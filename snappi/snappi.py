@@ -1490,7 +1490,7 @@ class LagPort(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -1500,7 +1500,7 @@ class LagPort(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -2518,7 +2518,7 @@ class Layer1(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -2528,7 +2528,7 @@ class Layer1(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -2625,7 +2625,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -2635,7 +2635,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -2646,7 +2646,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -2656,7 +2656,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -3511,7 +3511,7 @@ class Capture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -3521,7 +3521,7 @@ class Capture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -4610,7 +4610,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4636,7 +4636,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -5020,7 +5020,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -5030,7 +5030,7 @@ class EthernetConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -5041,7 +5041,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """lag_name getter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -5051,7 +5051,7 @@ class EthernetConnection(OpenApiObject):
     def lag_name(self, value):
         """lag_name setter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -5062,7 +5062,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """vxlan_name getter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         Returns: str
         """
@@ -5072,7 +5072,7 @@ class EthernetConnection(OpenApiObject):
     def vxlan_name(self, value):
         """vxlan_name setter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         value: str
         """
@@ -5821,7 +5821,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5831,7 +5831,7 @@ class DeviceIpv4Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -5980,7 +5980,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5990,7 +5990,7 @@ class DeviceIpv6Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -6441,7 +6441,7 @@ class IsisInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -6451,7 +6451,7 @@ class IsisInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -9845,7 +9845,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -9855,7 +9855,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -13761,7 +13761,7 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -15915,7 +15915,7 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -20721,6 +20721,7 @@ class BgpAttributes(OpenApiObject):
             "itemformat": "ipv4",
         },
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
+        "tunnel_encapsulation": {"type": "BgpAttributesTunnelEncapsulation"},
         "mp_reach": {"type": "BgpAttributesMpReachNlri"},
         "mp_unreach": {"type": "BgpAttributesMpUnreachNlri"},
     }  # type: Dict[str, str]
@@ -20952,11 +20953,24 @@ class BgpAttributes(OpenApiObject):
         )
 
     @property
+    def tunnel_encapsulation(self):
+        # type: () -> BgpAttributesTunnelEncapsulation
+        """tunnel_encapsulation getter
+
+        The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.
+
+        Returns: BgpAttributesTunnelEncapsulation
+        """
+        return self._get_property(
+            "tunnel_encapsulation", BgpAttributesTunnelEncapsulation
+        )
+
+    @property
     def mp_reach(self):
         # type: () -> BgpAttributesMpReachNlri
         """mp_reach getter
 
-        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpReachNlri
         """
@@ -20967,7 +20981,7 @@ class BgpAttributes(OpenApiObject):
         # type: () -> BgpAttributesMpUnreachNlri
         """mp_unreach getter
 
-        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpUnreachNlri
         """
@@ -22564,6 +22578,2916 @@ class BgpAttributesOriginatorId(OpenApiObject):
         self._set_property("value", value)
 
 
+class BgpAttributesTunnelEncapsulation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sr_policy",
+            ],
+        },
+        "sr_policy": {"type": "BgpAttributesSegmentRoutingPolicy"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sr_policy",
+    }  # type: Dict[str, Union(type)]
+
+    SR_POLICY = "sr_policy"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesTunnelEncapsulation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def sr_policy(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicy
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicy class
+
+        Optional Segment Routing Policy information as defined in draft-ietf-idr-segment-routing-te-policy.. This information is carried in TUNNEL_ENCAPSULATION attribute with type set to SR Policy (15).. [From .proto :. message PaPolicy {. optional PaBindingSegmentIdentifier bsid 1;. optional PaPreference preference 2;. repeated PaSegmentList segment_lists 3;. optional PaPriority priority 4;. optional PaPolicyName policy_name 5;. optional PaExplicitNullLabelPolicy explicit_null_label_policy 6;. .
+
+        Returns: BgpAttributesSegmentRoutingPolicy
+        """
+        return self._get_property(
+            "sr_policy", BgpAttributesSegmentRoutingPolicy, self, "sr_policy"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sr_policy"]]
+        """choice getter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        Returns: Union[Literal["sr_policy"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        value: Union[Literal["sr_policy"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "binding_segment_identifier": {"type": "BgpAttributesBsid"},
+        "prerefence": {"type": "BgpAttributesSrPolicyPreference"},
+        "priority": {"type": "BgpAttributesSrPolicyPriority"},
+        "policy_name": {"type": "BgpAttributesSrPolicyPolicyName"},
+        "explicit_null_policy": {"type": "BgpAttributesSrPolicyExplicitNullPolicy"},
+        "segment_list": {"type": "BgpAttributesSrPolicySegmentList"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicy, self).__init__()
+        self._parent = parent
+
+    @property
+    def binding_segment_identifier(self):
+        # type: () -> BgpAttributesBsid
+        """binding_segment_identifier getter
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy. Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]
+
+        Returns: BgpAttributesBsid
+        """
+        return self._get_property("binding_segment_identifier", BgpAttributesBsid)
+
+    @property
+    def prerefence(self):
+        # type: () -> BgpAttributesSrPolicyPreference
+        """prerefence getter
+
+        Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy..
+
+        Returns: BgpAttributesSrPolicyPreference
+        """
+        return self._get_property("prerefence", BgpAttributesSrPolicyPreference)
+
+    @property
+    def priority(self):
+        # type: () -> BgpAttributesSrPolicyPriority
+        """priority getter
+
+        Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed..
+
+        Returns: BgpAttributesSrPolicyPriority
+        """
+        return self._get_property("priority", BgpAttributesSrPolicyPriority)
+
+    @property
+    def policy_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyName
+        """policy_name getter
+
+        Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging.
+
+        Returns: BgpAttributesSrPolicyPolicyName
+        """
+        return self._get_property("policy_name", BgpAttributesSrPolicyPolicyName)
+
+    @property
+    def explicit_null_policy(self):
+        # type: () -> BgpAttributesSrPolicyExplicitNullPolicy
+        """explicit_null_policy getter
+
+        This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.
+
+        Returns: BgpAttributesSrPolicyExplicitNullPolicy
+        """
+        return self._get_property(
+            "explicit_null_policy", BgpAttributesSrPolicyExplicitNullPolicy
+        )
+
+    @property
+    def segment_list(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        """segment_list getter
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]
+
+        Returns: BgpAttributesSrPolicySegmentList
+        """
+        return self._get_property("segment_list", BgpAttributesSrPolicySegmentList)
+
+
+class BgpAttributesBsid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "mpls",
+                "srv6",
+            ],
+        },
+        "mpls": {"type": "BgpAttributesBsidMpls"},
+        "srv6": {"type": "BgpAttributesBsidSrv6"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    MPLS = "mpls"  # type: str
+    SRV6 = "srv6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesBsid, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def mpls(self):
+        # type: () -> BgpAttributesBsidMpls
+        """Factory property that returns an instance of the BgpAttributesBsidMpls class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .
+
+        Returns: BgpAttributesBsidMpls
+        """
+        return self._get_property("mpls", BgpAttributesBsidMpls, self, "mpls")
+
+    @property
+    def srv6(self):
+        # type: () -> BgpAttributesBsidSrv6
+        """Factory property that returns an instance of the BgpAttributesBsidSrv6 class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .
+
+        Returns: BgpAttributesBsidSrv6
+        """
+        return self._get_property("srv6", BgpAttributesBsidSrv6, self, "srv6")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["mpls"], Literal["srv6"]]
+        """choice getter
+
+        The type of Segment Identifier.
+
+        Returns: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of Segment Identifier.
+
+        value: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesBsidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, flag_specified_bsid_only=False, flag_drop_upon_invalid=False
+    ):
+        super(BgpAttributesBsidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+
+    def set(self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "label": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048576,
+        },
+        "traffic_class": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "flag_bos": {"type": bool},
+        "ttl": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 63,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "label": 16,
+        "traffic_class": 0,
+        "flag_bos": True,
+        "ttl": 63,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, label=16, traffic_class=0, flag_bos=True, ttl=63):
+        super(BgpAttributesSidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("label", label)
+        self._set_property("traffic_class", traffic_class)
+        self._set_property("flag_bos", flag_bos)
+        self._set_property("ttl", ttl)
+
+    def set(self, label=None, traffic_class=None, flag_bos=None, ttl=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def label(self):
+        # type: () -> int
+        """label getter
+
+        20 bit MPLS Label value.
+
+        Returns: int
+        """
+        return self._get_property("label")
+
+    @label.setter
+    def label(self, value):
+        """label setter
+
+        20 bit MPLS Label value.
+
+        value: int
+        """
+        self._set_property("label", value)
+
+    @property
+    def traffic_class(self):
+        # type: () -> int
+        """traffic_class getter
+
+        3 bits of Traffic Class.
+
+        Returns: int
+        """
+        return self._get_property("traffic_class")
+
+    @traffic_class.setter
+    def traffic_class(self, value):
+        """traffic_class setter
+
+        3 bits of Traffic Class.
+
+        value: int
+        """
+        self._set_property("traffic_class", value)
+
+    @property
+    def flag_bos(self):
+        # type: () -> bool
+        """flag_bos getter
+
+        Bottom of Stack
+
+        Returns: bool
+        """
+        return self._get_property("flag_bos")
+
+    @flag_bos.setter
+    def flag_bos(self, value):
+        """flag_bos setter
+
+        Bottom of Stack
+
+        value: bool
+        """
+        self._set_property("flag_bos", value)
+
+    @property
+    def ttl(self):
+        # type: () -> int
+        """ttl getter
+
+        8 bits Time to Live
+
+        Returns: int
+        """
+        return self._get_property("ttl")
+
+    @ttl.setter
+    def ttl(self, value):
+        """ttl setter
+
+        8 bits Time to Live
+
+        value: int
+        """
+        self._set_property("ttl", value)
+
+
+class BgpAttributesBsidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "flag_srv6_endpoint_behavior": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "flag_srv6_endpoint_behavior": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesBsidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("flag_srv6_endpoint_behavior", flag_srv6_endpoint_behavior)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self,
+        flag_specified_bsid_only=None,
+        flag_drop_upon_invalid=None,
+        flag_srv6_endpoint_behavior=None,
+        ipv6_addr=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def flag_srv6_endpoint_behavior(self):
+        # type: () -> bool
+        """flag_srv6_endpoint_behavior getter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-segment-routing-te-policy.
+
+        Returns: bool
+        """
+        return self._get_property("flag_srv6_endpoint_behavior")
+
+    @flag_srv6_endpoint_behavior.setter
+    def flag_srv6_endpoint_behavior(self, value):
+        """flag_srv6_endpoint_behavior setter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-segment-routing-te-policy.
+
+        value: bool
+        """
+        self._set_property("flag_srv6_endpoint_behavior", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+
+class BgpAttributesSrPolicyPreference(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPreference, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Preference sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Preference sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPriority(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPriority, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Priority sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Priority sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPolicyName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyExplicitNullPolicy(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "unknown",
+                "push_ipv4",
+                "push_ipv6",
+                "push_ipv4_and_ipv6",
+                "donot_push",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "push_ipv4_and_ipv6",
+    }  # type: Dict[str, Union(type)]
+
+    UNKNOWN = "unknown"  # type: str
+    PUSH_IPV4 = "push_ipv4"  # type: str
+    PUSH_IPV6 = "push_ipv6"  # type: str
+    PUSH_IPV4_AND_IPV6 = "push_ipv4_and_ipv6"  # type: str
+    DONOT_PUSH = "donot_push"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicyExplicitNullPolicy, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """choice getter
+
+        The Explicit NULL Label policy.
+
+        Returns: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Explicit NULL Label policy.
+
+        value: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSrPolicySegmentList(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "weight": {"type": "BgpAttributesSegmentRoutingPolicySegmentListWeight"},
+        "segments": {"type": "BgpAttributesSegmentRoutingPolicySegmentListSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSrPolicySegmentList, self).__init__()
+        self._parent = parent
+
+    @property
+    def weight(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """weight getter
+
+        The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """
+        return self._get_property(
+            "weight", BgpAttributesSegmentRoutingPolicySegmentListWeight
+        )
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """segments getter
+
+        TBD
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesSegmentRoutingPolicySegmentListSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListWeight(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSegmentRoutingPolicySegmentListWeight, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value of the weight.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the weight.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_a",
+                "type_b",
+                "type_c",
+                "type_d",
+                "type_e",
+                "type_f",
+                "type_g",
+                "type_h",
+                "type_i",
+                "type_j",
+                "type_k",
+            ],
+        },
+        "type_a": {"type": "BgpAttributesSegmentRoutingPolicyTypeA"},
+        "type_b": {"type": "BgpAttributesSegmentRoutingPolicyTypeB"},
+        "type_c": {"type": "BgpAttributesSegmentRoutingPolicyTypeC"},
+        "type_d": {"type": "BgpAttributesSegmentRoutingPolicyTypeD"},
+        "type_e": {"type": "BgpAttributesSegmentRoutingPolicyTypeE"},
+        "type_f": {"type": "BgpAttributesSegmentRoutingPolicyTypeF"},
+        "type_g": {"type": "BgpAttributesSegmentRoutingPolicyTypeG"},
+        "type_h": {"type": "BgpAttributesSegmentRoutingPolicyTypeH"},
+        "type_i": {"type": "BgpAttributesSegmentRoutingPolicyTypeI"},
+        "type_j": {"type": "BgpAttributesSegmentRoutingPolicyTypeJ"},
+        "type_k": {"type": "BgpAttributesSegmentRoutingPolicyTypeK"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TYPE_A = "type_a"  # type: str
+    TYPE_B = "type_b"  # type: str
+    TYPE_C = "type_c"  # type: str
+    TYPE_D = "type_d"  # type: str
+    TYPE_E = "type_e"  # type: str
+    TYPE_F = "type_f"  # type: str
+    TYPE_G = "type_g"  # type: str
+    TYPE_H = "type_h"  # type: str
+    TYPE_I = "type_i"  # type: str
+    TYPE_J = "type_j"  # type: str
+    TYPE_K = "type_k"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegment, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeA
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeA
+        """
+        return self._get_property(
+            "type_a", BgpAttributesSegmentRoutingPolicyTypeA, self, "type_a"
+        )
+
+    @property
+    def type_b(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeB
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeB
+        """
+        return self._get_property(
+            "type_b", BgpAttributesSegmentRoutingPolicyTypeB, self, "type_b"
+        )
+
+    @property
+    def type_c(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeC
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeC
+        """
+        return self._get_property(
+            "type_c", BgpAttributesSegmentRoutingPolicyTypeC, self, "type_c"
+        )
+
+    @property
+    def type_d(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeD
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeD
+        """
+        return self._get_property(
+            "type_d", BgpAttributesSegmentRoutingPolicyTypeD, self, "type_d"
+        )
+
+    @property
+    def type_e(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeE
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeE
+        """
+        return self._get_property(
+            "type_e", BgpAttributesSegmentRoutingPolicyTypeE, self, "type_e"
+        )
+
+    @property
+    def type_f(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeF
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeF
+        """
+        return self._get_property(
+            "type_f", BgpAttributesSegmentRoutingPolicyTypeF, self, "type_f"
+        )
+
+    @property
+    def type_g(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeG
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeG
+        """
+        return self._get_property(
+            "type_g", BgpAttributesSegmentRoutingPolicyTypeG, self, "type_g"
+        )
+
+    @property
+    def type_h(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeH
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeH
+        """
+        return self._get_property(
+            "type_h", BgpAttributesSegmentRoutingPolicyTypeH, self, "type_h"
+        )
+
+    @property
+    def type_i(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeI
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SRv6 SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeI
+        """
+        return self._get_property(
+            "type_i", BgpAttributesSegmentRoutingPolicyTypeI, self, "type_i"
+        )
+
+    @property
+    def type_j(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeJ
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 10 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeJ
+        """
+        return self._get_property(
+            "type_j", BgpAttributesSegmentRoutingPolicyTypeJ, self, "type_j"
+        )
+
+    @property
+    def type_k(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeK
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 11 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeK
+        """
+        return self._get_property(
+            "type_k", BgpAttributesSegmentRoutingPolicyTypeK, self, "type_k"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """choice getter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Node Address with optional SID.. Type D: IPv6 Node Address with optional SID for SR MPLS.. Type E: IPv4 Address and index with optional SID.. Type F: IPv4 Local and Remote addresses with optional SID.. Type G: IPv6 Address and index for local and remote pair with optional SID for SR MPLS.. Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. Type I: IPv6 Node Address with optional SID for SRv6.. Type J: IPv6 Address and index for local and remote pair with optional SID for SRv6.. Type K: IPv6 Local and Remote addresses for SRv6.
+
+        Returns: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Node Address with optional SID.. Type D: IPv6 Node Address with optional SID for SR MPLS.. Type E: IPv4 Address and index with optional SID.. Type F: IPv4 Local and Remote addresses with optional SID.. Type G: IPv6 Address and index for local and remote pair with optional SID for SR MPLS.. Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. Type I: IPv6 Node Address with optional SID for SRv6.. Type J: IPv6 Address and index for local and remote pair with optional SID for SRv6.. Type K: IPv6 Local and Remote addresses for SRv6.
+
+        value: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeA(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicyTypeA, self).__init__()
+        self._parent = parent
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "v_flag": {"type": bool},
+        "a_flag": {"type": bool},
+        "b_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "v_flag": False,
+        "a_flag": False,
+        "b_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, v_flag=False, a_flag=False, b_flag=False):
+        super(BgpAttributesSegmentRoutingPolicyTypeFlags, self).__init__()
+        self._parent = parent
+        self._set_property("v_flag", v_flag)
+        self._set_property("a_flag", a_flag)
+        self._set_property("b_flag", b_flag)
+
+    def set(self, v_flag=None, a_flag=None, b_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        Indicates verification of segment data in is enabled.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        Indicates verification of segment data in is enabled.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def a_flag(self):
+        # type: () -> bool
+        """a_flag getter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        Returns: bool
+        """
+        return self._get_property("a_flag")
+
+    @a_flag.setter
+    def a_flag(self, value):
+        """a_flag setter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        value: bool
+        """
+        self._set_property("a_flag", value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-segment-routing-te-policy.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-segment-routing-te-policy.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, srv6_sid="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeB, self).__init__()
+        self._parent = parent
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(self, srv6_sid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "lb_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "ln_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "func_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "arg_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "lb_length": 0,
+        "ln_length": 0,
+        "func_length": 0,
+        "arg_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, lb_length=0, ln_length=0, func_length=0, arg_length=0
+    ):
+        super(
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("lb_length", lb_length)
+        self._set_property("ln_length", ln_length)
+        self._set_property("func_length", func_length)
+        self._set_property("arg_length", arg_length)
+
+    def set(self, lb_length=None, ln_length=None, func_length=None, arg_length=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def lb_length(self):
+        # type: () -> int
+        """lb_length getter
+
+        SRv6 SID Locator Block length in bits.
+
+        Returns: int
+        """
+        return self._get_property("lb_length")
+
+    @lb_length.setter
+    def lb_length(self, value):
+        """lb_length setter
+
+        SRv6 SID Locator Block length in bits.
+
+        value: int
+        """
+        self._set_property("lb_length", value)
+
+    @property
+    def ln_length(self):
+        # type: () -> int
+        """ln_length getter
+
+        SRv6 SID Locator Node length in bits.
+
+        Returns: int
+        """
+        return self._get_property("ln_length")
+
+    @ln_length.setter
+    def ln_length(self, value):
+        """ln_length setter
+
+        SRv6 SID Locator Node length in bits.
+
+        value: int
+        """
+        self._set_property("ln_length", value)
+
+    @property
+    def func_length(self):
+        # type: () -> int
+        """func_length getter
+
+        SRv6 SID Function length in bits.
+
+        Returns: int
+        """
+        return self._get_property("func_length")
+
+    @func_length.setter
+    def func_length(self, value):
+        """func_length setter
+
+        SRv6 SID Function length in bits.
+
+        value: int
+        """
+        self._set_property("func_length", value)
+
+    @property
+    def arg_length(self):
+        # type: () -> int
+        """arg_length getter
+
+        SRv6 SID Arguments length in bits.
+
+        Returns: int
+        """
+        return self._get_property("arg_length")
+
+    @arg_length.setter
+    def arg_length(self, value):
+        """arg_length setter
+
+        SRv6 SID Arguments length in bits.
+
+        value: int
+        """
+        self._set_property("arg_length", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeC, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, sr_algorithm=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeD(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeD, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeE(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeE, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, local_interface_id=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeF(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "remote_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv4_address": "0.0.0.0",
+        "remote_ipv4_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeF, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv4_address", local_ipv4_address)
+        self._set_property("remote_ipv4_address", remote_ipv4_address)
+
+    def set(self, local_ipv4_address=None, remote_ipv4_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv4_address(self):
+        # type: () -> str
+        """local_ipv4_address getter
+
+        Local IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv4_address")
+
+    @local_ipv4_address.setter
+    def local_ipv4_address(self, value):
+        """local_ipv4_address setter
+
+        Local IPv4 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv4_address", value)
+
+    @property
+    def remote_ipv4_address(self):
+        # type: () -> str
+        """remote_ipv4_address getter
+
+        Remote IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv4_address")
+
+    @remote_ipv4_address.setter
+    def remote_ipv4_address(self, value):
+        """remote_ipv4_address setter
+
+        Remote IPv4 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv4_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeG(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeG, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+
+    def set(
+        self,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeH(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv6_address="0::0", remote_ipv6_address="0::0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeH, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+
+    def set(self, local_ipv6_address=None, remote_ipv6_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, sr_algorithm=0, ipv6_node_address="0::0", srv6_sid="0::0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeI, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None, srv6_sid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        Optional SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        Optional SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+        srv6_sid="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeJ, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(
+        self,
+        sr_algorithm=None,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+        srv6_sid=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        Optional SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        Optional SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        local_ipv6_address="0::0",
+        remote_ipv6_address="0::0",
+        srv6_sid="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeK, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(self, local_ipv6_address=None, remote_ipv6_address=None, srv6_sid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        Optional SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        Optional SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSegmentRoutingPolicySegmentListSegment, BgpAttributesSegmentRoutingPolicyTypeA, BgpAttributesSegmentRoutingPolicyTypeB, BgpAttributesSegmentRoutingPolicyTypeC, BgpAttributesSegmentRoutingPolicyTypeD, BgpAttributesSegmentRoutingPolicyTypeE, BgpAttributesSegmentRoutingPolicyTypeF, BgpAttributesSegmentRoutingPolicyTypeG, BgpAttributesSegmentRoutingPolicyTypeH, BgpAttributesSegmentRoutingPolicyTypeI, BgpAttributesSegmentRoutingPolicyTypeJ, BgpAttributesSegmentRoutingPolicyTypeK]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSegmentRoutingPolicySegmentListSegment):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSegmentRoutingPolicySegmentListSegment"
+            )
+
+    def segment(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. [.proto :. // This defines one segment. The distinction between "segment" and "segment. // identifier" (SID) is basically non-existent; these objects can be seen as. // either.. message PaSegment {. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }. // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. // SID only, in the form of MPLS Label.. message Type1 {. optional Flags flags 1;. optional MPLS sid 2;. }. // SID only, in the form of IPv6 address.. message Type2 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto sid 2;. }. // IPv4 Node Address with optional SID.. message Type3 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SR MPLS.. message Type4 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Address index with optional SID.. message Type5 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Local and Remote addresses with optional SID.. message Type6 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SR. // MPLS.. message Type7 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional MPLS sid 6;. }. // IPv6 Local and Remote addresses with optional SID for SR MPLS.. message Type8 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SRv6.. message Type9 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SRv6.. message Type10 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional monitoring.raven.IPAddressProto sid 6;. }. // IPv6 Local and Remote addresses for SRv6.. message Type11 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. oneof segment {. Type1 type1 1;. Type2 type2 2;. Type3 type3 3;. Type4 type4 4;. Type5 type5 5;. Type6 type6 6;. Type7 type7 7;. Type8 type8 8;. Type9 type9 9;. Type10 type10 10;. Type11 type11 11;. }. }. ]
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """Add method that creates and returns an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. [.proto :. // This defines one segment. The distinction between "segment" and "segment. // identifier" (SID) is basically non-existent; these objects can be seen as. // either.. message PaSegment {. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }. // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. // SID only, in the form of MPLS Label.. message Type1 {. optional Flags flags 1;. optional MPLS sid 2;. }. // SID only, in the form of IPv6 address.. message Type2 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto sid 2;. }. // IPv4 Node Address with optional SID.. message Type3 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SR MPLS.. message Type4 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Address index with optional SID.. message Type5 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Local and Remote addresses with optional SID.. message Type6 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SR. // MPLS.. message Type7 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional MPLS sid 6;. }. // IPv6 Local and Remote addresses with optional SID for SR MPLS.. message Type8 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SRv6.. message Type9 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SRv6.. message Type10 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional monitoring.raven.IPAddressProto sid 6;. }. // IPv6 Local and Remote addresses for SRv6.. message Type11 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. oneof segment {. Type1 type1 1;. Type2 type2 2;. Type3 type3 3;. Type4 type4 4;. Type5 type5 5;. Type6 type6 6;. Type7 type7 7;. Type8 type8 8;. Type9 type9 9;. Type10 type10 10;. Type11 type11 11;. }. }. ]
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return item
+
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_a
+        item.choice = "type_a"
+        self._add(item)
+        return self
+
+    def type_b(self, srv6_sid="0::0"):
+        # type: (str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_b
+        item.choice = "type_b"
+        self._add(item)
+        return self
+
+    def type_c(self, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_c
+        item.choice = "type_c"
+        self._add(item)
+        return self
+
+    def type_d(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_d
+        item.choice = "type_d"
+        self._add(item)
+        return self
+
+    def type_e(self, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_e
+        item.choice = "type_e"
+        self._add(item)
+        return self
+
+    def type_f(self, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_f
+        item.choice = "type_f"
+        self._add(item)
+        return self
+
+    def type_g(
+        self,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        # type: (int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_g
+        item.choice = "type_g"
+        self._add(item)
+        return self
+
+    def type_h(self, local_ipv6_address="0::0", remote_ipv6_address="0::0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_h
+        item.choice = "type_h"
+        self._add(item)
+        return self
+
+    def type_i(self, sr_algorithm=0, ipv6_node_address="0::0", srv6_sid="0::0"):
+        # type: (int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SRv6 SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_i
+        item.choice = "type_i"
+        self._add(item)
+        return self
+
+    def type_j(
+        self,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+        srv6_sid="0::0",
+    ):
+        # type: (int,int,str,int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 10 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_j
+        item.choice = "type_j"
+        self._add(item)
+        return self
+
+    def type_k(
+        self, local_ipv6_address="0::0", remote_ipv6_address="0::0", srv6_sid="0::0"
+    ):
+        # type: (str,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 11 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_k
+        item.choice = "type_k"
+        self._add(item)
+        return self
+
+
 class BgpAttributesMpReachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -22574,10 +25498,14 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpOneIpv4SrPolicyNLRIPrefixIter"},
+        "ipv6_srpolicy": {"type": "BgpOneIpv6SrPolicyNLRIPrefixIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -22586,6 +25514,8 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -22614,12 +25544,12 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -22629,7 +25559,7 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -22653,12 +25583,44 @@ class BgpAttributesMpReachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
         return self._get_property(
             "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
+        )
+
+    @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
+        """ipv4_srpolicy getter
+
+        List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+
+        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv4_srpolicy",
+            BgpOneIpv4SrPolicyNLRIPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
+        """ipv6_srpolicy getter
+
+        List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI
+
+        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv6_srpolicy",
+            BgpOneIpv6SrPolicyNLRIPrefixIter,
+            self._parent,
+            self._choice,
         )
 
 
@@ -23002,6 +25964,462 @@ class BgpOneIpv6NLRIPrefixIter(OpenApiIter):
         return item
 
 
+class BgpOneIpv4SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "path_id": {"type": "BgpNLRIPrefixPathId"},
+        "segment_routing_distinguisher": {
+            "type": "BgpNLRIPrefixSegmentRoutingDistinguisher"
+        },
+        "segment_routing_color": {"type": "BgpNLRIPrefixSegmentRoutingColor"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "prefix": 24,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address=None, prefix=24):
+        super(BgpOneIpv4SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+        self._set_property("prefix", prefix)
+
+    def set(self, address=None, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The IPv4 address of the network.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The IPv4 address of the network.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def path_id(self):
+        # type: () -> BgpNLRIPrefixPathId
+        """path_id getter
+
+        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+
+        Returns: BgpNLRIPrefixPathId
+        """
+        return self._get_property("path_id", BgpNLRIPrefixPathId)
+
+    @property
+    def segment_routing_distinguisher(self):
+        # type: () -> BgpNLRIPrefixSegmentRoutingDistinguisher
+        """segment_routing_distinguisher getter
+
+        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
+
+        Returns: BgpNLRIPrefixSegmentRoutingDistinguisher
+        """
+        return self._get_property(
+            "segment_routing_distinguisher", BgpNLRIPrefixSegmentRoutingDistinguisher
+        )
+
+    @property
+    def segment_routing_color(self):
+        # type: () -> BgpNLRIPrefixSegmentRoutingColor
+        """segment_routing_color getter
+
+        Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.
+
+        Returns: BgpNLRIPrefixSegmentRoutingColor
+        """
+        return self._get_property(
+            "segment_routing_color", BgpNLRIPrefixSegmentRoutingColor
+        )
+
+
+class BgpNLRIPrefixSegmentRoutingDistinguisher(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=1):
+        super(BgpNLRIPrefixSegmentRoutingDistinguisher, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The value of the optional Segment Routing distinguisher of the prefix.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The value of the optional Segment Routing distinguisher of the prefix.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpNLRIPrefixSegmentRoutingColor(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=1):
+        super(BgpNLRIPrefixSegmentRoutingColor, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The value of the optional Segment Routing color of the prefix.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The value of the optional Segment Routing color of the prefix.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpOneIpv4SrPolicyNLRIPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneIpv4SrPolicyNLRIPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneIpv4SrPolicyNLRIPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneIpv4SrPolicyNLRIPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneIpv4SrPolicyNLRIPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneIpv4SrPolicyNLRIPrefix):
+            raise Exception("Item is not an instance of BgpOneIpv4SrPolicyNLRIPrefix")
+
+    def oneipv4srpolicynlriprefix(self, address=None, prefix=24):
+        # type: (str,int) -> BgpOneIpv4SrPolicyNLRIPrefixIter
+        """Factory method that creates an instance of the BgpOneIpv4SrPolicyNLRIPrefix class
+
+        One IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
+        """
+        item = BgpOneIpv4SrPolicyNLRIPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return self
+
+    def add(self, address=None, prefix=24):
+        # type: (str,int) -> BgpOneIpv4SrPolicyNLRIPrefix
+        """Add method that creates and returns an instance of the BgpOneIpv4SrPolicyNLRIPrefix class
+
+        One IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpOneIpv4SrPolicyNLRIPrefix
+        """
+        item = BgpOneIpv4SrPolicyNLRIPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return item
+
+
+class BgpOneIpv6SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "path_id": {"type": "BgpNLRIPrefixPathId"},
+        "segment_routing_distinguisher": {
+            "type": "BgpNLRIPrefixSegmentRoutingDistinguisher"
+        },
+        "segment_routing_color": {"type": "BgpNLRIPrefixSegmentRoutingColor"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "prefix": 64,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address=None, prefix=64):
+        super(BgpOneIpv6SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+        self._set_property("prefix", prefix)
+
+    def set(self, address=None, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The IPv6 address of the network.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The IPv6 address of the network.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The IPv6 network prefix length to be applied to the address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv6 network prefix length to be applied to the address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def path_id(self):
+        # type: () -> BgpNLRIPrefixPathId
+        """path_id getter
+
+        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+
+        Returns: BgpNLRIPrefixPathId
+        """
+        return self._get_property("path_id", BgpNLRIPrefixPathId)
+
+    @property
+    def segment_routing_distinguisher(self):
+        # type: () -> BgpNLRIPrefixSegmentRoutingDistinguisher
+        """segment_routing_distinguisher getter
+
+        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
+
+        Returns: BgpNLRIPrefixSegmentRoutingDistinguisher
+        """
+        return self._get_property(
+            "segment_routing_distinguisher", BgpNLRIPrefixSegmentRoutingDistinguisher
+        )
+
+    @property
+    def segment_routing_color(self):
+        # type: () -> BgpNLRIPrefixSegmentRoutingColor
+        """segment_routing_color getter
+
+        Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.
+
+        Returns: BgpNLRIPrefixSegmentRoutingColor
+        """
+        return self._get_property(
+            "segment_routing_color", BgpNLRIPrefixSegmentRoutingColor
+        )
+
+
+class BgpOneIpv6SrPolicyNLRIPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneIpv6SrPolicyNLRIPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneIpv6SrPolicyNLRIPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneIpv6SrPolicyNLRIPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneIpv6SrPolicyNLRIPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneIpv6SrPolicyNLRIPrefix):
+            raise Exception("Item is not an instance of BgpOneIpv6SrPolicyNLRIPrefix")
+
+    def oneipv6srpolicynlriprefix(self, address=None, prefix=64):
+        # type: (str,int) -> BgpOneIpv6SrPolicyNLRIPrefixIter
+        """Factory method that creates an instance of the BgpOneIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
+        """
+        item = BgpOneIpv6SrPolicyNLRIPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return self
+
+    def add(self, address=None, prefix=64):
+        # type: (str,int) -> BgpOneIpv6SrPolicyNLRIPrefix
+        """Add method that creates and returns an instance of the BgpOneIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpOneIpv6SrPolicyNLRIPrefix
+        """
+        item = BgpOneIpv6SrPolicyNLRIPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return item
+
+
 class BgpAttributesMpUnreachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -23011,10 +26429,14 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpOneIpv4SrPolicyNLRIPrefixIter"},
+        "ipv6_srpolicy": {"type": "BgpOneIpv6SrPolicyNLRIPrefixIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -23023,6 +26445,8 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -23040,12 +26464,12 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -23055,7 +26479,7 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         self._set_property("choice", value)
 
@@ -23083,6 +26507,38 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
         """
         return self._get_property(
             "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
+        )
+
+    @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
+        """ipv4_srpolicy getter
+
+        List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+
+        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv4_srpolicy",
+            BgpOneIpv4SrPolicyNLRIPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
+        """ipv6_srpolicy getter
+
+        List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPUNREACH_NLRI
+
+        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv6_srpolicy",
+            BgpOneIpv6SrPolicyNLRIPrefixIter,
+            self._parent,
+            self._choice,
         )
 
 
@@ -23627,7 +27083,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -23637,7 +27093,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -25256,7 +28712,7 @@ class VxlanV4Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -25266,7 +28722,7 @@ class VxlanV4Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -25866,7 +29322,7 @@ class VxlanV6Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -25876,7 +29332,7 @@ class VxlanV6Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -26482,7 +29938,7 @@ class RsvpIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -26492,7 +29948,7 @@ class RsvpIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -26850,7 +30306,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -26860,7 +30316,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -28925,7 +32381,7 @@ class Flow(OpenApiObject):
         # type: () -> FlowHeaderIter
         """egress_packet getter
 
-        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
+        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
 
         Returns: FlowHeaderIter
         """
@@ -29120,7 +32576,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """tx_name getter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -29130,7 +32586,7 @@ class FlowPort(OpenApiObject):
     def tx_name(self, value):
         """tx_name setter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -29143,7 +32599,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -29153,7 +32609,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -29164,7 +32620,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -29174,7 +32630,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -29251,7 +32707,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -29261,7 +32717,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -29274,7 +32730,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -29284,7 +32740,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -114053,7 +117509,7 @@ class LldpConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -114063,7 +117519,7 @@ class LldpConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -115208,7 +118664,7 @@ class StatePortLink(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115218,7 +118674,7 @@ class StatePortLink(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115290,7 +118746,7 @@ class StatePortCapture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115300,7 +118756,7 @@ class StatePortCapture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115552,7 +119008,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -115562,7 +119018,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -115718,7 +119174,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115728,7 +119184,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115800,7 +119256,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115810,7 +119266,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115950,7 +119406,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -115960,7 +119416,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -116100,7 +119556,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -116110,7 +119566,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -116256,7 +119712,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -116266,7 +119722,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -116594,7 +120050,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -116604,7 +120060,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -116666,7 +120122,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequestIter
         """
@@ -116680,7 +120136,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequest
         """
@@ -116825,7 +120281,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -116835,7 +120291,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -116897,7 +120353,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequestIter
         """
@@ -116911,7 +120367,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequest
         """
@@ -117177,7 +120633,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -117187,7 +120643,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -117664,7 +121120,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -117674,7 +121130,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -118058,7 +121514,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -118068,7 +121524,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -118330,7 +121786,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -118340,7 +121796,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -118699,7 +122155,7 @@ class PortMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -118709,7 +122165,7 @@ class PortMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -118791,7 +122247,7 @@ class FlowMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -118801,7 +122257,7 @@ class FlowMetricsRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -119165,7 +122621,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -119175,7 +122631,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         value: List[str]
         """
@@ -119274,7 +122730,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -119284,7 +122740,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         value: List[str]
         """
@@ -119403,7 +122859,7 @@ class IsisMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -119413,7 +122869,7 @@ class IsisMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -119500,7 +122956,7 @@ class LagMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -119510,7 +122966,7 @@ class LagMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -119614,7 +123070,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -119624,7 +123080,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -119635,7 +123091,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_member_port_names getter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -119645,7 +123101,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_member_port_names(self, value):
         """lag_member_port_names setter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -119724,7 +123180,7 @@ class LldpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -119734,7 +123190,7 @@ class LldpMetricsRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -119861,7 +123317,7 @@ class RsvpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -119871,7 +123327,7 @@ class RsvpMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -120219,7 +123675,7 @@ class PortMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -120229,7 +123685,7 @@ class PortMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -124173,7 +127629,7 @@ class LagMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -124183,7 +127639,7 @@ class LagMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -126711,7 +130167,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -126721,7 +130177,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -126759,7 +130215,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -126769,7 +130225,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -126821,7 +130277,7 @@ class BgpPrefixStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bgp_peer_names getter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -126831,7 +130287,7 @@ class BgpPrefixStateRequest(OpenApiObject):
     def bgp_peer_names(self, value):
         """bgp_peer_names setter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -127332,7 +130788,7 @@ class IsisLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -127342,7 +130798,7 @@ class IsisLspsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -127385,7 +130841,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -127395,7 +130851,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -127454,7 +130910,7 @@ class RsvpLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """rsvp_router_names getter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -127464,7 +130920,7 @@ class RsvpLspsStateRequest(OpenApiObject):
     def rsvp_router_names(self, value):
         """rsvp_router_names setter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -133309,7 +136765,7 @@ class CaptureRequest(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -133319,7 +136775,7 @@ class CaptureRequest(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
