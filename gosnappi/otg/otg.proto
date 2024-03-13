@@ -4064,62 +4064,55 @@ message BgpNLRIPrefixPathId {
   optional uint32 value = 1;
 }
 
-// One IPv4 Segment Routing Policy NLRI Prefix.
-message BgpOneIpv4SrPolicyNLRIPrefix {
+// IPv4 Segment Routing Policy NLRI Prefix.
+message BgpIpv4SrPolicyNLRIPrefix {
 
-  // The IPv4 address of the network.
-  optional string address = 1;
+  // The 4-octet value uniquely identifying the policy in the context of <color, endpoint>
+  // tuple.  The distinguisher has no semantic value and is solely used by the SR Policy
+  // originator to make unique (from an NLRI perspective)  both for multiple candidate
+  // paths of the same SR Policy as well as candidate paths of different SR Policies
+  // (i.e. with different segment lists) with the same Color and Endpoint but meant for
+  // different headends.
+  // default = 1
+  optional uint32 distinguisher = 1;
 
-  // The IPv4 network prefix length to be applied to the address.
-  // default = 24
-  optional uint32 prefix = 2;
+  // 4-octet value identifying (with the endpoint) the policy. The color is used to match
+  // the color of the destination  prefixes to steer traffic into the SR Policy as specified
+  // in section 8 of RFC9256.
+  // default = 1
+  optional uint32 color = 2;
 
-  // Description missing in models
-  BgpNLRIPrefixPathId path_id = 3;
-
-  // Description missing in models
-  BgpNLRIPrefixSegmentRoutingDistinguisher segment_routing_distinguisher = 4;
-
-  // Description missing in models
-  BgpNLRIPrefixSegmentRoutingColor segment_routing_color = 5;
+  // Identifies the endpoint of a policy.  The Endpoint is an IPv4 address and can be
+  // either a unicast or an unspecified address (0.0.0.0) as specified in section 2.1
+  // of RFC9256.
+  // default = 0.0.0.0
+  optional string endpoint = 3;
 }
 
 // One IPv6 Segment Routing Policy NLRI Prefix.
-message BgpOneIpv6SrPolicyNLRIPrefix {
+message BgpIpv6SrPolicyNLRIPrefix {
 
-  // The IPv6 address of the network.
-  optional string address = 1;
-
-  // The IPv6 network prefix length to be applied to the address.
-  // default = 64
-  optional uint32 prefix = 2;
-
-  // Description missing in models
-  BgpNLRIPrefixPathId path_id = 3;
-
-  // Description missing in models
-  BgpNLRIPrefixSegmentRoutingDistinguisher segment_routing_distinguisher = 4;
-
-  // Description missing in models
-  BgpNLRIPrefixSegmentRoutingColor segment_routing_color = 5;
-}
-
-// Optional field in the NLRI carrying the distinguisher for Segment Routing Policy
-// NLRI with SAFI 73.
-message BgpNLRIPrefixSegmentRoutingDistinguisher {
-
-  // The value of the optional Segment Routing distinguisher of the prefix.
+  // The 4-octet value uniquely identifying the policy in the context of <color, endpoint>
+  // tuple.  The distinguisher has no semantic value and is solely used by the SR Policy
+  // originator to make unique (from an NLRI perspective)  both for multiple candidate
+  // paths of the same SR Policy as well as candidate paths of different SR Policies
+  // (i.e. with different segment lists) with the same Color and Endpoint but meant for
+  // different headends.
   // default = 1
-  optional uint32 value = 1;
-}
+  optional uint32 distinguisher = 1;
 
-// Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI
-// 73.
-message BgpNLRIPrefixSegmentRoutingColor {
-
-  // The value of the optional Segment Routing color of the prefix.
+  // 4-octet value identifying (with the endpoint) the policy. The color is used to match
+  // the color of the destination  prefixes to steer traffic into the SR Policy as specified
+  // in section 8 of RFC9256.
   // default = 1
-  optional uint32 value = 1;
+  optional uint32 color = 2;
+
+  // Identifies the endpoint of a policy.  The Endpoint may represent a single node or
+  // a set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can
+  // be either a unicast or an unspecified address (0::0) as specified in section 2.1
+  // of RFC9256.
+  // default = 0::0
+  optional string endpoint = 3;
 }
 
 // Attributes carried in the Update packet alongwith the reach/unreach prefixes.
@@ -4538,13 +4531,12 @@ message BgpAttributesMpReachNlri {
   // List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
   repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 4;
 
-  // List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI
-  // .
-  repeated BgpOneIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 5;
+  // IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+  BgpIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 5;
 
-  // List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI
-  // .
-  repeated BgpOneIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 6;
+  // IPv6 endpoint with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI .
+  // 
+  BgpIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 6;
 }
 
 // The MP_UNREACH attribute is an optional attribute which can be included in the attributes
@@ -4571,18 +4563,15 @@ message BgpAttributesMpUnreachNlri {
   // List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
   repeated BgpOneIpv4NLRIPrefix ipv4_unicast = 2;
 
-  // SAFI of the NLRI being sent in the Update.
-  // description: >-
   // List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
   repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 3;
 
-  // List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI
-  // .
-  repeated BgpOneIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 4;
+  // IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+  BgpIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 4;
 
-  // List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPUNREACH_NLRI
-  // .
-  repeated BgpOneIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 5;
+  // IPv6 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+  // 
+  BgpIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 5;
 }
 
 // Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route
@@ -5368,6 +5357,15 @@ message BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure {
   // SRv6 SID Arguments length in bits.
   // default = 0
   optional uint32 arg_length = 4;
+}
+
+// Optional field in the NLRI carrying the distinguisher for Segment Routing Policy
+// NLRI with SAFI 73.
+message BgpNLRIPrefixSegmentRoutingDistinguisher {
+
+  // The value of the optional Segment Routing distinguisher of the prefix.
+  // default = 1
+  optional uint32 value = 1;
 }
 
 // Configuration for BGPv6 peer settings and routes.

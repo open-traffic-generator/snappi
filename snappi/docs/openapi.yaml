@@ -5611,83 +5611,68 @@ components:
           format: uint32
           default: 1
           x-field-uid: 1
-    Bgp.OneIpv4SrPolicyNLRIPrefix:
+    Bgp.Ipv4SrPolicyNLRIPrefix:
       description: |-
-        One IPv4 Segment Routing Policy NLRI Prefix.
+        IPv4 Segment Routing Policy NLRI Prefix.
       type: object
       properties:
-        address:
-          description: |-
-            The IPv4 address of the network.
-          type: string
-          format: ipv4
-          x-field-uid: 1
-        prefix:
-          description: "The IPv4 network prefix length to be applied to the address. "
+        distinguisher:
+          description: "The 4-octet value uniquely identifying the policy in the context\
+            \ of <color, endpoint> tuple.  The distinguisher has no semantic value\
+            \ and is solely used by the SR Policy originator to make unique (from\
+            \ an NLRI perspective)  both for multiple candidate paths of the same\
+            \ SR Policy as well as candidate paths of different SR Policies  (i.e.\
+            \ with different segment lists) with the same Color and Endpoint but meant\
+            \ for different headends. "
           type: integer
           format: uint32
-          default: 24
-          maximum: 32
+          default: 1
+          x-field-uid: 1
+        color:
+          description: |-
+            4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination  prefixes to steer traffic into the SR Policy as specified in section 8 of RFC9256.
+          type: integer
+          format: uint32
+          default: 1
           x-field-uid: 2
-        path_id:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixPathId'
+        endpoint:
+          description: |-
+            Identifies the endpoint of a policy.  The Endpoint is an IPv4 address and can be either a unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
           x-field-uid: 3
-        segment_routing_distinguisher:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixSegmentRoutingDistinguisher'
-          x-field-uid: 4
-        segment_routing_color:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixSegmentRoutingColor'
-          x-field-uid: 5
-    Bgp.OneIpv6SrPolicyNLRIPrefix:
+    Bgp.Ipv6SrPolicyNLRIPrefix:
       description: |-
         One IPv6 Segment Routing Policy NLRI Prefix.
       type: object
       properties:
-        address:
+        distinguisher:
+          description: "The 4-octet value uniquely identifying the policy in the context\
+            \ of <color, endpoint> tuple.  The distinguisher has no semantic value\
+            \ and is solely used by the SR Policy originator to make unique (from\
+            \ an NLRI perspective)  both for multiple candidate paths of the same\
+            \ SR Policy as well as candidate paths of different SR Policies  (i.e.\
+            \ with different segment lists) with the same Color and Endpoint but meant\
+            \ for different headends. "
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 1
+        color:
           description: |-
-            The IPv6 address of the network.
+            4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination  prefixes to steer traffic into the SR Policy as specified in section 8 of RFC9256.
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 2
+        endpoint:
+          description: |-
+            Identifies the endpoint of a policy.  The Endpoint may represent a single node or a set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either a unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
           type: string
           format: ipv6
-          x-field-uid: 1
-        prefix:
-          description: "The IPv6 network prefix length to be applied to the address. "
-          type: integer
-          format: uint32
-          default: 64
-          maximum: 128
-          x-field-uid: 2
-        path_id:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixPathId'
+          default: 0::0
           x-field-uid: 3
-        segment_routing_distinguisher:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixSegmentRoutingDistinguisher'
-          x-field-uid: 4
-        segment_routing_color:
-          $ref: '#/components/schemas/Bgp.NLRIPrefixSegmentRoutingColor'
-          x-field-uid: 5
-    Bgp.NLRIPrefixSegmentRoutingDistinguisher:
-      description: |-
-        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
-      type: object
-      properties:
-        value:
-          description: "The value of the optional Segment Routing distinguisher of\
-            \ the prefix. "
-          type: integer
-          format: uint32
-          default: 1
-          x-field-uid: 1
-    Bgp.NLRIPrefixSegmentRoutingColor:
-      description: |-
-        Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.
-      type: object
-      properties:
-        value:
-          description: "The value of the optional Segment Routing color of the prefix. "
-          type: integer
-          format: uint32
-          default: 1
-          x-field-uid: 1
     Bgp.Attributes:
       description: |-
         Attributes carried in the Update packet alongwith the reach/unreach prefixes.
@@ -6244,17 +6229,13 @@ components:
           x-field-uid: 4
         ipv4_srpolicy:
           description: |-
-            List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
-          type: array
-          items:
-            $ref: '#/components/schemas/Bgp.OneIpv4SrPolicyNLRIPrefix'
+            IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+          $ref: '#/components/schemas/Bgp.Ipv4SrPolicyNLRIPrefix'
           x-field-uid: 5
         ipv6_srpolicy:
-          description: "List of IPv6 prefixes with Segment Routing Policy being sent\
-            \ in the IPv6 MPREACH_NLRI .            "
-          type: array
-          items:
-            $ref: '#/components/schemas/Bgp.OneIpv6SrPolicyNLRIPrefix'
+          description: "IPv6 endpoint with Segment Routing Policy being sent in the\
+            \ IPv6 MPREACH_NLRI .          "
+          $ref: '#/components/schemas/Bgp.Ipv6SrPolicyNLRIPrefix'
           x-field-uid: 6
     Bgp.Attributes.MpUnreachNlri:
       description: "The MP_UNREACH attribute is an optional attribute which can be\
@@ -6293,8 +6274,6 @@ components:
           x-field-uid: 2
         ipv6_unicast:
           description: |-
-            SAFI of the NLRI being sent in the Update.
-                   description: >-
             List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
           type: array
           items:
@@ -6302,17 +6281,13 @@ components:
           x-field-uid: 3
         ipv4_srpolicy:
           description: |-
-            List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
-          type: array
-          items:
-            $ref: '#/components/schemas/Bgp.OneIpv4SrPolicyNLRIPrefix'
+            IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+          $ref: '#/components/schemas/Bgp.Ipv4SrPolicyNLRIPrefix'
           x-field-uid: 4
         ipv6_srpolicy:
-          description: "List of IPv6 prefixes with Segment Routing Policy being sent\
-            \ in the IPv6 MPUNREACH_NLRI .            "
-          type: array
-          items:
-            $ref: '#/components/schemas/Bgp.OneIpv6SrPolicyNLRIPrefix'
+          description: "IPv6 endpoint with Segment Routing Policy being sent in the\
+            \ IPv4 MPUNREACH_NLRI .          "
+          $ref: '#/components/schemas/Bgp.Ipv6SrPolicyNLRIPrefix'
           x-field-uid: 5
     Bgp.Attributes.MultiExitDiscriminator:
       description: "Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to\
@@ -7238,6 +7213,18 @@ components:
           maximum: 128
           default: 0
           x-field-uid: 4
+    Bgp.NLRIPrefixSegmentRoutingDistinguisher:
+      description: |-
+        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
+      type: object
+      properties:
+        value:
+          description: "The value of the optional Segment Routing distinguisher of\
+            \ the prefix. "
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 1
     Bgp.V6Peer:
       description: |-
         Configuration for BGPv6 peer settings and routes.

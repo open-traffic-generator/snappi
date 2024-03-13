@@ -25504,8 +25504,8 @@ class BgpAttributesMpReachNlri(OpenApiObject):
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
-        "ipv4_srpolicy": {"type": "BgpOneIpv4SrPolicyNLRIPrefixIter"},
-        "ipv6_srpolicy": {"type": "BgpOneIpv6SrPolicyNLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -25530,6 +25530,32 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             getattr(self, self._DEFAULTS["choice"])
         else:
             self._set_property("choice", choice)
+
+    @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
 
     @property
     def next_hop(self):
@@ -25589,38 +25615,6 @@ class BgpAttributesMpReachNlri(OpenApiObject):
         """
         return self._get_property(
             "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
-        )
-
-    @property
-    def ipv4_srpolicy(self):
-        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
-        """ipv4_srpolicy getter
-
-        List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
-
-        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
-        """
-        return self._get_property(
-            "ipv4_srpolicy",
-            BgpOneIpv4SrPolicyNLRIPrefixIter,
-            self._parent,
-            self._choice,
-        )
-
-    @property
-    def ipv6_srpolicy(self):
-        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
-        """ipv6_srpolicy getter
-
-        List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI
-
-        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
-        """
-        return self._get_property(
-            "ipv6_srpolicy",
-            BgpOneIpv6SrPolicyNLRIPrefixIter,
-            self._parent,
-            self._choice,
         )
 
 
@@ -25964,460 +25958,212 @@ class BgpOneIpv6NLRIPrefixIter(OpenApiIter):
         return item
 
 
-class BgpOneIpv4SrPolicyNLRIPrefix(OpenApiObject):
+class BgpIpv4SrPolicyNLRIPrefix(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "address": {
+        "distinguisher": {
+            "type": int,
+            "format": "uint32",
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+        "endpoint": {
             "type": str,
             "format": "ipv4",
         },
-        "prefix": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 32,
-        },
-        "path_id": {"type": "BgpNLRIPrefixPathId"},
-        "segment_routing_distinguisher": {
-            "type": "BgpNLRIPrefixSegmentRoutingDistinguisher"
-        },
-        "segment_routing_color": {"type": "BgpNLRIPrefixSegmentRoutingColor"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "prefix": 24,
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0.0.0.0",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, address=None, prefix=24):
-        super(BgpOneIpv4SrPolicyNLRIPrefix, self).__init__()
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0.0.0.0"):
+        super(BgpIpv4SrPolicyNLRIPrefix, self).__init__()
         self._parent = parent
-        self._set_property("address", address)
-        self._set_property("prefix", prefix)
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
 
-    def set(self, address=None, prefix=None):
+    def set(self, distinguisher=None, color=None, endpoint=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def address(self):
-        # type: () -> str
-        """address getter
+    def distinguisher(self):
+        # type: () -> int
+        """distinguisher getter
 
-        The IPv4 address of the network.
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        Returns: int
+        """
+        return self._get_property("distinguisher")
+
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        value: int
+        """
+        self._set_property("distinguisher", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+    @property
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
+
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
 
         Returns: str
         """
-        return self._get_property("address")
+        return self._get_property("endpoint")
 
-    @address.setter
-    def address(self, value):
-        """address setter
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
 
-        The IPv4 address of the network.
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
 
         value: str
         """
-        self._set_property("address", value)
-
-    @property
-    def prefix(self):
-        # type: () -> int
-        """prefix getter
-
-        The IPv4 network prefix length to be applied to the address.
-
-        Returns: int
-        """
-        return self._get_property("prefix")
-
-    @prefix.setter
-    def prefix(self, value):
-        """prefix setter
-
-        The IPv4 network prefix length to be applied to the address.
-
-        value: int
-        """
-        self._set_property("prefix", value)
-
-    @property
-    def path_id(self):
-        # type: () -> BgpNLRIPrefixPathId
-        """path_id getter
-
-        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
-
-        Returns: BgpNLRIPrefixPathId
-        """
-        return self._get_property("path_id", BgpNLRIPrefixPathId)
-
-    @property
-    def segment_routing_distinguisher(self):
-        # type: () -> BgpNLRIPrefixSegmentRoutingDistinguisher
-        """segment_routing_distinguisher getter
-
-        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
-
-        Returns: BgpNLRIPrefixSegmentRoutingDistinguisher
-        """
-        return self._get_property(
-            "segment_routing_distinguisher", BgpNLRIPrefixSegmentRoutingDistinguisher
-        )
-
-    @property
-    def segment_routing_color(self):
-        # type: () -> BgpNLRIPrefixSegmentRoutingColor
-        """segment_routing_color getter
-
-        Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.
-
-        Returns: BgpNLRIPrefixSegmentRoutingColor
-        """
-        return self._get_property(
-            "segment_routing_color", BgpNLRIPrefixSegmentRoutingColor
-        )
+        self._set_property("endpoint", value)
 
 
-class BgpNLRIPrefixSegmentRoutingDistinguisher(OpenApiObject):
+class BgpIpv6SrPolicyNLRIPrefix(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "value": {
+        "distinguisher": {
             "type": int,
             "format": "uint32",
         },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "value": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, value=1):
-        super(BgpNLRIPrefixSegmentRoutingDistinguisher, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-
-    def set(self, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        The value of the optional Segment Routing distinguisher of the prefix.
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The value of the optional Segment Routing distinguisher of the prefix.
-
-        value: int
-        """
-        self._set_property("value", value)
-
-
-class BgpNLRIPrefixSegmentRoutingColor(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "value": {
+        "color": {
             "type": int,
             "format": "uint32",
         },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "value": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, value=1):
-        super(BgpNLRIPrefixSegmentRoutingColor, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-
-    def set(self, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        The value of the optional Segment Routing color of the prefix.
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The value of the optional Segment Routing color of the prefix.
-
-        value: int
-        """
-        self._set_property("value", value)
-
-
-class BgpOneIpv4SrPolicyNLRIPrefixIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(BgpOneIpv4SrPolicyNLRIPrefixIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[BgpOneIpv4SrPolicyNLRIPrefix]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> BgpOneIpv4SrPolicyNLRIPrefix
-        return self._next()
-
-    def next(self):
-        # type: () -> BgpOneIpv4SrPolicyNLRIPrefix
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, BgpOneIpv4SrPolicyNLRIPrefix):
-            raise Exception("Item is not an instance of BgpOneIpv4SrPolicyNLRIPrefix")
-
-    def oneipv4srpolicynlriprefix(self, address=None, prefix=24):
-        # type: (str,int) -> BgpOneIpv4SrPolicyNLRIPrefixIter
-        """Factory method that creates an instance of the BgpOneIpv4SrPolicyNLRIPrefix class
-
-        One IPv4 Segment Routing Policy NLRI Prefix.
-
-        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
-        """
-        item = BgpOneIpv4SrPolicyNLRIPrefix(
-            parent=self._parent, address=address, prefix=prefix
-        )
-        self._add(item)
-        return self
-
-    def add(self, address=None, prefix=24):
-        # type: (str,int) -> BgpOneIpv4SrPolicyNLRIPrefix
-        """Add method that creates and returns an instance of the BgpOneIpv4SrPolicyNLRIPrefix class
-
-        One IPv4 Segment Routing Policy NLRI Prefix.
-
-        Returns: BgpOneIpv4SrPolicyNLRIPrefix
-        """
-        item = BgpOneIpv4SrPolicyNLRIPrefix(
-            parent=self._parent, address=address, prefix=prefix
-        )
-        self._add(item)
-        return item
-
-
-class BgpOneIpv6SrPolicyNLRIPrefix(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "address": {
+        "endpoint": {
             "type": str,
             "format": "ipv6",
         },
-        "prefix": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 128,
-        },
-        "path_id": {"type": "BgpNLRIPrefixPathId"},
-        "segment_routing_distinguisher": {
-            "type": "BgpNLRIPrefixSegmentRoutingDistinguisher"
-        },
-        "segment_routing_color": {"type": "BgpNLRIPrefixSegmentRoutingColor"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "prefix": 64,
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0::0",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, address=None, prefix=64):
-        super(BgpOneIpv6SrPolicyNLRIPrefix, self).__init__()
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0::0"):
+        super(BgpIpv6SrPolicyNLRIPrefix, self).__init__()
         self._parent = parent
-        self._set_property("address", address)
-        self._set_property("prefix", prefix)
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
 
-    def set(self, address=None, prefix=None):
+    def set(self, distinguisher=None, color=None, endpoint=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def address(self):
-        # type: () -> str
-        """address getter
-
-        The IPv6 address of the network.
-
-        Returns: str
-        """
-        return self._get_property("address")
-
-    @address.setter
-    def address(self, value):
-        """address setter
-
-        The IPv6 address of the network.
-
-        value: str
-        """
-        self._set_property("address", value)
-
-    @property
-    def prefix(self):
+    def distinguisher(self):
         # type: () -> int
-        """prefix getter
+        """distinguisher getter
 
-        The IPv6 network prefix length to be applied to the address.
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
 
         Returns: int
         """
-        return self._get_property("prefix")
+        return self._get_property("distinguisher")
 
-    @prefix.setter
-    def prefix(self, value):
-        """prefix setter
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
 
-        The IPv6 network prefix length to be applied to the address.
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
 
         value: int
         """
-        self._set_property("prefix", value)
+        self._set_property("distinguisher", value)
 
     @property
-    def path_id(self):
-        # type: () -> BgpNLRIPrefixPathId
-        """path_id getter
+    def color(self):
+        # type: () -> int
+        """color getter
 
-        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
 
-        Returns: BgpNLRIPrefixPathId
+        Returns: int
         """
-        return self._get_property("path_id", BgpNLRIPrefixPathId)
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
 
     @property
-    def segment_routing_distinguisher(self):
-        # type: () -> BgpNLRIPrefixSegmentRoutingDistinguisher
-        """segment_routing_distinguisher getter
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
 
-        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
 
-        Returns: BgpNLRIPrefixSegmentRoutingDistinguisher
+        Returns: str
         """
-        return self._get_property(
-            "segment_routing_distinguisher", BgpNLRIPrefixSegmentRoutingDistinguisher
-        )
+        return self._get_property("endpoint")
 
-    @property
-    def segment_routing_color(self):
-        # type: () -> BgpNLRIPrefixSegmentRoutingColor
-        """segment_routing_color getter
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
 
-        Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.Optional field in the NLRI carrying color for Segment Routing Policy NLRI with SAFI 73.
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
 
-        Returns: BgpNLRIPrefixSegmentRoutingColor
+        value: str
         """
-        return self._get_property(
-            "segment_routing_color", BgpNLRIPrefixSegmentRoutingColor
-        )
-
-
-class BgpOneIpv6SrPolicyNLRIPrefixIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(BgpOneIpv6SrPolicyNLRIPrefixIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[BgpOneIpv6SrPolicyNLRIPrefix]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> BgpOneIpv6SrPolicyNLRIPrefix
-        return self._next()
-
-    def next(self):
-        # type: () -> BgpOneIpv6SrPolicyNLRIPrefix
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, BgpOneIpv6SrPolicyNLRIPrefix):
-            raise Exception("Item is not an instance of BgpOneIpv6SrPolicyNLRIPrefix")
-
-    def oneipv6srpolicynlriprefix(self, address=None, prefix=64):
-        # type: (str,int) -> BgpOneIpv6SrPolicyNLRIPrefixIter
-        """Factory method that creates an instance of the BgpOneIpv6SrPolicyNLRIPrefix class
-
-        One IPv6 Segment Routing Policy NLRI Prefix.
-
-        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
-        """
-        item = BgpOneIpv6SrPolicyNLRIPrefix(
-            parent=self._parent, address=address, prefix=prefix
-        )
-        self._add(item)
-        return self
-
-    def add(self, address=None, prefix=64):
-        # type: (str,int) -> BgpOneIpv6SrPolicyNLRIPrefix
-        """Add method that creates and returns an instance of the BgpOneIpv6SrPolicyNLRIPrefix class
-
-        One IPv6 Segment Routing Policy NLRI Prefix.
-
-        Returns: BgpOneIpv6SrPolicyNLRIPrefix
-        """
-        item = BgpOneIpv6SrPolicyNLRIPrefix(
-            parent=self._parent, address=address, prefix=prefix
-        )
-        self._add(item)
-        return item
+        self._set_property("endpoint", value)
 
 
 class BgpAttributesMpUnreachNlri(OpenApiObject):
@@ -26435,8 +26181,8 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
-        "ipv4_srpolicy": {"type": "BgpOneIpv4SrPolicyNLRIPrefixIter"},
-        "ipv6_srpolicy": {"type": "BgpOneIpv6SrPolicyNLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -26461,6 +26207,32 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             getattr(self, self._DEFAULTS["choice"])
         else:
             self._set_property("choice", choice)
+
+    @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
 
     @property
     def choice(self):
@@ -26501,44 +26273,12 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
         return self._get_property(
             "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
-        )
-
-    @property
-    def ipv4_srpolicy(self):
-        # type: () -> BgpOneIpv4SrPolicyNLRIPrefixIter
-        """ipv4_srpolicy getter
-
-        List of IPv4 prefixes with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
-
-        Returns: BgpOneIpv4SrPolicyNLRIPrefixIter
-        """
-        return self._get_property(
-            "ipv4_srpolicy",
-            BgpOneIpv4SrPolicyNLRIPrefixIter,
-            self._parent,
-            self._choice,
-        )
-
-    @property
-    def ipv6_srpolicy(self):
-        # type: () -> BgpOneIpv6SrPolicyNLRIPrefixIter
-        """ipv6_srpolicy getter
-
-        List of IPv6 prefixes with Segment Routing Policy being sent in the IPv6 MPUNREACH_NLRI
-
-        Returns: BgpOneIpv6SrPolicyNLRIPrefixIter
-        """
-        return self._get_property(
-            "ipv6_srpolicy",
-            BgpOneIpv6SrPolicyNLRIPrefixIter,
-            self._parent,
-            self._choice,
         )
 
 

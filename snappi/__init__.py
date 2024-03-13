@@ -209,12 +209,8 @@ from .snappi import BgpNLRIPrefixPathId
 from .snappi import BgpOneIpv4NLRIPrefixIter
 from .snappi import BgpOneIpv6NLRIPrefix
 from .snappi import BgpOneIpv6NLRIPrefixIter
-from .snappi import BgpOneIpv4SrPolicyNLRIPrefix
-from .snappi import BgpNLRIPrefixSegmentRoutingDistinguisher
-from .snappi import BgpNLRIPrefixSegmentRoutingColor
-from .snappi import BgpOneIpv4SrPolicyNLRIPrefixIter
-from .snappi import BgpOneIpv6SrPolicyNLRIPrefix
-from .snappi import BgpOneIpv6SrPolicyNLRIPrefixIter
+from .snappi import BgpIpv4SrPolicyNLRIPrefix
+from .snappi import BgpIpv6SrPolicyNLRIPrefix
 from .snappi import BgpAttributesMpUnreachNlri
 from .snappi import BgpOneTraditionalNlriPrefix
 from .snappi import BgpOneTraditionalNlriPrefixIter
