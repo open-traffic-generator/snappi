@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 )
 
@@ -141,12 +140,6 @@ type api interface {
 	deprecated(message string)
 	under_review(message string)
 	addWarnings(message string)
-	SetLogger(logger zerolog.Logger)
-	SetLogLevel(loglevel zerolog.Level)
-	// By default choice is false which outputs the log to Console.
-	// To set output to file assign choice to true
-	// and to reset back to console set choice to false
-	SetLogOutputToFile(choice bool)
 }
 
 // NewGrpcTransport sets the underlying transport of the Api as grpc
@@ -201,24 +194,6 @@ func (api *apiSt) deprecated(message string) {
 func (api *apiSt) under_review(message string) {
 	api.warnings = message
 	logs.Warn().Msg(message)
-}
-
-func (api *apiSt) SetLogger(logger zerolog.Logger) {
-	SetUserLogger(logger)
-}
-
-func (api *apiSt) SetLogOutputToFile(choice bool) {
-	logs = SetUserLogOutputToFile(choice)
-	if choice {
-		logs.Info().Str("Logging to", "file - openapiartlog.log").Msg("")
-	} else {
-		logs.Info().Str("Logging to", "console").Msg("")
-	}
-}
-
-func (api *apiSt) SetLogLevel(logLevel zerolog.Level) {
-	SetUserLogLevel(logLevel)
-	logs.Info().Str("Log Level set to", logLevel.String()).Msg("")
 }
 
 // Returns instance of telemetry operations
