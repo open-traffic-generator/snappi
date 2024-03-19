@@ -182,9 +182,13 @@ from .snappi import BgpAttributesBsid
 from .snappi import BgpAttributesBsidMpls
 from .snappi import BgpAttributesSidMpls
 from .snappi import BgpAttributesBsidSrv6
+from .snappi import BgpAttributesSrv6Bsid
+from .snappi import BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+from .snappi import BgpAttributesSrv6BsidIter
 from .snappi import BgpAttributesSrPolicyPreference
 from .snappi import BgpAttributesSrPolicyPriority
 from .snappi import BgpAttributesSrPolicyPolicyName
+from .snappi import BgpAttributesSrPolicyPolicyCandidateName
 from .snappi import BgpAttributesSrPolicyExplicitNullPolicy
 from .snappi import BgpAttributesSrPolicySegmentList
 from .snappi import BgpAttributesSegmentRoutingPolicySegmentListWeight
@@ -192,7 +196,6 @@ from .snappi import BgpAttributesSegmentRoutingPolicySegmentListSegment
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeA
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeFlags
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeB
-from .snappi import BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeC
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeD
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeE
@@ -200,6 +203,7 @@ from .snappi import BgpAttributesSegmentRoutingPolicyTypeF
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeG
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeH
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeI
+from .snappi import BgpAttributesSidSrv6
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeJ
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeK
 from .snappi import BgpAttributesSegmentRoutingPolicySegmentListSegmentIter

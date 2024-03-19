@@ -20970,7 +20970,7 @@ class BgpAttributes(OpenApiObject):
         # type: () -> BgpAttributesMpReachNlri
         """mp_reach getter
 
-        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
+        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpReachNlri
         """
@@ -20981,7 +20981,7 @@ class BgpAttributes(OpenApiObject):
         # type: () -> BgpAttributesMpUnreachNlri
         """mp_unreach getter
 
-        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73. Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
+        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpUnreachNlri
         """
@@ -22618,7 +22618,7 @@ class BgpAttributesTunnelEncapsulation(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicy
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicy class
 
-        Optional Segment Routing Policy information as defined in draft-ietf-idr-segment-routing-te-policy.. This information is carried in TUNNEL_ENCAPSULATION attribute with type set to SR Policy (15).. [From .proto :. message PaPolicy {. optional PaBindingSegmentIdentifier bsid 1;. optional PaPreference preference 2;. repeated PaSegmentList segment_lists 3;. optional PaPriority priority 4;. optional PaPolicyName policy_name 5;. optional PaExplicitNullLabelPolicy explicit_null_label_policy 6;. .
+        Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.. This information is carried in TUNNEL_ENCAPSULATION attribute with type set to SR Policy (15).
 
         Returns: BgpAttributesSegmentRoutingPolicy
         """
@@ -22653,10 +22653,14 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
 
     _TYPES = {
         "binding_segment_identifier": {"type": "BgpAttributesBsid"},
-        "prerefence": {"type": "BgpAttributesSrPolicyPreference"},
+        "srv6_binding_segment_identifier": {"type": "BgpAttributesSrv6BsidIter"},
+        "preference": {"type": "BgpAttributesSrPolicyPreference"},
         "priority": {"type": "BgpAttributesSrPolicyPriority"},
         "policy_name": {"type": "BgpAttributesSrPolicyPolicyName"},
-        "explicit_null_policy": {"type": "BgpAttributesSrPolicyExplicitNullPolicy"},
+        "policy_candidate_name": {"type": "BgpAttributesSrPolicyPolicyCandidateName"},
+        "explicit_null_label_policy": {
+            "type": "BgpAttributesSrPolicyExplicitNullPolicy"
+        },
         "segment_list": {"type": "BgpAttributesSrPolicySegmentList"},
     }  # type: Dict[str, str]
 
@@ -22675,29 +22679,45 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
         # type: () -> BgpAttributesBsid
         """binding_segment_identifier getter
 
-        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy. Section 2.4.2 .. [.proto:. message PaBindingSegmentIdentifier {. optional bool specified_bsid_only 1; // S-flag.. optional bool drop_upon_invalid 2; // I-flag. oneof sid {. PaSegment.MPLS mpls 4;. monitoring.raven.IPAddressProto ipv6 5;. }. }. ]
+        The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.
 
         Returns: BgpAttributesBsid
         """
         return self._get_property("binding_segment_identifier", BgpAttributesBsid)
 
     @property
-    def prerefence(self):
-        # type: () -> BgpAttributesSrPolicyPreference
-        """prerefence getter
+    def srv6_binding_segment_identifier(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        """srv6_binding_segment_identifier getter
 
-        Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy.. Optional Preference sub-tlv used to select the best candidate path for an SR Policy..
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one. or more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        return self._get_property(
+            "srv6_binding_segment_identifier",
+            BgpAttributesSrv6BsidIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def preference(self):
+        # type: () -> BgpAttributesSrPolicyPreference
+        """preference getter
+
+        Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 ..
 
         Returns: BgpAttributesSrPolicyPreference
         """
-        return self._get_property("prerefence", BgpAttributesSrPolicyPreference)
+        return self._get_property("preference", BgpAttributesSrPolicyPreference)
 
     @property
     def priority(self):
         # type: () -> BgpAttributesSrPolicyPriority
         """priority getter
 
-        Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed.. Optional Priority sub-tlv used to select the order in which policies should be re-computed..
+        Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
 
         Returns: BgpAttributesSrPolicyPriority
         """
@@ -22708,23 +22728,36 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
         # type: () -> BgpAttributesSrPolicyPolicyName
         """policy_name getter
 
-        Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging. Optional Policy Name sub-tlv which carries the symbolic name for the SR Policy candidate path for debugging.
+        Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .
 
         Returns: BgpAttributesSrPolicyPolicyName
         """
         return self._get_property("policy_name", BgpAttributesSrPolicyPolicyName)
 
     @property
-    def explicit_null_policy(self):
-        # type: () -> BgpAttributesSrPolicyExplicitNullPolicy
-        """explicit_null_policy getter
+    def policy_candidate_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyCandidateName
+        """policy_candidate_name getter
 
-        This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.This is an optional sub-tlv . If included it Indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.
+        Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPolicyCandidateName
+        """
+        return self._get_property(
+            "policy_candidate_name", BgpAttributesSrPolicyPolicyCandidateName
+        )
+
+    @property
+    def explicit_null_label_policy(self):
+        # type: () -> BgpAttributesSrPolicyExplicitNullPolicy
+        """explicit_null_label_policy getter
+
+        This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
 
         Returns: BgpAttributesSrPolicyExplicitNullPolicy
         """
         return self._get_property(
-            "explicit_null_policy", BgpAttributesSrPolicyExplicitNullPolicy
+            "explicit_null_label_policy", BgpAttributesSrPolicyExplicitNullPolicy
         )
 
     @property
@@ -22732,7 +22765,7 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
         # type: () -> BgpAttributesSrPolicySegmentList
         """segment_list getter
 
-        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.. [.proto :. // Contains one "segment (label) stack" with its weight. The weight is used for. // weighted multipath.. message PaSegmentList {. message Weight {. optional uint32 value 1;. }. optional Weight weight 1;. repeated PaSegment segments 2;. }. ]
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
 
         Returns: BgpAttributesSrPolicySegmentList
         """
@@ -22780,7 +22813,7 @@ class BgpAttributesBsid(OpenApiObject):
         # type: () -> BgpAttributesBsidMpls
         """Factory property that returns an instance of the BgpAttributesBsidMpls class
 
-        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
 
         Returns: BgpAttributesBsidMpls
         """
@@ -22791,7 +22824,7 @@ class BgpAttributesBsid(OpenApiObject):
         # type: () -> BgpAttributesBsidSrv6
         """Factory property that returns an instance of the BgpAttributesBsidSrv6 class
 
-        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
 
         Returns: BgpAttributesBsidSrv6
         """
@@ -22899,7 +22932,7 @@ class BgpAttributesBsidMpls(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
 
         Returns: BgpAttributesSidMpls
         """
@@ -23043,10 +23076,119 @@ class BgpAttributesBsidSrv6(OpenApiObject):
     _TYPES = {
         "flag_specified_bsid_only": {"type": bool},
         "flag_drop_upon_invalid": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesBsidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None, ipv6_addr=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+
+class BgpAttributesSrv6Bsid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
         "flag_srv6_endpoint_behavior": {"type": bool},
         "ipv6_addr": {
             "type": str,
             "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
         },
     }  # type: Dict[str, str]
 
@@ -23069,7 +23211,7 @@ class BgpAttributesBsidSrv6(OpenApiObject):
         flag_srv6_endpoint_behavior=False,
         ipv6_addr="0::0",
     ):
-        super(BgpAttributesBsidSrv6, self).__init__()
+        super(BgpAttributesSrv6Bsid, self).__init__()
         self._parent = parent
         self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
         self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
@@ -23134,7 +23276,7 @@ class BgpAttributesBsidSrv6(OpenApiObject):
         # type: () -> bool
         """flag_srv6_endpoint_behavior getter
 
-        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-segment-routing-te-policy.
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
 
         Returns: bool
         """
@@ -23144,7 +23286,7 @@ class BgpAttributesBsidSrv6(OpenApiObject):
     def flag_srv6_endpoint_behavior(self, value):
         """flag_srv6_endpoint_behavior setter
 
-        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-segment-routing-te-policy.
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
 
         value: bool
         """
@@ -23170,6 +23312,281 @@ class BgpAttributesBsidSrv6(OpenApiObject):
         value: str
         """
         self._set_property("ipv6_addr", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "endpoint_behaviour": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 4,
+        },
+        "lb_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "ln_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "func_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "arg_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "endpoint_behaviour": "ffff",
+        "lb_length": 0,
+        "ln_length": 0,
+        "func_length": 0,
+        "arg_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        endpoint_behaviour="ffff",
+        lb_length=0,
+        ln_length=0,
+        func_length=0,
+        arg_length=0,
+    ):
+        super(
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("endpoint_behaviour", endpoint_behaviour)
+        self._set_property("lb_length", lb_length)
+        self._set_property("ln_length", ln_length)
+        self._set_property("func_length", func_length)
+        self._set_property("arg_length", arg_length)
+
+    def set(
+        self,
+        endpoint_behaviour=None,
+        lb_length=None,
+        ln_length=None,
+        func_length=None,
+        arg_length=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def endpoint_behaviour(self):
+        # type: () -> str
+        """endpoint_behaviour getter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        Returns: str
+        """
+        return self._get_property("endpoint_behaviour")
+
+    @endpoint_behaviour.setter
+    def endpoint_behaviour(self, value):
+        """endpoint_behaviour setter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        value: str
+        """
+        self._set_property("endpoint_behaviour", value)
+
+    @property
+    def lb_length(self):
+        # type: () -> int
+        """lb_length getter
+
+        SRv6 SID Locator Block length in bits.
+
+        Returns: int
+        """
+        return self._get_property("lb_length")
+
+    @lb_length.setter
+    def lb_length(self, value):
+        """lb_length setter
+
+        SRv6 SID Locator Block length in bits.
+
+        value: int
+        """
+        self._set_property("lb_length", value)
+
+    @property
+    def ln_length(self):
+        # type: () -> int
+        """ln_length getter
+
+        SRv6 SID Locator Node length in bits.
+
+        Returns: int
+        """
+        return self._get_property("ln_length")
+
+    @ln_length.setter
+    def ln_length(self, value):
+        """ln_length setter
+
+        SRv6 SID Locator Node length in bits.
+
+        value: int
+        """
+        self._set_property("ln_length", value)
+
+    @property
+    def func_length(self):
+        # type: () -> int
+        """func_length getter
+
+        SRv6 SID Function length in bits.
+
+        Returns: int
+        """
+        return self._get_property("func_length")
+
+    @func_length.setter
+    def func_length(self, value):
+        """func_length setter
+
+        SRv6 SID Function length in bits.
+
+        value: int
+        """
+        self._set_property("func_length", value)
+
+    @property
+    def arg_length(self):
+        # type: () -> int
+        """arg_length getter
+
+        SRv6 SID Arguments length in bits.
+
+        Returns: int
+        """
+        return self._get_property("arg_length")
+
+    @arg_length.setter
+    def arg_length(self, value):
+        """arg_length setter
+
+        SRv6 SID Arguments length in bits.
+
+        value: int
+        """
+        self._set_property("arg_length", value)
+
+
+class BgpAttributesSrv6BsidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrv6BsidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrv6Bsid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrv6Bsid):
+            raise Exception("Item is not an instance of BgpAttributesSrv6Bsid")
+
+    def srv6bsid(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6BsidIter
+        """Factory method that creates an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6Bsid
+        """Add method that creates and returns an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6Bsid
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return item
 
 
 class BgpAttributesSrPolicyPreference(OpenApiObject):
@@ -23323,6 +23740,56 @@ class BgpAttributesSrPolicyPolicyName(OpenApiObject):
         self._set_property("value", value)
 
 
+class BgpAttributesSrPolicyPolicyCandidateName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyCandidateName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
 class BgpAttributesSrPolicyExplicitNullPolicy(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -23410,7 +23877,7 @@ class BgpAttributesSrPolicySegmentList(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicySegmentListWeight
         """weight getter
 
-        The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV specifies the weight associated with given segment list. The weight is used for weighted multipath.
+        The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListWeight
         """
@@ -23566,7 +24033,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeB
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
 
-        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeB
         """
@@ -23618,7 +24085,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeF
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
 
-        Type F: IPv4 Local and Remote addresses with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeF
         """
@@ -23657,7 +24124,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeI
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
 
-        Type I: IPv6 Node Address with optional SRv6 SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeI
         """
@@ -23670,7 +24137,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeJ
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
 
-        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 10 in the SEGMENT_LIST sub-tlv.
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeJ
         """
@@ -23683,7 +24150,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeK
         """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
 
-        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 11 in the SEGMENT_LIST sub-tlv.
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeK
         """
@@ -23696,7 +24163,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
         # type: () -> Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
         """choice getter
 
-        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Node Address with optional SID.. Type D: IPv6 Node Address with optional SID for SR MPLS.. Type E: IPv4 Address and index with optional SID.. Type F: IPv4 Local and Remote addresses with optional SID.. Type G: IPv6 Address and index for local and remote pair with optional SID for SR MPLS.. Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. Type I: IPv6 Node Address with optional SID for SRv6.. Type J: IPv6 Address and index for local and remote pair with optional SID for SRv6.. Type K: IPv6 Local and Remote addresses for SRv6.
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
 
         Returns: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
         """
@@ -23706,7 +24173,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Node Address with optional SID.. Type D: IPv6 Node Address with optional SID for SR MPLS.. Type E: IPv4 Address and index with optional SID.. Type F: IPv4 Local and Remote addresses with optional SID.. Type G: IPv6 Address and index for local and remote pair with optional SID for SR MPLS.. Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. Type I: IPv6 Node Address with optional SID for SRv6.. Type J: IPv6 Address and index for local and remote pair with optional SID for SRv6.. Type K: IPv6 Local and Remote addresses for SRv6.
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
 
         value: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
         """
@@ -23738,7 +24205,7 @@ class BgpAttributesSegmentRoutingPolicyTypeA(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -23749,7 +24216,7 @@ class BgpAttributesSegmentRoutingPolicyTypeA(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
 
         Returns: BgpAttributesSidMpls
         """
@@ -23762,6 +24229,7 @@ class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
     _TYPES = {
         "v_flag": {"type": bool},
         "a_flag": {"type": bool},
+        "s_flag": {"type": bool},
         "b_flag": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -23770,19 +24238,23 @@ class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
     _DEFAULTS = {
         "v_flag": False,
         "a_flag": False,
+        "s_flag": False,
         "b_flag": False,
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, v_flag=False, a_flag=False, b_flag=False):
+    def __init__(
+        self, parent=None, v_flag=False, a_flag=False, s_flag=False, b_flag=False
+    ):
         super(BgpAttributesSegmentRoutingPolicyTypeFlags, self).__init__()
         self._parent = parent
         self._set_property("v_flag", v_flag)
         self._set_property("a_flag", a_flag)
+        self._set_property("s_flag", s_flag)
         self._set_property("b_flag", b_flag)
 
-    def set(self, v_flag=None, a_flag=None, b_flag=None):
+    def set(self, v_flag=None, a_flag=None, s_flag=None, b_flag=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -23830,11 +24302,32 @@ class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
         self._set_property("a_flag", value)
 
     @property
+    def s_flag(self):
+        # type: () -> bool
+        """s_flag getter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        Returns: bool
+        """
+        return self._get_property("s_flag")
+
+    @s_flag.setter
+    def s_flag(self, value):
+        """s_flag setter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        value: bool
+        """
+        self._set_property("s_flag", value)
+
+    @property
     def b_flag(self):
         # type: () -> bool
         """b_flag getter
 
-        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-segment-routing-te-policy.
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
 
         Returns: bool
         """
@@ -23844,7 +24337,7 @@ class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
     def b_flag(self, value):
         """b_flag setter
 
-        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-segment-routing-te-policy.
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
 
         value: bool
         """
@@ -23888,7 +24381,7 @@ class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -23920,7 +24413,7 @@ class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """srv6_endpoint_behavior getter
 
-        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
 
         Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """
@@ -23928,147 +24421,6 @@ class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
             "srv6_endpoint_behavior",
             BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
         )
-
-
-class BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure(
-    OpenApiObject
-):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "lb_length": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 128,
-        },
-        "ln_length": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 128,
-        },
-        "func_length": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 128,
-        },
-        "arg_length": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 128,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "lb_length": 0,
-        "ln_length": 0,
-        "func_length": 0,
-        "arg_length": 0,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, lb_length=0, ln_length=0, func_length=0, arg_length=0
-    ):
-        super(
-            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure, self
-        ).__init__()
-        self._parent = parent
-        self._set_property("lb_length", lb_length)
-        self._set_property("ln_length", ln_length)
-        self._set_property("func_length", func_length)
-        self._set_property("arg_length", arg_length)
-
-    def set(self, lb_length=None, ln_length=None, func_length=None, arg_length=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def lb_length(self):
-        # type: () -> int
-        """lb_length getter
-
-        SRv6 SID Locator Block length in bits.
-
-        Returns: int
-        """
-        return self._get_property("lb_length")
-
-    @lb_length.setter
-    def lb_length(self, value):
-        """lb_length setter
-
-        SRv6 SID Locator Block length in bits.
-
-        value: int
-        """
-        self._set_property("lb_length", value)
-
-    @property
-    def ln_length(self):
-        # type: () -> int
-        """ln_length getter
-
-        SRv6 SID Locator Node length in bits.
-
-        Returns: int
-        """
-        return self._get_property("ln_length")
-
-    @ln_length.setter
-    def ln_length(self, value):
-        """ln_length setter
-
-        SRv6 SID Locator Node length in bits.
-
-        value: int
-        """
-        self._set_property("ln_length", value)
-
-    @property
-    def func_length(self):
-        # type: () -> int
-        """func_length getter
-
-        SRv6 SID Function length in bits.
-
-        Returns: int
-        """
-        return self._get_property("func_length")
-
-    @func_length.setter
-    def func_length(self, value):
-        """func_length setter
-
-        SRv6 SID Function length in bits.
-
-        value: int
-        """
-        self._set_property("func_length", value)
-
-    @property
-    def arg_length(self):
-        # type: () -> int
-        """arg_length getter
-
-        SRv6 SID Arguments length in bits.
-
-        Returns: int
-        """
-        return self._get_property("arg_length")
-
-    @arg_length.setter
-    def arg_length(self, value):
-        """arg_length setter
-
-        SRv6 SID Arguments length in bits.
-
-        value: int
-        """
-        self._set_property("arg_length", value)
 
 
 class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
@@ -24113,7 +24465,7 @@ class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24166,7 +24518,7 @@ class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24215,7 +24567,7 @@ class BgpAttributesSegmentRoutingPolicyTypeD(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24268,7 +24620,7 @@ class BgpAttributesSegmentRoutingPolicyTypeD(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24316,7 +24668,7 @@ class BgpAttributesSegmentRoutingPolicyTypeE(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24369,7 +24721,7 @@ class BgpAttributesSegmentRoutingPolicyTypeE(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24419,7 +24771,7 @@ class BgpAttributesSegmentRoutingPolicyTypeF(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24472,7 +24824,7 @@ class BgpAttributesSegmentRoutingPolicyTypeF(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24545,7 +24897,7 @@ class BgpAttributesSegmentRoutingPolicyTypeG(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24640,7 +24992,7 @@ class BgpAttributesSegmentRoutingPolicyTypeG(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24690,7 +25042,7 @@ class BgpAttributesSegmentRoutingPolicyTypeH(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24743,7 +25095,7 @@ class BgpAttributesSegmentRoutingPolicyTypeH(OpenApiObject):
         # type: () -> BgpAttributesSidMpls
         """sr_mpls_sid getter
 
-        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. - [.proto . // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. ]Optional SR-MPLS SID.
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
 
         Returns: BgpAttributesSidMpls
         """
@@ -24764,10 +25116,7 @@ class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "srv6_sid": {
-            "type": str,
-            "format": "ipv6",
-        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
         "srv6_endpoint_behavior": {
             "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
         },
@@ -24778,21 +25127,17 @@ class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
     _DEFAULTS = {
         "sr_algorithm": 0,
         "ipv6_node_address": "0::0",
-        "srv6_sid": "0::0",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self, parent=None, sr_algorithm=0, ipv6_node_address="0::0", srv6_sid="0::0"
-    ):
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
         super(BgpAttributesSegmentRoutingPolicyTypeI, self).__init__()
         self._parent = parent
         self._set_property("sr_algorithm", sr_algorithm)
         self._set_property("ipv6_node_address", ipv6_node_address)
-        self._set_property("srv6_sid", srv6_sid)
 
-    def set(self, sr_algorithm=None, ipv6_node_address=None, srv6_sid=None):
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -24802,7 +25147,7 @@ class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -24852,31 +25197,21 @@ class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
 
     @property
     def srv6_sid(self):
-        # type: () -> str
+        # type: () -> BgpAttributesSidSrv6
         """srv6_sid getter
 
-        Optional SRv6 SID.
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
 
-        Returns: str
+        Returns: BgpAttributesSidSrv6
         """
-        return self._get_property("srv6_sid")
-
-    @srv6_sid.setter
-    def srv6_sid(self, value):
-        """srv6_sid setter
-
-        Optional SRv6 SID.
-
-        value: str
-        """
-        self._set_property("srv6_sid", value)
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
 
     @property
     def srv6_endpoint_behavior(self):
         # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """srv6_endpoint_behavior getter
 
-        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
 
         Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """
@@ -24884,6 +25219,56 @@ class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
             "srv6_endpoint_behavior",
             BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
         )
+
+
+class BgpAttributesSidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ip": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "ip": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ip="0::0"):
+        super(BgpAttributesSidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("ip", ip)
+
+    def set(self, ip=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ip(self):
+        # type: () -> str
+        """ip getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("ip")
+
+    @ip.setter
+    def ip(self, value):
+        """ip setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("ip", value)
 
 
 class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
@@ -24912,10 +25297,7 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "srv6_sid": {
-            "type": str,
-            "format": "ipv6",
-        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
         "srv6_endpoint_behavior": {
             "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
         },
@@ -24929,7 +25311,6 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
         "local_ipv6_node_address": "0::0",
         "remote_interface_id": 0,
         "remote_ipv6_node_address": "0::0",
-        "srv6_sid": "0::0",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -24942,7 +25323,6 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
         local_ipv6_node_address="0::0",
         remote_interface_id=0,
         remote_ipv6_node_address="0::0",
-        srv6_sid="0::0",
     ):
         super(BgpAttributesSegmentRoutingPolicyTypeJ, self).__init__()
         self._parent = parent
@@ -24951,7 +25331,6 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
         self._set_property("local_ipv6_node_address", local_ipv6_node_address)
         self._set_property("remote_interface_id", remote_interface_id)
         self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
-        self._set_property("srv6_sid", srv6_sid)
 
     def set(
         self,
@@ -24960,7 +25339,6 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
         local_ipv6_node_address=None,
         remote_interface_id=None,
         remote_ipv6_node_address=None,
-        srv6_sid=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -24971,7 +25349,7 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
@@ -25084,31 +25462,21 @@ class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
 
     @property
     def srv6_sid(self):
-        # type: () -> str
+        # type: () -> BgpAttributesSidSrv6
         """srv6_sid getter
 
-        Optional SRv6 SID.
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
 
-        Returns: str
+        Returns: BgpAttributesSidSrv6
         """
-        return self._get_property("srv6_sid")
-
-    @srv6_sid.setter
-    def srv6_sid(self, value):
-        """srv6_sid setter
-
-        Optional SRv6 SID.
-
-        value: str
-        """
-        self._set_property("srv6_sid", value)
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
 
     @property
     def srv6_endpoint_behavior(self):
         # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """srv6_endpoint_behavior getter
 
-        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
 
         Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """
@@ -25123,6 +25491,11 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
 
     _TYPES = {
         "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
         "local_ipv6_address": {
             "type": str,
             "format": "ipv6",
@@ -25131,10 +25504,7 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
             "type": str,
             "format": "ipv6",
         },
-        "srv6_sid": {
-            "type": str,
-            "format": "ipv6",
-        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
         "srv6_endpoint_behavior": {
             "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
         },
@@ -25143,9 +25513,9 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
+        "sr_algorithm": 0,
         "local_ipv6_address": "0::0",
         "remote_ipv6_address": "0::0",
-        "srv6_sid": "0::0",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -25153,17 +25523,17 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
     def __init__(
         self,
         parent=None,
+        sr_algorithm=0,
         local_ipv6_address="0::0",
         remote_ipv6_address="0::0",
-        srv6_sid="0::0",
     ):
         super(BgpAttributesSegmentRoutingPolicyTypeK, self).__init__()
         self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
         self._set_property("local_ipv6_address", local_ipv6_address)
         self._set_property("remote_ipv6_address", remote_ipv6_address)
-        self._set_property("srv6_sid", srv6_sid)
 
-    def set(self, local_ipv6_address=None, remote_ipv6_address=None, srv6_sid=None):
+    def set(self, sr_algorithm=None, local_ipv6_address=None, remote_ipv6_address=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -25173,11 +25543,32 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
         # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
         """flags getter
 
-        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding. - [.proto:. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }]
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
 
         Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
         """
         return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
 
     @property
     def local_ipv6_address(self):
@@ -25223,31 +25614,21 @@ class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
 
     @property
     def srv6_sid(self):
-        # type: () -> str
+        # type: () -> BgpAttributesSidSrv6
         """srv6_sid getter
 
-        Optional SRv6 SID.
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
 
-        Returns: str
+        Returns: BgpAttributesSidSrv6
         """
-        return self._get_property("srv6_sid")
-
-    @srv6_sid.setter
-    def srv6_sid(self, value):
-        """srv6_sid setter
-
-        Optional SRv6 SID.
-
-        value: str
-        """
-        self._set_property("srv6_sid", value)
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
 
     @property
     def srv6_endpoint_behavior(self):
         # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """srv6_endpoint_behavior getter
 
-        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
 
         Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
         """
@@ -25293,7 +25674,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
 
-        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. [.proto :. // This defines one segment. The distinction between "segment" and "segment. // identifier" (SID) is basically non-existent; these objects can be seen as. // either.. message PaSegment {. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }. // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. // SID only, in the form of MPLS Label.. message Type1 {. optional Flags flags 1;. optional MPLS sid 2;. }. // SID only, in the form of IPv6 address.. message Type2 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto sid 2;. }. // IPv4 Node Address with optional SID.. message Type3 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SR MPLS.. message Type4 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Address index with optional SID.. message Type5 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Local and Remote addresses with optional SID.. message Type6 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SR. // MPLS.. message Type7 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional MPLS sid 6;. }. // IPv6 Local and Remote addresses with optional SID for SR MPLS.. message Type8 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SRv6.. message Type9 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SRv6.. message Type10 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional monitoring.raven.IPAddressProto sid 6;. }. // IPv6 Local and Remote addresses for SRv6.. message Type11 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. oneof segment {. Type1 type1 1;. Type2 type2 2;. Type3 type3 3;. Type4 type4 4;. Type5 type5 5;. Type6 type6 6;. Type7 type7 7;. Type8 type8 8;. Type9 type9 9;. Type10 type10 10;. Type11 type11 11;. }. }. ]
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """
@@ -25307,7 +25688,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
         """Add method that creates and returns an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
 
-        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. [.proto :. // This defines one segment. The distinction between "segment" and "segment. // identifier" (SID) is basically non-existent; these objects can be seen as. // either.. message PaSegment {. message Flags // bits in total.. // V-flag. Indicates verification is enabled. See section 5,. // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01. optional bool verification 1;. // A-flag. Indicates presence of SR Algorithm field applicable to Segment. // Types 3, 4, and 9.. optional bool algorithm 2;. }. // Segment identified by MPLS label.. message MPLS {. optional uint32 label 1; // 20 bits.. optional uint32 traffic_class 2; // bits (TC).. optional bool bottom_of_stack 3; // bit (S).. optional uint32 time_to_live 4; // bits (TTL).. }. // SID only, in the form of MPLS Label.. message Type1 {. optional Flags flags 1;. optional MPLS sid 2;. }. // SID only, in the form of IPv6 address.. message Type2 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto sid 2;. }. // IPv4 Node Address with optional SID.. message Type3 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SR MPLS.. message Type4 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Address index with optional SID.. message Type5 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional MPLS sid 4;. }. // IPv4 Local and Remote addresses with optional SID.. message Type6 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SR. // MPLS.. message Type7 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional MPLS sid 6;. }. // IPv6 Local and Remote addresses with optional SID for SR MPLS.. message Type8 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional MPLS sid 4;. }. // IPv6 Node Address with optional SID for SRv6.. message Type9 {. optional Flags flags 1;. optional PaAlgorithm algorithm 2;. optional monitoring.raven.IPAddressProto node_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. // IPv6 Address index for local and remote pair with optional SID for SRv6.. message Type10 {. optional Flags flags 1;. optional uint32 local_interface_id 2;. optional monitoring.raven.IPAddressProto local_node_address 3;. // `remote_interface_id` and `remote_node_address` pair is optional. Both. // must be present or both must be absent.. optional uint32 remote_interface_id 4;. optional monitoring.raven.IPAddressProto remote_node_address 5;. optional monitoring.raven.IPAddressProto sid 6;. }. // IPv6 Local and Remote addresses for SRv6.. message Type11 {. optional Flags flags 1;. optional monitoring.raven.IPAddressProto local_address 2;. optional monitoring.raven.IPAddressProto remote_address 3;. optional monitoring.raven.IPAddressProto sid 4;. }. oneof segment {. Type1 type1 1;. Type2 type2 2;. Type3 type3 3;. Type4 type4 4;. Type5 type5 5;. Type6 type6 6;. Type7 type7 7;. Type8 type8 8;. Type9 type9 9;. Type10 type10 10;. Type11 type11 11;. }. }. ]
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegment
         """
@@ -25335,7 +25716,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         # type: (str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
 
-        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """
@@ -25391,7 +25772,7 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
 
-        Type F: IPv4 Local and Remote addresses with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """
@@ -25435,11 +25816,11 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         self._add(item)
         return self
 
-    def type_i(self, sr_algorithm=0, ipv6_node_address="0::0", srv6_sid="0::0"):
-        # type: (int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+    def type_i(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
 
-        Type I: IPv6 Node Address with optional SRv6 SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """
@@ -25456,12 +25837,11 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         local_ipv6_node_address="0::0",
         remote_interface_id=0,
         remote_ipv6_node_address="0::0",
-        srv6_sid="0::0",
     ):
-        # type: (int,int,str,int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        # type: (int,int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
 
-        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 10 in the SEGMENT_LIST sub-tlv.
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """
@@ -25472,12 +25852,12 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         return self
 
     def type_k(
-        self, local_ipv6_address="0::0", remote_ipv6_address="0::0", srv6_sid="0::0"
+        self, sr_algorithm=0, local_ipv6_address="0::0", remote_ipv6_address="0::0"
     ):
-        # type: (str,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        # type: (int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
 
-        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 11 in the SEGMENT_LIST sub-tlv.
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
 
         Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
         """

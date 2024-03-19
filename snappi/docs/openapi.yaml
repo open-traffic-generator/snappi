@@ -6185,8 +6185,9 @@ components:
         \ in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
         The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
         \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 \n-\
-        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73\n-\
-        \ Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73"
+        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.1 )\n- Segment Routing Policy for IPv6 Unicast with AFI as 2 and\
+        \ SAFI as 73"
       type: object
       required:
       - choice
@@ -6242,8 +6243,9 @@ components:
         \ included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
         The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
         \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 \n-\
-        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73\n-\
-        \ Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73"
+        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.1)\n- Segment Routing Policy for IPv6 Unicast with AFI as 2 and\
+        \ SAFI as 73"
       type: object
       properties:
         choice:
@@ -6345,50 +6347,53 @@ components:
           $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy'
           x-field-uid: 2
     Bgp.Attributes.SegmentRoutingPolicy:
-      description: "Optional Segment Routing Policy information as defined in draft-ietf-idr-segment-routing-te-policy.\n\
+      description: "Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.\n\
         This information is carried in TUNNEL_ENCAPSULATION attribute with type set\
-        \ to  SR Policy (15).\n- [From .proto :\n  message PaPolicy {\n    optional\
-        \ PaBindingSegmentIdentifier bsid = 1;\n    optional PaPreference preference\
-        \ = 2;\n    repeated PaSegmentList segment_lists = 3;\n    optional PaPriority\
-        \ priority = 4;\n    optional PaPolicyName policy_name = 5;\n    optional\
-        \ PaExplicitNullLabelPolicy explicit_null_label_policy = 6;\n  } \n ] "
+        \ to  SR Policy (15). "
       type: object
       properties:
         binding_segment_identifier:
-          description: "When the active candidate path has a specified Binding Segment\
-            \ Identifier, \nthe SR Policy uses that BSID if this value (label in MPLS,\
-            \ IPv6 address in SRv6) is available.\nThe format of the sub-TLV is defined\
-            \ in draft-ietf-idr-segment-routing-te-policy\nSection 2.4.2 .\n- [.proto:\n\
-            \  message PaBindingSegmentIdentifier {\n    optional bool specified_bsid_only\
-            \ = 1;  // S-flag.\n    optional bool drop_upon_invalid = 2;    // I-flag.\
-            \ \n    oneof sid {\n      PaSegment.MPLS mpls = 4;\n      monitoring.raven.IPAddressProto\
-            \ ipv6 = 5;\n    }\n  }\n]"
           $ref: '#/components/schemas/Bgp.Attributes.Bsid'
           x-field-uid: 1
-        prerefence:
-          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.Preference'
+        srv6_binding_segment_identifier:
+          description: "The SRv6 Binding SID sub-TLV is an optional sub-TLV of type\
+            \ 20 that is used to signal the SRv6 Binding SID\nrelated information\
+            \ of an SR Policy candidate path. \n  - More than one SRv6 Binding SID\
+            \ sub-TLVs MAY be signaled in the same SR Policy encoding to indicate\
+            \ one\n    or more SRv6 SIDs, each with potentially different SRv6 Endpoint\
+            \ Behaviors to be instantiated.\n  - The format of the sub-TLV is defined\
+            \ in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .       "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.Srv6Bsid'
           x-field-uid: 2
+        preference:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.Preference'
+          x-field-uid: 3
         priority:
           $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.Priority'
-          x-field-uid: 3
+          x-field-uid: 4
         policy_name:
           $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.PolicyName'
-          x-field-uid: 4
-        explicit_null_policy:
-          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.ExplicitNullPolicy'
           x-field-uid: 5
+        policy_candidate_name:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.PolicyCandidateName'
+          x-field-uid: 6
+        explicit_null_label_policy:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.ExplicitNullPolicy'
+          x-field-uid: 7
         segment_list:
           $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.SegmentList'
-          x-field-uid: 6
+          x-field-uid: 8
     Bgp.Attributes.Bsid:
-      description: "When the active candidate path has a specified Binding Segment\
-        \ Identifier, the SR Policy uses that \nBSID if this value (label in MPLS,\
-        \ IPv6 address in SRv6) is available.\n- The format of the sub-TLV is defined\
-        \ in draft-ietf-idr-segment-routing-te-policy Section 2.4.2 .\n- [.proto:\n\
-        \      message PaBindingSegmentIdentifier {\n        optional bool specified_bsid_only\
-        \ = 1;  // S-flag.\n        optional bool drop_upon_invalid = 2;    // I-flag.\
-        \ \n        oneof sid {\n          PaSegment.MPLS mpls = 4;\n          monitoring.raven.IPAddressProto\
-        \ ipv6 = 5;\n        }\n      }\n    ]"
+      description: "The Binding Segment Identifier is an optional sub-tlv of type\
+        \ 13 that can be sent with a SR Policy \nTunnel Encapsulation attribute.\n\
+        When the active candidate path has a specified Binding Segment Identifier,\
+        \ the SR Policy uses that \nBSID if this value (label in MPLS, IPv6 address\
+        \ in SRv6) is available.\n- The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.4.2 . \n- It is recommended that if SRv6 Binding SID is desired\
+        \ to be signalled, the SRv6 Binding SID sub-TLV that enables \n  the specification\
+        \ of the SRv6 Endpoint Behavior should be used."
       type: object
       required:
       - choice
@@ -6414,8 +6419,8 @@ components:
     Bgp.Attributes.Bsid.Mpls:
       description: "When the active candidate path has a specified Binding Segment\
         \ Identifier, the SR Policy uses that BSID defined \nas a MPLS label.The format\
-        \ of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy  Section\
-        \ 2.4.2 ."
+        \ of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02  Section 2.4.2\
+        \ ."
       type: object
       properties:
         flag_specified_bsid_only:
@@ -6436,8 +6441,37 @@ components:
     Bgp.Attributes.Bsid.Srv6:
       description: "When the active candidate path has a specified Binding Segment\
         \ Identifier, the SR Policy uses that BSID defined \nas an IPv6 Address.The\
-        \ format of the sub-TLV is defined in draft-ietf-idr-segment-routing-te-policy\
-        \ Section 2.4.2 ."
+        \ format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section\
+        \ 2.4.2 ."
+      type: object
+      properties:
+        flag_specified_bsid_only:
+          description: "S-Flag: This flag encodes the \"Specified-BSID-only\" behavior.\
+            \ It's usage is \ndescribed in section 6.2.3 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 1
+        flag_drop_upon_invalid:
+          description: "I-Flag: This flag encodes the \"Drop Upon Invalid\" behavior.\
+            \ \nIt's usage is described in section 8.2 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 2
+        ipv6_addr:
+          description: |-
+            IPv6 address denoting the SRv6 SID.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+    Bgp.Attributes.Srv6Bsid:
+      description: "The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20\
+        \ that is used to signal the SRv6 Binding SID\nrelated information of an SR\
+        \ Policy candidate path. \n  - More than one SRv6 Binding SID sub-TLVs MAY\
+        \ be signaled in the same SR Policy encoding to indicate one or\n    more\
+        \ SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be\
+        \ instantiated.\n  - The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.4.3 ."
       type: object
       properties:
         flag_specified_bsid_only:
@@ -6455,7 +6489,7 @@ components:
         flag_srv6_endpoint_behavior:
           description: "B-Flag: This flag, when set, indicates the presence of the\
             \ SRv6 Endpoint Behavior \nand SID Structure encoding specified in Section\
-            \ 2.4.4.2.4 of draft-ietf-idr-segment-routing-te-policy."
+            \ 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02."
           type: boolean
           default: false
           x-field-uid: 3
@@ -6466,14 +6500,13 @@ components:
           format: ipv6
           default: 0::0
           x-field-uid: 4
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 5
     Bgp.Attributes.Sid.Mpls:
       description: "This carries a 20 bit Multi Protocol Label Switching alongwith\
         \ 3 bits traffic class, 1 bit indicating presence\nor absence of Bottom-Of-Stack\
-        \ and 8 bits carrying the Time to Live value. \n- [.proto : \n    // Segment\
-        \ identified by MPLS label.\n  message MPLS {\n    optional uint32 label =\
-        \ 1;          // 20 bits.\n    optional uint32 traffic_class = 2;  // 3 bits\
-        \ (TC).\n    optional bool bottom_of_stack = 3;  // 1 bit (S).\n    optional\
-        \ uint32 time_to_live = 4;   // 8 bits (TTL).\n  }\n]"
+        \ and 8 bits carrying the Time to Live value. "
       type: object
       properties:
         label:
@@ -6506,9 +6539,20 @@ components:
           default: 63
           maximum: 63
           x-field-uid: 4
+    Bgp.Attributes.Sid.Srv6:
+      description: |-
+        An IPv6 address denoting a SRv6 SID.
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 1
     Bgp.Attributes.SrPolicy.Preference:
       description: |
-        Optional Preference sub-tlv used to select the best candidate path for an SR Policy.
+        Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.
+        It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .
       type: object
       properties:
         value:
@@ -6519,8 +6563,9 @@ components:
           default: 0
           x-field-uid: 1
     Bgp.Attributes.SrPolicy.Priority:
-      description: |
-        Optional Priority sub-tlv used to select the order in which policies should be re-computed.
+      description: |-
+        Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.
+        - It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
       type: object
       properties:
         value:
@@ -6530,9 +6575,26 @@ components:
           maximum: 255
           default: 0
           x-field-uid: 1
+    Bgp.Attributes.SrPolicy.PolicyCandidateName:
+      description: "Optional Policy Candidate Path Name sub-tlv (Type 129) which carries\
+        \ the symbolic name for the SR Policy candidate path \nfor debugging.    \n\
+        - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 ."
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          description: |-
+            Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.
+            It is recommended that the size of the name is limited to 255 bytes.
+          type: string
+          maxLength: 500
+          x-field-uid: 1
     Bgp.Attributes.SrPolicy.PolicyName:
-      description: "Optional Policy Name sub-tlv which carries the symbolic name for\
-        \ the SR Policy candidate path for debugging.    "
+      description: "Optional Policy Name sub-tlv (Type 130) which carries the symbolic\
+        \ name for the SR Policy for which the \ncandidate path is being advertised\
+        \ for debugging.    \n- It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02\
+        \ ."
       type: object
       required:
       - value
@@ -6545,9 +6607,10 @@ components:
           maxLength: 500
           x-field-uid: 1
     Bgp.Attributes.SrPolicy.ExplicitNullPolicy:
-      description: "This is an optional sub-tlv . \nIf included , it Indicates whether\
-        \ an Explicit NULL Label must be pushed on an unlabeled IP\npacket before\
-        \ other labels for IPv4 or IPv6 flows."
+      description: |-
+        This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP
+        packet before other labels for IPv4 or IPv6 flows.
+        - It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
       properties:
         choice:
           description: |-
@@ -6574,13 +6637,10 @@ components:
           - donot_push
     Bgp.Attributes.SrPolicy.SegmentList:
       description: "One optional SEGMENT_LIST sub-tlv encoded with type of 128.\n\
-        One sub-tlv encodes a single explicit path towards the endpoint as described\
-        \ in \nsection 5.1 of [RFC9256]. \nThe Segment List sub-TLV includes the elements\
-        \ of the paths (i.e., segments) as well \nas an optional Weight sub-TLV.\n\
-        - [.proto :\n  // Contains one \"segment (label) stack\" with its weight.\
-        \ The weight is used for\n  // weighted multipath.\n  message PaSegmentList\
-        \ {\n    message Weight {\n      optional uint32 value = 1;\n    }\n    optional\
-        \ Weight weight = 1;\n    repeated PaSegment segments = 2;\n  }\n]"
+        One sub-tlv (Type 128) encodes a single explicit path towards the endpoint\
+        \ as described in \nsection 5.1 of [RFC9256]. \nThe Segment List sub-TLV includes\
+        \ the elements of the paths (i.e., segments) as well \nas an optional Weight\
+        \ sub-TLV."
       type: object
       properties:
         weight:
@@ -6593,7 +6653,7 @@ components:
           x-field-uid: 2
     Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Weight:
       description: |-
-        The optional Weight sub-TLV specifies the weight associated with a given segment list. The weight is used for weighted multipath.
+        The optional Weight sub-TLV (Type 9) specifies the weight associated with a given segment list. The weight is used for weighted multipath.
       type: object
       properties:
         value:
@@ -6604,127 +6664,11 @@ components:
           default: 0
           x-field-uid: 1
     Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Segment:
-      description: |-
-        A Segment sub-TLV describes a single segment in a segment list  i.e., a single
-        element of the explicit path. The Segment sub-TLVs are optional.
-        - [.proto :
-          // This defines one segment. The distinction between a "segment" and a "segment
-          // identifier" (SID) is basically non-existent; these objects can be seen as
-          // either.
-          message PaSegment {
-            message Flags {  // 8 bits in total.
-              // V-flag. Indicates verification is enabled. See section 5,
-              // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01
-              optional bool verification = 1;
-              // A-flag. Indicates presence of SR Algorithm field applicable to Segment
-              // Types 3, 4, and 9.
-              optional bool algorithm = 2;
-            }
-            // Segment identified by MPLS label.
-            message MPLS {
-              optional uint32 label = 1;          // 20 bits.
-              optional uint32 traffic_class = 2;  // 3 bits (TC).
-              optional bool bottom_of_stack = 3;  // 1 bit (S).
-              optional uint32 time_to_live = 4;   // 8 bits (TTL).
-            }
-            // SID only, in the form of MPLS Label.
-            message Type1 {
-              optional Flags flags = 1;
-              optional MPLS sid = 2;
-            }
-            // SID only, in the form of IPv6 address.
-            message Type2 {
-              optional Flags flags = 1;
-              optional monitoring.raven.IPAddressProto sid = 2;
-            }
-            // IPv4 Node Address with optional SID.
-            message Type3 {
-              optional Flags flags = 1;
-              optional PaAlgorithm algorithm = 2;
-              optional monitoring.raven.IPAddressProto node_address = 3;
-              optional MPLS sid = 4;
-            }
-            // IPv6 Node Address with optional SID for SR MPLS.
-            message Type4 {
-              optional Flags flags = 1;
-              optional PaAlgorithm algorithm = 2;
-              optional monitoring.raven.IPAddressProto node_address = 3;
-              optional MPLS sid = 4;
-            }
-            // IPv4 Address + index with optional SID.
-            message Type5 {
-              optional Flags flags = 1;
-              optional uint32 local_interface_id = 2;
-              optional monitoring.raven.IPAddressProto node_address = 3;
-              optional MPLS sid = 4;
-            }
-            // IPv4 Local and Remote addresses with optional SID.
-            message Type6 {
-              optional Flags flags = 1;
-              optional monitoring.raven.IPAddressProto local_address = 2;
-              optional monitoring.raven.IPAddressProto remote_address = 3;
-              optional MPLS sid = 4;
-            }
-            // IPv6 Address + index for local and remote pair with optional SID for SR
-            // MPLS.
-            message Type7 {
-              optional Flags flags = 1;
-              optional uint32 local_interface_id = 2;
-              optional monitoring.raven.IPAddressProto local_node_address = 3;
-              // `remote_interface_id` and `remote_node_address` pair is optional. Both
-              // must be present or both must be absent.
-              optional uint32 remote_interface_id = 4;
-              optional monitoring.raven.IPAddressProto remote_node_address = 5;
-              optional MPLS sid = 6;
-            }
-            // IPv6 Local and Remote addresses with optional SID for SR MPLS.
-            message Type8 {
-              optional Flags flags = 1;
-              optional monitoring.raven.IPAddressProto local_address = 2;
-              optional monitoring.raven.IPAddressProto remote_address = 3;
-              optional MPLS sid = 4;
-            }
-            // IPv6 Node Address with optional SID for SRv6.
-            message Type9 {
-              optional Flags flags = 1;
-              optional PaAlgorithm algorithm = 2;
-              optional monitoring.raven.IPAddressProto node_address = 3;
-              optional monitoring.raven.IPAddressProto sid = 4;
-            }
-            // IPv6 Address + index for local and remote pair with optional SID for SRv6.
-            message Type10 {
-              optional Flags flags = 1;
-              optional uint32 local_interface_id = 2;
-              optional monitoring.raven.IPAddressProto local_node_address = 3;
-              // `remote_interface_id` and `remote_node_address` pair is optional. Both
-              // must be present or both must be absent.
-              optional uint32 remote_interface_id = 4;
-              optional monitoring.raven.IPAddressProto remote_node_address = 5;
-              optional monitoring.raven.IPAddressProto sid = 6;
-            }
-            // IPv6 Local and Remote addresses for SRv6.
-            message Type11 {
-              optional Flags flags = 1;
-              optional monitoring.raven.IPAddressProto local_address = 2;
-              optional monitoring.raven.IPAddressProto remote_address = 3;
-              optional monitoring.raven.IPAddressProto sid = 4;
-            }
-
-            oneof segment {
-              Type1 type1 = 1;
-              Type2 type2 = 2;
-              Type3 type3 = 3;
-              Type4 type4 = 4;
-              Type5 type5 = 5;
-              Type6 type6 = 6;
-              Type7 type7 = 7;
-              Type8 type8 = 8;
-              Type9 type9 = 9;
-              Type10 type10 = 10;
-              Type11 type11 = 11;
-            }
-          }
-        ]
+      description: "A Segment sub-TLV describes a single segment in a segment list\
+        \  i.e., a single\nelement of the explicit path. The Segment sub-TLVs are\
+        \ optional.\nSegment Types A and B are defined as described in 2.4.4.2.\n\
+        Segment Types C upto K are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03\
+        \  .      "
       type: object
       required:
       - choice
@@ -6734,15 +6678,15 @@ components:
             Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy
             - Type  A: SID only, in the form of MPLS Label.
             - Type  B: SID only, in the form of IPv6 Address.
-            - Type  C: IPv4 Node Address with optional SID.
-            - Type  D: IPv6 Node Address with optional SID for SR MPLS.
-            - Type  E: IPv4 Address and index with optional SID.
-            - Type  F: IPv4 Local and Remote addresses with optional SID.
-            - Type  G: IPv6 Address and index for local and remote pair with optional SID for SR MPLS.
-            - Type  H: IPv6 Local and Remote addresses with optional SID for SR MPLS.
-            - Type  I: IPv6 Node Address with optional SID for SRv6.
-            - Type  J: IPv6 Address and index for local and remote pair with optional SID for SRv6.
-            - Type  K: IPv6 Local and Remote addresses for SRv6.
+            - Type  C: IPv4 Prefix with optional SR Algorithm.
+            - Type  D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.
+            - Type  E: IPv4 Prefix with Local Interface ID.
+            - Type  F: IPv4 Addresses for link endpoints as Local, Remote pair.
+            - Type  G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.
+            - Type  H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.
+            - Type  I: IPv6 Global Prefix with optional SR Algorithm for SRv6.
+            - Type  J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.
+            - Type  K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
           type: string
           x-field-uid: 1
           x-enum:
@@ -6815,7 +6759,7 @@ components:
           x-field-uid: 12
     Bgp.Attributes.SegmentRoutingPolicy.TypeA:
       description: |-
-        Type  A: SID only, in the form of MPLS Label.
+        Type A: SID only, in the form of MPLS Label.
         It is encoded as a Segment of Type 1 in the SEGMENT_LIST sub-tlv.
       type: object
       properties:
@@ -6828,7 +6772,7 @@ components:
     Bgp.Attributes.SegmentRoutingPolicy.TypeB:
       description: |-
         Type B: SID only, in the form of IPv6 address.
-        It is encoded as a Segment of Type 2 in the SEGMENT_LIST sub-tlv.
+        It is encoded as a Segment of Type 13 in the SEGMENT_LIST sub-tlv.
       type: object
       properties:
         flags:
@@ -6929,8 +6873,8 @@ components:
           $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
           x-field-uid: 4
     Bgp.Attributes.SegmentRoutingPolicy.TypeF:
-      description: "Type F: IPv4 Local and Remote addresses with optional SID.\nIt\
-        \ is encoded as a Segment of Type 6 in the SEGMENT_LIST sub-tlv. "
+      description: "Type F: IPv4 Local and Remote addresses with optional SR-MPLS\
+        \ SID.\nIt is encoded as a Segment of Type 6 in the SEGMENT_LIST sub-tlv. "
       type: object
       properties:
         flags:
@@ -7025,8 +6969,8 @@ components:
           $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
           x-field-uid: 6
     Bgp.Attributes.SegmentRoutingPolicy.TypeI:
-      description: "Type I: IPv6 Node Address with optional SRv6 SID.\nIt is encoded\
-        \ as a Segment of Type 9 in the SEGMENT_LIST sub-tlv. "
+      description: "Type I: IPv6 Node Address with optional SR Algorithm and optional\
+        \ SRv6 SID.\nIt is encoded as a Segment of Type 14 in the SEGMENT_LIST sub-tlv. "
       type: object
       properties:
         flags:
@@ -7048,18 +6992,14 @@ components:
           default: 0::0
           x-field-uid: 3
         srv6_sid:
-          description: |-
-            Optional SRv6 SID.
-          type: string
-          format: ipv6
-          default: 0::0
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
           x-field-uid: 4
         srv6_endpoint_behavior:
           $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
           x-field-uid: 5
     Bgp.Attributes.SegmentRoutingPolicy.TypeJ:
       description: "Type J: IPv6 Address, Interface ID for local and remote pair for\
-        \ SRv6 with optional SID.\nIt is encoded as a Segment of Type 10 in the SEGMENT_LIST\
+        \ SRv6 with optional SID.\nIt is encoded as a Segment of Type 15 in the SEGMENT_LIST\
         \ sub-tlv. "
       type: object
       properties:
@@ -7103,58 +7043,55 @@ components:
           default: 0::0
           x-field-uid: 6
         srv6_sid:
-          description: |-
-            Optional SRv6 SID.
-          type: string
-          format: ipv6
-          default: 0::0
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
           x-field-uid: 7
         srv6_endpoint_behavior:
           $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
           x-field-uid: 8
     Bgp.Attributes.SegmentRoutingPolicy.TypeK:
       description: "Type K: IPv6 Local and Remote addresses for SRv6 with optional\
-        \ SID.\nIt is encoded as a Segment of Type 11 in the SEGMENT_LIST sub-tlv. "
+        \ SID.\nIt is encoded as a Segment of Type 16 in the SEGMENT_LIST sub-tlv. "
       type: object
       properties:
         flags:
           $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
           x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
         local_ipv6_address:
           description: |-
             Local IPv6 Address.
           type: string
           format: ipv6
           default: 0::0
-          x-field-uid: 2
+          x-field-uid: 3
         remote_ipv6_address:
           description: |-
             Remote IPv6 Address.
           type: string
           format: ipv6
           default: 0::0
-          x-field-uid: 3
-        srv6_sid:
-          description: |-
-            Optional SRv6 SID.
-          type: string
-          format: ipv6
-          default: 0::0
           x-field-uid: 4
+        srv6_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
+          x-field-uid: 5
         srv6_endpoint_behavior:
           $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
-          x-field-uid: 5
+          x-field-uid: 6
     Bgp.Attributes.SegmentRoutingPolicy.TypeFlags:
-      description: "Flags for each Segment in SEGMENT_LIST sub-tlv.\n- V-flag. Indicates\
-        \ verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256\n\
-        - A-flag. Indicates presence of SR Algorithm field applicable to Segment Types\
-        \ 3, 4, and 9.\n- B-Flag. Indicates presence of SRv6 Endpoint Behavior and\
-        \ SID Structure encoding.  \n- [.proto:\n    message Flags {  // 8 bits in\
-        \ total.\n      // V-flag. Indicates verification is enabled. See section\
-        \ 5,\n      // https://tools.ietf.org/html/draft-ietf-spring-segment-routing-policy-01\n\
-        \      optional bool verification = 1;\n      // A-flag. Indicates presence\
-        \ of SR Algorithm field applicable to Segment\n      // Types 3, 4, and 9.\n\
-        \      optional bool algorithm = 2;\n}]"
+      description: |-
+        Flags for each Segment in SEGMENT_LIST sub-tlv.
+        - V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256
+        - A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, D , I , J and K .
+        - B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types B , I , J and K .
+        - S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).
+                  This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
       type: object
       properties:
         v_flag:
@@ -7169,18 +7106,36 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
-        b_flag:
-          description: "Indicates presence of SRv6 Endpoint Behavior and SID Structure\
-            \ encoding specified in Section 2.4.4.2.4\nof draft-ietf-idr-segment-routing-te-policy.\
-            \         "
+        s_flag:
+          description: |-
+            This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
           type: boolean
           default: false
           x-field-uid: 3
+        b_flag:
+          description: "Indicates presence of SRv6 Endpoint Behavior and SID Structure\
+            \ encoding specified in Section 2.4.4.2.4\nof draft-ietf-idr-sr-policy-safi-02.\
+            \         "
+          type: boolean
+          default: false
+          x-field-uid: 4
     Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure:
       description: |-
-        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node,  Function, and Argument MUST be less than or equal to 128. - This is specified in draft-ietf-idr-segment-routing-te-policy Section 2.4.4.2.4
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node,  Function, and Argument MUST be less than or equal to 128. - This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
       type: object
       properties:
+        endpoint_behaviour:
+          description: "This is a 2-octet field that is used to specify the SRv6 Endpoint\
+            \ Behavior code point for the SRv6 SID as defined \nin section 9.2 of\
+            \ [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice\
+            \ of SRv6 Endpoint Behavior is \nleft to the headend. Well known 16-bit\
+            \ values for this field are available at \nhttps://www.iana.org/assignments/segment-routing/segment-routing.xhtml\
+            \ ."
+          type: string
+          format: hex
+          default: ffff
+          maxLength: 4
+          x-field-uid: 1
         lb_length:
           description: |-
             SRv6 SID Locator Block length in bits.
@@ -7188,7 +7143,7 @@ components:
           format: uint32
           maximum: 128
           default: 0
-          x-field-uid: 1
+          x-field-uid: 2
         ln_length:
           description: |-
             SRv6 SID Locator Node length in bits.
@@ -7196,7 +7151,7 @@ components:
           format: uint32
           maximum: 128
           default: 0
-          x-field-uid: 2
+          x-field-uid: 3
         func_length:
           description: |-
             SRv6 SID Function length in bits.
@@ -7204,7 +7159,7 @@ components:
           format: uint32
           maximum: 128
           default: 0
-          x-field-uid: 3
+          x-field-uid: 4
         arg_length:
           description: |-
             SRv6 SID Arguments length in bits.
@@ -7212,7 +7167,7 @@ components:
           format: uint32
           maximum: 128
           default: 0
-          x-field-uid: 4
+          x-field-uid: 5
     Bgp.NLRIPrefixSegmentRoutingDistinguisher:
       description: |-
         Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
