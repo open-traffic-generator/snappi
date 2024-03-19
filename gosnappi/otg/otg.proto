@@ -125,10 +125,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -268,9 +264,15 @@ message DeviceEthernet {
   // objects.
   // required = true
   optional string name = 8;
+
+  // DHCPv4 Client Configuration.
+  DeviceDhcpv4client dhcp_v4interface = 9;
+
+  // DHCPv6 Client Configuration.
+  DeviceDhcpv6client dhcp_v6interface = 10;
 }
 
-// Ethernet interface connection to a port, LAG or VXLAN tunnel.
+// Ethernet interface connection to a port, LAG, VXLAN tunnel or another Chained Ethernet.
 message EthernetConnection {
 
   message Choice {
@@ -279,9 +281,10 @@ message EthernetConnection {
       port_name = 1;
       lag_name = 2;
       vxlan_name = 3;
+      chained_ethernet_name = 4;
     }
   }
-  // port_name, lag_name or vxlan_name
+  // port_name, lag_name, vxlan_name, chained_ethernet
   optional Choice.Enum choice = 1;
 
   // Name of the port that the Ethernet interface is configured on.
@@ -289,17 +292,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -313,12 +308,16 @@ message EthernetConnection {
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
   // - #/components/schemas/Vxlan.V6Tunnel/properties/name
   // 
+  optional string vxlan_name = 4;
+
+  // The unique name of the Ethernet interface behind which this Ethernet is chained.
+  // Configuring IPv4/IPv6, Loopback IPv4/Ipv6 addresses or any protocol on Chained Ethernet
+  // except DHCP Client will be restricted by the implementation.
   // 
   // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
+  // - /components/schemas/Device.Ethernet/properties/name
   // 
-  optional string vxlan_name = 4;
+  optional string chained_ethernet_name = 5;
 }
 
 // Emulated VLAN protocol.
@@ -381,10 +380,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -463,10 +458,6 @@ message DeviceIpv6Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -508,15 +499,106 @@ message DeviceIpv6GatewayMAC {
   optional string value = 3;
 }
 
+// Under Review: Information TBD
+// 
+// Configuration for emulated DHCPv4 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+message DeviceDhcpv4client {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  message SelectingServer {
+    enum Enum {
+      unspecified = 0;
+      first_server = 1;
+      server_address = 2;
+    }
+  }
+  // The client receives one or more DHCPOFFER messages from one or more servers. The
+  // client may choose to wait for multiple responses. The client chooses one server from
+  // which to request configuration parameters, based on the configuration parameters
+  // offered in the DHCPOFFER messages. use_first_server: if selected, the subnet accepts
+  // the IP addresses offered by the first server to respond with an offer of IP addresses.
+  // use_server_address: The address of the DHCP server from which the subnet will accept
+  // IP addresses. server address to 0.0.0.0, implementation will use the services of
+  // the first DHCP server that responds to the DHCP Lease Request message.
+  // default = SelectingServer.Enum.first_server
+  optional SelectingServer.Enum selecting_server = 2;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string first_server = 3;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string server_address = 4;
+
+  // If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER
+  // and DHCPACK messages.
+  // default = False
+  optional bool broadcast = 5;
+
+  // A manually configured IPv4 gateway address.  The default value 0.0.0.0, meaning that
+  // no manual gateway IP address is specified. If the DHCPv4 Client receives from a server
+  // a response packet with a Router Address TLV  specifying another gateway address than
+  // the manually configured gateway IP,  then this TLV is ignored.  Whenever a manual
+  // non default gateway IP is configured, the client will use it as gateway address
+  // for traffic outside of its network;  otherwise client uses the gateway IP address
+  // learned from the server.
+  // default = 0.0.0.0
+  optional string gateway_ip = 6;
+
+  // A manually configured gateway MAC address.  In case of non default, ARP messages
+  // are sent to resolve the gateway MAC address.
+  // default = 0:0:0:0:0:0
+  optional string gateway_mac = 7;
+
+  // DHCPv4 Client parameters request list.
+  Dhcpv4ClientParams parameters_request_list = 8;
+}
+
+// Configuration Parameter request list by emulated DHCPv4 Client.
+message Dhcpv4ClientParams {
+
+  // Request for the subnet mask option specifies the client's subnet mask as per RFC950.
+  // 
+  // default = True
+  optional bool subnet_mask = 1;
+
+  // Request for the router option that specifies a list of IP addresses for routers on
+  // the client's subnet.
+  // default = True
+  optional bool router = 2;
+
+  // Request for the renewal timer, T1, when the timer expire, the client transitions
+  // from the BOUND state to the RENEWING state
+  // default = False
+  optional bool renewal_time = 3;
+
+  // Request for the rebinding timer (T2), when expires, the client transitions to the
+  // REBINDING state.
+  // default = False
+  optional bool rebinding_timer = 4;
+}
+
+// Under Review: Information TBD
+// 
+// Configuration for emulated DHCPv6 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+message DeviceDhcpv6client {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+}
+
 // A container for layer1 settings.
 message Layer1 {
 
   // A list of unique names of port objects that will share the
   // choice settings.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -572,16 +654,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -722,17 +798,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -984,6 +1054,12 @@ message Device {
 
   // The properties of an RSVP router and its children.
   DeviceRsvp rsvp = 8;
+
+  // The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+  DeviceDhcpServer dhcp_server = 9;
+
+  // This module describes a model for configuration related to Relay Agents. https://datatracker.ietf.org/doc/html/rfc3046.
+  DeviceRelayAgent relay_agent = 10;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1050,10 +1126,6 @@ message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1866,17 +1938,13 @@ message BgpV4Peer {
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
 message BgpV4Interface {
 
-  // The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for
-  // this list of BGP peers.
+  // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the
+  // source IP for this list of BGP peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
+  // - /components/schemas/DhcpClient.V4/properties/name
   // 
   // required = true
   optional string ipv4_name = 1;
@@ -2637,8 +2705,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3098,8 +3164,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -4696,17 +4760,13 @@ message BgpV6Peer {
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
 message BgpV6Interface {
 
-  // The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this
-  // list of BGP peers.
+  // The unique name of IPv6,d Loopback IPv6 interface or DHCPv4 client used as the source
+  // IP for this list of BGP peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
+  // - /components/schemas/DhcpClient.V6/properties/name
   // 
   // required = true
   optional string ipv6_name = 1;
@@ -4969,11 +5029,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -4997,11 +5052,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -5165,10 +5215,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -5230,11 +5276,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -5639,6 +5680,154 @@ message RsvpEroSubobject {
   optional HopType.Enum hop_type = 5;
 }
 
+// Under Review: Information TBD
+// 
+// Configuration for one or more IPv4 or IPv6 DHCP servers.
+message DeviceDhcpServer {
+
+  // This contains an array of references to IPv4 interfaces, each of which will have
+  // list of DHCPv4 servers to different destinations.
+  repeated DhcpServerV4 ipv4_interfaces = 2;
+
+  // This contains an array of references to IPv6 interfaces, each of which will have
+  // list of DHCPv6 servers to different destinations.
+  repeated DhcpServerV6 ipv6_interfaces = 3;
+}
+
+// Under Review: Information TBD
+// 
+// Configuration for emulated DHCPv4 Server.
+message DhcpServerV4 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv4 on which DHCPv4 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 2;
+
+  // The Life Time length in seconds that is assigned to a lease if the requesting DHCP
+  // client does not specify a specific expiration time.
+  // default = 86400
+  optional uint32 lease_time = 3;
+
+  // The IP address of the first lease pool.
+  // default = 100.1.1.1
+  optional string start_pool_address = 4;
+
+  // The IPv4 network prefix length to be applied to the address.
+  // default = 24
+  optional uint32 prefix = 5;
+
+  // The total number of addresses in the pool.
+  // default = 1
+  optional uint32 pool_size = 6;
+
+  // Increments the network address prefixes within a pool range  where multiple addresses
+  // are present. The value is incremented according to the Prefix Length and Step.
+  // default = 1
+  optional uint32 step = 7;
+
+  // The Router address advertised by the DHCPv4 server in Offer and Ack messages.
+  optional string router_address = 8;
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  optional string primary_dns_server = 9;
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  optional string secondary_dns_server = 10;
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  optional string echo_relay_with_tlv_82 = 11;
+}
+
+// Under Review: Information TBD
+// 
+// Configuration for emulated DHCPv6 Server.
+message DhcpServerV6 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv6 on which DHCPv6 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  optional string ipv6_name = 2;
+}
+
+// Under Review: Information TBD
+// 
+// Top level container for relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
+message DeviceRelayAgent {
+
+  // This contains an array of references to IPv4 interfaces, each of which will have
+  // list of V6 Relay Agent to different destinations.
+  repeated V4RAInst ipv4_interfaces = 1;
+
+  // This contains an array of references to IPv6 interfaces, each of which will have
+  // list of V6 Relay Agent to different destinations.
+  repeated V6RAInst ipv6_interfaces = 2;
+}
+
+// Under Review: Information TBD
+// 
+// Top level container for DHCPv4 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
+message V4RAInst {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv4 on which Relay Agent V4 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  optional string ipv4_name = 2;
+
+  // IPv4 address for the interface attached to client's network. This IP address is used
+  // as Source IP address  and Relay-Agent-IP address in the DHCP packet that is forwarded
+  // for DHCP server. as well
+  // default = 0.0.0.0
+  optional string client_side_address = 3;
+
+  // IPv4 address for DHCPv4 Server.
+  // default = 0.0.0.0
+  optional string server_address = 4;
+}
+
+// Under Review: Information TBD
+// 
+// Top level container for DHCPv6 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
+message V6RAInst {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv6 on which Relay Agent V4 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  optional string ipv6_name = 2;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -5662,10 +5851,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -5732,16 +5917,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -5750,19 +5928,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -5838,18 +6006,10 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/DhcpClient.V4/properties/name
+  // - /components/schemas/DhcpClient.V6/properties/name
+  // - /components/schemas/DhcpServer.V4/properties/ipv4_name
+  // - /components/schemas/DhcpServer.V6/properties/ipv6_name
   // 
   repeated string tx_names = 2;
 
@@ -5865,18 +6025,10 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/DhcpClient.V4/properties/name
+  // - /components/schemas/DhcpClient.V6/properties/name
+  // - /components/schemas/DhcpServer.V4/properties/ipv4_name
+  // - /components/schemas/DhcpServer.V6/properties/ipv6_name
   // 
   repeated string rx_names = 3;
 }
@@ -8409,12 +8561,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -8484,10 +8630,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8791,10 +8933,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -8820,10 +8958,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -8845,10 +8979,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -8910,13 +9040,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -8961,10 +9084,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -8986,10 +9105,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9035,11 +9150,6 @@ message StateProtocolBgpPeers {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message State {
@@ -9079,10 +9189,6 @@ message StateProtocolIsisRouters {
 
   // The names of ISIS routers for which the state has to be applied. An empty or null
   // list will control all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -9237,18 +9343,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -9270,10 +9370,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -9340,18 +9436,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9373,10 +9463,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9436,10 +9522,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -9495,10 +9577,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
@@ -9523,6 +9601,8 @@ message MetricsRequest {
       lacp = 7;
       lldp = 8;
       rsvp = 9;
+      dhcpv4_client = 10;
+      dhcpv6_client = 11;
     }
   }
   // Description missing in models
@@ -9555,6 +9635,12 @@ message MetricsRequest {
 
   // Description missing in models
   RsvpMetricsRequest rsvp = 10;
+
+  // Description missing in models
+  Dhcpv4ClientMetricsRequest dhcpv4_client = 11;
+
+  // Description missing in models
+  Dhcpv6ClientMetricsRequest dhcpv6_client = 12;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -9572,6 +9658,8 @@ message MetricsResponse {
       lacp_metrics = 7;
       lldp_metrics = 8;
       rsvp_metrics = 9;
+      dhcpv4_client = 10;
+      dhcpv6_client = 11;
     }
   }
   // Description missing in models
@@ -9604,6 +9692,12 @@ message MetricsResponse {
 
   // Description missing in models
   repeated RsvpMetric rsvp_metrics = 10;
+
+  // Description missing in models
+  repeated Dhcpv4ClientMetric dhcpv4client_metrics = 11;
+
+  // Description missing in models
+  repeated Dhcpv6ClientMetric dhcpv6client_metrics = 12;
 }
 
 // The port result request to the traffic generator
@@ -9611,10 +9705,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9647,10 +9737,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9722,10 +9808,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -9960,10 +10042,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -10090,10 +10168,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -10216,10 +10290,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -10357,10 +10427,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -10387,10 +10453,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -10445,18 +10507,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10577,10 +10631,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -10639,10 +10689,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -10794,6 +10840,112 @@ message RsvpMetric {
   optional uint64 path_reoptimizations = 31;
 }
 
+// The request to retrieve DHCPv4 per client metrics/statistics.
+message Dhcpv4ClientMetricsRequest {
+
+  // The names of DHCPv4 clients to return results for. An empty list will return results
+  // for all DHCPv4 client.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  repeated string client_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      discovers_sent = 2;
+      offers_received = 3;
+      requests_sent = 4;
+      acks_received = 5;
+      nacks_received = 6;
+      releases_sent = 7;
+      declineds_sent = 8;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv4 client cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv4 per peer statistics information.
+message Dhcpv4ClientMetric {
+
+  // The name of a configured DHCPv4 client.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of DHCPDISCOVER messages sent.
+  optional uint64 discovers_sent_count = 3;
+
+  // Number of DHCPOFFER messages received.
+  optional uint64 offers_received_count = 4;
+
+  // Number of DHCPREQUEST messages received.
+  optional uint64 requests_sent_count = 5;
+
+  // Number of lease DHCPACK messages received.
+  optional uint64 acks_received_count = 6;
+
+  // Number of negative lease DHCPNACK messages received.
+  optional uint64 nacks_received_count = 7;
+
+  // Number of DHCPRELEASE messages sent.
+  optional uint64 releases_sent_count = 8;
+
+  // Number of DHCPDECLINE messages sent.
+  optional uint64 declines_sent_count = 9;
+}
+
+// The request to retrieve DHCPv6 per client metrics/statistics.
+message Dhcpv6ClientMetricsRequest {
+
+  // The names of DHCPv6 clients to return results for. An empty list will return results
+  // for all DHCPv6 client.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  repeated string client_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      dummy1 = 1;
+      dummy2 = 2;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv6 client cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv6 per peer statistics information.
+message Dhcpv6ClientMetric {
+
+  // The name of a configured DHCPv6 client.
+  optional string name = 1;
+
+  // TBD
+  optional string dummy1 = 2;
+
+  // TBD
+  optional string dummy2 = 3;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -10806,6 +10958,7 @@ message StatesRequest {
       isis_lsps = 4;
       lldp_neighbors = 5;
       rsvp_lsps = 6;
+      dhcpv4_client_addresses = 7;
     }
   }
   // Description missing in models
@@ -10829,6 +10982,9 @@ message StatesRequest {
 
   // Description missing in models
   RsvpLspsStateRequest rsvp_lsps = 7;
+
+  // Description missing in models
+  Dhcpv4ClientAddressesStateRequest dhcpv4_client_addresses = 8;
 }
 
 // Response containing chosen traffic generator states
@@ -10843,6 +10999,7 @@ message StatesResponse {
       isis_lsps = 4;
       lldp_neighbors = 5;
       rsvp_lsps = 6;
+      dhcp_client_addresses = 7;
     }
   }
   // Description missing in models
@@ -10866,6 +11023,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated RsvpLspsState rsvp_lsps = 7;
+
+  // Description missing in models
+  repeated Dhcpv4ClientAddressesState dhcpv4_client_addresses = 8;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -10874,10 +11034,6 @@ message Neighborsv4StatesRequest {
   // The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will
   // be retrieved. If no names are specified then the results will contain Neighbor state
   // (ARP cache entries) for all available Ethernet interfaces.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -10911,10 +11067,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -10940,11 +11092,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -11193,10 +11340,6 @@ message IsisLspsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -11514,10 +11657,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -11676,10 +11815,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -11805,15 +11940,64 @@ message RsvpLspIpv4Ero {
   optional Type.Enum type = 3;
 }
 
+// The request to retrieve DHCP Client learned address information.
+message Dhcpv4ClientAddressesStateRequest {
+
+  // TBD
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  repeated string dhcp_client_names = 1;
+}
+
+// Addresses learned by DHCP clients.
+message Dhcpv4ClientAddressesState {
+
+  // The name of a DHCP Client.
+  optional string dhcp_client_name = 1;
+
+  // Description missing in models
+  repeated DhcpClientv4State ipv4_addresses = 2;
+}
+
+// IPv4 unicast prefix.
+message DhcpClientv4State {
+
+  // The IP address associated with this DHCP Client session.
+  optional string ipv4_address = 1;
+
+  // The length of the prefix.
+  optional uint32 prefix_length = 2;
+
+  // The Gateway address associated with this DHCP Client session.
+  optional string gateway_address = 3;
+
+  // The duration of the IP address lease, in seconds.
+  optional string lease_time = 4;
+}
+
+// IPv6 unicast prefix.
+message DhcpClientv6State {
+
+  // The IP address associated with this DHCP Client session.
+  optional string ipv6_address = 1;
+
+  // The length of the prefix.
+  optional uint32 prefix_length = 2;
+
+  // The Gateway address associated with this DHCP Client session.
+  optional string gateway_address = 3;
+
+  // The duration of the IP address lease, in seconds.
+  optional string lease_time = 4;
+}
+
 // The capture result request to the traffic generator. Stops the port capture on the
 // port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13524,6 +13708,7 @@ message PatternFlowIpv4Src {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto_dhcp = 1;
       increment = 4;
       decrement = 5;
     }
@@ -13540,16 +13725,22 @@ message PatternFlowIpv4Src {
   // default = ['0.0.0.0']
   repeated string values = 3;
 
-  // Description missing in models
-  PatternFlowIpv4SrcCounter increment = 5;
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0.0.0.0
+  optional string auto_dhcp = 4;
 
   // Description missing in models
-  PatternFlowIpv4SrcCounter decrement = 6;
+  PatternFlowIpv4SrcCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv4SrcCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4SrcMetricTag metric_tags = 7;
+  repeated PatternFlowIpv4SrcMetricTag metric_tags = 8;
 }
 
 // ipv4 counter pattern
@@ -13596,6 +13787,7 @@ message PatternFlowIpv4Dst {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto_dhcp = 1;
       increment = 4;
       decrement = 5;
     }
@@ -13612,16 +13804,22 @@ message PatternFlowIpv4Dst {
   // default = ['0.0.0.0']
   repeated string values = 3;
 
-  // Description missing in models
-  PatternFlowIpv4DstCounter increment = 5;
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0.0.0.0
+  optional string auto_dhcp = 4;
 
   // Description missing in models
-  PatternFlowIpv4DstCounter decrement = 6;
+  PatternFlowIpv4DstCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv4DstCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4DstMetricTag metric_tags = 7;
+  repeated PatternFlowIpv4DstMetricTag metric_tags = 8;
 }
 
 // integer counter pattern
@@ -14903,6 +15101,7 @@ message PatternFlowIpv6Src {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto_dhcp = 1;
       increment = 4;
       decrement = 5;
     }
@@ -14919,16 +15118,22 @@ message PatternFlowIpv6Src {
   // default = ['::0']
   repeated string values = 3;
 
-  // Description missing in models
-  PatternFlowIpv6SrcCounter increment = 5;
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = ::0
+  optional string auto_dhcp = 4;
 
   // Description missing in models
-  PatternFlowIpv6SrcCounter decrement = 6;
+  PatternFlowIpv6SrcCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SrcCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6SrcMetricTag metric_tags = 7;
+  repeated PatternFlowIpv6SrcMetricTag metric_tags = 8;
 }
 
 // ipv6 counter pattern
@@ -14975,6 +15180,7 @@ message PatternFlowIpv6Dst {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto_dhcp = 1;
       increment = 4;
       decrement = 5;
     }
@@ -14991,16 +15197,22 @@ message PatternFlowIpv6Dst {
   // default = ['::0']
   repeated string values = 3;
 
-  // Description missing in models
-  PatternFlowIpv6DstCounter increment = 5;
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = ::0
+  optional string auto_dhcp = 4;
 
   // Description missing in models
-  PatternFlowIpv6DstCounter decrement = 6;
+  PatternFlowIpv6DstCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6DstCounter decrement = 7;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
+  repeated PatternFlowIpv6DstMetricTag metric_tags = 8;
 }
 
 // mac counter pattern
