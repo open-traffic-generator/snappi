@@ -93747,7 +93747,7 @@ class FlowSnmpv2c(OpenApiObject):
         # type: () -> FlowSnmpv2cData
         """data getter
 
-        This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
+        This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
 
         Returns: FlowSnmpv2cData
         """
@@ -113201,7 +113201,7 @@ class FlowSnmpv3ScopedPDU(OpenApiObject):
             "format": "hex",
             "maxLength": 10000,
         },
-        "data": {"type": "FlowSnmpv2cPDU"},
+        "data": {"type": "FlowSnmpv2cData"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -113268,14 +113268,14 @@ class FlowSnmpv3ScopedPDU(OpenApiObject):
 
     @property
     def data(self):
-        # type: () -> FlowSnmpv2cPDU
+        # type: () -> FlowSnmpv2cData
         """data getter
 
-        This contains the body of the SNMP PDU.This contains the body of the SNMP PDU.This contains the body of the SNMP PDU.This contains the body of the SNMP PDU.
+        This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
 
-        Returns: FlowSnmpv2cPDU
+        Returns: FlowSnmpv2cData
         """
-        return self._get_property("data", FlowSnmpv2cPDU)
+        return self._get_property("data", FlowSnmpv2cData)
 
 
 class FlowHeaderIter(OpenApiIter):

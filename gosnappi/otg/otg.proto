@@ -6563,7 +6563,7 @@ message FlowSnmpv2c {
   FlowSnmpv2cData data = 3;
 }
 
-// This contains the body of the SNMPv2C message.
+// This contains the body of the SNMP message.
 // 
 // - Encoding of subsequent fields follow ASN.1 specification.
 // Refer: http://www.itu.int/ITU-T/asn1/
@@ -7899,7 +7899,7 @@ message FlowSnmpv3ScopedPDU {
   optional string context_name = 2;
 
   // Description missing in models
-  FlowSnmpv2cPDU data = 3;
+  FlowSnmpv2cData data = 3;
 }
 
 // The frame size which overrides the total length of the packet
