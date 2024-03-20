@@ -388,8 +388,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -643,10 +642,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -657,10 +652,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -668,11 +659,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -789,10 +775,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -894,8 +876,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -957,8 +938,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -1052,8 +1032,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -1064,8 +1042,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -1273,8 +1249,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -1284,10 +1258,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -1694,8 +1664,7 @@ components:
         eth_name:
           description: "The unique name of the Ethernet interface on which ISIS is\
             \ running. Two ISIS interfaces cannot share the same Ethernet.       \
-            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2859,11 +2828,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -3802,8 +3766,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -4334,8 +4296,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -6405,11 +6365,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -6727,11 +6682,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -6768,11 +6718,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -6982,7 +6927,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -7071,11 +7015,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -7643,10 +7582,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -7727,11 +7663,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -7741,14 +7672,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -7764,11 +7688,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -7873,18 +7792,6 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
         rx_names:
           type: array
           items:
@@ -7912,18 +7819,6 @@ components:
           x-field-uid: 3
           description: |
             TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -8074,6 +7969,9 @@ components:
         rsvp:
           $ref: '#/components/schemas/Flow.Rsvp'
           x-field-uid: 22
+        snmpv3:
+          $ref: '#/components/schemas/Flow.Snmpv3'
+          x-field-uid: 23
     Flow.Custom:
       type: object
       description: |-
@@ -8908,7 +8806,7 @@ components:
           x-field-uid: 9
     Flow.Snmpv2c.PDU:
       description: |-
-        This contains the body of the SNMPv2C PDU.
+        This contains the body of the SNMP PDU.
       type: object
       properties:
         request_id:
@@ -10302,6 +10200,158 @@ components:
           maxLength: 131050
           default: '0000'
           x-field-uid: 3
+    Flow.Snmpv3:
+      description: |-
+        SNMPv3 packet header as defined in RFC3412, RFC2274 and RFC2574.
+      type: object
+      properties:
+        version:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version'
+        global_data:
+          $ref: '#/components/schemas/Flow.Snmpv3.HeaderData'
+          x-field-uid: 2
+        security_parameters:
+          $ref: '#/components/schemas/Flow.Snmpv3.SecurityParameters'
+          x-field-uid: 3
+        data:
+          $ref: '#/components/schemas/Flow.Snmpv3.ScopedPduData'
+          x-field-uid: 4
+    Flow.Snmpv3.HeaderData:
+      description: |-
+        It contains administrative parameters.
+      type: object
+      properties:
+        id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id'
+        max_size:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize'
+        flags:
+          $ref: '#/components/schemas/Flow.Snmpv3.HeaderDataFlags'
+          x-field-uid: 3
+        security_model:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel'
+    Flow.Snmpv3.HeaderDataFlags:
+      description: |-
+        It contains several bit fields which control processing of the message.
+      type: object
+      properties:
+        reportable:
+          description: |-
+            It is a secondary aid in determining whether a Report PDU MUST be sent.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        encrypted:
+          description: |-
+            If this flag is set, then the securityModel used by the SNMP  engine which sent the message MUST also protect the scopedPDU  in an SNMP message from disclosure.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        authenticated:
+          description: |-
+            If this flag is set, then the securityModel used by  the SNMP engine which sent the message MUST identify  the securityName on whose behalf the SNMP message was generated and MUST provide,  in a securityModel-specific manner,  sufficient data for the receiver of the message to be able to authenticate that identification.
+          type: boolean
+          default: false
+          x-field-uid: 3
+    Flow.Snmpv3.SecurityParameters:
+      description: |-
+        It is used for communication between the Security Model modules in the sending and receiving SNMP engines.  It follows RFC2274 and RFC2574.
+      type: object
+      properties:
+        authoritative_engine_id:
+          description: |-
+            It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 10000
+          x-field-uid: 1
+        authoritative_engine_boots:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots'
+        authoritative_engine_time:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime'
+        user_name:
+          description: |-
+            It specifies the user (principal) on whose behalf the message is being exchanged.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 32
+          x-field-uid: 4
+        authentication_parameters:
+          description: |-
+            These are defined by the authentication protocol in use for the message,  as defined by the usmUserAuthProtocol column in the user's entry in the usmUserTable.
+          type: string
+          format: hex
+          maxLength: 10000
+          default: ''
+          x-field-uid: 5
+        privacy_parameters:
+          description: |-
+            These are defined by the privacy protocol in use for the message,  as defined by the usmUserPrivProtocol column in the user's entry in the usmUserTable).
+          type: string
+          format: hex
+          default: ''
+          maxLength: 10000
+          x-field-uid: 6
+    Flow.Snmpv3.ScopedPduData:
+      description: |-
+        This field represents either the plain text scopedPDU  if the encrypted flag in the snmpv3.global_data.flags is zero,  or it represents an encryptedPDU (encoded as an OCTET STRING)  which MUST be decrypted by the securityModel in use to produce a plaintext scopedPDU.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: plain_text
+          x-field-uid: 1
+          x-enum:
+            plain_text:
+              x-field-uid: 1
+            encrypted_pdu:
+              x-field-uid: 2
+          enum:
+          - plain_text
+          - encrypted_pdu
+        plain_text:
+          $ref: '#/components/schemas/Flow.Snmpv3.ScopedPDU'
+          x-field-uid: 2
+        encrypted_pdu:
+          description: |-
+            It represents an encryptedPDU (encoded as an OCTET STRING).
+          type: string
+          format: hex
+          default: ''
+          maxLength: 10000
+          x-field-uid: 3
+    Flow.Snmpv3.ScopedPDU:
+      description: |-
+        It contains information to identify an administratively unique context and a PDU.  The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.
+      type: object
+      properties:
+        context_engine_id:
+          description: |-
+            It is an unique identifier within an administrative domain,  an SNMP entity that may realize an instance of a context with a particular contextName.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 10000
+          x-field-uid: 1
+        context_name:
+          description: |-
+            It in conjunction with the context_engine_id field,  identifies the particular context associated with  the management information contained in the PDU portion of the message.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 10000
+          x-field-uid: 2
+        data:
+          $ref: '#/components/schemas/Flow.Snmpv2c.PDU'
+          x-field-uid: 3
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -10978,8 +11028,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -11076,10 +11125,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -11467,10 +11512,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11504,10 +11545,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11538,10 +11575,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -11611,13 +11644,6 @@ components:
             - /components/schemas/Bgp.V6RouteRange/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -11676,10 +11702,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11708,10 +11730,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -11761,11 +11779,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -11820,10 +11833,6 @@ components:
         router_names:
           description: |
             The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -12005,8 +12014,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -12017,10 +12024,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12058,10 +12061,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12140,8 +12139,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -12152,10 +12149,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12193,10 +12186,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12260,10 +12249,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
@@ -12331,10 +12316,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
@@ -12512,10 +12493,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -12573,10 +12550,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12681,10 +12654,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -13045,10 +13014,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -13255,10 +13220,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -13462,10 +13423,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -13739,10 +13696,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -13794,10 +13747,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -13880,10 +13829,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -13893,10 +13838,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14094,10 +14035,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -14185,10 +14122,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -14595,10 +14528,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -14641,10 +14570,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -14684,11 +14609,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -15070,10 +14990,6 @@ components:
         isis_router_names:
           description: |
             The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -15537,10 +15453,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -15770,10 +15682,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -15977,10 +15885,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -33954,6 +33858,408 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.Version.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 3
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.Version:
+      description: |-
+        Version
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 3
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.HeaderData.Id.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.HeaderData.Id:
+      description: |-
+        It is used between two SNMP entities to coordinate request messages and responses.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.HeaderData.MaxSize:
+      description: |-
+        The maximum message size that the sender can accept when another SNMP engine sends  an SNMP message (be it a response or any other message) to the sender of this message  on the transport in use for this message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.HeaderData.SecurityModel:
+      description: |-
+        It identifies which Security Model was used by the sender to generate  the message and therefore which securityModel MUST be used by the receiver to perform security  processing for the message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots:
+      description: |-
+        It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 2147483647
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2147483647
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime:
+      description: |-
+        It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter'
           x-field-uid: 6
     Version:
       description: |-
