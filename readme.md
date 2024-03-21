@@ -96,4 +96,4 @@ def test_quickstart():
             break
         time.sleep(0.1)
 ```
-Updating again to force new version to be built for dev branch.
+Updating to force new version to be built for dev branch.
