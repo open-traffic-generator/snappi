@@ -604,13 +604,13 @@ func (obj *flowRSVPPathSessionAttributeLspTunnelRa) validateObj(vObj *validation
 
 func (obj *flowRSVPPathSessionAttributeLspTunnelRa) setDefault() {
 	if obj.obj.ExcludeAny == nil {
-		obj.SetExcludeAny("0")
+		obj.SetExcludeAny("00")
 	}
 	if obj.obj.IncludeAny == nil {
-		obj.SetIncludeAny("0")
+		obj.SetIncludeAny("00")
 	}
 	if obj.obj.IncludeAll == nil {
-		obj.SetIncludeAll("0")
+		obj.SetIncludeAll("00")
 	}
 	if obj.obj.SetupPriority == nil {
 		obj.SetSetupPriority(7)

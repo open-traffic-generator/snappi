@@ -328,7 +328,7 @@ func (obj *flowRSVPSessionAttributeNameLength) setChoice(value FlowRSVPSessionAt
 	return obj
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPSessionAttributeNameLength) Auto() uint32 {
 
@@ -340,7 +340,7 @@ func (obj *flowRSVPSessionAttributeNameLength) Auto() uint32 {
 
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPSessionAttributeNameLength) HasAuto() bool {
 	return obj.obj.Auto != nil
@@ -375,16 +375,6 @@ func (obj *flowRSVPSessionAttributeNameLength) SetValue(value uint32) FlowRSVPSe
 func (obj *flowRSVPSessionAttributeNameLength) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	if obj.obj.Auto != nil {
-
-		if *obj.obj.Auto > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= FlowRSVPSessionAttributeNameLength.Auto <= 255 but Got %d", *obj.obj.Auto))
-		}
-
 	}
 
 	if obj.obj.Value != nil {

@@ -25,6 +25,7 @@ type bgpV4Peer struct {
 	v4SrtePoliciesHolder           BgpV4PeerBgpSrteV4PolicyIter
 	v6SrtePoliciesHolder           BgpV4PeerBgpSrteV6PolicyIter
 	gracefulRestartHolder          BgpGracefulRestart
+	replayUpdatesHolder            BgpUpdateReplay
 }
 
 func NewBgpV4Peer() BgpV4Peer {
@@ -261,6 +262,7 @@ func (obj *bgpV4Peer) setNil() {
 	obj.v4SrtePoliciesHolder = nil
 	obj.v6SrtePoliciesHolder = nil
 	obj.gracefulRestartHolder = nil
+	obj.replayUpdatesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -352,6 +354,14 @@ type BgpV4Peer interface {
 	SetGracefulRestart(value BgpGracefulRestart) BgpV4Peer
 	// HasGracefulRestart checks if GracefulRestart has been set in BgpV4Peer
 	HasGracefulRestart() bool
+	// ReplayUpdates returns BgpUpdateReplay, set in BgpV4Peer.
+	// BgpUpdateReplay is ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the order given in the input to the peer after the BGP session is established.
+	ReplayUpdates() BgpUpdateReplay
+	// SetReplayUpdates assigns BgpUpdateReplay provided by user to BgpV4Peer.
+	// BgpUpdateReplay is ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the order given in the input to the peer after the BGP session is established.
+	SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer
+	// HasReplayUpdates checks if ReplayUpdates has been set in BgpV4Peer
+	HasReplayUpdates() bool
 	setNil()
 }
 
@@ -1028,6 +1038,34 @@ func (obj *bgpV4Peer) SetGracefulRestart(value BgpGracefulRestart) BgpV4Peer {
 	return obj
 }
 
+// BGP Updates to be sent to the peer as specified after the session is established.
+// ReplayUpdates returns a BgpUpdateReplay
+func (obj *bgpV4Peer) ReplayUpdates() BgpUpdateReplay {
+	if obj.obj.ReplayUpdates == nil {
+		obj.obj.ReplayUpdates = NewBgpUpdateReplay().msg()
+	}
+	if obj.replayUpdatesHolder == nil {
+		obj.replayUpdatesHolder = &bgpUpdateReplay{obj: obj.obj.ReplayUpdates}
+	}
+	return obj.replayUpdatesHolder
+}
+
+// BGP Updates to be sent to the peer as specified after the session is established.
+// ReplayUpdates returns a BgpUpdateReplay
+func (obj *bgpV4Peer) HasReplayUpdates() bool {
+	return obj.obj.ReplayUpdates != nil
+}
+
+// BGP Updates to be sent to the peer as specified after the session is established.
+// SetReplayUpdates sets the BgpUpdateReplay value in the BgpV4Peer object
+func (obj *bgpV4Peer) SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer {
+
+	obj.replayUpdatesHolder = nil
+	obj.obj.ReplayUpdates = value.msg()
+
+	return obj
+}
+
 func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1149,6 +1187,11 @@ func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.GracefulRestart != nil {
 
 		obj.GracefulRestart().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.ReplayUpdates != nil {
+
+		obj.ReplayUpdates().validateObj(vObj, set_default)
 	}
 
 }

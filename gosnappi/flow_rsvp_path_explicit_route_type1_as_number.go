@@ -17,7 +17,7 @@ type flowRSVPPathExplicitRouteType1ASNumber struct {
 	marshaller   marshalFlowRSVPPathExplicitRouteType1ASNumber
 	unMarshaller unMarshalFlowRSVPPathExplicitRouteType1ASNumber
 	lBitHolder   PatternFlowRSVPPathExplicitRouteType1ASNumberLBit
-	lengthHolder FlowRSVPExplicitRouteLength
+	lengthHolder FlowRSVPExplicitRouteASNumberLength
 }
 
 func NewFlowRSVPPathExplicitRouteType1ASNumber() FlowRSVPPathExplicitRouteType1ASNumber {
@@ -282,12 +282,12 @@ type FlowRSVPPathExplicitRouteType1ASNumber interface {
 	SetLBit(value PatternFlowRSVPPathExplicitRouteType1ASNumberLBit) FlowRSVPPathExplicitRouteType1ASNumber
 	// HasLBit checks if LBit has been set in FlowRSVPPathExplicitRouteType1ASNumber
 	HasLBit() bool
-	// Length returns FlowRSVPExplicitRouteLength, set in FlowRSVPPathExplicitRouteType1ASNumber.
-	// FlowRSVPExplicitRouteLength is description is TBD
-	Length() FlowRSVPExplicitRouteLength
-	// SetLength assigns FlowRSVPExplicitRouteLength provided by user to FlowRSVPPathExplicitRouteType1ASNumber.
-	// FlowRSVPExplicitRouteLength is description is TBD
-	SetLength(value FlowRSVPExplicitRouteLength) FlowRSVPPathExplicitRouteType1ASNumber
+	// Length returns FlowRSVPExplicitRouteASNumberLength, set in FlowRSVPPathExplicitRouteType1ASNumber.
+	// FlowRSVPExplicitRouteASNumberLength is description is TBD
+	Length() FlowRSVPExplicitRouteASNumberLength
+	// SetLength assigns FlowRSVPExplicitRouteASNumberLength provided by user to FlowRSVPPathExplicitRouteType1ASNumber.
+	// FlowRSVPExplicitRouteASNumberLength is description is TBD
+	SetLength(value FlowRSVPExplicitRouteASNumberLength) FlowRSVPPathExplicitRouteType1ASNumber
 	// HasLength checks if Length has been set in FlowRSVPPathExplicitRouteType1ASNumber
 	HasLength() bool
 	// AsNumber returns uint32, set in FlowRSVPPathExplicitRouteType1ASNumber.
@@ -328,26 +328,26 @@ func (obj *flowRSVPPathExplicitRouteType1ASNumber) SetLBit(value PatternFlowRSVP
 }
 
 // The Length contains the total length of the subobject in bytes,including L, Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
-// Length returns a FlowRSVPExplicitRouteLength
-func (obj *flowRSVPPathExplicitRouteType1ASNumber) Length() FlowRSVPExplicitRouteLength {
+// Length returns a FlowRSVPExplicitRouteASNumberLength
+func (obj *flowRSVPPathExplicitRouteType1ASNumber) Length() FlowRSVPExplicitRouteASNumberLength {
 	if obj.obj.Length == nil {
-		obj.obj.Length = NewFlowRSVPExplicitRouteLength().msg()
+		obj.obj.Length = NewFlowRSVPExplicitRouteASNumberLength().msg()
 	}
 	if obj.lengthHolder == nil {
-		obj.lengthHolder = &flowRSVPExplicitRouteLength{obj: obj.obj.Length}
+		obj.lengthHolder = &flowRSVPExplicitRouteASNumberLength{obj: obj.obj.Length}
 	}
 	return obj.lengthHolder
 }
 
 // The Length contains the total length of the subobject in bytes,including L, Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
-// Length returns a FlowRSVPExplicitRouteLength
+// Length returns a FlowRSVPExplicitRouteASNumberLength
 func (obj *flowRSVPPathExplicitRouteType1ASNumber) HasLength() bool {
 	return obj.obj.Length != nil
 }
 
 // The Length contains the total length of the subobject in bytes,including L, Type and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
-// SetLength sets the FlowRSVPExplicitRouteLength value in the FlowRSVPPathExplicitRouteType1ASNumber object
-func (obj *flowRSVPPathExplicitRouteType1ASNumber) SetLength(value FlowRSVPExplicitRouteLength) FlowRSVPPathExplicitRouteType1ASNumber {
+// SetLength sets the FlowRSVPExplicitRouteASNumberLength value in the FlowRSVPPathExplicitRouteType1ASNumber object
+func (obj *flowRSVPPathExplicitRouteType1ASNumber) SetLength(value FlowRSVPExplicitRouteASNumberLength) FlowRSVPPathExplicitRouteType1ASNumber {
 
 	obj.lengthHolder = nil
 	obj.obj.Length = value.msg()

@@ -328,7 +328,7 @@ func (obj *flowRSVPRouteRecordLength) setChoice(value FlowRSVPRouteRecordLengthC
 	return obj
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPRouteRecordLength) Auto() uint32 {
 
@@ -340,7 +340,7 @@ func (obj *flowRSVPRouteRecordLength) Auto() uint32 {
 
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPRouteRecordLength) HasAuto() bool {
 	return obj.obj.Auto != nil
@@ -377,22 +377,12 @@ func (obj *flowRSVPRouteRecordLength) validateObj(vObj *validation, set_default 
 		obj.setDefault()
 	}
 
-	if obj.obj.Auto != nil {
-
-		if *obj.obj.Auto > 256 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= FlowRSVPRouteRecordLength.Auto <= 256 but Got %d", *obj.obj.Auto))
-		}
-
-	}
-
 	if obj.obj.Value != nil {
 
-		if *obj.obj.Value > 256 {
+		if *obj.obj.Value > 255 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= FlowRSVPRouteRecordLength.Value <= 256 but Got %d", *obj.obj.Value))
+				fmt.Sprintf("0 <= FlowRSVPRouteRecordLength.Value <= 255 but Got %d", *obj.obj.Value))
 		}
 
 	}

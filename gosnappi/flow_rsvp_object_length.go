@@ -328,7 +328,7 @@ func (obj *flowRSVPObjectLength) setChoice(value FlowRSVPObjectLengthChoiceEnum)
 	return obj
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPObjectLength) Auto() uint32 {
 
@@ -340,7 +340,7 @@ func (obj *flowRSVPObjectLength) Auto() uint32 {
 
 }
 
-// OTG will provide a system generated value for this property.  If OTG is unable to generate a value the default value must be used.
+// The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
 // Auto returns a uint32
 func (obj *flowRSVPObjectLength) HasAuto() bool {
 	return obj.obj.Auto != nil
@@ -375,16 +375,6 @@ func (obj *flowRSVPObjectLength) SetValue(value uint32) FlowRSVPObjectLength {
 func (obj *flowRSVPObjectLength) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	if obj.obj.Auto != nil {
-
-		if *obj.obj.Auto < 4 || *obj.obj.Auto > 65535 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("4 <= FlowRSVPObjectLength.Auto <= 65535 but Got %d", *obj.obj.Auto))
-		}
-
 	}
 
 	if obj.obj.Value != nil {
