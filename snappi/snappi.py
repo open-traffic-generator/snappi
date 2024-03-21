@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.0.1
+# Open Traffic Generator API 1.1.0
 # License: MIT
 
 import importlib
@@ -9911,6 +9911,7 @@ class BgpV4Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
+        "replay_updates": {"type": "BgpUpdateReplay"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -10182,6 +10183,17 @@ class BgpV4Peer(OpenApiObject):
         Returns: BgpGracefulRestart
         """
         return self._get_property("graceful_restart", BgpGracefulRestart)
+
+    @property
+    def replay_updates(self):
+        # type: () -> BgpUpdateReplay
+        """replay_updates getter
+
+        Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.BGP Updates to be sent to the peer as specified after the session is established.
+
+        Returns: BgpUpdateReplay
+        """
+        return self._get_property("replay_updates", BgpUpdateReplay)
 
 
 class BgpV4EthernetSegment(OpenApiObject):
@@ -20469,6 +20481,2985 @@ class BgpGracefulRestart(OpenApiObject):
         self._set_property("stale_time", value)
 
 
+class BgpUpdateReplay(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "structured_pdus",
+                "raw_bytes",
+            ],
+        },
+        "structured_pdus": {"type": "BgpStructuredPdus"},
+        "raw_bytes": {"type": "BgpRawBytes"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "structured_pdus",
+    }  # type: Dict[str, Union(type)]
+
+    STRUCTURED_PDUS = "structured_pdus"  # type: str
+    RAW_BYTES = "raw_bytes"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpUpdateReplay, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def structured_pdus(self):
+        # type: () -> BgpStructuredPdus
+        """Factory property that returns an instance of the BgpStructuredPdus class
+
+        Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.
+
+        Returns: BgpStructuredPdus
+        """
+        return self._get_property(
+            "structured_pdus", BgpStructuredPdus, self, "structured_pdus"
+        )
+
+    @property
+    def raw_bytes(self):
+        # type: () -> BgpRawBytes
+        """Factory property that returns an instance of the BgpRawBytes class
+
+        Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.
+
+        Returns: BgpRawBytes
+        """
+        return self._get_property("raw_bytes", BgpRawBytes, self, "raw_bytes")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["raw_bytes"], Literal["structured_pdus"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["raw_bytes"], Literal["structured_pdus"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["raw_bytes"], Literal["structured_pdus"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpStructuredPdus(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "updates": {"type": "BgpOneStructuredUpdateReplayIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpStructuredPdus, self).__init__()
+        self._parent = parent
+
+    @property
+    def updates(self):
+        # type: () -> BgpOneStructuredUpdateReplayIter
+        """updates getter
+
+        Array of ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.
+
+        Returns: BgpOneStructuredUpdateReplayIter
+        """
+        return self._get_property(
+            "updates", BgpOneStructuredUpdateReplayIter, self._parent, self._choice
+        )
+
+
+class BgpOneStructuredUpdateReplay(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "time_gap": {
+            "type": int,
+            "format": "uint32",
+        },
+        "path_attributes": {"type": "BgpAttributes"},
+        "traditional_unreach_nlris": {"type": "BgpOneTraditionalNlriPrefixIter"},
+        "traditional_reach_nlris": {"type": "BgpOneTraditionalNlriPrefixIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "time_gap": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, time_gap=0):
+        super(BgpOneStructuredUpdateReplay, self).__init__()
+        self._parent = parent
+        self._set_property("time_gap", time_gap)
+
+    def set(self, time_gap=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def time_gap(self):
+        # type: () -> int
+        """time_gap getter
+
+        Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+
+        Returns: int
+        """
+        return self._get_property("time_gap")
+
+    @time_gap.setter
+    def time_gap(self, value):
+        """time_gap setter
+
+        Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+
+        value: int
+        """
+        self._set_property("time_gap", value)
+
+    @property
+    def path_attributes(self):
+        # type: () -> BgpAttributes
+        """path_attributes getter
+
+        Attributes carried in the Update packet alongwith the reach/unreach prefixes.Attributes carried in the Update packet alongwith the reach/unreach prefixes.Attributes carried in the Update packet alongwith the reach/unreach prefixes.Attributes carried in the Update packet alongwith the reach/unreach prefixes.
+
+        Returns: BgpAttributes
+        """
+        return self._get_property("path_attributes", BgpAttributes)
+
+    @property
+    def traditional_unreach_nlris(self):
+        # type: () -> BgpOneTraditionalNlriPrefixIter
+        """traditional_unreach_nlris getter
+
+        The IPv4 prefixes to be included in the traditional UNREACH_NLRI.
+
+        Returns: BgpOneTraditionalNlriPrefixIter
+        """
+        return self._get_property(
+            "traditional_unreach_nlris",
+            BgpOneTraditionalNlriPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def traditional_reach_nlris(self):
+        # type: () -> BgpOneTraditionalNlriPrefixIter
+        """traditional_reach_nlris getter
+
+        The IPv4 prefixes to be included in the traditional REACH_NLRI.
+
+        Returns: BgpOneTraditionalNlriPrefixIter
+        """
+        return self._get_property(
+            "traditional_reach_nlris",
+            BgpOneTraditionalNlriPrefixIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "other_attributes": {"type": "BgpAttributesOtherAttributeIter"},
+        "origin": {
+            "type": str,
+            "enum": [
+                "igp",
+                "egp",
+                "incomplete",
+            ],
+        },
+        "as_path": {"type": "BgpAttributesAsPath"},
+        "as4_path": {"type": "BgpAttributesAs4Path"},
+        "next_hop": {"type": "BgpAttributesNextHop"},
+        "multi_exit_discriminator": {"type": "BgpAttributesMultiExitDiscriminator"},
+        "local_preference": {"type": "BgpAttributesLocalPreference"},
+        "include_atomic_aggregator": {"type": bool},
+        "aggregator": {"type": "BgpAttributesAggregator"},
+        "as4_aggregator": {"type": "BgpAttributesAs4Aggregator"},
+        "community": {"type": "BgpAttributesCommunityIter"},
+        "originator_id": {"type": "BgpAttributesOriginatorId"},
+        "cluster_ids": {
+            "type": list,
+            "itemtype": str,
+            "itemformat": "ipv4",
+        },
+        "extended_communities": {"type": "BgpExtendedCommunityIter"},
+        "mp_reach": {"type": "BgpAttributesMpReachNlri"},
+        "mp_unreach": {"type": "BgpAttributesMpUnreachNlri"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "origin": "incomplete",
+        "include_atomic_aggregator": False,
+    }  # type: Dict[str, Union(type)]
+
+    IGP = "igp"  # type: str
+    EGP = "egp"  # type: str
+    INCOMPLETE = "incomplete"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        origin="incomplete",
+        include_atomic_aggregator=False,
+        cluster_ids=None,
+    ):
+        super(BgpAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("origin", origin)
+        self._set_property("include_atomic_aggregator", include_atomic_aggregator)
+        self._set_property("cluster_ids", cluster_ids)
+
+    def set(self, origin=None, include_atomic_aggregator=None, cluster_ids=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def other_attributes(self):
+        # type: () -> BgpAttributesOtherAttributeIter
+        """other_attributes getter
+
+        Any attributes not present in the list of configurable attributes should be added to the list of unknown attributes.
+
+        Returns: BgpAttributesOtherAttributeIter
+        """
+        return self._get_property(
+            "other_attributes",
+            BgpAttributesOtherAttributeIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def origin(self):
+        # type: () -> Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """origin getter
+
+        The ORIGIN attribute is mandatory attribute which can take three values: the prefix originates from an interior routing protocol 'igp', it originates from 'egp' or the origin is 'incomplete',if the prefix is learned through other means.
+
+        Returns: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        return self._get_property("origin")
+
+    @origin.setter
+    def origin(self, value):
+        """origin setter
+
+        The ORIGIN attribute is mandatory attribute which can take three values: the prefix originates from an interior routing protocol 'igp', it originates from 'egp' or the origin is 'incomplete',if the prefix is learned through other means.
+
+        value: Union[Literal["egp"], Literal["igp"], Literal["incomplete"]]
+        """
+        self._set_property("origin", value)
+
+    @property
+    def as_path(self):
+        # type: () -> BgpAttributesAsPath
+        """as_path getter
+
+        The AS_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. There are two modes in which AS numbers can be encoded in the AS Path Segments. When the AS Path is being exchanged between old and new BGP speakers or between two old BGP speakers the AS numbers are encoded as byte values.. When the AS Path is being exchanged between two new BGP speakers supporting byte AS the AS numbers are encoded as byte values.The AS_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. There are two modes in which AS numbers can be encoded in the AS Path Segments. When the AS Path is being exchanged between old and new BGP speakers or between two old BGP speakers the AS numbers are encoded as byte values.. When the AS Path is being exchanged between two new BGP speakers supporting byte AS the AS numbers are encoded as byte values.The AS_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. There are two modes in which AS numbers can be encoded in the AS Path Segments. When the AS Path is being exchanged between old and new BGP speakers or between two old BGP speakers the AS numbers are encoded as byte values.. When the AS Path is being exchanged between two new BGP speakers supporting byte AS the AS numbers are encoded as byte values.AS_PATH attribute to be included in the Update.
+
+        Returns: BgpAttributesAsPath
+        """
+        return self._get_property("as_path", BgpAttributesAsPath)
+
+    @property
+    def as4_path(self):
+        # type: () -> BgpAttributesAs4Path
+        """as4_path getter
+
+        The AS4_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. AS4_PATH is only exchanged in two scenarios:. When an old BGP speaker has to forward received AS4_PATH containing byte AS numbers to new BGP speaker.. When new BGP speaker is connected to an old BGP speaker and has to propagate byte AS numbers via the old BGP speaker.. Its usage is described in RFC4893.The AS4_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. AS4_PATH is only exchanged in two scenarios:. When an old BGP speaker has to forward received AS4_PATH containing byte AS numbers to new BGP speaker.. When new BGP speaker is connected to an old BGP speaker and has to propagate byte AS numbers via the old BGP speaker.. Its usage is described in RFC4893.The AS4_PATH attribute identifies the autonomous systems through which routing information. carried in this UPDATE message has passed.. This contains the configuration of how to include the Local AS in the AS path. attribute of the MP REACH NLRI. It also contains optional configuration of. additional AS Path Segments that can be included in the AS Path attribute.. The AS Path consists of Set or Sequence of Autonomous Systems (AS) numbers that. routing information passes through to reach the destination.. AS4_PATH is only exchanged in two scenarios:. When an old BGP speaker has to forward received AS4_PATH containing byte AS numbers to new BGP speaker.. When new BGP speaker is connected to an old BGP speaker and has to propagate byte AS numbers via the old BGP speaker.. Its usage is described in RFC4893.AS4_PATH attribute to be included in the Update.
+
+        Returns: BgpAttributesAs4Path
+        """
+        return self._get_property("as4_path", BgpAttributesAs4Path)
+
+    @property
+    def next_hop(self):
+        # type: () -> BgpAttributesNextHop
+        """next_hop getter
+
+        Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI. Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI. Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI.
+
+        Returns: BgpAttributesNextHop
+        """
+        return self._get_property("next_hop", BgpAttributesNextHop)
+
+    @property
+    def multi_exit_discriminator(self):
+        # type: () -> BgpAttributesMultiExitDiscriminator
+        """multi_exit_discriminator getter
+
+        Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route selection process. Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route selection process. Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route selection process.
+
+        Returns: BgpAttributesMultiExitDiscriminator
+        """
+        return self._get_property(
+            "multi_exit_discriminator", BgpAttributesMultiExitDiscriminator
+        )
+
+    @property
+    def local_preference(self):
+        # type: () -> BgpAttributesLocalPreference
+        """local_preference getter
+
+        Optional LOCAL_PREFERENCE attribute sent to the peer to indicate the degree of preference for externally learned routes.This should be included only for internal peers.It is used for the selection of the path for the traffic leaving the AS.The route with the highest local preference value is preferred.Optional LOCAL_PREFERENCE attribute sent to the peer to indicate the degree of preference for externally learned routes.This should be included only for internal peers.It is used for the selection of the path for the traffic leaving the AS.The route with the highest local preference value is preferred.Optional LOCAL_PREFERENCE attribute sent to the peer to indicate the degree of preference for externally learned routes.This should be included only for internal peers.It is used for the selection of the path for the traffic leaving the AS.The route with the highest local preference value is preferred.
+
+        Returns: BgpAttributesLocalPreference
+        """
+        return self._get_property("local_preference", BgpAttributesLocalPreference)
+
+    @property
+    def include_atomic_aggregator(self):
+        # type: () -> bool
+        """include_atomic_aggregator getter
+
+        If enabled, it indicates that the ATOMIC_AGGREGATOR attribute should be included in the Update.. Presence of this attribute Indicates that this route might not be getting sent on fully optimized path since some intermediate BGP speaker has aggregated the route.
+
+        Returns: bool
+        """
+        return self._get_property("include_atomic_aggregator")
+
+    @include_atomic_aggregator.setter
+    def include_atomic_aggregator(self, value):
+        """include_atomic_aggregator setter
+
+        If enabled, it indicates that the ATOMIC_AGGREGATOR attribute should be included in the Update.. Presence of this attribute Indicates that this route might not be getting sent on fully optimized path since some intermediate BGP speaker has aggregated the route.
+
+        value: bool
+        """
+        self._set_property("include_atomic_aggregator", value)
+
+    @property
+    def aggregator(self):
+        # type: () -> BgpAttributesAggregator
+        """aggregator getter
+
+        Optional AGGREGATOR attribute which maybe be added by BGP speaker which performs route aggregation.. When AGGREGATOR attribute is being sent to new BGP speaker the AS number is encoded as 4 byte value.. When AGGREGATOR attribute is being exchanged between new and an old BGP speaker or between two old BGP speakers, the AS number is encoded as 2 byte value.. It contain the AS number and IP address of the speaker performing the aggregation. Optional AGGREGATOR attribute which maybe be added by BGP speaker which performs route aggregation.. When AGGREGATOR attribute is being sent to new BGP speaker the AS number is encoded as 4 byte value.. When AGGREGATOR attribute is being exchanged between new and an old BGP speaker or between two old BGP speakers, the AS number is encoded as 2 byte value.. It contain the AS number and IP address of the speaker performing the aggregation. Optional AGGREGATOR attribute which maybe be added by BGP speaker which performs route aggregation.. When AGGREGATOR attribute is being sent to new BGP speaker the AS number is encoded as 4 byte value.. When AGGREGATOR attribute is being exchanged between new and an old BGP speaker or between two old BGP speakers, the AS number is encoded as 2 byte value.. It contain the AS number and IP address of the speaker performing the aggregation.
+
+        Returns: BgpAttributesAggregator
+        """
+        return self._get_property("aggregator", BgpAttributesAggregator)
+
+    @property
+    def as4_aggregator(self):
+        # type: () -> BgpAttributesAs4Aggregator
+        """as4_aggregator getter
+
+        Optional AS4_AGGREGATOR attribute which maybe be added by BGP speaker in one of two cases:. If it is new BGP speaker speaking to an old BGP speaker and needs to send 4 byte value for the AS number of the BGP route aggregator.. If it is old BGP speaker speaking to new BGP speaker and has to transparently forward received AS4_AGGREGATOR from some other peer.. Its usage is described in RFC4893. Optional AS4_AGGREGATOR attribute which maybe be added by BGP speaker in one of two cases:. If it is new BGP speaker speaking to an old BGP speaker and needs to send 4 byte value for the AS number of the BGP route aggregator.. If it is old BGP speaker speaking to new BGP speaker and has to transparently forward received AS4_AGGREGATOR from some other peer.. Its usage is described in RFC4893. Optional AS4_AGGREGATOR attribute which maybe be added by BGP speaker in one of two cases:. If it is new BGP speaker speaking to an old BGP speaker and needs to send 4 byte value for the AS number of the BGP route aggregator.. If it is old BGP speaker speaking to new BGP speaker and has to transparently forward received AS4_AGGREGATOR from some other peer.. Its usage is described in RFC4893.
+
+        Returns: BgpAttributesAs4Aggregator
+        """
+        return self._get_property("as4_aggregator", BgpAttributesAs4Aggregator)
+
+    @property
+    def community(self):
+        # type: () -> BgpAttributesCommunityIter
+        """community getter
+
+        TBD
+
+        Returns: BgpAttributesCommunityIter
+        """
+        return self._get_property(
+            "community", BgpAttributesCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def originator_id(self):
+        # type: () -> BgpAttributesOriginatorId
+        """originator_id getter
+
+        Optional ORIGINATOR_ID attribute (type code 9) carries the Router Id of the route's originator in the local AS.Optional ORIGINATOR_ID attribute (type code 9) carries the Router Id of the route's originator in the local AS.Optional ORIGINATOR_ID attribute (type code 9) carries the Router Id of the route's originator in the local AS.
+
+        Returns: BgpAttributesOriginatorId
+        """
+        return self._get_property("originator_id", BgpAttributesOriginatorId)
+
+    @property
+    def cluster_ids(self):
+        # type: () -> List[str]
+        """cluster_ids getter
+
+        When Route Reflector reflects route, it prepends the local CLUSTER_ID to the CLUSTER_LIST as defined in RFC4456.
+
+        Returns: List[str]
+        """
+        return self._get_property("cluster_ids")
+
+    @cluster_ids.setter
+    def cluster_ids(self, value):
+        """cluster_ids setter
+
+        When Route Reflector reflects route, it prepends the local CLUSTER_ID to the CLUSTER_LIST as defined in RFC4456.
+
+        value: List[str]
+        """
+        self._set_property("cluster_ids", value)
+
+    @property
+    def extended_communities(self):
+        # type: () -> BgpExtendedCommunityIter
+        """extended_communities getter
+
+        Optional EXTENDED_COMMUNITY attribute settings.. The EXTENDED_COMMUNITY Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes. are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an eight byte value.. It is divided into two main parts. The first two bytes of the community encode type and sub-type fields and the last six bytes carry unique set. of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: BgpExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities", BgpExtendedCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def mp_reach(self):
+        # type: () -> BgpAttributesMpReachNlri
+        """mp_reach getter
+
+        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+
+        Returns: BgpAttributesMpReachNlri
+        """
+        return self._get_property("mp_reach", BgpAttributesMpReachNlri)
+
+    @property
+    def mp_unreach(self):
+        # type: () -> BgpAttributesMpUnreachNlri
+        """mp_unreach getter
+
+        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+
+        Returns: BgpAttributesMpUnreachNlri
+        """
+        return self._get_property("mp_unreach", BgpAttributesMpUnreachNlri)
+
+
+class BgpAttributesOtherAttribute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_optional": {"type": bool},
+        "flag_transitive": {"type": bool},
+        "flag_partial": {"type": bool},
+        "flag_extended_length": {"type": bool},
+        "type": {
+            "type": int,
+            "format": "uint32",
+        },
+        "raw_value": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("type", "raw_value")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_optional": False,
+        "flag_transitive": False,
+        "flag_partial": False,
+        "flag_extended_length": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_optional=False,
+        flag_transitive=False,
+        flag_partial=False,
+        flag_extended_length=False,
+        type=None,
+        raw_value=None,
+    ):
+        super(BgpAttributesOtherAttribute, self).__init__()
+        self._parent = parent
+        self._set_property("flag_optional", flag_optional)
+        self._set_property("flag_transitive", flag_transitive)
+        self._set_property("flag_partial", flag_partial)
+        self._set_property("flag_extended_length", flag_extended_length)
+        self._set_property("type", type)
+        self._set_property("raw_value", raw_value)
+
+    def set(
+        self,
+        flag_optional=None,
+        flag_transitive=None,
+        flag_partial=None,
+        flag_extended_length=None,
+        type=None,
+        raw_value=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_optional(self):
+        # type: () -> bool
+        """flag_optional getter
+
+        Optional flag in the BGP attribute.
+
+        Returns: bool
+        """
+        return self._get_property("flag_optional")
+
+    @flag_optional.setter
+    def flag_optional(self, value):
+        """flag_optional setter
+
+        Optional flag in the BGP attribute.
+
+        value: bool
+        """
+        self._set_property("flag_optional", value)
+
+    @property
+    def flag_transitive(self):
+        # type: () -> bool
+        """flag_transitive getter
+
+        Transitive flag in the BGP attribute.
+
+        Returns: bool
+        """
+        return self._get_property("flag_transitive")
+
+    @flag_transitive.setter
+    def flag_transitive(self, value):
+        """flag_transitive setter
+
+        Transitive flag in the BGP attribute.
+
+        value: bool
+        """
+        self._set_property("flag_transitive", value)
+
+    @property
+    def flag_partial(self):
+        # type: () -> bool
+        """flag_partial getter
+
+        Partial flag in the BGP attribute.
+
+        Returns: bool
+        """
+        return self._get_property("flag_partial")
+
+    @flag_partial.setter
+    def flag_partial(self, value):
+        """flag_partial setter
+
+        Partial flag in the BGP attribute.
+
+        value: bool
+        """
+        self._set_property("flag_partial", value)
+
+    @property
+    def flag_extended_length(self):
+        # type: () -> bool
+        """flag_extended_length getter
+
+        Extended length flag in the BGP attribute.
+
+        Returns: bool
+        """
+        return self._get_property("flag_extended_length")
+
+    @flag_extended_length.setter
+    def flag_extended_length(self, value):
+        """flag_extended_length setter
+
+        Extended length flag in the BGP attribute.
+
+        value: bool
+        """
+        self._set_property("flag_extended_length", value)
+
+    @property
+    def type(self):
+        # type: () -> int
+        """type getter
+
+        The value of the Type field in the attribute.
+
+        Returns: int
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        The value of the Type field in the attribute.
+
+        value: int
+        """
+        if value is None:
+            raise TypeError("Cannot set required property type as None")
+        self._set_property("type", value)
+
+    @property
+    def raw_value(self):
+        # type: () -> str
+        """raw_value getter
+
+        Contents of the value field the contents after the initial two bytes containing the Flags and Type field of the attribute in hex bytes. It includes the contents of length of the extended length field if included.
+
+        Returns: str
+        """
+        return self._get_property("raw_value")
+
+    @raw_value.setter
+    def raw_value(self, value):
+        """raw_value setter
+
+        Contents of the value field the contents after the initial two bytes containing the Flags and Type field of the attribute in hex bytes. It includes the contents of length of the extended length field if included.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property raw_value as None")
+        self._set_property("raw_value", value)
+
+
+class BgpAttributesOtherAttributeIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesOtherAttributeIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesOtherAttribute]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesOtherAttributeIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesOtherAttribute
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesOtherAttribute
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesOtherAttribute):
+            raise Exception("Item is not an instance of BgpAttributesOtherAttribute")
+
+    def otherattribute(
+        self,
+        flag_optional=False,
+        flag_transitive=False,
+        flag_partial=False,
+        flag_extended_length=False,
+        type=None,
+        raw_value=None,
+    ):
+        # type: (bool,bool,bool,bool,int,str) -> BgpAttributesOtherAttributeIter
+        """Factory method that creates an instance of the BgpAttributesOtherAttribute class
+
+        One unknown attribute stored as hex bytes.
+
+        Returns: BgpAttributesOtherAttributeIter
+        """
+        item = BgpAttributesOtherAttribute(
+            parent=self._parent,
+            flag_optional=flag_optional,
+            flag_transitive=flag_transitive,
+            flag_partial=flag_partial,
+            flag_extended_length=flag_extended_length,
+            type=type,
+            raw_value=raw_value,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        flag_optional=False,
+        flag_transitive=False,
+        flag_partial=False,
+        flag_extended_length=False,
+        type=None,
+        raw_value=None,
+    ):
+        # type: (bool,bool,bool,bool,int,str) -> BgpAttributesOtherAttribute
+        """Add method that creates and returns an instance of the BgpAttributesOtherAttribute class
+
+        One unknown attribute stored as hex bytes.
+
+        Returns: BgpAttributesOtherAttribute
+        """
+        item = BgpAttributesOtherAttribute(
+            parent=self._parent,
+            flag_optional=flag_optional,
+            flag_transitive=flag_transitive,
+            flag_partial=flag_partial,
+            flag_extended_length=flag_extended_length,
+            type=type,
+            raw_value=raw_value,
+        )
+        self._add(item)
+        return item
+
+
+class BgpAttributesAsPath(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "four_byte_as_path",
+                "two_byte_as_path",
+            ],
+        },
+        "four_byte_as_path": {"type": "BgpAttributesAsPathFourByteAsPath"},
+        "two_byte_as_path": {"type": "BgpAttributesAsPathTwoByteAsPath"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "four_byte_as_path",
+    }  # type: Dict[str, Union(type)]
+
+    FOUR_BYTE_AS_PATH = "four_byte_as_path"  # type: str
+    TWO_BYTE_AS_PATH = "two_byte_as_path"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesAsPath, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def four_byte_as_path(self):
+        # type: () -> BgpAttributesAsPathFourByteAsPath
+        """Factory property that returns an instance of the BgpAttributesAsPathFourByteAsPath class
+
+        AS Paths with byte AS numbers can be exchanged only if both BGP speakers support byte AS number extensions.
+
+        Returns: BgpAttributesAsPathFourByteAsPath
+        """
+        return self._get_property(
+            "four_byte_as_path",
+            BgpAttributesAsPathFourByteAsPath,
+            self,
+            "four_byte_as_path",
+        )
+
+    @property
+    def two_byte_as_path(self):
+        # type: () -> BgpAttributesAsPathTwoByteAsPath
+        """Factory property that returns an instance of the BgpAttributesAsPathTwoByteAsPath class
+
+        AS Paths with byte AS numbers is used when any of the two scenarios occur :. An old BGP speaker and new BGP speaker are sending BGP Updates to one another.. Two old BGP speakers are sending BGP Updates to one another.
+
+        Returns: BgpAttributesAsPathTwoByteAsPath
+        """
+        return self._get_property(
+            "two_byte_as_path",
+            BgpAttributesAsPathTwoByteAsPath,
+            self,
+            "two_byte_as_path",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["four_byte_as_path"], Literal["two_byte_as_path"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["four_byte_as_path"], Literal["two_byte_as_path"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["four_byte_as_path"], Literal["two_byte_as_path"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesAsPathFourByteAsPath(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "segments": {"type": "BgpAttributesFourByteAsPathSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesAsPathFourByteAsPath, self).__init__()
+        self._parent = parent
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesFourByteAsPathSegmentIter
+        """segments getter
+
+        The AS path segments containing byte AS numbers to be added in the AS Path attribute. By default, an empty AS path should always be included and for EBGP at minimum the local AS number should be present in the AS Path.
+
+        Returns: BgpAttributesFourByteAsPathSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesFourByteAsPathSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesFourByteAsPathSegment(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "as_seq",
+                "as_set",
+                "as_confed_seq",
+                "as_confed_set",
+            ],
+        },
+        "as_numbers": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "type": "as_seq",
+    }  # type: Dict[str, Union(type)]
+
+    AS_SEQ = "as_seq"  # type: str
+    AS_SET = "as_set"  # type: str
+    AS_CONFED_SEQ = "as_confed_seq"  # type: str
+    AS_CONFED_SET = "as_confed_set"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type="as_seq", as_numbers=None):
+        super(BgpAttributesFourByteAsPathSegment, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("as_numbers", as_numbers)
+
+    def set(self, type=None, as_numbers=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """type getter
+
+        AS sequence is the most common type of AS_PATH, it contains the list. of ASNs starting with the most recent ASN being added read from left. to right.. The other three AS_PATH types are used for Confederations. AS_SET is the type of AS_PATH attribute that summarizes routes using. using the aggregate-address command, allowing AS_PATHs to be summarized. in the update as well.. AS_CONFED_SEQ gives the list of ASNs in the path starting with the most. recent ASN to be added reading left to right. AS_CONFED_SET will allow summarization of multiple AS PATHs to be sent. in BGP Updates.
+
+        Returns: Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        AS sequence is the most common type of AS_PATH, it contains the list. of ASNs starting with the most recent ASN being added read from left. to right.. The other three AS_PATH types are used for Confederations. AS_SET is the type of AS_PATH attribute that summarizes routes using. using the aggregate-address command, allowing AS_PATHs to be summarized. in the update as well.. AS_CONFED_SEQ gives the list of ASNs in the path starting with the most. recent ASN to be added reading left to right. AS_CONFED_SET will allow summarization of multiple AS PATHs to be sent. in BGP Updates.
+
+        value: Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def as_numbers(self):
+        # type: () -> List[int]
+        """as_numbers getter
+
+        The byte AS numbers in this AS path segment.
+
+        Returns: List[int]
+        """
+        return self._get_property("as_numbers")
+
+    @as_numbers.setter
+    def as_numbers(self, value):
+        """as_numbers setter
+
+        The byte AS numbers in this AS path segment.
+
+        value: List[int]
+        """
+        self._set_property("as_numbers", value)
+
+
+class BgpAttributesFourByteAsPathSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesFourByteAsPathSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesFourByteAsPathSegment]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesFourByteAsPathSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesFourByteAsPathSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesFourByteAsPathSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesFourByteAsPathSegment):
+            raise Exception(
+                "Item is not an instance of BgpAttributesFourByteAsPathSegment"
+            )
+
+    def fourbyteaspathsegment(self, type="as_seq", as_numbers=None):
+        # type: (Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]],List[int]) -> BgpAttributesFourByteAsPathSegmentIter
+        """Factory method that creates an instance of the BgpAttributesFourByteAsPathSegment class
+
+        Configuration for single BGP AS path segment containing byte AS numbers.
+
+        Returns: BgpAttributesFourByteAsPathSegmentIter
+        """
+        item = BgpAttributesFourByteAsPathSegment(
+            parent=self._parent, type=type, as_numbers=as_numbers
+        )
+        self._add(item)
+        return self
+
+    def add(self, type="as_seq", as_numbers=None):
+        # type: (Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]],List[int]) -> BgpAttributesFourByteAsPathSegment
+        """Add method that creates and returns an instance of the BgpAttributesFourByteAsPathSegment class
+
+        Configuration for single BGP AS path segment containing byte AS numbers.
+
+        Returns: BgpAttributesFourByteAsPathSegment
+        """
+        item = BgpAttributesFourByteAsPathSegment(
+            parent=self._parent, type=type, as_numbers=as_numbers
+        )
+        self._add(item)
+        return item
+
+
+class BgpAttributesAsPathTwoByteAsPath(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "segments": {"type": "BgpAttributesTwoByteAsPathSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesAsPathTwoByteAsPath, self).__init__()
+        self._parent = parent
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesTwoByteAsPathSegmentIter
+        """segments getter
+
+        The AS path segments containing byte AS numbers to be added in the AS Path attribute. By default, an empty AS path should always be included and for EBGP the sender's AS number should be prepended to the AS Path.
+
+        Returns: BgpAttributesTwoByteAsPathSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesTwoByteAsPathSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesTwoByteAsPathSegment(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "as_seq",
+                "as_set",
+                "as_confed_seq",
+                "as_confed_set",
+            ],
+        },
+        "as_numbers": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "type": "as_seq",
+    }  # type: Dict[str, Union(type)]
+
+    AS_SEQ = "as_seq"  # type: str
+    AS_SET = "as_set"  # type: str
+    AS_CONFED_SEQ = "as_confed_seq"  # type: str
+    AS_CONFED_SET = "as_confed_set"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type="as_seq", as_numbers=None):
+        super(BgpAttributesTwoByteAsPathSegment, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("as_numbers", as_numbers)
+
+    def set(self, type=None, as_numbers=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """type getter
+
+        AS sequence is the most common type of AS_PATH, it contains the list. of ASNs starting with the most recent ASN being added read from left. to right.. The other three AS_PATH types are used for Confederations. AS_SET is the type of AS_PATH attribute that summarizes routes using. using the aggregate-address command, allowing AS_PATHs to be summarized. in the update as well.. AS_CONFED_SEQ gives the list of ASNs in the path starting with the most. recent ASN to be added reading left to right. AS_CONFED_SET will allow summarization of multiple AS PATHs to be sent. in BGP Updates.
+
+        Returns: Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        AS sequence is the most common type of AS_PATH, it contains the list. of ASNs starting with the most recent ASN being added read from left. to right.. The other three AS_PATH types are used for Confederations. AS_SET is the type of AS_PATH attribute that summarizes routes using. using the aggregate-address command, allowing AS_PATHs to be summarized. in the update as well.. AS_CONFED_SEQ gives the list of ASNs in the path starting with the most. recent ASN to be added reading left to right. AS_CONFED_SET will allow summarization of multiple AS PATHs to be sent. in BGP Updates.
+
+        value: Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def as_numbers(self):
+        # type: () -> List[int]
+        """as_numbers getter
+
+        The byte AS numbers in this AS path segment.
+
+        Returns: List[int]
+        """
+        return self._get_property("as_numbers")
+
+    @as_numbers.setter
+    def as_numbers(self, value):
+        """as_numbers setter
+
+        The byte AS numbers in this AS path segment.
+
+        value: List[int]
+        """
+        self._set_property("as_numbers", value)
+
+
+class BgpAttributesTwoByteAsPathSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesTwoByteAsPathSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesTwoByteAsPathSegment]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesTwoByteAsPathSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesTwoByteAsPathSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesTwoByteAsPathSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesTwoByteAsPathSegment):
+            raise Exception(
+                "Item is not an instance of BgpAttributesTwoByteAsPathSegment"
+            )
+
+    def twobyteaspathsegment(self, type="as_seq", as_numbers=None):
+        # type: (Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]],List[int]) -> BgpAttributesTwoByteAsPathSegmentIter
+        """Factory method that creates an instance of the BgpAttributesTwoByteAsPathSegment class
+
+        Configuration for single BGP AS path segment containing byte AS numbers.
+
+        Returns: BgpAttributesTwoByteAsPathSegmentIter
+        """
+        item = BgpAttributesTwoByteAsPathSegment(
+            parent=self._parent, type=type, as_numbers=as_numbers
+        )
+        self._add(item)
+        return self
+
+    def add(self, type="as_seq", as_numbers=None):
+        # type: (Union[Literal["as_confed_seq"], Literal["as_confed_set"], Literal["as_seq"], Literal["as_set"]],List[int]) -> BgpAttributesTwoByteAsPathSegment
+        """Add method that creates and returns an instance of the BgpAttributesTwoByteAsPathSegment class
+
+        Configuration for single BGP AS path segment containing byte AS numbers.
+
+        Returns: BgpAttributesTwoByteAsPathSegment
+        """
+        item = BgpAttributesTwoByteAsPathSegment(
+            parent=self._parent, type=type, as_numbers=as_numbers
+        )
+        self._add(item)
+        return item
+
+
+class BgpAttributesAs4Path(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "segments": {"type": "BgpAttributesFourByteAsPathSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesAs4Path, self).__init__()
+        self._parent = parent
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesFourByteAsPathSegmentIter
+        """segments getter
+
+        The AS path segments containing byte AS numbers to be added in the AS4_PATH attribute.
+
+        Returns: BgpAttributesFourByteAsPathSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesFourByteAsPathSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesNextHop(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4",
+                "ipv6",
+                "ipv6_two_addresses",
+            ],
+        },
+        "ipv4": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "ipv6": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "ipv6_two_addresses": {"type": "BgpAttributesNextHopIpv6TwoAddresses"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {
+        "ipv4": "0.0.0.0",
+        "ipv6": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = "ipv4"  # type: str
+    IPV6 = "ipv6"  # type: str
+    IPV6_TWO_ADDRESSES = "ipv6_two_addresses"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, ipv4="0.0.0.0", ipv6="0::0"):
+        super(BgpAttributesNextHop, self).__init__()
+        self._parent = parent
+        self._set_property("ipv4", ipv4)
+        self._set_property("ipv6", ipv6)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, ipv4=None, ipv6=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ipv6_two_addresses(self):
+        # type: () -> BgpAttributesNextHopIpv6TwoAddresses
+        """Factory property that returns an instance of the BgpAttributesNextHopIpv6TwoAddresses class
+
+        There is specific scenario in which it is possible to receive Global and Link Local address in the Next Hop field in MP_REACH attribute or in the NEXT_HOP attribute(RFC2545: Section 3).
+
+        Returns: BgpAttributesNextHopIpv6TwoAddresses
+        """
+        return self._get_property(
+            "ipv6_two_addresses",
+            BgpAttributesNextHopIpv6TwoAddresses,
+            self,
+            "ipv6_two_addresses",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4"], Literal["ipv6"], Literal["ipv6_two_addresses"]]
+        """choice getter
+
+        The type of the next HOP.
+
+        Returns: Union[Literal["ipv4"], Literal["ipv6"], Literal["ipv6_two_addresses"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of the next HOP.
+
+        value: Union[Literal["ipv4"], Literal["ipv6"], Literal["ipv6_two_addresses"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+    @property
+    def ipv4(self):
+        # type: () -> str
+        """ipv4 getter
+
+        The byte IPv4 address of the next-hop from which the route was received.
+
+        Returns: str
+        """
+        return self._get_property("ipv4")
+
+    @ipv4.setter
+    def ipv4(self, value):
+        """ipv4 setter
+
+        The byte IPv4 address of the next-hop from which the route was received.
+
+        value: str
+        """
+        self._set_property("ipv4", value, "ipv4")
+
+    @property
+    def ipv6(self):
+        # type: () -> str
+        """ipv6 getter
+
+        The 16 byte IPv6 address of the next-hop from which the route was received.
+
+        Returns: str
+        """
+        return self._get_property("ipv6")
+
+    @ipv6.setter
+    def ipv6(self, value):
+        """ipv6 setter
+
+        The 16 byte IPv6 address of the next-hop from which the route was received.
+
+        value: str
+        """
+        self._set_property("ipv6", value, "ipv6")
+
+
+class BgpAttributesNextHopIpv6TwoAddresses(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "first": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "second": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "first": "0::0",
+        "second": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, first="0::0", second="0::0"):
+        super(BgpAttributesNextHopIpv6TwoAddresses, self).__init__()
+        self._parent = parent
+        self._set_property("first", first)
+        self._set_property("second", second)
+
+    def set(self, first=None, second=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def first(self):
+        # type: () -> str
+        """first getter
+
+        The first IPv6 next hop in the 32 byte IPv6 Next Hop.
+
+        Returns: str
+        """
+        return self._get_property("first")
+
+    @first.setter
+    def first(self, value):
+        """first setter
+
+        The first IPv6 next hop in the 32 byte IPv6 Next Hop.
+
+        value: str
+        """
+        self._set_property("first", value)
+
+    @property
+    def second(self):
+        # type: () -> str
+        """second getter
+
+        The second IPv6 next hop in the 32 byte IPv6 Next Hop.
+
+        Returns: str
+        """
+        return self._get_property("second")
+
+    @second.setter
+    def second(self, value):
+        """second setter
+
+        The second IPv6 next hop in the 32 byte IPv6 Next Hop.
+
+        value: str
+        """
+        self._set_property("second", value)
+
+
+class BgpAttributesMultiExitDiscriminator(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesMultiExitDiscriminator, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The multi exit discriminator (MED) value used for route selection sent to the peer.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The multi exit discriminator (MED) value used for route selection sent to the peer.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesLocalPreference(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 100,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=100):
+        super(BgpAttributesLocalPreference, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be set in the LOCAL_PREFERENCE attribute The multi exit discriminator (MED) value used for route selection sent to the peer.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be set in the LOCAL_PREFERENCE attribute The multi exit discriminator (MED) value used for route selection sent to the peer.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesAggregator(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "four_byte_as",
+                "two_byte_as",
+            ],
+        },
+        "four_byte_as": {
+            "type": int,
+            "format": "uint32",
+        },
+        "two_byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "four_byte_as",
+        "four_byte_as": 65536,
+        "two_byte_as": 1,
+        "ipv4_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    FOUR_BYTE_AS = "four_byte_as"  # type: str
+    TWO_BYTE_AS = "two_byte_as"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        four_byte_as=65536,
+        two_byte_as=1,
+        ipv4_address="0.0.0.0",
+    ):
+        super(BgpAttributesAggregator, self).__init__()
+        self._parent = parent
+        self._set_property("four_byte_as", four_byte_as)
+        self._set_property("two_byte_as", two_byte_as)
+        self._set_property("ipv4_address", ipv4_address)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, four_byte_as=None, two_byte_as=None, ipv4_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["four_byte_as"], Literal["two_byte_as"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["four_byte_as"], Literal["two_byte_as"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["four_byte_as"], Literal["two_byte_as"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def four_byte_as(self):
+        # type: () -> int
+        """four_byte_as getter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route. If the value of the AS number is less than octets 65535 or less), the AS4_AGGREGATOR object should not be sent.
+
+        Returns: int
+        """
+        return self._get_property("four_byte_as")
+
+    @four_byte_as.setter
+    def four_byte_as(self, value):
+        """four_byte_as setter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route. If the value of the AS number is less than octets 65535 or less), the AS4_AGGREGATOR object should not be sent.
+
+        value: int
+        """
+        self._set_property("four_byte_as", value, "four_byte_as")
+
+    @property
+    def two_byte_as(self):
+        # type: () -> int
+        """two_byte_as getter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route.
+
+        Returns: int
+        """
+        return self._get_property("two_byte_as")
+
+    @two_byte_as.setter
+    def two_byte_as(self, value):
+        """two_byte_as setter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route.
+
+        value: int
+        """
+        self._set_property("two_byte_as", value, "two_byte_as")
+
+    @property
+    def ipv4_address(self):
+        # type: () -> str
+        """ipv4_address getter
+
+        The IPv4 address of the BGP speaker which aggregated the route.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_address")
+
+    @ipv4_address.setter
+    def ipv4_address(self, value):
+        """ipv4_address setter
+
+        The IPv4 address of the BGP speaker which aggregated the route.
+
+        value: str
+        """
+        self._set_property("ipv4_address", value)
+
+
+class BgpAttributesAs4Aggregator(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "as_num": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "ipv4_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, as_num=None, ipv4_address="0.0.0.0"):
+        super(BgpAttributesAs4Aggregator, self).__init__()
+        self._parent = parent
+        self._set_property("as_num", as_num)
+        self._set_property("ipv4_address", ipv4_address)
+
+    def set(self, as_num=None, ipv4_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def as_num(self):
+        # type: () -> int
+        """as_num getter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route.
+
+        Returns: int
+        """
+        return self._get_property("as_num")
+
+    @as_num.setter
+    def as_num(self, value):
+        """as_num setter
+
+        The value of the byte AS number of the BGP speaker which aggregated the route.
+
+        value: int
+        """
+        self._set_property("as_num", value)
+
+    @property
+    def ipv4_address(self):
+        # type: () -> str
+        """ipv4_address getter
+
+        The IPv4 address of the BGP speaker which aggregated the route.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_address")
+
+    @ipv4_address.setter
+    def ipv4_address(self, value):
+        """ipv4_address setter
+
+        The IPv4 address of the BGP speaker which aggregated the route.
+
+        value: str
+        """
+        self._set_property("ipv4_address", value)
+
+
+class BgpAttributesCommunity(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "custom_community",
+                "no_export",
+                "no_advertised",
+                "no_export_subconfed",
+                "llgr_stale",
+                "no_llgr",
+            ],
+        },
+        "custom_community": {"type": "BgpAttributesCustomCommunity"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    CUSTOM_COMMUNITY = "custom_community"  # type: str
+    NO_EXPORT = "no_export"  # type: str
+    NO_ADVERTISED = "no_advertised"  # type: str
+    NO_EXPORT_SUBCONFED = "no_export_subconfed"  # type: str
+    LLGR_STALE = "llgr_stale"  # type: str
+    NO_LLGR = "no_llgr"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesCommunity, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def custom_community(self):
+        # type: () -> BgpAttributesCustomCommunity
+        """Factory property that returns an instance of the BgpAttributesCustomCommunity class
+
+        User defined COMMUNITY attribute containing byte AS and custom byte value defined by the administrator of the domain.
+
+        Returns: BgpAttributesCustomCommunity
+        """
+        return self._get_property(
+            "custom_community", BgpAttributesCustomCommunity, self, "custom_community"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom_community"], Literal["llgr_stale"], Literal["no_advertised"], Literal["no_export"], Literal["no_export_subconfed"], Literal["no_llgr"]]
+        """choice getter
+
+        The type of community AS number.
+
+        Returns: Union[Literal["custom_community"], Literal["llgr_stale"], Literal["no_advertised"], Literal["no_export"], Literal["no_export_subconfed"], Literal["no_llgr"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of community AS number.
+
+        value: Union[Literal["custom_community"], Literal["llgr_stale"], Literal["no_advertised"], Literal["no_export"], Literal["no_export_subconfed"], Literal["no_llgr"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesCustomCommunity(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "as_number": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "custom": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 4,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "as_number": 0,
+        "custom": "0000",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, as_number=0, custom="0000"):
+        super(BgpAttributesCustomCommunity, self).__init__()
+        self._parent = parent
+        self._set_property("as_number", as_number)
+        self._set_property("custom", custom)
+
+    def set(self, as_number=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def as_number(self):
+        # type: () -> int
+        """as_number getter
+
+        First two octets of the community value containing 2 byte AS number.
+
+        Returns: int
+        """
+        return self._get_property("as_number")
+
+    @as_number.setter
+    def as_number(self, value):
+        """as_number setter
+
+        First two octets of the community value containing 2 byte AS number.
+
+        value: int
+        """
+        self._set_property("as_number", value)
+
+    @property
+    def custom(self):
+        # type: () -> str
+        """custom getter
+
+        Last two octets of the community value in hex. If user provides less than hex bytes, it should be left-padded with 0s.
+
+        Returns: str
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        Last two octets of the community value in hex. If user provides less than hex bytes, it should be left-padded with 0s.
+
+        value: str
+        """
+        self._set_property("custom", value)
+
+
+class BgpAttributesCommunityIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesCommunityIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesCommunity, BgpAttributesCustomCommunity]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesCommunityIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesCommunity
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesCommunity
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesCommunity):
+            raise Exception("Item is not an instance of BgpAttributesCommunity")
+
+    def community(self):
+        # type: () -> BgpAttributesCommunityIter
+        """Factory method that creates an instance of the BgpAttributesCommunity class
+
+        The COMMUNITY attribute provide additional capability for tagging routes and for modifying BGP routing policy on upstream and downstream routers. BGP community is 32-bit number which is broken into 16-bit AS number and . 16-bit custom value or it contains some pre-defined well known values.
+
+        Returns: BgpAttributesCommunityIter
+        """
+        item = BgpAttributesCommunity(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesCommunity
+        """Add method that creates and returns an instance of the BgpAttributesCommunity class
+
+        The COMMUNITY attribute provide additional capability for tagging routes and for modifying BGP routing policy on upstream and downstream routers. BGP community is 32-bit number which is broken into 16-bit AS number and . 16-bit custom value or it contains some pre-defined well known values.
+
+        Returns: BgpAttributesCommunity
+        """
+        item = BgpAttributesCommunity(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def custom_community(self, as_number=0, custom="0000"):
+        # type: (int,str) -> BgpAttributesCommunityIter
+        """Factory method that creates an instance of the BgpAttributesCustomCommunity class
+
+        User defined COMMUNITY attribute containing byte AS and custom byte value defined by the administrator of the domain.
+
+        Returns: BgpAttributesCommunityIter
+        """
+        item = BgpAttributesCommunity()
+        item.custom_community
+        item.choice = "custom_community"
+        self._add(item)
+        return self
+
+
+class BgpAttributesOriginatorId(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value="0.0.0.0"):
+        super(BgpAttributesOriginatorId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        The value of the originator's Router Id.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The value of the originator's Router Id.
+
+        value: str
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesMpReachNlri(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "next_hop": {"type": "BgpAttributesNextHop"},
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4_unicast",
+                "ipv6_unicast",
+            ],
+        },
+        "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
+        "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    IPV4_UNICAST = "ipv4_unicast"  # type: str
+    IPV6_UNICAST = "ipv6_unicast"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesMpReachNlri, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def next_hop(self):
+        # type: () -> BgpAttributesNextHop
+        """next_hop getter
+
+        Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI. Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI. Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised as traditional NLRI.
+
+        Returns: BgpAttributesNextHop
+        """
+        return self._get_property("next_hop", BgpAttributesNextHop)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """choice getter
+
+        The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
+
+        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
+
+        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+    @property
+    def ipv4_unicast(self):
+        # type: () -> BgpOneIpv4NLRIPrefixIter
+        """ipv4_unicast getter
+
+        List of IPv4 prefixes being sent in the IPv4 Unicast MPREACH_NLRI .
+
+        Returns: BgpOneIpv4NLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv4_unicast", BgpOneIpv4NLRIPrefixIter, self._parent, self._choice
+        )
+
+    @property
+    def ipv6_unicast(self):
+        # type: () -> BgpOneIpv6NLRIPrefixIter
+        """ipv6_unicast getter
+
+        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+
+        Returns: BgpOneIpv6NLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
+        )
+
+
+class BgpOneIpv4NLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "path_id": {"type": "BgpNLRIPrefixPathId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "address": "0.0.0.0",
+        "prefix": 24,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address="0.0.0.0", prefix=24):
+        super(BgpOneIpv4NLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+        self._set_property("prefix", prefix)
+
+    def set(self, address=None, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The IPv4 address of the network.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The IPv4 address of the network.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def path_id(self):
+        # type: () -> BgpNLRIPrefixPathId
+        """path_id getter
+
+        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+
+        Returns: BgpNLRIPrefixPathId
+        """
+        return self._get_property("path_id", BgpNLRIPrefixPathId)
+
+
+class BgpNLRIPrefixPathId(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=1):
+        super(BgpNLRIPrefixPathId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The value of the optional Path ID of the prefix.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The value of the optional Path ID of the prefix.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpOneIpv4NLRIPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneIpv4NLRIPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneIpv4NLRIPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneIpv4NLRIPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneIpv4NLRIPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneIpv4NLRIPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneIpv4NLRIPrefix):
+            raise Exception("Item is not an instance of BgpOneIpv4NLRIPrefix")
+
+    def oneipv4nlriprefix(self, address="0.0.0.0", prefix=24):
+        # type: (str,int) -> BgpOneIpv4NLRIPrefixIter
+        """Factory method that creates an instance of the BgpOneIpv4NLRIPrefix class
+
+        One IPv4 NLRI Prefix.
+
+        Returns: BgpOneIpv4NLRIPrefixIter
+        """
+        item = BgpOneIpv4NLRIPrefix(parent=self._parent, address=address, prefix=prefix)
+        self._add(item)
+        return self
+
+    def add(self, address="0.0.0.0", prefix=24):
+        # type: (str,int) -> BgpOneIpv4NLRIPrefix
+        """Add method that creates and returns an instance of the BgpOneIpv4NLRIPrefix class
+
+        One IPv4 NLRI Prefix.
+
+        Returns: BgpOneIpv4NLRIPrefix
+        """
+        item = BgpOneIpv4NLRIPrefix(parent=self._parent, address=address, prefix=prefix)
+        self._add(item)
+        return item
+
+
+class BgpOneIpv6NLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "path_id": {"type": "BgpNLRIPrefixPathId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "address": "0::0",
+        "prefix": 64,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address="0::0", prefix=64):
+        super(BgpOneIpv6NLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+        self._set_property("prefix", prefix)
+
+    def set(self, address=None, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The IPv6 address of the network.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The IPv6 address of the network.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The IPv6 network prefix length to be applied to the address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv6 network prefix length to be applied to the address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def path_id(self):
+        # type: () -> BgpNLRIPrefixPathId
+        """path_id getter
+
+        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+
+        Returns: BgpNLRIPrefixPathId
+        """
+        return self._get_property("path_id", BgpNLRIPrefixPathId)
+
+
+class BgpOneIpv6NLRIPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneIpv6NLRIPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneIpv6NLRIPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneIpv6NLRIPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneIpv6NLRIPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneIpv6NLRIPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneIpv6NLRIPrefix):
+            raise Exception("Item is not an instance of BgpOneIpv6NLRIPrefix")
+
+    def oneipv6nlriprefix(self, address="0::0", prefix=64):
+        # type: (str,int) -> BgpOneIpv6NLRIPrefixIter
+        """Factory method that creates an instance of the BgpOneIpv6NLRIPrefix class
+
+        One IPv6 NLRI Prefix.
+
+        Returns: BgpOneIpv6NLRIPrefixIter
+        """
+        item = BgpOneIpv6NLRIPrefix(parent=self._parent, address=address, prefix=prefix)
+        self._add(item)
+        return self
+
+    def add(self, address="0::0", prefix=64):
+        # type: (str,int) -> BgpOneIpv6NLRIPrefix
+        """Add method that creates and returns an instance of the BgpOneIpv6NLRIPrefix class
+
+        One IPv6 NLRI Prefix.
+
+        Returns: BgpOneIpv6NLRIPrefix
+        """
+        item = BgpOneIpv6NLRIPrefix(parent=self._parent, address=address, prefix=prefix)
+        self._add(item)
+        return item
+
+
+class BgpAttributesMpUnreachNlri(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4_unicast",
+                "ipv6_unicast",
+            ],
+        },
+        "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
+        "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    IPV4_UNICAST = "ipv4_unicast"  # type: str
+    IPV6_UNICAST = "ipv6_unicast"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesMpUnreachNlri, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """choice getter
+
+        The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
+
+        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
+
+        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def ipv4_unicast(self):
+        # type: () -> BgpOneIpv4NLRIPrefixIter
+        """ipv4_unicast getter
+
+        List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
+
+        Returns: BgpOneIpv4NLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv4_unicast", BgpOneIpv4NLRIPrefixIter, self._parent, self._choice
+        )
+
+    @property
+    def ipv6_unicast(self):
+        # type: () -> BgpOneIpv6NLRIPrefixIter
+        """ipv6_unicast getter
+
+        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+
+        Returns: BgpOneIpv6NLRIPrefixIter
+        """
+        return self._get_property(
+            "ipv6_unicast", BgpOneIpv6NLRIPrefixIter, self._parent, self._choice
+        )
+
+
+class BgpOneTraditionalNlriPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "path_id": {"type": "BgpNLRIPrefixPathId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "address": "0.0.0.0",
+        "prefix": 24,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, address="0.0.0.0", prefix=24):
+        super(BgpOneTraditionalNlriPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("address", address)
+        self._set_property("prefix", prefix)
+
+    def set(self, address=None, prefix=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def address(self):
+        # type: () -> str
+        """address getter
+
+        The IPv4 address of the network.
+
+        Returns: str
+        """
+        return self._get_property("address")
+
+    @address.setter
+    def address(self, value):
+        """address setter
+
+        The IPv4 address of the network.
+
+        value: str
+        """
+        self._set_property("address", value)
+
+    @property
+    def prefix(self):
+        # type: () -> int
+        """prefix getter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        Returns: int
+        """
+        return self._get_property("prefix")
+
+    @prefix.setter
+    def prefix(self, value):
+        """prefix setter
+
+        The IPv4 network prefix length to be applied to the address.
+
+        value: int
+        """
+        self._set_property("prefix", value)
+
+    @property
+    def path_id(self):
+        # type: () -> BgpNLRIPrefixPathId
+        """path_id getter
+
+        Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.Optional field in the NLRI carrying Path Id of the prefix.
+
+        Returns: BgpNLRIPrefixPathId
+        """
+        return self._get_property("path_id", BgpNLRIPrefixPathId)
+
+
+class BgpOneTraditionalNlriPrefixIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneTraditionalNlriPrefixIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneTraditionalNlriPrefix]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneTraditionalNlriPrefixIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneTraditionalNlriPrefix
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneTraditionalNlriPrefix
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneTraditionalNlriPrefix):
+            raise Exception("Item is not an instance of BgpOneTraditionalNlriPrefix")
+
+    def onetraditionalnlriprefix(self, address="0.0.0.0", prefix=24):
+        # type: (str,int) -> BgpOneTraditionalNlriPrefixIter
+        """Factory method that creates an instance of the BgpOneTraditionalNlriPrefix class
+
+        TRADITIONAL_NLRI is an optional part of the the BGP Update which can carry only IPv4 prefix information as defined in https://www.rfc-editor.org/rfc/rfc4271.html#section-4.3 and extended by https://datatracker.ietf.org/doc/html/rfc7911#section-3 to carry additional Path Id information per prefix.
+
+        Returns: BgpOneTraditionalNlriPrefixIter
+        """
+        item = BgpOneTraditionalNlriPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return self
+
+    def add(self, address="0.0.0.0", prefix=24):
+        # type: (str,int) -> BgpOneTraditionalNlriPrefix
+        """Add method that creates and returns an instance of the BgpOneTraditionalNlriPrefix class
+
+        TRADITIONAL_NLRI is an optional part of the the BGP Update which can carry only IPv4 prefix information as defined in https://www.rfc-editor.org/rfc/rfc4271.html#section-4.3 and extended by https://datatracker.ietf.org/doc/html/rfc7911#section-3 to carry additional Path Id information per prefix.
+
+        Returns: BgpOneTraditionalNlriPrefix
+        """
+        item = BgpOneTraditionalNlriPrefix(
+            parent=self._parent, address=address, prefix=prefix
+        )
+        self._add(item)
+        return item
+
+
+class BgpOneStructuredUpdateReplayIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneStructuredUpdateReplayIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneStructuredUpdateReplay]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneStructuredUpdateReplayIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneStructuredUpdateReplay
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneStructuredUpdateReplay
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneStructuredUpdateReplay):
+            raise Exception("Item is not an instance of BgpOneStructuredUpdateReplay")
+
+    def onestructuredupdatereplay(self, time_gap=0):
+        # type: (int) -> BgpOneStructuredUpdateReplayIter
+        """Factory method that creates an instance of the BgpOneStructuredUpdateReplay class
+
+        One structured BGP Update.
+
+        Returns: BgpOneStructuredUpdateReplayIter
+        """
+        item = BgpOneStructuredUpdateReplay(parent=self._parent, time_gap=time_gap)
+        self._add(item)
+        return self
+
+    def add(self, time_gap=0):
+        # type: (int) -> BgpOneStructuredUpdateReplay
+        """Add method that creates and returns an instance of the BgpOneStructuredUpdateReplay class
+
+        One structured BGP Update.
+
+        Returns: BgpOneStructuredUpdateReplay
+        """
+        item = BgpOneStructuredUpdateReplay(parent=self._parent, time_gap=time_gap)
+        self._add(item)
+        return item
+
+
+class BgpRawBytes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "updates": {"type": "BgpOneUpdateReplayIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpRawBytes, self).__init__()
+        self._parent = parent
+
+    @property
+    def updates(self):
+        # type: () -> BgpOneUpdateReplayIter
+        """updates getter
+
+        Array of ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.
+
+        Returns: BgpOneUpdateReplayIter
+        """
+        return self._get_property(
+            "updates", BgpOneUpdateReplayIter, self._parent, self._choice
+        )
+
+
+class BgpOneUpdateReplay(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "time_gap": {
+            "type": int,
+            "format": "uint32",
+        },
+        "update_bytes": {
+            "type": str,
+            "format": "hex",
+            "minLength": 1,
+            "maxLength": 8154,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("update_bytes",)  # type: tuple(str)
+
+    _DEFAULTS = {
+        "time_gap": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, time_gap=0, update_bytes=None):
+        super(BgpOneUpdateReplay, self).__init__()
+        self._parent = parent
+        self._set_property("time_gap", time_gap)
+        self._set_property("update_bytes", update_bytes)
+
+    def set(self, time_gap=None, update_bytes=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def time_gap(self):
+        # type: () -> int
+        """time_gap getter
+
+        Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+
+        Returns: int
+        """
+        return self._get_property("time_gap")
+
+    @time_gap.setter
+    def time_gap(self, value):
+        """time_gap setter
+
+        Minimum time interval in milliseconds from previous Update from the sequence of BGP Updates to be replayed.
+
+        value: int
+        """
+        self._set_property("time_gap", value)
+
+    @property
+    def update_bytes(self):
+        # type: () -> str
+        """update_bytes getter
+
+        Bytes specified in hex format to be sent to peer after the BGP Update Header. The Update Header will always have the initial 16 bytes containing Marker bytes, bytes containing the Length and byte containing the Type.The string MUST contain sequence of valid hex bytes. The bytes specified in hex format should be appended to the Update message to be sent to the peer after the fixed 19 bytes described above. This byte stream can be of any length from to 4077 bytes.The value 4077 is derived from the maximum length allowed for BGP message in RFC4271 which is 4096 minus mandatory 19 bytes described above. In the imported byte stream, one byte is represented as string of characters, for example character string (0x)AB represents value of single byte. So the maximum length of this attribute is 8154 (4077 2 hex characters per byte).
+
+        Returns: str
+        """
+        return self._get_property("update_bytes")
+
+    @update_bytes.setter
+    def update_bytes(self, value):
+        """update_bytes setter
+
+        Bytes specified in hex format to be sent to peer after the BGP Update Header. The Update Header will always have the initial 16 bytes containing Marker bytes, bytes containing the Length and byte containing the Type.The string MUST contain sequence of valid hex bytes. The bytes specified in hex format should be appended to the Update message to be sent to the peer after the fixed 19 bytes described above. This byte stream can be of any length from to 4077 bytes.The value 4077 is derived from the maximum length allowed for BGP message in RFC4271 which is 4096 minus mandatory 19 bytes described above. In the imported byte stream, one byte is represented as string of characters, for example character string (0x)AB represents value of single byte. So the maximum length of this attribute is 8154 (4077 2 hex characters per byte).
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property update_bytes as None")
+        self._set_property("update_bytes", value)
+
+
+class BgpOneUpdateReplayIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpOneUpdateReplayIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpOneUpdateReplay]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpOneUpdateReplayIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpOneUpdateReplay
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpOneUpdateReplay
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpOneUpdateReplay):
+            raise Exception("Item is not an instance of BgpOneUpdateReplay")
+
+    def oneupdatereplay(self, time_gap=0, update_bytes=None):
+        # type: (int,str) -> BgpOneUpdateReplayIter
+        """Factory method that creates an instance of the BgpOneUpdateReplay class
+
+        Specification of one BGP Update to be sent to the BGP peer.
+
+        Returns: BgpOneUpdateReplayIter
+        """
+        item = BgpOneUpdateReplay(
+            parent=self._parent, time_gap=time_gap, update_bytes=update_bytes
+        )
+        self._add(item)
+        return self
+
+    def add(self, time_gap=0, update_bytes=None):
+        # type: (int,str) -> BgpOneUpdateReplay
+        """Add method that creates and returns an instance of the BgpOneUpdateReplay class
+
+        Specification of one BGP Update to be sent to the BGP peer.
+
+        Returns: BgpOneUpdateReplay
+        """
+        item = BgpOneUpdateReplay(
+            parent=self._parent, time_gap=time_gap, update_bytes=update_bytes
+        )
+        self._add(item)
+        return item
+
+
 class BgpV4PeerIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -20703,6 +23694,7 @@ class BgpV6Peer(OpenApiObject):
         "v6_srte_policies": {"type": "BgpSrteV6PolicyIter"},
         "name": {"type": str},
         "graceful_restart": {"type": "BgpGracefulRestart"},
+        "replay_updates": {"type": "BgpUpdateReplay"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("peer_address", "as_type", "as_number", "name")  # type: tuple(str)
@@ -20985,6 +23977,17 @@ class BgpV6Peer(OpenApiObject):
         Returns: BgpGracefulRestart
         """
         return self._get_property("graceful_restart", BgpGracefulRestart)
+
+    @property
+    def replay_updates(self):
+        # type: () -> BgpUpdateReplay
+        """replay_updates getter
+
+        Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.Ordered BGP Updates including both Advertise and Withdraws to be sent in the order given in the input to the peer after the BGP session is established.BGP Updates to be sent to the peer as specified after the session is established.
+
+        Returns: BgpUpdateReplay
+        """
+        return self._get_property("replay_updates", BgpUpdateReplay)
 
 
 class BgpV6SegmentRouting(OpenApiObject):
@@ -95415,7 +98418,6 @@ class FlowRSVPLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 65535,
         },
         "value": {
             "type": int,
@@ -95482,7 +98484,7 @@ class FlowRSVPLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -95914,8 +98916,6 @@ class FlowRSVPObjectLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "minimum": 4,
-            "maximum": 65535,
         },
         "value": {
             "type": int,
@@ -95983,7 +98983,7 @@ class FlowRSVPObjectLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -99293,12 +102293,11 @@ class FlowRSVPExplicitRouteLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
         },
         "value": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
+            "maximum": 255,
         },
     }  # type: Dict[str, str]
 
@@ -99360,7 +102359,7 @@ class FlowRSVPExplicitRouteLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -99661,7 +102660,7 @@ class FlowRSVPPathExplicitRouteType1ASNumber(OpenApiObject):
 
     _TYPES = {
         "l_bit": {"type": "PatternFlowRSVPPathExplicitRouteType1ASNumberLBit"},
-        "length": {"type": "FlowRSVPExplicitRouteLength"},
+        "length": {"type": "FlowRSVPExplicitRouteASNumberLength"},
         "as_number": {
             "type": int,
             "format": "uint32",
@@ -99702,14 +102701,14 @@ class FlowRSVPPathExplicitRouteType1ASNumber(OpenApiObject):
 
     @property
     def length(self):
-        # type: () -> FlowRSVPExplicitRouteLength
+        # type: () -> FlowRSVPExplicitRouteASNumberLength
         """length getter
 
         The Length contains the total length of the subobject in bytes,including L, Type and Length fields. The Length MUST be atleast 4, and MUST be multiple of 4.
 
-        Returns: FlowRSVPExplicitRouteLength
+        Returns: FlowRSVPExplicitRouteASNumberLength
         """
-        return self._get_property("length", FlowRSVPExplicitRouteLength)
+        return self._get_property("length", FlowRSVPExplicitRouteASNumberLength)
 
     @property
     def as_number(self):
@@ -100000,6 +102999,114 @@ class PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter(OpenApiObject):
         value: int
         """
         self._set_property("count", value)
+
+
+class FlowRSVPExplicitRouteASNumberLength(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "auto",
+                "value",
+            ],
+        },
+        "auto": {
+            "type": int,
+            "format": "uint32",
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "auto",
+        "auto": 4,
+        "value": 4,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    VALUE = "value"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, auto=4, value=4):
+        super(FlowRSVPExplicitRouteASNumberLength, self).__init__()
+        self._parent = parent
+        self._set_property("auto", auto)
+        self._set_property("value", value)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, auto=None, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auto"], Literal["value"]]
+        """choice getter
+
+        auto or configured value.
+
+        Returns: Union[Literal["auto"], Literal["value"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        auto or configured value.
+
+        value: Union[Literal["auto"], Literal["value"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def auto(self):
+        # type: () -> int
+        """auto getter
+
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
+
+        Returns: int
+        """
+        return self._get_property("auto")
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
 
 
 class FlowRSVPType1ExplicitRouteSubobjectsIter(OpenApiIter):
@@ -101099,7 +104206,6 @@ class FlowRSVPSessionAttributeNameLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 255,
         },
         "value": {
             "type": int,
@@ -101166,7 +104272,7 @@ class FlowRSVPSessionAttributeNameLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -101238,9 +104344,9 @@ class FlowRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "exclude_any": "0",
-        "include_any": "0",
-        "include_all": "0",
+        "exclude_any": "00",
+        "include_any": "00",
+        "include_all": "00",
         "setup_priority": 7,
         "holding_priority": 7,
         "session_name": "",
@@ -101251,9 +104357,9 @@ class FlowRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        exclude_any="0",
-        include_any="0",
-        include_all="0",
+        exclude_any="00",
+        include_any="00",
+        include_all="00",
         setup_priority=7,
         holding_priority=7,
         session_name="",
@@ -106399,12 +109505,11 @@ class FlowRSVPRouteRecordLength(OpenApiObject):
         "auto": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
         },
         "value": {
             "type": int,
             "format": "uint32",
-            "maximum": 256,
+            "maximum": 255,
         },
     }  # type: Dict[str, str]
 
@@ -106466,7 +109571,7 @@ class FlowRSVPRouteRecordLength(OpenApiObject):
         # type: () -> int
         """auto getter
 
-        OTG will provide system generated value for this property. If OTG is unable to generate value the default value must be used.
+        The OTG implementation will provide system generated value for this property. If the OTG implementation is unable to generate value the default value must be used.
 
         Returns: int
         """
@@ -130327,8 +133432,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.0.1"
-        self._version_meta.sdk_version = "1.0.1"
+        self._version_meta.api_spec_version = "1.1.0"
+        self._version_meta.sdk_version = "1.1.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

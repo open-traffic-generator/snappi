@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.0.1
+/* Open Traffic Generator API 1.1.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1857,6 +1857,10 @@ message BgpV4Peer {
 
   // Description missing in models
   BgpGracefulRestart graceful_restart = 14;
+
+  // BGP Updates to be sent to the peer as specified after the session is established.
+  // 
+  BgpUpdateReplay replay_updates = 15;
 }
 
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
@@ -3973,6 +3977,619 @@ message BgpGracefulRestart {
   optional uint32 stale_time = 4;
 }
 
+// Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the
+// order given in the input to the peer after the BGP session is established.
+message BgpUpdateReplay {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      structured_pdus = 1;
+      raw_bytes = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.structured_pdus
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpStructuredPdus structured_pdus = 2;
+
+  // Description missing in models
+  BgpRawBytes raw_bytes = 3;
+}
+
+// Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the
+// order given in the input to the peer after the BGP session is established.
+message BgpRawBytes {
+
+  // Array of ordered BGP Updates ( including both Advertise and Withdraws ) to be sent
+  // in the order given in the input to the peer after the BGP session is established.
+  // 
+  repeated BgpOneUpdateReplay updates = 1;
+}
+
+// Specification of one BGP Update to be sent to the BGP peer.
+message BgpOneUpdateReplay {
+
+  // Minimum time interval in milliseconds from previous Update from the sequence of BGP
+  // Updates to be replayed.
+  // default = 0
+  optional uint32 time_gap = 1;
+
+  // Bytes specified in hex format to be sent to peer after the BGP Update Header. The
+  // Update Header will always have the  initial 16 bytes containing Marker bytes, 2 bytes
+  // containing the Length and 1 byte containing the Type.The string MUST  contain sequence
+  // of valid hex bytes. The bytes specified in hex format should be appended to the Update
+  // message to be sent  to the peer after the fixed 19 bytes described above. This byte
+  // stream can be of any length from 1 to 4077 bytes.The value  4077 is derived from
+  // the maximum length allowed for a BGP message in RFC4271 which is 4096 minus mandatory
+  // 19 bytes described  above. In the imported byte stream, one byte is represented as
+  // string of 2 characters, for example 2 character string (0x)AB  represents value of
+  // a single byte. So the maximum length of this attribute is 8154 (4077 * 2 hex characters
+  // per byte).
+  // required = true
+  optional string update_bytes = 2;
+}
+
+// Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the
+// order given in the input to the peer after the BGP session is established.
+message BgpStructuredPdus {
+
+  // Array of ordered BGP Updates ( including both Advertise and Withdraws ) to be sent
+  // in the order given in the input to the peer after the BGP session is established.
+  // 
+  repeated BgpOneStructuredUpdateReplay updates = 1;
+}
+
+// One structured BGP Update.
+message BgpOneStructuredUpdateReplay {
+
+  // Minimum time interval in milliseconds from previous Update from the sequence of BGP
+  // Updates to be replayed.
+  // default = 0
+  optional uint32 time_gap = 1;
+
+  // Attributes carried in the Update packet alongwith the reach/unreach prefixes.
+  // 
+  BgpAttributes path_attributes = 2;
+
+  // The IPv4 prefixes to be included in the traditional UNREACH_NLRI.
+  repeated BgpOneTraditionalNlriPrefix traditional_unreach_nlris = 3;
+
+  // The IPv4 prefixes to be included in the traditional REACH_NLRI.
+  repeated BgpOneTraditionalNlriPrefix traditional_reach_nlris = 4;
+}
+
+// TRADITIONAL_NLRI is an optional part of the the BGP Update which can carry only IPv4
+// prefix information as defined in https://www.rfc-editor.org/rfc/rfc4271.html#section-4.3
+// 
+// and extended by https://datatracker.ietf.org/doc/html/rfc7911#section-3 to carry
+// additional Path Id information per prefix.
+message BgpOneTraditionalNlriPrefix {
+
+  // The IPv4 address of the network.
+  // default = 0.0.0.0
+  optional string address = 1;
+
+  // The IPv4 network prefix length to be applied to the address.
+  // default = 24
+  optional uint32 prefix = 2;
+
+  // Description missing in models
+  BgpNLRIPrefixPathId path_id = 3;
+}
+
+// One IPv4 NLRI Prefix.
+message BgpOneIpv4NLRIPrefix {
+
+  // The IPv4 address of the network.
+  // default = 0.0.0.0
+  optional string address = 1;
+
+  // The IPv4 network prefix length to be applied to the address.
+  // default = 24
+  optional uint32 prefix = 2;
+
+  // Description missing in models
+  BgpNLRIPrefixPathId path_id = 3;
+}
+
+// One IPv6 NLRI Prefix.
+message BgpOneIpv6NLRIPrefix {
+
+  // The IPv6 address of the network.
+  // default = 0::0
+  optional string address = 1;
+
+  // The IPv6 network prefix length to be applied to the address.
+  // default = 64
+  optional uint32 prefix = 2;
+
+  // Description missing in models
+  BgpNLRIPrefixPathId path_id = 3;
+}
+
+// Optional field in the NLRI carrying Path Id of the prefix.
+message BgpNLRIPrefixPathId {
+
+  // The value of the optional Path ID of the prefix.
+  // default = 1
+  optional uint32 value = 1;
+}
+
+// Attributes carried in the Update packet alongwith the reach/unreach prefixes.
+message BgpAttributes {
+
+  // Any attributes not present in the list of configurable attributes should be added
+  // to the list of unknown attributes.
+  repeated BgpAttributesOtherAttribute other_attributes = 1;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The ORIGIN attribute is a mandatory attribute which can take three values:
+  // the prefix originates from an interior routing protocol 'igp', it originates from
+  // 'egp'
+  // or the origin is 'incomplete',if the prefix is learned through other means.
+  // 
+  // default = Origin.Enum.incomplete
+  optional Origin.Enum origin = 2;
+
+  // AS_PATH attribute to be included in the Update.
+  BgpAttributesAsPath as_path = 3;
+
+  // AS4_PATH attribute to be included in the Update.
+  BgpAttributesAs4Path as4_path = 4;
+
+  // Description missing in models
+  BgpAttributesNextHop next_hop = 5;
+
+  // Description missing in models
+  BgpAttributesMultiExitDiscriminator multi_exit_discriminator = 6;
+
+  // Description missing in models
+  BgpAttributesLocalPreference local_preference = 7;
+
+  // If enabled, it indicates that the ATOMIC_AGGREGATOR attribute should be included
+  // in the Update.
+  // Presence of this attribute Indicates that this route might not be getting sent on
+  // a fully optimized path
+  // since some intermediate BGP speaker has aggregated the route.
+  // 
+  // default = False
+  optional bool include_atomic_aggregator = 8;
+
+  // Description missing in models
+  BgpAttributesAggregator aggregator = 9;
+
+  // Description missing in models
+  BgpAttributesAs4Aggregator as4_aggregator = 10;
+
+  // Description missing in models
+  repeated BgpAttributesCommunity community = 11;
+
+  // Description missing in models
+  BgpAttributesOriginatorId originator_id = 12;
+
+  // When a Route Reflector reflects a route, it prepends the local CLUSTER_ID to the
+  // CLUSTER_LIST as defined in RFC4456.
+  repeated string cluster_ids = 13;
+
+  // Optional EXTENDED_COMMUNITY attribute settings.
+  // The EXTENDED_COMMUNITY Attribute is a transitive optional BGP attribute, with the
+  // Type Code 16. Community and Extended Communities  attributes
+  // are utilized to trigger routing decisions, such as acceptance, rejection,  preference,
+  // or redistribution. An extended community is an eight byte value.
+  // It is divided into two main parts. The first two bytes of the community encode a
+  // type and sub-type fields and the last six bytes carry a unique set
+  // of data in a format defined by the type and sub-type field. Extended communities
+  // provide a larger range for grouping or categorizing communities.
+  repeated BgpExtendedCommunity extended_communities = 14;
+
+  // Description missing in models
+  BgpAttributesMpReachNlri mp_reach = 16;
+
+  // Description missing in models
+  BgpAttributesMpUnreachNlri mp_unreach = 17;
+}
+
+// One unknown attribute stored as hex bytes.
+message BgpAttributesOtherAttribute {
+
+  // Optional flag in the BGP attribute.
+  // default = False
+  optional bool flag_optional = 1;
+
+  // Transitive flag in the BGP attribute.
+  // default = False
+  optional bool flag_transitive = 2;
+
+  // Partial flag in the BGP attribute.
+  // default = False
+  optional bool flag_partial = 3;
+
+  // Extended length flag in the BGP attribute.
+  // default = False
+  optional bool flag_extended_length = 4;
+
+  // The value of the Type field in the attribute.
+  // required = true
+  optional uint32 type = 5;
+
+  // Contents of the value field ( the contents after the initial two bytes containing
+  // the Flags and Type field ) of the attribute in hex bytes.
+  // It includes the contents of length of the extended length field if included.
+  // required = true
+  optional string raw_value = 6;
+}
+
+// The AS_PATH attribute identifies the autonomous systems through  which routing information
+// carried in this UPDATE message has passed.
+// This contains the configuration of how to include the Local AS in the AS path
+// attribute of the MP REACH NLRI. It also contains optional configuration of
+// additional AS Path Segments that can be included in the AS Path attribute.
+// The AS Path consists of a Set or Sequence of Autonomous Systems (AS) numbers  that
+// a routing information passes through to reach the destination.
+// There are two modes in which AS numbers can be encoded in the AS Path Segments
+// - When the AS Path is being exchanged between old and new BGP speakers or between
+// two old BGP speakers , the AS numbers are encoded as 2 byte values.
+// - When the AS Path is being exchanged between two new BGP speakers supporting 4 byte
+// AS , the AS numbers are encoded as 4 byte values.
+message BgpAttributesAsPath {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      four_byte_as_path = 1;
+      two_byte_as_path = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.four_byte_as_path
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpAttributesAsPathFourByteAsPath four_byte_as_path = 2;
+
+  // Description missing in models
+  BgpAttributesAsPathTwoByteAsPath two_byte_as_path = 3;
+}
+
+// AS Paths with 4 byte AS numbers can be exchanged only if both BGP speakers support
+// 4 byte AS number extensions.
+message BgpAttributesAsPathFourByteAsPath {
+
+  // The AS path segments containing 4 byte AS numbers to be added in the AS Path attribute.
+  // By default, an empty AS path should always be included and for EBGP at minimum the
+  // local AS number should be present in the AS Path.
+  repeated BgpAttributesFourByteAsPathSegment segments = 1;
+}
+
+// Configuration for a single BGP AS path segment containing 4 byte AS numbers.
+message BgpAttributesFourByteAsPathSegment {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      as_seq = 1;
+      as_set = 2;
+      as_confed_seq = 3;
+      as_confed_set = 4;
+    }
+  }
+  // AS sequence is the most common type of AS_PATH, it contains the  list
+  // of ASNs starting with the most recent ASN being added read  from left
+  // to right.
+  // The other three AS_PATH types are used for Confederations
+  // - AS_SET is the type of AS_PATH attribute that summarizes routes using
+  // using the aggregate-address command, allowing AS_PATHs to be  summarized
+  // in the update as well.
+  // - AS_CONFED_SEQ gives the list of ASNs in the path starting with the  most
+  // recent ASN to be added reading left to right
+  // - AS_CONFED_SET will allow summarization of multiple AS PATHs to be  sent
+  // in BGP Updates.
+  // default = Type.Enum.as_seq
+  optional Type.Enum type = 1;
+
+  // The 4 byte AS numbers in this AS path segment.
+  repeated uint32 as_numbers = 2;
+}
+
+// AS Paths with 2 byte AS numbers is used when any of the two scenarios occur :
+// - An old BGP speaker and new BGP speaker are sending BGP Updates to one another.
+// - Two old BGP speakers are sending BGP Updates to one another.
+message BgpAttributesAsPathTwoByteAsPath {
+
+  // The AS path segments containing 2 byte AS numbers to be added in the AS Path attribute.
+  // By default, an empty AS path should always be included and for EBGP the sender's
+  // AS number should be prepended to the AS Path.
+  repeated BgpAttributesTwoByteAsPathSegment segments = 1;
+}
+
+// Configuration for a single BGP AS path segment containing 2 byte AS numbers.
+message BgpAttributesTwoByteAsPathSegment {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      as_seq = 1;
+      as_set = 2;
+      as_confed_seq = 3;
+      as_confed_set = 4;
+    }
+  }
+  // AS sequence is the most common type of AS_PATH, it contains the  list
+  // of ASNs starting with the most recent ASN being added read  from left
+  // to right.
+  // The other three AS_PATH types are used for Confederations
+  // - AS_SET is the type of AS_PATH attribute that summarizes routes using
+  // using the aggregate-address command, allowing AS_PATHs to be  summarized
+  // in the update as well.
+  // - AS_CONFED_SEQ gives the list of ASNs in the path starting with the  most
+  // recent ASN to be added reading left to right
+  // - AS_CONFED_SET will allow summarization of multiple AS PATHs to be  sent
+  // in BGP Updates.
+  // default = Type.Enum.as_seq
+  optional Type.Enum type = 1;
+
+  // The 2 byte AS numbers in this AS path segment.
+  repeated uint32 as_numbers = 2;
+}
+
+// The AS4_PATH attribute identifies the autonomous systems through  which routing information
+// carried in this UPDATE message has passed.
+// This contains the configuration of how to include the Local AS in the AS path
+// attribute of the MP REACH NLRI. It also contains optional configuration of
+// additional AS Path Segments that can be included in the AS Path attribute.
+// The AS Path consists of a Set or Sequence of Autonomous Systems (AS) numbers  that
+// a routing information passes through to reach the destination.
+// AS4_PATH is only exchanged in two scenarios:
+// - When an old BGP speaker has to forward a received AS4_PATH containing 4 byte AS
+// numbers to new BGP speaker.
+// - When a new BGP speaker is connected to an old BGP speaker and has to propagate
+// 4 byte AS numbers via the old BGP speaker.
+// Its usage is described in RFC4893.
+message BgpAttributesAs4Path {
+
+  // The AS path segments containing 4 byte AS numbers to be added in the AS4_PATH attribute.
+  repeated BgpAttributesFourByteAsPathSegment segments = 1;
+}
+
+// Optional AGGREGATOR attribute which maybe be added by a BGP speaker which performs
+// route aggregation.
+// When AGGREGATOR attribute is being sent to a new BGP speaker , the AS number is encoded
+// as a 4 byte value.
+// When AGGREGATOR attribute is being exchanged between a new and an old BGP speaker
+// or between two old BGP speakers,
+// the AS number is encoded as a 2 byte value.
+// It contain the AS number and IP address of the speaker performing the aggregation.
+// 
+message BgpAttributesAggregator {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      four_byte_as = 1;
+      two_byte_as = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.four_byte_as
+  optional Choice.Enum choice = 1;
+
+  // The value of the 4 byte  AS number of the BGP speaker which aggregated the route.
+  // If the value of the AS number is less than 2 octets ( 65535 or less), the AS4_AGGREGATOR
+  // object should not be sent.
+  // default = 65536
+  optional uint32 four_byte_as = 2;
+
+  // The value of the 2 byte AS number of the BGP speaker which aggregated the route.
+  // 
+  // default = 1
+  optional uint32 two_byte_as = 3;
+
+  // The IPv4 address of the BGP speaker which aggregated the route.
+  // default = 0.0.0.0
+  optional string ipv4_address = 4;
+}
+
+// Optional AS4_AGGREGATOR attribute which maybe be added by a BGP speaker in one of
+// two cases:
+// - If it is a new BGP speaker speaking to an old BGP speaker and needs to send a 4
+// byte value for the AS number of the BGP route aggregator.
+// - If it is a old BGP speaker speaking to a new BGP speaker and has to transparently
+// forward a received AS4_AGGREGATOR from some other peer.
+// Its usage is described in RFC4893.
+message BgpAttributesAs4Aggregator {
+
+  // The value of the 4 byte AS number of the BGP speaker which aggregated the route.
+  // 
+  optional uint32 as_num = 1;
+
+  // The IPv4 address of the BGP speaker which aggregated the route.
+  // default = 0.0.0.0
+  optional string ipv4_address = 2;
+}
+
+// The COMMUNITY attribute provide additional capability for tagging routes and for
+// modifying BGP routing policy on
+// upstream and downstream routers. BGP community is a 32-bit number which is broken
+// into 16-bit AS number and a
+// 16-bit custom value or it contains some pre-defined well known values.
+// 
+message BgpAttributesCommunity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      custom_community = 1;
+      no_export = 2;
+      no_advertised = 3;
+      no_export_subconfed = 4;
+      llgr_stale = 5;
+      no_llgr = 6;
+    }
+  }
+  // The type of community AS number.
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpAttributesCustomCommunity custom_community = 2;
+}
+
+// User defined COMMUNITY attribute containing 2 byte AS and custom 2 byte value defined
+// by the administrator of the domain.
+message BgpAttributesCustomCommunity {
+
+  // First two octets of the community value containing a 2 byte AS number.
+  // default = 0
+  optional uint32 as_number = 1;
+
+  // Last two octets of the community value in hex.  If user provides less than 4 hex
+  // bytes, it should be left-padded with 0s.
+  // default = 0000
+  optional string custom = 2;
+}
+
+// Next hop to be sent inside MP_REACH NLRI or as the NEXT_HOP attribute if advertised
+// as traditional NLRI.
+message BgpAttributesNextHop {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+      ipv6_two_addresses = 3;
+    }
+  }
+  // The type of the next HOP.
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // The 4 byte IPv4 address of the next-hop from which the route was received.
+  // default = 0.0.0.0
+  optional string ipv4 = 2;
+
+  // The 16 byte IPv6 address of the next-hop from which the route was received.
+  // default = 0::0
+  optional string ipv6 = 3;
+
+  // Description missing in models
+  BgpAttributesNextHopIpv6TwoAddresses ipv6_two_addresses = 4;
+}
+
+// There is a specific scenario in which it is possible to receive a Global and Link
+// Local address in the Next Hop
+// field in a MP_REACH attribute or in the NEXT_HOP attribute(RFC2545: Section 3).
+message BgpAttributesNextHopIpv6TwoAddresses {
+
+  // The first IPv6 next hop in the 32 byte IPv6 Next Hop.
+  // default = 0::0
+  optional string first = 1;
+
+  // The second IPv6 next hop in the 32 byte IPv6 Next Hop.
+  // default = 0::0
+  optional string second = 2;
+}
+
+// The MP_REACH attribute is an optional attribute which can be included in the attributes
+// of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
+// The following AFI / SAFI combinations are supported:
+// - IPv4 Unicast with AFI as 1 and SAFI as 1
+// - IPv6 Unicast with AFI as 2 and SAFI as 1
+message BgpAttributesMpReachNlri {
+
+  // Description missing in models
+  BgpAttributesNextHop next_hop = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_unicast = 1;
+      ipv6_unicast = 2;
+    }
+  }
+  // The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
+  // required = true
+  optional Choice.Enum choice = 2;
+
+  // List of IPv4 prefixes being sent in the IPv4 Unicast MPREACH_NLRI .
+  repeated BgpOneIpv4NLRIPrefix ipv4_unicast = 3;
+
+  // SAFI of the NLRI being sent in the Update.
+  // description: >-
+  // List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+  repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 4;
+}
+
+// The MP_UNREACH attribute is an optional attribute which can be included in the attributes
+// of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
+// The following AFI / SAFI combinations are supported:
+// - IPv4 Unicast with AFI as 1 and SAFI as 1
+// - IPv6 Unicast with AFI as 2 and SAFI as 1
+message BgpAttributesMpUnreachNlri {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_unicast = 1;
+      ipv6_unicast = 2;
+    }
+  }
+  // The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
+  optional Choice.Enum choice = 1;
+
+  // List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
+  repeated BgpOneIpv4NLRIPrefix ipv4_unicast = 2;
+
+  // SAFI of the NLRI being sent in the Update.
+  // description: >-
+  // List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+  repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 3;
+}
+
+// Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route
+// selection process.
+message BgpAttributesMultiExitDiscriminator {
+
+  // The multi exit discriminator (MED) value used for route selection sent to the peer.
+  // 
+  // default = 0
+  optional uint32 value = 1;
+}
+
+// Optional LOCAL_PREFERENCE attribute sent to the peer to indicate the degree of preference
+// 
+// for externally learned routes.This should be included only for internal peers.It
+// is
+// used for the selection of the path for the traffic leaving the AS.The route with
+// the
+// highest local preference value is preferred.
+message BgpAttributesLocalPreference {
+
+  // Value to be set in the LOCAL_PREFERENCE attribute The multi exit discriminator (MED)
+  // value used for route selection sent to the peer.
+  // default = 100
+  optional uint32 value = 1;
+}
+
+// Optional ORIGINATOR_ID attribute (type code 9) carries the Router Id of the route's
+// originator in the local AS.
+message BgpAttributesOriginatorId {
+
+  // The value of the originator's Router Id.
+  // default = 0.0.0.0
+  optional string value = 1;
+}
+
 // Configuration for BGPv6 peer settings and routes.
 message BgpV6Peer {
 
@@ -4070,6 +4687,10 @@ message BgpV6Peer {
 
   // Description missing in models
   BgpGracefulRestart graceful_restart = 15;
+
+  // BGP Updates to be sent to the peer as specified after the session is established.
+  // 
+  BgpUpdateReplay replay_updates = 16;
 }
 
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
@@ -6358,8 +6979,9 @@ message FlowRSVPLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 0
   optional uint32 auto = 2;
 
@@ -6418,8 +7040,9 @@ message FlowRSVPObjectLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 4
   optional uint32 auto = 2;
 
@@ -6720,7 +7343,7 @@ message FlowRSVPPathExplicitRouteType1ASNumber {
 
   // The Length contains the total length of the subobject in bytes,including L, Type
   // and Length fields.   The Length MUST be atleast 4, and MUST be a multiple of 4.
-  FlowRSVPExplicitRouteLength length = 2;
+  FlowRSVPExplicitRouteASNumberLength length = 2;
 
   // Autonomous System number to be set in the ERO sub-object that this LSP should traverse
   // through. This field is applicable only if the value of 'type' is set to 'as_number'.
@@ -6742,13 +7365,39 @@ message FlowRSVPExplicitRouteLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 8
   optional uint32 auto = 2;
 
   // Description missing in models
   // default = 8
+  optional uint32 value = 3;
+}
+
+// Description missing in models
+message FlowRSVPExplicitRouteASNumberLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
+  // default = 4
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 4
   optional uint32 value = 3;
 }
 
@@ -6859,7 +7508,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // render the link unacceptable. The most significant byte in the hex-string is the
   // farthest  to the left in the byte sequence.  Leading zero bytes in the configured
   // value may be omitted for brevity.
-  // default = 0
+  // default = 00
   optional string exclude_any = 1;
 
   // A 32-bit vector representing a set of attribute filters associated with a tunnel
@@ -6867,7 +7516,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // passes. The most significant byte in the hex-string is the farthest  to the left
   // in the byte sequence.  Leading zero bytes in the configured value may be omitted
   // for brevity.
-  // default = 0
+  // default = 00
   optional string include_any = 2;
 
   // A 32-bit vector representing a set of attribute filters associated with a tunnel
@@ -6875,7 +7524,7 @@ message FlowRSVPPathSessionAttributeLspTunnelRa {
   // to zero) automatically passes. The most significant byte in the hex-string is the
   // farthest to the left in the byte sequence.  Leading zero bytes in the configured
   // value may be omitted for brevity.
-  // default = 0
+  // default = 00
   optional string include_all = 3;
 
   // The priority of the session with respect to taking resources,in the range of 0 to
@@ -6931,8 +7580,9 @@ message FlowRSVPSessionAttributeNameLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 0
   optional uint32 auto = 2;
 
@@ -7216,8 +7866,9 @@ message FlowRSVPRouteRecordLength {
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // OTG will provide a system generated value for this property.  If OTG is unable to
-  // generate a value the default value must be used.
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
   // default = 8
   optional uint32 auto = 2;
 
