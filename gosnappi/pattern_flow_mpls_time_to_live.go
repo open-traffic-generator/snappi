@@ -620,9 +620,44 @@ func (obj *patternFlowMplsTimeToLive) validateObj(vObj *validation, set_default 
 }
 
 func (obj *patternFlowMplsTimeToLive) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowMplsTimeToLiveChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowMplsTimeToLiveChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowMplsTimeToLiveChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowMplsTimeToLiveChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowMplsTimeToLiveChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowMplsTimeToLiveChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowMplsTimeToLiveChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowMplsTimeToLive")
+			}
+		} else {
+			intVal := otg.PatternFlowMplsTimeToLive_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowMplsTimeToLive_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

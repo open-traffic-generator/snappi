@@ -620,9 +620,44 @@ func (obj *patternFlowGreReserved0) validateObj(vObj *validation, set_default bo
 }
 
 func (obj *patternFlowGreReserved0) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowGreReserved0Choice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowGreReserved0ChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowGreReserved0Choice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowGreReserved0Choice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowGreReserved0Choice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowGreReserved0Choice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowGreReserved0Choice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowGreReserved0")
+			}
+		} else {
+			intVal := otg.PatternFlowGreReserved0_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowGreReserved0_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

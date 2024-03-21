@@ -368,9 +368,29 @@ func (obj *flowRSVPMessage) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowRSVPMessage) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPMessageChoice.PATH)
+	var choices_set int = 0
+	var choice FlowRSVPMessageChoiceEnum
 
+	if obj.obj.Path != nil {
+		choices_set += 1
+		choice = FlowRSVPMessageChoice.PATH
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPMessageChoice.PATH)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPMessage")
+			}
+		} else {
+			intVal := otg.FlowRSVPMessage_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPMessage_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -709,5 +709,58 @@ func (obj *flowSnmpv2CData) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowSnmpv2CData) setDefault() {
+	var choices_set int = 0
+	var choice FlowSnmpv2CDataChoiceEnum
+
+	if obj.obj.GetRequest != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.GET_REQUEST
+	}
+
+	if obj.obj.GetNextRequest != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.GET_NEXT_REQUEST
+	}
+
+	if obj.obj.Response != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.RESPONSE
+	}
+
+	if obj.obj.SetRequest != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.SET_REQUEST
+	}
+
+	if obj.obj.GetBulkRequest != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.GET_BULK_REQUEST
+	}
+
+	if obj.obj.InformRequest != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.INFORM_REQUEST
+	}
+
+	if obj.obj.Snmpv2Trap != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.SNMPV2_TRAP
+	}
+
+	if obj.obj.Report != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CDataChoice.REPORT
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowSnmpv2CData")
+			}
+		} else {
+			intVal := otg.FlowSnmpv2CData_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowSnmpv2CData_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

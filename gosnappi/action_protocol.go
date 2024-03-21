@@ -467,5 +467,33 @@ func (obj *actionProtocol) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *actionProtocol) setDefault() {
+	var choices_set int = 0
+	var choice ActionProtocolChoiceEnum
+
+	if obj.obj.Ipv4 != nil {
+		choices_set += 1
+		choice = ActionProtocolChoice.IPV4
+	}
+
+	if obj.obj.Ipv6 != nil {
+		choices_set += 1
+		choice = ActionProtocolChoice.IPV6
+	}
+
+	if obj.obj.Bgp != nil {
+		choices_set += 1
+		choice = ActionProtocolChoice.BGP
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in ActionProtocol")
+			}
+		} else {
+			intVal := otg.ActionProtocol_Choice_Enum_value[string(choice)]
+			enumValue := otg.ActionProtocol_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

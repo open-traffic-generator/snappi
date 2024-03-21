@@ -365,5 +365,23 @@ func (obj *stateProtocolIsis) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *stateProtocolIsis) setDefault() {
+	var choices_set int = 0
+	var choice StateProtocolIsisChoiceEnum
+
+	if obj.obj.Routers != nil {
+		choices_set += 1
+		choice = StateProtocolIsisChoice.ROUTERS
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StateProtocolIsis")
+			}
+		} else {
+			intVal := otg.StateProtocolIsis_Choice_Enum_value[string(choice)]
+			enumValue := otg.StateProtocolIsis_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

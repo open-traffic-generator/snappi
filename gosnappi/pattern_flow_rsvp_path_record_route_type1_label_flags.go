@@ -406,9 +406,34 @@ func (obj *patternFlowRSVPPathRecordRouteType1LabelFlags) validateObj(vObj *vali
 }
 
 func (obj *patternFlowRSVPPathRecordRouteType1LabelFlags) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathRecordRouteType1LabelFlagsChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathRecordRouteType1LabelFlagsChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRecordRouteType1LabelFlagsChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRecordRouteType1LabelFlagsChoice.VALUES
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathRecordRouteType1LabelFlagsChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathRecordRouteType1LabelFlags")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathRecordRouteType1LabelFlags_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathRecordRouteType1LabelFlags_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

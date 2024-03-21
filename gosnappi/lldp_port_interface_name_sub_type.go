@@ -369,9 +369,34 @@ func (obj *lldpPortInterfaceNameSubType) validateObj(vObj *validation, set_defau
 }
 
 func (obj *lldpPortInterfaceNameSubType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LldpPortInterfaceNameSubTypeChoice.AUTO)
+	var choices_set int = 0
+	var choice LldpPortInterfaceNameSubTypeChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = LldpPortInterfaceNameSubTypeChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = LldpPortInterfaceNameSubTypeChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LldpPortInterfaceNameSubTypeChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpPortInterfaceNameSubType")
+			}
+		} else {
+			intVal := otg.LldpPortInterfaceNameSubType_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpPortInterfaceNameSubType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

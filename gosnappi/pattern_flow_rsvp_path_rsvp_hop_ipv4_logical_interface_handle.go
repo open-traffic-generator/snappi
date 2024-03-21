@@ -492,9 +492,44 @@ func (obj *patternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle) validateObj(vOb
 }
 
 func (obj *patternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

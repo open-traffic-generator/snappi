@@ -368,9 +368,29 @@ func (obj *flowIcmpv6) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowIcmpv6) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowIcmpv6Choice.ECHO)
+	var choices_set int = 0
+	var choice FlowIcmpv6ChoiceEnum
 
+	if obj.obj.Echo != nil {
+		choices_set += 1
+		choice = FlowIcmpv6Choice.ECHO
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowIcmpv6Choice.ECHO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowIcmpv6")
+			}
+		} else {
+			intVal := otg.FlowIcmpv6_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowIcmpv6_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

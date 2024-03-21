@@ -615,9 +615,44 @@ func (obj *patternFlowIpv6Dst) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *patternFlowIpv6Dst) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv6DstChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv6DstChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6DstChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv6DstChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6DstChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6DstChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv6DstChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv6Dst")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv6Dst_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv6Dst_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

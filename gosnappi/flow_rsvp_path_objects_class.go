@@ -824,5 +824,68 @@ func (obj *flowRSVPPathObjectsClass) validateObj(vObj *validation, set_default b
 }
 
 func (obj *flowRSVPPathObjectsClass) setDefault() {
+	var choices_set int = 0
+	var choice FlowRSVPPathObjectsClassChoiceEnum
+
+	if obj.obj.Session != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.SESSION
+	}
+
+	if obj.obj.RsvpHop != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.RSVP_HOP
+	}
+
+	if obj.obj.TimeValues != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.TIME_VALUES
+	}
+
+	if obj.obj.ExplicitRoute != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.EXPLICIT_ROUTE
+	}
+
+	if obj.obj.LabelRequest != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.LABEL_REQUEST
+	}
+
+	if obj.obj.SessionAttribute != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.SESSION_ATTRIBUTE
+	}
+
+	if obj.obj.SenderTemplate != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.SENDER_TEMPLATE
+	}
+
+	if obj.obj.SenderTspec != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.SENDER_TSPEC
+	}
+
+	if obj.obj.RecordRoute != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.RECORD_ROUTE
+	}
+
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsClassChoice.CUSTOM
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathObjectsClass")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathObjectsClass_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathObjectsClass_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

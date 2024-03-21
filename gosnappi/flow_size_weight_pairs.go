@@ -489,13 +489,38 @@ func (obj *flowSizeWeightPairs) validateObj(vObj *validation, set_default bool) 
 }
 
 func (obj *flowSizeWeightPairs) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowSizeWeightPairsChoice.PREDEFINED)
-		if obj.obj.Predefined.Number() == 0 {
-			obj.SetPredefined(FlowSizeWeightPairsPredefined.IMIX)
+	var choices_set int = 0
+	var choice FlowSizeWeightPairsChoiceEnum
+
+	if obj.obj.Predefined != nil && obj.obj.Predefined.Number() != 0 {
+		choices_set += 1
+		choice = FlowSizeWeightPairsChoice.PREDEFINED
+	}
+
+	if len(obj.obj.Custom) > 0 {
+		choices_set += 1
+		choice = FlowSizeWeightPairsChoice.CUSTOM
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowSizeWeightPairsChoice.PREDEFINED)
+			if obj.obj.Predefined.Number() == 0 {
+				obj.SetPredefined(FlowSizeWeightPairsPredefined.IMIX)
+
+			}
 
 		}
 
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowSizeWeightPairs")
+			}
+		} else {
+			intVal := otg.FlowSizeWeightPairs_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowSizeWeightPairs_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

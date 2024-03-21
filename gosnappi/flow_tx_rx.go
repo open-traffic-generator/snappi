@@ -432,9 +432,34 @@ func (obj *flowTxRx) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowTxRx) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowTxRxChoice.PORT)
+	var choices_set int = 0
+	var choice FlowTxRxChoiceEnum
 
+	if obj.obj.Port != nil {
+		choices_set += 1
+		choice = FlowTxRxChoice.PORT
+	}
+
+	if obj.obj.Device != nil {
+		choices_set += 1
+		choice = FlowTxRxChoice.DEVICE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowTxRxChoice.PORT)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowTxRx")
+			}
+		} else {
+			intVal := otg.FlowTxRx_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowTxRx_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

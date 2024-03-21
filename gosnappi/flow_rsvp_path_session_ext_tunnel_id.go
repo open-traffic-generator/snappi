@@ -419,9 +419,34 @@ func (obj *flowRSVPPathSessionExtTunnelId) validateObj(vObj *validation, set_def
 }
 
 func (obj *flowRSVPPathSessionExtTunnelId) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPPathSessionExtTunnelIdChoice.AS_INTEGER)
+	var choices_set int = 0
+	var choice FlowRSVPPathSessionExtTunnelIdChoiceEnum
 
+	if obj.obj.AsInteger != nil {
+		choices_set += 1
+		choice = FlowRSVPPathSessionExtTunnelIdChoice.AS_INTEGER
+	}
+
+	if obj.obj.AsIpv4 != nil {
+		choices_set += 1
+		choice = FlowRSVPPathSessionExtTunnelIdChoice.AS_IPV4
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPPathSessionExtTunnelIdChoice.AS_INTEGER)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathSessionExtTunnelId")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathSessionExtTunnelId_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathSessionExtTunnelId_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -438,9 +438,39 @@ func (obj *lldpPortId) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *lldpPortId) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LldpPortIdChoice.INTERFACE_NAME_SUBTYPE)
+	var choices_set int = 0
+	var choice LldpPortIdChoiceEnum
 
+	if obj.obj.MacAddressSubtype != nil {
+		choices_set += 1
+		choice = LldpPortIdChoice.MAC_ADDRESS_SUBTYPE
+	}
+
+	if obj.obj.InterfaceNameSubtype != nil {
+		choices_set += 1
+		choice = LldpPortIdChoice.INTERFACE_NAME_SUBTYPE
+	}
+
+	if obj.obj.LocalSubtype != nil {
+		choices_set += 1
+		choice = LldpPortIdChoice.LOCAL_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LldpPortIdChoice.INTERFACE_NAME_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpPortId")
+			}
+		} else {
+			intVal := otg.LldpPortId_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpPortId_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

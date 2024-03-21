@@ -515,9 +515,44 @@ func (obj *patternFlowIpv4OptionsCustomTypeOptionNumber) validateObj(vObj *valid
 }
 
 func (obj *patternFlowIpv4OptionsCustomTypeOptionNumber) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4OptionsCustomTypeOptionNumberChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4OptionsCustomTypeOptionNumberChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4OptionsCustomTypeOptionNumber")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4OptionsCustomTypeOptionNumber_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4OptionsCustomTypeOptionNumber_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

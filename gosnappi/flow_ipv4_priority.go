@@ -470,9 +470,39 @@ func (obj *flowIpv4Priority) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowIpv4Priority) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowIpv4PriorityChoice.DSCP)
+	var choices_set int = 0
+	var choice FlowIpv4PriorityChoiceEnum
 
+	if obj.obj.Raw != nil {
+		choices_set += 1
+		choice = FlowIpv4PriorityChoice.RAW
+	}
+
+	if obj.obj.Tos != nil {
+		choices_set += 1
+		choice = FlowIpv4PriorityChoice.TOS
+	}
+
+	if obj.obj.Dscp != nil {
+		choices_set += 1
+		choice = FlowIpv4PriorityChoice.DSCP
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowIpv4PriorityChoice.DSCP)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowIpv4Priority")
+			}
+		} else {
+			intVal := otg.FlowIpv4Priority_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowIpv4Priority_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

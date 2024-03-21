@@ -995,9 +995,54 @@ func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *statesResponse) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(StatesResponseChoice.IPV4_NEIGHBORS)
+	var choices_set int = 0
+	var choice StatesResponseChoiceEnum
 
+	if len(obj.obj.Ipv4Neighbors) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.IPV4_NEIGHBORS
+	}
+
+	if len(obj.obj.Ipv6Neighbors) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.IPV6_NEIGHBORS
+	}
+
+	if len(obj.obj.BgpPrefixes) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.BGP_PREFIXES
+	}
+
+	if len(obj.obj.IsisLsps) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.ISIS_LSPS
+	}
+
+	if len(obj.obj.LldpNeighbors) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.LLDP_NEIGHBORS
+	}
+
+	if len(obj.obj.RsvpLsps) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.RSVP_LSPS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(StatesResponseChoice.IPV4_NEIGHBORS)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StatesResponse")
+			}
+		} else {
+			intVal := otg.StatesResponse_Choice_Enum_value[string(choice)]
+			enumValue := otg.StatesResponse_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

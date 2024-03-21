@@ -387,9 +387,34 @@ func (obj *lldpChassisMacSubType) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *lldpChassisMacSubType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LldpChassisMacSubTypeChoice.AUTO)
+	var choices_set int = 0
+	var choice LldpChassisMacSubTypeChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = LldpChassisMacSubTypeChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = LldpChassisMacSubTypeChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LldpChassisMacSubTypeChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpChassisMacSubType")
+			}
+		} else {
+			intVal := otg.LldpChassisMacSubType_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpChassisMacSubType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

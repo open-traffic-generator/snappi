@@ -620,9 +620,44 @@ func (obj *patternFlowTcpWindow) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *patternFlowTcpWindow) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowTcpWindowChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowTcpWindowChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowTcpWindowChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowTcpWindowChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowTcpWindowChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowTcpWindowChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowTcpWindowChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowTcpWindow")
+			}
+		} else {
+			intVal := otg.PatternFlowTcpWindow_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowTcpWindow_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

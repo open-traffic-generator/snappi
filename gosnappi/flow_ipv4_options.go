@@ -377,9 +377,29 @@ func (obj *flowIpv4Options) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowIpv4Options) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
+	var choices_set int = 0
+	var choice FlowIpv4OptionsChoiceEnum
 
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = FlowIpv4OptionsChoice.CUSTOM
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowIpv4Options")
+			}
+		} else {
+			intVal := otg.FlowIpv4Options_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowIpv4Options_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

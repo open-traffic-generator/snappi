@@ -572,9 +572,49 @@ func (obj *captureFilter) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *captureFilter) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(CaptureFilterChoice.CUSTOM)
+	var choices_set int = 0
+	var choice CaptureFilterChoiceEnum
 
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = CaptureFilterChoice.CUSTOM
+	}
+
+	if obj.obj.Ethernet != nil {
+		choices_set += 1
+		choice = CaptureFilterChoice.ETHERNET
+	}
+
+	if obj.obj.Vlan != nil {
+		choices_set += 1
+		choice = CaptureFilterChoice.VLAN
+	}
+
+	if obj.obj.Ipv4 != nil {
+		choices_set += 1
+		choice = CaptureFilterChoice.IPV4
+	}
+
+	if obj.obj.Ipv6 != nil {
+		choices_set += 1
+		choice = CaptureFilterChoice.IPV6
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(CaptureFilterChoice.CUSTOM)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in CaptureFilter")
+			}
+		} else {
+			intVal := otg.CaptureFilter_Choice_Enum_value[string(choice)]
+			enumValue := otg.CaptureFilter_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -368,9 +368,29 @@ func (obj *bgpExtendedCommunityNonTransitive2OctetAsType) validateObj(vObj *vali
 }
 
 func (obj *bgpExtendedCommunityNonTransitive2OctetAsType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpExtendedCommunityNonTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+	var choices_set int = 0
+	var choice BgpExtendedCommunityNonTransitive2OctetAsTypeChoiceEnum
 
+	if obj.obj.LinkBandwidthSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityNonTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpExtendedCommunityNonTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpExtendedCommunityNonTransitive2OctetAsType")
+			}
+		} else {
+			intVal := otg.BgpExtendedCommunityNonTransitive2OctetAsType_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpExtendedCommunityNonTransitive2OctetAsType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

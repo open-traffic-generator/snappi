@@ -515,9 +515,44 @@ func (obj *patternFlowRSVPPathSenderTspecIntServReserved1) validateObj(vObj *val
 }
 
 func (obj *patternFlowRSVPPathSenderTspecIntServReserved1) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathSenderTspecIntServReserved1Choice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathSenderTspecIntServReserved1ChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServReserved1Choice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServReserved1Choice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServReserved1Choice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServReserved1Choice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathSenderTspecIntServReserved1Choice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathSenderTspecIntServReserved1")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathSenderTspecIntServReserved1_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathSenderTspecIntServReserved1_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

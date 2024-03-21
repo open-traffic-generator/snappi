@@ -368,9 +368,29 @@ func (obj *flowIcmp) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowIcmp) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowIcmpChoice.ECHO)
+	var choices_set int = 0
+	var choice FlowIcmpChoiceEnum
 
+	if obj.obj.Echo != nil {
+		choices_set += 1
+		choice = FlowIcmpChoice.ECHO
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowIcmpChoice.ECHO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowIcmp")
+			}
+		} else {
+			intVal := otg.FlowIcmp_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowIcmp_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

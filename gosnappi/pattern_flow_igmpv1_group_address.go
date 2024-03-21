@@ -615,9 +615,44 @@ func (obj *patternFlowIgmpv1GroupAddress) validateObj(vObj *validation, set_defa
 }
 
 func (obj *patternFlowIgmpv1GroupAddress) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIgmpv1GroupAddressChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIgmpv1GroupAddressChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1GroupAddressChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIgmpv1GroupAddressChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1GroupAddressChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1GroupAddressChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIgmpv1GroupAddressChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIgmpv1GroupAddress")
+			}
+		} else {
+			intVal := otg.PatternFlowIgmpv1GroupAddress_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIgmpv1GroupAddress_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

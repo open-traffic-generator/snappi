@@ -620,9 +620,44 @@ func (obj *patternFlowPppControl) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *patternFlowPppControl) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowPppControlChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowPppControlChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowPppControlChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowPppControlChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowPppControlChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowPppControlChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowPppControlChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowPppControl")
+			}
+		} else {
+			intVal := otg.PatternFlowPppControl_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowPppControl_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

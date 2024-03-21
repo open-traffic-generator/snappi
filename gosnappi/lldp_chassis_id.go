@@ -438,9 +438,39 @@ func (obj *lldpChassisId) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *lldpChassisId) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LldpChassisIdChoice.MAC_ADDRESS_SUBTYPE)
+	var choices_set int = 0
+	var choice LldpChassisIdChoiceEnum
 
+	if obj.obj.MacAddressSubtype != nil {
+		choices_set += 1
+		choice = LldpChassisIdChoice.MAC_ADDRESS_SUBTYPE
+	}
+
+	if obj.obj.InterfaceNameSubtype != nil {
+		choices_set += 1
+		choice = LldpChassisIdChoice.INTERFACE_NAME_SUBTYPE
+	}
+
+	if obj.obj.LocalSubtype != nil {
+		choices_set += 1
+		choice = LldpChassisIdChoice.LOCAL_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LldpChassisIdChoice.MAC_ADDRESS_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpChassisId")
+			}
+		} else {
+			intVal := otg.LldpChassisId_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpChassisId_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

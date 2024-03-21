@@ -470,9 +470,39 @@ func (obj *flowDelay) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowDelay) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowDelayChoice.BYTES)
+	var choices_set int = 0
+	var choice FlowDelayChoiceEnum
 
+	if obj.obj.Bytes != nil {
+		choices_set += 1
+		choice = FlowDelayChoice.BYTES
+	}
+
+	if obj.obj.Nanoseconds != nil {
+		choices_set += 1
+		choice = FlowDelayChoice.NANOSECONDS
+	}
+
+	if obj.obj.Microseconds != nil {
+		choices_set += 1
+		choice = FlowDelayChoice.MICROSECONDS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowDelayChoice.BYTES)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowDelay")
+			}
+		} else {
+			intVal := otg.FlowDelay_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowDelay_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

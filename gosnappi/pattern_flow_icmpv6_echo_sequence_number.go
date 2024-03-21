@@ -620,9 +620,44 @@ func (obj *patternFlowIcmpv6EchoSequenceNumber) validateObj(vObj *validation, se
 }
 
 func (obj *patternFlowIcmpv6EchoSequenceNumber) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIcmpv6EchoSequenceNumberChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIcmpv6EchoSequenceNumberChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIcmpv6EchoSequenceNumberChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIcmpv6EchoSequenceNumberChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIcmpv6EchoSequenceNumberChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIcmpv6EchoSequenceNumberChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIcmpv6EchoSequenceNumber")
+			}
+		} else {
+			intVal := otg.PatternFlowIcmpv6EchoSequenceNumber_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIcmpv6EchoSequenceNumber_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

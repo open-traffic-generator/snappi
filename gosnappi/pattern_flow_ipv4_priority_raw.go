@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4PriorityRaw) validateObj(vObj *validation, set_default
 }
 
 func (obj *patternFlowIpv4PriorityRaw) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4PriorityRawChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4PriorityRawChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4PriorityRawChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4PriorityRawChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4PriorityRawChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4PriorityRawChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4PriorityRawChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4PriorityRaw")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4PriorityRaw_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4PriorityRaw_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

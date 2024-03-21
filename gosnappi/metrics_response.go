@@ -1334,9 +1334,69 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *metricsResponse) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(MetricsResponseChoice.PORT_METRICS)
+	var choices_set int = 0
+	var choice MetricsResponseChoiceEnum
 
+	if len(obj.obj.FlowMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.FLOW_METRICS
+	}
+
+	if len(obj.obj.PortMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.PORT_METRICS
+	}
+
+	if len(obj.obj.Bgpv4Metrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.BGPV4_METRICS
+	}
+
+	if len(obj.obj.Bgpv6Metrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.BGPV6_METRICS
+	}
+
+	if len(obj.obj.IsisMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.ISIS_METRICS
+	}
+
+	if len(obj.obj.LagMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.LAG_METRICS
+	}
+
+	if len(obj.obj.LacpMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.LACP_METRICS
+	}
+
+	if len(obj.obj.LldpMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.LLDP_METRICS
+	}
+
+	if len(obj.obj.RsvpMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.RSVP_METRICS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(MetricsResponseChoice.PORT_METRICS)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in MetricsResponse")
+			}
+		} else {
+			intVal := otg.MetricsResponse_Choice_Enum_value[string(choice)]
+			enumValue := otg.MetricsResponse_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

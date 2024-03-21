@@ -368,9 +368,29 @@ func (obj *bgpExtendedCommunityTransitiveEvpnType) validateObj(vObj *validation,
 }
 
 func (obj *bgpExtendedCommunityTransitiveEvpnType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpExtendedCommunityTransitiveEvpnTypeChoice.ROUTER_MAC_SUBTYPE)
+	var choices_set int = 0
+	var choice BgpExtendedCommunityTransitiveEvpnTypeChoiceEnum
 
+	if obj.obj.RouterMacSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitiveEvpnTypeChoice.ROUTER_MAC_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpExtendedCommunityTransitiveEvpnTypeChoice.ROUTER_MAC_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpExtendedCommunityTransitiveEvpnType")
+			}
+		} else {
+			intVal := otg.BgpExtendedCommunityTransitiveEvpnType_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpExtendedCommunityTransitiveEvpnType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

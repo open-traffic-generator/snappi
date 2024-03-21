@@ -809,9 +809,69 @@ func (obj *flowSnmpv2CVariableBindingValue) validateObj(vObj *validation, set_de
 }
 
 func (obj *flowSnmpv2CVariableBindingValue) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowSnmpv2CVariableBindingValueChoice.NO_VALUE)
+	var choices_set int = 0
+	var choice FlowSnmpv2CVariableBindingValueChoiceEnum
 
+	if obj.obj.IntegerValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.INTEGER_VALUE
+	}
+
+	if obj.obj.StringValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.STRING_VALUE
+	}
+
+	if obj.obj.ObjectIdentifierValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.OBJECT_IDENTIFIER_VALUE
+	}
+
+	if obj.obj.IpAddressValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.IP_ADDRESS_VALUE
+	}
+
+	if obj.obj.CounterValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.COUNTER_VALUE
+	}
+
+	if obj.obj.TimeticksValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.TIMETICKS_VALUE
+	}
+
+	if obj.obj.ArbitraryValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.ARBITRARY_VALUE
+	}
+
+	if obj.obj.BigCounterValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.BIG_COUNTER_VALUE
+	}
+
+	if obj.obj.UnsignedIntegerValue != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingValueChoice.UNSIGNED_INTEGER_VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowSnmpv2CVariableBindingValueChoice.NO_VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowSnmpv2CVariableBindingValue")
+			}
+		} else {
+			intVal := otg.FlowSnmpv2CVariableBindingValue_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowSnmpv2CVariableBindingValue_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -419,9 +419,34 @@ func (obj *lagProtocol) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *lagProtocol) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LagProtocolChoice.LACP)
+	var choices_set int = 0
+	var choice LagProtocolChoiceEnum
 
+	if obj.obj.Lacp != nil {
+		choices_set += 1
+		choice = LagProtocolChoice.LACP
+	}
+
+	if obj.obj.Static != nil {
+		choices_set += 1
+		choice = LagProtocolChoice.STATIC
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LagProtocolChoice.LACP)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LagProtocol")
+			}
+		} else {
+			intVal := otg.LagProtocol_Choice_Enum_value[string(choice)]
+			enumValue := otg.LagProtocol_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

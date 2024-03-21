@@ -511,9 +511,44 @@ func (obj *patternFlowSnmpv2CVersion) validateObj(vObj *validation, set_default 
 }
 
 func (obj *patternFlowSnmpv2CVersion) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowSnmpv2CVersionChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowSnmpv2CVersionChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVersionChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVersionChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVersionChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVersionChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowSnmpv2CVersionChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowSnmpv2CVersion")
+			}
+		} else {
+			intVal := otg.PatternFlowSnmpv2CVersion_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowSnmpv2CVersion_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

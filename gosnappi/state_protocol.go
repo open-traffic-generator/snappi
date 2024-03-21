@@ -571,5 +571,43 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *stateProtocol) setDefault() {
+	var choices_set int = 0
+	var choice StateProtocolChoiceEnum
+
+	if obj.obj.All != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.ALL
+	}
+
+	if obj.obj.Route != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.ROUTE
+	}
+
+	if obj.obj.Lacp != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.LACP
+	}
+
+	if obj.obj.Bgp != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.BGP
+	}
+
+	if obj.obj.Isis != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.ISIS
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StateProtocol")
+			}
+		} else {
+			intVal := otg.StateProtocol_Choice_Enum_value[string(choice)]
+			enumValue := otg.StateProtocol_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

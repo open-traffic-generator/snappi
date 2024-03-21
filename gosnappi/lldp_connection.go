@@ -365,5 +365,23 @@ func (obj *lldpConnection) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *lldpConnection) setDefault() {
+	var choices_set int = 0
+	var choice LldpConnectionChoiceEnum
+
+	if obj.obj.PortName != nil {
+		choices_set += 1
+		choice = LldpConnectionChoice.PORT_NAME
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpConnection")
+			}
+		} else {
+			intVal := otg.LldpConnection_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpConnection_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

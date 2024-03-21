@@ -620,9 +620,44 @@ func (obj *patternFlowPfcPausePauseClass0) validateObj(vObj *validation, set_def
 }
 
 func (obj *patternFlowPfcPausePauseClass0) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowPfcPausePauseClass0Choice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowPfcPausePauseClass0ChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowPfcPausePauseClass0Choice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowPfcPausePauseClass0Choice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowPfcPausePauseClass0Choice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowPfcPausePauseClass0Choice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowPfcPausePauseClass0Choice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowPfcPausePauseClass0")
+			}
+		} else {
+			intVal := otg.PatternFlowPfcPausePauseClass0_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowPfcPausePauseClass0_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

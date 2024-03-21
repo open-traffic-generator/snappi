@@ -368,9 +368,29 @@ func (obj *flowRSVPPathObjectsSessionCType) validateObj(vObj *validation, set_de
 }
 
 func (obj *flowRSVPPathObjectsSessionCType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPPathObjectsSessionCTypeChoice.LSP_TUNNEL_IPV4)
+	var choices_set int = 0
+	var choice FlowRSVPPathObjectsSessionCTypeChoiceEnum
 
+	if obj.obj.LspTunnelIpv4 != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsSessionCTypeChoice.LSP_TUNNEL_IPV4
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPPathObjectsSessionCTypeChoice.LSP_TUNNEL_IPV4)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathObjectsSessionCType")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathObjectsSessionCType_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathObjectsSessionCType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

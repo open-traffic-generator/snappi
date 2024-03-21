@@ -365,5 +365,23 @@ func (obj *stateProtocolBgp) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *stateProtocolBgp) setDefault() {
+	var choices_set int = 0
+	var choice StateProtocolBgpChoiceEnum
+
+	if obj.obj.Peers != nil {
+		choices_set += 1
+		choice = StateProtocolBgpChoice.PEERS
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StateProtocolBgp")
+			}
+		} else {
+			intVal := otg.StateProtocolBgp_Choice_Enum_value[string(choice)]
+			enumValue := otg.StateProtocolBgp_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

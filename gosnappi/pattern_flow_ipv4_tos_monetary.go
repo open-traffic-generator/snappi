@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4TosMonetary) validateObj(vObj *validation, set_default
 }
 
 func (obj *patternFlowIpv4TosMonetary) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4TosMonetaryChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4TosMonetaryChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosMonetaryChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4TosMonetaryChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosMonetaryChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosMonetaryChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4TosMonetaryChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4TosMonetary")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4TosMonetary_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4TosMonetary_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

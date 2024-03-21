@@ -525,9 +525,44 @@ func (obj *flowDuration) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowDuration) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowDurationChoice.CONTINUOUS)
+	var choices_set int = 0
+	var choice FlowDurationChoiceEnum
 
+	if obj.obj.FixedPackets != nil {
+		choices_set += 1
+		choice = FlowDurationChoice.FIXED_PACKETS
+	}
+
+	if obj.obj.FixedSeconds != nil {
+		choices_set += 1
+		choice = FlowDurationChoice.FIXED_SECONDS
+	}
+
+	if obj.obj.Burst != nil {
+		choices_set += 1
+		choice = FlowDurationChoice.BURST
+	}
+
+	if obj.obj.Continuous != nil {
+		choices_set += 1
+		choice = FlowDurationChoice.CONTINUOUS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowDurationChoice.CONTINUOUS)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowDuration")
+			}
+		} else {
+			intVal := otg.FlowDuration_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowDuration_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

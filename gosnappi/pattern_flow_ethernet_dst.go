@@ -658,9 +658,49 @@ func (obj *patternFlowEthernetDst) validateObj(vObj *validation, set_default boo
 }
 
 func (obj *patternFlowEthernetDst) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowEthernetDstChoice.AUTO)
+	var choices_set int = 0
+	var choice PatternFlowEthernetDstChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowEthernetDstChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowEthernetDstChoice.VALUES
+	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowEthernetDstChoice.AUTO
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowEthernetDstChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowEthernetDstChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowEthernetDstChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowEthernetDst")
+			}
+		} else {
+			intVal := otg.PatternFlowEthernetDst_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowEthernetDst_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

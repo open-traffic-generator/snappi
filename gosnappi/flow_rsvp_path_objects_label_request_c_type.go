@@ -368,9 +368,29 @@ func (obj *flowRSVPPathObjectsLabelRequestCType) validateObj(vObj *validation, s
 }
 
 func (obj *flowRSVPPathObjectsLabelRequestCType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPPathObjectsLabelRequestCTypeChoice.WITHOUT_LABEL_RANGE)
+	var choices_set int = 0
+	var choice FlowRSVPPathObjectsLabelRequestCTypeChoiceEnum
 
+	if obj.obj.WithoutLabelRange != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsLabelRequestCTypeChoice.WITHOUT_LABEL_RANGE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPPathObjectsLabelRequestCTypeChoice.WITHOUT_LABEL_RANGE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathObjectsLabelRequestCType")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathObjectsLabelRequestCType_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathObjectsLabelRequestCType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -365,5 +365,23 @@ func (obj *actionResponse) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *actionResponse) setDefault() {
+	var choices_set int = 0
+	var choice ActionResponseChoiceEnum
+
+	if obj.obj.Protocol != nil {
+		choices_set += 1
+		choice = ActionResponseChoice.PROTOCOL
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in ActionResponse")
+			}
+		} else {
+			intVal := otg.ActionResponse_Choice_Enum_value[string(choice)]
+			enumValue := otg.ActionResponse_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

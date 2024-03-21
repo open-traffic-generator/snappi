@@ -510,9 +510,44 @@ func (obj *patternFlowRSVPPathSessionExtTunnelIdAsIpv4) validateObj(vObj *valida
 }
 
 func (obj *patternFlowRSVPPathSessionExtTunnelIdAsIpv4) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathSessionExtTunnelIdAsIpv4ChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Choice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathSessionExtTunnelIdAsIpv4")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathSessionExtTunnelIdAsIpv4_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathSessionExtTunnelIdAsIpv4_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

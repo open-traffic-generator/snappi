@@ -368,9 +368,29 @@ func (obj *flowRSVPPathObjectsSenderTspecCType) validateObj(vObj *validation, se
 }
 
 func (obj *flowRSVPPathObjectsSenderTspecCType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPPathObjectsSenderTspecCTypeChoice.INT_SERV)
+	var choices_set int = 0
+	var choice FlowRSVPPathObjectsSenderTspecCTypeChoiceEnum
 
+	if obj.obj.IntServ != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsSenderTspecCTypeChoice.INT_SERV
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPPathObjectsSenderTspecCTypeChoice.INT_SERV)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathObjectsSenderTspecCType")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathObjectsSenderTspecCType_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathObjectsSenderTspecCType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

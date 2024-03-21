@@ -610,9 +610,54 @@ func (obj *flowRate) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowRate) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRateChoice.PPS)
+	var choices_set int = 0
+	var choice FlowRateChoiceEnum
 
+	if obj.obj.Pps != nil {
+		choices_set += 1
+		choice = FlowRateChoice.PPS
+	}
+
+	if obj.obj.Bps != nil {
+		choices_set += 1
+		choice = FlowRateChoice.BPS
+	}
+
+	if obj.obj.Kbps != nil {
+		choices_set += 1
+		choice = FlowRateChoice.KBPS
+	}
+
+	if obj.obj.Mbps != nil {
+		choices_set += 1
+		choice = FlowRateChoice.MBPS
+	}
+
+	if obj.obj.Gbps != nil {
+		choices_set += 1
+		choice = FlowRateChoice.GBPS
+	}
+
+	if obj.obj.Percentage != nil {
+		choices_set += 1
+		choice = FlowRateChoice.PERCENTAGE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRateChoice.PPS)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRate")
+			}
+		} else {
+			intVal := otg.FlowRate_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRate_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

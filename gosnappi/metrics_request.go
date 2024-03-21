@@ -776,9 +776,69 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *metricsRequest) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(MetricsRequestChoice.PORT)
+	var choices_set int = 0
+	var choice MetricsRequestChoiceEnum
 
+	if obj.obj.Port != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.PORT
+	}
+
+	if obj.obj.Flow != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.FLOW
+	}
+
+	if obj.obj.Bgpv4 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.BGPV4
+	}
+
+	if obj.obj.Bgpv6 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.BGPV6
+	}
+
+	if obj.obj.Isis != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ISIS
+	}
+
+	if obj.obj.Lag != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.LAG
+	}
+
+	if obj.obj.Lacp != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.LACP
+	}
+
+	if obj.obj.Lldp != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.LLDP
+	}
+
+	if obj.obj.Rsvp != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.RSVP
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(MetricsRequestChoice.PORT)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in MetricsRequest")
+			}
+		} else {
+			intVal := otg.MetricsRequest_Choice_Enum_value[string(choice)]
+			enumValue := otg.MetricsRequest_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

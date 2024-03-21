@@ -270,10 +270,10 @@ type FlowRSVPRecordRouteIPv4Flag interface {
 	setChoice(value FlowRSVPRecordRouteIPv4FlagChoiceEnum) FlowRSVPRecordRouteIPv4Flag
 	// HasChoice checks if Choice has been set in FlowRSVPRecordRouteIPv4Flag
 	HasChoice() bool
-	// getter for LocalProtectionAvailable to set choice.
-	LocalProtectionAvailable()
 	// getter for LocalProtectionInUse to set choice.
 	LocalProtectionInUse()
+	// getter for LocalProtectionAvailable to set choice.
+	LocalProtectionAvailable()
 }
 
 type FlowRSVPRecordRouteIPv4FlagChoiceEnum string
@@ -291,14 +291,14 @@ func (obj *flowRSVPRecordRouteIPv4Flag) Choice() FlowRSVPRecordRouteIPv4FlagChoi
 	return FlowRSVPRecordRouteIPv4FlagChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for LocalProtectionAvailable to set choice
-func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionAvailable() {
-	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
-}
-
 // getter for LocalProtectionInUse to set choice
 func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionInUse() {
 	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_IN_USE)
+}
+
+// getter for LocalProtectionAvailable to set choice
+func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionAvailable() {
+	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
 }
 
 // description is TBD
@@ -328,9 +328,24 @@ func (obj *flowRSVPRecordRouteIPv4Flag) validateObj(vObj *validation, set_defaul
 }
 
 func (obj *flowRSVPRecordRouteIPv4Flag) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
+	var choices_set int = 0
+	var choice FlowRSVPRecordRouteIPv4FlagChoiceEnum
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
 
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPRecordRouteIPv4Flag")
+			}
+		} else {
+			intVal := otg.FlowRSVPRecordRouteIPv4Flag_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPRecordRouteIPv4Flag_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

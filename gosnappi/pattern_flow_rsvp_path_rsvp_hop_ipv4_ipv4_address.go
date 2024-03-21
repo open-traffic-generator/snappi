@@ -510,9 +510,44 @@ func (obj *patternFlowRSVPPathRsvpHopIpv4Ipv4Address) validateObj(vObj *validati
 }
 
 func (obj *patternFlowRSVPPathRsvpHopIpv4Ipv4Address) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathRsvpHopIpv4Ipv4Address")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathRsvpHopIpv4Ipv4Address_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathRsvpHopIpv4Ipv4Address_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

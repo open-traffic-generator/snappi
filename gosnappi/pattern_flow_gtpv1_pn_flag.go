@@ -620,9 +620,44 @@ func (obj *patternFlowGtpv1PnFlag) validateObj(vObj *validation, set_default boo
 }
 
 func (obj *patternFlowGtpv1PnFlag) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowGtpv1PnFlagChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowGtpv1PnFlagChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowGtpv1PnFlagChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowGtpv1PnFlagChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowGtpv1PnFlagChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowGtpv1PnFlagChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowGtpv1PnFlagChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowGtpv1PnFlag")
+			}
+		} else {
+			intVal := otg.PatternFlowGtpv1PnFlag_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowGtpv1PnFlag_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

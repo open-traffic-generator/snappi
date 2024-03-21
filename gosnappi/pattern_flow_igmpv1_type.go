@@ -620,9 +620,44 @@ func (obj *patternFlowIgmpv1Type) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *patternFlowIgmpv1Type) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIgmpv1TypeChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIgmpv1TypeChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1TypeChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIgmpv1TypeChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1TypeChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1TypeChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIgmpv1TypeChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIgmpv1Type")
+			}
+		} else {
+			intVal := otg.PatternFlowIgmpv1Type_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIgmpv1Type_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

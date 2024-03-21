@@ -467,5 +467,33 @@ func (obj *controlState) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *controlState) setDefault() {
+	var choices_set int = 0
+	var choice ControlStateChoiceEnum
+
+	if obj.obj.Port != nil {
+		choices_set += 1
+		choice = ControlStateChoice.PORT
+	}
+
+	if obj.obj.Protocol != nil {
+		choices_set += 1
+		choice = ControlStateChoice.PROTOCOL
+	}
+
+	if obj.obj.Traffic != nil {
+		choices_set += 1
+		choice = ControlStateChoice.TRAFFIC
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in ControlState")
+			}
+		} else {
+			intVal := otg.ControlState_Choice_Enum_value[string(choice)]
+			enumValue := otg.ControlState_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

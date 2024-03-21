@@ -416,5 +416,28 @@ func (obj *statePort) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *statePort) setDefault() {
+	var choices_set int = 0
+	var choice StatePortChoiceEnum
+
+	if obj.obj.Link != nil {
+		choices_set += 1
+		choice = StatePortChoice.LINK
+	}
+
+	if obj.obj.Capture != nil {
+		choices_set += 1
+		choice = StatePortChoice.CAPTURE
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StatePort")
+			}
+		} else {
+			intVal := otg.StatePort_Choice_Enum_value[string(choice)]
+			enumValue := otg.StatePort_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

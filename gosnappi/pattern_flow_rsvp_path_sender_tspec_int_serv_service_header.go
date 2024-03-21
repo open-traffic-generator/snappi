@@ -515,9 +515,44 @@ func (obj *patternFlowRSVPPathSenderTspecIntServServiceHeader) validateObj(vObj 
 }
 
 func (obj *patternFlowRSVPPathSenderTspecIntServServiceHeader) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowRSVPPathSenderTspecIntServServiceHeaderChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowRSVPPathSenderTspecIntServServiceHeader")
+			}
+		} else {
+			intVal := otg.PatternFlowRSVPPathSenderTspecIntServServiceHeader_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowRSVPPathSenderTspecIntServServiceHeader_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

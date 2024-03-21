@@ -419,9 +419,34 @@ func (obj *vxlanV6TunnelDestinationIPMode) validateObj(vObj *validation, set_def
 }
 
 func (obj *vxlanV6TunnelDestinationIPMode) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(VxlanV6TunnelDestinationIPModeChoice.MULTICAST)
+	var choices_set int = 0
+	var choice VxlanV6TunnelDestinationIPModeChoiceEnum
 
+	if obj.obj.Unicast != nil {
+		choices_set += 1
+		choice = VxlanV6TunnelDestinationIPModeChoice.UNICAST
+	}
+
+	if obj.obj.Multicast != nil {
+		choices_set += 1
+		choice = VxlanV6TunnelDestinationIPModeChoice.MULTICAST
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(VxlanV6TunnelDestinationIPModeChoice.MULTICAST)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in VxlanV6TunnelDestinationIPMode")
+			}
+		} else {
+			intVal := otg.VxlanV6TunnelDestinationIPMode_Choice_Enum_value[string(choice)]
+			enumValue := otg.VxlanV6TunnelDestinationIPMode_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

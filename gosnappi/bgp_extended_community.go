@@ -674,9 +674,59 @@ func (obj *bgpExtendedCommunity) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *bgpExtendedCommunity) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpExtendedCommunityChoice.TRANSITIVE_2OCTET_AS_TYPE)
+	var choices_set int = 0
+	var choice BgpExtendedCommunityChoiceEnum
 
+	if obj.obj.TransitiveIpv4AddressType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.TRANSITIVE_IPV4_ADDRESS_TYPE
+	}
+
+	if obj.obj.TransitiveOpaqueType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.TRANSITIVE_OPAQUE_TYPE
+	}
+
+	if obj.obj.TransitiveEvpnType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.TRANSITIVE_EVPN_TYPE
+	}
+
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.CUSTOM
+	}
+
+	if obj.obj.Transitive_2OctetAsType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.TRANSITIVE_2OCTET_AS_TYPE
+	}
+
+	if obj.obj.Transitive_4OctetAsType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.TRANSITIVE_4OCTET_AS_TYPE
+	}
+
+	if obj.obj.NonTransitive_2OctetAsType != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityChoice.NON_TRANSITIVE_2OCTET_AS_TYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpExtendedCommunityChoice.TRANSITIVE_2OCTET_AS_TYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpExtendedCommunity")
+			}
+		} else {
+			intVal := otg.BgpExtendedCommunity_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpExtendedCommunity_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

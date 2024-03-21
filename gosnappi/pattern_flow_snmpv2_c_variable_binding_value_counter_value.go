@@ -488,9 +488,44 @@ func (obj *patternFlowSnmpv2CVariableBindingValueCounterValue) validateObj(vObj 
 }
 
 func (obj *patternFlowSnmpv2CVariableBindingValueCounterValue) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowSnmpv2CVariableBindingValueCounterValueChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowSnmpv2CVariableBindingValueCounterValueChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowSnmpv2CVariableBindingValueCounterValue")
+			}
+		} else {
+			intVal := otg.PatternFlowSnmpv2CVariableBindingValueCounterValue_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowSnmpv2CVariableBindingValueCounterValue_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

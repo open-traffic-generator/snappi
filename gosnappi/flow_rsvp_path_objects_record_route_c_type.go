@@ -368,9 +368,29 @@ func (obj *flowRSVPPathObjectsRecordRouteCType) validateObj(vObj *validation, se
 }
 
 func (obj *flowRSVPPathObjectsRecordRouteCType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPPathObjectsRecordRouteCTypeChoice.TYPE_1)
+	var choices_set int = 0
+	var choice FlowRSVPPathObjectsRecordRouteCTypeChoiceEnum
 
+	if obj.obj.Type_1 != nil {
+		choices_set += 1
+		choice = FlowRSVPPathObjectsRecordRouteCTypeChoice.TYPE_1
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPPathObjectsRecordRouteCTypeChoice.TYPE_1)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPPathObjectsRecordRouteCType")
+			}
+		} else {
+			intVal := otg.FlowRSVPPathObjectsRecordRouteCType_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPPathObjectsRecordRouteCType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

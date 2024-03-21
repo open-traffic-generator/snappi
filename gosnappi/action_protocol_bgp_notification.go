@@ -713,9 +713,59 @@ func (obj *actionProtocolBgpNotification) validateObj(vObj *validation, set_defa
 }
 
 func (obj *actionProtocolBgpNotification) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(ActionProtocolBgpNotificationChoice.CEASE)
+	var choices_set int = 0
+	var choice ActionProtocolBgpNotificationChoiceEnum
 
+	if obj.obj.Cease != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.CEASE
+	}
+
+	if obj.obj.MessageHeaderError != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.MESSAGE_HEADER_ERROR
+	}
+
+	if obj.obj.OpenMessageError != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.OPEN_MESSAGE_ERROR
+	}
+
+	if obj.obj.UpdateMessageError != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.UPDATE_MESSAGE_ERROR
+	}
+
+	if obj.obj.HoldTimerExpired != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.HOLD_TIMER_EXPIRED
+	}
+
+	if obj.obj.FiniteStateMachineError != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.FINITE_STATE_MACHINE_ERROR
+	}
+
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = ActionProtocolBgpNotificationChoice.CUSTOM
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(ActionProtocolBgpNotificationChoice.CEASE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in ActionProtocolBgpNotification")
+			}
+		} else {
+			intVal := otg.ActionProtocolBgpNotification_Choice_Enum_value[string(choice)]
+			enumValue := otg.ActionProtocolBgpNotification_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -520,9 +520,44 @@ func (obj *flowSize) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowSize) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowSizeChoice.FIXED)
+	var choices_set int = 0
+	var choice FlowSizeChoiceEnum
 
+	if obj.obj.Fixed != nil {
+		choices_set += 1
+		choice = FlowSizeChoice.FIXED
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = FlowSizeChoice.INCREMENT
+	}
+
+	if obj.obj.Random != nil {
+		choices_set += 1
+		choice = FlowSizeChoice.RANDOM
+	}
+
+	if obj.obj.WeightPairs != nil {
+		choices_set += 1
+		choice = FlowSizeChoice.WEIGHT_PAIRS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowSizeChoice.FIXED)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowSize")
+			}
+		} else {
+			intVal := otg.FlowSize_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowSize_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

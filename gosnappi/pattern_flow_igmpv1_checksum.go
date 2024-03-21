@@ -397,13 +397,38 @@ func (obj *patternFlowIgmpv1Checksum) validateObj(vObj *validation, set_default 
 }
 
 func (obj *patternFlowIgmpv1Checksum) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIgmpv1ChecksumChoice.GENERATED)
-		if obj.obj.Generated.Number() == 0 {
-			obj.SetGenerated(PatternFlowIgmpv1ChecksumGenerated.GOOD)
+	var choices_set int = 0
+	var choice PatternFlowIgmpv1ChecksumChoiceEnum
+
+	if obj.obj.Generated != nil && obj.obj.Generated.Number() != 0 {
+		choices_set += 1
+		choice = PatternFlowIgmpv1ChecksumChoice.GENERATED
+	}
+
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = PatternFlowIgmpv1ChecksumChoice.CUSTOM
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIgmpv1ChecksumChoice.GENERATED)
+			if obj.obj.Generated.Number() == 0 {
+				obj.SetGenerated(PatternFlowIgmpv1ChecksumGenerated.GOOD)
+
+			}
 
 		}
 
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIgmpv1Checksum")
+			}
+		} else {
+			intVal := otg.PatternFlowIgmpv1Checksum_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIgmpv1Checksum_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

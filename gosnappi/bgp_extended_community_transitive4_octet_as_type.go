@@ -419,9 +419,34 @@ func (obj *bgpExtendedCommunityTransitive4OctetAsType) validateObj(vObj *validat
 }
 
 func (obj *bgpExtendedCommunityTransitive4OctetAsType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpExtendedCommunityTransitive4OctetAsTypeChoice.ROUTE_TARGET_SUBTYPE)
+	var choices_set int = 0
+	var choice BgpExtendedCommunityTransitive4OctetAsTypeChoiceEnum
 
+	if obj.obj.RouteTargetSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitive4OctetAsTypeChoice.ROUTE_TARGET_SUBTYPE
+	}
+
+	if obj.obj.RouteOriginSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitive4OctetAsTypeChoice.ROUTE_ORIGIN_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpExtendedCommunityTransitive4OctetAsTypeChoice.ROUTE_TARGET_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpExtendedCommunityTransitive4OctetAsType")
+			}
+		} else {
+			intVal := otg.BgpExtendedCommunityTransitive4OctetAsType_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpExtendedCommunityTransitive4OctetAsType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

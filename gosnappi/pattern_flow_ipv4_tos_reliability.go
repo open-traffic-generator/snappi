@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4TosReliability) validateObj(vObj *validation, set_defa
 }
 
 func (obj *patternFlowIpv4TosReliability) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4TosReliabilityChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4TosReliabilityChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosReliabilityChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4TosReliabilityChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosReliabilityChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosReliabilityChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4TosReliabilityChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4TosReliability")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4TosReliability_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4TosReliability_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -457,10 +457,36 @@ func (obj *layer1FlowControl) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *layer1FlowControl) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
+	var choices_set int = 0
+	var choice Layer1FlowControlChoiceEnum
 
+	if obj.obj.Ieee_802_1Qbb != nil {
+		choices_set += 1
+		choice = Layer1FlowControlChoice.IEEE_802_1QBB
 	}
+
+	if obj.obj.Ieee_802_3X != nil {
+		choices_set += 1
+		choice = Layer1FlowControlChoice.IEEE_802_3X
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(Layer1FlowControlChoice.IEEE_802_1QBB)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in Layer1FlowControl")
+			}
+		} else {
+			intVal := otg.Layer1FlowControl_Choice_Enum_value[string(choice)]
+			enumValue := otg.Layer1FlowControl_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
+
 	if obj.obj.DirectedAddress == nil {
 		obj.SetDirectedAddress("01:80:C2:00:00:01")
 	}

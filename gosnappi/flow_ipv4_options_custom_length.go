@@ -380,9 +380,34 @@ func (obj *flowIpv4OptionsCustomLength) validateObj(vObj *validation, set_defaul
 }
 
 func (obj *flowIpv4OptionsCustomLength) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowIpv4OptionsCustomLengthChoice.AUTO)
+	var choices_set int = 0
+	var choice FlowIpv4OptionsCustomLengthChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = FlowIpv4OptionsCustomLengthChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = FlowIpv4OptionsCustomLengthChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowIpv4OptionsCustomLengthChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowIpv4OptionsCustomLength")
+			}
+		} else {
+			intVal := otg.FlowIpv4OptionsCustomLength_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowIpv4OptionsCustomLength_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

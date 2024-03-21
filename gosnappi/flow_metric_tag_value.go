@@ -388,9 +388,34 @@ func (obj *flowMetricTagValue) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowMetricTagValue) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowMetricTagValueChoice.HEX)
+	var choices_set int = 0
+	var choice FlowMetricTagValueChoiceEnum
 
+	if obj.obj.Hex != nil {
+		choices_set += 1
+		choice = FlowMetricTagValueChoice.HEX
+	}
+
+	if obj.obj.Str != nil {
+		choices_set += 1
+		choice = FlowMetricTagValueChoice.STR
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowMetricTagValueChoice.HEX)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowMetricTagValue")
+			}
+		} else {
+			intVal := otg.FlowMetricTagValue_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowMetricTagValue_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

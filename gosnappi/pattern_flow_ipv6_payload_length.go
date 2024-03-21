@@ -664,9 +664,49 @@ func (obj *patternFlowIpv6PayloadLength) validateObj(vObj *validation, set_defau
 }
 
 func (obj *patternFlowIpv6PayloadLength) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv6PayloadLengthChoice.AUTO)
+	var choices_set int = 0
+	var choice PatternFlowIpv6PayloadLengthChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6PayloadLengthChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv6PayloadLengthChoice.VALUES
+	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6PayloadLengthChoice.AUTO
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6PayloadLengthChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6PayloadLengthChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv6PayloadLengthChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv6PayloadLength")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv6PayloadLength_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv6PayloadLength_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

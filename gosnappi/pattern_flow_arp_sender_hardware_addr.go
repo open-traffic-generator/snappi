@@ -615,9 +615,44 @@ func (obj *patternFlowArpSenderHardwareAddr) validateObj(vObj *validation, set_d
 }
 
 func (obj *patternFlowArpSenderHardwareAddr) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowArpSenderHardwareAddrChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowArpSenderHardwareAddrChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowArpSenderHardwareAddrChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowArpSenderHardwareAddrChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowArpSenderHardwareAddrChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowArpSenderHardwareAddrChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowArpSenderHardwareAddrChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowArpSenderHardwareAddr")
+			}
+		} else {
+			intVal := otg.PatternFlowArpSenderHardwareAddr_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowArpSenderHardwareAddr_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

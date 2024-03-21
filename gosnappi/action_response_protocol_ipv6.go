@@ -365,5 +365,23 @@ func (obj *actionResponseProtocolIpv6) validateObj(vObj *validation, set_default
 }
 
 func (obj *actionResponseProtocolIpv6) setDefault() {
+	var choices_set int = 0
+	var choice ActionResponseProtocolIpv6ChoiceEnum
+
+	if obj.obj.Ping != nil {
+		choices_set += 1
+		choice = ActionResponseProtocolIpv6Choice.PING
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in ActionResponseProtocolIpv6")
+			}
+		} else {
+			intVal := otg.ActionResponseProtocolIpv6_Choice_Enum_value[string(choice)]
+			enumValue := otg.ActionResponseProtocolIpv6_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

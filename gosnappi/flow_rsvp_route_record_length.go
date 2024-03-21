@@ -400,9 +400,34 @@ func (obj *flowRSVPRouteRecordLength) validateObj(vObj *validation, set_default 
 }
 
 func (obj *flowRSVPRouteRecordLength) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPRouteRecordLengthChoice.AUTO)
+	var choices_set int = 0
+	var choice FlowRSVPRouteRecordLengthChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = FlowRSVPRouteRecordLengthChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = FlowRSVPRouteRecordLengthChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPRouteRecordLengthChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPRouteRecordLength")
+			}
+		} else {
+			intVal := otg.FlowRSVPRouteRecordLength_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPRouteRecordLength_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

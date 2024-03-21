@@ -369,9 +369,34 @@ func (obj *lldpSystemName) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *lldpSystemName) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(LldpSystemNameChoice.AUTO)
+	var choices_set int = 0
+	var choice LldpSystemNameChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = LldpSystemNameChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = LldpSystemNameChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LldpSystemNameChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LldpSystemName")
+			}
+		} else {
+			intVal := otg.LldpSystemName_Choice_Enum_value[string(choice)]
+			enumValue := otg.LldpSystemName_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4TosDelay) validateObj(vObj *validation, set_default bo
 }
 
 func (obj *patternFlowIpv4TosDelay) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4TosDelayChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4TosDelayChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosDelayChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4TosDelayChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosDelayChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TosDelayChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4TosDelayChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4TosDelay")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4TosDelay_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4TosDelay_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

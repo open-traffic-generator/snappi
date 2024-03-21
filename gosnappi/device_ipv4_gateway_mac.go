@@ -400,9 +400,34 @@ func (obj *deviceIpv4GatewayMAC) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *deviceIpv4GatewayMAC) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(DeviceIpv4GatewayMACChoice.AUTO)
+	var choices_set int = 0
+	var choice DeviceIpv4GatewayMACChoiceEnum
 
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = DeviceIpv4GatewayMACChoice.AUTO
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = DeviceIpv4GatewayMACChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(DeviceIpv4GatewayMACChoice.AUTO)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in DeviceIpv4GatewayMAC")
+			}
+		} else {
+			intVal := otg.DeviceIpv4GatewayMAC_Choice_Enum_value[string(choice)]
+			enumValue := otg.DeviceIpv4GatewayMAC_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

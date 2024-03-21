@@ -620,9 +620,44 @@ func (obj *patternFlowTcpDataOffset) validateObj(vObj *validation, set_default b
 }
 
 func (obj *patternFlowTcpDataOffset) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowTcpDataOffsetChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowTcpDataOffsetChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowTcpDataOffsetChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowTcpDataOffsetChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowTcpDataOffsetChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowTcpDataOffsetChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowTcpDataOffsetChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowTcpDataOffset")
+			}
+		} else {
+			intVal := otg.PatternFlowTcpDataOffset_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowTcpDataOffset_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

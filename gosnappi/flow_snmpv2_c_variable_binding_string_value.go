@@ -414,9 +414,34 @@ func (obj *flowSnmpv2CVariableBindingStringValue) validateObj(vObj *validation, 
 }
 
 func (obj *flowSnmpv2CVariableBindingStringValue) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowSnmpv2CVariableBindingStringValueChoice.ASCII)
+	var choices_set int = 0
+	var choice FlowSnmpv2CVariableBindingStringValueChoiceEnum
 
+	if obj.obj.Ascii != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingStringValueChoice.ASCII
+	}
+
+	if obj.obj.Raw != nil {
+		choices_set += 1
+		choice = FlowSnmpv2CVariableBindingStringValueChoice.RAW
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowSnmpv2CVariableBindingStringValueChoice.ASCII)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowSnmpv2CVariableBindingStringValue")
+			}
+		} else {
+			intVal := otg.FlowSnmpv2CVariableBindingStringValue_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowSnmpv2CVariableBindingStringValue_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

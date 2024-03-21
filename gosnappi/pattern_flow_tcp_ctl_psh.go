@@ -620,9 +620,44 @@ func (obj *patternFlowTcpCtlPsh) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *patternFlowTcpCtlPsh) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowTcpCtlPshChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowTcpCtlPshChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowTcpCtlPshChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowTcpCtlPshChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowTcpCtlPshChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowTcpCtlPshChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowTcpCtlPshChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowTcpCtlPsh")
+			}
+		} else {
+			intVal := otg.PatternFlowTcpCtlPsh_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowTcpCtlPsh_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

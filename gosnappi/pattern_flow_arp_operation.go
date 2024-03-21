@@ -620,9 +620,44 @@ func (obj *patternFlowArpOperation) validateObj(vObj *validation, set_default bo
 }
 
 func (obj *patternFlowArpOperation) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowArpOperationChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowArpOperationChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowArpOperationChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowArpOperationChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowArpOperationChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowArpOperationChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowArpOperationChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowArpOperation")
+			}
+		} else {
+			intVal := otg.PatternFlowArpOperation_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowArpOperation_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

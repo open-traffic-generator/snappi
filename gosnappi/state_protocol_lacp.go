@@ -416,5 +416,28 @@ func (obj *stateProtocolLacp) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *stateProtocolLacp) setDefault() {
+	var choices_set int = 0
+	var choice StateProtocolLacpChoiceEnum
+
+	if obj.obj.Admin != nil {
+		choices_set += 1
+		choice = StateProtocolLacpChoice.ADMIN
+	}
+
+	if obj.obj.MemberPorts != nil {
+		choices_set += 1
+		choice = StateProtocolLacpChoice.MEMBER_PORTS
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in StateProtocolLacp")
+			}
+		} else {
+			intVal := otg.StateProtocolLacp_Choice_Enum_value[string(choice)]
+			enumValue := otg.StateProtocolLacp_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

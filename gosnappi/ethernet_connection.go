@@ -483,5 +483,33 @@ func (obj *ethernetConnection) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *ethernetConnection) setDefault() {
+	var choices_set int = 0
+	var choice EthernetConnectionChoiceEnum
+
+	if obj.obj.PortName != nil {
+		choices_set += 1
+		choice = EthernetConnectionChoice.PORT_NAME
+	}
+
+	if obj.obj.LagName != nil {
+		choices_set += 1
+		choice = EthernetConnectionChoice.LAG_NAME
+	}
+
+	if obj.obj.VxlanName != nil {
+		choices_set += 1
+		choice = EthernetConnectionChoice.VXLAN_NAME
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in EthernetConnection")
+			}
+		} else {
+			intVal := otg.EthernetConnection_Choice_Enum_value[string(choice)]
+			enumValue := otg.EthernetConnection_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

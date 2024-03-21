@@ -419,9 +419,34 @@ func (obj *bgpExtendedCommunityTransitiveIpv4AddressType) validateObj(vObj *vali
 }
 
 func (obj *bgpExtendedCommunityTransitiveIpv4AddressType) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpExtendedCommunityTransitiveIpv4AddressTypeChoice.ROUTE_TARGET_SUBTYPE)
+	var choices_set int = 0
+	var choice BgpExtendedCommunityTransitiveIpv4AddressTypeChoiceEnum
 
+	if obj.obj.RouteTargetSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitiveIpv4AddressTypeChoice.ROUTE_TARGET_SUBTYPE
+	}
+
+	if obj.obj.RouteOriginSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitiveIpv4AddressTypeChoice.ROUTE_ORIGIN_SUBTYPE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpExtendedCommunityTransitiveIpv4AddressTypeChoice.ROUTE_TARGET_SUBTYPE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpExtendedCommunityTransitiveIpv4AddressType")
+			}
+		} else {
+			intVal := otg.BgpExtendedCommunityTransitiveIpv4AddressType_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpExtendedCommunityTransitiveIpv4AddressType_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

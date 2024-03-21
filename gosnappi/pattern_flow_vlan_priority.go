@@ -620,9 +620,44 @@ func (obj *patternFlowVlanPriority) validateObj(vObj *validation, set_default bo
 }
 
 func (obj *patternFlowVlanPriority) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowVlanPriorityChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowVlanPriorityChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowVlanPriorityChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowVlanPriorityChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowVlanPriorityChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowVlanPriorityChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowVlanPriorityChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowVlanPriority")
+			}
+		} else {
+			intVal := otg.PatternFlowVlanPriority_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowVlanPriority_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

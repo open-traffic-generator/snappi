@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4TimeToLive) validateObj(vObj *validation, set_default 
 }
 
 func (obj *patternFlowIpv4TimeToLive) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4TimeToLiveChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4TimeToLiveChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TimeToLiveChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4TimeToLiveChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TimeToLiveChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4TimeToLiveChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4TimeToLiveChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4TimeToLive")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4TimeToLive_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4TimeToLive_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

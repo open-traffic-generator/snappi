@@ -428,9 +428,34 @@ func (obj *flowRxTxRatio) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowRxTxRatio) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRxTxRatioChoice.VALUE)
+	var choices_set int = 0
+	var choice FlowRxTxRatioChoiceEnum
 
+	if obj.obj.RxCount != nil {
+		choices_set += 1
+		choice = FlowRxTxRatioChoice.RX_COUNT
+	}
+
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = FlowRxTxRatioChoice.VALUE
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRxTxRatioChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRxTxRatio")
+			}
+		} else {
+			intVal := otg.FlowRxTxRatio_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRxTxRatio_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

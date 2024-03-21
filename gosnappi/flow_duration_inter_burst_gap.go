@@ -469,9 +469,39 @@ func (obj *flowDurationInterBurstGap) validateObj(vObj *validation, set_default 
 }
 
 func (obj *flowDurationInterBurstGap) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowDurationInterBurstGapChoice.BYTES)
+	var choices_set int = 0
+	var choice FlowDurationInterBurstGapChoiceEnum
 
+	if obj.obj.Bytes != nil {
+		choices_set += 1
+		choice = FlowDurationInterBurstGapChoice.BYTES
+	}
+
+	if obj.obj.Nanoseconds != nil {
+		choices_set += 1
+		choice = FlowDurationInterBurstGapChoice.NANOSECONDS
+	}
+
+	if obj.obj.Microseconds != nil {
+		choices_set += 1
+		choice = FlowDurationInterBurstGapChoice.MICROSECONDS
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowDurationInterBurstGapChoice.BYTES)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowDurationInterBurstGap")
+			}
+		} else {
+			intVal := otg.FlowDurationInterBurstGap_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowDurationInterBurstGap_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

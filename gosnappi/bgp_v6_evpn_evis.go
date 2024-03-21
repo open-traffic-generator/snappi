@@ -382,9 +382,29 @@ func (obj *bgpV6EvpnEvis) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *bgpV6EvpnEvis) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(BgpV6EvpnEvisChoice.EVI_VXLAN)
+	var choices_set int = 0
+	var choice BgpV6EvpnEvisChoiceEnum
 
+	if obj.obj.EviVxlan != nil {
+		choices_set += 1
+		choice = BgpV6EvpnEvisChoice.EVI_VXLAN
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(BgpV6EvpnEvisChoice.EVI_VXLAN)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in BgpV6EvpnEvis")
+			}
+		} else {
+			intVal := otg.BgpV6EvpnEvis_Choice_Enum_value[string(choice)]
+			enumValue := otg.BgpV6EvpnEvis_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

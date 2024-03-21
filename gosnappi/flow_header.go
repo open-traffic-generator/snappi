@@ -1387,9 +1387,129 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *flowHeader) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowHeaderChoice.ETHERNET)
+	var choices_set int = 0
+	var choice FlowHeaderChoiceEnum
 
+	if obj.obj.Custom != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.CUSTOM
+	}
+
+	if obj.obj.Ethernet != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.ETHERNET
+	}
+
+	if obj.obj.Vlan != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.VLAN
+	}
+
+	if obj.obj.Vxlan != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.VXLAN
+	}
+
+	if obj.obj.Ipv4 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IPV4
+	}
+
+	if obj.obj.Ipv6 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IPV6
+	}
+
+	if obj.obj.Pfcpause != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.PFCPAUSE
+	}
+
+	if obj.obj.Ethernetpause != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.ETHERNETPAUSE
+	}
+
+	if obj.obj.Tcp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.TCP
+	}
+
+	if obj.obj.Udp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.UDP
+	}
+
+	if obj.obj.Gre != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.GRE
+	}
+
+	if obj.obj.Gtpv1 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.GTPV1
+	}
+
+	if obj.obj.Gtpv2 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.GTPV2
+	}
+
+	if obj.obj.Arp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.ARP
+	}
+
+	if obj.obj.Icmp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.ICMP
+	}
+
+	if obj.obj.Icmpv6 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.ICMPV6
+	}
+
+	if obj.obj.Ppp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.PPP
+	}
+
+	if obj.obj.Igmpv1 != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IGMPV1
+	}
+
+	if obj.obj.Mpls != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.MPLS
+	}
+
+	if obj.obj.Snmpv2C != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.SNMPV2C
+	}
+
+	if obj.obj.Rsvp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.RSVP
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowHeaderChoice.ETHERNET)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowHeader")
+			}
+		} else {
+			intVal := otg.FlowHeader_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowHeader_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

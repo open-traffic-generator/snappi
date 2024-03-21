@@ -270,10 +270,10 @@ type FlowRSVPLspTunnelFlag interface {
 	setChoice(value FlowRSVPLspTunnelFlagChoiceEnum) FlowRSVPLspTunnelFlag
 	// HasChoice checks if Choice has been set in FlowRSVPLspTunnelFlag
 	HasChoice() bool
-	// getter for LocalProtectionDesired to set choice.
-	LocalProtectionDesired()
 	// getter for SeStyleDesired to set choice.
 	SeStyleDesired()
+	// getter for LocalProtectionDesired to set choice.
+	LocalProtectionDesired()
 	// getter for LabelRecordingDesired to set choice.
 	LabelRecordingDesired()
 }
@@ -295,14 +295,14 @@ func (obj *flowRSVPLspTunnelFlag) Choice() FlowRSVPLspTunnelFlagChoiceEnum {
 	return FlowRSVPLspTunnelFlagChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for LocalProtectionDesired to set choice
-func (obj *flowRSVPLspTunnelFlag) LocalProtectionDesired() {
-	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
-}
-
 // getter for SeStyleDesired to set choice
 func (obj *flowRSVPLspTunnelFlag) SeStyleDesired() {
 	obj.setChoice(FlowRSVPLspTunnelFlagChoice.SE_STYLE_DESIRED)
+}
+
+// getter for LocalProtectionDesired to set choice
+func (obj *flowRSVPLspTunnelFlag) LocalProtectionDesired() {
+	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
 }
 
 // getter for LabelRecordingDesired to set choice
@@ -337,9 +337,24 @@ func (obj *flowRSVPLspTunnelFlag) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *flowRSVPLspTunnelFlag) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
+	var choices_set int = 0
+	var choice FlowRSVPLspTunnelFlagChoiceEnum
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
 
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in FlowRSVPLspTunnelFlag")
+			}
+		} else {
+			intVal := otg.FlowRSVPLspTunnelFlag_Choice_Enum_value[string(choice)]
+			enumValue := otg.FlowRSVPLspTunnelFlag_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }

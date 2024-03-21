@@ -620,9 +620,44 @@ func (obj *patternFlowIpv4MoreFragments) validateObj(vObj *validation, set_defau
 }
 
 func (obj *patternFlowIpv4MoreFragments) setDefault() {
-	if obj.obj.Choice == nil {
-		obj.setChoice(PatternFlowIpv4MoreFragmentsChoice.VALUE)
+	var choices_set int = 0
+	var choice PatternFlowIpv4MoreFragmentsChoiceEnum
 
+	if obj.obj.Value != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4MoreFragmentsChoice.VALUE
+	}
+
+	if len(obj.obj.Values) > 0 {
+		choices_set += 1
+		choice = PatternFlowIpv4MoreFragmentsChoice.VALUES
+	}
+
+	if obj.obj.Increment != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4MoreFragmentsChoice.INCREMENT
+	}
+
+	if obj.obj.Decrement != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4MoreFragmentsChoice.DECREMENT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(PatternFlowIpv4MoreFragmentsChoice.VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in PatternFlowIpv4MoreFragments")
+			}
+		} else {
+			intVal := otg.PatternFlowIpv4MoreFragments_Choice_Enum_value[string(choice)]
+			enumValue := otg.PatternFlowIpv4MoreFragments_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }
