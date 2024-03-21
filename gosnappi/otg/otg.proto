@@ -4665,7 +4665,7 @@ message BgpAttributesSegmentRoutingPolicy {
   BgpAttributesSrPolicyExplicitNullPolicy explicit_null_label_policy = 7;
 
   // Description missing in models
-  BgpAttributesSrPolicySegmentList segment_list = 8;
+  repeated BgpAttributesSrPolicySegmentList segment_list = 8;
 }
 
 // The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent

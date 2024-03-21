@@ -207,6 +207,7 @@ from .snappi import BgpAttributesSidSrv6
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeJ
 from .snappi import BgpAttributesSegmentRoutingPolicyTypeK
 from .snappi import BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+from .snappi import BgpAttributesSrPolicySegmentListIter
 from .snappi import BgpAttributesMpReachNlri
 from .snappi import BgpOneIpv4NLRIPrefix
 from .snappi import BgpNLRIPrefixPathId

@@ -22661,7 +22661,7 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
         "explicit_null_label_policy": {
             "type": "BgpAttributesSrPolicyExplicitNullPolicy"
         },
-        "segment_list": {"type": "BgpAttributesSrPolicySegmentList"},
+        "segment_list": {"type": "BgpAttributesSrPolicySegmentListIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -22762,14 +22762,19 @@ class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
 
     @property
     def segment_list(self):
-        # type: () -> BgpAttributesSrPolicySegmentList
+        # type: () -> BgpAttributesSrPolicySegmentListIter
         """segment_list getter
 
-        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+        TBD
 
-        Returns: BgpAttributesSrPolicySegmentList
+        Returns: BgpAttributesSrPolicySegmentListIter
         """
-        return self._get_property("segment_list", BgpAttributesSrPolicySegmentList)
+        return self._get_property(
+            "segment_list",
+            BgpAttributesSrPolicySegmentListIter,
+            self._parent,
+            self._choice,
+        )
 
 
 class BgpAttributesBsid(OpenApiObject):
@@ -25866,6 +25871,63 @@ class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
         item.choice = "type_k"
         self._add(item)
         return self
+
+
+class BgpAttributesSrPolicySegmentListIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicySegmentListIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrPolicySegmentList]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrPolicySegmentList):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSrPolicySegmentList"
+            )
+
+    def segmentlist(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        """Factory method that creates an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentListIter
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        """Add method that creates and returns an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentList
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return item
 
 
 class BgpAttributesMpReachNlri(OpenApiObject):
