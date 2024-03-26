@@ -6078,8 +6078,8 @@ message FilterPacket {
 message FilterFieldCustom {
 
   // Description missing in models
-  // default = 00
-  optional string offset = 1;
+  // default = 0
+  optional uint32 offset = 1;
 
   // Description missing in models
   // default = 00
@@ -10719,7 +10719,7 @@ message MetricsRequest {
       lacp = 7;
       lldp = 8;
       rsvp = 9;
-      user_defined_metrics = 10;
+      user_defined = 10;
     }
   }
   // Description missing in models

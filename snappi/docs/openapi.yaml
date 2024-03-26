@@ -8290,9 +8290,9 @@ components:
       type: object
       properties:
         offset:
-          type: string
-          format: hex
-          default: '00'
+          type: integer
+          format: uint32
+          default: 0
           x-field-uid: 1
         value:
           x-field-uid: 2
@@ -13719,7 +13719,7 @@ components:
               x-field-uid: 8
             rsvp:
               x-field-uid: 9
-            user_defined_metrics:
+            user_defined:
               x-field-uid: 10
           enum:
           - port
@@ -13731,7 +13731,7 @@ components:
           - lacp
           - lldp
           - rsvp
-          - user_defined_metrics
+          - user_defined
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2

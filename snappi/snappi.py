@@ -115254,8 +115254,8 @@ class FilterFieldCustom(OpenApiObject):
 
     _TYPES = {
         "offset": {
-            "type": str,
-            "format": "hex",
+            "type": int,
+            "format": "uint32",
         },
         "value": {
             "type": str,
@@ -115270,14 +115270,14 @@ class FilterFieldCustom(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
-        "offset": "00",
+        "offset": 0,
         "value": "00",
         "mask": "00",
     }  # type: Dict[str, Union(type)]
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, offset="00", value="00", mask="00"):
+    def __init__(self, parent=None, offset=0, value="00", mask="00"):
         super(FilterFieldCustom, self).__init__()
         self._parent = parent
         self._set_property("offset", offset)
@@ -115291,12 +115291,12 @@ class FilterFieldCustom(OpenApiObject):
 
     @property
     def offset(self):
-        # type: () -> str
+        # type: () -> int
         """offset getter
 
         TBD
 
-        Returns: str
+        Returns: int
         """
         return self._get_property("offset")
 
@@ -115306,7 +115306,7 @@ class FilterFieldCustom(OpenApiObject):
 
         TBD
 
-        value: str
+        value: int
         """
         self._set_property("offset", value)
 
@@ -120295,8 +120295,8 @@ class FilterPacketIter(OpenApiIter):
         self._add(item)
         return item
 
-    def custom(self, offset="00", value="00", mask="00"):
-        # type: (str,str,str) -> FilterPacketIter
+    def custom(self, offset=0, value="00", mask="00"):
+        # type: (int,str,str) -> FilterPacketIter
         """Factory method that creates an instance of the FilterFieldCustom class
 
         TBD
@@ -124422,7 +124422,7 @@ class MetricsRequest(OpenApiObject):
                 "lacp",
                 "lldp",
                 "rsvp",
-                "user_defined_metrics",
+                "user_defined",
             ],
         },
         "port": {"type": "PortMetricsRequest"},
@@ -124452,7 +124452,7 @@ class MetricsRequest(OpenApiObject):
     LACP = "lacp"  # type: str
     LLDP = "lldp"  # type: str
     RSVP = "rsvp"  # type: str
-    USER_DEFINED_METRICS = "user_defined_metrics"  # type: str
+    USER_DEFINED = "user_defined"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -124568,13 +124568,26 @@ class MetricsRequest(OpenApiObject):
         return self._get_property("rsvp", RsvpMetricsRequest, self, "rsvp")
 
     @property
+    def user_defined(self):
+        # type: () -> UserDefinedMetricsRequest
+        """Factory property that returns an instance of the UserDefinedMetricsRequest class
+
+        The user defined metrics result request to the traffic generator
+
+        Returns: UserDefinedMetricsRequest
+        """
+        return self._get_property(
+            "user_defined", UserDefinedMetricsRequest, self, "user_defined"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
+        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
+        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined"]]
         """
         return self._get_property("choice")
 
@@ -124584,20 +124597,9 @@ class MetricsRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
+        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined"]]
         """
         self._set_property("choice", value)
-
-    @property
-    def user_defined(self):
-        # type: () -> UserDefinedMetricsRequest
-        """user_defined getter
-
-        The user defined metrics result request to the traffic generatorThe user defined metrics result request to the traffic generatorThe user defined metrics result request to the traffic generator
-
-        Returns: UserDefinedMetricsRequest
-        """
-        return self._get_property("user_defined", UserDefinedMetricsRequest)
 
 
 class PortMetricsRequest(OpenApiObject):
@@ -125885,8 +125887,8 @@ class UserDefinedMetricsRequest(OpenApiObject):
         "column_names": {
             "type": list,
             "enum": [
-                "frames_tx",
                 "frames_rx",
+                "frames_tx",
             ],
             "itemtype": str,
         },
@@ -125899,8 +125901,8 @@ class UserDefinedMetricsRequest(OpenApiObject):
     PORT_NAMES = "port_names"  # type: str
     FLOW_NAMES = "flow_names"  # type: str
 
-    FRAMES_TX = "frames_tx"  # type: str
     FRAMES_RX = "frames_rx"  # type: str
+    FRAMES_TX = "frames_tx"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
