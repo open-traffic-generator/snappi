@@ -1123,13 +1123,16 @@ class Config(OpenApiObject):
         "events": {"type": "Event"},
         "options": {"type": "ConfigOptions"},
         "lldp": {"type": "LldpIter"},
+        "filter_metrics": {"type": "FilterMetricIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
-    _STATUS = {}  # type: Dict[str, Union(type)]
+    _STATUS = {
+        "filter_metrics": "filter_metrics property in schema Config is under_review, There may be changes in filter_metrics configuration",
+    }  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None):
         super(Config, self).__init__()
@@ -1233,6 +1236,19 @@ class Config(OpenApiObject):
         Returns: LldpIter
         """
         return self._get_property("lldp", LldpIter, self._parent, self._choice)
+
+    @property
+    def filter_metrics(self):
+        # type: () -> FilterMetricIter
+        """filter_metrics getter
+
+        Under Review: There may be changes in filter_metrics configuration. The filter_metrics that will be configured on traffic generator.
+
+        Returns: FilterMetricIter
+        """
+        return self._get_property(
+            "filter_metrics", FilterMetricIter, self._parent, self._choice
+        )
 
 
 class Port(OpenApiObject):
@@ -1490,7 +1506,7 @@ class LagPort(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -1500,7 +1516,7 @@ class LagPort(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port object that will be part of the LAG. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -2518,7 +2534,7 @@ class Layer1(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -2528,7 +2544,7 @@ class Layer1(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        A list of unique names of port objects that will share the. choice settings. . x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -2625,7 +2641,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """ieee_media_defaults getter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         Returns: bool
         """
@@ -2635,7 +2651,7 @@ class Layer1(OpenApiObject):
     def ieee_media_defaults(self, value):
         """ieee_media_defaults setter
 
-        Under Review: This field is currently under review for pending exploration on use cases. Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
+        Under Review: This field is currently under review for pending exploration on use cases. Set to true to override the auto_negotiate, link_training. and rs_fec settings for gigabit ethernet interfaces.
 
         value: bool
         """
@@ -2646,7 +2662,7 @@ class Layer1(OpenApiObject):
         # type: () -> bool
         """auto_negotiate getter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         Returns: bool
         """
@@ -2656,7 +2672,7 @@ class Layer1(OpenApiObject):
     def auto_negotiate(self, value):
         """auto_negotiate setter
 
-        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
+        Under Review: This field is currently under review for pending exploration on use cases, given that separate configuration called `AutoNegotiation` already exists.. Enable/disable auto negotiation.
 
         value: bool
         """
@@ -3511,7 +3527,7 @@ class Capture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -3521,7 +3537,7 @@ class Capture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -4610,7 +4626,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> CaptureIter
         """Factory method that creates an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: CaptureIter
         """
@@ -4636,7 +4652,7 @@ class CaptureIter(OpenApiIter):
         # type: (List[str],bool,int,Union[Literal["pcap"], Literal["pcapng"]],str) -> Capture
         """Add method that creates and returns an instance of the Capture class
 
-        Under Review: There may be changes in filter configuration. Under Review: There may be changes in filter configuration. Configuration for capture settings.
+        Under Review: There may be changes in filter configuration. Configuration for capture settings.
 
         Returns: Capture
         """
@@ -5020,7 +5036,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -5030,7 +5046,7 @@ class EthernetConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the port that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -5041,7 +5057,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """lag_name getter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -5051,7 +5067,7 @@ class EthernetConnection(OpenApiObject):
     def lag_name(self, value):
         """lag_name setter
 
-        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        Name of the LAG that the Ethernet interface is configured on.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -5062,7 +5078,7 @@ class EthernetConnection(OpenApiObject):
         # type: () -> str
         """vxlan_name getter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         Returns: str
         """
@@ -5072,7 +5088,7 @@ class EthernetConnection(OpenApiObject):
     def vxlan_name(self, value):
         """vxlan_name setter
 
-        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name. . x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
+        Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.. x-constraint:. #/components/schemas/Vxlan.V4Tunnel/properties/name. #/components/schemas/Vxlan.V6Tunnel/properties/name.
 
         value: str
         """
@@ -5821,7 +5837,7 @@ class DeviceIpv4Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5831,7 +5847,7 @@ class DeviceIpv4Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -5980,7 +5996,7 @@ class DeviceIpv6Loopback(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -5990,7 +6006,7 @@ class DeviceIpv6Loopback(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface behind which this Loopback interface will be created.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -6441,7 +6457,7 @@ class IsisInterface(OpenApiObject):
         # type: () -> str
         """eth_name getter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: str
         """
@@ -6451,7 +6467,7 @@ class IsisInterface(OpenApiObject):
     def eth_name(self, value):
         """eth_name setter
 
-        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: str
         """
@@ -9845,7 +9861,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -9855,7 +9871,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -13761,7 +13777,7 @@ class BgpV4RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -15915,7 +15931,7 @@ class BgpV6RouteRange(OpenApiObject):
         # type: () -> BgpExtCommunityIter
         """ext_communities getter
 
-        Deprecated: This property is deprecated in favor of property extended_communities. Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
+        Deprecated: This property is deprecated in favor of property extended_communities. Optional Extended Community settings. The Extended Communities Attribute is transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first Bytes of the community encode type and sub-type fields and the last Bytes carry unique set of data in format defined by the type and sub-type field. Extended communities provide larger range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two byte local administrator id. When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for administrator_ipv4_address is four byte IPv4 address followed by two byte local administrator id. When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from IANA's "ETHER TYPES" registry e.g IPv4 (protocol type 0x0800), IPv6 (protocol type 0x86dd), and MPLS (protocol type 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format. When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates occur for the same MAC address. Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 
         Returns: BgpExtCommunityIter
         """
@@ -23627,7 +23643,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -23637,7 +23653,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -25256,7 +25272,7 @@ class VxlanV4Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -25266,7 +25282,7 @@ class VxlanV4Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -25866,7 +25882,7 @@ class VxlanV6Tunnel(OpenApiObject):
         # type: () -> str
         """source_interface getter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -25876,7 +25892,7 @@ class VxlanV6Tunnel(OpenApiObject):
     def source_interface(self, value):
         """source_interface setter
 
-        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
+        Determines the source interface.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -26482,7 +26498,7 @@ class RsvpIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -26492,7 +26508,7 @@ class RsvpIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -26850,7 +26866,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -26860,7 +26876,7 @@ class RsvpLspIpv4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
+        The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks" on which this LSP interface is configured.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -28925,7 +28941,7 @@ class Flow(OpenApiObject):
         # type: () -> FlowHeaderIter
         """egress_packet getter
 
-        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
+        Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.. The list of protocol headers defining the shape of all intended packets in corresponding flow as it is received. by traffic-generator port.. For all protocol headers, only the `metric_tags` property is configurable.
 
         Returns: FlowHeaderIter
         """
@@ -29120,7 +29136,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """tx_name getter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -29130,7 +29146,7 @@ class FlowPort(OpenApiObject):
     def tx_name(self, value):
         """tx_name setter
 
-        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        The unique name of port that is the transmit port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -29143,7 +29159,7 @@ class FlowPort(OpenApiObject):
         # type: () -> str
         """rx_name getter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -29153,7 +29169,7 @@ class FlowPort(OpenApiObject):
     def rx_name(self, value):
         """rx_name setter
 
-        Deprecated: This property is deprecated in favor of property rx_names. Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Deprecated: This property is deprecated in favor of property rx_names. The unique name of port that is the intended receive port.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -29164,7 +29180,7 @@ class FlowPort(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -29174,7 +29190,7 @@ class FlowPort(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
+        Unique name of ports or lags that are intended receive endpoints.. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -29251,7 +29267,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -29261,7 +29277,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -29274,7 +29290,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -29284,7 +29300,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -114053,7 +114069,7 @@ class LldpConnection(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -114063,7 +114079,7 @@ class LldpConnection(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        Name of the test port on which LLDP is configured on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -114695,6 +114711,5940 @@ class LldpIter(OpenApiIter):
         return item
 
 
+class FilterMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "association": {"type": "FilterMetricAssociation"},
+        "receive_filters": {"type": "FilterPacketIter"},
+        "name": {"type": str},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {
+        "self": "FilterMetric is under_review, There may be changes in filter_metric configuration",
+    }  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None):
+        super(FilterMetric, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def association(self):
+        # type: () -> FilterMetricAssociation
+        """association getter
+
+        Configuration for filter_metric Association. Based on the association, filter_metric will be applied to count packets on per port or per flow.Configuration for filter_metric Association. Based on the association, filter_metric will be applied to count packets on per port or per flow.Configuration for filter_metric Association. Based on the association, filter_metric will be applied to count packets on per port or per flow.Association.
+
+        Returns: FilterMetricAssociation
+        """
+        return self._get_property("association", FilterMetricAssociation)
+
+    @property
+    def receive_filters(self):
+        # type: () -> FilterPacketIter
+        """receive_filters getter
+
+        A list of filters to apply to the packet receiving ports. If no filters are specified then all packets will be counted. filter_metric can have multiple filters. The number of filters supported is determined by the implementation.. When multiple filters are specified then implementation must && (and) all the filters.
+
+        Returns: FilterPacketIter
+        """
+        return self._get_property(
+            "receive_filters", FilterPacketIter, self._parent, self._choice
+        )
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+
+class FilterMetricAssociation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "port_names",
+                "flow_names",
+            ],
+        },
+        "port_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "flow_names": {
+            "type": list,
+            "itemtype": str,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    PORT_NAMES = "port_names"  # type: str
+    FLOW_NAMES = "flow_names"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, port_names=None, flow_names=None):
+        super(FilterMetricAssociation, self).__init__()
+        self._parent = parent
+        self._set_property("port_names", port_names)
+        self._set_property("flow_names", flow_names)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, port_names=None, flow_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["flow_names"], Literal["port_names"]]
+        """choice getter
+
+        The type of association.
+
+        Returns: Union[Literal["flow_names"], Literal["port_names"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of association.
+
+        value: Union[Literal["flow_names"], Literal["port_names"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def port_names(self):
+        # type: () -> List[str]
+        """port_names getter
+
+        List of port names.. x-constraint:. /components/schemas/Port/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("port_names")
+
+    @port_names.setter
+    def port_names(self, value):
+        """port_names setter
+
+        List of port names.. x-constraint:. /components/schemas/Port/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("port_names", value, "port_names")
+
+    @property
+    def flow_names(self):
+        # type: () -> List[str]
+        """flow_names getter
+
+        List of flow names.. x-constraint:. /components/schemas/Flow/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("flow_names")
+
+    @flow_names.setter
+    def flow_names(self, value):
+        """flow_names setter
+
+        List of flow names.. x-constraint:. /components/schemas/Flow/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("flow_names", value, "flow_names")
+
+
+class FilterPacket(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "custom",
+                "ethernet",
+                "vlan",
+                "vxlan",
+                "ipv4",
+                "ipv6",
+                "pfcpause",
+                "ethernetpause",
+                "tcp",
+                "udp",
+                "gre",
+                "gtpv1",
+                "gtpv2",
+                "arp",
+                "icmp",
+                "icmpv6",
+                "ppp",
+                "igmpv1",
+                "mpls",
+                "snmpv2c",
+                "rsvp",
+            ],
+        },
+        "custom": {"type": "FilterFieldCustom"},
+        "ethernet": {"type": "FilterEthernet"},
+        "vlan": {"type": "FilterVlan"},
+        "vxlan": {"type": "FilterVxlan"},
+        "ipv4": {"type": "FilterIpv4"},
+        "ipv6": {"type": "FilterIpv6"},
+        "pfcpause": {"type": "FilterPfcPause"},
+        "ethernetpause": {"type": "FilterEthernetPause"},
+        "tcp": {"type": "FilterTcp"},
+        "udp": {"type": "FilterUdp"},
+        "gre": {"type": "FilterGre"},
+        "gtpv1": {"type": "FilterGtpv1"},
+        "gtpv2": {"type": "FilterGtpv2"},
+        "arp": {"type": "FilterArp"},
+        "icmp": {"type": "FilterIcmp"},
+        "icmpv6": {"type": "FilterIcmpv6"},
+        "ppp": {"type": "FilterPpp"},
+        "igmpv1": {"type": "FilterIgmpv1"},
+        "mpls": {"type": "FilterMpls"},
+        "snmpv2c": {"type": "FilterSnmpv2c"},
+        "rsvp": {"type": "FilterRsvp"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "custom",
+    }  # type: Dict[str, Union(type)]
+
+    CUSTOM = "custom"  # type: str
+    ETHERNET = "ethernet"  # type: str
+    VLAN = "vlan"  # type: str
+    VXLAN = "vxlan"  # type: str
+    IPV4 = "ipv4"  # type: str
+    IPV6 = "ipv6"  # type: str
+    PFCPAUSE = "pfcpause"  # type: str
+    ETHERNETPAUSE = "ethernetpause"  # type: str
+    TCP = "tcp"  # type: str
+    UDP = "udp"  # type: str
+    GRE = "gre"  # type: str
+    GTPV1 = "gtpv1"  # type: str
+    GTPV2 = "gtpv2"  # type: str
+    ARP = "arp"  # type: str
+    ICMP = "icmp"  # type: str
+    ICMPV6 = "icmpv6"  # type: str
+    PPP = "ppp"  # type: str
+    IGMPV1 = "igmpv1"  # type: str
+    MPLS = "mpls"  # type: str
+    SNMPV2C = "snmpv2c"  # type: str
+    RSVP = "rsvp"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterPacket, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def custom(self):
+        # type: () -> FilterFieldCustom
+        """Factory property that returns an instance of the FilterFieldCustom class
+
+        TBD
+
+        Returns: FilterFieldCustom
+        """
+        return self._get_property("custom", FilterFieldCustom, self, "custom")
+
+    @property
+    def ethernet(self):
+        # type: () -> FilterEthernet
+        """Factory property that returns an instance of the FilterEthernet class
+
+        Ethernet packet header
+
+        Returns: FilterEthernet
+        """
+        return self._get_property("ethernet", FilterEthernet, self, "ethernet")
+
+    @property
+    def vlan(self):
+        # type: () -> FilterVlan
+        """Factory property that returns an instance of the FilterVlan class
+
+        VLAN packet header
+
+        Returns: FilterVlan
+        """
+        return self._get_property("vlan", FilterVlan, self, "vlan")
+
+    @property
+    def vxlan(self):
+        # type: () -> FilterVxlan
+        """Factory property that returns an instance of the FilterVxlan class
+
+        VXLAN packet header
+
+        Returns: FilterVxlan
+        """
+        return self._get_property("vxlan", FilterVxlan, self, "vxlan")
+
+    @property
+    def ipv4(self):
+        # type: () -> FilterIpv4
+        """Factory property that returns an instance of the FilterIpv4 class
+
+        IPv4 packet header
+
+        Returns: FilterIpv4
+        """
+        return self._get_property("ipv4", FilterIpv4, self, "ipv4")
+
+    @property
+    def ipv6(self):
+        # type: () -> FilterIpv6
+        """Factory property that returns an instance of the FilterIpv6 class
+
+        IPv6 packet header
+
+        Returns: FilterIpv6
+        """
+        return self._get_property("ipv6", FilterIpv6, self, "ipv6")
+
+    @property
+    def pfcpause(self):
+        # type: () -> FilterPfcPause
+        """Factory property that returns an instance of the FilterPfcPause class
+
+        IEEE 802.1Qbb PFC Pause packet header.
+
+        Returns: FilterPfcPause
+        """
+        return self._get_property("pfcpause", FilterPfcPause, self, "pfcpause")
+
+    @property
+    def ethernetpause(self):
+        # type: () -> FilterEthernetPause
+        """Factory property that returns an instance of the FilterEthernetPause class
+
+        IEEE 802.3x global ethernet pause packet header
+
+        Returns: FilterEthernetPause
+        """
+        return self._get_property(
+            "ethernetpause", FilterEthernetPause, self, "ethernetpause"
+        )
+
+    @property
+    def tcp(self):
+        # type: () -> FilterTcp
+        """Factory property that returns an instance of the FilterTcp class
+
+        TCP packet header
+
+        Returns: FilterTcp
+        """
+        return self._get_property("tcp", FilterTcp, self, "tcp")
+
+    @property
+    def udp(self):
+        # type: () -> FilterUdp
+        """Factory property that returns an instance of the FilterUdp class
+
+        UDP packet header
+
+        Returns: FilterUdp
+        """
+        return self._get_property("udp", FilterUdp, self, "udp")
+
+    @property
+    def gre(self):
+        # type: () -> FilterGre
+        """Factory property that returns an instance of the FilterGre class
+
+        Standard GRE packet header (RFC2784)
+
+        Returns: FilterGre
+        """
+        return self._get_property("gre", FilterGre, self, "gre")
+
+    @property
+    def gtpv1(self):
+        # type: () -> FilterGtpv1
+        """Factory property that returns an instance of the FilterGtpv1 class
+
+        TBD
+
+        Returns: FilterGtpv1
+        """
+        return self._get_property("gtpv1", FilterGtpv1, self, "gtpv1")
+
+    @property
+    def gtpv2(self):
+        # type: () -> FilterGtpv2
+        """Factory property that returns an instance of the FilterGtpv2 class
+
+        TBD
+
+        Returns: FilterGtpv2
+        """
+        return self._get_property("gtpv2", FilterGtpv2, self, "gtpv2")
+
+    @property
+    def arp(self):
+        # type: () -> FilterArp
+        """Factory property that returns an instance of the FilterArp class
+
+        ARP packet header
+
+        Returns: FilterArp
+        """
+        return self._get_property("arp", FilterArp, self, "arp")
+
+    @property
+    def icmp(self):
+        # type: () -> FilterIcmp
+        """Factory property that returns an instance of the FilterIcmp class
+
+        ICMP packet header
+
+        Returns: FilterIcmp
+        """
+        return self._get_property("icmp", FilterIcmp, self, "icmp")
+
+    @property
+    def icmpv6(self):
+        # type: () -> FilterIcmpv6
+        """Factory property that returns an instance of the FilterIcmpv6 class
+
+        ICMPv6 packet header
+
+        Returns: FilterIcmpv6
+        """
+        return self._get_property("icmpv6", FilterIcmpv6, self, "icmpv6")
+
+    @property
+    def ppp(self):
+        # type: () -> FilterPpp
+        """Factory property that returns an instance of the FilterPpp class
+
+        TBD
+
+        Returns: FilterPpp
+        """
+        return self._get_property("ppp", FilterPpp, self, "ppp")
+
+    @property
+    def igmpv1(self):
+        # type: () -> FilterIgmpv1
+        """Factory property that returns an instance of the FilterIgmpv1 class
+
+        TBD
+
+        Returns: FilterIgmpv1
+        """
+        return self._get_property("igmpv1", FilterIgmpv1, self, "igmpv1")
+
+    @property
+    def mpls(self):
+        # type: () -> FilterMpls
+        """Factory property that returns an instance of the FilterMpls class
+
+        TBD
+
+        Returns: FilterMpls
+        """
+        return self._get_property("mpls", FilterMpls, self, "mpls")
+
+    @property
+    def snmpv2c(self):
+        # type: () -> FilterSnmpv2c
+        """Factory property that returns an instance of the FilterSnmpv2c class
+
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+
+        Returns: FilterSnmpv2c
+        """
+        return self._get_property("snmpv2c", FilterSnmpv2c, self, "snmpv2c")
+
+    @property
+    def rsvp(self):
+        # type: () -> FilterRsvp
+        """Factory property that returns an instance of the FilterRsvp class
+
+        TBD
+
+        Returns: FilterRsvp
+        """
+        return self._get_property("rsvp", FilterRsvp, self, "rsvp")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        """choice getter
+
+        The type of packet filter.
+
+        Returns: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of packet filter.
+
+        value: Union[Literal["arp"], Literal["custom"], Literal["ethernet"], Literal["ethernetpause"], Literal["gre"], Literal["gtpv1"], Literal["gtpv2"], Literal["icmp"], Literal["icmpv6"], Literal["igmpv1"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["pfcpause"], Literal["ppp"], Literal["rsvp"], Literal["snmpv2c"], Literal["tcp"], Literal["udp"], Literal["vlan"], Literal["vxlan"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterFieldCustom(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "offset": {
+            "type": str,
+            "format": "hex",
+        },
+        "value": {
+            "type": str,
+            "format": "hex",
+        },
+        "mask": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "offset": "00",
+        "value": "00",
+        "mask": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, offset="00", value="00", mask="00"):
+        super(FilterFieldCustom, self).__init__()
+        self._parent = parent
+        self._set_property("offset", offset)
+        self._set_property("value", value)
+        self._set_property("mask", mask)
+
+    def set(self, offset=None, value=None, mask=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def offset(self):
+        # type: () -> str
+        """offset getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("offset")
+
+    @offset.setter
+    def offset(self, value):
+        """offset setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("offset", value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value)
+
+    @property
+    def mask(self):
+        # type: () -> str
+        """mask getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("mask")
+
+    @mask.setter
+    def mask(self, value):
+        """mask setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("mask", value)
+
+
+class FilterEthernet(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "dst": {"type": "FilterField"},
+        "src": {"type": "FilterField"},
+        "ether_type": {"type": "FilterField"},
+        "pfc_queue": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterEthernet, self).__init__()
+        self._parent = parent
+
+    @property
+    def dst(self):
+        # type: () -> FilterField
+        """dst getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("dst", FilterField)
+
+    @property
+    def src(self):
+        # type: () -> FilterField
+        """src getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("src", FilterField)
+
+    @property
+    def ether_type(self):
+        # type: () -> FilterField
+        """ether_type getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("ether_type", FilterField)
+
+    @property
+    def pfc_queue(self):
+        # type: () -> FilterField
+        """pfc_queue getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("pfc_queue", FilterField)
+
+
+class FilterField(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "format": "hex",
+        },
+        "mask": {
+            "type": str,
+            "format": "hex",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": "00",
+        "mask": "00",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value="00", mask="00"):
+        super(FilterField, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("mask", mask)
+
+    def set(self, value=None, mask=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("value", value)
+
+    @property
+    def mask(self):
+        # type: () -> str
+        """mask getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("mask")
+
+    @mask.setter
+    def mask(self, value):
+        """mask setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("mask", value)
+
+
+class FilterVlan(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "priority": {"type": "FilterField"},
+        "cfi": {"type": "FilterField"},
+        "id": {"type": "FilterField"},
+        "tpid": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterVlan, self).__init__()
+        self._parent = parent
+
+    @property
+    def priority(self):
+        # type: () -> FilterField
+        """priority getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("priority", FilterField)
+
+    @property
+    def cfi(self):
+        # type: () -> FilterField
+        """cfi getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("cfi", FilterField)
+
+    @property
+    def id(self):
+        # type: () -> FilterField
+        """id getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("id", FilterField)
+
+    @property
+    def tpid(self):
+        # type: () -> FilterField
+        """tpid getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("tpid", FilterField)
+
+
+class FilterVxlan(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "FilterField"},
+        "reserved0": {"type": "FilterField"},
+        "vni": {"type": "FilterField"},
+        "reserved1": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterVxlan, self).__init__()
+        self._parent = parent
+
+    @property
+    def flags(self):
+        # type: () -> FilterField
+        """flags getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("flags", FilterField)
+
+    @property
+    def reserved0(self):
+        # type: () -> FilterField
+        """reserved0 getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved0", FilterField)
+
+    @property
+    def vni(self):
+        # type: () -> FilterField
+        """vni getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("vni", FilterField)
+
+    @property
+    def reserved1(self):
+        # type: () -> FilterField
+        """reserved1 getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved1", FilterField)
+
+
+class FilterIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "header_length": {"type": "FilterField"},
+        "priority": {"type": "FilterIpv4Priority"},
+        "total_length": {"type": "FilterField"},
+        "identification": {"type": "FilterField"},
+        "reserved": {"type": "FilterField"},
+        "dont_fragment": {"type": "FilterField"},
+        "more_fragments": {"type": "FilterField"},
+        "fragment_offset": {"type": "FilterField"},
+        "time_to_live": {"type": "FilterField"},
+        "protocol": {"type": "FilterField"},
+        "header_checksum": {"type": "FilterField"},
+        "src": {"type": "FilterField"},
+        "dst": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def header_length(self):
+        # type: () -> FilterField
+        """header_length getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("header_length", FilterField)
+
+    @property
+    def priority(self):
+        # type: () -> FilterIpv4Priority
+        """priority getter
+
+        A container for ipv4 raw, tos, dscp ip priorities.A container for ipv4 raw, tos, dscp ip priorities.A container for ipv4 raw, tos, dscp ip priorities.A container for ipv4 raw, tos, dscp ip priorities.
+
+        Returns: FilterIpv4Priority
+        """
+        return self._get_property("priority", FilterIpv4Priority)
+
+    @property
+    def total_length(self):
+        # type: () -> FilterField
+        """total_length getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("total_length", FilterField)
+
+    @property
+    def identification(self):
+        # type: () -> FilterField
+        """identification getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("identification", FilterField)
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def dont_fragment(self):
+        # type: () -> FilterField
+        """dont_fragment getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("dont_fragment", FilterField)
+
+    @property
+    def more_fragments(self):
+        # type: () -> FilterField
+        """more_fragments getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("more_fragments", FilterField)
+
+    @property
+    def fragment_offset(self):
+        # type: () -> FilterField
+        """fragment_offset getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("fragment_offset", FilterField)
+
+    @property
+    def time_to_live(self):
+        # type: () -> FilterField
+        """time_to_live getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("time_to_live", FilterField)
+
+    @property
+    def protocol(self):
+        # type: () -> FilterField
+        """protocol getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol", FilterField)
+
+    @property
+    def header_checksum(self):
+        # type: () -> FilterField
+        """header_checksum getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("header_checksum", FilterField)
+
+    @property
+    def src(self):
+        # type: () -> FilterField
+        """src getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("src", FilterField)
+
+    @property
+    def dst(self):
+        # type: () -> FilterField
+        """dst getter
+
+
+
+        Returns: FilterField
+        """
+        return self._get_property("dst", FilterField)
+
+
+class FilterIpv4Priority(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "raw",
+                "tos",
+                "dscp",
+            ],
+        },
+        "raw": {"type": "FilterField"},
+        "tos": {"type": "FilterIpv4Tos"},
+        "dscp": {"type": "FilterIpv4Dscp"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "dscp",
+    }  # type: Dict[str, Union(type)]
+
+    RAW = "raw"  # type: str
+    TOS = "tos"  # type: str
+    DSCP = "dscp"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterIpv4Priority, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def raw(self):
+        # type: () -> FilterField
+        """Factory property that returns an instance of the FilterField class
+
+        TBD
+
+        Returns: FilterField
+        """
+        return self._get_property("raw", FilterField, self, "raw")
+
+    @property
+    def tos(self):
+        # type: () -> FilterIpv4Tos
+        """Factory property that returns an instance of the FilterIpv4Tos class
+
+        Type of service (TOS) packet field.
+
+        Returns: FilterIpv4Tos
+        """
+        return self._get_property("tos", FilterIpv4Tos, self, "tos")
+
+    @property
+    def dscp(self):
+        # type: () -> FilterIpv4Dscp
+        """Factory property that returns an instance of the FilterIpv4Dscp class
+
+        Differentiated services code point (DSCP) packet field.
+
+        Returns: FilterIpv4Dscp
+        """
+        return self._get_property("dscp", FilterIpv4Dscp, self, "dscp")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["dscp"], Literal["raw"], Literal["tos"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["dscp"], Literal["raw"], Literal["tos"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["dscp"], Literal["raw"], Literal["tos"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterIpv4Tos(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "precedence": {"type": "FilterField"},
+        "delay": {"type": "FilterField"},
+        "throughput": {"type": "FilterField"},
+        "reliability": {"type": "FilterField"},
+        "monetary": {"type": "FilterField"},
+        "unused": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIpv4Tos, self).__init__()
+        self._parent = parent
+
+    @property
+    def precedence(self):
+        # type: () -> FilterField
+        """precedence getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("precedence", FilterField)
+
+    @property
+    def delay(self):
+        # type: () -> FilterField
+        """delay getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("delay", FilterField)
+
+    @property
+    def throughput(self):
+        # type: () -> FilterField
+        """throughput getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("throughput", FilterField)
+
+    @property
+    def reliability(self):
+        # type: () -> FilterField
+        """reliability getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reliability", FilterField)
+
+    @property
+    def monetary(self):
+        # type: () -> FilterField
+        """monetary getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("monetary", FilterField)
+
+    @property
+    def unused(self):
+        # type: () -> FilterField
+        """unused getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("unused", FilterField)
+
+
+class FilterIpv4Dscp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "phb": {"type": "FilterField"},
+        "ecn": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIpv4Dscp, self).__init__()
+        self._parent = parent
+
+    @property
+    def phb(self):
+        # type: () -> FilterField
+        """phb getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("phb", FilterField)
+
+    @property
+    def ecn(self):
+        # type: () -> FilterField
+        """ecn getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ecn", FilterField)
+
+
+class FilterIpv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "traffic_class": {"type": "FilterField"},
+        "flow_label": {"type": "FilterField"},
+        "payload_length": {"type": "FilterField"},
+        "next_header": {"type": "FilterField"},
+        "hop_limit": {"type": "FilterField"},
+        "src": {"type": "FilterField"},
+        "dst": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIpv6, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def traffic_class(self):
+        # type: () -> FilterField
+        """traffic_class getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("traffic_class", FilterField)
+
+    @property
+    def flow_label(self):
+        # type: () -> FilterField
+        """flow_label getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("flow_label", FilterField)
+
+    @property
+    def payload_length(self):
+        # type: () -> FilterField
+        """payload_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("payload_length", FilterField)
+
+    @property
+    def next_header(self):
+        # type: () -> FilterField
+        """next_header getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("next_header", FilterField)
+
+    @property
+    def hop_limit(self):
+        # type: () -> FilterField
+        """hop_limit getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("hop_limit", FilterField)
+
+    @property
+    def src(self):
+        # type: () -> FilterField
+        """src getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("src", FilterField)
+
+    @property
+    def dst(self):
+        # type: () -> FilterField
+        """dst getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("dst", FilterField)
+
+
+class FilterPfcPause(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "dst": {"type": "FilterField"},
+        "src": {"type": "FilterField"},
+        "ether_type": {"type": "FilterField"},
+        "control_op_code": {"type": "FilterField"},
+        "class_enable_vector": {"type": "FilterField"},
+        "pause_class_0": {"type": "FilterField"},
+        "pause_class_1": {"type": "FilterField"},
+        "pause_class_2": {"type": "FilterField"},
+        "pause_class_3": {"type": "FilterField"},
+        "pause_class_4": {"type": "FilterField"},
+        "pause_class_5": {"type": "FilterField"},
+        "pause_class_6": {"type": "FilterField"},
+        "pause_class_7": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterPfcPause, self).__init__()
+        self._parent = parent
+
+    @property
+    def dst(self):
+        # type: () -> FilterField
+        """dst getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("dst", FilterField)
+
+    @property
+    def src(self):
+        # type: () -> FilterField
+        """src getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("src", FilterField)
+
+    @property
+    def ether_type(self):
+        # type: () -> FilterField
+        """ether_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ether_type", FilterField)
+
+    @property
+    def control_op_code(self):
+        # type: () -> FilterField
+        """control_op_code getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("control_op_code", FilterField)
+
+    @property
+    def class_enable_vector(self):
+        # type: () -> FilterField
+        """class_enable_vector getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("class_enable_vector", FilterField)
+
+    @property
+    def pause_class_0(self):
+        # type: () -> FilterField
+        """pause_class_0 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_0", FilterField)
+
+    @property
+    def pause_class_1(self):
+        # type: () -> FilterField
+        """pause_class_1 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_1", FilterField)
+
+    @property
+    def pause_class_2(self):
+        # type: () -> FilterField
+        """pause_class_2 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_2", FilterField)
+
+    @property
+    def pause_class_3(self):
+        # type: () -> FilterField
+        """pause_class_3 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_3", FilterField)
+
+    @property
+    def pause_class_4(self):
+        # type: () -> FilterField
+        """pause_class_4 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_4", FilterField)
+
+    @property
+    def pause_class_5(self):
+        # type: () -> FilterField
+        """pause_class_5 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_5", FilterField)
+
+    @property
+    def pause_class_6(self):
+        # type: () -> FilterField
+        """pause_class_6 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_6", FilterField)
+
+    @property
+    def pause_class_7(self):
+        # type: () -> FilterField
+        """pause_class_7 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pause_class_7", FilterField)
+
+
+class FilterEthernetPause(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "dst": {"type": "FilterField"},
+        "src": {"type": "FilterField"},
+        "ether_type": {"type": "FilterField"},
+        "control_op_code": {"type": "FilterField"},
+        "time": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterEthernetPause, self).__init__()
+        self._parent = parent
+
+    @property
+    def dst(self):
+        # type: () -> FilterField
+        """dst getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("dst", FilterField)
+
+    @property
+    def src(self):
+        # type: () -> FilterField
+        """src getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("src", FilterField)
+
+    @property
+    def ether_type(self):
+        # type: () -> FilterField
+        """ether_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ether_type", FilterField)
+
+    @property
+    def control_op_code(self):
+        # type: () -> FilterField
+        """control_op_code getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("control_op_code", FilterField)
+
+    @property
+    def time(self):
+        # type: () -> FilterField
+        """time getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("time", FilterField)
+
+
+class FilterTcp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "src_port": {"type": "FilterField"},
+        "dst_port": {"type": "FilterField"},
+        "seq_num": {"type": "FilterField"},
+        "ack_num": {"type": "FilterField"},
+        "data_offset": {"type": "FilterField"},
+        "ecn_ns": {"type": "FilterField"},
+        "ecn_cwr": {"type": "FilterField"},
+        "ecn_echo": {"type": "FilterField"},
+        "ctl_urg": {"type": "FilterField"},
+        "ctl_ack": {"type": "FilterField"},
+        "ctl_psh": {"type": "FilterField"},
+        "ctl_rst": {"type": "FilterField"},
+        "ctl_syn": {"type": "FilterField"},
+        "ctl_fin": {"type": "FilterField"},
+        "window": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterTcp, self).__init__()
+        self._parent = parent
+
+    @property
+    def src_port(self):
+        # type: () -> FilterField
+        """src_port getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("src_port", FilterField)
+
+    @property
+    def dst_port(self):
+        # type: () -> FilterField
+        """dst_port getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("dst_port", FilterField)
+
+    @property
+    def seq_num(self):
+        # type: () -> FilterField
+        """seq_num getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("seq_num", FilterField)
+
+    @property
+    def ack_num(self):
+        # type: () -> FilterField
+        """ack_num getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ack_num", FilterField)
+
+    @property
+    def data_offset(self):
+        # type: () -> FilterField
+        """data_offset getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("data_offset", FilterField)
+
+    @property
+    def ecn_ns(self):
+        # type: () -> FilterField
+        """ecn_ns getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ecn_ns", FilterField)
+
+    @property
+    def ecn_cwr(self):
+        # type: () -> FilterField
+        """ecn_cwr getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ecn_cwr", FilterField)
+
+    @property
+    def ecn_echo(self):
+        # type: () -> FilterField
+        """ecn_echo getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ecn_echo", FilterField)
+
+    @property
+    def ctl_urg(self):
+        # type: () -> FilterField
+        """ctl_urg getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_urg", FilterField)
+
+    @property
+    def ctl_ack(self):
+        # type: () -> FilterField
+        """ctl_ack getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_ack", FilterField)
+
+    @property
+    def ctl_psh(self):
+        # type: () -> FilterField
+        """ctl_psh getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_psh", FilterField)
+
+    @property
+    def ctl_rst(self):
+        # type: () -> FilterField
+        """ctl_rst getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_rst", FilterField)
+
+    @property
+    def ctl_syn(self):
+        # type: () -> FilterField
+        """ctl_syn getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_syn", FilterField)
+
+    @property
+    def ctl_fin(self):
+        # type: () -> FilterField
+        """ctl_fin getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ctl_fin", FilterField)
+
+    @property
+    def window(self):
+        # type: () -> FilterField
+        """window getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("window", FilterField)
+
+
+class FilterUdp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "src_port": {"type": "FilterField"},
+        "dst_port": {"type": "FilterField"},
+        "length": {"type": "FilterField"},
+        "checksum": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterUdp, self).__init__()
+        self._parent = parent
+
+    @property
+    def src_port(self):
+        # type: () -> FilterField
+        """src_port getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("src_port", FilterField)
+
+    @property
+    def dst_port(self):
+        # type: () -> FilterField
+        """dst_port getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("dst_port", FilterField)
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def checksum(self):
+        # type: () -> FilterField
+        """checksum getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum", FilterField)
+
+
+class FilterGre(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "checksum_present": {"type": "FilterField"},
+        "reserved0": {"type": "FilterField"},
+        "version": {"type": "FilterField"},
+        "protocol": {"type": "FilterField"},
+        "checksum": {"type": "FilterField"},
+        "reserved1": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterGre, self).__init__()
+        self._parent = parent
+
+    @property
+    def checksum_present(self):
+        # type: () -> FilterField
+        """checksum_present getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum_present", FilterField)
+
+    @property
+    def reserved0(self):
+        # type: () -> FilterField
+        """reserved0 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved0", FilterField)
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def protocol(self):
+        # type: () -> FilterField
+        """protocol getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol", FilterField)
+
+    @property
+    def checksum(self):
+        # type: () -> FilterField
+        """checksum getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum", FilterField)
+
+    @property
+    def reserved1(self):
+        # type: () -> FilterField
+        """reserved1 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved1", FilterField)
+
+
+class FilterGtpv1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "protocol_type": {"type": "FilterField"},
+        "reserved": {"type": "FilterField"},
+        "e_flag": {"type": "FilterField"},
+        "s_flag": {"type": "FilterField"},
+        "pn_flag": {"type": "FilterField"},
+        "message_type": {"type": "FilterField"},
+        "message_length": {"type": "FilterField"},
+        "teid": {"type": "FilterField"},
+        "squence_number": {"type": "FilterField"},
+        "n_pdu_number": {"type": "FilterField"},
+        "next_extension_header_type": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterGtpv1, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def protocol_type(self):
+        # type: () -> FilterField
+        """protocol_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol_type", FilterField)
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def e_flag(self):
+        # type: () -> FilterField
+        """e_flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("e_flag", FilterField)
+
+    @property
+    def s_flag(self):
+        # type: () -> FilterField
+        """s_flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("s_flag", FilterField)
+
+    @property
+    def pn_flag(self):
+        # type: () -> FilterField
+        """pn_flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("pn_flag", FilterField)
+
+    @property
+    def message_type(self):
+        # type: () -> FilterField
+        """message_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("message_type", FilterField)
+
+    @property
+    def message_length(self):
+        # type: () -> FilterField
+        """message_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("message_length", FilterField)
+
+    @property
+    def teid(self):
+        # type: () -> FilterField
+        """teid getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("teid", FilterField)
+
+    @property
+    def squence_number(self):
+        # type: () -> FilterField
+        """squence_number getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("squence_number", FilterField)
+
+    @property
+    def n_pdu_number(self):
+        # type: () -> FilterField
+        """n_pdu_number getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("n_pdu_number", FilterField)
+
+    @property
+    def next_extension_header_type(self):
+        # type: () -> FilterField
+        """next_extension_header_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("next_extension_header_type", FilterField)
+
+
+class FilterGtpv2(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "piggybacking_flag": {"type": "FilterField"},
+        "teid_flag": {"type": "FilterField"},
+        "spare1": {"type": "FilterField"},
+        "message_type": {"type": "FilterField"},
+        "message_length": {"type": "FilterField"},
+        "teid": {"type": "FilterField"},
+        "sequence_number": {"type": "FilterField"},
+        "spare2": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterGtpv2, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def piggybacking_flag(self):
+        # type: () -> FilterField
+        """piggybacking_flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("piggybacking_flag", FilterField)
+
+    @property
+    def teid_flag(self):
+        # type: () -> FilterField
+        """teid_flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("teid_flag", FilterField)
+
+    @property
+    def spare1(self):
+        # type: () -> FilterField
+        """spare1 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("spare1", FilterField)
+
+    @property
+    def message_type(self):
+        # type: () -> FilterField
+        """message_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("message_type", FilterField)
+
+    @property
+    def message_length(self):
+        # type: () -> FilterField
+        """message_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("message_length", FilterField)
+
+    @property
+    def teid(self):
+        # type: () -> FilterField
+        """teid getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("teid", FilterField)
+
+    @property
+    def sequence_number(self):
+        # type: () -> FilterField
+        """sequence_number getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("sequence_number", FilterField)
+
+    @property
+    def spare2(self):
+        # type: () -> FilterField
+        """spare2 getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("spare2", FilterField)
+
+
+class FilterArp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "hardware_type": {"type": "FilterField"},
+        "protocol_type": {"type": "FilterField"},
+        "hardware_length": {"type": "FilterField"},
+        "protocol_length": {"type": "FilterField"},
+        "operation": {"type": "FilterField"},
+        "sender_hardware_addr": {"type": "FilterField"},
+        "sender_protocol_addr": {"type": "FilterField"},
+        "target_hardware_addr": {"type": "FilterField"},
+        "target_protocol_addr": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterArp, self).__init__()
+        self._parent = parent
+
+    @property
+    def hardware_type(self):
+        # type: () -> FilterField
+        """hardware_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("hardware_type", FilterField)
+
+    @property
+    def protocol_type(self):
+        # type: () -> FilterField
+        """protocol_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol_type", FilterField)
+
+    @property
+    def hardware_length(self):
+        # type: () -> FilterField
+        """hardware_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("hardware_length", FilterField)
+
+    @property
+    def protocol_length(self):
+        # type: () -> FilterField
+        """protocol_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol_length", FilterField)
+
+    @property
+    def operation(self):
+        # type: () -> FilterField
+        """operation getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("operation", FilterField)
+
+    @property
+    def sender_hardware_addr(self):
+        # type: () -> FilterField
+        """sender_hardware_addr getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("sender_hardware_addr", FilterField)
+
+    @property
+    def sender_protocol_addr(self):
+        # type: () -> FilterField
+        """sender_protocol_addr getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("sender_protocol_addr", FilterField)
+
+    @property
+    def target_hardware_addr(self):
+        # type: () -> FilterField
+        """target_hardware_addr getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("target_hardware_addr", FilterField)
+
+    @property
+    def target_protocol_addr(self):
+        # type: () -> FilterField
+        """target_protocol_addr getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("target_protocol_addr", FilterField)
+
+
+class FilterIcmp(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "echo",
+            ],
+        },
+        "echo": {"type": "FilterIcmpEcho"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "echo",
+    }  # type: Dict[str, Union(type)]
+
+    ECHO = "echo"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterIcmp, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def echo(self):
+        # type: () -> FilterIcmpEcho
+        """Factory property that returns an instance of the FilterIcmpEcho class
+
+        TBD
+
+        Returns: FilterIcmpEcho
+        """
+        return self._get_property("echo", FilterIcmpEcho, self, "echo")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["echo"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["echo"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["echo"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterIcmpEcho(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "FilterField"},
+        "code": {"type": "FilterField"},
+        "checksum": {"type": "FilterField"},
+        "identifier": {"type": "FilterField"},
+        "sequence_number": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIcmpEcho, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> FilterField
+        """type getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("type", FilterField)
+
+    @property
+    def code(self):
+        # type: () -> FilterField
+        """code getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("code", FilterField)
+
+    @property
+    def checksum(self):
+        # type: () -> FilterField
+        """checksum getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum", FilterField)
+
+    @property
+    def identifier(self):
+        # type: () -> FilterField
+        """identifier getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("identifier", FilterField)
+
+    @property
+    def sequence_number(self):
+        # type: () -> FilterField
+        """sequence_number getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("sequence_number", FilterField)
+
+
+class FilterIcmpv6(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "echo",
+            ],
+        },
+        "echo": {"type": "FilterIcmpv6Echo"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "echo",
+    }  # type: Dict[str, Union(type)]
+
+    ECHO = "echo"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterIcmpv6, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def echo(self):
+        # type: () -> FilterIcmpv6Echo
+        """Factory property that returns an instance of the FilterIcmpv6Echo class
+
+        TBD
+
+        Returns: FilterIcmpv6Echo
+        """
+        return self._get_property("echo", FilterIcmpv6Echo, self, "echo")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["echo"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["echo"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["echo"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterIcmpv6Echo(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {"type": "FilterField"},
+        "code": {"type": "FilterField"},
+        "identifier": {"type": "FilterField"},
+        "sequence_number": {"type": "FilterField"},
+        "checksum": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIcmpv6Echo, self).__init__()
+        self._parent = parent
+
+    @property
+    def type(self):
+        # type: () -> FilterField
+        """type getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("type", FilterField)
+
+    @property
+    def code(self):
+        # type: () -> FilterField
+        """code getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("code", FilterField)
+
+    @property
+    def identifier(self):
+        # type: () -> FilterField
+        """identifier getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("identifier", FilterField)
+
+    @property
+    def sequence_number(self):
+        # type: () -> FilterField
+        """sequence_number getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("sequence_number", FilterField)
+
+    @property
+    def checksum(self):
+        # type: () -> FilterField
+        """checksum getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum", FilterField)
+
+
+class FilterPpp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "address": {"type": "FilterField"},
+        "control": {"type": "FilterField"},
+        "protocol_type": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterPpp, self).__init__()
+        self._parent = parent
+
+    @property
+    def address(self):
+        # type: () -> FilterField
+        """address getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("address", FilterField)
+
+    @property
+    def control(self):
+        # type: () -> FilterField
+        """control getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("control", FilterField)
+
+    @property
+    def protocol_type(self):
+        # type: () -> FilterField
+        """protocol_type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("protocol_type", FilterField)
+
+
+class FilterIgmpv1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "type": {"type": "FilterField"},
+        "unused": {"type": "FilterField"},
+        "checksum": {"type": "FilterField"},
+        "group_address": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterIgmpv1, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def type(self):
+        # type: () -> FilterField
+        """type getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("type", FilterField)
+
+    @property
+    def unused(self):
+        # type: () -> FilterField
+        """unused getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("unused", FilterField)
+
+    @property
+    def checksum(self):
+        # type: () -> FilterField
+        """checksum getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("checksum", FilterField)
+
+    @property
+    def group_address(self):
+        # type: () -> FilterField
+        """group_address getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("group_address", FilterField)
+
+
+class FilterMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "label": {"type": "FilterField"},
+        "traffic_class": {"type": "FilterField"},
+        "bottom_of_stack": {"type": "FilterField"},
+        "time_to_live": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterMpls, self).__init__()
+        self._parent = parent
+
+    @property
+    def label(self):
+        # type: () -> FilterField
+        """label getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("label", FilterField)
+
+    @property
+    def traffic_class(self):
+        # type: () -> FilterField
+        """traffic_class getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("traffic_class", FilterField)
+
+    @property
+    def bottom_of_stack(self):
+        # type: () -> FilterField
+        """bottom_of_stack getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("bottom_of_stack", FilterField)
+
+    @property
+    def time_to_live(self):
+        # type: () -> FilterField
+        """time_to_live getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("time_to_live", FilterField)
+
+
+class FilterSnmpv2c(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "community": {"type": "FilterField"},
+        "data": {"type": "FilterSnmpv2cData"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterSnmpv2c, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def community(self):
+        # type: () -> FilterField
+        """community getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("community", FilterField)
+
+    @property
+    def data(self):
+        # type: () -> FilterSnmpv2cData
+        """data getter
+
+        This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMPv2C message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
+
+        Returns: FilterSnmpv2cData
+        """
+        return self._get_property("data", FilterSnmpv2cData)
+
+
+class FilterSnmpv2cData(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "get_request",
+                "get_next_request",
+                "response",
+                "set_request",
+                "get_bulk_request",
+                "inform_request",
+                "snmpv2_trap",
+                "report",
+            ],
+        },
+        "get_request": {"type": "FilterSnmpv2cPDU"},
+        "get_next_request": {"type": "FilterSnmpv2cPDU"},
+        "response": {"type": "FilterSnmpv2cPDU"},
+        "set_request": {"type": "FilterSnmpv2cPDU"},
+        "get_bulk_request": {"type": "FilterSnmpv2cBulkPDU"},
+        "inform_request": {"type": "FilterSnmpv2cPDU"},
+        "snmpv2_trap": {"type": "FilterSnmpv2cPDU"},
+        "report": {"type": "FilterSnmpv2cPDU"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    GET_REQUEST = "get_request"  # type: str
+    GET_NEXT_REQUEST = "get_next_request"  # type: str
+    RESPONSE = "response"  # type: str
+    SET_REQUEST = "set_request"  # type: str
+    GET_BULK_REQUEST = "get_bulk_request"  # type: str
+    INFORM_REQUEST = "inform_request"  # type: str
+    SNMPV2_TRAP = "snmpv2_trap"  # type: str
+    REPORT = "report"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterSnmpv2cData, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def get_request(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property("get_request", FilterSnmpv2cPDU, self, "get_request")
+
+    @property
+    def get_next_request(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property(
+            "get_next_request", FilterSnmpv2cPDU, self, "get_next_request"
+        )
+
+    @property
+    def response(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property("response", FilterSnmpv2cPDU, self, "response")
+
+    @property
+    def set_request(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property("set_request", FilterSnmpv2cPDU, self, "set_request")
+
+    @property
+    def get_bulk_request(self):
+        # type: () -> FilterSnmpv2cBulkPDU
+        """Factory property that returns an instance of the FilterSnmpv2cBulkPDU class
+
+        The purpose of the GetBulkRequest-PDU is to request the transfer of potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
+
+        Returns: FilterSnmpv2cBulkPDU
+        """
+        return self._get_property(
+            "get_bulk_request", FilterSnmpv2cBulkPDU, self, "get_bulk_request"
+        )
+
+    @property
+    def inform_request(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property(
+            "inform_request", FilterSnmpv2cPDU, self, "inform_request"
+        )
+
+    @property
+    def snmpv2_trap(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property("snmpv2_trap", FilterSnmpv2cPDU, self, "snmpv2_trap")
+
+    @property
+    def report(self):
+        # type: () -> FilterSnmpv2cPDU
+        """Factory property that returns an instance of the FilterSnmpv2cPDU class
+
+        This contains the body of the SNMPv2C PDU.
+
+        Returns: FilterSnmpv2cPDU
+        """
+        return self._get_property("report", FilterSnmpv2cPDU, self, "report")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["get_bulk_request"], Literal["get_next_request"], Literal["get_request"], Literal["inform_request"], Literal["report"], Literal["response"], Literal["set_request"], Literal["snmpv2_trap"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class FilterSnmpv2cPDU(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "request_id": {"type": "FilterField"},
+        "error_status": {"type": "FilterField"},
+        "error_index": {"type": "FilterField"},
+        "variable_bindings": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterSnmpv2cPDU, self).__init__()
+        self._parent = parent
+
+    @property
+    def request_id(self):
+        # type: () -> FilterField
+        """request_id getter
+
+        TBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("request_id", FilterField)
+
+    @property
+    def error_status(self):
+        # type: () -> FilterField
+        """error_status getter
+
+        TBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("error_status", FilterField)
+
+    @property
+    def error_index(self):
+        # type: () -> FilterField
+        """error_index getter
+
+        TBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("error_index", FilterField)
+
+    @property
+    def variable_bindings(self):
+        # type: () -> FilterField
+        """variable_bindings getter
+
+        TBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("variable_bindings", FilterField)
+
+
+class FilterSnmpv2cBulkPDU(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "request_id": {"type": "FilterField"},
+        "non_repeaters": {"type": "FilterField"},
+        "max_repetitions": {"type": "FilterField"},
+        "variable_bindings": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterSnmpv2cBulkPDU, self).__init__()
+        self._parent = parent
+
+    @property
+    def request_id(self):
+        # type: () -> FilterField
+        """request_id getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("request_id", FilterField)
+
+    @property
+    def non_repeaters(self):
+        # type: () -> FilterField
+        """non_repeaters getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("non_repeaters", FilterField)
+
+    @property
+    def max_repetitions(self):
+        # type: () -> FilterField
+        """max_repetitions getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("max_repetitions", FilterField)
+
+    @property
+    def variable_bindings(self):
+        # type: () -> FilterField
+        """variable_bindings getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("variable_bindings", FilterField)
+
+
+class FilterRsvp(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "flag": {"type": "FilterField"},
+        "rsvp_checksum": {"type": "FilterField"},
+        "time_to_live": {"type": "FilterField"},
+        "reserved": {"type": "FilterField"},
+        "rsvp_length": {"type": "FilterField"},
+        "message_type": {"type": "FilterRSVPMessage"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRsvp, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def flag(self):
+        # type: () -> FilterField
+        """flag getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("flag", FilterField)
+
+    @property
+    def rsvp_checksum(self):
+        # type: () -> FilterField
+        """rsvp_checksum getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("rsvp_checksum", FilterField)
+
+    @property
+    def time_to_live(self):
+        # type: () -> FilterField
+        """time_to_live getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("time_to_live", FilterField)
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def rsvp_length(self):
+        # type: () -> FilterField
+        """rsvp_length getter
+
+        TBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("rsvp_length", FilterField)
+
+    @property
+    def message_type(self):
+        # type: () -> FilterRSVPMessage
+        """message_type getter
+
+
+
+        Returns: FilterRSVPMessage
+        """
+        return self._get_property("message_type", FilterRSVPMessage)
+
+
+class FilterRSVPMessage(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "path",
+            ],
+        },
+        "path": {"type": "FilterRSVPPathMessage"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "path",
+    }  # type: Dict[str, Union(type)]
+
+    PATH = "path"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPMessage, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def path(self):
+        # type: () -> FilterRSVPPathMessage
+        """Factory property that returns an instance of the FilterRSVPPathMessage class
+
+        "Path" message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15: 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE [optional]
+
+        Returns: FilterRSVPPathMessage
+        """
+        return self._get_property("path", FilterRSVPPathMessage, self, "path")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["path"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["path"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["path"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathMessage(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "objects": {"type": "FilterRSVPPathObjectsIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathMessage, self).__init__()
+        self._parent = parent
+
+    @property
+    def objects(self):
+        # type: () -> FilterRSVPPathObjectsIter
+        """objects getter
+
+        "Path" message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE and SENDER_TSPEC objects in order.
+
+        Returns: FilterRSVPPathObjectsIter
+        """
+        return self._get_property(
+            "objects", FilterRSVPPathObjectsIter, self._parent, self._choice
+        )
+
+
+class FilterRSVPPathObjects(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "class_num": {"type": "FilterRSVPPathObjectsClass"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjects, self).__init__()
+        self._parent = parent
+
+    @property
+    def class_num(self):
+        # type: () -> FilterRSVPPathObjectsClass
+        """class_num getter
+
+        The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.
+
+        Returns: FilterRSVPPathObjectsClass
+        """
+        return self._get_property("class_num", FilterRSVPPathObjectsClass)
+
+
+class FilterRSVPPathObjectsClass(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "session",
+                "rsvp_hop",
+                "time_values",
+                "explicit_route",
+                "label_request",
+                "session_attribute",
+                "sender_template",
+                "sender_tspec",
+                "record_route",
+                "custom",
+            ],
+        },
+        "session": {"type": "FilterRSVPPathObjectsClassSession"},
+        "rsvp_hop": {"type": "FilterRSVPPathObjectsClassRsvpHop"},
+        "time_values": {"type": "FilterRSVPPathObjectsClassTimeValues"},
+        "explicit_route": {"type": "FilterRSVPPathObjectsClassExplicitRoute"},
+        "label_request": {"type": "FilterRSVPPathObjectsClassLabelRequest"},
+        "session_attribute": {"type": "FilterRSVPPathObjectsClassSessionAttribute"},
+        "sender_template": {"type": "FilterRSVPPathObjectsClassSenderTemplate"},
+        "sender_tspec": {"type": "FilterRSVPPathObjectsClassSenderTspec"},
+        "record_route": {"type": "FilterRSVPPathObjectsClassRecordRoute"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    SESSION = "session"  # type: str
+    RSVP_HOP = "rsvp_hop"  # type: str
+    TIME_VALUES = "time_values"  # type: str
+    EXPLICIT_ROUTE = "explicit_route"  # type: str
+    LABEL_REQUEST = "label_request"  # type: str
+    SESSION_ATTRIBUTE = "session_attribute"  # type: str
+    SENDER_TEMPLATE = "sender_template"  # type: str
+    SENDER_TSPEC = "sender_tspec"  # type: str
+    RECORD_ROUTE = "record_route"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsClass, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def session(self):
+        # type: () -> FilterRSVPPathObjectsClassSession
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassSession class
+
+        TBD
+
+        Returns: FilterRSVPPathObjectsClassSession
+        """
+        return self._get_property(
+            "session", FilterRSVPPathObjectsClassSession, self, "session"
+        )
+
+    @property
+    def rsvp_hop(self):
+        # type: () -> FilterRSVPPathObjectsClassRsvpHop
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassRsvpHop class
+
+        TBD
+
+        Returns: FilterRSVPPathObjectsClassRsvpHop
+        """
+        return self._get_property(
+            "rsvp_hop", FilterRSVPPathObjectsClassRsvpHop, self, "rsvp_hop"
+        )
+
+    @property
+    def time_values(self):
+        # type: () -> FilterRSVPPathObjectsClassTimeValues
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassTimeValues class
+
+        Object for TIME_VALUES class. Currently supported c-type is Type Time Value (1).
+
+        Returns: FilterRSVPPathObjectsClassTimeValues
+        """
+        return self._get_property(
+            "time_values", FilterRSVPPathObjectsClassTimeValues, self, "time_values"
+        )
+
+    @property
+    def explicit_route(self):
+        # type: () -> FilterRSVPPathObjectsClassExplicitRoute
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassExplicitRoute class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassExplicitRoute
+        """
+        return self._get_property(
+            "explicit_route",
+            FilterRSVPPathObjectsClassExplicitRoute,
+            self,
+            "explicit_route",
+        )
+
+    @property
+    def label_request(self):
+        # type: () -> FilterRSVPPathObjectsClassLabelRequest
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassLabelRequest class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassLabelRequest
+        """
+        return self._get_property(
+            "label_request",
+            FilterRSVPPathObjectsClassLabelRequest,
+            self,
+            "label_request",
+        )
+
+    @property
+    def session_attribute(self):
+        # type: () -> FilterRSVPPathObjectsClassSessionAttribute
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassSessionAttribute class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassSessionAttribute
+        """
+        return self._get_property(
+            "session_attribute",
+            FilterRSVPPathObjectsClassSessionAttribute,
+            self,
+            "session_attribute",
+        )
+
+    @property
+    def sender_template(self):
+        # type: () -> FilterRSVPPathObjectsClassSenderTemplate
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassSenderTemplate class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassSenderTemplate
+        """
+        return self._get_property(
+            "sender_template",
+            FilterRSVPPathObjectsClassSenderTemplate,
+            self,
+            "sender_template",
+        )
+
+    @property
+    def sender_tspec(self):
+        # type: () -> FilterRSVPPathObjectsClassSenderTspec
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassSenderTspec class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassSenderTspec
+        """
+        return self._get_property(
+            "sender_tspec", FilterRSVPPathObjectsClassSenderTspec, self, "sender_tspec"
+        )
+
+    @property
+    def record_route(self):
+        # type: () -> FilterRSVPPathObjectsClassRecordRoute
+        """Factory property that returns an instance of the FilterRSVPPathObjectsClassRecordRoute class
+
+        C-Type is specific to class num.
+
+        Returns: FilterRSVPPathObjectsClassRecordRoute
+        """
+        return self._get_property(
+            "record_route", FilterRSVPPathObjectsClassRecordRoute, self, "record_route"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["custom"], Literal["explicit_route"], Literal["label_request"], Literal["record_route"], Literal["rsvp_hop"], Literal["sender_template"], Literal["sender_tspec"], Literal["session"], Literal["session_attribute"], Literal["time_values"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathObjectsClassSession(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsSessionCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassSession, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsSessionCType
+        """c_type getter
+
+        The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).
+
+        Returns: FilterRSVPPathObjectsSessionCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsSessionCType)
+
+
+class FilterRSVPPathObjectsSessionCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel_ipv4",
+            ],
+        },
+        "lsp_tunnel_ipv4": {"type": "FilterRSVPPathSessionLspTunnelIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel_ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL_IPV4 = "lsp_tunnel_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsSessionCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel_ipv4(self):
+        # type: () -> FilterRSVPPathSessionLspTunnelIpv4
+        """Factory property that returns an instance of the FilterRSVPPathSessionLspTunnelIpv4 class
+
+        TBD
+
+        Returns: FilterRSVPPathSessionLspTunnelIpv4
+        """
+        return self._get_property(
+            "lsp_tunnel_ipv4",
+            FilterRSVPPathSessionLspTunnelIpv4,
+            self,
+            "lsp_tunnel_ipv4",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel_ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathSessionLspTunnelIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_tunnel_end_point_address": {"type": "FilterField"},
+        "reserved": {"type": "FilterField"},
+        "tunnel_id": {"type": "FilterField"},
+        "extended_tunnel_id": {"type": "FilterRSVPPathSessionExtTunnelId"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathSessionLspTunnelIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_tunnel_end_point_address(self):
+        # type: () -> FilterField
+        """ipv4_tunnel_end_point_address getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ipv4_tunnel_end_point_address", FilterField)
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def tunnel_id(self):
+        # type: () -> FilterField
+        """tunnel_id getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("tunnel_id", FilterField)
+
+    @property
+    def extended_tunnel_id(self):
+        # type: () -> FilterRSVPPathSessionExtTunnelId
+        """extended_tunnel_id getter
+
+        A 32-bit identifier used in the SESSION that remains constant over the life of the tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of SESSION to the ingress-egress pair may place their IPv4 address here as globally unique identifier.
+
+        Returns: FilterRSVPPathSessionExtTunnelId
+        """
+        return self._get_property(
+            "extended_tunnel_id", FilterRSVPPathSessionExtTunnelId
+        )
+
+
+class FilterRSVPPathSessionExtTunnelId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "as_integer",
+                "as_ipv4",
+            ],
+        },
+        "as_integer": {"type": "FilterField"},
+        "as_ipv4": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "as_integer",
+    }  # type: Dict[str, Union(type)]
+
+    AS_INTEGER = "as_integer"  # type: str
+    AS_IPV4 = "as_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathSessionExtTunnelId, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def as_integer(self):
+        # type: () -> FilterField
+        """Factory property that returns an instance of the FilterField class
+
+        TBD
+
+        Returns: FilterField
+        """
+        return self._get_property("as_integer", FilterField, self, "as_integer")
+
+    @property
+    def as_ipv4(self):
+        # type: () -> FilterField
+        """Factory property that returns an instance of the FilterField class
+
+        TBD
+
+        Returns: FilterField
+        """
+        return self._get_property("as_ipv4", FilterField, self, "as_ipv4")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """choice getter
+
+        32 bit integer or IPv4 address.
+
+        Returns: Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        32 bit integer or IPv4 address.
+
+        value: Union[Literal["as_integer"], Literal["as_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathObjectsClassRsvpHop(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsRsvpHopCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassRsvpHop, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsRsvpHopCType
+        """c_type getter
+
+        Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+
+        Returns: FilterRSVPPathObjectsRsvpHopCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsRsvpHopCType)
+
+
+class FilterRSVPPathObjectsRsvpHopCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "ipv4",
+            ],
+        },
+        "ipv4": {"type": "FilterRSVPPathRsvpHopIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    IPV4 = "ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsRsvpHopCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def ipv4(self):
+        # type: () -> FilterRSVPPathRsvpHopIpv4
+        """Factory property that returns an instance of the FilterRSVPPathRsvpHopIpv4 class
+
+        TBD
+
+        Returns: FilterRSVPPathRsvpHopIpv4
+        """
+        return self._get_property("ipv4", FilterRSVPPathRsvpHopIpv4, self, "ipv4")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathRsvpHopIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_address": {"type": "FilterField"},
+        "logical_interface_handle": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathRsvpHopIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_address(self):
+        # type: () -> FilterField
+        """ipv4_address getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ipv4_address", FilterField)
+
+    @property
+    def logical_interface_handle(self):
+        # type: () -> FilterField
+        """logical_interface_handle getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("logical_interface_handle", FilterField)
+
+
+class FilterRSVPPathObjectsClassTimeValues(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FilterRSVPPathTimeValuesType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsClassTimeValues, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FilterRSVPPathTimeValuesType1
+        """Factory property that returns an instance of the FilterRSVPPathTimeValuesType1 class
+
+        TBD
+
+        Returns: FilterRSVPPathTimeValuesType1
+        """
+        return self._get_property(
+            "type_1", FilterRSVPPathTimeValuesType1, self, "type_1"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathTimeValuesType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "refresh_period_r": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathTimeValuesType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def refresh_period_r(self):
+        # type: () -> FilterField
+        """refresh_period_r getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("refresh_period_r", FilterField)
+
+
+class FilterRSVPPathObjectsClassExplicitRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsClassExplicitRouteCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassExplicitRoute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsClassExplicitRouteCType
+        """c_type getter
+
+        Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).Object for EXPLICIT_ROUTE class and c-type is Type Explicit Route (1).
+
+        Returns: FilterRSVPPathObjectsClassExplicitRouteCType
+        """
+        return self._get_property(
+            "c_type", FilterRSVPPathObjectsClassExplicitRouteCType
+        )
+
+
+class FilterRSVPPathObjectsClassExplicitRouteCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FilterRSVPPathExplicitRouteType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsClassExplicitRouteCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FilterRSVPPathExplicitRouteType1
+        """Factory property that returns an instance of the FilterRSVPPathExplicitRouteType1 class
+
+        TBD
+
+        Returns: FilterRSVPPathExplicitRouteType1
+        """
+        return self._get_property(
+            "type_1", FilterRSVPPathExplicitRouteType1, self, "type_1"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathExplicitRouteType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "subobjects": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathExplicitRouteType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def subobjects(self):
+        # type: () -> FilterField
+        """subobjects getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("subobjects", FilterField)
+
+
+class FilterRSVPPathObjectsClassLabelRequest(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsLabelRequestCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassLabelRequest, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsLabelRequestCType
+        """c_type getter
+
+        Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).
+
+        Returns: FilterRSVPPathObjectsLabelRequestCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsLabelRequestCType)
+
+
+class FilterRSVPPathObjectsLabelRequestCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "without_label_range",
+            ],
+        },
+        "without_label_range": {"type": "FilterRSVPPathLabelRequestWithoutLabelRange"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "without_label_range",
+    }  # type: Dict[str, Union(type)]
+
+    WITHOUT_LABEL_RANGE = "without_label_range"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsLabelRequestCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def without_label_range(self):
+        # type: () -> FilterRSVPPathLabelRequestWithoutLabelRange
+        """Factory property that returns an instance of the FilterRSVPPathLabelRequestWithoutLabelRange class
+
+        TBD
+
+        Returns: FilterRSVPPathLabelRequestWithoutLabelRange
+        """
+        return self._get_property(
+            "without_label_range",
+            FilterRSVPPathLabelRequestWithoutLabelRange,
+            self,
+            "without_label_range",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["without_label_range"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["without_label_range"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["without_label_range"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathLabelRequestWithoutLabelRange(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "reserved": {"type": "FilterField"},
+        "l3pid": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathLabelRequestWithoutLabelRange, self).__init__()
+        self._parent = parent
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def l3pid(self):
+        # type: () -> FilterField
+        """l3pid getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("l3pid", FilterField)
+
+
+class FilterRSVPPathObjectsClassSessionAttribute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsSessionAttributeCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassSessionAttribute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsSessionAttributeCType
+        """c_type getter
+
+        Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).
+
+        Returns: FilterRSVPPathObjectsSessionAttributeCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsSessionAttributeCType)
+
+
+class FilterRSVPPathObjectsSessionAttributeCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel",
+                "lsp_tunnel_ra",
+            ],
+        },
+        "lsp_tunnel": {"type": "FilterRSVPPathSessionAttributeLspTunnel"},
+        "lsp_tunnel_ra": {"type": "FilterRSVPPathSessionAttributeLspTunnelRa"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL = "lsp_tunnel"  # type: str
+    LSP_TUNNEL_RA = "lsp_tunnel_ra"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsSessionAttributeCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel(self):
+        # type: () -> FilterRSVPPathSessionAttributeLspTunnel
+        """Factory property that returns an instance of the FilterRSVPPathSessionAttributeLspTunnel class
+
+        TBD
+
+        Returns: FilterRSVPPathSessionAttributeLspTunnel
+        """
+        return self._get_property(
+            "lsp_tunnel", FilterRSVPPathSessionAttributeLspTunnel, self, "lsp_tunnel"
+        )
+
+    @property
+    def lsp_tunnel_ra(self):
+        # type: () -> FilterRSVPPathSessionAttributeLspTunnelRa
+        """Factory property that returns an instance of the FilterRSVPPathSessionAttributeLspTunnelRa class
+
+        TBD
+
+        Returns: FilterRSVPPathSessionAttributeLspTunnelRa
+        """
+        return self._get_property(
+            "lsp_tunnel_ra",
+            FilterRSVPPathSessionAttributeLspTunnelRa,
+            self,
+            "lsp_tunnel_ra",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel"], Literal["lsp_tunnel_ra"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathSessionAttributeLspTunnel(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "setup_priority": {"type": "FilterField"},
+        "holding_priority": {"type": "FilterField"},
+        "flags": {"type": "FilterField"},
+        "name_length": {"type": "FilterField"},
+        "session_name": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathSessionAttributeLspTunnel, self).__init__()
+        self._parent = parent
+
+    @property
+    def setup_priority(self):
+        # type: () -> FilterField
+        """setup_priority getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("setup_priority", FilterField)
+
+    @property
+    def holding_priority(self):
+        # type: () -> FilterField
+        """holding_priority getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("holding_priority", FilterField)
+
+    @property
+    def flags(self):
+        # type: () -> FilterField
+        """flags getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("flags", FilterField)
+
+    @property
+    def name_length(self):
+        # type: () -> FilterField
+        """name_length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("name_length", FilterField)
+
+    @property
+    def session_name(self):
+        # type: () -> FilterField
+        """session_name getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("session_name", FilterField)
+
+
+class FilterRSVPPathSessionAttributeLspTunnelRa(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "exclude_any": {"type": "FilterField"},
+        "include_any": {"type": "FilterField"},
+        "include_all": {"type": "FilterField"},
+        "setup_priority": {"type": "FilterField"},
+        "holding_priority": {"type": "FilterField"},
+        "flags": {"type": "FilterField"},
+        "name_length": {"type": "FilterField"},
+        "session_name": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathSessionAttributeLspTunnelRa, self).__init__()
+        self._parent = parent
+
+    @property
+    def exclude_any(self):
+        # type: () -> FilterField
+        """exclude_any getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("exclude_any", FilterField)
+
+    @property
+    def include_any(self):
+        # type: () -> FilterField
+        """include_any getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("include_any", FilterField)
+
+    @property
+    def include_all(self):
+        # type: () -> FilterField
+        """include_all getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("include_all", FilterField)
+
+    @property
+    def setup_priority(self):
+        # type: () -> FilterField
+        """setup_priority getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("setup_priority", FilterField)
+
+    @property
+    def holding_priority(self):
+        # type: () -> FilterField
+        """holding_priority getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("holding_priority", FilterField)
+
+    @property
+    def flags(self):
+        # type: () -> FilterField
+        """flags getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("flags", FilterField)
+
+    @property
+    def name_length(self):
+        # type: () -> FilterField
+        """name_length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("name_length", FilterField)
+
+    @property
+    def session_name(self):
+        # type: () -> FilterField
+        """session_name getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("session_name", FilterField)
+
+
+class FilterRSVPPathObjectsClassSenderTemplate(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsSenderTemplateCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassSenderTemplate, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsSenderTemplateCType
+        """c_type getter
+
+        Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+
+        Returns: FilterRSVPPathObjectsSenderTemplateCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsSenderTemplateCType)
+
+
+class FilterRSVPPathObjectsSenderTemplateCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "lsp_tunnel_ipv4",
+            ],
+        },
+        "lsp_tunnel_ipv4": {"type": "FilterRSVPPathSenderTemplateLspTunnelIpv4"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "lsp_tunnel_ipv4",
+    }  # type: Dict[str, Union(type)]
+
+    LSP_TUNNEL_IPV4 = "lsp_tunnel_ipv4"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsSenderTemplateCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def lsp_tunnel_ipv4(self):
+        # type: () -> FilterRSVPPathSenderTemplateLspTunnelIpv4
+        """Factory property that returns an instance of the FilterRSVPPathSenderTemplateLspTunnelIpv4 class
+
+        TBD
+
+        Returns: FilterRSVPPathSenderTemplateLspTunnelIpv4
+        """
+        return self._get_property(
+            "lsp_tunnel_ipv4",
+            FilterRSVPPathSenderTemplateLspTunnelIpv4,
+            self,
+            "lsp_tunnel_ipv4",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["lsp_tunnel_ipv4"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["lsp_tunnel_ipv4"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathSenderTemplateLspTunnelIpv4(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ipv4_tunnel_sender_address": {"type": "FilterField"},
+        "reserved": {"type": "FilterField"},
+        "lsp_id": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathSenderTemplateLspTunnelIpv4, self).__init__()
+        self._parent = parent
+
+    @property
+    def ipv4_tunnel_sender_address(self):
+        # type: () -> FilterField
+        """ipv4_tunnel_sender_address getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("ipv4_tunnel_sender_address", FilterField)
+
+    @property
+    def reserved(self):
+        # type: () -> FilterField
+        """reserved getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved", FilterField)
+
+    @property
+    def lsp_id(self):
+        # type: () -> FilterField
+        """lsp_id getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("lsp_id", FilterField)
+
+
+class FilterRSVPPathObjectsClassSenderTspec(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsSenderTspecCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassSenderTspec, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsSenderTspecCType
+        """c_type getter
+
+        Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+
+        Returns: FilterRSVPPathObjectsSenderTspecCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsSenderTspecCType)
+
+
+class FilterRSVPPathObjectsSenderTspecCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "int_serv",
+            ],
+        },
+        "int_serv": {"type": "FilterRSVPPathSenderTspecIntServ"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "int_serv",
+    }  # type: Dict[str, Union(type)]
+
+    INT_SERV = "int_serv"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsSenderTspecCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def int_serv(self):
+        # type: () -> FilterRSVPPathSenderTspecIntServ
+        """Factory property that returns an instance of the FilterRSVPPathSenderTspecIntServ class
+
+        TBD
+
+        Returns: FilterRSVPPathSenderTspecIntServ
+        """
+        return self._get_property(
+            "int_serv", FilterRSVPPathSenderTspecIntServ, self, "int_serv"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["int_serv"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["int_serv"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["int_serv"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathSenderTspecIntServ(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "FilterField"},
+        "reserved1": {"type": "FilterField"},
+        "overall_length": {"type": "FilterField"},
+        "service_header": {"type": "FilterField"},
+        "zero_bit": {"type": "FilterField"},
+        "reserved2": {"type": "FilterField"},
+        "length_of_service_data": {"type": "FilterField"},
+        "parameter_id_token_bucket_tspec": {"type": "FilterField"},
+        "parameter_127_flag": {"type": "FilterField"},
+        "parameter_127_length": {"type": "FilterField"},
+        "token_bucket_rate": {"type": "FilterField"},
+        "token_bucket_size": {"type": "FilterField"},
+        "peak_data_rate": {"type": "FilterField"},
+        "minimum_policed_unit": {"type": "FilterField"},
+        "maximum_packet_size": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathSenderTspecIntServ, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> FilterField
+        """version getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("version", FilterField)
+
+    @property
+    def reserved1(self):
+        # type: () -> FilterField
+        """reserved1 getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved1", FilterField)
+
+    @property
+    def overall_length(self):
+        # type: () -> FilterField
+        """overall_length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("overall_length", FilterField)
+
+    @property
+    def service_header(self):
+        # type: () -> FilterField
+        """service_header getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("service_header", FilterField)
+
+    @property
+    def zero_bit(self):
+        # type: () -> FilterField
+        """zero_bit getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("zero_bit", FilterField)
+
+    @property
+    def reserved2(self):
+        # type: () -> FilterField
+        """reserved2 getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("reserved2", FilterField)
+
+    @property
+    def length_of_service_data(self):
+        # type: () -> FilterField
+        """length_of_service_data getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("length_of_service_data", FilterField)
+
+    @property
+    def parameter_id_token_bucket_tspec(self):
+        # type: () -> FilterField
+        """parameter_id_token_bucket_tspec getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("parameter_id_token_bucket_tspec", FilterField)
+
+    @property
+    def parameter_127_flag(self):
+        # type: () -> FilterField
+        """parameter_127_flag getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("parameter_127_flag", FilterField)
+
+    @property
+    def parameter_127_length(self):
+        # type: () -> FilterField
+        """parameter_127_length getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("parameter_127_length", FilterField)
+
+    @property
+    def token_bucket_rate(self):
+        # type: () -> FilterField
+        """token_bucket_rate getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("token_bucket_rate", FilterField)
+
+    @property
+    def token_bucket_size(self):
+        # type: () -> FilterField
+        """token_bucket_size getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("token_bucket_size", FilterField)
+
+    @property
+    def peak_data_rate(self):
+        # type: () -> FilterField
+        """peak_data_rate getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("peak_data_rate", FilterField)
+
+    @property
+    def minimum_policed_unit(self):
+        # type: () -> FilterField
+        """minimum_policed_unit getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("minimum_policed_unit", FilterField)
+
+    @property
+    def maximum_packet_size(self):
+        # type: () -> FilterField
+        """maximum_packet_size getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("maximum_packet_size", FilterField)
+
+
+class FilterRSVPPathObjectsClassRecordRoute(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "length": {"type": "FilterField"},
+        "c_type": {"type": "FilterRSVPPathObjectsRecordRouteCType"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathObjectsClassRecordRoute, self).__init__()
+        self._parent = parent
+
+    @property
+    def length(self):
+        # type: () -> FilterField
+        """length getter
+
+        TBDTBDTBDTBDA 16-bit field containing the total object length in bytes. Must always be multiple of or at least 4.
+
+        Returns: FilterField
+        """
+        return self._get_property("length", FilterField)
+
+    @property
+    def c_type(self):
+        # type: () -> FilterRSVPPathObjectsRecordRouteCType
+        """c_type getter
+
+        Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).Object for RECORD_ROUTE class. c-type is Type Route Record (1).
+
+        Returns: FilterRSVPPathObjectsRecordRouteCType
+        """
+        return self._get_property("c_type", FilterRSVPPathObjectsRecordRouteCType)
+
+
+class FilterRSVPPathObjectsRecordRouteCType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_1",
+            ],
+        },
+        "type_1": {"type": "FilterRSVPPathRecordRouteType1"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "type_1",
+    }  # type: Dict[str, Union(type)]
+
+    TYPE_1 = "type_1"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsRecordRouteCType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_1(self):
+        # type: () -> FilterRSVPPathRecordRouteType1
+        """Factory property that returns an instance of the FilterRSVPPathRecordRouteType1 class
+
+        TBD
+
+        Returns: FilterRSVPPathRecordRouteType1
+        """
+        return self._get_property(
+            "type_1", FilterRSVPPathRecordRouteType1, self, "type_1"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_1"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["type_1"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["type_1"]]
+        """
+        self._set_property("choice", value)
+
+
+class FilterRSVPPathRecordRouteType1(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "subobjects": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterRSVPPathRecordRouteType1, self).__init__()
+        self._parent = parent
+
+    @property
+    def subobjects(self):
+        # type: () -> FilterField
+        """subobjects getter
+
+        TBDTBDTBDTBD
+
+        Returns: FilterField
+        """
+        return self._get_property("subobjects", FilterField)
+
+
+class FilterRSVPPathObjectsIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterRSVPPathObjectsIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FilterRSVPPathObjects]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FilterRSVPPathObjectsIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FilterRSVPPathObjects
+        return self._next()
+
+    def next(self):
+        # type: () -> FilterRSVPPathObjects
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FilterRSVPPathObjects):
+            raise Exception("Item is not an instance of FilterRSVPPathObjects")
+
+    def pathobjects(self):
+        # type: () -> FilterRSVPPathObjectsIter
+        """Factory method that creates an instance of the FilterRSVPPathObjects class
+
+        Every RSVP object encapsulated in an RSVP message consists of 32-bit word header and the object's contents.
+
+        Returns: FilterRSVPPathObjectsIter
+        """
+        item = FilterRSVPPathObjects(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FilterRSVPPathObjects
+        """Add method that creates and returns an instance of the FilterRSVPPathObjects class
+
+        Every RSVP object encapsulated in an RSVP message consists of 32-bit word header and the object's contents.
+
+        Returns: FilterRSVPPathObjects
+        """
+        item = FilterRSVPPathObjects(parent=self._parent)
+        self._add(item)
+        return item
+
+
+class FilterPacketIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterPacketIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FilterArp, FilterEthernet, FilterEthernetPause, FilterFieldCustom, FilterGre, FilterGtpv1, FilterGtpv2, FilterIcmp, FilterIcmpv6, FilterIgmpv1, FilterIpv4, FilterIpv6, FilterMpls, FilterPacket, FilterPfcPause, FilterPpp, FilterRsvp, FilterSnmpv2c, FilterTcp, FilterUdp, FilterVlan, FilterVxlan]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FilterPacketIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FilterPacket
+        return self._next()
+
+    def next(self):
+        # type: () -> FilterPacket
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FilterPacket):
+            raise Exception("Item is not an instance of FilterPacket")
+
+    def packet(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterPacket class
+
+        Configuration for filter packets
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> FilterPacket
+        """Add method that creates and returns an instance of the FilterPacket class
+
+        Configuration for filter packets
+
+        Returns: FilterPacket
+        """
+        item = FilterPacket(parent=self._parent, choice=self._choice)
+        self._add(item)
+        return item
+
+    def custom(self, offset="00", value="00", mask="00"):
+        # type: (str,str,str) -> FilterPacketIter
+        """Factory method that creates an instance of the FilterFieldCustom class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.custom
+        item.choice = "custom"
+        self._add(item)
+        return self
+
+    def ethernet(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterEthernet class
+
+        Ethernet packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.ethernet
+        item.choice = "ethernet"
+        self._add(item)
+        return self
+
+    def vlan(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterVlan class
+
+        VLAN packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.vlan
+        item.choice = "vlan"
+        self._add(item)
+        return self
+
+    def vxlan(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterVxlan class
+
+        VXLAN packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.vxlan
+        item.choice = "vxlan"
+        self._add(item)
+        return self
+
+    def ipv4(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterIpv4 class
+
+        IPv4 packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.ipv4
+        item.choice = "ipv4"
+        self._add(item)
+        return self
+
+    def ipv6(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterIpv6 class
+
+        IPv6 packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.ipv6
+        item.choice = "ipv6"
+        self._add(item)
+        return self
+
+    def pfcpause(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterPfcPause class
+
+        IEEE 802.1Qbb PFC Pause packet header.
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.pfcpause
+        item.choice = "pfcpause"
+        self._add(item)
+        return self
+
+    def ethernetpause(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterEthernetPause class
+
+        IEEE 802.3x global ethernet pause packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.ethernetpause
+        item.choice = "ethernetpause"
+        self._add(item)
+        return self
+
+    def tcp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterTcp class
+
+        TCP packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.tcp
+        item.choice = "tcp"
+        self._add(item)
+        return self
+
+    def udp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterUdp class
+
+        UDP packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.udp
+        item.choice = "udp"
+        self._add(item)
+        return self
+
+    def gre(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterGre class
+
+        Standard GRE packet header (RFC2784)
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.gre
+        item.choice = "gre"
+        self._add(item)
+        return self
+
+    def gtpv1(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterGtpv1 class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.gtpv1
+        item.choice = "gtpv1"
+        self._add(item)
+        return self
+
+    def gtpv2(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterGtpv2 class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.gtpv2
+        item.choice = "gtpv2"
+        self._add(item)
+        return self
+
+    def arp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterArp class
+
+        ARP packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.arp
+        item.choice = "arp"
+        self._add(item)
+        return self
+
+    def icmp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterIcmp class
+
+        ICMP packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.icmp
+        item.choice = "icmp"
+        self._add(item)
+        return self
+
+    def icmpv6(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterIcmpv6 class
+
+        ICMPv6 packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.icmpv6
+        item.choice = "icmpv6"
+        self._add(item)
+        return self
+
+    def ppp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterPpp class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.ppp
+        item.choice = "ppp"
+        self._add(item)
+        return self
+
+    def igmpv1(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterIgmpv1 class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.igmpv1
+        item.choice = "igmpv1"
+        self._add(item)
+        return self
+
+    def mpls(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterMpls class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.mpls
+        item.choice = "mpls"
+        self._add(item)
+        return self
+
+    def snmpv2c(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterSnmpv2c class
+
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.snmpv2c
+        item.choice = "snmpv2c"
+        self._add(item)
+        return self
+
+    def rsvp(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterRsvp class
+
+        TBD
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.rsvp
+        item.choice = "rsvp"
+        self._add(item)
+        return self
+
+
+class FilterMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(FilterMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[FilterMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> FilterMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> FilterMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> FilterMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, FilterMetric):
+            raise Exception("Item is not an instance of FilterMetric")
+
+    def filtermetric(self, name=None):
+        # type: (str) -> FilterMetricIter
+        """Factory method that creates an instance of the FilterMetric class
+
+        Under Review: There may be changes in filter_metric configuration. Configuration for FilterMetrics settings.
+
+        Returns: FilterMetricIter
+        """
+        item = FilterMetric(parent=self._parent, name=name)
+        self._add(item)
+        return self
+
+    def add(self, name=None):
+        # type: (str) -> FilterMetric
+        """Add method that creates and returns an instance of the FilterMetric class
+
+        Under Review: There may be changes in filter_metric configuration. Configuration for FilterMetrics settings.
+
+        Returns: FilterMetric
+        """
+        item = FilterMetric(parent=self._parent, name=name)
+        self._add(item)
+        return item
+
+
 class Warning(OpenApiObject):
     __slots__ = "_parent"
 
@@ -115208,7 +121158,7 @@ class StatePortLink(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115218,7 +121168,7 @@ class StatePortLink(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of target ports. An empty or null list will target all ports.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115290,7 +121240,7 @@ class StatePortCapture(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115300,7 +121250,7 @@ class StatePortCapture(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of ports to which the capture state will be applied to. If the list of port_names is empty or null the state will be applied to all configured ports.. If the list is not empty any port that is not included in the list of port_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115552,7 +121502,7 @@ class StateProtocolRoute(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -115562,7 +121512,7 @@ class StateProtocolRoute(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. . x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
+        The names of device route objects to control. If no names are specified then all route objects that match the x-constraint will be affected.. x-constraint:. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -115718,7 +121668,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115728,7 +121678,7 @@ class StateProtocolLacpAdmin(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115800,7 +121750,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
         # type: () -> List[str]
         """lag_member_names getter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -115810,7 +121760,7 @@ class StateProtocolLacpMemberPorts(OpenApiObject):
     def lag_member_names(self, value):
         """lag_member_names setter
 
-        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -115950,7 +121900,7 @@ class StateProtocolBgpPeers(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -115960,7 +121910,7 @@ class StateProtocolBgpPeers(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -116100,7 +122050,7 @@ class StateProtocolIsisRouters(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -116110,7 +122060,7 @@ class StateProtocolIsisRouters(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -116256,7 +122206,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -116266,7 +122216,7 @@ class StateTrafficFlowTransmit(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.. If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -116594,7 +122544,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -116604,7 +122554,7 @@ class ActionProtocolIpv4PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface to be used.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -116666,7 +122616,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequestIter
         """
@@ -116680,7 +122630,7 @@ class ActionProtocolIpv4PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv4PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv4PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv4PingRequest
         """
@@ -116825,7 +122775,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -116835,7 +122785,7 @@ class ActionProtocolIpv6PingRequest(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface to be used.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -116897,7 +122847,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequestIter
         """Factory method that creates an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequestIter
         """
@@ -116911,7 +122861,7 @@ class ActionProtocolIpv6PingRequestIter(OpenApiIter):
         # type: (str,str) -> ActionProtocolIpv6PingRequest
         """Add method that creates and returns an instance of the ActionProtocolIpv6PingRequest class
 
-        Under Review: Most ping request parameters are still TBD.. Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
+        Under Review: Most ping request parameters are still TBD.. Request for initiating ping between single source and destination pair.. For ping request, IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 
         Returns: ActionProtocolIpv6PingRequest
         """
@@ -117177,7 +123127,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
         # type: () -> List[str]
         """names getter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -117187,7 +123137,7 @@ class ActionProtocolBgpNotification(OpenApiObject):
     def names(self, value):
         """names setter
 
-        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -117664,7 +123614,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         Returns: List[str]
         """
@@ -117674,7 +123624,7 @@ class ActionProtocolBgpInitiateGracefulRestart(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name. . x-constraint:. /components/schemas/Device.Bgp/properties/name.
+        The names of device BGP peers objects to control.. x-constraint:. /components/schemas/Device.Bgp/properties/name.
 
         value: List[str]
         """
@@ -118058,7 +124008,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -118068,7 +124018,7 @@ class ActionResponseProtocolIpv4PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        Name of source IPv4 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -118330,7 +124280,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
         # type: () -> str
         """src_name getter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -118340,7 +124290,7 @@ class ActionResponseProtocolIpv6PingResponse(OpenApiObject):
     def src_name(self, value):
         """src_name setter
 
-        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. . x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        Name of source IPv6 interface used for ping.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -118472,6 +124422,7 @@ class MetricsRequest(OpenApiObject):
                 "lacp",
                 "lldp",
                 "rsvp",
+                "user_defined_metrics",
             ],
         },
         "port": {"type": "PortMetricsRequest"},
@@ -118483,6 +124434,7 @@ class MetricsRequest(OpenApiObject):
         "lacp": {"type": "LacpMetricsRequest"},
         "lldp": {"type": "LldpMetricsRequest"},
         "rsvp": {"type": "RsvpMetricsRequest"},
+        "user_defined": {"type": "UserDefinedMetricsRequest"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -118500,6 +124452,7 @@ class MetricsRequest(OpenApiObject):
     LACP = "lacp"  # type: str
     LLDP = "lldp"  # type: str
     RSVP = "rsvp"  # type: str
+    USER_DEFINED_METRICS = "user_defined_metrics"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -118616,12 +124569,12 @@ class MetricsRequest(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
         """
         return self._get_property("choice")
 
@@ -118631,9 +124584,20 @@ class MetricsRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"], Literal["user_defined_metrics"]]
         """
         self._set_property("choice", value)
+
+    @property
+    def user_defined(self):
+        # type: () -> UserDefinedMetricsRequest
+        """user_defined getter
+
+        The user defined metrics result request to the traffic generatorThe user defined metrics result request to the traffic generatorThe user defined metrics result request to the traffic generator
+
+        Returns: UserDefinedMetricsRequest
+        """
+        return self._get_property("user_defined", UserDefinedMetricsRequest)
 
 
 class PortMetricsRequest(OpenApiObject):
@@ -118699,7 +124663,7 @@ class PortMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """port_names getter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -118709,7 +124673,7 @@ class PortMetricsRequest(OpenApiObject):
     def port_names(self, value):
         """port_names setter
 
-        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of objects to return results for. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -118791,7 +124755,7 @@ class FlowMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """flow_names getter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         Returns: List[str]
         """
@@ -118801,7 +124765,7 @@ class FlowMetricsRequest(OpenApiObject):
     def flow_names(self, value):
         """flow_names setter
 
-        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name. . x-constraint:. /components/schemas/Flow/properties/name.
+        Flow metrics will be retrieved for these flow names.. If no flow names are specified then all flows will be returned.. x-constraint:. /components/schemas/Flow/properties/name.
 
         value: List[str]
         """
@@ -119165,7 +125129,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         Returns: List[str]
         """
@@ -119175,7 +125139,7 @@ class Bgpv4MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
+        The names of BGPv4 peers to return results for. An empty list will return results for all BGPv4 peers.. x-constraint:. /components/schemas/Bgp.V4peer/properties/name.
 
         value: List[str]
         """
@@ -119274,7 +125238,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """peer_names getter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         Returns: List[str]
         """
@@ -119284,7 +125248,7 @@ class Bgpv6MetricsRequest(OpenApiObject):
     def peer_names(self, value):
         """peer_names setter
 
-        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name. . x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
+        The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.. x-constraint:. /components/schemas/Bgp.V6peer/properties/name.
 
         value: List[str]
         """
@@ -119403,7 +125367,7 @@ class IsisMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -119413,7 +125377,7 @@ class IsisMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -119500,7 +125464,7 @@ class LagMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -119510,7 +125474,7 @@ class LagMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAGs to return results for. An empty list will return results for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -119614,7 +125578,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_names getter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: List[str]
         """
@@ -119624,7 +125588,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_names(self, value):
         """lag_names setter
 
-        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: List[str]
         """
@@ -119635,7 +125599,7 @@ class LacpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lag_member_port_names getter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: List[str]
         """
@@ -119645,7 +125609,7 @@ class LacpMetricsRequest(OpenApiObject):
     def lag_member_port_names(self, value):
         """lag_member_port_names setter
 
-        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: List[str]
         """
@@ -119724,7 +125688,7 @@ class LldpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -119734,7 +125698,7 @@ class LldpMetricsRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -119861,7 +125825,7 @@ class RsvpMetricsRequest(OpenApiObject):
         # type: () -> List[str]
         """router_names getter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -119871,7 +125835,7 @@ class RsvpMetricsRequest(OpenApiObject):
     def router_names(self, value):
         """router_names setter
 
-        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -119899,6 +125863,159 @@ class RsvpMetricsRequest(OpenApiObject):
         self._set_property("column_names", value)
 
 
+class UserDefinedMetricsRequest(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "port_names",
+                "flow_names",
+            ],
+        },
+        "port_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "flow_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "column_names": {
+            "type": list,
+            "enum": [
+                "frames_tx",
+                "frames_rx",
+            ],
+            "itemtype": str,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    PORT_NAMES = "port_names"  # type: str
+    FLOW_NAMES = "flow_names"  # type: str
+
+    FRAMES_TX = "frames_tx"  # type: str
+    FRAMES_RX = "frames_rx"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        port_names=None,
+        flow_names=None,
+        column_names=None,
+    ):
+        super(UserDefinedMetricsRequest, self).__init__()
+        self._parent = parent
+        self._set_property("port_names", port_names)
+        self._set_property("flow_names", flow_names)
+        self._set_property("column_names", column_names)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, port_names=None, flow_names=None, column_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["flow_names"], Literal["port_names"]]
+        """choice getter
+
+        The type
+
+        Returns: Union[Literal["flow_names"], Literal["port_names"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type
+
+        value: Union[Literal["flow_names"], Literal["port_names"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def port_names(self):
+        # type: () -> List[str]
+        """port_names getter
+
+        Names of ports for which to return results.. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("port_names")
+
+    @port_names.setter
+    def port_names(self, value):
+        """port_names setter
+
+        Names of ports for which to return results.. An empty list will return all port row results.. x-constraint:. /components/schemas/Port/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("port_names", value, "port_names")
+
+    @property
+    def flow_names(self):
+        # type: () -> List[str]
+        """flow_names getter
+
+        Names of flows for which to return results.. An empty list will return all flow row results.. x-constraint:. /components/schemas/Flow/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("flow_names")
+
+    @flow_names.setter
+    def flow_names(self, value):
+        """flow_names setter
+
+        Names of flows for which to return results.. An empty list will return all flow row results.. x-constraint:. /components/schemas/Flow/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("flow_names", value, "flow_names")
+
+    @property
+    def column_names(self):
+        # type: () -> List[Union[Literal["frames_rx"], Literal["frames_tx"]]]
+        """column_names getter
+
+        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
+
+        Returns: List[Union[Literal["frames_rx"], Literal["frames_tx"]]]
+        """
+        return self._get_property("column_names")
+
+    @column_names.setter
+    def column_names(self, value):
+        """column_names setter
+
+        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
+
+        value: List[Union[Literal["frames_rx"], Literal["frames_tx"]]]
+        """
+        self._set_property("column_names", value)
+
+
 class MetricsResponse(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -119915,6 +126032,7 @@ class MetricsResponse(OpenApiObject):
                 "lacp_metrics",
                 "lldp_metrics",
                 "rsvp_metrics",
+                "user_defined_metrics",
             ],
         },
         "port_metrics": {"type": "PortMetricIter"},
@@ -119926,6 +126044,7 @@ class MetricsResponse(OpenApiObject):
         "lacp_metrics": {"type": "LacpMetricIter"},
         "lldp_metrics": {"type": "LldpMetricIter"},
         "rsvp_metrics": {"type": "RsvpMetricIter"},
+        "user_defined_metrics": {"type": "UserDefinedMetricIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -119943,6 +126062,7 @@ class MetricsResponse(OpenApiObject):
     LACP_METRICS = "lacp_metrics"  # type: str
     LLDP_METRICS = "lldp_metrics"  # type: str
     RSVP_METRICS = "rsvp_metrics"  # type: str
+    USER_DEFINED_METRICS = "user_defined_metrics"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -119960,12 +126080,12 @@ class MetricsResponse(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"], Literal["user_defined_metrics"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"], Literal["user_defined_metrics"]]
         """
         return self._get_property("choice")
 
@@ -119975,7 +126095,7 @@ class MetricsResponse(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"], Literal["user_defined_metrics"]]
         """
         self._set_property("choice", value)
 
@@ -120094,6 +126214,19 @@ class MetricsResponse(OpenApiObject):
         """
         return self._get_property(
             "rsvp_metrics", RsvpMetricIter, self._parent, self._choice
+        )
+
+    @property
+    def user_defined_metrics(self):
+        # type: () -> UserDefinedMetricIter
+        """user_defined_metrics getter
+
+        TBD
+
+        Returns: UserDefinedMetricIter
+        """
+        return self._get_property(
+            "user_defined_metrics", UserDefinedMetricIter, self._parent, self._choice
         )
 
 
@@ -120219,7 +126352,7 @@ class PortMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -120229,7 +126362,7 @@ class PortMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured port. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of configured port. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """
@@ -124173,7 +130306,7 @@ class LagMetric(OpenApiObject):
         # type: () -> str
         """name getter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         Returns: str
         """
@@ -124183,7 +130316,7 @@ class LagMetric(OpenApiObject):
     def name(self, value):
         """name setter
 
-        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name. . x-constraint:. /components/schemas/Lag/properties/name.
+        The name of configured LAG. x-constraint:. /components/schemas/Lag/properties/name.
 
         value: str
         """
@@ -126534,6 +132667,306 @@ class RsvpMetricIter(OpenApiIter):
         return item
 
 
+class UserDefinedMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "frames_tx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "frames_rx": {
+            "type": int,
+            "format": "uint64",
+        },
+        "filtered_metrics": {"type": "UserDefinedFilterMetricIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, name=None, frames_tx=None, frames_rx=None):
+        super(UserDefinedMetric, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("frames_tx", frames_tx)
+        self._set_property("frames_rx", frames_rx)
+
+    def set(self, name=None, frames_tx=None, frames_rx=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        The name of configured port/flow. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        The name of configured port/flow. x-constraint:. /components/schemas/Port/properties/name. /components/schemas/Flow/properties/name.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def frames_tx(self):
+        # type: () -> int
+        """frames_tx getter
+
+        The current total number of frames transmitted
+
+        Returns: int
+        """
+        return self._get_property("frames_tx")
+
+    @frames_tx.setter
+    def frames_tx(self, value):
+        """frames_tx setter
+
+        The current total number of frames transmitted
+
+        value: int
+        """
+        self._set_property("frames_tx", value)
+
+    @property
+    def frames_rx(self):
+        # type: () -> int
+        """frames_rx getter
+
+        The current total number of valid frames received
+
+        Returns: int
+        """
+        return self._get_property("frames_rx")
+
+    @frames_rx.setter
+    def frames_rx(self, value):
+        """frames_rx setter
+
+        The current total number of valid frames received
+
+        value: int
+        """
+        self._set_property("frames_rx", value)
+
+    @property
+    def filtered_metrics(self):
+        # type: () -> UserDefinedFilterMetricIter
+        """filtered_metrics getter
+
+        List of metrics corresponding to set of values applicable. for configured filter metrics object in the corresponding port or flow.. The container is keyed by list of tag-value pairs.
+
+        Returns: UserDefinedFilterMetricIter
+        """
+        return self._get_property(
+            "filtered_metrics", UserDefinedFilterMetricIter, self._parent, self._choice
+        )
+
+
+class UserDefinedFilterMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "filter_name": {"type": str},
+        "filter_value": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, filter_name=None, filter_value=None):
+        super(UserDefinedFilterMetric, self).__init__()
+        self._parent = parent
+        self._set_property("filter_name", filter_name)
+        self._set_property("filter_value", filter_value)
+
+    def set(self, filter_name=None, filter_value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def filter_name(self):
+        # type: () -> str
+        """filter_name getter
+
+        Name of the filter metrics
+
+        Returns: str
+        """
+        return self._get_property("filter_name")
+
+    @filter_name.setter
+    def filter_name(self, value):
+        """filter_name setter
+
+        Name of the filter metrics
+
+        value: str
+        """
+        self._set_property("filter_name", value)
+
+    @property
+    def filter_value(self):
+        # type: () -> int
+        """filter_value getter
+
+        The current total number of frames adhering to the filter condition
+
+        Returns: int
+        """
+        return self._get_property("filter_value")
+
+    @filter_value.setter
+    def filter_value(self, value):
+        """filter_value setter
+
+        The current total number of frames adhering to the filter condition
+
+        value: int
+        """
+        self._set_property("filter_value", value)
+
+
+class UserDefinedFilterMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UserDefinedFilterMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UserDefinedFilterMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UserDefinedFilterMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UserDefinedFilterMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> UserDefinedFilterMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UserDefinedFilterMetric):
+            raise Exception("Item is not an instance of UserDefinedFilterMetric")
+
+    def metric(self, filter_name=None, filter_value=None):
+        # type: (str,int) -> UserDefinedFilterMetricIter
+        """Factory method that creates an instance of the UserDefinedFilterMetric class
+
+        Metrics for each set of values applicable for configured. metric tags in ingress or egress packet header fields of corresponding flow.. The container is keyed by list of tag-value pairs.
+
+        Returns: UserDefinedFilterMetricIter
+        """
+        item = UserDefinedFilterMetric(
+            parent=self._parent, filter_name=filter_name, filter_value=filter_value
+        )
+        self._add(item)
+        return self
+
+    def add(self, filter_name=None, filter_value=None):
+        # type: (str,int) -> UserDefinedFilterMetric
+        """Add method that creates and returns an instance of the UserDefinedFilterMetric class
+
+        Metrics for each set of values applicable for configured. metric tags in ingress or egress packet header fields of corresponding flow.. The container is keyed by list of tag-value pairs.
+
+        Returns: UserDefinedFilterMetric
+        """
+        item = UserDefinedFilterMetric(
+            parent=self._parent, filter_name=filter_name, filter_value=filter_value
+        )
+        self._add(item)
+        return item
+
+
+class UserDefinedMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(UserDefinedMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[UserDefinedMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> UserDefinedMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> UserDefinedMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> UserDefinedMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, UserDefinedMetric):
+            raise Exception("Item is not an instance of UserDefinedMetric")
+
+    def metric(self, name=None, frames_tx=None, frames_rx=None):
+        # type: (str,int,int) -> UserDefinedMetricIter
+        """Factory method that creates an instance of the UserDefinedMetric class
+
+        TBD
+
+        Returns: UserDefinedMetricIter
+        """
+        item = UserDefinedMetric(
+            parent=self._parent, name=name, frames_tx=frames_tx, frames_rx=frames_rx
+        )
+        self._add(item)
+        return self
+
+    def add(self, name=None, frames_tx=None, frames_rx=None):
+        # type: (str,int,int) -> UserDefinedMetric
+        """Add method that creates and returns an instance of the UserDefinedMetric class
+
+        TBD
+
+        Returns: UserDefinedMetric
+        """
+        item = UserDefinedMetric(
+            parent=self._parent, name=name, frames_tx=frames_tx, frames_rx=frames_rx
+        )
+        self._add(item)
+        return item
+
+
 class StatesRequest(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -126711,7 +133144,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -126721,7 +133154,7 @@ class Neighborsv4StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -126759,7 +133192,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
         # type: () -> List[str]
         """ethernet_names getter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         Returns: List[str]
         """
@@ -126769,7 +133202,7 @@ class Neighborsv6StatesRequest(OpenApiObject):
     def ethernet_names(self, value):
         """ethernet_names setter
 
-        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name. . x-constraint:. /components/schemas/Device.Ethernet/properties/name.
+        The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
 
         value: List[str]
         """
@@ -126821,7 +133254,7 @@ class BgpPrefixStateRequest(OpenApiObject):
         # type: () -> List[str]
         """bgp_peer_names getter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         Returns: List[str]
         """
@@ -126831,7 +133264,7 @@ class BgpPrefixStateRequest(OpenApiObject):
     def bgp_peer_names(self, value):
         """bgp_peer_names setter
 
-        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name. . x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
+        The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.. x-constraint:. /components/schemas/Bgp.V4Peer/properties/name. /components/schemas/Bgp.V6Peer/properties/name.
 
         value: List[str]
         """
@@ -127332,7 +133765,7 @@ class IsisLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """isis_router_names getter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         Returns: List[str]
         """
@@ -127342,7 +133775,7 @@ class IsisLspsStateRequest(OpenApiObject):
     def isis_router_names(self, value):
         """isis_router_names setter
 
-        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name. . x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
+        The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.. x-constraint:. /components/schemas/Device.IsisRouter/properties/name.
 
         value: List[str]
         """
@@ -127385,7 +133818,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """lldp_names getter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         Returns: List[str]
         """
@@ -127395,7 +133828,7 @@ class LldpNeighborsStateRequest(OpenApiObject):
     def lldp_names(self, value):
         """lldp_names setter
 
-        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name. . x-constraint:. /components/schemas/Lldp/properties/name.
+        The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.. x-constraint:. /components/schemas/Lldp/properties/name.
 
         value: List[str]
         """
@@ -127454,7 +133887,7 @@ class RsvpLspsStateRequest(OpenApiObject):
         # type: () -> List[str]
         """rsvp_router_names getter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         Returns: List[str]
         """
@@ -127464,7 +133897,7 @@ class RsvpLspsStateRequest(OpenApiObject):
     def rsvp_router_names(self, value):
         """rsvp_router_names setter
 
-        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name. . x-constraint:. /components/schemas/Device.Rsvp/properties/name.
+        The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.. x-constraint:. /components/schemas/Device.Rsvp/properties/name.
 
         value: List[str]
         """
@@ -133309,7 +139742,7 @@ class CaptureRequest(OpenApiObject):
         # type: () -> str
         """port_name getter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         Returns: str
         """
@@ -133319,7 +139752,7 @@ class CaptureRequest(OpenApiObject):
     def port_name(self, value):
         """port_name setter
 
-        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name. . x-constraint:. /components/schemas/Port/properties/name.
+        The name of port capture is started on.. x-constraint:. /components/schemas/Port/properties/name.
 
         value: str
         """

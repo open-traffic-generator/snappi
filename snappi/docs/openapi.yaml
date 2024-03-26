@@ -297,6 +297,18 @@ components:
           items:
             $ref: '#/components/schemas/Lldp'
           x-field-uid: 9
+        filter_metrics:
+          x-status:
+            status: under_review
+            information: There may be changes in filter_metrics configuration
+          description: |-
+            Under Review: There may be changes in filter_metrics configuration
+
+            The filter_metrics that will be configured on traffic generator.
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterMetric'
+          x-field-uid: 10
     Config.Options:
       description: |-
         Global configuration options.
@@ -388,8 +400,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -643,10 +654,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -657,10 +664,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -668,11 +671,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -789,10 +787,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -894,8 +888,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -957,8 +950,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -1052,8 +1044,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -1064,8 +1054,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -1273,8 +1261,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -1284,10 +1270,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -1694,8 +1676,7 @@ components:
         eth_name:
           description: "The unique name of the Ethernet interface on which ISIS is\
             \ running. Two ISIS interfaces cannot share the same Ethernet.       \
-            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2859,11 +2840,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -3802,8 +3778,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -4334,8 +4308,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -6405,11 +6377,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -6727,11 +6694,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -6768,11 +6730,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -6982,7 +6939,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -7071,11 +7027,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -7643,10 +7594,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -7727,11 +7675,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -7741,14 +7684,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -7764,11 +7700,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -7873,18 +7804,6 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
         rx_names:
           type: array
           items:
@@ -7912,18 +7831,6 @@ components:
           x-field-uid: 3
           description: |
             TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -8145,6 +8052,271 @@ components:
         pfc_queue:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.PfcQueue'
+    Filter.Ethernet:
+      description: |-
+        Ethernet packet header
+      type: object
+      properties:
+        dst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        src:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        ether_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        pfc_queue:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+    FilterMetric:
+      x-status:
+        status: under_review
+        information: There may be changes in filter_metric configuration
+      description: |-
+        Under Review: There may be changes in filter_metric configuration
+
+        Configuration for FilterMetrics settings.
+      type: object
+      required:
+      - name
+      properties:
+        association:
+          description: |-
+            Association.
+          $ref: '#/components/schemas/FilterMetric.Association'
+          x-field-uid: 1
+        receive_filters:
+          description: |-
+            A list of filters to apply to the packet receiving ports. If no filters are specified then all packets will be counted. A filter_metric can have multiple filters. The number of filters supported is determined by the implementation.
+            When multiple filters are specified then implementation must && (and) all the filters.
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter.Packet'
+          minItems: 1
+          maxItems: 32
+          x-field-uid: 2
+        name:
+          x-field-uid: 3
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+    FilterMetric.Association:
+      description: |-
+        Configuration for filter_metric Association. Based on the association, filter_metric will be applied to count packets on per port or per flow.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of association.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            port_names:
+              x-field-uid: 1
+            flow_names:
+              x-field-uid: 2
+          enum:
+          - port_names
+          - flow_names
+        port_names:
+          description: |
+            List of port names.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 2
+        flow_names:
+          description: |
+            List of flow names.
+
+            x-constraint:
+            - /components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 3
+    Filter.Packet:
+      description: |-
+        Configuration for filter packets
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of packet filter.
+          type: string
+          default: custom
+          x-field-uid: 1
+          x-enum:
+            custom:
+              x-field-uid: 1
+            ethernet:
+              x-field-uid: 2
+            vlan:
+              x-field-uid: 3
+            vxlan:
+              x-field-uid: 4
+            ipv4:
+              x-field-uid: 5
+            ipv6:
+              x-field-uid: 6
+            pfcpause:
+              x-field-uid: 7
+            ethernetpause:
+              x-field-uid: 8
+            tcp:
+              x-field-uid: 9
+            udp:
+              x-field-uid: 10
+            gre:
+              x-field-uid: 11
+            gtpv1:
+              x-field-uid: 12
+            gtpv2:
+              x-field-uid: 13
+            arp:
+              x-field-uid: 14
+            icmp:
+              x-field-uid: 15
+            icmpv6:
+              x-field-uid: 16
+            ppp:
+              x-field-uid: 17
+            igmpv1:
+              x-field-uid: 18
+            mpls:
+              x-field-uid: 19
+            snmpv2c:
+              x-field-uid: 20
+            rsvp:
+              x-field-uid: 21
+          enum:
+          - custom
+          - ethernet
+          - vlan
+          - vxlan
+          - ipv4
+          - ipv6
+          - pfcpause
+          - ethernetpause
+          - tcp
+          - udp
+          - gre
+          - gtpv1
+          - gtpv2
+          - arp
+          - icmp
+          - icmpv6
+          - ppp
+          - igmpv1
+          - mpls
+          - snmpv2c
+          - rsvp
+        custom:
+          description: |-
+            custom
+          $ref: '#/components/schemas/Filter.Field.Custom'
+          x-field-uid: 2
+        ethernet:
+          $ref: '#/components/schemas/Filter.Ethernet'
+          x-field-uid: 3
+        vlan:
+          $ref: '#/components/schemas/Filter.Vlan'
+          x-field-uid: 4
+        vxlan:
+          $ref: '#/components/schemas/Filter.Vxlan'
+          x-field-uid: 5
+        ipv4:
+          $ref: '#/components/schemas/Filter.Ipv4'
+          x-field-uid: 6
+        ipv6:
+          $ref: '#/components/schemas/Filter.Ipv6'
+          x-field-uid: 7
+        pfcpause:
+          $ref: '#/components/schemas/Filter.PfcPause'
+          x-field-uid: 8
+        ethernetpause:
+          $ref: '#/components/schemas/Filter.EthernetPause'
+          x-field-uid: 9
+        tcp:
+          $ref: '#/components/schemas/Filter.Tcp'
+          x-field-uid: 10
+        udp:
+          $ref: '#/components/schemas/Filter.Udp'
+          x-field-uid: 11
+        gre:
+          $ref: '#/components/schemas/Filter.Gre'
+          x-field-uid: 12
+        gtpv1:
+          $ref: '#/components/schemas/Filter.Gtpv1'
+          x-field-uid: 13
+        gtpv2:
+          $ref: '#/components/schemas/Filter.Gtpv2'
+          x-field-uid: 14
+        arp:
+          $ref: '#/components/schemas/Filter.Arp'
+          x-field-uid: 15
+        icmp:
+          $ref: '#/components/schemas/Filter.Icmp'
+          x-field-uid: 16
+        icmpv6:
+          $ref: '#/components/schemas/Filter.Icmpv6'
+          x-field-uid: 17
+        ppp:
+          $ref: '#/components/schemas/Filter.Ppp'
+          x-field-uid: 18
+        igmpv1:
+          $ref: '#/components/schemas/Filter.Igmpv1'
+          x-field-uid: 19
+        mpls:
+          $ref: '#/components/schemas/Filter.Mpls'
+          x-field-uid: 20
+        snmpv2c:
+          $ref: '#/components/schemas/Filter.Snmpv2c'
+          x-field-uid: 21
+        rsvp:
+          $ref: '#/components/schemas/Filter.Rsvp'
+          x-field-uid: 22
+    Filter.Field.Custom:
+      type: object
+      properties:
+        offset:
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 1
+        value:
+          x-field-uid: 2
+          type: string
+          format: hex
+          default: '00'
+        mask:
+          x-field-uid: 3
+          type: string
+          format: hex
+          default: '00'
+    Filter.Field:
+      type: object
+      properties:
+        value:
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 1
+        mask:
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 2
     Flow.Vlan:
       description: |-
         VLAN packet header
@@ -8162,6 +8334,23 @@ components:
         tpid:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid'
+    Filter.Vlan:
+      description: |-
+        VLAN packet header
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        cfi:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        id:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        tpid:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Vxlan:
       description: |-
         VXLAN packet header
@@ -8179,6 +8368,23 @@ components:
         reserved1:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1'
+    Filter.Vxlan:
+      description: |-
+        VXLAN packet header
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        reserved0:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        vni:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        reserved1:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Ipv4:
       description: |-
         IPv4 packet header
@@ -8391,6 +8597,116 @@ components:
         unused:
           x-field-uid: 6
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused'
+    Filter.Ipv4:
+      description: |-
+        IPv4 packet header
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        header_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        priority:
+          $ref: '#/components/schemas/Filter.Ipv4.Priority'
+          x-field-uid: 3
+        total_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        identification:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        dont_fragment:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        more_fragments:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        fragment_offset:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
+        time_to_live:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 10
+        protocol:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 11
+        header_checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 12
+        src:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 13
+        dst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 14
+    Filter.Ipv4.Priority:
+      description: |-
+        A container for ipv4 raw, tos, dscp ip priorities.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: dscp
+          x-field-uid: 1
+          x-enum:
+            raw:
+              x-field-uid: 1
+            tos:
+              x-field-uid: 2
+            dscp:
+              x-field-uid: 3
+          enum:
+          - raw
+          - tos
+          - dscp
+        raw:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        tos:
+          $ref: '#/components/schemas/Filter.Ipv4.Tos'
+          x-field-uid: 3
+        dscp:
+          $ref: '#/components/schemas/Filter.Ipv4.Dscp'
+          x-field-uid: 4
+    Filter.Ipv4.Dscp:
+      description: |-
+        Differentiated services code point (DSCP) packet field.
+      type: object
+      properties:
+        phb:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        ecn:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+    Filter.Ipv4.Tos:
+      description: |-
+        Type of service (TOS) packet field.
+      type: object
+      properties:
+        precedence:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        delay:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        throughput:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        reliability:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        monetary:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        unused:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
     Flow.Ipv6:
       description: |-
         IPv6 packet header
@@ -8420,6 +8736,35 @@ components:
         dst:
           x-field-uid: 8
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst'
+    Filter.Ipv6:
+      description: |-
+        IPv6 packet header
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        traffic_class:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        flow_label:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        payload_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        next_header:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        hop_limit:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        src:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        dst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
     Flow.PfcPause:
       description: |-
         IEEE 802.1Qbb PFC Pause packet header.
@@ -8464,6 +8809,50 @@ components:
         pause_class_7:
           x-field-uid: 13
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7'
+    Filter.PfcPause:
+      description: |-
+        IEEE 802.1Qbb PFC Pause packet header.
+      type: object
+      properties:
+        dst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        src:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        ether_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        control_op_code:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        class_enable_vector:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        pause_class_0:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        pause_class_1:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        pause_class_2:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        pause_class_3:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
+        pause_class_4:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 10
+        pause_class_5:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 11
+        pause_class_6:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 12
+        pause_class_7:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 13
     Flow.EthernetPause:
       description: |-
         IEEE 802.3x global ethernet pause packet header
@@ -8484,6 +8873,26 @@ components:
         time:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time'
+    Filter.EthernetPause:
+      description: |-
+        IEEE 802.3x global ethernet pause packet header
+      type: object
+      properties:
+        dst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        src:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        ether_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        control_op_code:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        time:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
     Flow.Tcp:
       description: |-
         TCP packet header
@@ -8534,6 +8943,56 @@ components:
         window:
           x-field-uid: 15
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window'
+    Filter.Tcp:
+      description: |-
+        TCP packet header
+      type: object
+      properties:
+        src_port:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        dst_port:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        seq_num:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        ack_num:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        data_offset:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        ecn_ns:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        ecn_cwr:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        ecn_echo:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        ctl_urg:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
+        ctl_ack:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 10
+        ctl_psh:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 11
+        ctl_rst:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 12
+        ctl_syn:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 13
+        ctl_fin:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 14
+        window:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 15
     Flow.Udp:
       description: |-
         UDP packet header
@@ -8551,6 +9010,23 @@ components:
         checksum:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Udp.Checksum'
+    Filter.Udp:
+      description: |-
+        UDP packet header
+      type: object
+      properties:
+        src_port:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        dst_port:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Gre:
       description: |-
         Standard GRE packet header (RFC2784)
@@ -8574,6 +9050,29 @@ components:
         reserved1:
           x-field-uid: 6
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1'
+    Filter.Gre:
+      description: |-
+        Standard GRE packet header (RFC2784)
+      type: object
+      properties:
+        checksum_present:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        reserved0:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        protocol:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        reserved1:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
     Flow.Gtpv1:
       description: |-
         GTPv1 packet header
@@ -8634,6 +9133,45 @@ components:
         next_extension_header:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader'
+    Filter.Gtpv1:
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        protocol_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        e_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        s_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        pn_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        message_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        message_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        teid:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
+        squence_number:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 10
+        n_pdu_number:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 11
+        next_extension_header_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 12
     Flow.Gtpv2:
       description: |-
         GTPv2 packet header
@@ -8666,6 +9204,36 @@ components:
         spare2:
           x-field-uid: 9
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2'
+    Filter.Gtpv2:
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        piggybacking_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        teid_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        spare1:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        message_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        message_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        teid:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        sequence_number:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        spare2:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
     Flow.Arp:
       description: |-
         ARP packet header
@@ -8698,6 +9266,38 @@ components:
         target_protocol_addr:
           x-field-uid: 9
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetProtocolAddr'
+    Filter.Arp:
+      description: |-
+        ARP packet header
+      type: object
+      properties:
+        hardware_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        protocol_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        hardware_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        protocol_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        operation:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        sender_hardware_addr:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        sender_protocol_addr:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        target_hardware_addr:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        target_protocol_addr:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
     Flow.Icmp:
       description: |-
         ICMP packet header
@@ -8735,6 +9335,41 @@ components:
         sequence_number:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber'
+    Filter.Icmp:
+      description: |-
+        ICMP packet header
+      type: object
+      properties:
+        choice:
+          type: string
+          default: echo
+          x-field-uid: 1
+          x-enum:
+            echo:
+              x-field-uid: 1
+          enum:
+          - echo
+        echo:
+          $ref: '#/components/schemas/Filter.Icmp.Echo'
+          x-field-uid: 2
+    Filter.Icmp.Echo:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        code:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        identifier:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        sequence_number:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
     Flow.Icmpv6:
       description: |-
         ICMPv6 packet header
@@ -8772,6 +9407,41 @@ components:
         checksum:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Checksum'
+    Filter.Icmpv6:
+      description: |-
+        ICMPv6 packet header
+      type: object
+      properties:
+        choice:
+          type: string
+          default: echo
+          x-field-uid: 1
+          x-enum:
+            echo:
+              x-field-uid: 1
+          enum:
+          - echo
+        echo:
+          $ref: '#/components/schemas/Filter.Icmpv6.Echo'
+          x-field-uid: 2
+    Filter.Icmpv6.Echo:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        code:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        identifier:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        sequence_number:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
     Flow.Ppp:
       description: |-
         PPP packet header
@@ -8786,6 +9456,18 @@ components:
         protocol_type:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.Ppp.ProtocolType'
+    Filter.Ppp:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        control:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        protocol_type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
     Flow.Igmpv1:
       description: |-
         IGMPv1 packet header
@@ -8806,6 +9488,24 @@ components:
         group_address:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress'
+    Filter.Igmpv1:
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        type:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        unused:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        group_address:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
     Flow.Mpls:
       description: |-
         MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
@@ -8823,6 +9523,21 @@ components:
         time_to_live:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
+    Filter.Mpls:
+      type: object
+      properties:
+        label:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        traffic_class:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        bottom_of_stack:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        time_to_live:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Snmpv2c:
       description: |-
         SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -9172,6 +9887,117 @@ components:
           maxLength: 10000
           default: '00'
           x-field-uid: 3
+    Filter.Snmpv2c:
+      description: |-
+        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        community:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        data:
+          $ref: '#/components/schemas/Filter.Snmpv2c.Data'
+          x-field-uid: 3
+    Filter.Snmpv2c.Data:
+      description: |-
+        This contains the body of the SNMPv2C message.
+
+        - Encoding of subsequent fields follow ASN.1 specification.
+          Refer: http://www.itu.int/ITU-T/asn1/
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          x-enum:
+            get_request:
+              x-field-uid: 1
+            get_next_request:
+              x-field-uid: 2
+            response:
+              x-field-uid: 3
+            set_request:
+              x-field-uid: 4
+            get_bulk_request:
+              x-field-uid: 5
+            inform_request:
+              x-field-uid: 6
+            snmpv2_trap:
+              x-field-uid: 7
+            report:
+              x-field-uid: 8
+          enum:
+          - get_request
+          - get_next_request
+          - response
+          - set_request
+          - get_bulk_request
+          - inform_request
+          - snmpv2_trap
+          - report
+        get_request:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 2
+        get_next_request:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 3
+        response:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 4
+        set_request:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 5
+        get_bulk_request:
+          $ref: '#/components/schemas/Filter.Snmpv2c.BulkPDU'
+          x-field-uid: 6
+        inform_request:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 7
+        snmpv2_trap:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 8
+        report:
+          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
+          x-field-uid: 9
+    Filter.Snmpv2c.PDU:
+      description: |-
+        This contains the body of the SNMPv2C PDU.
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        error_status:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        error_index:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        variable_bindings:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+    Filter.Snmpv2c.BulkPDU:
+      description: |-
+        The purpose of the GetBulkRequest-PDU is to request the transfer of a potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
+      type: object
+      properties:
+        request_id:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        non_repeaters:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        max_repetitions:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        variable_bindings:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Rsvp:
       description: |-
         RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
@@ -10302,6 +11128,587 @@ components:
           maxLength: 131050
           default: '0000'
           x-field-uid: 3
+    Filter.Rsvp:
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        rsvp_checksum:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        time_to_live:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        rsvp_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        message_type:
+          $ref: '#/components/schemas/Filter.RSVP.Message'
+          x-field-uid: 7
+    Filter.RSVP.Message:
+      type: object
+      properties:
+        choice:
+          type: string
+          default: path
+          x-enum:
+            path:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - path
+        path:
+          $ref: '#/components/schemas/Filter.RSVP.PathMessage'
+          x-field-uid: 2
+    Filter.RSVP.PathMessage:
+      description: |-
+        "Path" message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15: 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE [optional]
+      type: object
+      properties:
+        objects:
+          description: |-
+            "Path" message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE and SENDER_TSPEC objects in order.
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter.RSVP.PathObjects'
+          x-field-uid: 1
+    Filter.RSVP.PathObjects:
+      description: |-
+        Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header and the object's contents.
+      type: object
+      properties:
+        class_num:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClass'
+          x-field-uid: 1
+    Filter.RSVP.PathObjectsClass:
+      description: |-
+        The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 . Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          x-enum:
+            session:
+              x-field-uid: 1
+            rsvp_hop:
+              x-field-uid: 2
+            time_values:
+              x-field-uid: 3
+            explicit_route:
+              x-field-uid: 4
+            label_request:
+              x-field-uid: 5
+            session_attribute:
+              x-field-uid: 6
+            sender_template:
+              x-field-uid: 7
+            sender_tspec:
+              x-field-uid: 8
+            record_route:
+              x-field-uid: 9
+            custom:
+              x-field-uid: 10
+          enum:
+          - session
+          - rsvp_hop
+          - time_values
+          - explicit_route
+          - label_request
+          - session_attribute
+          - sender_template
+          - sender_tspec
+          - record_route
+          - custom
+        session:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSession'
+          x-field-uid: 2
+        rsvp_hop:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassRsvpHop'
+          x-field-uid: 3
+        time_values:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassTimeValues'
+          x-field-uid: 4
+        explicit_route:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassExplicitRoute'
+          x-field-uid: 5
+        label_request:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassLabelRequest'
+          x-field-uid: 6
+        session_attribute:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSessionAttribute'
+          x-field-uid: 7
+        sender_template:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSenderTemplate'
+          x-field-uid: 8
+        sender_tspec:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSenderTspec'
+          x-field-uid: 9
+        record_route:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassRecordRoute'
+          x-field-uid: 10
+    Filter.RSVP.PathObjectsClassSession:
+      type: object
+      properties:
+        length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSessionCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsSessionCType:
+      description: |-
+        The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel_ipv4
+          x-enum:
+            lsp_tunnel_ipv4:
+              x-field-uid: 1
+          enum:
+          - lsp_tunnel_ipv4
+        lsp_tunnel_ipv4:
+          $ref: '#/components/schemas/Filter.RSVP.PathSessionLspTunnelIpv4'
+          x-field-uid: 2
+    Filter.RSVP.PathSessionLspTunnelIpv4:
+      type: object
+      properties:
+        ipv4_tunnel_end_point_address:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        tunnel_id:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        extended_tunnel_id:
+          description: |-
+            A 32-bit identifier used in the SESSION that remains constant over the life of the tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of a SESSION to the ingress-egress pair may place their IPv4 address here as a globally unique identifier.
+          $ref: '#/components/schemas/Filter.RSVP.PathSessionExtTunnelId'
+          x-field-uid: 4
+    Filter.RSVP.PathSessionExtTunnelId:
+      type: object
+      properties:
+        choice:
+          description: |-
+            32 bit integer or IPv4 address.
+          type: string
+          default: as_integer
+          x-field-uid: 1
+          x-enum:
+            as_integer:
+              x-field-uid: 1
+            as_ipv4:
+              x-field-uid: 2
+          enum:
+          - as_integer
+          - as_ipv4
+        as_integer:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        as_ipv4:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+    Filter.RSVP.PathObjectsClassRsvpHop:
+      type: object
+      properties:
+        length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsRsvpHopCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsRsvpHopCType:
+      description: |-
+        Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: ipv4
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+          enum:
+          - ipv4
+        ipv4:
+          $ref: '#/components/schemas/Filter.RSVP.PathRsvpHopIpv4'
+          x-field-uid: 2
+    Filter.RSVP.PathRsvpHopIpv4:
+      type: object
+      properties:
+        ipv4_address:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        logical_interface_handle:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsClassTimeValues:
+      description: |-
+        Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: type_1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Filter.RSVP.PathTimeValuesType1'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsTimeValuesCType:
+      description: |-
+        Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: type_1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Filter.RSVP.PathTimeValuesType1'
+          x-field-uid: 2
+    Filter.RSVP.PathTimeValuesType1:
+      type: object
+      properties:
+        refresh_period_r:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+    Filter.RSVP.PathObjectsClassExplicitRoute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassExplicitRouteCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsClassExplicitRouteCType:
+      description: |-
+        Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          default: type_1
+          x-field-uid: 1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Filter.RSVP.PathExplicitRouteType1'
+          x-field-uid: 2
+    Filter.RSVP.PathExplicitRouteType1:
+      type: object
+      properties:
+        subobjects:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+    Filter.RSVP.PathObjectsClassLabelRequest:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsLabelRequestCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsLabelRequestCType:
+      description: |-
+        Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: without_label_range
+          x-enum:
+            without_label_range:
+              x-field-uid: 1
+          enum:
+          - without_label_range
+        without_label_range:
+          $ref: '#/components/schemas/Filter.RSVP.PathLabelRequestWithoutLabelRange'
+          x-field-uid: 2
+    Filter.RSVP.PathLabelRequestWithoutLabelRange:
+      type: object
+      properties:
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        l3pid:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsClassSessionAttribute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSessionAttributeCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsSessionAttributeCType:
+      description: |-
+        Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel
+          x-enum:
+            lsp_tunnel:
+              x-field-uid: 1
+            lsp_tunnel_ra:
+              x-field-uid: 2
+          enum:
+          - lsp_tunnel
+          - lsp_tunnel_ra
+        lsp_tunnel:
+          $ref: '#/components/schemas/Filter.RSVP.PathSessionAttributeLspTunnel'
+          x-field-uid: 2
+        lsp_tunnel_ra:
+          $ref: '#/components/schemas/Filter.RSVP.PathSessionAttributeLspTunnelRa'
+          x-field-uid: 3
+    Filter.RSVP.PathSessionAttributeLspTunnel:
+      type: object
+      properties:
+        setup_priority:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        holding_priority:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        flags:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        name_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        session_name:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+    Filter.RSVP.PathSessionAttributeLspTunnelRa:
+      type: object
+      properties:
+        exclude_any:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        include_any:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        include_all:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        setup_priority:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        holding_priority:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        flags:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        name_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        session_name:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+    Filter.RSVP.PathObjectsClassSenderTemplate:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSenderTemplateCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsSenderTemplateCType:
+      description: |-
+        Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: lsp_tunnel_ipv4
+          x-enum:
+            lsp_tunnel_ipv4:
+              x-field-uid: 1
+          enum:
+          - lsp_tunnel_ipv4
+        lsp_tunnel_ipv4:
+          $ref: '#/components/schemas/Filter.RSVP.PathSenderTemplateLspTunnelIpv4'
+          x-field-uid: 2
+    Filter.RSVP.PathSenderTemplateLspTunnelIpv4:
+      type: object
+      properties:
+        ipv4_tunnel_sender_address:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        reserved:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        lsp_id:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+    Filter.RSVP.PathObjectsClassSenderTspec:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSenderTspecCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsSenderTspecCType:
+      description: |-
+        Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-field-uid: 1
+          default: int_serv
+          x-enum:
+            int_serv:
+              x-field-uid: 1
+          enum:
+          - int_serv
+        int_serv:
+          $ref: '#/components/schemas/Filter.RSVP.PathSenderTspecIntServ'
+          x-field-uid: 2
+    Filter.RSVP.PathSenderTspecIntServ:
+      type: object
+      properties:
+        version:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        reserved1:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        overall_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        service_header:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
+        zero_bit:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 5
+        reserved2:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 6
+        length_of_service_data:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 7
+        parameter_id_token_bucket_tspec:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 8
+        parameter_127_flag:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 9
+        parameter_127_length:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 10
+        token_bucket_rate:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 11
+        token_bucket_size:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 12
+        peak_data_rate:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 13
+        minimum_policed_unit:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 14
+        maximum_packet_size:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 15
+    Filter.RSVP.PathObjectsClassRecordRoute:
+      description: |-
+        C-Type is specific to a class num.
+      type: object
+      properties:
+        length:
+          description: |-
+            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        c_type:
+          $ref: '#/components/schemas/Filter.RSVP.PathObjectsRecordRouteCType'
+          x-field-uid: 2
+    Filter.RSVP.PathObjectsRecordRouteCType:
+      description: |-
+        Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
+      type: object
+      properties:
+        choice:
+          type: string
+          default: type_1
+          x-field-uid: 1
+          x-enum:
+            type_1:
+              x-field-uid: 1
+          enum:
+          - type_1
+        type_1:
+          $ref: '#/components/schemas/Filter.RSVP.PathRecordRouteType1'
+          x-field-uid: 2
+    Filter.RSVP.PathRecordRouteType1:
+      type: object
+      properties:
+        subobjects:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -10978,8 +12385,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -11076,10 +12482,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -11467,10 +12869,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11504,10 +12902,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11538,10 +12932,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -11611,13 +13001,6 @@ components:
             - /components/schemas/Bgp.V6RouteRange/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -11676,10 +13059,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -11708,10 +13087,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -11761,11 +13136,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -11820,10 +13190,6 @@ components:
         router_names:
           description: |
             The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -12005,8 +13371,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -12017,10 +13381,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12058,10 +13418,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12140,8 +13496,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -12152,10 +13506,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12193,10 +13543,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12260,10 +13606,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
@@ -12334,10 +13676,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
           type: array
           items:
             type: string
@@ -12381,6 +13719,8 @@ components:
               x-field-uid: 8
             rsvp:
               x-field-uid: 9
+            user_defined_metrics:
+              x-field-uid: 10
           enum:
           - port
           - flow
@@ -12391,6 +13731,7 @@ components:
           - lacp
           - lldp
           - rsvp
+          - user_defined_metrics
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -12418,6 +13759,9 @@ components:
         rsvp:
           $ref: '#/components/schemas/Rsvp.Metrics.Request'
           x-field-uid: 10
+        user_defined:
+          $ref: '#/components/schemas/User.Defined.Metrics.Request'
+          x-field-uid: 11
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -12446,6 +13790,8 @@ components:
               x-field-uid: 8
             rsvp_metrics:
               x-field-uid: 9
+            user_defined_metrics:
+              x-field-uid: 10
           enum:
           - flow_metrics
           - port_metrics
@@ -12456,6 +13802,7 @@ components:
           - lacp_metrics
           - lldp_metrics
           - rsvp_metrics
+          - user_defined_metrics
         port_metrics:
           type: array
           items:
@@ -12501,6 +13848,11 @@ components:
           items:
             $ref: '#/components/schemas/Rsvp.Metric'
           x-field-uid: 10
+        user_defined_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/User.Defined.Metric'
+          x-field-uid: 11
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -12509,10 +13861,6 @@ components:
         port_names:
           description: |
             The names of objects to return results for. An empty list will return all port row results.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12573,10 +13921,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12681,10 +14025,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -13045,10 +14385,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -13255,10 +14591,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -13462,10 +14794,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -13739,10 +15067,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -13794,10 +15118,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -13880,10 +15200,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -13893,10 +15209,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14094,10 +15406,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -14185,10 +15493,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -14478,6 +15782,119 @@ components:
           type: integer
           format: uint64
           x-field-uid: 31
+    User.Defined.Metrics.Request:
+      description: |-
+        The user defined metrics result request to the traffic generator
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type
+          type: string
+          x-field-uid: 1
+          x-enum:
+            port_names:
+              x-field-uid: 1
+            flow_names:
+              x-field-uid: 2
+          enum:
+          - port_names
+          - flow_names
+        port_names:
+          description: |
+            Names of ports for which to return results.
+            An empty list will return all port row results.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 2
+        flow_names:
+          description: |
+            Names of flows for which to return results.
+            An empty list will return all flow row results.
+
+            x-constraint:
+            - /components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 3
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned. The name of the port cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              frames_tx:
+                x-field-uid: 1
+              frames_rx:
+                x-field-uid: 2
+            enum:
+            - frames_tx
+            - frames_rx
+          x-field-uid: 4
+    User.Defined.Metric:
+      type: object
+      properties:
+        name:
+          description: |
+            The name of a configured port/flow
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+            - /components/schemas/Flow/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 1
+        frames_tx:
+          description: |-
+            The current total number of frames transmitted
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        frames_rx:
+          description: |-
+            The current total number of valid frames received
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        filtered_metrics:
+          description: |-
+            List of metrics corresponding to a set of values applicable
+            for configured filter metrics object in the corresponding port or flow.
+            The container is keyed by list of tag-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/User.Defined.Filter.Metric'
+          x-field-uid: 4
+    User.Defined.Filter.Metric:
+      description: |-
+        Metrics for each set of values applicable for configured
+        metric tags in ingress or egress packet header fields of corresponding flow.
+        The container is keyed by list of tag-value pairs.
+      type: object
+      properties:
+        filter_name:
+          description: |-
+            Name of the filter metrics
+          type: string
+          x-field-uid: 1
+        filter_value:
+          description: |-
+            The current total number of frames adhering to the filter condition
+          type: integer
+          format: uint64
+          x-field-uid: 2
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -14595,10 +16012,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -14641,10 +16054,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -14684,11 +16093,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -15070,10 +16474,6 @@ components:
         isis_router_names:
           description: |
             The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -15537,10 +16937,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -15770,10 +17166,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -15977,10 +17369,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name

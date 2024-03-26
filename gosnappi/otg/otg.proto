@@ -51,6 +51,11 @@ message Config {
 
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
+
+  // Under Review: There may be changes in filter_metrics configuration
+  // 
+  // The filter_metrics that will be configured on traffic generator.
+  repeated FilterMetric filter_metrics = 10;
 }
 
 // Global configuration options.
@@ -121,10 +126,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -289,17 +290,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -308,11 +301,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -381,10 +369,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -463,10 +447,6 @@ message DeviceIpv6Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -513,10 +493,6 @@ message Layer1 {
 
   // A list of unique names of port objects that will share the
   // choice settings.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -572,16 +548,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -722,17 +692,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1050,10 +1014,6 @@ message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1873,11 +1833,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -2637,8 +2592,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3098,8 +3051,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -4703,11 +4654,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -4969,11 +4915,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -4997,11 +4938,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -5165,10 +5101,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -5230,11 +5162,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -5666,10 +5593,6 @@ message Flow {
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
   // 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // The list of protocol headers defining the shape of all
   // intended packets in corresponding flow as it is received
   // by traffic-generator port.
@@ -5732,16 +5655,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -5750,19 +5666,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -5839,33 +5745,9 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -6030,6 +5912,196 @@ message FlowEthernet {
   PatternFlowEthernetPfcQueue pfc_queue = 4;
 }
 
+// Ethernet packet header
+message FilterEthernet {
+
+  // Description missing in models
+  FilterField dst = 1;
+
+  // Description missing in models
+  FilterField src = 2;
+
+  // Description missing in models
+  FilterField ether_type = 3;
+
+  // Description missing in models
+  FilterField pfc_queue = 4;
+}
+
+// Under Review: There may be changes in filter_metric configuration
+// 
+// Configuration for FilterMetrics settings.
+message FilterMetric {
+
+  // Association.
+  FilterMetricAssociation association = 1;
+
+  // A list of filters to apply to the packet receiving ports. If no filters are specified
+  // then all packets will be counted. A filter_metric can have multiple filters. The
+  // number of filters supported is determined by the implementation.
+  // When multiple filters are specified then implementation must && (and) all the filters.
+  repeated FilterPacket receive_filters = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 3;
+}
+
+// Configuration for filter_metric Association. Based on the association, filter_metric
+// will be applied to count packets on per port or per flow.
+message FilterMetricAssociation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      port_names = 1;
+      flow_names = 2;
+    }
+  }
+  // The type of association.
+  optional Choice.Enum choice = 1;
+
+  // List of port names.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 2;
+
+  // List of flow names.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flow_names = 3;
+}
+
+// Configuration for filter packets
+message FilterPacket {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      custom = 1;
+      ethernet = 2;
+      vlan = 3;
+      vxlan = 4;
+      ipv4 = 5;
+      ipv6 = 6;
+      pfcpause = 7;
+      ethernetpause = 8;
+      tcp = 9;
+      udp = 10;
+      gre = 11;
+      gtpv1 = 12;
+      gtpv2 = 13;
+      arp = 14;
+      icmp = 15;
+      icmpv6 = 16;
+      ppp = 17;
+      igmpv1 = 18;
+      mpls = 19;
+      snmpv2c = 20;
+      rsvp = 21;
+    }
+  }
+  // The type of packet filter.
+  // default = Choice.Enum.custom
+  optional Choice.Enum choice = 1;
+
+  // custom
+  FilterFieldCustom custom = 2;
+
+  // Description missing in models
+  FilterEthernet ethernet = 3;
+
+  // Description missing in models
+  FilterVlan vlan = 4;
+
+  // Description missing in models
+  FilterVxlan vxlan = 5;
+
+  // Description missing in models
+  FilterIpv4 ipv4 = 6;
+
+  // Description missing in models
+  FilterIpv6 ipv6 = 7;
+
+  // Description missing in models
+  FilterPfcPause pfcpause = 8;
+
+  // Description missing in models
+  FilterEthernetPause ethernetpause = 9;
+
+  // Description missing in models
+  FilterTcp tcp = 10;
+
+  // Description missing in models
+  FilterUdp udp = 11;
+
+  // Description missing in models
+  FilterGre gre = 12;
+
+  // Description missing in models
+  FilterGtpv1 gtpv1 = 13;
+
+  // Description missing in models
+  FilterGtpv2 gtpv2 = 14;
+
+  // Description missing in models
+  FilterArp arp = 15;
+
+  // Description missing in models
+  FilterIcmp icmp = 16;
+
+  // Description missing in models
+  FilterIcmpv6 icmpv6 = 17;
+
+  // Description missing in models
+  FilterPpp ppp = 18;
+
+  // Description missing in models
+  FilterIgmpv1 igmpv1 = 19;
+
+  // Description missing in models
+  FilterMpls mpls = 20;
+
+  // Description missing in models
+  FilterSnmpv2c snmpv2c = 21;
+
+  // Description missing in models
+  FilterRsvp rsvp = 22;
+}
+
+// Description missing in models
+message FilterFieldCustom {
+
+  // Description missing in models
+  // default = 00
+  optional string offset = 1;
+
+  // Description missing in models
+  // default = 00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = 00
+  optional string mask = 3;
+}
+
+// Description missing in models
+message FilterField {
+
+  // Description missing in models
+  // default = 00
+  optional string value = 1;
+
+  // Description missing in models
+  // default = 00
+  optional string mask = 2;
+}
+
 // VLAN packet header
 message FlowVlan {
 
@@ -6046,6 +6118,22 @@ message FlowVlan {
   PatternFlowVlanTpid tpid = 4;
 }
 
+// VLAN packet header
+message FilterVlan {
+
+  // Description missing in models
+  FilterField priority = 1;
+
+  // Description missing in models
+  FilterField cfi = 2;
+
+  // Description missing in models
+  FilterField id = 3;
+
+  // Description missing in models
+  FilterField tpid = 4;
+}
+
 // VXLAN packet header
 message FlowVxlan {
 
@@ -6060,6 +6148,22 @@ message FlowVxlan {
 
   // Description missing in models
   PatternFlowVxlanReserved1 reserved1 = 4;
+}
+
+// VXLAN packet header
+message FilterVxlan {
+
+  // Description missing in models
+  FilterField flags = 1;
+
+  // Description missing in models
+  FilterField reserved0 = 2;
+
+  // Description missing in models
+  FilterField vni = 3;
+
+  // Description missing in models
+  FilterField reserved1 = 4;
 }
 
 // IPv4 packet header
@@ -6250,6 +6354,109 @@ message FlowIpv4Tos {
   PatternFlowIpv4TosUnused unused = 6;
 }
 
+// IPv4 packet header
+message FilterIpv4 {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField header_length = 2;
+
+  // Description missing in models
+  FilterIpv4Priority priority = 3;
+
+  // Description missing in models
+  FilterField total_length = 4;
+
+  // Description missing in models
+  FilterField identification = 5;
+
+  // Description missing in models
+  FilterField reserved = 6;
+
+  // Description missing in models
+  FilterField dont_fragment = 7;
+
+  // Description missing in models
+  FilterField more_fragments = 8;
+
+  // Description missing in models
+  FilterField fragment_offset = 9;
+
+  // Description missing in models
+  FilterField time_to_live = 10;
+
+  // Description missing in models
+  FilterField protocol = 11;
+
+  // Description missing in models
+  FilterField header_checksum = 12;
+
+  // Description missing in models
+  FilterField src = 13;
+
+  // Description missing in models
+  FilterField dst = 14;
+}
+
+// A container for ipv4 raw, tos, dscp ip priorities.
+message FilterIpv4Priority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      raw = 1;
+      tos = 2;
+      dscp = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.dscp
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterField raw = 2;
+
+  // Description missing in models
+  FilterIpv4Tos tos = 3;
+
+  // Description missing in models
+  FilterIpv4Dscp dscp = 4;
+}
+
+// Differentiated services code point (DSCP) packet field.
+message FilterIpv4Dscp {
+
+  // Description missing in models
+  FilterField phb = 1;
+
+  // Description missing in models
+  FilterField ecn = 2;
+}
+
+// Type of service (TOS) packet field.
+message FilterIpv4Tos {
+
+  // Description missing in models
+  FilterField precedence = 1;
+
+  // Description missing in models
+  FilterField delay = 2;
+
+  // Description missing in models
+  FilterField throughput = 3;
+
+  // Description missing in models
+  FilterField reliability = 4;
+
+  // Description missing in models
+  FilterField monetary = 5;
+
+  // Description missing in models
+  FilterField unused = 6;
+}
+
 // IPv6 packet header
 message FlowIpv6 {
 
@@ -6276,6 +6483,34 @@ message FlowIpv6 {
 
   // Description missing in models
   PatternFlowIpv6Dst dst = 8;
+}
+
+// IPv6 packet header
+message FilterIpv6 {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField traffic_class = 2;
+
+  // Description missing in models
+  FilterField flow_label = 3;
+
+  // Description missing in models
+  FilterField payload_length = 4;
+
+  // Description missing in models
+  FilterField next_header = 5;
+
+  // Description missing in models
+  FilterField hop_limit = 6;
+
+  // Description missing in models
+  FilterField src = 7;
+
+  // Description missing in models
+  FilterField dst = 8;
 }
 
 // IEEE 802.1Qbb PFC Pause packet header.
@@ -6321,6 +6556,49 @@ message FlowPfcPause {
   PatternFlowPfcPausePauseClass7 pause_class_7 = 13;
 }
 
+// IEEE 802.1Qbb PFC Pause packet header.
+message FilterPfcPause {
+
+  // Description missing in models
+  FilterField dst = 1;
+
+  // Description missing in models
+  FilterField src = 2;
+
+  // Description missing in models
+  FilterField ether_type = 3;
+
+  // Description missing in models
+  FilterField control_op_code = 4;
+
+  // Description missing in models
+  FilterField class_enable_vector = 5;
+
+  // Description missing in models
+  FilterField pause_class_0 = 6;
+
+  // Description missing in models
+  FilterField pause_class_1 = 7;
+
+  // Description missing in models
+  FilterField pause_class_2 = 8;
+
+  // Description missing in models
+  FilterField pause_class_3 = 9;
+
+  // Description missing in models
+  FilterField pause_class_4 = 10;
+
+  // Description missing in models
+  FilterField pause_class_5 = 11;
+
+  // Description missing in models
+  FilterField pause_class_6 = 12;
+
+  // Description missing in models
+  FilterField pause_class_7 = 13;
+}
+
 // IEEE 802.3x global ethernet pause packet header
 message FlowEthernetPause {
 
@@ -6338,6 +6616,25 @@ message FlowEthernetPause {
 
   // Description missing in models
   PatternFlowEthernetPauseTime time = 5;
+}
+
+// IEEE 802.3x global ethernet pause packet header
+message FilterEthernetPause {
+
+  // Description missing in models
+  FilterField dst = 1;
+
+  // Description missing in models
+  FilterField src = 2;
+
+  // Description missing in models
+  FilterField ether_type = 3;
+
+  // Description missing in models
+  FilterField control_op_code = 4;
+
+  // Description missing in models
+  FilterField time = 5;
 }
 
 // TCP packet header
@@ -6389,6 +6686,55 @@ message FlowTcp {
   PatternFlowTcpWindow window = 15;
 }
 
+// TCP packet header
+message FilterTcp {
+
+  // Description missing in models
+  FilterField src_port = 1;
+
+  // Description missing in models
+  FilterField dst_port = 2;
+
+  // Description missing in models
+  FilterField seq_num = 3;
+
+  // Description missing in models
+  FilterField ack_num = 4;
+
+  // Description missing in models
+  FilterField data_offset = 5;
+
+  // Description missing in models
+  FilterField ecn_ns = 6;
+
+  // Description missing in models
+  FilterField ecn_cwr = 7;
+
+  // Description missing in models
+  FilterField ecn_echo = 8;
+
+  // Description missing in models
+  FilterField ctl_urg = 9;
+
+  // Description missing in models
+  FilterField ctl_ack = 10;
+
+  // Description missing in models
+  FilterField ctl_psh = 11;
+
+  // Description missing in models
+  FilterField ctl_rst = 12;
+
+  // Description missing in models
+  FilterField ctl_syn = 13;
+
+  // Description missing in models
+  FilterField ctl_fin = 14;
+
+  // Description missing in models
+  FilterField window = 15;
+}
+
 // UDP packet header
 message FlowUdp {
 
@@ -6403,6 +6749,22 @@ message FlowUdp {
 
   // Description missing in models
   PatternFlowUdpChecksum checksum = 4;
+}
+
+// UDP packet header
+message FilterUdp {
+
+  // Description missing in models
+  FilterField src_port = 1;
+
+  // Description missing in models
+  FilterField dst_port = 2;
+
+  // Description missing in models
+  FilterField length = 3;
+
+  // Description missing in models
+  FilterField checksum = 4;
 }
 
 // Standard GRE packet header (RFC2784)
@@ -6425,6 +6787,28 @@ message FlowGre {
 
   // Description missing in models
   PatternFlowGreReserved1 reserved1 = 6;
+}
+
+// Standard GRE packet header (RFC2784)
+message FilterGre {
+
+  // Description missing in models
+  FilterField checksum_present = 1;
+
+  // Description missing in models
+  FilterField reserved0 = 2;
+
+  // Description missing in models
+  FilterField version = 3;
+
+  // Description missing in models
+  FilterField protocol = 4;
+
+  // Description missing in models
+  FilterField checksum = 5;
+
+  // Description missing in models
+  FilterField reserved1 = 6;
 }
 
 // GTPv1 packet header
@@ -6483,6 +6867,46 @@ message FlowGtpExtension {
   PatternFlowGtpExtensionNextExtensionHeader next_extension_header = 3;
 }
 
+// Description missing in models
+message FilterGtpv1 {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField protocol_type = 2;
+
+  // Description missing in models
+  FilterField reserved = 3;
+
+  // Description missing in models
+  FilterField e_flag = 4;
+
+  // Description missing in models
+  FilterField s_flag = 5;
+
+  // Description missing in models
+  FilterField pn_flag = 6;
+
+  // Description missing in models
+  FilterField message_type = 7;
+
+  // Description missing in models
+  FilterField message_length = 8;
+
+  // Description missing in models
+  FilterField teid = 9;
+
+  // Description missing in models
+  FilterField squence_number = 10;
+
+  // Description missing in models
+  FilterField n_pdu_number = 11;
+
+  // Description missing in models
+  FilterField next_extension_header_type = 12;
+}
+
 // GTPv2 packet header
 message FlowGtpv2 {
 
@@ -6514,6 +6938,37 @@ message FlowGtpv2 {
   PatternFlowGtpv2Spare2 spare2 = 9;
 }
 
+// Description missing in models
+message FilterGtpv2 {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField piggybacking_flag = 2;
+
+  // Description missing in models
+  FilterField teid_flag = 3;
+
+  // Description missing in models
+  FilterField spare1 = 4;
+
+  // Description missing in models
+  FilterField message_type = 5;
+
+  // Description missing in models
+  FilterField message_length = 6;
+
+  // Description missing in models
+  FilterField teid = 7;
+
+  // Description missing in models
+  FilterField sequence_number = 8;
+
+  // Description missing in models
+  FilterField spare2 = 9;
+}
+
 // ARP packet header
 message FlowArp {
 
@@ -6543,6 +6998,37 @@ message FlowArp {
 
   // Description missing in models
   PatternFlowArpTargetProtocolAddr target_protocol_addr = 9;
+}
+
+// ARP packet header
+message FilterArp {
+
+  // Description missing in models
+  FilterField hardware_type = 1;
+
+  // Description missing in models
+  FilterField protocol_type = 2;
+
+  // Description missing in models
+  FilterField hardware_length = 3;
+
+  // Description missing in models
+  FilterField protocol_length = 4;
+
+  // Description missing in models
+  FilterField operation = 5;
+
+  // Description missing in models
+  FilterField sender_hardware_addr = 6;
+
+  // Description missing in models
+  FilterField sender_protocol_addr = 7;
+
+  // Description missing in models
+  FilterField target_hardware_addr = 8;
+
+  // Description missing in models
+  FilterField target_protocol_addr = 9;
 }
 
 // ICMP packet header
@@ -6581,6 +7067,42 @@ message FlowIcmpEcho {
   PatternFlowIcmpEchoSequenceNumber sequence_number = 5;
 }
 
+// ICMP packet header
+message FilterIcmp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      echo = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.echo
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterIcmpEcho echo = 2;
+}
+
+// Description missing in models
+message FilterIcmpEcho {
+
+  // Description missing in models
+  FilterField type = 1;
+
+  // Description missing in models
+  FilterField code = 2;
+
+  // Description missing in models
+  FilterField checksum = 3;
+
+  // Description missing in models
+  FilterField identifier = 4;
+
+  // Description missing in models
+  FilterField sequence_number = 5;
+}
+
 // ICMPv6 packet header
 message FlowIcmpv6 {
 
@@ -6617,6 +7139,42 @@ message FlowIcmpv6Echo {
   PatternFlowIcmpv6EchoChecksum checksum = 5;
 }
 
+// ICMPv6 packet header
+message FilterIcmpv6 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      echo = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.echo
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterIcmpv6Echo echo = 2;
+}
+
+// Description missing in models
+message FilterIcmpv6Echo {
+
+  // Description missing in models
+  FilterField type = 1;
+
+  // Description missing in models
+  FilterField code = 2;
+
+  // Description missing in models
+  FilterField identifier = 3;
+
+  // Description missing in models
+  FilterField sequence_number = 4;
+
+  // Description missing in models
+  FilterField checksum = 5;
+}
+
 // PPP packet header
 message FlowPpp {
 
@@ -6628,6 +7186,19 @@ message FlowPpp {
 
   // Description missing in models
   PatternFlowPppProtocolType protocol_type = 3;
+}
+
+// Description missing in models
+message FilterPpp {
+
+  // Description missing in models
+  FilterField address = 1;
+
+  // Description missing in models
+  FilterField control = 2;
+
+  // Description missing in models
+  FilterField protocol_type = 3;
 }
 
 // IGMPv1 packet header
@@ -6649,6 +7220,25 @@ message FlowIgmpv1 {
   PatternFlowIgmpv1GroupAddress group_address = 5;
 }
 
+// Description missing in models
+message FilterIgmpv1 {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField type = 2;
+
+  // Description missing in models
+  FilterField unused = 3;
+
+  // Description missing in models
+  FilterField checksum = 4;
+
+  // Description missing in models
+  FilterField group_address = 5;
+}
+
 // MPLS packet header; When configuring multiple such headers, the count shall not exceed
 // 20.
 message FlowMpls {
@@ -6664,6 +7254,22 @@ message FlowMpls {
 
   // Description missing in models
   PatternFlowMplsTimeToLive time_to_live = 4;
+}
+
+// Description missing in models
+message FilterMpls {
+
+  // Description missing in models
+  FilterField label = 1;
+
+  // Description missing in models
+  FilterField traffic_class = 2;
+
+  // Description missing in models
+  FilterField bottom_of_stack = 3;
+
+  // Description missing in models
+  FilterField time_to_live = 4;
 }
 
 // SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -6926,6 +7532,101 @@ message FlowSnmpv2cVariableBindingStringValue {
   // It contains the hex string to be sent.  As of now it is restricted to 10000 bytes.
   // default = 00
   optional string raw = 3;
+}
+
+// SNMPv2C packet header as defined in RFC1901 and RFC3416.
+message FilterSnmpv2c {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField community = 2;
+
+  // Description missing in models
+  FilterSnmpv2cData data = 3;
+}
+
+// This contains the body of the SNMPv2C message.
+// 
+// - Encoding of subsequent fields follow ASN.1 specification.
+// Refer: http://www.itu.int/ITU-T/asn1/
+message FilterSnmpv2cData {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      get_request = 1;
+      get_next_request = 2;
+      response = 3;
+      set_request = 4;
+      get_bulk_request = 5;
+      inform_request = 6;
+      snmpv2_trap = 7;
+      report = 8;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterSnmpv2cPDU get_request = 2;
+
+  // Description missing in models
+  FilterSnmpv2cPDU get_next_request = 3;
+
+  // Description missing in models
+  FilterSnmpv2cPDU response = 4;
+
+  // Description missing in models
+  FilterSnmpv2cPDU set_request = 5;
+
+  // Description missing in models
+  FilterSnmpv2cBulkPDU get_bulk_request = 6;
+
+  // Description missing in models
+  FilterSnmpv2cPDU inform_request = 7;
+
+  // Description missing in models
+  FilterSnmpv2cPDU snmpv2_trap = 8;
+
+  // Description missing in models
+  FilterSnmpv2cPDU report = 9;
+}
+
+// This contains the body of the SNMPv2C PDU.
+message FilterSnmpv2cPDU {
+
+  // Description missing in models
+  FilterField request_id = 1;
+
+  // Description missing in models
+  FilterField error_status = 2;
+
+  // Description missing in models
+  FilterField error_index = 3;
+
+  // Description missing in models
+  FilterField variable_bindings = 4;
+}
+
+// The purpose of the GetBulkRequest-PDU is to request the transfer of a potentially
+// large amount of data, including, but not limited to, the efficient and rapid retrieval
+// of large tables.
+message FilterSnmpv2cBulkPDU {
+
+  // Description missing in models
+  FilterField request_id = 1;
+
+  // Description missing in models
+  FilterField non_repeaters = 2;
+
+  // Description missing in models
+  FilterField max_repetitions = 3;
+
+  // Description missing in models
+  FilterField variable_bindings = 4;
 }
 
 // RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message
@@ -7896,6 +8597,575 @@ message FlowRSVPPathObjectsCustom {
   optional string bytes = 3;
 }
 
+// Description missing in models
+message FilterRsvp {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField flag = 2;
+
+  // Description missing in models
+  FilterField rsvp_checksum = 3;
+
+  // Description missing in models
+  FilterField time_to_live = 4;
+
+  // Description missing in models
+  FilterField reserved = 5;
+
+  // Description missing in models
+  FilterField rsvp_length = 6;
+
+  // Description missing in models
+  FilterRSVPMessage message_type = 7;
+}
+
+// Description missing in models
+message FilterRSVPMessage {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      path = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.path
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathMessage path = 2;
+}
+
+// Path message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15:
+// 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST
+// 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE
+// [optional]
+message FilterRSVPPathMessage {
+
+  // Path message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE
+  // and SENDER_TSPEC objects in order.
+  repeated FilterRSVPPathObjects objects = 1;
+}
+
+// Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header
+// and the object's contents.
+message FilterRSVPPathObjects {
+
+  // Description missing in models
+  FilterRSVPPathObjectsClass class_num = 1;
+}
+
+// The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4
+// . Curently supported class numbers are for Path message type. Path message: Supported
+// Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE:
+// 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC:
+// 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported
+// in above options.
+message FilterRSVPPathObjectsClass {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      session = 1;
+      rsvp_hop = 2;
+      time_values = 3;
+      explicit_route = 4;
+      label_request = 5;
+      session_attribute = 6;
+      sender_template = 7;
+      sender_tspec = 8;
+      record_route = 9;
+      custom = 10;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassSession session = 2;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassRsvpHop rsvp_hop = 3;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassTimeValues time_values = 4;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassExplicitRoute explicit_route = 5;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassLabelRequest label_request = 6;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassSessionAttribute session_attribute = 7;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassSenderTemplate sender_template = 8;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassSenderTspec sender_tspec = 9;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassRecordRoute record_route = 10;
+}
+
+// Description missing in models
+message FilterRSVPPathObjectsClassSession {
+
+  // Description missing in models
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsSessionCType c_type = 2;
+}
+
+// The body of an object corresponding to the class number and c-type. Currently supported
+// c-type for SESSION object is LSP Tunnel IPv4 (7).
+message FilterRSVPPathObjectsSessionCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel_ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel_ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathSessionLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathSessionLspTunnelIpv4 {
+
+  // Description missing in models
+  FilterField ipv4_tunnel_end_point_address = 1;
+
+  // Description missing in models
+  FilterField reserved = 2;
+
+  // Description missing in models
+  FilterField tunnel_id = 3;
+
+  // A 32-bit identifier used in the SESSION that remains constant over the life of the
+  // tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of
+  // a SESSION to the ingress-egress pair may place their IPv4 address here as a globally
+  // unique identifier.
+  FilterRSVPPathSessionExtTunnelId extended_tunnel_id = 4;
+}
+
+// Description missing in models
+message FilterRSVPPathSessionExtTunnelId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      as_integer = 1;
+      as_ipv4 = 2;
+    }
+  }
+  // 32 bit integer or IPv4 address.
+  // default = Choice.Enum.as_integer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterField as_integer = 2;
+
+  // Description missing in models
+  FilterField as_ipv4 = 3;
+}
+
+// Description missing in models
+message FilterRSVPPathObjectsClassRsvpHop {
+
+  // Description missing in models
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsRsvpHopCType c_type = 2;
+}
+
+// Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
+message FilterRSVPPathObjectsRsvpHopCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathRsvpHopIpv4 ipv4 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathRsvpHopIpv4 {
+
+  // Description missing in models
+  FilterField ipv4_address = 1;
+
+  // Description missing in models
+  FilterField logical_interface_handle = 2;
+}
+
+// Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+message FilterRSVPPathObjectsClassTimeValues {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathTimeValuesType1 type_1 = 2;
+}
+
+// Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
+message FilterRSVPPathObjectsTimeValuesCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathTimeValuesType1 type_1 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathTimeValuesType1 {
+
+  // Description missing in models
+  FilterField refresh_period_r = 1;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassExplicitRoute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsClassExplicitRouteCType c_type = 2;
+}
+
+// Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
+message FilterRSVPPathObjectsClassExplicitRouteCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathExplicitRouteType1 type_1 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathExplicitRouteType1 {
+
+  // Description missing in models
+  FilterField subobjects = 1;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassLabelRequest {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsLabelRequestCType c_type = 2;
+}
+
+// Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range
+// (1).
+message FilterRSVPPathObjectsLabelRequestCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      without_label_range = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.without_label_range
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathLabelRequestWithoutLabelRange without_label_range = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathLabelRequestWithoutLabelRange {
+
+  // Description missing in models
+  FilterField reserved = 1;
+
+  // Description missing in models
+  FilterField l3pid = 2;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassSessionAttribute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsSessionAttributeCType c_type = 2;
+}
+
+// Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1)
+// and LSP_Tunnel (7).
+message FilterRSVPPathObjectsSessionAttributeCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel = 1;
+      lsp_tunnel_ra = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathSessionAttributeLspTunnel lsp_tunnel = 2;
+
+  // Description missing in models
+  FilterRSVPPathSessionAttributeLspTunnelRa lsp_tunnel_ra = 3;
+}
+
+// Description missing in models
+message FilterRSVPPathSessionAttributeLspTunnel {
+
+  // Description missing in models
+  FilterField setup_priority = 1;
+
+  // Description missing in models
+  FilterField holding_priority = 2;
+
+  // Description missing in models
+  FilterField flags = 3;
+
+  // Description missing in models
+  FilterField name_length = 4;
+
+  // Description missing in models
+  FilterField session_name = 5;
+}
+
+// Description missing in models
+message FilterRSVPPathSessionAttributeLspTunnelRa {
+
+  // Description missing in models
+  FilterField exclude_any = 1;
+
+  // Description missing in models
+  FilterField include_any = 2;
+
+  // Description missing in models
+  FilterField include_all = 3;
+
+  // Description missing in models
+  FilterField setup_priority = 4;
+
+  // Description missing in models
+  FilterField holding_priority = 5;
+
+  // Description missing in models
+  FilterField flags = 6;
+
+  // Description missing in models
+  FilterField name_length = 7;
+
+  // Description missing in models
+  FilterField session_name = 8;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassSenderTemplate {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsSenderTemplateCType c_type = 2;
+}
+
+// Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
+message FilterRSVPPathObjectsSenderTemplateCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lsp_tunnel_ipv4 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lsp_tunnel_ipv4
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathSenderTemplateLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathSenderTemplateLspTunnelIpv4 {
+
+  // Description missing in models
+  FilterField ipv4_tunnel_sender_address = 1;
+
+  // Description missing in models
+  FilterField reserved = 2;
+
+  // Description missing in models
+  FilterField lsp_id = 3;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassSenderTspec {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsSenderTspecCType c_type = 2;
+}
+
+// Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
+message FilterRSVPPathObjectsSenderTspecCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      int_serv = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.int_serv
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathSenderTspecIntServ int_serv = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathSenderTspecIntServ {
+
+  // Description missing in models
+  FilterField version = 1;
+
+  // Description missing in models
+  FilterField reserved1 = 2;
+
+  // Description missing in models
+  FilterField overall_length = 3;
+
+  // Description missing in models
+  FilterField service_header = 4;
+
+  // Description missing in models
+  FilterField zero_bit = 5;
+
+  // Description missing in models
+  FilterField reserved2 = 6;
+
+  // Description missing in models
+  FilterField length_of_service_data = 7;
+
+  // Description missing in models
+  FilterField parameter_id_token_bucket_tspec = 8;
+
+  // Description missing in models
+  FilterField parameter_127_flag = 9;
+
+  // Description missing in models
+  FilterField parameter_127_length = 10;
+
+  // Description missing in models
+  FilterField token_bucket_rate = 11;
+
+  // Description missing in models
+  FilterField token_bucket_size = 12;
+
+  // Description missing in models
+  FilterField peak_data_rate = 13;
+
+  // Description missing in models
+  FilterField minimum_policed_unit = 14;
+
+  // Description missing in models
+  FilterField maximum_packet_size = 15;
+}
+
+// C-Type is specific to a class num.
+message FilterRSVPPathObjectsClassRecordRoute {
+
+  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
+  // of 4 or at least 4.
+  FilterField length = 1;
+
+  // Description missing in models
+  FilterRSVPPathObjectsRecordRouteCType c_type = 2;
+}
+
+// Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
+message FilterRSVPPathObjectsRecordRouteCType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_1 = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.type_1
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterRSVPPathRecordRouteType1 type_1 = 2;
+}
+
+// Description missing in models
+message FilterRSVPPathRecordRouteType1 {
+
+  // Description missing in models
+  FilterField subobjects = 1;
+}
+
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -8409,12 +9679,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -8484,10 +9748,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8791,10 +10051,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -8820,10 +10076,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -8845,10 +10097,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -8910,13 +10158,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -8961,10 +10202,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -8986,10 +10223,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9035,11 +10268,6 @@ message StateProtocolBgpPeers {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message State {
@@ -9079,10 +10307,6 @@ message StateProtocolIsisRouters {
 
   // The names of ISIS routers for which the state has to be applied. An empty or null
   // list will control all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -9237,18 +10461,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -9270,10 +10488,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -9340,18 +10554,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9373,10 +10581,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9436,10 +10640,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -9495,10 +10695,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
@@ -9523,6 +10719,7 @@ message MetricsRequest {
       lacp = 7;
       lldp = 8;
       rsvp = 9;
+      user_defined_metrics = 10;
     }
   }
   // Description missing in models
@@ -9555,6 +10752,9 @@ message MetricsRequest {
 
   // Description missing in models
   RsvpMetricsRequest rsvp = 10;
+
+  // Description missing in models
+  UserDefinedMetricsRequest user_defined = 11;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -9572,6 +10772,7 @@ message MetricsResponse {
       lacp_metrics = 7;
       lldp_metrics = 8;
       rsvp_metrics = 9;
+      user_defined_metrics = 10;
     }
   }
   // Description missing in models
@@ -9604,6 +10805,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated RsvpMetric rsvp_metrics = 10;
+
+  // Description missing in models
+  repeated UserDefinedMetric user_defined_metrics = 11;
 }
 
 // The port result request to the traffic generator
@@ -9611,10 +10815,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9647,10 +10847,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9722,10 +10918,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -9960,10 +11152,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -10090,10 +11278,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -10216,10 +11400,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -10357,10 +11537,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -10387,10 +11563,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -10445,18 +11617,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10577,10 +11741,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -10639,10 +11799,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -10794,6 +11950,82 @@ message RsvpMetric {
   optional uint64 path_reoptimizations = 31;
 }
 
+// The user defined metrics result request to the traffic generator
+message UserDefinedMetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      port_names = 1;
+      flow_names = 2;
+    }
+  }
+  // The type
+  optional Choice.Enum choice = 1;
+
+  // Names of ports for which to return results.
+  // An empty list will return all port row results.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 2;
+
+  // Names of flows for which to return results.
+  // An empty list will return all flow row results.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flow_names = 3;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      frames_tx = 1;
+      frames_rx = 2;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned. The name of the port cannot be excluded.
+  repeated ColumnNames.Enum column_names = 4;
+}
+
+// Description missing in models
+message UserDefinedMetric {
+
+  // The name of a configured port/flow
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Flow/properties/name
+  // 
+  optional string name = 1;
+
+  // The current total number of frames transmitted
+  optional uint64 frames_tx = 2;
+
+  // The current total number of valid frames received
+  optional uint64 frames_rx = 3;
+
+  // List of metrics corresponding to a set of values applicable
+  // for configured filter metrics object in the corresponding port or flow.
+  // The container is keyed by list of tag-value pairs.
+  repeated UserDefinedFilterMetric filtered_metrics = 4;
+}
+
+// Metrics for each set of values applicable for configured
+// metric tags in ingress or egress packet header fields of corresponding flow.
+// The container is keyed by list of tag-value pairs.
+message UserDefinedFilterMetric {
+
+  // Name of the filter metrics
+  optional string filter_name = 1;
+
+  // The current total number of frames adhering to the filter condition
+  optional uint64 filter_value = 2;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -10878,10 +12110,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -10911,10 +12139,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -10940,11 +12164,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -11193,10 +12412,6 @@ message IsisLspsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -11514,10 +12729,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -11676,10 +12887,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -11810,10 +13017,6 @@ message RsvpLspIpv4Ero {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
