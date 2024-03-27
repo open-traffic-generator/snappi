@@ -5980,6 +5980,11 @@ message FilterMetricAssociation {
 // Configuration for filter packets
 message FilterPacket {
 
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
   message Choice {
     enum Enum {
       unspecified = 0;
@@ -6008,70 +6013,70 @@ message FilterPacket {
   }
   // The type of packet filter.
   // default = Choice.Enum.custom
-  optional Choice.Enum choice = 1;
+  optional Choice.Enum choice = 2;
 
   // custom
-  FilterFieldCustom custom = 2;
+  FilterFieldCustom custom = 3;
 
   // Description missing in models
-  FilterEthernet ethernet = 3;
+  FilterEthernet ethernet = 4;
 
   // Description missing in models
-  FilterVlan vlan = 4;
+  FilterVlan vlan = 5;
 
   // Description missing in models
-  FilterVxlan vxlan = 5;
+  FilterVxlan vxlan = 6;
 
   // Description missing in models
-  FilterIpv4 ipv4 = 6;
+  FilterIpv4 ipv4 = 7;
 
   // Description missing in models
-  FilterIpv6 ipv6 = 7;
+  FilterIpv6 ipv6 = 8;
 
   // Description missing in models
-  FilterPfcPause pfcpause = 8;
+  FilterPfcPause pfcpause = 9;
 
   // Description missing in models
-  FilterEthernetPause ethernetpause = 9;
+  FilterEthernetPause ethernetpause = 10;
 
   // Description missing in models
-  FilterTcp tcp = 10;
+  FilterTcp tcp = 11;
 
   // Description missing in models
-  FilterUdp udp = 11;
+  FilterUdp udp = 12;
 
   // Description missing in models
-  FilterGre gre = 12;
+  FilterGre gre = 13;
 
   // Description missing in models
-  FilterGtpv1 gtpv1 = 13;
+  FilterGtpv1 gtpv1 = 14;
 
   // Description missing in models
-  FilterGtpv2 gtpv2 = 14;
+  FilterGtpv2 gtpv2 = 15;
 
   // Description missing in models
-  FilterArp arp = 15;
+  FilterArp arp = 16;
 
   // Description missing in models
-  FilterIcmp icmp = 16;
+  FilterIcmp icmp = 17;
 
   // Description missing in models
-  FilterIcmpv6 icmpv6 = 17;
+  FilterIcmpv6 icmpv6 = 18;
 
   // Description missing in models
-  FilterPpp ppp = 18;
+  FilterPpp ppp = 19;
 
   // Description missing in models
-  FilterIgmpv1 igmpv1 = 19;
+  FilterIgmpv1 igmpv1 = 20;
 
   // Description missing in models
-  FilterMpls mpls = 20;
+  FilterMpls mpls = 21;
 
   // Description missing in models
-  FilterSnmpv2c snmpv2c = 21;
+  FilterSnmpv2c snmpv2c = 22;
 
   // Description missing in models
-  FilterRsvp rsvp = 22;
+  FilterRsvp rsvp = 23;
 }
 
 // Description missing in models

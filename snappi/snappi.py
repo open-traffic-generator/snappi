@@ -114903,6 +114903,7 @@ class FilterPacket(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
     _TYPES = {
+        "name": {"type": str},
         "choice": {
             "type": str,
             "enum": [
@@ -114952,7 +114953,7 @@ class FilterPacket(OpenApiObject):
         "rsvp": {"type": "FilterRsvp"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ()  # type: tuple(str)
+    _REQUIRED = ("name",)  # type: tuple(str)
 
     _DEFAULTS = {
         "choice": "custom",
@@ -114982,9 +114983,10 @@ class FilterPacket(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, choice=None):
+    def __init__(self, parent=None, choice=None, name=None):
         super(FilterPacket, self).__init__()
         self._parent = parent
+        self._set_property("name", name)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -114993,6 +114995,11 @@ class FilterPacket(OpenApiObject):
             getattr(self, self._DEFAULTS["choice"])
         else:
             self._set_property("choice", choice)
+
+    def set(self, name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
 
     @property
     def custom(self):
@@ -115226,6 +115233,29 @@ class FilterPacket(OpenApiObject):
         Returns: FilterRsvp
         """
         return self._get_property("rsvp", FilterRsvp, self, "rsvp")
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
 
     @property
     def choice(self):
@@ -120244,7 +120274,7 @@ class FilterRSVPPathObjectsIter(OpenApiIter):
 class FilterPacketIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
-    _GETITEM_RETURNS_CHOICE_OBJECT = True
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
         super(FilterPacketIter, self).__init__()
@@ -120271,323 +120301,29 @@ class FilterPacketIter(OpenApiIter):
         if not isinstance(item, FilterPacket):
             raise Exception("Item is not an instance of FilterPacket")
 
-    def packet(self):
-        # type: () -> FilterPacketIter
+    def packet(self, name=None):
+        # type: (str) -> FilterPacketIter
         """Factory method that creates an instance of the FilterPacket class
 
         Configuration for filter packets
 
         Returns: FilterPacketIter
         """
-        item = FilterPacket(parent=self._parent, choice=self._choice)
+        item = FilterPacket(parent=self._parent, choice=self._choice, name=name)
         self._add(item)
         return self
 
-    def add(self):
-        # type: () -> FilterPacket
+    def add(self, name=None):
+        # type: (str) -> FilterPacket
         """Add method that creates and returns an instance of the FilterPacket class
 
         Configuration for filter packets
 
         Returns: FilterPacket
         """
-        item = FilterPacket(parent=self._parent, choice=self._choice)
+        item = FilterPacket(parent=self._parent, choice=self._choice, name=name)
         self._add(item)
         return item
-
-    def custom(self, offset=0, value="00", mask="00"):
-        # type: (int,str,str) -> FilterPacketIter
-        """Factory method that creates an instance of the FilterFieldCustom class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.custom
-        item.choice = "custom"
-        self._add(item)
-        return self
-
-    def ethernet(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterEthernet class
-
-        Ethernet packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.ethernet
-        item.choice = "ethernet"
-        self._add(item)
-        return self
-
-    def vlan(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterVlan class
-
-        VLAN packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.vlan
-        item.choice = "vlan"
-        self._add(item)
-        return self
-
-    def vxlan(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterVxlan class
-
-        VXLAN packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.vxlan
-        item.choice = "vxlan"
-        self._add(item)
-        return self
-
-    def ipv4(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterIpv4 class
-
-        IPv4 packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.ipv4
-        item.choice = "ipv4"
-        self._add(item)
-        return self
-
-    def ipv6(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterIpv6 class
-
-        IPv6 packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.ipv6
-        item.choice = "ipv6"
-        self._add(item)
-        return self
-
-    def pfcpause(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterPfcPause class
-
-        IEEE 802.1Qbb PFC Pause packet header.
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.pfcpause
-        item.choice = "pfcpause"
-        self._add(item)
-        return self
-
-    def ethernetpause(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterEthernetPause class
-
-        IEEE 802.3x global ethernet pause packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.ethernetpause
-        item.choice = "ethernetpause"
-        self._add(item)
-        return self
-
-    def tcp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterTcp class
-
-        TCP packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.tcp
-        item.choice = "tcp"
-        self._add(item)
-        return self
-
-    def udp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterUdp class
-
-        UDP packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.udp
-        item.choice = "udp"
-        self._add(item)
-        return self
-
-    def gre(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterGre class
-
-        Standard GRE packet header (RFC2784)
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.gre
-        item.choice = "gre"
-        self._add(item)
-        return self
-
-    def gtpv1(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterGtpv1 class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.gtpv1
-        item.choice = "gtpv1"
-        self._add(item)
-        return self
-
-    def gtpv2(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterGtpv2 class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.gtpv2
-        item.choice = "gtpv2"
-        self._add(item)
-        return self
-
-    def arp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterArp class
-
-        ARP packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.arp
-        item.choice = "arp"
-        self._add(item)
-        return self
-
-    def icmp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterIcmp class
-
-        ICMP packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.icmp
-        item.choice = "icmp"
-        self._add(item)
-        return self
-
-    def icmpv6(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterIcmpv6 class
-
-        ICMPv6 packet header
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.icmpv6
-        item.choice = "icmpv6"
-        self._add(item)
-        return self
-
-    def ppp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterPpp class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.ppp
-        item.choice = "ppp"
-        self._add(item)
-        return self
-
-    def igmpv1(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterIgmpv1 class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.igmpv1
-        item.choice = "igmpv1"
-        self._add(item)
-        return self
-
-    def mpls(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterMpls class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.mpls
-        item.choice = "mpls"
-        self._add(item)
-        return self
-
-    def snmpv2c(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterSnmpv2c class
-
-        SNMPv2C packet header as defined in RFC1901 and RFC3416.
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.snmpv2c
-        item.choice = "snmpv2c"
-        self._add(item)
-        return self
-
-    def rsvp(self):
-        # type: () -> FilterPacketIter
-        """Factory method that creates an instance of the FilterRsvp class
-
-        TBD
-
-        Returns: FilterPacketIter
-        """
-        item = FilterPacket()
-        item.rsvp
-        item.choice = "rsvp"
-        self._add(item)
-        return self
 
 
 class FilterMetricIter(OpenApiIter):
