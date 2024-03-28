@@ -5815,17 +5815,18 @@ class DeviceIpv6Iter(OpenApiIter):
 
 
 class DeviceDhcpv4client(OpenApiObject):
-    __slots__ = "_parent"
+    __slots__ = ("_parent", "_choice")
 
     _TYPES = {
         "name": {"type": str},
-        "selecting_server": {
+        "choice": {
             "type": str,
             "enum": [
                 "first_server",
                 "server_address",
             ],
         },
+        "first_server": {"type": bool},
         "server_address": {"type": "Dhcpv4clientServer"},
         "broadcast": {"type": bool},
         "parameters_request_list": {"type": "Dhcpv4ClientParams"},
@@ -5834,7 +5835,8 @@ class DeviceDhcpv4client(OpenApiObject):
     _REQUIRED = ("name",)  # type: tuple(str)
 
     _DEFAULTS = {
-        "selecting_server": "first_server",
+        "choice": "first_server",
+        "first_server": True,
         "broadcast": False,
     }  # type: Dict[str, Union(type)]
 
@@ -5846,18 +5848,39 @@ class DeviceDhcpv4client(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     def __init__(
-        self, parent=None, name=None, selecting_server="first_server", broadcast=False
+        self, parent=None, choice=None, name=None, first_server=True, broadcast=False
     ):
         super(DeviceDhcpv4client, self).__init__()
         self._parent = parent
         self._set_property("name", name)
-        self._set_property("selecting_server", selecting_server)
+        self._set_property("first_server", first_server)
         self._set_property("broadcast", broadcast)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
 
-    def set(self, name=None, selecting_server=None, broadcast=None):
+    def set(self, name=None, first_server=None, broadcast=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
+
+    @property
+    def server_address(self):
+        # type: () -> Dhcpv4clientServer
+        """Factory property that returns an instance of the Dhcpv4clientServer class
+
+        The address of the DHCP server from which the subnet will accept IP addresses.
+
+        Returns: Dhcpv4clientServer
+        """
+        return self._get_property(
+            "server_address", Dhcpv4clientServer, self, "server_address"
+        )
 
     @property
     def name(self):
@@ -5883,36 +5906,46 @@ class DeviceDhcpv4client(OpenApiObject):
         self._set_property("name", value)
 
     @property
-    def selecting_server(self):
+    def choice(self):
         # type: () -> Union[Literal["first_server"], Literal["server_address"]]
-        """selecting_server getter
+        """choice getter
 
         The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
 
         Returns: Union[Literal["first_server"], Literal["server_address"]]
         """
-        return self._get_property("selecting_server")
+        return self._get_property("choice")
 
-    @selecting_server.setter
-    def selecting_server(self, value):
-        """selecting_server setter
+    @choice.setter
+    def choice(self, value):
+        """choice setter
 
         The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
 
         value: Union[Literal["first_server"], Literal["server_address"]]
         """
-        self._set_property("selecting_server", value)
+        self._set_property("choice", value)
 
     @property
-    def server_address(self):
-        # type: () -> Dhcpv4clientServer
-        """server_address getter
+    def first_server(self):
+        # type: () -> bool
+        """first_server getter
 
-        The address of the DHCP server from which the subnet will accept IP addresses.The address of the DHCP server from which the subnet will accept IP addresses.The address of the DHCP server from which the subnet will accept IP addresses.
+        TBD
 
-        Returns: Dhcpv4clientServer
+        Returns: bool
         """
-        return self._get_property("server_address", Dhcpv4clientServer)
+        return self._get_property("first_server")
+
+    @first_server.setter
+    def first_server(self, value):
+        """first_server setter
+
+        TBD
+
+        value: bool
+        """
+        self._set_property("first_server", value, "first_server")
 
     @property
     def broadcast(self):
@@ -6134,7 +6167,7 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[DeviceDhcpv4client]
+        # type: (str) -> Union[DeviceDhcpv4client, Dhcpv4clientServer]
         return self._getitem(key)
 
     def __iter__(self):
@@ -6153,8 +6186,8 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         if not isinstance(item, DeviceDhcpv4client):
             raise Exception("Item is not an instance of DeviceDhcpv4client")
 
-    def dhcpv4client(self, name=None, selecting_server="first_server", broadcast=False):
-        # type: (str,Union[Literal["first_server"], Literal["server_address"]],bool) -> DeviceDhcpv4clientIter
+    def dhcpv4client(self, name=None, first_server=True, broadcast=False):
+        # type: (str,bool,bool) -> DeviceDhcpv4clientIter
         """Factory method that creates an instance of the DeviceDhcpv4client class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
@@ -6163,15 +6196,16 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         """
         item = DeviceDhcpv4client(
             parent=self._parent,
+            choice=self._choice,
             name=name,
-            selecting_server=selecting_server,
+            first_server=first_server,
             broadcast=broadcast,
         )
         self._add(item)
         return self
 
-    def add(self, name=None, selecting_server="first_server", broadcast=False):
-        # type: (str,Union[Literal["first_server"], Literal["server_address"]],bool) -> DeviceDhcpv4client
+    def add(self, name=None, first_server=True, broadcast=False):
+        # type: (str,bool,bool) -> DeviceDhcpv4client
         """Add method that creates and returns an instance of the DeviceDhcpv4client class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
@@ -6180,8 +6214,9 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         """
         item = DeviceDhcpv4client(
             parent=self._parent,
+            choice=self._choice,
             name=name,
-            selecting_server=selecting_server,
+            first_server=first_server,
             broadcast=broadcast,
         )
         self._add(item)

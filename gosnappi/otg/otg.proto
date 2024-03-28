@@ -509,7 +509,7 @@ message DeviceDhcpv4client {
   // required = true
   optional string name = 1;
 
-  message SelectingServer {
+  message Choice {
     enum Enum {
       unspecified = 0;
       first_server = 1;
@@ -524,19 +524,23 @@ message DeviceDhcpv4client {
   // The address of the DHCP server from which the subnet will accept IP addresses. If
   // server_address is selected then next field 'server_address' to be assigned with a
   // IP address.
-  // default = SelectingServer.Enum.first_server
-  optional SelectingServer.Enum selecting_server = 2;
+  // default = Choice.Enum.first_server
+  optional Choice.Enum choice = 2;
 
   // Description missing in models
-  Dhcpv4clientServer server_address = 3;
+  // default = True
+  optional bool first_server = 3;
+
+  // Description missing in models
+  Dhcpv4clientServer server_address = 4;
 
   // If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER
   // and DHCPACK messages.
   // default = False
-  optional bool broadcast = 4;
+  optional bool broadcast = 5;
 
   // Optional parameters field request list of DHCPv4 Client.
-  Dhcpv4ClientParams parameters_request_list = 5;
+  Dhcpv4ClientParams parameters_request_list = 6;
 }
 
 // The address of the DHCP server from which the subnet will accept IP addresses.
@@ -544,20 +548,6 @@ message Dhcpv4clientServer {
 
   // The address of the DHCP server.
   optional string ip = 1;
-}
-
-// A manually configured IPv4 gateway address to be used  as gateway address of the
-// learned DHCP IP address
-message Dhcpv4clientGatewayInfo {
-
-  // Whenever a gateway IP is configured, the client will use it as gateway address  for
-  // traffic outside of its network;  otherwise client uses the gateway IP address learned
-  // from the server.
-  optional string ip = 1;
-
-  // A manually configured gateway MAC address.  ARP messages are sent to resolve the
-  // gateway MAC address.
-  optional string mac = 2;
 }
 
 // Configuration Parameter request list by emulated DHCPv4 Client.
