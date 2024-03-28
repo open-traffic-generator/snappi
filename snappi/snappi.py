@@ -4831,8 +4831,8 @@ class DeviceEthernet(OpenApiObject):
         },
         "vlans": {"type": "DeviceVlanIter"},
         "name": {"type": str},
-        "dhcp_v4interface": {"type": "DeviceDhcpv4client"},
-        "dhcp_v6interface": {"type": "DeviceDhcpv6client"},
+        "dhcp_v4interfaces": {"type": "DeviceDhcpv4clientIter"},
+        "dhcp_v6interfaces": {"type": "DeviceDhcpv6clientIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("mac", "name")  # type: tuple(str)
@@ -4971,26 +4971,30 @@ class DeviceEthernet(OpenApiObject):
         self._set_property("name", value)
 
     @property
-    def dhcp_v4interface(self):
-        # type: () -> DeviceDhcpv4client
-        """dhcp_v4interface getter
+    def dhcp_v4interfaces(self):
+        # type: () -> DeviceDhcpv4clientIter
+        """dhcp_v4interfaces getter
 
-        Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlUnder Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlUnder Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlDHCPv4 Client Configuration.
+        List of DHCPv4 Clients Configuration.
 
-        Returns: DeviceDhcpv4client
+        Returns: DeviceDhcpv4clientIter
         """
-        return self._get_property("dhcp_v4interface", DeviceDhcpv4client)
+        return self._get_property(
+            "dhcp_v4interfaces", DeviceDhcpv4clientIter, self._parent, self._choice
+        )
 
     @property
-    def dhcp_v6interface(self):
-        # type: () -> DeviceDhcpv6client
-        """dhcp_v6interface getter
+    def dhcp_v6interfaces(self):
+        # type: () -> DeviceDhcpv6clientIter
+        """dhcp_v6interfaces getter
 
-        Under Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlUnder Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlUnder Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.htmlDHCPv6 Client Configuration.
+        List of DHCPv6 Clients Configuration.
 
-        Returns: DeviceDhcpv6client
+        Returns: DeviceDhcpv6clientIter
         """
-        return self._get_property("dhcp_v6interface", DeviceDhcpv6client)
+        return self._get_property(
+            "dhcp_v6interfaces", DeviceDhcpv6clientIter, self._parent, self._choice
+        )
 
 
 class EthernetConnection(OpenApiObject):
@@ -5822,23 +5826,8 @@ class DeviceDhcpv4client(OpenApiObject):
                 "server_address",
             ],
         },
-        "first_server": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "server_address": {
-            "type": str,
-            "format": "ipv4",
-        },
+        "server_address": {"type": "Dhcpv4clientServer"},
         "broadcast": {"type": bool},
-        "gateway_ip": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "gateway_mac": {
-            "type": str,
-            "format": "mac",
-        },
         "parameters_request_list": {"type": "Dhcpv4ClientParams"},
     }  # type: Dict[str, str]
 
@@ -5846,11 +5835,7 @@ class DeviceDhcpv4client(OpenApiObject):
 
     _DEFAULTS = {
         "selecting_server": "first_server",
-        "first_server": "0.0.0.0",
-        "server_address": "0.0.0.0",
         "broadcast": False,
-        "gateway_ip": "0.0.0.0",
-        "gateway_mac": "0:0:0:0:0:0",
     }  # type: Dict[str, Union(type)]
 
     FIRST_SERVER = "first_server"  # type: str
@@ -5861,36 +5846,15 @@ class DeviceDhcpv4client(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     def __init__(
-        self,
-        parent=None,
-        name=None,
-        selecting_server="first_server",
-        first_server="0.0.0.0",
-        server_address="0.0.0.0",
-        broadcast=False,
-        gateway_ip="0.0.0.0",
-        gateway_mac="0:0:0:0:0:0",
+        self, parent=None, name=None, selecting_server="first_server", broadcast=False
     ):
         super(DeviceDhcpv4client, self).__init__()
         self._parent = parent
         self._set_property("name", name)
         self._set_property("selecting_server", selecting_server)
-        self._set_property("first_server", first_server)
-        self._set_property("server_address", server_address)
         self._set_property("broadcast", broadcast)
-        self._set_property("gateway_ip", gateway_ip)
-        self._set_property("gateway_mac", gateway_mac)
 
-    def set(
-        self,
-        name=None,
-        selecting_server=None,
-        first_server=None,
-        server_address=None,
-        broadcast=None,
-        gateway_ip=None,
-        gateway_mac=None,
-    ):
+    def set(self, name=None, selecting_server=None, broadcast=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -5923,7 +5887,7 @@ class DeviceDhcpv4client(OpenApiObject):
         # type: () -> Union[Literal["first_server"], Literal["server_address"]]
         """selecting_server getter
 
-        The client receives one or more DHCPOFFER messages from one or more servers. The client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. use_first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. use_server_address: The address of the DHCP server from which the subnet will accept IP addresses. server address to 0.0.0.0, implementation will use the services of the first DHCP server that responds to the DHCP Lease Request message.
+        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
 
         Returns: Union[Literal["first_server"], Literal["server_address"]]
         """
@@ -5933,53 +5897,22 @@ class DeviceDhcpv4client(OpenApiObject):
     def selecting_server(self, value):
         """selecting_server setter
 
-        The client receives one or more DHCPOFFER messages from one or more servers. The client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. use_first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. use_server_address: The address of the DHCP server from which the subnet will accept IP addresses. server address to 0.0.0.0, implementation will use the services of the first DHCP server that responds to the DHCP Lease Request message.
+        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
 
         value: Union[Literal["first_server"], Literal["server_address"]]
         """
         self._set_property("selecting_server", value)
 
     @property
-    def first_server(self):
-        # type: () -> str
-        """first_server getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("first_server")
-
-    @first_server.setter
-    def first_server(self, value):
-        """first_server setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("first_server", value)
-
-    @property
     def server_address(self):
-        # type: () -> str
+        # type: () -> Dhcpv4clientServer
         """server_address getter
 
-        TBD
+        The address of the DHCP server from which the subnet will accept IP addresses.The address of the DHCP server from which the subnet will accept IP addresses.The address of the DHCP server from which the subnet will accept IP addresses.
 
-        Returns: str
+        Returns: Dhcpv4clientServer
         """
-        return self._get_property("server_address")
-
-    @server_address.setter
-    def server_address(self, value):
-        """server_address setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("server_address", value)
+        return self._get_property("server_address", Dhcpv4clientServer)
 
     @property
     def broadcast(self):
@@ -6003,57 +5936,63 @@ class DeviceDhcpv4client(OpenApiObject):
         self._set_property("broadcast", value)
 
     @property
-    def gateway_ip(self):
-        # type: () -> str
-        """gateway_ip getter
-
-        A manually configured IPv4 gateway address. The default value 0.0.0.0, meaning that no manual gateway IP address is specified. If the DHCPv4 Client receives from server response packet with Router Address TLV specifying another gateway address than the manually configured gateway IP, then this TLV is ignored. Whenever manual non default gateway IP is configured, the client will use it as gateway address for traffic outside of its network; otherwise client uses the gateway IP address learned from the server.
-
-        Returns: str
-        """
-        return self._get_property("gateway_ip")
-
-    @gateway_ip.setter
-    def gateway_ip(self, value):
-        """gateway_ip setter
-
-        A manually configured IPv4 gateway address. The default value 0.0.0.0, meaning that no manual gateway IP address is specified. If the DHCPv4 Client receives from server response packet with Router Address TLV specifying another gateway address than the manually configured gateway IP, then this TLV is ignored. Whenever manual non default gateway IP is configured, the client will use it as gateway address for traffic outside of its network; otherwise client uses the gateway IP address learned from the server.
-
-        value: str
-        """
-        self._set_property("gateway_ip", value)
-
-    @property
-    def gateway_mac(self):
-        # type: () -> str
-        """gateway_mac getter
-
-        A manually configured gateway MAC address. In case of non default, ARP messages are sent to resolve the gateway MAC address.
-
-        Returns: str
-        """
-        return self._get_property("gateway_mac")
-
-    @gateway_mac.setter
-    def gateway_mac(self, value):
-        """gateway_mac setter
-
-        A manually configured gateway MAC address. In case of non default, ARP messages are sent to resolve the gateway MAC address.
-
-        value: str
-        """
-        self._set_property("gateway_mac", value)
-
-    @property
     def parameters_request_list(self):
         # type: () -> Dhcpv4ClientParams
         """parameters_request_list getter
 
-        Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.DHCPv4 Client parameters request list.
+        Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.Optional parameters field request list of DHCPv4 Client.
 
         Returns: Dhcpv4ClientParams
         """
         return self._get_property("parameters_request_list", Dhcpv4ClientParams)
+
+
+class Dhcpv4clientServer(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ip": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ip=None):
+        super(Dhcpv4clientServer, self).__init__()
+        self._parent = parent
+        self._set_property("ip", ip)
+
+    def set(self, ip=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ip(self):
+        # type: () -> str
+        """ip getter
+
+        The address of the DHCP server.
+
+        Returns: str
+        """
+        return self._get_property("ip")
+
+    @ip.setter
+    def ip(self, value):
+        """ip setter
+
+        The address of the DHCP server.
+
+        value: str
+        """
+        self._set_property("ip", value)
 
 
 class Dhcpv4ClientParams(OpenApiObject):
@@ -6062,7 +6001,7 @@ class Dhcpv4ClientParams(OpenApiObject):
     _TYPES = {
         "subnet_mask": {"type": bool},
         "router": {"type": bool},
-        "renewal_time": {"type": bool},
+        "renewal_timer": {"type": bool},
         "rebinding_timer": {"type": bool},
     }  # type: Dict[str, str]
 
@@ -6071,7 +6010,7 @@ class Dhcpv4ClientParams(OpenApiObject):
     _DEFAULTS = {
         "subnet_mask": True,
         "router": True,
-        "renewal_time": False,
+        "renewal_timer": False,
         "rebinding_timer": False,
     }  # type: Dict[str, Union(type)]
 
@@ -6082,18 +6021,18 @@ class Dhcpv4ClientParams(OpenApiObject):
         parent=None,
         subnet_mask=True,
         router=True,
-        renewal_time=False,
+        renewal_timer=False,
         rebinding_timer=False,
     ):
         super(Dhcpv4ClientParams, self).__init__()
         self._parent = parent
         self._set_property("subnet_mask", subnet_mask)
         self._set_property("router", router)
-        self._set_property("renewal_time", renewal_time)
+        self._set_property("renewal_timer", renewal_timer)
         self._set_property("rebinding_timer", rebinding_timer)
 
     def set(
-        self, subnet_mask=None, router=None, renewal_time=None, rebinding_timer=None
+        self, subnet_mask=None, router=None, renewal_timer=None, rebinding_timer=None
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -6142,32 +6081,32 @@ class Dhcpv4ClientParams(OpenApiObject):
         self._set_property("router", value)
 
     @property
-    def renewal_time(self):
+    def renewal_timer(self):
         # type: () -> bool
-        """renewal_time getter
+        """renewal_timer getter
 
-        Request for the renewal timer, T1, when the timer expire, the client transitions from the BOUND state to the RENEWING state
+        Request for the renewal timer, T1. When the timer expires, the client transitions from the BOUND state to the RENEWING state.
 
         Returns: bool
         """
-        return self._get_property("renewal_time")
+        return self._get_property("renewal_timer")
 
-    @renewal_time.setter
-    def renewal_time(self, value):
-        """renewal_time setter
+    @renewal_timer.setter
+    def renewal_timer(self, value):
+        """renewal_timer setter
 
-        Request for the renewal timer, T1, when the timer expire, the client transitions from the BOUND state to the RENEWING state
+        Request for the renewal timer, T1. When the timer expires, the client transitions from the BOUND state to the RENEWING state.
 
         value: bool
         """
-        self._set_property("renewal_time", value)
+        self._set_property("renewal_timer", value)
 
     @property
     def rebinding_timer(self):
         # type: () -> bool
         """rebinding_timer getter
 
-        Request for the rebinding timer (T2), when expires, the client transitions to the REBINDING state.
+        Request for the rebinding timer (T2). When expires, the client transitions to the REBINDING state.
 
         Returns: bool
         """
@@ -6177,11 +6116,76 @@ class Dhcpv4ClientParams(OpenApiObject):
     def rebinding_timer(self, value):
         """rebinding_timer setter
 
-        Request for the rebinding timer (T2), when expires, the client transitions to the REBINDING state.
+        Request for the rebinding timer (T2). When expires, the client transitions to the REBINDING state.
 
         value: bool
         """
         self._set_property("rebinding_timer", value)
+
+
+class DeviceDhcpv4clientIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(DeviceDhcpv4clientIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[DeviceDhcpv4client]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> DeviceDhcpv4clientIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> DeviceDhcpv4client
+        return self._next()
+
+    def next(self):
+        # type: () -> DeviceDhcpv4client
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, DeviceDhcpv4client):
+            raise Exception("Item is not an instance of DeviceDhcpv4client")
+
+    def dhcpv4client(self, name=None, selecting_server="first_server", broadcast=False):
+        # type: (str,Union[Literal["first_server"], Literal["server_address"]],bool) -> DeviceDhcpv4clientIter
+        """Factory method that creates an instance of the DeviceDhcpv4client class
+
+        Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+
+        Returns: DeviceDhcpv4clientIter
+        """
+        item = DeviceDhcpv4client(
+            parent=self._parent,
+            name=name,
+            selecting_server=selecting_server,
+            broadcast=broadcast,
+        )
+        self._add(item)
+        return self
+
+    def add(self, name=None, selecting_server="first_server", broadcast=False):
+        # type: (str,Union[Literal["first_server"], Literal["server_address"]],bool) -> DeviceDhcpv4client
+        """Add method that creates and returns an instance of the DeviceDhcpv4client class
+
+        Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+
+        Returns: DeviceDhcpv4client
+        """
+        item = DeviceDhcpv4client(
+            parent=self._parent,
+            name=name,
+            selecting_server=selecting_server,
+            broadcast=broadcast,
+        )
+        self._add(item)
+        return item
 
 
 class DeviceDhcpv6client(OpenApiObject):
@@ -6231,6 +6235,61 @@ class DeviceDhcpv6client(OpenApiObject):
         if value is None:
             raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
+
+
+class DeviceDhcpv6clientIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(DeviceDhcpv6clientIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[DeviceDhcpv6client]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> DeviceDhcpv6clientIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> DeviceDhcpv6client
+        return self._next()
+
+    def next(self):
+        # type: () -> DeviceDhcpv6client
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, DeviceDhcpv6client):
+            raise Exception("Item is not an instance of DeviceDhcpv6client")
+
+    def dhcpv6client(self, name=None):
+        # type: (str) -> DeviceDhcpv6clientIter
+        """Factory method that creates an instance of the DeviceDhcpv6client class
+
+        Under Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+
+        Returns: DeviceDhcpv6clientIter
+        """
+        item = DeviceDhcpv6client(parent=self._parent, name=name)
+        self._add(item)
+        return self
+
+    def add(self, name=None):
+        # type: (str) -> DeviceDhcpv6client
+        """Add method that creates and returns an instance of the DeviceDhcpv6client class
+
+        Under Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+
+        Returns: DeviceDhcpv6client
+        """
+        item = DeviceDhcpv6client(parent=self._parent, name=name)
+        self._add(item)
+        return item
 
 
 class DeviceEthernetIter(OpenApiIter):
@@ -24131,7 +24190,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6,d Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
 
         Returns: str
         """
@@ -24141,7 +24200,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6,d Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
+        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
 
         value: str
         """
@@ -29368,106 +29427,24 @@ class DhcpServerV4(OpenApiObject):
     _TYPES = {
         "name": {"type": str},
         "ipv4_name": {"type": str},
-        "lease_time": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 300,
-            "maximum": 30000000,
-        },
-        "start_pool_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "prefix": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 32,
-        },
-        "pool_size": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-        },
-        "router_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "primary_dns_server": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "secondary_dns_server": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "echo_relay_with_tlv_82": {
-            "type": str,
-            "format": "ipv4",
-        },
+        "address_pool": {"type": "DhcpServerV4Pool"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "ipv4_name")  # type: tuple(str)
+    _REQUIRED = ("name", "ipv4_name", "address_pool")  # type: tuple(str)
 
-    _DEFAULTS = {
-        "lease_time": 86400,
-        "start_pool_address": "100.1.1.1",
-        "prefix": 24,
-        "pool_size": 1,
-        "step": 1,
-    }  # type: Dict[str, Union(type)]
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     _STATUS = {
         "self": "DhcpServerV4 is under_review, Information TBD",
     }  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        ipv4_name=None,
-        lease_time=86400,
-        start_pool_address="100.1.1.1",
-        prefix=24,
-        pool_size=1,
-        step=1,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
-        echo_relay_with_tlv_82=None,
-    ):
+    def __init__(self, parent=None, name=None, ipv4_name=None):
         super(DhcpServerV4, self).__init__()
         self._parent = parent
         self._set_property("name", name)
         self._set_property("ipv4_name", ipv4_name)
-        self._set_property("lease_time", lease_time)
-        self._set_property("start_pool_address", start_pool_address)
-        self._set_property("prefix", prefix)
-        self._set_property("pool_size", pool_size)
-        self._set_property("step", step)
-        self._set_property("router_address", router_address)
-        self._set_property("primary_dns_server", primary_dns_server)
-        self._set_property("secondary_dns_server", secondary_dns_server)
-        self._set_property("echo_relay_with_tlv_82", echo_relay_with_tlv_82)
 
-    def set(
-        self,
-        name=None,
-        ipv4_name=None,
-        lease_time=None,
-        start_pool_address=None,
-        prefix=None,
-        pool_size=None,
-        step=None,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
-        echo_relay_with_tlv_82=None,
-    ):
+    def set(self, name=None, ipv4_name=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -29519,11 +29496,123 @@ class DhcpServerV4(OpenApiObject):
         self._set_property("ipv4_name", value)
 
     @property
+    def address_pool(self):
+        # type: () -> DhcpServerV4Pool
+        """address_pool getter
+
+        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Configure DHCPv4 Server Lease parameters
+
+        Returns: DhcpServerV4Pool
+        """
+        return self._get_property("address_pool", DhcpServerV4Pool)
+
+
+class DhcpServerV4Pool(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "lease_time": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 10,
+        },
+        "start_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "prefix": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "size": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "step": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+        },
+        "options": {"type": "DhcpServerV4PoolOption"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("name", "start_address")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "lease_time": 86400,
+        "prefix": 24,
+        "size": 1,
+        "step": 1,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {
+        "self": "DhcpServerV4Pool is under_review, Information TBD",
+    }  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        name=None,
+        lease_time=86400,
+        start_address=None,
+        prefix=24,
+        size=1,
+        step=1,
+    ):
+        super(DhcpServerV4Pool, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("lease_time", lease_time)
+        self._set_property("start_address", start_address)
+        self._set_property("prefix", prefix)
+        self._set_property("size", size)
+        self._set_property("step", step)
+
+    def set(
+        self,
+        name=None,
+        lease_time=None,
+        start_address=None,
+        prefix=None,
+        size=None,
+        step=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property name as None")
+        self._set_property("name", value)
+
+    @property
     def lease_time(self):
         # type: () -> int
         """lease_time getter
 
-        The Life Time length in seconds that is assigned to lease if the requesting DHCP client does not specify specific expiration time.
+        The Life Time length in seconds that is assigned to lease.
 
         Returns: int
         """
@@ -29533,32 +29622,34 @@ class DhcpServerV4(OpenApiObject):
     def lease_time(self, value):
         """lease_time setter
 
-        The Life Time length in seconds that is assigned to lease if the requesting DHCP client does not specify specific expiration time.
+        The Life Time length in seconds that is assigned to lease.
 
         value: int
         """
         self._set_property("lease_time", value)
 
     @property
-    def start_pool_address(self):
+    def start_address(self):
         # type: () -> str
-        """start_pool_address getter
+        """start_address getter
 
         The IP address of the first lease pool.
 
         Returns: str
         """
-        return self._get_property("start_pool_address")
+        return self._get_property("start_address")
 
-    @start_pool_address.setter
-    def start_pool_address(self, value):
-        """start_pool_address setter
+    @start_address.setter
+    def start_address(self, value):
+        """start_address setter
 
         The IP address of the first lease pool.
 
         value: str
         """
-        self._set_property("start_pool_address", value)
+        if value is None:
+            raise TypeError("Cannot set required property start_address as None")
+        self._set_property("start_address", value)
 
     @property
     def prefix(self):
@@ -29582,32 +29673,32 @@ class DhcpServerV4(OpenApiObject):
         self._set_property("prefix", value)
 
     @property
-    def pool_size(self):
+    def size(self):
         # type: () -> int
-        """pool_size getter
+        """size getter
 
         The total number of addresses in the pool.
 
         Returns: int
         """
-        return self._get_property("pool_size")
+        return self._get_property("size")
 
-    @pool_size.setter
-    def pool_size(self, value):
-        """pool_size setter
+    @size.setter
+    def size(self, value):
+        """size setter
 
         The total number of addresses in the pool.
 
         value: int
         """
-        self._set_property("pool_size", value)
+        self._set_property("size", value)
 
     @property
     def step(self):
         # type: () -> int
         """step getter
 
-        Increments the network address prefixes within pool range where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
+        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
 
         Returns: int
         """
@@ -29617,11 +29708,76 @@ class DhcpServerV4(OpenApiObject):
     def step(self, value):
         """step setter
 
-        Increments the network address prefixes within pool range where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
+        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
 
         value: int
         """
         self._set_property("step", value)
+
+    @property
+    def options(self):
+        # type: () -> DhcpServerV4PoolOption
+        """options getter
+
+        Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.
+
+        Returns: DhcpServerV4PoolOption
+        """
+        return self._get_property("options", DhcpServerV4PoolOption)
+
+
+class DhcpServerV4PoolOption(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "router_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "primary_dns_server": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "secondary_dns_server": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "echo_relay_with_tlv_82": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "echo_relay_with_tlv_82": True,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        router_address=None,
+        primary_dns_server=None,
+        secondary_dns_server=None,
+        echo_relay_with_tlv_82=True,
+    ):
+        super(DhcpServerV4PoolOption, self).__init__()
+        self._parent = parent
+        self._set_property("router_address", router_address)
+        self._set_property("primary_dns_server", primary_dns_server)
+        self._set_property("secondary_dns_server", secondary_dns_server)
+        self._set_property("echo_relay_with_tlv_82", echo_relay_with_tlv_82)
+
+    def set(
+        self,
+        router_address=None,
+        primary_dns_server=None,
+        secondary_dns_server=None,
+        echo_relay_with_tlv_82=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
 
     @property
     def router_address(self):
@@ -29688,12 +29844,12 @@ class DhcpServerV4(OpenApiObject):
 
     @property
     def echo_relay_with_tlv_82(self):
-        # type: () -> str
+        # type: () -> bool
         """echo_relay_with_tlv_82 getter
 
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
+        If selected, the DHCP server includes in its replies the TLV information for the DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from DHCP relay agent, otherwise it replies without including this TLV.
 
-        Returns: str
+        Returns: bool
         """
         return self._get_property("echo_relay_with_tlv_82")
 
@@ -29701,9 +29857,9 @@ class DhcpServerV4(OpenApiObject):
     def echo_relay_with_tlv_82(self, value):
         """echo_relay_with_tlv_82 setter
 
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
+        If selected, the DHCP server includes in its replies the TLV information for the DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from DHCP relay agent, otherwise it replies without including this TLV.
 
-        value: str
+        value: bool
         """
         self._set_property("echo_relay_with_tlv_82", value)
 
@@ -29738,79 +29894,27 @@ class DhcpServerV4Iter(OpenApiIter):
         if not isinstance(item, DhcpServerV4):
             raise Exception("Item is not an instance of DhcpServerV4")
 
-    def v4(
-        self,
-        name=None,
-        ipv4_name=None,
-        lease_time=86400,
-        start_pool_address="100.1.1.1",
-        prefix=24,
-        pool_size=1,
-        step=1,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
-        echo_relay_with_tlv_82=None,
-    ):
-        # type: (str,str,int,str,int,int,int,str,str,str,str) -> DhcpServerV4Iter
+    def v4(self, name=None, ipv4_name=None):
+        # type: (str,str) -> DhcpServerV4Iter
         """Factory method that creates an instance of the DhcpServerV4 class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Server.
 
         Returns: DhcpServerV4Iter
         """
-        item = DhcpServerV4(
-            parent=self._parent,
-            name=name,
-            ipv4_name=ipv4_name,
-            lease_time=lease_time,
-            start_pool_address=start_pool_address,
-            prefix=prefix,
-            pool_size=pool_size,
-            step=step,
-            router_address=router_address,
-            primary_dns_server=primary_dns_server,
-            secondary_dns_server=secondary_dns_server,
-            echo_relay_with_tlv_82=echo_relay_with_tlv_82,
-        )
+        item = DhcpServerV4(parent=self._parent, name=name, ipv4_name=ipv4_name)
         self._add(item)
         return self
 
-    def add(
-        self,
-        name=None,
-        ipv4_name=None,
-        lease_time=86400,
-        start_pool_address="100.1.1.1",
-        prefix=24,
-        pool_size=1,
-        step=1,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
-        echo_relay_with_tlv_82=None,
-    ):
-        # type: (str,str,int,str,int,int,int,str,str,str,str) -> DhcpServerV4
+    def add(self, name=None, ipv4_name=None):
+        # type: (str,str) -> DhcpServerV4
         """Add method that creates and returns an instance of the DhcpServerV4 class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Server.
 
         Returns: DhcpServerV4
         """
-        item = DhcpServerV4(
-            parent=self._parent,
-            name=name,
-            ipv4_name=ipv4_name,
-            lease_time=lease_time,
-            start_pool_address=start_pool_address,
-            prefix=prefix,
-            pool_size=pool_size,
-            step=step,
-            router_address=router_address,
-            primary_dns_server=primary_dns_server,
-            secondary_dns_server=secondary_dns_server,
-            echo_relay_with_tlv_82=echo_relay_with_tlv_82,
-        )
+        item = DhcpServerV4(parent=self._parent, name=name, ipv4_name=ipv4_name)
         self._add(item)
         return item
 
@@ -29967,7 +30071,7 @@ class DeviceRelayAgent(OpenApiObject):
         # type: () -> V4RAInstIter
         """ipv4_interfaces getter
 
-        This contains an array of references to IPv4 interfaces, each of which will have list of V6 Relay Agent to different destinations.
+        This contains an array of references to IPv4 interfaces, each of which will have list of DHCPv4 Relay Agent to different destinations.
 
         Returns: V4RAInstIter
         """
@@ -29980,7 +30084,7 @@ class DeviceRelayAgent(OpenApiObject):
         # type: () -> V6RAInstIter
         """ipv6_interfaces getter
 
-        This contains an array of references to IPv6 interfaces, each of which will have list of V6 Relay Agent to different destinations.
+        This contains an array of references to IPv6 interfaces, each of which will have list of DHCPv6 Relay Agent to different destinations.
 
         Returns: V6RAInstIter
         """
@@ -30005,7 +30109,7 @@ class V4RAInst(OpenApiObject):
         },
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name",)  # type: tuple(str)
+    _REQUIRED = ("name", "ipv4_name")  # type: tuple(str)
 
     _DEFAULTS = {
         "client_side_address": "0.0.0.0",
@@ -30066,7 +30170,7 @@ class V4RAInst(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4 on which Relay Agent V4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which Relay Agent V4 will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -30076,10 +30180,12 @@ class V4RAInst(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4 on which Relay Agent V4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The unique name of the IPv4 on which Relay Agent V4 will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
+        if value is None:
+            raise TypeError("Cannot set required property ipv4_name as None")
         self._set_property("ipv4_name", value)
 
     @property
@@ -30087,7 +30193,7 @@ class V4RAInst(OpenApiObject):
         # type: () -> str
         """client_side_address getter
 
-        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded for DHCP server. as well
+        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded to the DHCP server. as well
 
         Returns: str
         """
@@ -30097,7 +30203,7 @@ class V4RAInst(OpenApiObject):
     def client_side_address(self, value):
         """client_side_address setter
 
-        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded for DHCP server. as well
+        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded to the DHCP server. as well
 
         value: str
         """
@@ -30212,7 +30318,7 @@ class V6RAInst(OpenApiObject):
         "ipv6_name": {"type": str},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name",)  # type: tuple(str)
+    _REQUIRED = ("name", "ipv6_name")  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -30273,6 +30379,8 @@ class V6RAInst(OpenApiObject):
 
         value: str
         """
+        if value is None:
+            raise TypeError("Cannot set required property ipv6_name as None")
         self._set_property("ipv6_name", value)
 
 
@@ -30771,7 +30879,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """tx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/DhcpClient.V4/properties/name. /components/schemas/DhcpClient.V6/properties/name. /components/schemas/DhcpServer.V4/properties/ipv4_name. /components/schemas/DhcpServer.V6/properties/ipv6_name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -30781,7 +30889,7 @@ class FlowRouter(OpenApiObject):
     def tx_names(self, value):
         """tx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/DhcpClient.V4/properties/name. /components/schemas/DhcpClient.V6/properties/name. /components/schemas/DhcpServer.V4/properties/ipv4_name. /components/schemas/DhcpServer.V6/properties/ipv6_name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -30794,7 +30902,7 @@ class FlowRouter(OpenApiObject):
         # type: () -> List[str]
         """rx_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/DhcpClient.V4/properties/name. /components/schemas/DhcpClient.V6/properties/name. /components/schemas/DhcpServer.V4/properties/ipv4_name. /components/schemas/DhcpServer.V6/properties/ipv6_name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         Returns: List[str]
         """
@@ -30804,7 +30912,7 @@ class FlowRouter(OpenApiObject):
     def rx_names(self, value):
         """rx_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name. /components/schemas/DhcpClient.V4/properties/name. /components/schemas/DhcpClient.V6/properties/name. /components/schemas/DhcpServer.V4/properties/ipv4_name. /components/schemas/DhcpServer.V6/properties/ipv6_name.
+        TBD. x-constraint:. /components/schemas/Device.Ethernet/properties/name. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Bgp.V4RouteRange/properties/name. /components/schemas/Bgp.V6RouteRange/properties/name. /components/schemas/Bgp.CMacIpRange/properties/name. /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name. /components/schemas/Isis.V4RouteRange/properties/name. /components/schemas/Isis.V6RouteRange/properties/name.
 
         value: List[str]
         """
@@ -46066,7 +46174,6 @@ class PatternFlowIpv4Src(OpenApiObject):
             "enum": [
                 "value",
                 "values",
-                "auto_dhcp",
                 "increment",
                 "decrement",
             ],
@@ -46080,10 +46187,6 @@ class PatternFlowIpv4Src(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv4",
         },
-        "auto_dhcp": {
-            "type": str,
-            "format": "ipv4",
-        },
         "increment": {"type": "PatternFlowIpv4SrcCounter"},
         "decrement": {"type": "PatternFlowIpv4SrcCounter"},
         "metric_tags": {"type": "PatternFlowIpv4SrcMetricTagIter"},
@@ -46095,30 +46198,20 @@ class PatternFlowIpv4Src(OpenApiObject):
         "choice": "value",
         "value": "0.0.0.0",
         "values": ["0.0.0.0"],
-        "auto_dhcp": "0.0.0.0",
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
-    AUTO_DHCP = "auto_dhcp"  # type: str
     INCREMENT = "increment"  # type: str
     DECREMENT = "decrement"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self,
-        parent=None,
-        choice=None,
-        value="0.0.0.0",
-        values=["0.0.0.0"],
-        auto_dhcp="0.0.0.0",
-    ):
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
         super(PatternFlowIpv4Src, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
-        self._set_property("auto_dhcp", auto_dhcp)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -46128,7 +46221,7 @@ class PatternFlowIpv4Src(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, value=None, values=None, auto_dhcp=None):
+    def set(self, value=None, values=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -46161,12 +46254,12 @@ class PatternFlowIpv4Src(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         return self._get_property("choice")
 
@@ -46176,7 +46269,7 @@ class PatternFlowIpv4Src(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         self._set_property("choice", value)
 
@@ -46221,17 +46314,6 @@ class PatternFlowIpv4Src(OpenApiObject):
         value: List[str]
         """
         self._set_property("values", value, "values")
-
-    @property
-    def auto_dhcp(self):
-        # type: () -> str
-        """auto_dhcp getter
-
-        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
-
-        Returns: str
-        """
-        return self._get_property("auto_dhcp")
 
     @property
     def metric_tags(self):
@@ -46524,7 +46606,6 @@ class PatternFlowIpv4Dst(OpenApiObject):
             "enum": [
                 "value",
                 "values",
-                "auto_dhcp",
                 "increment",
                 "decrement",
             ],
@@ -46538,10 +46619,6 @@ class PatternFlowIpv4Dst(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv4",
         },
-        "auto_dhcp": {
-            "type": str,
-            "format": "ipv4",
-        },
         "increment": {"type": "PatternFlowIpv4DstCounter"},
         "decrement": {"type": "PatternFlowIpv4DstCounter"},
         "metric_tags": {"type": "PatternFlowIpv4DstMetricTagIter"},
@@ -46553,30 +46630,20 @@ class PatternFlowIpv4Dst(OpenApiObject):
         "choice": "value",
         "value": "0.0.0.0",
         "values": ["0.0.0.0"],
-        "auto_dhcp": "0.0.0.0",
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
-    AUTO_DHCP = "auto_dhcp"  # type: str
     INCREMENT = "increment"  # type: str
     DECREMENT = "decrement"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self,
-        parent=None,
-        choice=None,
-        value="0.0.0.0",
-        values=["0.0.0.0"],
-        auto_dhcp="0.0.0.0",
-    ):
+    def __init__(self, parent=None, choice=None, value="0.0.0.0", values=["0.0.0.0"]):
         super(PatternFlowIpv4Dst, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
-        self._set_property("auto_dhcp", auto_dhcp)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -46586,7 +46653,7 @@ class PatternFlowIpv4Dst(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, value=None, values=None, auto_dhcp=None):
+    def set(self, value=None, values=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -46619,12 +46686,12 @@ class PatternFlowIpv4Dst(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         return self._get_property("choice")
 
@@ -46634,7 +46701,7 @@ class PatternFlowIpv4Dst(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         self._set_property("choice", value)
 
@@ -46679,17 +46746,6 @@ class PatternFlowIpv4Dst(OpenApiObject):
         value: List[str]
         """
         self._set_property("values", value, "values")
-
-    @property
-    def auto_dhcp(self):
-        # type: () -> str
-        """auto_dhcp getter
-
-        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
-
-        Returns: str
-        """
-        return self._get_property("auto_dhcp")
 
     @property
     def metric_tags(self):
@@ -51001,7 +51057,6 @@ class PatternFlowIpv6Src(OpenApiObject):
             "enum": [
                 "value",
                 "values",
-                "auto_dhcp",
                 "increment",
                 "decrement",
             ],
@@ -51015,10 +51070,6 @@ class PatternFlowIpv6Src(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv6",
         },
-        "auto_dhcp": {
-            "type": str,
-            "format": "ipv6",
-        },
         "increment": {"type": "PatternFlowIpv6SrcCounter"},
         "decrement": {"type": "PatternFlowIpv6SrcCounter"},
         "metric_tags": {"type": "PatternFlowIpv6SrcMetricTagIter"},
@@ -51030,25 +51081,20 @@ class PatternFlowIpv6Src(OpenApiObject):
         "choice": "value",
         "value": "::0",
         "values": ["::0"],
-        "auto_dhcp": "::0",
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
-    AUTO_DHCP = "auto_dhcp"  # type: str
     INCREMENT = "increment"  # type: str
     DECREMENT = "decrement"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self, parent=None, choice=None, value="::0", values=["::0"], auto_dhcp="::0"
-    ):
+    def __init__(self, parent=None, choice=None, value="::0", values=["::0"]):
         super(PatternFlowIpv6Src, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
-        self._set_property("auto_dhcp", auto_dhcp)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -51058,7 +51104,7 @@ class PatternFlowIpv6Src(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, value=None, values=None, auto_dhcp=None):
+    def set(self, value=None, values=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -51091,12 +51137,12 @@ class PatternFlowIpv6Src(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         return self._get_property("choice")
 
@@ -51106,7 +51152,7 @@ class PatternFlowIpv6Src(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         self._set_property("choice", value)
 
@@ -51151,17 +51197,6 @@ class PatternFlowIpv6Src(OpenApiObject):
         value: List[str]
         """
         self._set_property("values", value, "values")
-
-    @property
-    def auto_dhcp(self):
-        # type: () -> str
-        """auto_dhcp getter
-
-        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
-
-        Returns: str
-        """
-        return self._get_property("auto_dhcp")
 
     @property
     def metric_tags(self):
@@ -51454,7 +51489,6 @@ class PatternFlowIpv6Dst(OpenApiObject):
             "enum": [
                 "value",
                 "values",
-                "auto_dhcp",
                 "increment",
                 "decrement",
             ],
@@ -51468,10 +51502,6 @@ class PatternFlowIpv6Dst(OpenApiObject):
             "itemtype": str,
             "itemformat": "ipv6",
         },
-        "auto_dhcp": {
-            "type": str,
-            "format": "ipv6",
-        },
         "increment": {"type": "PatternFlowIpv6DstCounter"},
         "decrement": {"type": "PatternFlowIpv6DstCounter"},
         "metric_tags": {"type": "PatternFlowIpv6DstMetricTagIter"},
@@ -51483,25 +51513,20 @@ class PatternFlowIpv6Dst(OpenApiObject):
         "choice": "value",
         "value": "::0",
         "values": ["::0"],
-        "auto_dhcp": "::0",
     }  # type: Dict[str, Union(type)]
 
     VALUE = "value"  # type: str
     VALUES = "values"  # type: str
-    AUTO_DHCP = "auto_dhcp"  # type: str
     INCREMENT = "increment"  # type: str
     DECREMENT = "decrement"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self, parent=None, choice=None, value="::0", values=["::0"], auto_dhcp="::0"
-    ):
+    def __init__(self, parent=None, choice=None, value="::0", values=["::0"]):
         super(PatternFlowIpv6Dst, self).__init__()
         self._parent = parent
         self._set_property("value", value)
         self._set_property("values", values)
-        self._set_property("auto_dhcp", auto_dhcp)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -51511,7 +51536,7 @@ class PatternFlowIpv6Dst(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, value=None, values=None, auto_dhcp=None):
+    def set(self, value=None, values=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -51544,12 +51569,12 @@ class PatternFlowIpv6Dst(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         return self._get_property("choice")
 
@@ -51559,7 +51584,7 @@ class PatternFlowIpv6Dst(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["auto_dhcp"], Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
+        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
         """
         self._set_property("choice", value)
 
@@ -51604,17 +51629,6 @@ class PatternFlowIpv6Dst(OpenApiObject):
         value: List[str]
         """
         self._set_property("values", value, "values")
-
-    @property
-    def auto_dhcp(self):
-        # type: () -> str
-        """auto_dhcp getter
-
-        The OTG implementation can provide system generated. value for this property. If the OTG is unable to generate value. the default value must be used.
-
-        Returns: str
-        """
-        return self._get_property("auto_dhcp")
 
     @property
     def metric_tags(self):
@@ -120087,6 +120101,7 @@ class MetricsRequest(OpenApiObject):
                 "lldp",
                 "rsvp",
                 "dhcpv4_client",
+                "dhcpv4_server",
                 "dhcpv6_client",
             ],
         },
@@ -120100,6 +120115,7 @@ class MetricsRequest(OpenApiObject):
         "lldp": {"type": "LldpMetricsRequest"},
         "rsvp": {"type": "RsvpMetricsRequest"},
         "dhcpv4_client": {"type": "Dhcpv4ClientMetricsRequest"},
+        "dhcpv4_server": {"type": "Dhcpv4ServerMetricsRequest"},
         "dhcpv6_client": {"type": "Dhcpv6ClientMetricsRequest"},
     }  # type: Dict[str, str]
 
@@ -120119,6 +120135,7 @@ class MetricsRequest(OpenApiObject):
     LLDP = "lldp"  # type: str
     RSVP = "rsvp"  # type: str
     DHCPV4_CLIENT = "dhcpv4_client"  # type: str
+    DHCPV4_SERVER = "dhcpv4_server"  # type: str
     DHCPV6_CLIENT = "dhcpv6_client"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -120248,6 +120265,19 @@ class MetricsRequest(OpenApiObject):
         )
 
     @property
+    def dhcpv4_server(self):
+        # type: () -> Dhcpv4ServerMetricsRequest
+        """Factory property that returns an instance of the Dhcpv4ServerMetricsRequest class
+
+        The request to retrieve DHCPv4 per Server metrics/statistics.
+
+        Returns: Dhcpv4ServerMetricsRequest
+        """
+        return self._get_property(
+            "dhcpv4_server", Dhcpv4ServerMetricsRequest, self, "dhcpv4_server"
+        )
+
+    @property
     def dhcpv6_client(self):
         # type: () -> Dhcpv6ClientMetricsRequest
         """Factory property that returns an instance of the Dhcpv6ClientMetricsRequest class
@@ -120262,12 +120292,12 @@ class MetricsRequest(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """
         return self._get_property("choice")
 
@@ -120277,7 +120307,7 @@ class MetricsRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """
         self._set_property("choice", value)
 
@@ -121557,11 +121587,17 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
             "type": list,
             "enum": [
                 "acks_received",
-                "declineds_sent",
+                "declines_sent",
                 "discovers_sent",
+                "gateway_address",
+                "ipv4_addresses",
+                "lease_time",
                 "nacks_received",
                 "offers_received",
+                "prefix_length",
+                "rebind_time",
                 "releases_sent",
+                "renew_time",
                 "requests_sent",
                 "session_state",
             ],
@@ -121574,11 +121610,17 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
     ACKS_RECEIVED = "acks_received"  # type: str
-    DECLINEDS_SENT = "declineds_sent"  # type: str
+    DECLINES_SENT = "declines_sent"  # type: str
     DISCOVERS_SENT = "discovers_sent"  # type: str
+    GATEWAY_ADDRESS = "gateway_address"  # type: str
+    IPV4_ADDRESSES = "ipv4_addresses"  # type: str
+    LEASE_TIME = "lease_time"  # type: str
     NACKS_RECEIVED = "nacks_received"  # type: str
     OFFERS_RECEIVED = "offers_received"  # type: str
+    PREFIX_LENGTH = "prefix_length"  # type: str
+    REBIND_TIME = "rebind_time"  # type: str
     RELEASES_SENT = "releases_sent"  # type: str
+    RENEW_TIME = "renew_time"  # type: str
     REQUESTS_SENT = "requests_sent"  # type: str
     SESSION_STATE = "session_state"  # type: str
 
@@ -121618,12 +121660,12 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
 
     @property
     def column_names(self):
-        # type: () -> List[Union[Literal["acks_received"], Literal["declineds_sent"], Literal["discovers_sent"], Literal["nacks_received"], Literal["offers_received"], Literal["releases_sent"], Literal["requests_sent"], Literal["session_state"]]]
+        # type: () -> List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
         """column_names getter
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 client cannot be excluded.
 
-        Returns: List[Union[Literal["acks_received"], Literal["declineds_sent"], Literal["discovers_sent"], Literal["nacks_received"], Literal["offers_received"], Literal["releases_sent"], Literal["requests_sent"], Literal["session_state"]]]
+        Returns: List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
         """
         return self._get_property("column_names")
 
@@ -121633,7 +121675,98 @@ class Dhcpv4ClientMetricsRequest(OpenApiObject):
 
         The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 client cannot be excluded.
 
-        value: List[Union[Literal["acks_received"], Literal["declineds_sent"], Literal["discovers_sent"], Literal["nacks_received"], Literal["offers_received"], Literal["releases_sent"], Literal["requests_sent"], Literal["session_state"]]]
+        value: List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
+        """
+        self._set_property("column_names", value)
+
+
+class Dhcpv4ServerMetricsRequest(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "server_names": {
+            "type": list,
+            "itemtype": str,
+        },
+        "column_names": {
+            "type": list,
+            "enum": [
+                "acks_sent",
+                "declines_received",
+                "discovers_received",
+                "nacks_sent",
+                "offers_sent",
+                "releases_received",
+                "requests_received",
+            ],
+            "itemtype": str,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ACKS_SENT = "acks_sent"  # type: str
+    DECLINES_RECEIVED = "declines_received"  # type: str
+    DISCOVERS_RECEIVED = "discovers_received"  # type: str
+    NACKS_SENT = "nacks_sent"  # type: str
+    OFFERS_SENT = "offers_sent"  # type: str
+    RELEASES_RECEIVED = "releases_received"  # type: str
+    REQUESTS_RECEIVED = "requests_received"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, server_names=None, column_names=None):
+        super(Dhcpv4ServerMetricsRequest, self).__init__()
+        self._parent = parent
+        self._set_property("server_names", server_names)
+        self._set_property("column_names", column_names)
+
+    def set(self, server_names=None, column_names=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def server_names(self):
+        # type: () -> List[str]
+        """server_names getter
+
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+
+        Returns: List[str]
+        """
+        return self._get_property("server_names")
+
+    @server_names.setter
+    def server_names(self, value):
+        """server_names setter
+
+        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
+
+        value: List[str]
+        """
+        self._set_property("server_names", value)
+
+    @property
+    def column_names(self):
+        # type: () -> List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
+        """column_names getter
+
+        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 server cannot be excluded.
+
+        Returns: List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
+        """
+        return self._get_property("column_names")
+
+    @column_names.setter
+    def column_names(self, value):
+        """column_names setter
+
+        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 server cannot be excluded.
+
+        value: List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
         """
         self._set_property("column_names", value)
 
@@ -121749,6 +121882,7 @@ class MetricsResponse(OpenApiObject):
         "lldp_metrics": {"type": "LldpMetricIter"},
         "rsvp_metrics": {"type": "RsvpMetricIter"},
         "dhcpv4client_metrics": {"type": "Dhcpv4ClientMetricIter"},
+        "dhcpv4server_metrics": {"type": "Dhcpv4ServerMetricIter"},
         "dhcpv6client_metrics": {"type": "Dhcpv6ClientMetricIter"},
     }  # type: Dict[str, str]
 
@@ -121933,6 +122067,19 @@ class MetricsResponse(OpenApiObject):
         """
         return self._get_property(
             "dhcpv4client_metrics", Dhcpv4ClientMetricIter, self._parent, self._choice
+        )
+
+    @property
+    def dhcpv4server_metrics(self):
+        # type: () -> Dhcpv4ServerMetricIter
+        """dhcpv4server_metrics getter
+
+        TBD
+
+        Returns: Dhcpv4ServerMetricIter
+        """
+        return self._get_property(
+            "dhcpv4server_metrics", Dhcpv4ServerMetricIter, self._parent, self._choice
         )
 
     @property
@@ -128406,7 +128553,7 @@ class Dhcpv4ClientMetric(OpenApiObject):
             "type": int,
             "format": "uint64",
         },
-        "requests_sent_count": {
+        "requests_received_count": {
             "type": int,
             "format": "uint64",
         },
@@ -128423,6 +128570,22 @@ class Dhcpv4ClientMetric(OpenApiObject):
             "format": "uint64",
         },
         "declines_sent_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "ipv4_address": {"type": str},
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 32,
+        },
+        "gateway_address": {"type": str},
+        "lease_time": {"type": str},
+        "renew_time": {
+            "type": int,
+            "format": "uint64",
+        },
+        "rebind_time": {
             "type": int,
             "format": "uint64",
         },
@@ -128444,11 +128607,17 @@ class Dhcpv4ClientMetric(OpenApiObject):
         session_state=None,
         discovers_sent_count=None,
         offers_received_count=None,
-        requests_sent_count=None,
+        requests_received_count=None,
         acks_received_count=None,
         nacks_received_count=None,
         releases_sent_count=None,
         declines_sent_count=None,
+        ipv4_address=None,
+        prefix_length=None,
+        gateway_address=None,
+        lease_time=None,
+        renew_time=None,
+        rebind_time=None,
     ):
         super(Dhcpv4ClientMetric, self).__init__()
         self._parent = parent
@@ -128456,11 +128625,17 @@ class Dhcpv4ClientMetric(OpenApiObject):
         self._set_property("session_state", session_state)
         self._set_property("discovers_sent_count", discovers_sent_count)
         self._set_property("offers_received_count", offers_received_count)
-        self._set_property("requests_sent_count", requests_sent_count)
+        self._set_property("requests_received_count", requests_received_count)
         self._set_property("acks_received_count", acks_received_count)
         self._set_property("nacks_received_count", nacks_received_count)
         self._set_property("releases_sent_count", releases_sent_count)
         self._set_property("declines_sent_count", declines_sent_count)
+        self._set_property("ipv4_address", ipv4_address)
+        self._set_property("prefix_length", prefix_length)
+        self._set_property("gateway_address", gateway_address)
+        self._set_property("lease_time", lease_time)
+        self._set_property("renew_time", renew_time)
+        self._set_property("rebind_time", rebind_time)
 
     def set(
         self,
@@ -128468,11 +128643,17 @@ class Dhcpv4ClientMetric(OpenApiObject):
         session_state=None,
         discovers_sent_count=None,
         offers_received_count=None,
-        requests_sent_count=None,
+        requests_received_count=None,
         acks_received_count=None,
         nacks_received_count=None,
         releases_sent_count=None,
         declines_sent_count=None,
+        ipv4_address=None,
+        prefix_length=None,
+        gateway_address=None,
+        lease_time=None,
+        renew_time=None,
+        rebind_time=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -128563,25 +128744,25 @@ class Dhcpv4ClientMetric(OpenApiObject):
         self._set_property("offers_received_count", value)
 
     @property
-    def requests_sent_count(self):
+    def requests_received_count(self):
         # type: () -> int
-        """requests_sent_count getter
+        """requests_received_count getter
 
         Number of DHCPREQUEST messages received.
 
         Returns: int
         """
-        return self._get_property("requests_sent_count")
+        return self._get_property("requests_received_count")
 
-    @requests_sent_count.setter
-    def requests_sent_count(self, value):
-        """requests_sent_count setter
+    @requests_received_count.setter
+    def requests_received_count(self, value):
+        """requests_received_count setter
 
         Number of DHCPREQUEST messages received.
 
         value: int
         """
-        self._set_property("requests_sent_count", value)
+        self._set_property("requests_received_count", value)
 
     @property
     def acks_received_count(self):
@@ -128667,6 +128848,132 @@ class Dhcpv4ClientMetric(OpenApiObject):
         """
         self._set_property("declines_sent_count", value)
 
+    @property
+    def ipv4_address(self):
+        # type: () -> str
+        """ipv4_address getter
+
+        The IP address associated with this DHCP Client session.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_address")
+
+    @ipv4_address.setter
+    def ipv4_address(self, value):
+        """ipv4_address setter
+
+        The IP address associated with this DHCP Client session.
+
+        value: str
+        """
+        self._set_property("ipv4_address", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        The length of the prefix.
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        The length of the prefix.
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def gateway_address(self):
+        # type: () -> str
+        """gateway_address getter
+
+        The Gateway address associated with this DHCP Client session.
+
+        Returns: str
+        """
+        return self._get_property("gateway_address")
+
+    @gateway_address.setter
+    def gateway_address(self, value):
+        """gateway_address setter
+
+        The Gateway address associated with this DHCP Client session.
+
+        value: str
+        """
+        self._set_property("gateway_address", value)
+
+    @property
+    def lease_time(self):
+        # type: () -> str
+        """lease_time getter
+
+        The duration of the IP address lease, in seconds.
+
+        Returns: str
+        """
+        return self._get_property("lease_time")
+
+    @lease_time.setter
+    def lease_time(self, value):
+        """lease_time setter
+
+        The duration of the IP address lease, in seconds.
+
+        value: str
+        """
+        self._set_property("lease_time", value)
+
+    @property
+    def renew_time(self):
+        # type: () -> int
+        """renew_time getter
+
+        Time in seconds until the DHCPv4 client starts renewing the lease.
+
+        Returns: int
+        """
+        return self._get_property("renew_time")
+
+    @renew_time.setter
+    def renew_time(self, value):
+        """renew_time setter
+
+        Time in seconds until the DHCPv4 client starts renewing the lease.
+
+        value: int
+        """
+        self._set_property("renew_time", value)
+
+    @property
+    def rebind_time(self):
+        # type: () -> int
+        """rebind_time getter
+
+        Time in seconds until the DHCPv4 client starts rebinding.
+
+        Returns: int
+        """
+        return self._get_property("rebind_time")
+
+    @rebind_time.setter
+    def rebind_time(self, value):
+        """rebind_time setter
+
+        Time in seconds until the DHCPv4 client starts rebinding.
+
+        value: int
+        """
+        self._set_property("rebind_time", value)
+
 
 class Dhcpv4ClientMetricIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
@@ -128704,13 +129011,19 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
         session_state=None,
         discovers_sent_count=None,
         offers_received_count=None,
-        requests_sent_count=None,
+        requests_received_count=None,
         acks_received_count=None,
         nacks_received_count=None,
         releases_sent_count=None,
         declines_sent_count=None,
+        ipv4_address=None,
+        prefix_length=None,
+        gateway_address=None,
+        lease_time=None,
+        renew_time=None,
+        rebind_time=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int) -> Dhcpv4ClientMetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,str,int,int) -> Dhcpv4ClientMetricIter
         """Factory method that creates an instance of the Dhcpv4ClientMetric class
 
         DHCPv4 per peer statistics information.
@@ -128723,11 +129036,17 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
             session_state=session_state,
             discovers_sent_count=discovers_sent_count,
             offers_received_count=offers_received_count,
-            requests_sent_count=requests_sent_count,
+            requests_received_count=requests_received_count,
             acks_received_count=acks_received_count,
             nacks_received_count=nacks_received_count,
             releases_sent_count=releases_sent_count,
             declines_sent_count=declines_sent_count,
+            ipv4_address=ipv4_address,
+            prefix_length=prefix_length,
+            gateway_address=gateway_address,
+            lease_time=lease_time,
+            renew_time=renew_time,
+            rebind_time=rebind_time,
         )
         self._add(item)
         return self
@@ -128738,13 +129057,19 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
         session_state=None,
         discovers_sent_count=None,
         offers_received_count=None,
-        requests_sent_count=None,
+        requests_received_count=None,
         acks_received_count=None,
         nacks_received_count=None,
         releases_sent_count=None,
         declines_sent_count=None,
+        ipv4_address=None,
+        prefix_length=None,
+        gateway_address=None,
+        lease_time=None,
+        renew_time=None,
+        rebind_time=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int) -> Dhcpv4ClientMetric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,str,int,int) -> Dhcpv4ClientMetric
         """Add method that creates and returns an instance of the Dhcpv4ClientMetric class
 
         DHCPv4 per peer statistics information.
@@ -128757,11 +129082,360 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
             session_state=session_state,
             discovers_sent_count=discovers_sent_count,
             offers_received_count=offers_received_count,
-            requests_sent_count=requests_sent_count,
+            requests_received_count=requests_received_count,
             acks_received_count=acks_received_count,
             nacks_received_count=nacks_received_count,
             releases_sent_count=releases_sent_count,
             declines_sent_count=declines_sent_count,
+            ipv4_address=ipv4_address,
+            prefix_length=prefix_length,
+            gateway_address=gateway_address,
+            lease_time=lease_time,
+            renew_time=renew_time,
+            rebind_time=rebind_time,
+        )
+        self._add(item)
+        return item
+
+
+class Dhcpv4ServerMetric(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "name": {"type": str},
+        "discovers_received_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "offers_sent_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "requests_received_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "acks_sent_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "nacks_sent_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "releases_received_count": {
+            "type": int,
+            "format": "uint64",
+        },
+        "declines_received_count": {
+            "type": int,
+            "format": "uint64",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        name=None,
+        discovers_received_count=None,
+        offers_sent_count=None,
+        requests_received_count=None,
+        acks_sent_count=None,
+        nacks_sent_count=None,
+        releases_received_count=None,
+        declines_received_count=None,
+    ):
+        super(Dhcpv4ServerMetric, self).__init__()
+        self._parent = parent
+        self._set_property("name", name)
+        self._set_property("discovers_received_count", discovers_received_count)
+        self._set_property("offers_sent_count", offers_sent_count)
+        self._set_property("requests_received_count", requests_received_count)
+        self._set_property("acks_sent_count", acks_sent_count)
+        self._set_property("nacks_sent_count", nacks_sent_count)
+        self._set_property("releases_received_count", releases_received_count)
+        self._set_property("declines_received_count", declines_received_count)
+
+    def set(
+        self,
+        name=None,
+        discovers_received_count=None,
+        offers_sent_count=None,
+        requests_received_count=None,
+        acks_sent_count=None,
+        nacks_sent_count=None,
+        releases_received_count=None,
+        declines_received_count=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def name(self):
+        # type: () -> str
+        """name getter
+
+        The name of configured DHCPv4 Server.
+
+        Returns: str
+        """
+        return self._get_property("name")
+
+    @name.setter
+    def name(self, value):
+        """name setter
+
+        The name of configured DHCPv4 Server.
+
+        value: str
+        """
+        self._set_property("name", value)
+
+    @property
+    def discovers_received_count(self):
+        # type: () -> int
+        """discovers_received_count getter
+
+        Number of DHCPDISCOVER messages received.
+
+        Returns: int
+        """
+        return self._get_property("discovers_received_count")
+
+    @discovers_received_count.setter
+    def discovers_received_count(self, value):
+        """discovers_received_count setter
+
+        Number of DHCPDISCOVER messages received.
+
+        value: int
+        """
+        self._set_property("discovers_received_count", value)
+
+    @property
+    def offers_sent_count(self):
+        # type: () -> int
+        """offers_sent_count getter
+
+        Number of DHCPOFFER messages sent.
+
+        Returns: int
+        """
+        return self._get_property("offers_sent_count")
+
+    @offers_sent_count.setter
+    def offers_sent_count(self, value):
+        """offers_sent_count setter
+
+        Number of DHCPOFFER messages sent.
+
+        value: int
+        """
+        self._set_property("offers_sent_count", value)
+
+    @property
+    def requests_received_count(self):
+        # type: () -> int
+        """requests_received_count getter
+
+        Number of DHCPOFFER messages received.
+
+        Returns: int
+        """
+        return self._get_property("requests_received_count")
+
+    @requests_received_count.setter
+    def requests_received_count(self, value):
+        """requests_received_count setter
+
+        Number of DHCPOFFER messages received.
+
+        value: int
+        """
+        self._set_property("requests_received_count", value)
+
+    @property
+    def acks_sent_count(self):
+        # type: () -> int
+        """acks_sent_count getter
+
+        Number of lease DHCPACK messages sent.
+
+        Returns: int
+        """
+        return self._get_property("acks_sent_count")
+
+    @acks_sent_count.setter
+    def acks_sent_count(self, value):
+        """acks_sent_count setter
+
+        Number of lease DHCPACK messages sent.
+
+        value: int
+        """
+        self._set_property("acks_sent_count", value)
+
+    @property
+    def nacks_sent_count(self):
+        # type: () -> int
+        """nacks_sent_count getter
+
+        Number of negative lease DHCPNACK messages sent.
+
+        Returns: int
+        """
+        return self._get_property("nacks_sent_count")
+
+    @nacks_sent_count.setter
+    def nacks_sent_count(self, value):
+        """nacks_sent_count setter
+
+        Number of negative lease DHCPNACK messages sent.
+
+        value: int
+        """
+        self._set_property("nacks_sent_count", value)
+
+    @property
+    def releases_received_count(self):
+        # type: () -> int
+        """releases_received_count getter
+
+        Number of DHCPRELEASE messages received.
+
+        Returns: int
+        """
+        return self._get_property("releases_received_count")
+
+    @releases_received_count.setter
+    def releases_received_count(self, value):
+        """releases_received_count setter
+
+        Number of DHCPRELEASE messages received.
+
+        value: int
+        """
+        self._set_property("releases_received_count", value)
+
+    @property
+    def declines_received_count(self):
+        # type: () -> int
+        """declines_received_count getter
+
+        Number of DHCPDECLINE messages received.
+
+        Returns: int
+        """
+        return self._get_property("declines_received_count")
+
+    @declines_received_count.setter
+    def declines_received_count(self, value):
+        """declines_received_count setter
+
+        Number of DHCPDECLINE messages received.
+
+        value: int
+        """
+        self._set_property("declines_received_count", value)
+
+
+class Dhcpv4ServerMetricIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Dhcpv4ServerMetricIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Dhcpv4ServerMetric]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Dhcpv4ServerMetricIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Dhcpv4ServerMetric
+        return self._next()
+
+    def next(self):
+        # type: () -> Dhcpv4ServerMetric
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Dhcpv4ServerMetric):
+            raise Exception("Item is not an instance of Dhcpv4ServerMetric")
+
+    def metric(
+        self,
+        name=None,
+        discovers_received_count=None,
+        offers_sent_count=None,
+        requests_received_count=None,
+        acks_sent_count=None,
+        nacks_sent_count=None,
+        releases_received_count=None,
+        declines_received_count=None,
+    ):
+        # type: (str,int,int,int,int,int,int,int) -> Dhcpv4ServerMetricIter
+        """Factory method that creates an instance of the Dhcpv4ServerMetric class
+
+        DHCPv4 per peer statistics information.
+
+        Returns: Dhcpv4ServerMetricIter
+        """
+        item = Dhcpv4ServerMetric(
+            parent=self._parent,
+            name=name,
+            discovers_received_count=discovers_received_count,
+            offers_sent_count=offers_sent_count,
+            requests_received_count=requests_received_count,
+            acks_sent_count=acks_sent_count,
+            nacks_sent_count=nacks_sent_count,
+            releases_received_count=releases_received_count,
+            declines_received_count=declines_received_count,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        name=None,
+        discovers_received_count=None,
+        offers_sent_count=None,
+        requests_received_count=None,
+        acks_sent_count=None,
+        nacks_sent_count=None,
+        releases_received_count=None,
+        declines_received_count=None,
+    ):
+        # type: (str,int,int,int,int,int,int,int) -> Dhcpv4ServerMetric
+        """Add method that creates and returns an instance of the Dhcpv4ServerMetric class
+
+        DHCPv4 per peer statistics information.
+
+        Returns: Dhcpv4ServerMetric
+        """
+        item = Dhcpv4ServerMetric(
+            parent=self._parent,
+            name=name,
+            discovers_received_count=discovers_received_count,
+            offers_sent_count=offers_sent_count,
+            requests_received_count=requests_received_count,
+            acks_sent_count=acks_sent_count,
+            nacks_sent_count=nacks_sent_count,
+            releases_received_count=releases_received_count,
+            declines_received_count=declines_received_count,
         )
         self._add(item)
         return item
@@ -128930,7 +129604,7 @@ class StatesRequest(OpenApiObject):
                 "isis_lsps",
                 "lldp_neighbors",
                 "rsvp_lsps",
-                "dhcpv4_client_addresses",
+                "dhcp_v4server_leases",
             ],
         },
         "ipv4_neighbors": {"type": "Neighborsv4StatesRequest"},
@@ -128939,7 +129613,7 @@ class StatesRequest(OpenApiObject):
         "isis_lsps": {"type": "IsisLspsStateRequest"},
         "lldp_neighbors": {"type": "LldpNeighborsStateRequest"},
         "rsvp_lsps": {"type": "RsvpLspsStateRequest"},
-        "dhcpv4_client_addresses": {"type": "Dhcpv4ClientAddressesStateRequest"},
+        "dhcp_v4server_leases": {"type": "Dhcpv4ServerLeaseStateRequest"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -128954,7 +129628,7 @@ class StatesRequest(OpenApiObject):
     ISIS_LSPS = "isis_lsps"  # type: str
     LLDP_NEIGHBORS = "lldp_neighbors"  # type: str
     RSVP_LSPS = "rsvp_lsps"  # type: str
-    DHCPV4_CLIENT_ADDRESSES = "dhcpv4_client_addresses"  # type: str
+    DHCP_V4SERVER_LEASES = "dhcp_v4server_leases"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -129045,29 +129719,29 @@ class StatesRequest(OpenApiObject):
         return self._get_property("rsvp_lsps", RsvpLspsStateRequest, self, "rsvp_lsps")
 
     @property
-    def dhcpv4_client_addresses(self):
-        # type: () -> Dhcpv4ClientAddressesStateRequest
-        """Factory property that returns an instance of the Dhcpv4ClientAddressesStateRequest class
+    def dhcp_v4server_leases(self):
+        # type: () -> Dhcpv4ServerLeaseStateRequest
+        """Factory property that returns an instance of the Dhcpv4ServerLeaseStateRequest class
 
-        The request to retrieve DHCP Client learned address information.
+        The request to retrieve DHCP Server host allocated status.
 
-        Returns: Dhcpv4ClientAddressesStateRequest
+        Returns: Dhcpv4ServerLeaseStateRequest
         """
         return self._get_property(
-            "dhcpv4_client_addresses",
-            Dhcpv4ClientAddressesStateRequest,
+            "dhcp_v4server_leases",
+            Dhcpv4ServerLeaseStateRequest,
             self,
-            "dhcpv4_client_addresses",
+            "dhcp_v4server_leases",
         )
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcpv4_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgp_prefixes"], Literal["dhcpv4_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        Returns: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         return self._get_property("choice")
 
@@ -129077,7 +129751,7 @@ class StatesRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgp_prefixes"], Literal["dhcpv4_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        value: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         self._set_property("choice", value)
 
@@ -129873,11 +130547,11 @@ class RsvpLspsStateRequest(OpenApiObject):
         self._set_property("rsvp_router_names", value)
 
 
-class Dhcpv4ClientAddressesStateRequest(OpenApiObject):
+class Dhcpv4ServerLeaseStateRequest(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "dhcp_client_names": {
+        "dhcp_server_names": {
             "type": list,
             "itemtype": str,
         },
@@ -129889,36 +130563,36 @@ class Dhcpv4ClientAddressesStateRequest(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, dhcp_client_names=None):
-        super(Dhcpv4ClientAddressesStateRequest, self).__init__()
+    def __init__(self, parent=None, dhcp_server_names=None):
+        super(Dhcpv4ServerLeaseStateRequest, self).__init__()
         self._parent = parent
-        self._set_property("dhcp_client_names", dhcp_client_names)
+        self._set_property("dhcp_server_names", dhcp_server_names)
 
-    def set(self, dhcp_client_names=None):
+    def set(self, dhcp_server_names=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def dhcp_client_names(self):
+    def dhcp_server_names(self):
         # type: () -> List[str]
-        """dhcp_client_names getter
+        """dhcp_server_names getter
 
-        TBD. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         Returns: List[str]
         """
-        return self._get_property("dhcp_client_names")
+        return self._get_property("dhcp_server_names")
 
-    @dhcp_client_names.setter
-    def dhcp_client_names(self, value):
-        """dhcp_client_names setter
+    @dhcp_server_names.setter
+    def dhcp_server_names(self, value):
+        """dhcp_server_names setter
 
-        TBD. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
+        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
 
         value: List[str]
         """
-        self._set_property("dhcp_client_names", value)
+        self._set_property("dhcp_server_names", value)
 
 
 class StatesResponse(OpenApiObject):
@@ -129934,7 +130608,7 @@ class StatesResponse(OpenApiObject):
                 "isis_lsps",
                 "lldp_neighbors",
                 "rsvp_lsps",
-                "dhcp_client_addresses",
+                "dhcp_v4server_leases",
             ],
         },
         "ipv4_neighbors": {"type": "Neighborsv4StateIter"},
@@ -129943,7 +130617,7 @@ class StatesResponse(OpenApiObject):
         "isis_lsps": {"type": "IsisLspsStateIter"},
         "lldp_neighbors": {"type": "LldpNeighborsStateIter"},
         "rsvp_lsps": {"type": "RsvpLspsStateIter"},
-        "dhcpv4_client_addresses": {"type": "Dhcpv4ClientAddressesStateIter"},
+        "dhcp_v4server_leases": {"type": "Dhcpv4ServerLeasesStateIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -129958,7 +130632,7 @@ class StatesResponse(OpenApiObject):
     ISIS_LSPS = "isis_lsps"  # type: str
     LLDP_NEIGHBORS = "lldp_neighbors"  # type: str
     RSVP_LSPS = "rsvp_lsps"  # type: str
-    DHCP_CLIENT_ADDRESSES = "dhcp_client_addresses"  # type: str
+    DHCP_V4SERVER_LEASES = "dhcp_v4server_leases"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -129976,12 +130650,12 @@ class StatesResponse(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcp_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgp_prefixes"], Literal["dhcp_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        Returns: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         return self._get_property("choice")
 
@@ -129991,7 +130665,7 @@ class StatesResponse(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgp_prefixes"], Literal["dhcp_client_addresses"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        value: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         self._set_property("choice", value)
 
@@ -130074,17 +130748,17 @@ class StatesResponse(OpenApiObject):
         )
 
     @property
-    def dhcpv4_client_addresses(self):
-        # type: () -> Dhcpv4ClientAddressesStateIter
-        """dhcpv4_client_addresses getter
+    def dhcp_v4server_leases(self):
+        # type: () -> Dhcpv4ServerLeasesStateIter
+        """dhcp_v4server_leases getter
 
         TBD
 
-        Returns: Dhcpv4ClientAddressesStateIter
+        Returns: Dhcpv4ServerLeasesStateIter
         """
         return self._get_property(
-            "dhcpv4_client_addresses",
-            Dhcpv4ClientAddressesStateIter,
+            "dhcp_v4server_leases",
+            Dhcpv4ServerLeasesStateIter,
             self._parent,
             self._choice,
         )
@@ -135750,12 +136424,12 @@ class RsvpLspsStateIter(OpenApiIter):
         return item
 
 
-class Dhcpv4ClientAddressesState(OpenApiObject):
+class Dhcpv4ServerLeasesState(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
         "dhcp_client_name": {"type": str},
-        "ipv4_addresses": {"type": "DhcpClientv4StateIter"},
+        "leases": {"type": "Dhcpv4ServerLeaseStateIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -135765,7 +136439,7 @@ class Dhcpv4ClientAddressesState(OpenApiObject):
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(self, parent=None, dhcp_client_name=None):
-        super(Dhcpv4ClientAddressesState, self).__init__()
+        super(Dhcpv4ServerLeasesState, self).__init__()
         self._parent = parent
         self._set_property("dhcp_client_name", dhcp_client_name)
 
@@ -135779,7 +136453,7 @@ class Dhcpv4ClientAddressesState(OpenApiObject):
         # type: () -> str
         """dhcp_client_name getter
 
-        The name of DHCP Client.
+        The name of DHCP Server.
 
         Returns: str
         """
@@ -135789,38 +136463,50 @@ class Dhcpv4ClientAddressesState(OpenApiObject):
     def dhcp_client_name(self, value):
         """dhcp_client_name setter
 
-        The name of DHCP Client.
+        The name of DHCP Server.
 
         value: str
         """
         self._set_property("dhcp_client_name", value)
 
     @property
-    def ipv4_addresses(self):
-        # type: () -> DhcpClientv4StateIter
-        """ipv4_addresses getter
+    def leases(self):
+        # type: () -> Dhcpv4ServerLeaseStateIter
+        """leases getter
 
         TBD
 
-        Returns: DhcpClientv4StateIter
+        Returns: Dhcpv4ServerLeaseStateIter
         """
         return self._get_property(
-            "ipv4_addresses", DhcpClientv4StateIter, self._parent, self._choice
+            "leases", Dhcpv4ServerLeaseStateIter, self._parent, self._choice
         )
 
 
-class DhcpClientv4State(OpenApiObject):
+class Dhcpv4ServerLeaseState(OpenApiObject):
     __slots__ = "_parent"
 
     _TYPES = {
-        "ipv4_address": {"type": str},
-        "prefix_length": {
+        "address": {"type": str},
+        "valid_time": {
             "type": int,
             "format": "uint32",
-            "maximum": 32,
         },
-        "gateway_address": {"type": str},
-        "lease_time": {"type": str},
+        "preferred_time": {
+            "type": int,
+            "format": "uint32",
+        },
+        "renew_time": {
+            "type": int,
+            "format": "uint32",
+        },
+        "rebind_time": {
+            "type": int,
+            "format": "uint32",
+        },
+        "client_id": {"type": str},
+        "circuit_id": {"type": str},
+        "remote_id": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -135832,246 +136518,358 @@ class DhcpClientv4State(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
+        address=None,
+        valid_time=None,
+        preferred_time=None,
+        renew_time=None,
+        rebind_time=None,
+        client_id=None,
+        circuit_id=None,
+        remote_id=None,
     ):
-        super(DhcpClientv4State, self).__init__()
+        super(Dhcpv4ServerLeaseState, self).__init__()
         self._parent = parent
-        self._set_property("ipv4_address", ipv4_address)
-        self._set_property("prefix_length", prefix_length)
-        self._set_property("gateway_address", gateway_address)
-        self._set_property("lease_time", lease_time)
+        self._set_property("address", address)
+        self._set_property("valid_time", valid_time)
+        self._set_property("preferred_time", preferred_time)
+        self._set_property("renew_time", renew_time)
+        self._set_property("rebind_time", rebind_time)
+        self._set_property("client_id", client_id)
+        self._set_property("circuit_id", circuit_id)
+        self._set_property("remote_id", remote_id)
 
     def set(
         self,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
+        address=None,
+        valid_time=None,
+        preferred_time=None,
+        renew_time=None,
+        rebind_time=None,
+        client_id=None,
+        circuit_id=None,
+        remote_id=None,
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
-    def ipv4_address(self):
+    def address(self):
         # type: () -> str
-        """ipv4_address getter
+        """address getter
 
-        The IP address associated with this DHCP Client session.
+        The IPv4 address associated with this lease.
 
         Returns: str
         """
-        return self._get_property("ipv4_address")
+        return self._get_property("address")
 
-    @ipv4_address.setter
-    def ipv4_address(self, value):
-        """ipv4_address setter
+    @address.setter
+    def address(self, value):
+        """address setter
 
-        The IP address associated with this DHCP Client session.
+        The IPv4 address associated with this lease.
 
         value: str
         """
-        self._set_property("ipv4_address", value)
+        self._set_property("address", value)
 
     @property
-    def prefix_length(self):
+    def valid_time(self):
         # type: () -> int
-        """prefix_length getter
+        """valid_time getter
 
-        The length of the prefix.
+        The time in seconds, IP address lease will expire.
 
         Returns: int
         """
-        return self._get_property("prefix_length")
+        return self._get_property("valid_time")
 
-    @prefix_length.setter
-    def prefix_length(self, value):
-        """prefix_length setter
+    @valid_time.setter
+    def valid_time(self, value):
+        """valid_time setter
 
-        The length of the prefix.
+        The time in seconds, IP address lease will expire.
 
         value: int
         """
-        self._set_property("prefix_length", value)
+        self._set_property("valid_time", value)
 
     @property
-    def gateway_address(self):
-        # type: () -> str
-        """gateway_address getter
+    def preferred_time(self):
+        # type: () -> int
+        """preferred_time getter
 
-        The Gateway address associated with this DHCP Client session.
+        The time in seconds, elapsed time since address has been renewed.
+
+        Returns: int
+        """
+        return self._get_property("preferred_time")
+
+    @preferred_time.setter
+    def preferred_time(self, value):
+        """preferred_time setter
+
+        The time in seconds, elapsed time since address has been renewed.
+
+        value: int
+        """
+        self._set_property("preferred_time", value)
+
+    @property
+    def renew_time(self):
+        # type: () -> int
+        """renew_time getter
+
+        Time in seconds until the DHCPv4 client starts renewing the lease.
+
+        Returns: int
+        """
+        return self._get_property("renew_time")
+
+    @renew_time.setter
+    def renew_time(self, value):
+        """renew_time setter
+
+        Time in seconds until the DHCPv4 client starts renewing the lease.
+
+        value: int
+        """
+        self._set_property("renew_time", value)
+
+    @property
+    def rebind_time(self):
+        # type: () -> int
+        """rebind_time getter
+
+        Time in seconds until the DHCPv4 client starts rebinding.
+
+        Returns: int
+        """
+        return self._get_property("rebind_time")
+
+    @rebind_time.setter
+    def rebind_time(self, value):
+        """rebind_time setter
+
+        Time in seconds until the DHCPv4 client starts rebinding.
+
+        value: int
+        """
+        self._set_property("rebind_time", value)
+
+    @property
+    def client_id(self):
+        # type: () -> str
+        """client_id getter
+
+        The ID of the DHCPv4 client holding this lease.
 
         Returns: str
         """
-        return self._get_property("gateway_address")
+        return self._get_property("client_id")
 
-    @gateway_address.setter
-    def gateway_address(self, value):
-        """gateway_address setter
+    @client_id.setter
+    def client_id(self, value):
+        """client_id setter
 
-        The Gateway address associated with this DHCP Client session.
+        The ID of the DHCPv4 client holding this lease.
 
         value: str
         """
-        self._set_property("gateway_address", value)
+        self._set_property("client_id", value)
 
     @property
-    def lease_time(self):
+    def circuit_id(self):
         # type: () -> str
-        """lease_time getter
+        """circuit_id getter
 
-        The duration of the IP address lease, in seconds.
+        The Circuit ID option found in the last request message.
 
         Returns: str
         """
-        return self._get_property("lease_time")
+        return self._get_property("circuit_id")
 
-    @lease_time.setter
-    def lease_time(self, value):
-        """lease_time setter
+    @circuit_id.setter
+    def circuit_id(self, value):
+        """circuit_id setter
 
-        The duration of the IP address lease, in seconds.
+        The Circuit ID option found in the last request message.
 
         value: str
         """
-        self._set_property("lease_time", value)
+        self._set_property("circuit_id", value)
+
+    @property
+    def remote_id(self):
+        # type: () -> str
+        """remote_id getter
+
+        The Remote ID option found in the last request message.
+
+        Returns: str
+        """
+        return self._get_property("remote_id")
+
+    @remote_id.setter
+    def remote_id(self, value):
+        """remote_id setter
+
+        The Remote ID option found in the last request message.
+
+        value: str
+        """
+        self._set_property("remote_id", value)
 
 
-class DhcpClientv4StateIter(OpenApiIter):
+class Dhcpv4ServerLeaseStateIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(DhcpClientv4StateIter, self).__init__()
+        super(Dhcpv4ServerLeaseStateIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[DhcpClientv4State]
+        # type: (str) -> Union[Dhcpv4ServerLeaseState]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> DhcpClientv4StateIter
+        # type: () -> Dhcpv4ServerLeaseStateIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> DhcpClientv4State
+        # type: () -> Dhcpv4ServerLeaseState
         return self._next()
 
     def next(self):
-        # type: () -> DhcpClientv4State
+        # type: () -> Dhcpv4ServerLeaseState
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, DhcpClientv4State):
-            raise Exception("Item is not an instance of DhcpClientv4State")
+        if not isinstance(item, Dhcpv4ServerLeaseState):
+            raise Exception("Item is not an instance of Dhcpv4ServerLeaseState")
 
     def state(
         self,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
+        address=None,
+        valid_time=None,
+        preferred_time=None,
+        renew_time=None,
+        rebind_time=None,
+        client_id=None,
+        circuit_id=None,
+        remote_id=None,
     ):
-        # type: (str,int,str,str) -> DhcpClientv4StateIter
-        """Factory method that creates an instance of the DhcpClientv4State class
+        # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseStateIter
+        """Factory method that creates an instance of the Dhcpv4ServerLeaseState class
 
         IPv4 unicast prefix.
 
-        Returns: DhcpClientv4StateIter
+        Returns: Dhcpv4ServerLeaseStateIter
         """
-        item = DhcpClientv4State(
+        item = Dhcpv4ServerLeaseState(
             parent=self._parent,
-            ipv4_address=ipv4_address,
-            prefix_length=prefix_length,
-            gateway_address=gateway_address,
-            lease_time=lease_time,
+            address=address,
+            valid_time=valid_time,
+            preferred_time=preferred_time,
+            renew_time=renew_time,
+            rebind_time=rebind_time,
+            client_id=client_id,
+            circuit_id=circuit_id,
+            remote_id=remote_id,
         )
         self._add(item)
         return self
 
     def add(
         self,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
+        address=None,
+        valid_time=None,
+        preferred_time=None,
+        renew_time=None,
+        rebind_time=None,
+        client_id=None,
+        circuit_id=None,
+        remote_id=None,
     ):
-        # type: (str,int,str,str) -> DhcpClientv4State
-        """Add method that creates and returns an instance of the DhcpClientv4State class
+        # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseState
+        """Add method that creates and returns an instance of the Dhcpv4ServerLeaseState class
 
         IPv4 unicast prefix.
 
-        Returns: DhcpClientv4State
+        Returns: Dhcpv4ServerLeaseState
         """
-        item = DhcpClientv4State(
+        item = Dhcpv4ServerLeaseState(
             parent=self._parent,
-            ipv4_address=ipv4_address,
-            prefix_length=prefix_length,
-            gateway_address=gateway_address,
-            lease_time=lease_time,
+            address=address,
+            valid_time=valid_time,
+            preferred_time=preferred_time,
+            renew_time=renew_time,
+            rebind_time=rebind_time,
+            client_id=client_id,
+            circuit_id=circuit_id,
+            remote_id=remote_id,
         )
         self._add(item)
         return item
 
 
-class Dhcpv4ClientAddressesStateIter(OpenApiIter):
+class Dhcpv4ServerLeasesStateIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
     _GETITEM_RETURNS_CHOICE_OBJECT = False
 
     def __init__(self, parent=None, choice=None):
-        super(Dhcpv4ClientAddressesStateIter, self).__init__()
+        super(Dhcpv4ServerLeasesStateIter, self).__init__()
         self._parent = parent
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv4ClientAddressesState]
+        # type: (str) -> Union[Dhcpv4ServerLeasesState]
         return self._getitem(key)
 
     def __iter__(self):
-        # type: () -> Dhcpv4ClientAddressesStateIter
+        # type: () -> Dhcpv4ServerLeasesStateIter
         return self._iter()
 
     def __next__(self):
-        # type: () -> Dhcpv4ClientAddressesState
+        # type: () -> Dhcpv4ServerLeasesState
         return self._next()
 
     def next(self):
-        # type: () -> Dhcpv4ClientAddressesState
+        # type: () -> Dhcpv4ServerLeasesState
         return self._next()
 
     def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv4ClientAddressesState):
-            raise Exception("Item is not an instance of Dhcpv4ClientAddressesState")
+        if not isinstance(item, Dhcpv4ServerLeasesState):
+            raise Exception("Item is not an instance of Dhcpv4ServerLeasesState")
 
     def state(self, dhcp_client_name=None):
-        # type: (str) -> Dhcpv4ClientAddressesStateIter
-        """Factory method that creates an instance of the Dhcpv4ClientAddressesState class
+        # type: (str) -> Dhcpv4ServerLeasesStateIter
+        """Factory method that creates an instance of the Dhcpv4ServerLeasesState class
 
-        Addresses learned by DHCP clients.
+        Lease information of DHCP Server.
 
-        Returns: Dhcpv4ClientAddressesStateIter
+        Returns: Dhcpv4ServerLeasesStateIter
         """
-        item = Dhcpv4ClientAddressesState(
+        item = Dhcpv4ServerLeasesState(
             parent=self._parent, dhcp_client_name=dhcp_client_name
         )
         self._add(item)
         return self
 
     def add(self, dhcp_client_name=None):
-        # type: (str) -> Dhcpv4ClientAddressesState
-        """Add method that creates and returns an instance of the Dhcpv4ClientAddressesState class
+        # type: (str) -> Dhcpv4ServerLeasesState
+        """Add method that creates and returns an instance of the Dhcpv4ServerLeasesState class
 
-        Addresses learned by DHCP clients.
+        Lease information of DHCP Server.
 
-        Returns: Dhcpv4ClientAddressesState
+        Returns: Dhcpv4ServerLeasesState
         """
-        item = Dhcpv4ClientAddressesState(
+        item = Dhcpv4ServerLeasesState(
             parent=self._parent, dhcp_client_name=dhcp_client_name
         )
         self._add(item)
