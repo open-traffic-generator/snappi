@@ -96,4 +96,4 @@ def test_quickstart():
             break
         time.sleep(0.1)
 ```
-Triggering again go snapp.
+Triggering  go snapp.
