@@ -29462,10 +29462,10 @@ class DhcpServerV4(OpenApiObject):
     _TYPES = {
         "name": {"type": str},
         "ipv4_name": {"type": str},
-        "address_pool": {"type": "DhcpServerV4Pool"},
+        "address_pools": {"type": "DhcpServerV4PoolIter"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "ipv4_name", "address_pool")  # type: tuple(str)
+    _REQUIRED = ("name", "ipv4_name", "address_pools")  # type: tuple(str)
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
@@ -29531,15 +29531,17 @@ class DhcpServerV4(OpenApiObject):
         self._set_property("ipv4_name", value)
 
     @property
-    def address_pool(self):
-        # type: () -> DhcpServerV4Pool
-        """address_pool getter
+    def address_pools(self):
+        # type: () -> DhcpServerV4PoolIter
+        """address_pools getter
 
-        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.Configure DHCPv4 Server Lease parameters
+        List of DHCPv4 Server Lease parameters
 
-        Returns: DhcpServerV4Pool
+        Returns: DhcpServerV4PoolIter
         """
-        return self._get_property("address_pool", DhcpServerV4Pool)
+        return self._get_property(
+            "address_pools", DhcpServerV4PoolIter, self._parent, self._choice
+        )
 
 
 class DhcpServerV4Pool(OpenApiObject):
@@ -29897,6 +29899,81 @@ class DhcpServerV4PoolOption(OpenApiObject):
         value: bool
         """
         self._set_property("echo_relay_with_tlv_82", value)
+
+
+class DhcpServerV4PoolIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(DhcpServerV4PoolIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[DhcpServerV4Pool]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> DhcpServerV4PoolIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> DhcpServerV4Pool
+        return self._next()
+
+    def next(self):
+        # type: () -> DhcpServerV4Pool
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, DhcpServerV4Pool):
+            raise Exception("Item is not an instance of DhcpServerV4Pool")
+
+    def pool(
+        self, name=None, lease_time=86400, start_address=None, prefix=24, size=1, step=1
+    ):
+        # type: (str,int,str,int,int,int) -> DhcpServerV4PoolIter
+        """Factory method that creates an instance of the DhcpServerV4Pool class
+
+        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.
+
+        Returns: DhcpServerV4PoolIter
+        """
+        item = DhcpServerV4Pool(
+            parent=self._parent,
+            name=name,
+            lease_time=lease_time,
+            start_address=start_address,
+            prefix=prefix,
+            size=size,
+            step=step,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self, name=None, lease_time=86400, start_address=None, prefix=24, size=1, step=1
+    ):
+        # type: (str,int,str,int,int,int) -> DhcpServerV4Pool
+        """Add method that creates and returns an instance of the DhcpServerV4Pool class
+
+        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.
+
+        Returns: DhcpServerV4Pool
+        """
+        item = DhcpServerV4Pool(
+            parent=self._parent,
+            name=name,
+            lease_time=lease_time,
+            start_address=start_address,
+            prefix=prefix,
+            size=size,
+            step=step,
+        )
+        self._add(item)
+        return item
 
 
 class DhcpServerV4Iter(OpenApiIter):

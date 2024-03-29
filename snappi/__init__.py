@@ -245,6 +245,7 @@ from .snappi import DeviceDhcpServer
 from .snappi import DhcpServerV4
 from .snappi import DhcpServerV4Pool
 from .snappi import DhcpServerV4PoolOption
+from .snappi import DhcpServerV4PoolIter
 from .snappi import DhcpServerV4Iter
 from .snappi import DhcpServerV6
 from .snappi import DhcpServerV6Iter

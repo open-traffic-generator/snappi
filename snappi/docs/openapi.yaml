@@ -7738,7 +7738,7 @@ components:
       required:
       - name
       - ipv4_name
-      - address_pool
+      - address_pools
       properties:
         name:
           x-field-uid: 1
@@ -7757,10 +7757,12 @@ components:
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
           x-field-uid: 2
-        address_pool:
+        address_pools:
           description: |-
-            Configure DHCPv4 Server Lease parameters
-          $ref: '#/components/schemas/DhcpServerV4.Pool'
+            List of DHCPv4 Server Lease parameters
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpServerV4.Pool'
           x-field-uid: 3
     DhcpServerV4.Pool:
       description: |-

@@ -5703,9 +5703,8 @@ message DhcpServerV4 {
   // required = true
   optional string ipv4_name = 2;
 
-  // Configure DHCPv4 Server Lease parameters
-  // required = true
-  DhcpServerV4Pool address_pool = 3;
+  // List of DHCPv4 Server Lease parameters
+  repeated DhcpServerV4Pool address_pools = 3;
 }
 
 // Under Review: Information TBD
