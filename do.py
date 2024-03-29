@@ -36,8 +36,8 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "support-auto-dhcp-feature"
-USE_MODELS_BRANCH = "dhcp_support_pr"
+USE_OPENAPIART_BRANCH = None
+USE_MODELS_BRANCH = "dhcpv4_support_review"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
