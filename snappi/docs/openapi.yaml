@@ -7805,7 +7805,7 @@ components:
           default: 24
           maximum: 32
           x-field-uid: 4
-        size:
+        count:
           description: |-
             The total number of addresses in the pool.
           type: integer
@@ -7836,18 +7836,21 @@ components:
             The Router address advertised by the DHCPv4 server in Offer and Ack messages.
           type: string
           format: ipv4
+          default: 0.0.0.0
           x-field-uid: 1
         primary_dns_server:
           description: |-
             The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
           type: string
           format: ipv4
+          default: 0.0.0.0
           x-field-uid: 2
         secondary_dns_server:
           description: |-
             The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
           type: string
           format: ipv4
+          default: 0.0.0.0
           x-field-uid: 3
         echo_relay_with_tlv_82:
           description: |-
@@ -14807,7 +14810,7 @@ components:
           x-field-uid: 1
         session_state:
           description: |-
-            Session state as up or down. Up refers to an Established state and Down refers to any other state.
+            Session state as up or down. Up refers to an Established state when the client has a valid lease  and is in its normal operating BOUND state and Down refers to any other state.
           type: string
           x-field-uid: 2
           x-enum:
@@ -14880,19 +14883,20 @@ components:
         lease_time:
           description: |-
             The duration of the IP address lease, in seconds.
-          type: string
+          type: integer
+          format: uint32
           x-field-uid: 13
         renew_time:
           description: |-
             Time in seconds until the DHCPv4 client starts renewing the lease.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 14
         rebind_time:
           description: |-
             Time in seconds until the DHCPv4 client starts rebinding.
           type: integer
-          format: uint64
+          format: uint32
           x-field-uid: 15
     Dhcpv4Server.Metrics.Request:
       description: |-

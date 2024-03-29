@@ -5731,7 +5731,7 @@ message DhcpServerV4Pool {
 
   // The total number of addresses in the pool.
   // default = 1
-  optional uint32 size = 5;
+  optional uint32 count = 5;
 
   // The increment value for the lease address within the lease pool. addresses are present.
   // The value is incremented according to the Prefix Length and Step.
@@ -5746,14 +5746,17 @@ message DhcpServerV4Pool {
 message DhcpServerV4PoolOption {
 
   // The Router address advertised by the DHCPv4 server in Offer and Ack messages.
+  // default = 0.0.0.0
   optional string router_address = 1;
 
   // The primary DNS server address that is offered to DHCP clients that request this
   // information through a TLV option.
+  // default = 0.0.0.0
   optional string primary_dns_server = 2;
 
   // The primary DNS server address that is offered to DHCP clients that request this
   // information through a TLV option.
+  // default = 0.0.0.0
   optional string secondary_dns_server = 3;
 
   // If selected, the DHCP server includes in its replies the TLV information for the
@@ -10903,8 +10906,9 @@ message Dhcpv4ClientMetric {
       down = 2;
     }
   }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
+  // Session state as up or down. Up refers to an Established state when the client has
+  // a valid lease  and is in its normal operating BOUND state and Down refers to any
+  // other state.
   optional SessionState.Enum session_state = 2;
 
   // Number of DHCPDISCOVER messages sent.
@@ -10938,13 +10942,13 @@ message Dhcpv4ClientMetric {
   optional string gateway_address = 12;
 
   // The duration of the IP address lease, in seconds.
-  optional string lease_time = 13;
+  optional uint32 lease_time = 13;
 
   // Time in seconds until the DHCPv4 client starts renewing the lease.
-  optional uint64 renew_time = 14;
+  optional uint32 renew_time = 14;
 
   // Time in seconds until the DHCPv4 client starts rebinding.
-  optional uint64 rebind_time = 15;
+  optional uint32 rebind_time = 15;
 }
 
 // The request to retrieve DHCPv4 per Server metrics/statistics.

@@ -29563,7 +29563,7 @@ class DhcpServerV4Pool(OpenApiObject):
             "format": "uint32",
             "maximum": 32,
         },
-        "size": {
+        "count": {
             "type": int,
             "format": "uint32",
             "minimum": 1,
@@ -29581,7 +29581,7 @@ class DhcpServerV4Pool(OpenApiObject):
     _DEFAULTS = {
         "lease_time": 86400,
         "prefix": 24,
-        "size": 1,
+        "count": 1,
         "step": 1,
     }  # type: Dict[str, Union(type)]
 
@@ -29596,7 +29596,7 @@ class DhcpServerV4Pool(OpenApiObject):
         lease_time=86400,
         start_address=None,
         prefix=24,
-        size=1,
+        count=1,
         step=1,
     ):
         super(DhcpServerV4Pool, self).__init__()
@@ -29605,7 +29605,7 @@ class DhcpServerV4Pool(OpenApiObject):
         self._set_property("lease_time", lease_time)
         self._set_property("start_address", start_address)
         self._set_property("prefix", prefix)
-        self._set_property("size", size)
+        self._set_property("count", count)
         self._set_property("step", step)
 
     def set(
@@ -29614,7 +29614,7 @@ class DhcpServerV4Pool(OpenApiObject):
         lease_time=None,
         start_address=None,
         prefix=None,
-        size=None,
+        count=None,
         step=None,
     ):
         for property_name, property_value in locals().items():
@@ -29710,25 +29710,25 @@ class DhcpServerV4Pool(OpenApiObject):
         self._set_property("prefix", value)
 
     @property
-    def size(self):
+    def count(self):
         # type: () -> int
-        """size getter
+        """count getter
 
         The total number of addresses in the pool.
 
         Returns: int
         """
-        return self._get_property("size")
+        return self._get_property("count")
 
-    @size.setter
-    def size(self, value):
-        """size setter
+    @count.setter
+    def count(self, value):
+        """count setter
 
         The total number of addresses in the pool.
 
         value: int
         """
-        self._set_property("size", value)
+        self._set_property("count", value)
 
     @property
     def step(self):
@@ -29785,6 +29785,9 @@ class DhcpServerV4PoolOption(OpenApiObject):
     _REQUIRED = ()  # type: tuple(str)
 
     _DEFAULTS = {
+        "router_address": "0.0.0.0",
+        "primary_dns_server": "0.0.0.0",
+        "secondary_dns_server": "0.0.0.0",
         "echo_relay_with_tlv_82": True,
     }  # type: Dict[str, Union(type)]
 
@@ -29793,9 +29796,9 @@ class DhcpServerV4PoolOption(OpenApiObject):
     def __init__(
         self,
         parent=None,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
+        router_address="0.0.0.0",
+        primary_dns_server="0.0.0.0",
+        secondary_dns_server="0.0.0.0",
         echo_relay_with_tlv_82=True,
     ):
         super(DhcpServerV4PoolOption, self).__init__()
@@ -29932,7 +29935,13 @@ class DhcpServerV4PoolIter(OpenApiIter):
             raise Exception("Item is not an instance of DhcpServerV4Pool")
 
     def pool(
-        self, name=None, lease_time=86400, start_address=None, prefix=24, size=1, step=1
+        self,
+        name=None,
+        lease_time=86400,
+        start_address=None,
+        prefix=24,
+        count=1,
+        step=1,
     ):
         # type: (str,int,str,int,int,int) -> DhcpServerV4PoolIter
         """Factory method that creates an instance of the DhcpServerV4Pool class
@@ -29947,14 +29956,20 @@ class DhcpServerV4PoolIter(OpenApiIter):
             lease_time=lease_time,
             start_address=start_address,
             prefix=prefix,
-            size=size,
+            count=count,
             step=step,
         )
         self._add(item)
         return self
 
     def add(
-        self, name=None, lease_time=86400, start_address=None, prefix=24, size=1, step=1
+        self,
+        name=None,
+        lease_time=86400,
+        start_address=None,
+        prefix=24,
+        count=1,
+        step=1,
     ):
         # type: (str,int,str,int,int,int) -> DhcpServerV4Pool
         """Add method that creates and returns an instance of the DhcpServerV4Pool class
@@ -29969,7 +29984,7 @@ class DhcpServerV4PoolIter(OpenApiIter):
             lease_time=lease_time,
             start_address=start_address,
             prefix=prefix,
-            size=size,
+            count=count,
             step=step,
         )
         self._add(item)
@@ -128692,14 +128707,17 @@ class Dhcpv4ClientMetric(OpenApiObject):
             "maximum": 32,
         },
         "gateway_address": {"type": str},
-        "lease_time": {"type": str},
+        "lease_time": {
+            "type": int,
+            "format": "uint32",
+        },
         "renew_time": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
         "rebind_time": {
             "type": int,
-            "format": "uint64",
+            "format": "uint32",
         },
     }  # type: Dict[str, str]
 
@@ -128797,7 +128815,7 @@ class Dhcpv4ClientMetric(OpenApiObject):
         # type: () -> Union[Literal["down"], Literal["up"]]
         """session_state getter
 
-        Session state as up or down. Up refers to an Established state and Down refers to any other state.
+        Session state as up or down. Up refers to an Established state when the client has valid lease and is in its normal operating BOUND state and Down refers to any other state.
 
         Returns: Union[Literal["down"], Literal["up"]]
         """
@@ -128807,7 +128825,7 @@ class Dhcpv4ClientMetric(OpenApiObject):
     def session_state(self, value):
         """session_state setter
 
-        Session state as up or down. Up refers to an Established state and Down refers to any other state.
+        Session state as up or down. Up refers to an Established state when the client has valid lease and is in its normal operating BOUND state and Down refers to any other state.
 
         value: Union[Literal["down"], Literal["up"]]
         """
@@ -129025,12 +129043,12 @@ class Dhcpv4ClientMetric(OpenApiObject):
 
     @property
     def lease_time(self):
-        # type: () -> str
+        # type: () -> int
         """lease_time getter
 
         The duration of the IP address lease, in seconds.
 
-        Returns: str
+        Returns: int
         """
         return self._get_property("lease_time")
 
@@ -129040,7 +129058,7 @@ class Dhcpv4ClientMetric(OpenApiObject):
 
         The duration of the IP address lease, in seconds.
 
-        value: str
+        value: int
         """
         self._set_property("lease_time", value)
 
@@ -129135,7 +129153,7 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
         renew_time=None,
         rebind_time=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,str,int,int) -> Dhcpv4ClientMetricIter
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,int,int,int) -> Dhcpv4ClientMetricIter
         """Factory method that creates an instance of the Dhcpv4ClientMetric class
 
         DHCPv4 per peer statistics information.
@@ -129181,7 +129199,7 @@ class Dhcpv4ClientMetricIter(OpenApiIter):
         renew_time=None,
         rebind_time=None,
     ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,str,int,int) -> Dhcpv4ClientMetric
+        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,int,int,int) -> Dhcpv4ClientMetric
         """Add method that creates and returns an instance of the Dhcpv4ClientMetric class
 
         DHCPv4 per peer statistics information.
