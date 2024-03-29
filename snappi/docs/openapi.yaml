@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.1.0
+  version: 1.2.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -8534,6 +8534,9 @@ components:
         window:
           x-field-uid: 15
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window'
+        checksum:
+          x-field-uid: 16
+          $ref: '#/components/schemas/Pattern.Flow.Tcp.Checksum'
     Flow.Udp:
       description: |-
         UDP packet header
@@ -24130,6 +24133,46 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Tcp.Checksum:
+      description: |-
+        The one's complement of the one's complement sum of all 16 bit words in header and text.  An all-zero value means that no checksum will be transmitted.   While computing the checksum, the checksum field itself is replaced with zeros.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
     Pattern.Flow.Udp.SrcPort.Counter:
       description: |-
         integer counter pattern

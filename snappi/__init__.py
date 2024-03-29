@@ -563,6 +563,7 @@ from .snappi import PatternFlowTcpWindow
 from .snappi import PatternFlowTcpWindowCounter
 from .snappi import PatternFlowTcpWindowMetricTag
 from .snappi import PatternFlowTcpWindowMetricTagIter
+from .snappi import PatternFlowTcpChecksum
 from .snappi import FlowUdp
 from .snappi import PatternFlowUdpSrcPort
 from .snappi import PatternFlowUdpSrcPortCounter

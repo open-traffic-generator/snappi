@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.1.0
+# Open Traffic Generator API 1.2.0
 # License: MIT
 
 import importlib
@@ -58533,6 +58533,7 @@ class FlowTcp(OpenApiObject):
         "ctl_syn": {"type": "PatternFlowTcpCtlSyn"},
         "ctl_fin": {"type": "PatternFlowTcpCtlFin"},
         "window": {"type": "PatternFlowTcpWindow"},
+        "checksum": {"type": "PatternFlowTcpChecksum"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -58709,6 +58710,17 @@ class FlowTcp(OpenApiObject):
         Returns: PatternFlowTcpWindow
         """
         return self._get_property("window", PatternFlowTcpWindow)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowTcpChecksum
+        """checksum getter
+
+        The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.
+
+        Returns: PatternFlowTcpChecksum
+        """
+        return self._get_property("checksum", PatternFlowTcpChecksum)
 
 
 class PatternFlowTcpSrcPort(OpenApiObject):
@@ -65268,6 +65280,129 @@ class PatternFlowTcpWindowMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class PatternFlowTcpChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowTcpChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
 
 
 class FlowUdp(OpenApiObject):
@@ -133432,8 +133567,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.1.0"
-        self._version_meta.sdk_version = "1.1.1"
+        self._version_meta.api_spec_version = "1.2.0"
+        self._version_meta.sdk_version = "1.2.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

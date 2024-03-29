@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.1.0
+/* Open Traffic Generator API 1.2.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -6387,6 +6387,9 @@ message FlowTcp {
 
   // Description missing in models
   PatternFlowTcpWindow window = 15;
+
+  // Description missing in models
+  PatternFlowTcpChecksum checksum = 16;
 }
 
 // UDP packet header
@@ -17378,6 +17381,37 @@ message PatternFlowTcpWindow {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowTcpWindowMetricTag metric_tags = 7;
+}
+
+// The one's complement of the one's complement sum of all 16 bit words in header and
+// text.  An all-zero value means that no checksum will be transmitted.   While computing
+// the checksum, the checksum field itself is replaced with zeros.
+message PatternFlowTcpChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
 }
 
 // integer counter pattern
