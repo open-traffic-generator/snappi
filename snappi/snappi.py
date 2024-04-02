@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.2.0
+# Open Traffic Generator API 1.3.0
 # License: MIT
 
 import importlib
@@ -20721,6 +20721,7 @@ class BgpAttributes(OpenApiObject):
             "itemformat": "ipv4",
         },
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
+        "tunnel_encapsulation": {"type": "BgpAttributesTunnelEncapsulation"},
         "mp_reach": {"type": "BgpAttributesMpReachNlri"},
         "mp_unreach": {"type": "BgpAttributesMpUnreachNlri"},
     }  # type: Dict[str, str]
@@ -20952,11 +20953,24 @@ class BgpAttributes(OpenApiObject):
         )
 
     @property
+    def tunnel_encapsulation(self):
+        # type: () -> BgpAttributesTunnelEncapsulation
+        """tunnel_encapsulation getter
+
+        The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.
+
+        Returns: BgpAttributesTunnelEncapsulation
+        """
+        return self._get_property(
+            "tunnel_encapsulation", BgpAttributesTunnelEncapsulation
+        )
+
+    @property
     def mp_reach(self):
         # type: () -> BgpAttributesMpReachNlri
         """mp_reach getter
 
-        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpReachNlri
         """
@@ -20967,7 +20981,7 @@ class BgpAttributes(OpenApiObject):
         # type: () -> BgpAttributesMpUnreachNlri
         """mp_unreach getter
 
-        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpUnreachNlri
         """
@@ -22564,6 +22578,3358 @@ class BgpAttributesOriginatorId(OpenApiObject):
         self._set_property("value", value)
 
 
+class BgpAttributesTunnelEncapsulation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sr_policy",
+            ],
+        },
+        "sr_policy": {"type": "BgpAttributesSegmentRoutingPolicy"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sr_policy",
+    }  # type: Dict[str, Union(type)]
+
+    SR_POLICY = "sr_policy"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesTunnelEncapsulation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def sr_policy(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicy
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicy class
+
+        Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.. This information is carried in TUNNEL_ENCAPSULATION attribute with type set to SR Policy (15).
+
+        Returns: BgpAttributesSegmentRoutingPolicy
+        """
+        return self._get_property(
+            "sr_policy", BgpAttributesSegmentRoutingPolicy, self, "sr_policy"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sr_policy"]]
+        """choice getter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        Returns: Union[Literal["sr_policy"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        value: Union[Literal["sr_policy"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "binding_segment_identifier": {"type": "BgpAttributesBsid"},
+        "srv6_binding_segment_identifier": {"type": "BgpAttributesSrv6BsidIter"},
+        "preference": {"type": "BgpAttributesSrPolicyPreference"},
+        "priority": {"type": "BgpAttributesSrPolicyPriority"},
+        "policy_name": {"type": "BgpAttributesSrPolicyPolicyName"},
+        "policy_candidate_name": {"type": "BgpAttributesSrPolicyPolicyCandidateName"},
+        "explicit_null_label_policy": {
+            "type": "BgpAttributesSrPolicyExplicitNullPolicy"
+        },
+        "segment_list": {"type": "BgpAttributesSrPolicySegmentListIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicy, self).__init__()
+        self._parent = parent
+
+    @property
+    def binding_segment_identifier(self):
+        # type: () -> BgpAttributesBsid
+        """binding_segment_identifier getter
+
+        The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.
+
+        Returns: BgpAttributesBsid
+        """
+        return self._get_property("binding_segment_identifier", BgpAttributesBsid)
+
+    @property
+    def srv6_binding_segment_identifier(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        """srv6_binding_segment_identifier getter
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one. or more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        return self._get_property(
+            "srv6_binding_segment_identifier",
+            BgpAttributesSrv6BsidIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def preference(self):
+        # type: () -> BgpAttributesSrPolicyPreference
+        """preference getter
+
+        Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 ..
+
+        Returns: BgpAttributesSrPolicyPreference
+        """
+        return self._get_property("preference", BgpAttributesSrPolicyPreference)
+
+    @property
+    def priority(self):
+        # type: () -> BgpAttributesSrPolicyPriority
+        """priority getter
+
+        Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPriority
+        """
+        return self._get_property("priority", BgpAttributesSrPolicyPriority)
+
+    @property
+    def policy_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyName
+        """policy_name getter
+
+        Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPolicyName
+        """
+        return self._get_property("policy_name", BgpAttributesSrPolicyPolicyName)
+
+    @property
+    def policy_candidate_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyCandidateName
+        """policy_candidate_name getter
+
+        Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPolicyCandidateName
+        """
+        return self._get_property(
+            "policy_candidate_name", BgpAttributesSrPolicyPolicyCandidateName
+        )
+
+    @property
+    def explicit_null_label_policy(self):
+        # type: () -> BgpAttributesSrPolicyExplicitNullPolicy
+        """explicit_null_label_policy getter
+
+        This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: BgpAttributesSrPolicyExplicitNullPolicy
+        """
+        return self._get_property(
+            "explicit_null_label_policy", BgpAttributesSrPolicyExplicitNullPolicy
+        )
+
+    @property
+    def segment_list(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        """segment_list getter
+
+        TBD
+
+        Returns: BgpAttributesSrPolicySegmentListIter
+        """
+        return self._get_property(
+            "segment_list",
+            BgpAttributesSrPolicySegmentListIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesBsid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "mpls",
+                "srv6",
+            ],
+        },
+        "mpls": {"type": "BgpAttributesBsidMpls"},
+        "srv6": {"type": "BgpAttributesBsidSrv6"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    MPLS = "mpls"  # type: str
+    SRV6 = "srv6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesBsid, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def mpls(self):
+        # type: () -> BgpAttributesBsidMpls
+        """Factory property that returns an instance of the BgpAttributesBsidMpls class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
+
+        Returns: BgpAttributesBsidMpls
+        """
+        return self._get_property("mpls", BgpAttributesBsidMpls, self, "mpls")
+
+    @property
+    def srv6(self):
+        # type: () -> BgpAttributesBsidSrv6
+        """Factory property that returns an instance of the BgpAttributesBsidSrv6 class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
+
+        Returns: BgpAttributesBsidSrv6
+        """
+        return self._get_property("srv6", BgpAttributesBsidSrv6, self, "srv6")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["mpls"], Literal["srv6"]]
+        """choice getter
+
+        The type of Segment Identifier.
+
+        Returns: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of Segment Identifier.
+
+        value: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesBsidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, flag_specified_bsid_only=False, flag_drop_upon_invalid=False
+    ):
+        super(BgpAttributesBsidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+
+    def set(self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "label": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048576,
+        },
+        "traffic_class": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "flag_bos": {"type": bool},
+        "ttl": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 63,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "label": 16,
+        "traffic_class": 0,
+        "flag_bos": True,
+        "ttl": 63,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, label=16, traffic_class=0, flag_bos=True, ttl=63):
+        super(BgpAttributesSidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("label", label)
+        self._set_property("traffic_class", traffic_class)
+        self._set_property("flag_bos", flag_bos)
+        self._set_property("ttl", ttl)
+
+    def set(self, label=None, traffic_class=None, flag_bos=None, ttl=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def label(self):
+        # type: () -> int
+        """label getter
+
+        20 bit MPLS Label value.
+
+        Returns: int
+        """
+        return self._get_property("label")
+
+    @label.setter
+    def label(self, value):
+        """label setter
+
+        20 bit MPLS Label value.
+
+        value: int
+        """
+        self._set_property("label", value)
+
+    @property
+    def traffic_class(self):
+        # type: () -> int
+        """traffic_class getter
+
+        3 bits of Traffic Class.
+
+        Returns: int
+        """
+        return self._get_property("traffic_class")
+
+    @traffic_class.setter
+    def traffic_class(self, value):
+        """traffic_class setter
+
+        3 bits of Traffic Class.
+
+        value: int
+        """
+        self._set_property("traffic_class", value)
+
+    @property
+    def flag_bos(self):
+        # type: () -> bool
+        """flag_bos getter
+
+        Bottom of Stack
+
+        Returns: bool
+        """
+        return self._get_property("flag_bos")
+
+    @flag_bos.setter
+    def flag_bos(self, value):
+        """flag_bos setter
+
+        Bottom of Stack
+
+        value: bool
+        """
+        self._set_property("flag_bos", value)
+
+    @property
+    def ttl(self):
+        # type: () -> int
+        """ttl getter
+
+        8 bits Time to Live
+
+        Returns: int
+        """
+        return self._get_property("ttl")
+
+    @ttl.setter
+    def ttl(self, value):
+        """ttl setter
+
+        8 bits Time to Live
+
+        value: int
+        """
+        self._set_property("ttl", value)
+
+
+class BgpAttributesBsidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesBsidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None, ipv6_addr=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+
+class BgpAttributesSrv6Bsid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "flag_srv6_endpoint_behavior": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "flag_srv6_endpoint_behavior": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesSrv6Bsid, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("flag_srv6_endpoint_behavior", flag_srv6_endpoint_behavior)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self,
+        flag_specified_bsid_only=None,
+        flag_drop_upon_invalid=None,
+        flag_srv6_endpoint_behavior=None,
+        ipv6_addr=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def flag_srv6_endpoint_behavior(self):
+        # type: () -> bool
+        """flag_srv6_endpoint_behavior getter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: bool
+        """
+        return self._get_property("flag_srv6_endpoint_behavior")
+
+    @flag_srv6_endpoint_behavior.setter
+    def flag_srv6_endpoint_behavior(self, value):
+        """flag_srv6_endpoint_behavior setter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
+
+        value: bool
+        """
+        self._set_property("flag_srv6_endpoint_behavior", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "endpoint_behaviour": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 4,
+        },
+        "lb_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "ln_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "func_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "arg_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "endpoint_behaviour": "ffff",
+        "lb_length": 0,
+        "ln_length": 0,
+        "func_length": 0,
+        "arg_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        endpoint_behaviour="ffff",
+        lb_length=0,
+        ln_length=0,
+        func_length=0,
+        arg_length=0,
+    ):
+        super(
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("endpoint_behaviour", endpoint_behaviour)
+        self._set_property("lb_length", lb_length)
+        self._set_property("ln_length", ln_length)
+        self._set_property("func_length", func_length)
+        self._set_property("arg_length", arg_length)
+
+    def set(
+        self,
+        endpoint_behaviour=None,
+        lb_length=None,
+        ln_length=None,
+        func_length=None,
+        arg_length=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def endpoint_behaviour(self):
+        # type: () -> str
+        """endpoint_behaviour getter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        Returns: str
+        """
+        return self._get_property("endpoint_behaviour")
+
+    @endpoint_behaviour.setter
+    def endpoint_behaviour(self, value):
+        """endpoint_behaviour setter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        value: str
+        """
+        self._set_property("endpoint_behaviour", value)
+
+    @property
+    def lb_length(self):
+        # type: () -> int
+        """lb_length getter
+
+        SRv6 SID Locator Block length in bits.
+
+        Returns: int
+        """
+        return self._get_property("lb_length")
+
+    @lb_length.setter
+    def lb_length(self, value):
+        """lb_length setter
+
+        SRv6 SID Locator Block length in bits.
+
+        value: int
+        """
+        self._set_property("lb_length", value)
+
+    @property
+    def ln_length(self):
+        # type: () -> int
+        """ln_length getter
+
+        SRv6 SID Locator Node length in bits.
+
+        Returns: int
+        """
+        return self._get_property("ln_length")
+
+    @ln_length.setter
+    def ln_length(self, value):
+        """ln_length setter
+
+        SRv6 SID Locator Node length in bits.
+
+        value: int
+        """
+        self._set_property("ln_length", value)
+
+    @property
+    def func_length(self):
+        # type: () -> int
+        """func_length getter
+
+        SRv6 SID Function length in bits.
+
+        Returns: int
+        """
+        return self._get_property("func_length")
+
+    @func_length.setter
+    def func_length(self, value):
+        """func_length setter
+
+        SRv6 SID Function length in bits.
+
+        value: int
+        """
+        self._set_property("func_length", value)
+
+    @property
+    def arg_length(self):
+        # type: () -> int
+        """arg_length getter
+
+        SRv6 SID Arguments length in bits.
+
+        Returns: int
+        """
+        return self._get_property("arg_length")
+
+    @arg_length.setter
+    def arg_length(self, value):
+        """arg_length setter
+
+        SRv6 SID Arguments length in bits.
+
+        value: int
+        """
+        self._set_property("arg_length", value)
+
+
+class BgpAttributesSrv6BsidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrv6BsidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrv6Bsid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrv6Bsid):
+            raise Exception("Item is not an instance of BgpAttributesSrv6Bsid")
+
+    def srv6bsid(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6BsidIter
+        """Factory method that creates an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6Bsid
+        """Add method that creates and returns an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6Bsid
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return item
+
+
+class BgpAttributesSrPolicyPreference(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPreference, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Preference sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Preference sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPriority(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPriority, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Priority sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Priority sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPolicyName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPolicyCandidateName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyCandidateName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyExplicitNullPolicy(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "unknown",
+                "push_ipv4",
+                "push_ipv6",
+                "push_ipv4_and_ipv6",
+                "donot_push",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "push_ipv4_and_ipv6",
+    }  # type: Dict[str, Union(type)]
+
+    UNKNOWN = "unknown"  # type: str
+    PUSH_IPV4 = "push_ipv4"  # type: str
+    PUSH_IPV6 = "push_ipv6"  # type: str
+    PUSH_IPV4_AND_IPV6 = "push_ipv4_and_ipv6"  # type: str
+    DONOT_PUSH = "donot_push"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicyExplicitNullPolicy, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """choice getter
+
+        The Explicit NULL Label policy.
+
+        Returns: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Explicit NULL Label policy.
+
+        value: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSrPolicySegmentList(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "weight": {"type": "BgpAttributesSegmentRoutingPolicySegmentListWeight"},
+        "segments": {"type": "BgpAttributesSegmentRoutingPolicySegmentListSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSrPolicySegmentList, self).__init__()
+        self._parent = parent
+
+    @property
+    def weight(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """weight getter
+
+        The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """
+        return self._get_property(
+            "weight", BgpAttributesSegmentRoutingPolicySegmentListWeight
+        )
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """segments getter
+
+        TBD
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesSegmentRoutingPolicySegmentListSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListWeight(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSegmentRoutingPolicySegmentListWeight, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value of the weight.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the weight.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_a",
+                "type_b",
+                "type_c",
+                "type_d",
+                "type_e",
+                "type_f",
+                "type_g",
+                "type_h",
+                "type_i",
+                "type_j",
+                "type_k",
+            ],
+        },
+        "type_a": {"type": "BgpAttributesSegmentRoutingPolicyTypeA"},
+        "type_b": {"type": "BgpAttributesSegmentRoutingPolicyTypeB"},
+        "type_c": {"type": "BgpAttributesSegmentRoutingPolicyTypeC"},
+        "type_d": {"type": "BgpAttributesSegmentRoutingPolicyTypeD"},
+        "type_e": {"type": "BgpAttributesSegmentRoutingPolicyTypeE"},
+        "type_f": {"type": "BgpAttributesSegmentRoutingPolicyTypeF"},
+        "type_g": {"type": "BgpAttributesSegmentRoutingPolicyTypeG"},
+        "type_h": {"type": "BgpAttributesSegmentRoutingPolicyTypeH"},
+        "type_i": {"type": "BgpAttributesSegmentRoutingPolicyTypeI"},
+        "type_j": {"type": "BgpAttributesSegmentRoutingPolicyTypeJ"},
+        "type_k": {"type": "BgpAttributesSegmentRoutingPolicyTypeK"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TYPE_A = "type_a"  # type: str
+    TYPE_B = "type_b"  # type: str
+    TYPE_C = "type_c"  # type: str
+    TYPE_D = "type_d"  # type: str
+    TYPE_E = "type_e"  # type: str
+    TYPE_F = "type_f"  # type: str
+    TYPE_G = "type_g"  # type: str
+    TYPE_H = "type_h"  # type: str
+    TYPE_I = "type_i"  # type: str
+    TYPE_J = "type_j"  # type: str
+    TYPE_K = "type_k"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegment, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeA
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeA
+        """
+        return self._get_property(
+            "type_a", BgpAttributesSegmentRoutingPolicyTypeA, self, "type_a"
+        )
+
+    @property
+    def type_b(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeB
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeB
+        """
+        return self._get_property(
+            "type_b", BgpAttributesSegmentRoutingPolicyTypeB, self, "type_b"
+        )
+
+    @property
+    def type_c(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeC
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeC
+        """
+        return self._get_property(
+            "type_c", BgpAttributesSegmentRoutingPolicyTypeC, self, "type_c"
+        )
+
+    @property
+    def type_d(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeD
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeD
+        """
+        return self._get_property(
+            "type_d", BgpAttributesSegmentRoutingPolicyTypeD, self, "type_d"
+        )
+
+    @property
+    def type_e(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeE
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeE
+        """
+        return self._get_property(
+            "type_e", BgpAttributesSegmentRoutingPolicyTypeE, self, "type_e"
+        )
+
+    @property
+    def type_f(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeF
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeF
+        """
+        return self._get_property(
+            "type_f", BgpAttributesSegmentRoutingPolicyTypeF, self, "type_f"
+        )
+
+    @property
+    def type_g(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeG
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeG
+        """
+        return self._get_property(
+            "type_g", BgpAttributesSegmentRoutingPolicyTypeG, self, "type_g"
+        )
+
+    @property
+    def type_h(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeH
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeH
+        """
+        return self._get_property(
+            "type_h", BgpAttributesSegmentRoutingPolicyTypeH, self, "type_h"
+        )
+
+    @property
+    def type_i(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeI
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeI
+        """
+        return self._get_property(
+            "type_i", BgpAttributesSegmentRoutingPolicyTypeI, self, "type_i"
+        )
+
+    @property
+    def type_j(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeJ
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeJ
+        """
+        return self._get_property(
+            "type_j", BgpAttributesSegmentRoutingPolicyTypeJ, self, "type_j"
+        )
+
+    @property
+    def type_k(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeK
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeK
+        """
+        return self._get_property(
+            "type_k", BgpAttributesSegmentRoutingPolicyTypeK, self, "type_k"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """choice getter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+
+        Returns: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+
+        value: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeA(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicyTypeA, self).__init__()
+        self._parent = parent
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "v_flag": {"type": bool},
+        "a_flag": {"type": bool},
+        "s_flag": {"type": bool},
+        "b_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "v_flag": False,
+        "a_flag": False,
+        "s_flag": False,
+        "b_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, v_flag=False, a_flag=False, s_flag=False, b_flag=False
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeFlags, self).__init__()
+        self._parent = parent
+        self._set_property("v_flag", v_flag)
+        self._set_property("a_flag", a_flag)
+        self._set_property("s_flag", s_flag)
+        self._set_property("b_flag", b_flag)
+
+    def set(self, v_flag=None, a_flag=None, s_flag=None, b_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        Indicates verification of segment data in is enabled.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        Indicates verification of segment data in is enabled.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def a_flag(self):
+        # type: () -> bool
+        """a_flag getter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        Returns: bool
+        """
+        return self._get_property("a_flag")
+
+    @a_flag.setter
+    def a_flag(self, value):
+        """a_flag setter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        value: bool
+        """
+        self._set_property("a_flag", value)
+
+    @property
+    def s_flag(self):
+        # type: () -> bool
+        """s_flag getter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        Returns: bool
+        """
+        return self._get_property("s_flag")
+
+    @s_flag.setter
+    def s_flag(self, value):
+        """s_flag setter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        value: bool
+        """
+        self._set_property("s_flag", value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, srv6_sid="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeB, self).__init__()
+        self._parent = parent
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(self, srv6_sid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeC, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, sr_algorithm=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeD(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeD, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeE(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeE, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, local_interface_id=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeF(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "remote_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv4_address": "0.0.0.0",
+        "remote_ipv4_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeF, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv4_address", local_ipv4_address)
+        self._set_property("remote_ipv4_address", remote_ipv4_address)
+
+    def set(self, local_ipv4_address=None, remote_ipv4_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv4_address(self):
+        # type: () -> str
+        """local_ipv4_address getter
+
+        Local IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv4_address")
+
+    @local_ipv4_address.setter
+    def local_ipv4_address(self, value):
+        """local_ipv4_address setter
+
+        Local IPv4 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv4_address", value)
+
+    @property
+    def remote_ipv4_address(self):
+        # type: () -> str
+        """remote_ipv4_address getter
+
+        Remote IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv4_address")
+
+    @remote_ipv4_address.setter
+    def remote_ipv4_address(self, value):
+        """remote_ipv4_address setter
+
+        Remote IPv4 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv4_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeG(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeG, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+
+    def set(
+        self,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeH(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv6_address="0::0", remote_ipv6_address="0::0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeH, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+
+    def set(self, local_ipv6_address=None, remote_ipv6_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeI, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ip": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "ip": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ip="0::0"):
+        super(BgpAttributesSidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("ip", ip)
+
+    def set(self, ip=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ip(self):
+        # type: () -> str
+        """ip getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("ip")
+
+    @ip.setter
+    def ip(self, value):
+        """ip setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("ip", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeJ, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+
+    def set(
+        self,
+        sr_algorithm=None,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sr_algorithm=0,
+        local_ipv6_address="0::0",
+        remote_ipv6_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeK, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+
+    def set(self, sr_algorithm=None, local_ipv6_address=None, remote_ipv6_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSegmentRoutingPolicySegmentListSegment, BgpAttributesSegmentRoutingPolicyTypeA, BgpAttributesSegmentRoutingPolicyTypeB, BgpAttributesSegmentRoutingPolicyTypeC, BgpAttributesSegmentRoutingPolicyTypeD, BgpAttributesSegmentRoutingPolicyTypeE, BgpAttributesSegmentRoutingPolicyTypeF, BgpAttributesSegmentRoutingPolicyTypeG, BgpAttributesSegmentRoutingPolicyTypeH, BgpAttributesSegmentRoutingPolicyTypeI, BgpAttributesSegmentRoutingPolicyTypeJ, BgpAttributesSegmentRoutingPolicyTypeK]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSegmentRoutingPolicySegmentListSegment):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSegmentRoutingPolicySegmentListSegment"
+            )
+
+    def segment(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """Add method that creates and returns an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return item
+
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_a
+        item.choice = "type_a"
+        self._add(item)
+        return self
+
+    def type_b(self, srv6_sid="0::0"):
+        # type: (str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_b
+        item.choice = "type_b"
+        self._add(item)
+        return self
+
+    def type_c(self, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_c
+        item.choice = "type_c"
+        self._add(item)
+        return self
+
+    def type_d(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_d
+        item.choice = "type_d"
+        self._add(item)
+        return self
+
+    def type_e(self, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_e
+        item.choice = "type_e"
+        self._add(item)
+        return self
+
+    def type_f(self, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_f
+        item.choice = "type_f"
+        self._add(item)
+        return self
+
+    def type_g(
+        self,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        # type: (int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_g
+        item.choice = "type_g"
+        self._add(item)
+        return self
+
+    def type_h(self, local_ipv6_address="0::0", remote_ipv6_address="0::0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_h
+        item.choice = "type_h"
+        self._add(item)
+        return self
+
+    def type_i(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_i
+        item.choice = "type_i"
+        self._add(item)
+        return self
+
+    def type_j(
+        self,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        # type: (int,int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_j
+        item.choice = "type_j"
+        self._add(item)
+        return self
+
+    def type_k(
+        self, sr_algorithm=0, local_ipv6_address="0::0", remote_ipv6_address="0::0"
+    ):
+        # type: (int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_k
+        item.choice = "type_k"
+        self._add(item)
+        return self
+
+
+class BgpAttributesSrPolicySegmentListIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicySegmentListIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrPolicySegmentList]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrPolicySegmentList):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSrPolicySegmentList"
+            )
+
+    def segmentlist(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        """Factory method that creates an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentListIter
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        """Add method that creates and returns an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentList
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return item
+
+
 class BgpAttributesMpReachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -22574,10 +25940,14 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -22586,6 +25956,8 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -22602,6 +25974,32 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             self._set_property("choice", choice)
 
     @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
+
+    @property
     def next_hop(self):
         # type: () -> BgpAttributesNextHop
         """next_hop getter
@@ -22614,12 +26012,12 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -22629,7 +26027,7 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -22653,7 +26051,7 @@ class BgpAttributesMpReachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
@@ -23002,6 +26400,214 @@ class BgpOneIpv6NLRIPrefixIter(OpenApiIter):
         return item
 
 
+class BgpIpv4SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "distinguisher": {
+            "type": int,
+            "format": "uint32",
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+        "endpoint": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0.0.0.0"):
+        super(BgpIpv4SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
+
+    def set(self, distinguisher=None, color=None, endpoint=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def distinguisher(self):
+        # type: () -> int
+        """distinguisher getter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        Returns: int
+        """
+        return self._get_property("distinguisher")
+
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        value: int
+        """
+        self._set_property("distinguisher", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+    @property
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
+
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+
+        Returns: str
+        """
+        return self._get_property("endpoint")
+
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
+
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+
+        value: str
+        """
+        self._set_property("endpoint", value)
+
+
+class BgpIpv6SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "distinguisher": {
+            "type": int,
+            "format": "uint32",
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+        "endpoint": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0::0"):
+        super(BgpIpv6SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
+
+    def set(self, distinguisher=None, color=None, endpoint=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def distinguisher(self):
+        # type: () -> int
+        """distinguisher getter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        Returns: int
+        """
+        return self._get_property("distinguisher")
+
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        value: int
+        """
+        self._set_property("distinguisher", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+    @property
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
+
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
+
+        Returns: str
+        """
+        return self._get_property("endpoint")
+
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
+
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
+
+        value: str
+        """
+        self._set_property("endpoint", value)
+
+
 class BgpAttributesMpUnreachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -23011,10 +26617,14 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -23023,6 +26633,8 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -23039,13 +26651,39 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             self._set_property("choice", choice)
 
     @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -23055,7 +26693,7 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         self._set_property("choice", value)
 
@@ -23077,7 +26715,7 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
@@ -133567,8 +137205,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.2.0"
-        self._version_meta.sdk_version = "1.2.0"
+        self._version_meta.api_spec_version = "1.3.0"
+        self._version_meta.sdk_version = "1.3.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False
