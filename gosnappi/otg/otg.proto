@@ -11696,7 +11696,7 @@ message PortReceivedBins {
   optional string bin_name = 1;
 
   // The current total number of frames adhering to the bin filter condition.
-  optional uint64 filter_value = 2;
+  optional uint64 bin_value = 2;
 }
 
 // The container for a flow metric request.

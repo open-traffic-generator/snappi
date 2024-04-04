@@ -15018,7 +15018,7 @@ components:
             Name of the receive bin
           type: string
           x-field-uid: 1
-        filter_value:
+        bin_value:
           description: |-
             The current total number of frames adhering to the bin filter condition.
           type: integer
