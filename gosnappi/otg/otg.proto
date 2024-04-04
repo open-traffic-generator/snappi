@@ -52,10 +52,11 @@ message Config {
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
 
-  // Under Review: There may be changes in filter_metrics configuration
+  // Under Review: There may be changes in receive_bins configuration
   // 
-  // The filter_metrics that will be configured on traffic generator.
-  repeated FilterMetric filter_metrics = 10;
+  // The receive_bins that will be configured on traffic generator. To get metrics according
+  // to configured bins/buckets.
+  repeated ReceiveBins receive_bins = 10;
 }
 
 // Global configuration options.
@@ -6679,19 +6680,19 @@ message FilterEthernet {
   FilterField pfc_queue = 4;
 }
 
-// Under Review: There may be changes in filter_metric configuration
+// Under Review: There may be changes in receive_bins configuration
 // 
-// Configuration for FilterMetrics settings.
-message FilterMetric {
+// Configuration for ReceiveBins settings.
+message ReceiveBins {
 
   // Association.
-  FilterMetricAssociation association = 1;
+  ReceiveBinsAssociation association = 1;
 
-  // A list of filters to apply to the packet receiving ports. If no filters are specified
-  // then all packets will be counted. A filter_metric can have multiple filters. The
+  // A list of filters to apply to the packet on receiving ports. If no filters are specified
+  // then all packets will be counted. A receive_bin can have multiple bin filters. The
   // number of filters supported is determined by the implementation.
   // When multiple filters are specified then implementation must && (and) all the filters.
-  repeated FilterPacket receive_filters = 2;
+  repeated FilterPacket bin_filters = 2;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
@@ -6699,9 +6700,9 @@ message FilterMetric {
   optional string name = 3;
 }
 
-// Configuration for filter_metric Association. Based on the association, filter_metric
+// Configuration for receive_bins Association. Based on the association, receive_bins
 // will be applied to count packets on per port or per flow.
-message FilterMetricAssociation {
+message ReceiveBinsAssociation {
 
   message Choice {
     enum Enum {
@@ -6728,13 +6729,8 @@ message FilterMetricAssociation {
   repeated string flow_names = 3;
 }
 
-// Configuration for filter packets
+// Configuration of bin filters with the packet headers
 message FilterPacket {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
 
   message Choice {
     enum Enum {
@@ -6762,99 +6758,100 @@ message FilterPacket {
       rsvp = 21;
     }
   }
-  // The type of packet filter.
+  // The type of packet header we are interested in our receive bin.
   // default = Choice.Enum.custom
-  optional Choice.Enum choice = 2;
+  optional Choice.Enum choice = 1;
 
   // custom
-  FilterFieldCustom custom = 3;
+  FilterFieldCustom custom = 2;
 
   // Description missing in models
-  FilterEthernet ethernet = 4;
+  FilterEthernet ethernet = 3;
 
   // Description missing in models
-  FilterVlan vlan = 5;
+  FilterVlan vlan = 4;
 
   // Description missing in models
-  FilterVxlan vxlan = 6;
+  FilterVxlan vxlan = 5;
 
   // Description missing in models
-  FilterIpv4 ipv4 = 7;
+  FilterIpv4 ipv4 = 6;
 
   // Description missing in models
-  FilterIpv6 ipv6 = 8;
+  FilterIpv6 ipv6 = 7;
 
   // Description missing in models
-  FilterPfcPause pfcpause = 9;
+  FilterPfcPause pfcpause = 8;
 
   // Description missing in models
-  FilterEthernetPause ethernetpause = 10;
+  FilterEthernetPause ethernetpause = 9;
 
   // Description missing in models
-  FilterTcp tcp = 11;
+  FilterTcp tcp = 10;
 
   // Description missing in models
-  FilterUdp udp = 12;
+  FilterUdp udp = 11;
 
   // Description missing in models
-  FilterGre gre = 13;
+  FilterGre gre = 12;
 
   // Description missing in models
-  FilterGtpv1 gtpv1 = 14;
+  FilterGtpv1 gtpv1 = 13;
 
   // Description missing in models
-  FilterGtpv2 gtpv2 = 15;
+  FilterGtpv2 gtpv2 = 14;
 
   // Description missing in models
-  FilterArp arp = 16;
+  FilterArp arp = 15;
 
   // Description missing in models
-  FilterIcmp icmp = 17;
+  FilterIcmp icmp = 16;
 
   // Description missing in models
-  FilterIcmpv6 icmpv6 = 18;
+  FilterIcmpv6 icmpv6 = 17;
 
   // Description missing in models
-  FilterPpp ppp = 19;
+  FilterPpp ppp = 18;
 
   // Description missing in models
-  FilterIgmpv1 igmpv1 = 20;
+  FilterIgmpv1 igmpv1 = 19;
 
   // Description missing in models
-  FilterMpls mpls = 21;
+  FilterMpls mpls = 20;
 
   // Description missing in models
-  FilterSnmpv2c snmpv2c = 22;
+  FilterSnmpv2c snmpv2c = 21;
 
   // Description missing in models
-  FilterRsvp rsvp = 23;
+  FilterRsvp rsvp = 22;
 }
 
-// Description missing in models
+// Custom configuration for filtering packet bytes in a particular bin.
 message FilterFieldCustom {
 
-  // Description missing in models
+  // The position from the starting of the packet from where we want the bytes to be considered
+  // for filtering.
   // default = 0
   optional uint32 offset = 1;
 
-  // Description missing in models
+  // The value to be considered for the filtering criteria.
   // default = 00
   optional string value = 2;
 
-  // Description missing in models
-  // default = 00
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
   optional string mask = 3;
 }
 
-// Description missing in models
+// Configuration settings for checking values within a particular field in bin_filters.
 message FilterField {
 
-  // Description missing in models
+  // The value to be considered for the filtering criteria.
   // default = 00
   optional string value = 1;
 
-  // Description missing in models
-  // default = 00
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
   optional string mask = 2;
 }
 
@@ -11478,7 +11475,6 @@ message MetricsRequest {
       lacp = 7;
       lldp = 8;
       rsvp = 9;
-      user_defined = 10;
     }
   }
   // Description missing in models
@@ -11511,9 +11507,6 @@ message MetricsRequest {
 
   // Description missing in models
   RsvpMetricsRequest rsvp = 10;
-
-  // Description missing in models
-  UserDefinedMetricsRequest user_defined = 11;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -11531,7 +11524,6 @@ message MetricsResponse {
       lacp_metrics = 7;
       lldp_metrics = 8;
       rsvp_metrics = 9;
-      user_defined_metrics = 10;
     }
   }
   // Description missing in models
@@ -11564,9 +11556,6 @@ message MetricsResponse {
 
   // Description missing in models
   repeated RsvpMetric rsvp_metrics = 10;
-
-  // Description missing in models
-  repeated UserDefinedMetric user_defined_metrics = 11;
 }
 
 // The port result request to the traffic generator
@@ -11600,6 +11589,29 @@ message PortMetricsRequest {
   // The list of column names that the returned result set will contain. If the list is
   // empty then all columns will be returned. The name of the port cannot be excluded.
   repeated ColumnNames.Enum column_names = 2;
+
+  // Description missing in models
+  PortReceivedBinsFilter received_bins = 3;
+}
+
+// Filter for received bins
+message PortReceivedBinsFilter {
+
+  // Controls inclusion/exclusion of received bins when fetching port metrics.
+  // default = True
+  optional bool include = 1;
+
+  // Controls inclusion/exclusion of received bins where each underlying attributes has
+  // zero value or absent value.
+  // default = False
+  optional bool include_empty_metrics = 2;
+
+  // List of bins to selectively fetch received bins.
+  // 
+  // x-constraint:
+  // - /components/schemas/ReceiveBins/properties/name
+  // 
+  repeated string bin_names = 3;
 }
 
 // Description missing in models
@@ -11670,6 +11682,21 @@ message PortMetric {
   }
   // The transmit state of the flow.
   optional Transmit.Enum transmit = 13;
+
+  // List of metrics corresponding to a set of values applicable
+  // for configured receive bins in the respective ports.
+  // The container is keyed by list of name-value pairs.
+  repeated PortReceivedBins received_bins = 14;
+}
+
+// Description missing in models
+message PortReceivedBins {
+
+  // Name of the receive bin
+  optional string bin_name = 1;
+
+  // The current total number of frames adhering to the bin filter condition.
+  optional uint64 filter_value = 2;
 }
 
 // The container for a flow metric request.
@@ -12707,82 +12734,6 @@ message RsvpMetric {
   // The number of successfully completed Make-Before-Break operations on LSPs on this
   // RSVP router.
   optional uint64 path_reoptimizations = 31;
-}
-
-// The user defined metrics result request to the traffic generator
-message UserDefinedMetricsRequest {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      port_names = 1;
-      flow_names = 2;
-    }
-  }
-  // The type
-  optional Choice.Enum choice = 1;
-
-  // Names of ports for which to return results.
-  // An empty list will return all port row results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
-  repeated string port_names = 2;
-
-  // Names of flows for which to return results.
-  // An empty list will return all flow row results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
-  repeated string flow_names = 3;
-
-  message ColumnNames {
-    enum Enum {
-      unspecified = 0;
-      frames_tx = 1;
-      frames_rx = 2;
-    }
-  }
-  // The list of column names that the returned result set will contain. If the list is
-  // empty then all columns will be returned. The name of the port cannot be excluded.
-  repeated ColumnNames.Enum column_names = 4;
-}
-
-// Description missing in models
-message UserDefinedMetric {
-
-  // The name of a configured port/flow
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // 
-  optional string name = 1;
-
-  // The current total number of frames transmitted
-  optional uint64 frames_tx = 2;
-
-  // The current total number of valid frames received
-  optional uint64 frames_rx = 3;
-
-  // List of metrics corresponding to a set of values applicable
-  // for configured filter metrics object in the corresponding port or flow.
-  // The container is keyed by list of tag-value pairs.
-  repeated UserDefinedFilterMetric filtered_metrics = 4;
-}
-
-// Metrics for each set of values applicable for configured
-// metric tags in ingress or egress packet header fields of corresponding flow.
-// The container is keyed by list of tag-value pairs.
-message UserDefinedFilterMetric {
-
-  // Name of the filter metrics
-  optional string filter_name = 1;
-
-  // The current total number of frames adhering to the filter condition
-  optional uint64 filter_value = 2;
 }
 
 // Request to traffic generator for states of choice

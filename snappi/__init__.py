@@ -1048,8 +1048,8 @@ from .snappi import LldpPortId
 from .snappi import LldpPortInterfaceNameSubType
 from .snappi import LldpSystemName
 from .snappi import LldpIter
-from .snappi import FilterMetric
-from .snappi import FilterMetricAssociation
+from .snappi import ReceiveBins
+from .snappi import ReceiveBinsAssociation
 from .snappi import FilterPacket
 from .snappi import FilterFieldCustom
 from .snappi import FilterEthernet
@@ -1115,7 +1115,7 @@ from .snappi import FilterRSVPPathObjectsRecordRouteCType
 from .snappi import FilterRSVPPathRecordRouteType1
 from .snappi import FilterRSVPPathObjectsIter
 from .snappi import FilterPacketIter
-from .snappi import FilterMetricIter
+from .snappi import ReceiveBinsIter
 from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
@@ -1169,6 +1169,7 @@ from .snappi import ActionResponseProtocolIpv6PingResponse
 from .snappi import ActionResponseProtocolIpv6PingResponseIter
 from .snappi import MetricsRequest
 from .snappi import PortMetricsRequest
+from .snappi import PortReceivedBinsFilter
 from .snappi import FlowMetricsRequest
 from .snappi import FlowTaggedMetricsFilter
 from .snappi import FlowMetricTagFilter
@@ -1180,9 +1181,10 @@ from .snappi import LagMetricsRequest
 from .snappi import LacpMetricsRequest
 from .snappi import LldpMetricsRequest
 from .snappi import RsvpMetricsRequest
-from .snappi import UserDefinedMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
+from .snappi import PortReceivedBins
+from .snappi import PortReceivedBinsIter
 from .snappi import PortMetricIter
 from .snappi import FlowMetric
 from .snappi import MetricTimestamp
@@ -1207,10 +1209,6 @@ from .snappi import LldpMetric
 from .snappi import LldpMetricIter
 from .snappi import RsvpMetric
 from .snappi import RsvpMetricIter
-from .snappi import UserDefinedMetric
-from .snappi import UserDefinedFilterMetric
-from .snappi import UserDefinedFilterMetricIter
-from .snappi import UserDefinedMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
