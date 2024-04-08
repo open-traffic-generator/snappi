@@ -5827,7 +5827,10 @@ class DeviceDhcpv4client(OpenApiObject):
             ],
         },
         "first_server": {"type": bool},
-        "server_address": {"type": "Dhcpv4clientServer"},
+        "server_address": {
+            "type": str,
+            "format": "ipv4",
+        },
         "broadcast": {"type": bool},
         "parameters_request_list": {"type": "Dhcpv4ClientParams"},
     }  # type: Dict[str, str]
@@ -5848,12 +5851,19 @@ class DeviceDhcpv4client(OpenApiObject):
     }  # type: Dict[str, Union(type)]
 
     def __init__(
-        self, parent=None, choice=None, name=None, first_server=True, broadcast=False
+        self,
+        parent=None,
+        choice=None,
+        name=None,
+        first_server=True,
+        server_address=None,
+        broadcast=False,
     ):
         super(DeviceDhcpv4client, self).__init__()
         self._parent = parent
         self._set_property("name", name)
         self._set_property("first_server", first_server)
+        self._set_property("server_address", server_address)
         self._set_property("broadcast", broadcast)
         if (
             "choice" in self._DEFAULTS
@@ -5864,23 +5874,10 @@ class DeviceDhcpv4client(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(self, name=None, first_server=None, broadcast=None):
+    def set(self, name=None, first_server=None, server_address=None, broadcast=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
-
-    @property
-    def server_address(self):
-        # type: () -> Dhcpv4clientServer
-        """Factory property that returns an instance of the Dhcpv4clientServer class
-
-        The address of the DHCP server from which the subnet will accept IP addresses.
-
-        Returns: Dhcpv4clientServer
-        """
-        return self._get_property(
-            "server_address", Dhcpv4clientServer, self, "server_address"
-        )
 
     @property
     def name(self):
@@ -5910,7 +5907,7 @@ class DeviceDhcpv4client(OpenApiObject):
         # type: () -> Union[Literal["first_server"], Literal["server_address"]]
         """choice getter
 
-        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
+        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses.
 
         Returns: Union[Literal["first_server"], Literal["server_address"]]
         """
@@ -5920,7 +5917,7 @@ class DeviceDhcpv4client(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
+        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses.
 
         value: Union[Literal["first_server"], Literal["server_address"]]
         """
@@ -5946,6 +5943,27 @@ class DeviceDhcpv4client(OpenApiObject):
         value: bool
         """
         self._set_property("first_server", value, "first_server")
+
+    @property
+    def server_address(self):
+        # type: () -> str
+        """server_address getter
+
+        The address of the DHCP server.
+
+        Returns: str
+        """
+        return self._get_property("server_address")
+
+    @server_address.setter
+    def server_address(self, value):
+        """server_address setter
+
+        The address of the DHCP server.
+
+        value: str
+        """
+        self._set_property("server_address", value, "server_address")
 
     @property
     def broadcast(self):
@@ -5978,54 +5996,6 @@ class DeviceDhcpv4client(OpenApiObject):
         Returns: Dhcpv4ClientParams
         """
         return self._get_property("parameters_request_list", Dhcpv4ClientParams)
-
-
-class Dhcpv4clientServer(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "ip": {
-            "type": str,
-            "format": "ipv4",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, ip=None):
-        super(Dhcpv4clientServer, self).__init__()
-        self._parent = parent
-        self._set_property("ip", ip)
-
-    def set(self, ip=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def ip(self):
-        # type: () -> str
-        """ip getter
-
-        The address of the DHCP server.
-
-        Returns: str
-        """
-        return self._get_property("ip")
-
-    @ip.setter
-    def ip(self, value):
-        """ip setter
-
-        The address of the DHCP server.
-
-        value: str
-        """
-        self._set_property("ip", value)
 
 
 class Dhcpv4ClientParams(OpenApiObject):
@@ -6167,7 +6137,7 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[DeviceDhcpv4client, Dhcpv4clientServer]
+        # type: (str) -> Union[DeviceDhcpv4client]
         return self._getitem(key)
 
     def __iter__(self):
@@ -6186,8 +6156,10 @@ class DeviceDhcpv4clientIter(OpenApiIter):
         if not isinstance(item, DeviceDhcpv4client):
             raise Exception("Item is not an instance of DeviceDhcpv4client")
 
-    def dhcpv4client(self, name=None, first_server=True, broadcast=False):
-        # type: (str,bool,bool) -> DeviceDhcpv4clientIter
+    def dhcpv4client(
+        self, name=None, first_server=True, server_address=None, broadcast=False
+    ):
+        # type: (str,bool,str,bool) -> DeviceDhcpv4clientIter
         """Factory method that creates an instance of the DeviceDhcpv4client class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
@@ -6199,13 +6171,14 @@ class DeviceDhcpv4clientIter(OpenApiIter):
             choice=self._choice,
             name=name,
             first_server=first_server,
+            server_address=server_address,
             broadcast=broadcast,
         )
         self._add(item)
         return self
 
-    def add(self, name=None, first_server=True, broadcast=False):
-        # type: (str,bool,bool) -> DeviceDhcpv4client
+    def add(self, name=None, first_server=True, server_address=None, broadcast=False):
+        # type: (str,bool,str,bool) -> DeviceDhcpv4client
         """Add method that creates and returns an instance of the DeviceDhcpv4client class
 
         Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
@@ -6217,6 +6190,7 @@ class DeviceDhcpv4clientIter(OpenApiIter):
             choice=self._choice,
             name=name,
             first_server=first_server,
+            server_address=server_address,
             broadcast=broadcast,
         )
         self._add(item)
@@ -29558,7 +29532,7 @@ class DhcpServerV4Pool(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "prefix": {
+        "prefix_length": {
             "type": int,
             "format": "uint32",
             "maximum": 32,
@@ -29576,11 +29550,11 @@ class DhcpServerV4Pool(OpenApiObject):
         "options": {"type": "DhcpServerV4PoolOption"},
     }  # type: Dict[str, str]
 
-    _REQUIRED = ("name", "start_address")  # type: tuple(str)
+    _REQUIRED = ("start_address",)  # type: tuple(str)
 
     _DEFAULTS = {
         "lease_time": 86400,
-        "prefix": 24,
+        "prefix_length": 24,
         "count": 1,
         "step": 1,
     }  # type: Dict[str, Union(type)]
@@ -29595,7 +29569,7 @@ class DhcpServerV4Pool(OpenApiObject):
         name=None,
         lease_time=86400,
         start_address=None,
-        prefix=24,
+        prefix_length=24,
         count=1,
         step=1,
     ):
@@ -29604,7 +29578,7 @@ class DhcpServerV4Pool(OpenApiObject):
         self._set_property("name", name)
         self._set_property("lease_time", lease_time)
         self._set_property("start_address", start_address)
-        self._set_property("prefix", prefix)
+        self._set_property("prefix_length", prefix_length)
         self._set_property("count", count)
         self._set_property("step", step)
 
@@ -29613,7 +29587,7 @@ class DhcpServerV4Pool(OpenApiObject):
         name=None,
         lease_time=None,
         start_address=None,
-        prefix=None,
+        prefix_length=None,
         count=None,
         step=None,
     ):
@@ -29640,8 +29614,6 @@ class DhcpServerV4Pool(OpenApiObject):
 
         value: str
         """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
 
     @property
@@ -29649,7 +29621,7 @@ class DhcpServerV4Pool(OpenApiObject):
         # type: () -> int
         """lease_time getter
 
-        The Life Time length in seconds that is assigned to lease.
+        The duration of time in seconds that is assigned to lease.
 
         Returns: int
         """
@@ -29659,7 +29631,7 @@ class DhcpServerV4Pool(OpenApiObject):
     def lease_time(self, value):
         """lease_time setter
 
-        The Life Time length in seconds that is assigned to lease.
+        The duration of time in seconds that is assigned to lease.
 
         value: int
         """
@@ -29670,7 +29642,7 @@ class DhcpServerV4Pool(OpenApiObject):
         # type: () -> str
         """start_address getter
 
-        The IP address of the first lease pool.
+        The IPv4 address of the first lease pool.
 
         Returns: str
         """
@@ -29680,7 +29652,7 @@ class DhcpServerV4Pool(OpenApiObject):
     def start_address(self, value):
         """start_address setter
 
-        The IP address of the first lease pool.
+        The IPv4 address of the first lease pool.
 
         value: str
         """
@@ -29689,25 +29661,25 @@ class DhcpServerV4Pool(OpenApiObject):
         self._set_property("start_address", value)
 
     @property
-    def prefix(self):
+    def prefix_length(self):
         # type: () -> int
-        """prefix getter
+        """prefix_length getter
 
         The IPv4 network prefix length to be applied to the address.
 
         Returns: int
         """
-        return self._get_property("prefix")
+        return self._get_property("prefix_length")
 
-    @prefix.setter
-    def prefix(self, value):
-        """prefix setter
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
 
         The IPv4 network prefix length to be applied to the address.
 
         value: int
         """
-        self._set_property("prefix", value)
+        self._set_property("prefix_length", value)
 
     @property
     def count(self):
@@ -29735,7 +29707,7 @@ class DhcpServerV4Pool(OpenApiObject):
         # type: () -> int
         """step getter
 
-        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
+        The increment value for the lease address within the lease pool. The value is incremented according to the prefix_length and step.
 
         Returns: int
         """
@@ -29745,7 +29717,7 @@ class DhcpServerV4Pool(OpenApiObject):
     def step(self, value):
         """step setter
 
-        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
+        The increment value for the lease address within the lease pool. The value is incremented according to the prefix_length and step.
 
         value: int
         """
@@ -29939,7 +29911,7 @@ class DhcpServerV4PoolIter(OpenApiIter):
         name=None,
         lease_time=86400,
         start_address=None,
-        prefix=24,
+        prefix_length=24,
         count=1,
         step=1,
     ):
@@ -29955,7 +29927,7 @@ class DhcpServerV4PoolIter(OpenApiIter):
             name=name,
             lease_time=lease_time,
             start_address=start_address,
-            prefix=prefix,
+            prefix_length=prefix_length,
             count=count,
             step=step,
         )
@@ -29967,7 +29939,7 @@ class DhcpServerV4PoolIter(OpenApiIter):
         name=None,
         lease_time=86400,
         start_address=None,
-        prefix=24,
+        prefix_length=24,
         count=1,
         step=1,
     ):
@@ -29983,7 +29955,7 @@ class DhcpServerV4PoolIter(OpenApiIter):
             name=name,
             lease_time=lease_time,
             start_address=start_address,
-            prefix=prefix,
+            prefix_length=prefix_length,
             count=count,
             step=step,
         )
@@ -30101,7 +30073,7 @@ class DhcpServerV6(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         Returns: str
         """
@@ -30111,7 +30083,7 @@ class DhcpServerV6(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
+        The unique name of the IPv6 interface on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
 
         value: str
         """
@@ -136709,7 +136681,7 @@ class Dhcpv4ServerLeaseState(OpenApiObject):
         # type: () -> int
         """valid_time getter
 
-        The time in seconds, IP address lease will expire.
+        The time in seconds, IPv4 address lease will expire.
 
         Returns: int
         """
@@ -136719,7 +136691,7 @@ class Dhcpv4ServerLeaseState(OpenApiObject):
     def valid_time(self, value):
         """valid_time setter
 
-        The time in seconds, IP address lease will expire.
+        The time in seconds, IPv4 address lease will expire.
 
         value: int
         """
@@ -136730,7 +136702,7 @@ class Dhcpv4ServerLeaseState(OpenApiObject):
         # type: () -> int
         """preferred_time getter
 
-        The time in seconds, elapsed time since address has been renewed.
+        The elapsed time in seconds since the address has been renewed.
 
         Returns: int
         """
@@ -136740,7 +136712,7 @@ class Dhcpv4ServerLeaseState(OpenApiObject):
     def preferred_time(self, value):
         """preferred_time setter
 
-        The time in seconds, elapsed time since address has been renewed.
+        The elapsed time in seconds since the address has been renewed.
 
         value: int
         """
@@ -136896,7 +136868,7 @@ class Dhcpv4ServerLeaseStateIter(OpenApiIter):
         # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseStateIter
         """Factory method that creates an instance of the Dhcpv4ServerLeaseState class
 
-        IPv4 unicast prefix.
+        IPv4 address lease state.
 
         Returns: Dhcpv4ServerLeaseStateIter
         """
@@ -136928,7 +136900,7 @@ class Dhcpv4ServerLeaseStateIter(OpenApiIter):
         # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseState
         """Add method that creates and returns an instance of the Dhcpv4ServerLeaseState class
 
-        IPv4 unicast prefix.
+        IPv4 address lease state.
 
         Returns: Dhcpv4ServerLeaseState
         """

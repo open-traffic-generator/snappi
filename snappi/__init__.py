@@ -38,7 +38,6 @@ from .snappi import DeviceIpv6
 from .snappi import DeviceIpv6GatewayMAC
 from .snappi import DeviceIpv6Iter
 from .snappi import DeviceDhcpv4client
-from .snappi import Dhcpv4clientServer
 from .snappi import Dhcpv4ClientParams
 from .snappi import DeviceDhcpv4clientIter
 from .snappi import DeviceDhcpv6client
