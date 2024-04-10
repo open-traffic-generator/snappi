@@ -32981,8 +32981,8 @@ class FlowHeader(OpenApiObject):
         "igmpv1": {"type": "FlowIgmpv1"},
         "mpls": {"type": "FlowMpls"},
         "snmpv2c": {"type": "FlowSnmpv2c"},
-        "rsvp": {"type": "FlowRsvp"},
         "snmpv3": {"type": "FlowSnmpv3"},
+        "rsvp": {"type": "FlowRsvp"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -33243,7 +33243,7 @@ class FlowHeader(OpenApiObject):
         # type: () -> FlowSnmpv2c
         """Factory property that returns an instance of the FlowSnmpv2c class
 
-        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+        SNMPv2C PDU as defined in RFC1901 and RFC3416.
 
         Returns: FlowSnmpv2c
         """
@@ -33286,7 +33286,7 @@ class FlowHeader(OpenApiObject):
         # type: () -> FlowSnmpv3
         """snmpv3 getter
 
-        SNMPv3 packet header as defined in RFC3412, RFC2274 and RFC2574.SNMPv3 packet header as defined in RFC3412, RFC2274 and RFC2574.SNMPv3 packet header as defined in RFC3412, RFC2274 and RFC2574.
+        SNMPv3 PDU as defined in RFC3412, RFC2274 and RFC2574. If SNMPv3 PDU is being configured with intention of being accepted at the Device Under Test, care should be taken. to ensure the following:. The user name should be configured to match what the SNMPv3 DUT is configured to accept.. If Authentication is enabled (note that the authentication algorithm and secret token are not carried in the SNMPv3 PDU):. then the Authentication algorithm to be used must be configured to match the authentication algorithm being used by the DUT. - If Authentication is enabled then the secret token should be configired to match the DUT's configured secret token for the user. - The engine ID should be configured to match the DUT engine ID - The engineBoots and engineTime parameters should be configured such that the DUT will accept the PDU. flow.metrics.enable should be set to false (resulting in non-availability of per flow metrics) if the implementation appends extra bytes to carry instrumentation data. since that can cause the packet to contain spurious extra bytes resulting in the DUT dropping the packet. Tx frame count can be tracked with port metrics. - This model does not support Encryption option.SNMPv3 PDU as defined in RFC3412, RFC2274 and RFC2574. If SNMPv3 PDU is being configured with intention of being accepted at the Device Under Test, care should be taken. to ensure the following:. The user name should be configured to match what the SNMPv3 DUT is configured to accept.. If Authentication is enabled (note that the authentication algorithm and secret token are not carried in the SNMPv3 PDU):. then the Authentication algorithm to be used must be configured to match the authentication algorithm being used by the DUT. - If Authentication is enabled then the secret token should be configired to match the DUT's configured secret token for the user. - The engine ID should be configured to match the DUT engine ID - The engineBoots and engineTime parameters should be configured such that the DUT will accept the PDU. flow.metrics.enable should be set to false (resulting in non-availability of per flow metrics) if the implementation appends extra bytes to carry instrumentation data. since that can cause the packet to contain spurious extra bytes resulting in the DUT dropping the packet. Tx frame count can be tracked with port metrics. - This model does not support Encryption option.SNMPv3 PDU as defined in RFC3412, RFC2274 and RFC2574. If SNMPv3 PDU is being configured with intention of being accepted at the Device Under Test, care should be taken. to ensure the following:. The user name should be configured to match what the SNMPv3 DUT is configured to accept.. If Authentication is enabled (note that the authentication algorithm and secret token are not carried in the SNMPv3 PDU):. then the Authentication algorithm to be used must be configured to match the authentication algorithm being used by the DUT. - If Authentication is enabled then the secret token should be configired to match the DUT's configured secret token for the user. - The engine ID should be configured to match the DUT engine ID - The engineBoots and engineTime parameters should be configured such that the DUT will accept the PDU. flow.metrics.enable should be set to false (resulting in non-availability of per flow metrics) if the implementation appends extra bytes to carry instrumentation data. since that can cause the packet to contain spurious extra bytes resulting in the DUT dropping the packet. Tx frame count can be tracked with port metrics. - This model does not support Encryption option.
 
         Returns: FlowSnmpv3
         """
@@ -101404,6 +101404,1515 @@ class PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter(OpenApiObject):
         self._set_property("count", value)
 
 
+class FlowSnmpv3(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "version": {"type": "PatternFlowSnmpv3Version"},
+        "global_data": {"type": "FlowSnmpv3HeaderData"},
+        "security_parameters": {"type": "FlowSnmpv3SecurityParameters"},
+        "scoped_data": {"type": "FlowSnmpv3ScopedPdu"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowSnmpv3, self).__init__()
+        self._parent = parent
+
+    @property
+    def version(self):
+        # type: () -> PatternFlowSnmpv3Version
+        """version getter
+
+        VersionVersionVersion
+
+        Returns: PatternFlowSnmpv3Version
+        """
+        return self._get_property("version", PatternFlowSnmpv3Version)
+
+    @property
+    def global_data(self):
+        # type: () -> FlowSnmpv3HeaderData
+        """global_data getter
+
+        It contains administrative parameters.The fields are described in detail at https://www.rfc-editor.org/rfc/rfc3412#section-6.It contains administrative parameters.The fields are described in detail at https://www.rfc-editor.org/rfc/rfc3412#section-6.It contains administrative parameters.The fields are described in detail at https://www.rfc-editor.org/rfc/rfc3412#section-6.
+
+        Returns: FlowSnmpv3HeaderData
+        """
+        return self._get_property("global_data", FlowSnmpv3HeaderData)
+
+    @property
+    def security_parameters(self):
+        # type: () -> FlowSnmpv3SecurityParameters
+        """security_parameters getter
+
+        It is used for communication between the Security Model modules in the sending and receiving SNMP engines. The fields are described in detail at https://datatracker.ietf.org/doc/html/rfc3411#section-5 .It is used for communication between the Security Model modules in the sending and receiving SNMP engines. The fields are described in detail at https://datatracker.ietf.org/doc/html/rfc3411#section-5 .It is used for communication between the Security Model modules in the sending and receiving SNMP engines. The fields are described in detail at https://datatracker.ietf.org/doc/html/rfc3411#section-5 .
+
+        Returns: FlowSnmpv3SecurityParameters
+        """
+        return self._get_property("security_parameters", FlowSnmpv3SecurityParameters)
+
+    @property
+    def scoped_data(self):
+        # type: () -> FlowSnmpv3ScopedPdu
+        """scoped_data getter
+
+        It contains information to identify an administratively unique context and PDU. The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.It contains information to identify an administratively unique context and PDU. The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.It contains information to identify an administratively unique context and PDU. The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.
+
+        Returns: FlowSnmpv3ScopedPdu
+        """
+        return self._get_property("scoped_data", FlowSnmpv3ScopedPdu)
+
+
+class PatternFlowSnmpv3Version(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 3,
+        "values": [3],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=3, values=[3]):
+        super(PatternFlowSnmpv3Version, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class FlowSnmpv3HeaderData(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "id": {"type": "PatternFlowSnmpv3HeaderDataId"},
+        "max_size": {"type": "PatternFlowSnmpv3HeaderDataMaxSize"},
+        "flags": {"type": "FlowSnmpv3HeaderDataFlags"},
+        "security_model": {"type": "PatternFlowSnmpv3HeaderDataSecurityModel"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FlowSnmpv3HeaderData, self).__init__()
+        self._parent = parent
+
+    @property
+    def id(self):
+        # type: () -> PatternFlowSnmpv3HeaderDataId
+        """id getter
+
+        It is used between two SNMP entities to coordinate request messages and responses. It should be unique for each SNMP request and response generated between two SNMP endpoints.It is used between two SNMP entities to coordinate request messages and responses. It should be unique for each SNMP request and response generated between two SNMP endpoints.It is used between two SNMP entities to coordinate request messages and responses. It should be unique for each SNMP request and response generated between two SNMP endpoints.
+
+        Returns: PatternFlowSnmpv3HeaderDataId
+        """
+        return self._get_property("id", PatternFlowSnmpv3HeaderDataId)
+
+    @property
+    def max_size(self):
+        # type: () -> PatternFlowSnmpv3HeaderDataMaxSize
+        """max_size getter
+
+        The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message. The default is set to the maximum number of bytes that can be sent in one fragmented IPv4 PDU. The minimum value for valid SNMPv3 PDU should be set to 484. Lower values are allowed for negative testing scenarios.The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message. The default is set to the maximum number of bytes that can be sent in one fragmented IPv4 PDU. The minimum value for valid SNMPv3 PDU should be set to 484. Lower values are allowed for negative testing scenarios.The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message. The default is set to the maximum number of bytes that can be sent in one fragmented IPv4 PDU. The minimum value for valid SNMPv3 PDU should be set to 484. Lower values are allowed for negative testing scenarios.
+
+        Returns: PatternFlowSnmpv3HeaderDataMaxSize
+        """
+        return self._get_property("max_size", PatternFlowSnmpv3HeaderDataMaxSize)
+
+    @property
+    def flags(self):
+        # type: () -> FlowSnmpv3HeaderDataFlags
+        """flags getter
+
+        It contains several bit fields which control processing of the message. The Authentication flag is set to true if the authentication_parameters object is included. The Encrypted flag is not supported and always set to false.It contains several bit fields which control processing of the message. The Authentication flag is set to true if the authentication_parameters object is included. The Encrypted flag is not supported and always set to false.It contains several bit fields which control processing of the message. The Authentication flag is set to true if the authentication_parameters object is included. The Encrypted flag is not supported and always set to false.
+
+        Returns: FlowSnmpv3HeaderDataFlags
+        """
+        return self._get_property("flags", FlowSnmpv3HeaderDataFlags)
+
+    @property
+    def security_model(self):
+        # type: () -> PatternFlowSnmpv3HeaderDataSecurityModel
+        """security_model getter
+
+        It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message. The default security_model is which refers to User-based Security Model (USM) defined in RFC3414. IANA assigned values for this field are maintained at https://www.iana.org/assignments/snmp-number-spaces/snmp-number-spaces.xhtml. It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message. The default security_model is which refers to User-based Security Model (USM) defined in RFC3414. IANA assigned values for this field are maintained at https://www.iana.org/assignments/snmp-number-spaces/snmp-number-spaces.xhtml. It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message. The default security_model is which refers to User-based Security Model (USM) defined in RFC3414. IANA assigned values for this field are maintained at https://www.iana.org/assignments/snmp-number-spaces/snmp-number-spaces.xhtml.
+
+        Returns: PatternFlowSnmpv3HeaderDataSecurityModel
+        """
+        return self._get_property(
+            "security_model", PatternFlowSnmpv3HeaderDataSecurityModel
+        )
+
+
+class PatternFlowSnmpv3HeaderDataId(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(PatternFlowSnmpv3HeaderDataId, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv3HeaderDataMaxSize(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 65507,
+        "values": [65507],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=65507, values=[65507]):
+        super(PatternFlowSnmpv3HeaderDataMaxSize, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class FlowSnmpv3HeaderDataFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "reportable": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "reportable": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, reportable=False):
+        super(FlowSnmpv3HeaderDataFlags, self).__init__()
+        self._parent = parent
+        self._set_property("reportable", reportable)
+
+    def set(self, reportable=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def reportable(self):
+        # type: () -> bool
+        """reportable getter
+
+        It is secondary aid in determining whether Report PDU MUST be sent.
+
+        Returns: bool
+        """
+        return self._get_property("reportable")
+
+    @reportable.setter
+    def reportable(self, value):
+        """reportable setter
+
+        It is secondary aid in determining whether Report PDU MUST be sent.
+
+        value: bool
+        """
+        self._set_property("reportable", value)
+
+
+class PatternFlowSnmpv3HeaderDataSecurityModel(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 3,
+        "values": [3],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=3, values=[3]):
+        super(PatternFlowSnmpv3HeaderDataSecurityModel, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class FlowSnmpv3SecurityParameters(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "authoritative_engine_id": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 64,
+        },
+        "authoritative_engine_boots": {
+            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots"
+        },
+        "authoritative_engine_time": {
+            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime"
+        },
+        "user_name": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 32,
+        },
+        "authentication_parameters": {"type": "FlowSnmpv3AuthenticationParameters"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "authoritative_engine_id": "",
+        "user_name": "",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, authoritative_engine_id="", user_name=""):
+        super(FlowSnmpv3SecurityParameters, self).__init__()
+        self._parent = parent
+        self._set_property("authoritative_engine_id", authoritative_engine_id)
+        self._set_property("user_name", user_name)
+
+    def set(self, authoritative_engine_id=None, user_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def authoritative_engine_id(self):
+        # type: () -> str
+        """authoritative_engine_id getter
+
+        It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message. It can have maximum length of 32 bytes. Every SNMP endpoint should generate an unique engine id.
+
+        Returns: str
+        """
+        return self._get_property("authoritative_engine_id")
+
+    @authoritative_engine_id.setter
+    def authoritative_engine_id(self, value):
+        """authoritative_engine_id setter
+
+        It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message. It can have maximum length of 32 bytes. Every SNMP endpoint should generate an unique engine id.
+
+        value: str
+        """
+        self._set_property("authoritative_engine_id", value)
+
+    @property
+    def authoritative_engine_boots(self):
+        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots
+        """authoritative_engine_boots getter
+
+        It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.
+
+        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots
+        """
+        return self._get_property(
+            "authoritative_engine_boots",
+            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots,
+        )
+
+    @property
+    def authoritative_engine_time(self):
+        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime
+        """authoritative_engine_time getter
+
+        It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.
+
+        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime
+        """
+        return self._get_property(
+            "authoritative_engine_time",
+            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime,
+        )
+
+    @property
+    def user_name(self):
+        # type: () -> str
+        """user_name getter
+
+        It specifies the user (principal) on whose behalf the message is being exchanged.
+
+        Returns: str
+        """
+        return self._get_property("user_name")
+
+    @user_name.setter
+    def user_name(self, value):
+        """user_name setter
+
+        It specifies the user (principal) on whose behalf the message is being exchanged.
+
+        value: str
+        """
+        self._set_property("user_name", value)
+
+    @property
+    def authentication_parameters(self):
+        # type: () -> FlowSnmpv3AuthenticationParameters
+        """authentication_parameters getter
+
+        If this object is included the Authentication flag is set to true in the header flags.. The contents of this object include which Authentication mechanism and the shared secret used. in conjunction with the Engine ID to generate the hash bytes to be inserted into the msgAuthenticationParameters field in the packet. If the object is not included, the Authentication flag will not be set in the header flags and. the contents of the msgAuthenticationParameters field will be empty.. The device under test should be configured to use the same shared secret and authentication algorithm. If this object is included the Authentication flag is set to true in the header flags.. The contents of this object include which Authentication mechanism and the shared secret used. in conjunction with the Engine ID to generate the hash bytes to be inserted into the msgAuthenticationParameters field in the packet. If the object is not included, the Authentication flag will not be set in the header flags and. the contents of the msgAuthenticationParameters field will be empty.. The device under test should be configured to use the same shared secret and authentication algorithm. If this object is included the Authentication flag is set to true in the header flags.. The contents of this object include which Authentication mechanism and the shared secret used. in conjunction with the Engine ID to generate the hash bytes to be inserted into the msgAuthenticationParameters field in the packet. If the object is not included, the Authentication flag will not be set in the header flags and. the contents of the msgAuthenticationParameters field will be empty.. The device under test should be configured to use the same shared secret and authentication algorithm.
+
+        Returns: FlowSnmpv3AuthenticationParameters
+        """
+        return self._get_property(
+            "authentication_parameters", FlowSnmpv3AuthenticationParameters
+        )
+
+
+class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(
+            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "value",
+                "values",
+            ],
+        },
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 2147483647,
+        },
+        "values": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 2147483647,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "value",
+        "value": 0,
+        "values": [0],
+    }  # type: Dict[str, Union(type)]
+
+    VALUE = "value"  # type: str
+    VALUES = "values"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, value=0, values=[0]):
+        super(
+            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+        self._set_property("values", values)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, value=None, values=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["value"], Literal["values"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["value"], Literal["values"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["value"], Literal["values"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        TBD
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        TBD
+
+        value: int
+        """
+        self._set_property("value", value, "value")
+
+    @property
+    def values(self):
+        # type: () -> List[int]
+        """values getter
+
+        TBD
+
+        Returns: List[int]
+        """
+        return self._get_property("values")
+
+    @values.setter
+    def values(self, value):
+        """values setter
+
+        TBD
+
+        value: List[int]
+        """
+        self._set_property("values", value, "values")
+
+
+class FlowSnmpv3AuthenticationParameters(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "md5",
+                "sha",
+            ],
+        },
+        "md5": {"type": "FlowSnmpv3Md5"},
+        "sha": {"type": "FlowSnmpv3Sha"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "md5",
+    }  # type: Dict[str, Union(type)]
+
+    MD5 = "md5"  # type: str
+    SHA = "sha"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(FlowSnmpv3AuthenticationParameters, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def md5(self):
+        # type: () -> FlowSnmpv3Md5
+        """Factory property that returns an instance of the FlowSnmpv3Md5 class
+
+        There are two modes of providing the auth_key to be used to generate the authentication hash. Either it is directly provided as sequence of 16 bytes 32 hex characters) or provided as plain-text password which is used to generate the 16 byte auth_key.This must match the configured password or auth_key on the device under test for the username. The auth_token provided by user or generated from password) is used to calculate 12 byte authentication digest that is added to the outgoing SNMPv3 PDU as per https://datatracker.ietf.org/doc/html/rfc3414#section-6.3.1.
+
+        Returns: FlowSnmpv3Md5
+        """
+        return self._get_property("md5", FlowSnmpv3Md5, self, "md5")
+
+    @property
+    def sha(self):
+        # type: () -> FlowSnmpv3Sha
+        """Factory property that returns an instance of the FlowSnmpv3Sha class
+
+        There are two modes of providing the auth_key to be used to generate the authentication hash. Either it is directly provided as sequence of 20 bytes 40 hex characters) or provided as plain-text password which is used to generate the 16 byte auth_key. This must match the configured password or auth_key on the device under test for the username. The auth_token provided by user or generated from password) is used to calculate 12 byte authentication digest that is added to the outgoing SNMPv3 PDU as per https://datatracker.ietf.org/doc/html/rfc3414#section-7.3.1 .
+
+        Returns: FlowSnmpv3Sha
+        """
+        return self._get_property("sha", FlowSnmpv3Sha, self, "sha")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["md5"], Literal["sha"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["md5"], Literal["sha"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["md5"], Literal["sha"]]
+        """
+        self._set_property("choice", value)
+
+
+class FlowSnmpv3Md5(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "password",
+                "auth_key",
+                "custom",
+            ],
+        },
+        "password": {"type": str},
+        "auth_key": {
+            "type": str,
+            "format": "hex",
+            "minLength": 32,
+            "maxLength": 32,
+        },
+        "custom": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 24,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "password",
+        "password": "password",
+        "auth_key": "000000000000000000000000000000",
+        "custom": "000000000000000000000000",
+    }  # type: Dict[str, Union(type)]
+
+    PASSWORD = "password"  # type: str
+    AUTH_KEY = "auth_key"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        password="password",
+        auth_key="000000000000000000000000000000",
+        custom="000000000000000000000000",
+    ):
+        super(FlowSnmpv3Md5, self).__init__()
+        self._parent = parent
+        self._set_property("password", password)
+        self._set_property("auth_key", auth_key)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, password=None, auth_key=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def password(self):
+        # type: () -> str
+        """password getter
+
+        The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.1
+
+        Returns: str
+        """
+        return self._get_property("password")
+
+    @password.setter
+    def password(self, value):
+        """password setter
+
+        The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.1
+
+        value: str
+        """
+        self._set_property("password", value, "password")
+
+    @property
+    def auth_key(self):
+        # type: () -> str
+        """auth_key getter
+
+        The auth_key directly provided as 16 byte (32 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+
+        Returns: str
+        """
+        return self._get_property("auth_key")
+
+    @auth_key.setter
+    def auth_key(self, value):
+        """auth_key setter
+
+        The auth_key directly provided as 16 byte (32 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+
+        value: str
+        """
+        self._set_property("auth_key", value, "auth_key")
+
+    @property
+    def custom(self):
+        # type: () -> str
+        """custom getter
+
+        The initial 12 bytes (24 hex characters) of the Md5 digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.. If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+
+        Returns: str
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        The initial 12 bytes (24 hex characters) of the Md5 digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.. If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+
+        value: str
+        """
+        self._set_property("custom", value, "custom")
+
+
+class FlowSnmpv3Sha(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "password",
+                "auth_key",
+                "custom",
+            ],
+        },
+        "password": {"type": str},
+        "auth_key": {
+            "type": str,
+            "format": "hex",
+            "minLength": 40,
+            "maxLength": 40,
+        },
+        "custom": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 24,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "password",
+        "password": "password",
+        "auth_key": "0000000000000000000000000000000000000000",
+        "custom": "000000000000000000000000",
+    }  # type: Dict[str, Union(type)]
+
+    PASSWORD = "password"  # type: str
+    AUTH_KEY = "auth_key"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        choice=None,
+        password="password",
+        auth_key="0000000000000000000000000000000000000000",
+        custom="000000000000000000000000",
+    ):
+        super(FlowSnmpv3Sha, self).__init__()
+        self._parent = parent
+        self._set_property("password", password)
+        self._set_property("auth_key", auth_key)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, password=None, auth_key=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["auth_key"], Literal["custom"], Literal["password"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def password(self):
+        # type: () -> str
+        """password getter
+
+        The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.2
+
+        Returns: str
+        """
+        return self._get_property("password")
+
+    @password.setter
+    def password(self, value):
+        """password setter
+
+        The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.2
+
+        value: str
+        """
+        self._set_property("password", value, "password")
+
+    @property
+    def auth_key(self):
+        # type: () -> str
+        """auth_key getter
+
+        The auth_key directly provided as 20 byte (40 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+
+        Returns: str
+        """
+        return self._get_property("auth_key")
+
+    @auth_key.setter
+    def auth_key(self, value):
+        """auth_key setter
+
+        The auth_key directly provided as 20 byte (40 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+
+        value: str
+        """
+        self._set_property("auth_key", value, "auth_key")
+
+    @property
+    def custom(self):
+        # type: () -> str
+        """custom getter
+
+        The initial 12 bytes (24 hex characters) of the SHA digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.. If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+
+        Returns: str
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        The initial 12 bytes (24 hex characters) of the SHA digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.. If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+
+        value: str
+        """
+        self._set_property("custom", value, "custom")
+
+
+class FlowSnmpv3ScopedPdu(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "context_engine_id": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 1000,
+        },
+        "context_name": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 1000,
+        },
+        "data": {"type": "FlowSnmpv2cData"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "context_engine_id": "",
+        "context_name": "",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, context_engine_id="", context_name=""):
+        super(FlowSnmpv3ScopedPdu, self).__init__()
+        self._parent = parent
+        self._set_property("context_engine_id", context_engine_id)
+        self._set_property("context_name", context_name)
+
+    def set(self, context_engine_id=None, context_name=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def context_engine_id(self):
+        # type: () -> str
+        """context_engine_id getter
+
+        It is an unique identifier within an administrative domain, an SNMP entity that may realize an instance of context with particular contextName.
+
+        Returns: str
+        """
+        return self._get_property("context_engine_id")
+
+    @context_engine_id.setter
+    def context_engine_id(self, value):
+        """context_engine_id setter
+
+        It is an unique identifier within an administrative domain, an SNMP entity that may realize an instance of context with particular contextName.
+
+        value: str
+        """
+        self._set_property("context_engine_id", value)
+
+    @property
+    def context_name(self):
+        # type: () -> str
+        """context_name getter
+
+        It in conjunction with the context_engine_id field, identifies the particular context associated with the management information contained in the PDU portion of the message.
+
+        Returns: str
+        """
+        return self._get_property("context_name")
+
+    @context_name.setter
+    def context_name(self, value):
+        """context_name setter
+
+        It in conjunction with the context_engine_id field, identifies the particular context associated with the management information contained in the PDU portion of the message.
+
+        value: str
+        """
+        self._set_property("context_name", value)
+
+    @property
+    def data(self):
+        # type: () -> FlowSnmpv2cData
+        """data getter
+
+        This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
+
+        Returns: FlowSnmpv2cData
+        """
+        return self._get_property("data", FlowSnmpv2cData)
+
+
 class FlowRsvp(OpenApiObject):
     __slots__ = "_parent"
 
@@ -114856,2199 +116365,6 @@ class FlowRSVPPathObjectsIter(OpenApiIter):
         item = FlowRSVPPathObjects(parent=self._parent)
         self._add(item)
         return item
-
-
-class FlowSnmpv3(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "version": {"type": "PatternFlowSnmpv3Version"},
-        "global_data": {"type": "FlowSnmpv3HeaderData"},
-        "security_parameters": {"type": "FlowSnmpv3SecurityParameters"},
-        "data": {"type": "FlowSnmpv3ScopedPduData"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(FlowSnmpv3, self).__init__()
-        self._parent = parent
-
-    @property
-    def version(self):
-        # type: () -> PatternFlowSnmpv3Version
-        """version getter
-
-        VersionVersionVersion
-
-        Returns: PatternFlowSnmpv3Version
-        """
-        return self._get_property("version", PatternFlowSnmpv3Version)
-
-    @property
-    def global_data(self):
-        # type: () -> FlowSnmpv3HeaderData
-        """global_data getter
-
-        It contains administrative parameters.It contains administrative parameters.It contains administrative parameters.
-
-        Returns: FlowSnmpv3HeaderData
-        """
-        return self._get_property("global_data", FlowSnmpv3HeaderData)
-
-    @property
-    def security_parameters(self):
-        # type: () -> FlowSnmpv3SecurityParameters
-        """security_parameters getter
-
-        It is used for communication between the Security Model modules in the sending and receiving SNMP engines. It follows RFC2274 and RFC2574.It is used for communication between the Security Model modules in the sending and receiving SNMP engines. It follows RFC2274 and RFC2574.It is used for communication between the Security Model modules in the sending and receiving SNMP engines. It follows RFC2274 and RFC2574.
-
-        Returns: FlowSnmpv3SecurityParameters
-        """
-        return self._get_property("security_parameters", FlowSnmpv3SecurityParameters)
-
-    @property
-    def data(self):
-        # type: () -> FlowSnmpv3ScopedPduData
-        """data getter
-
-        This field represents either the plain text scopedPDU if the encrypted flag in the snmpv3.global_data.flags is zero, or it represents an encryptedPDU (encoded as an OCTET STRING) which MUST be decrypted by the securityModel in use to produce plaintext scopedPDU.This field represents either the plain text scopedPDU if the encrypted flag in the snmpv3.global_data.flags is zero, or it represents an encryptedPDU (encoded as an OCTET STRING) which MUST be decrypted by the securityModel in use to produce plaintext scopedPDU.This field represents either the plain text scopedPDU if the encrypted flag in the snmpv3.global_data.flags is zero, or it represents an encryptedPDU (encoded as an OCTET STRING) which MUST be decrypted by the securityModel in use to produce plaintext scopedPDU.
-
-        Returns: FlowSnmpv3ScopedPduData
-        """
-        return self._get_property("data", FlowSnmpv3ScopedPduData)
-
-
-class PatternFlowSnmpv3Version(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {"type": "PatternFlowSnmpv3VersionCounter"},
-        "decrement": {"type": "PatternFlowSnmpv3VersionCounter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 3,
-        "values": [3],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=3, values=[3]):
-        super(PatternFlowSnmpv3Version, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3VersionCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3VersionCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3VersionCounter
-        """
-        return self._get_property(
-            "increment", PatternFlowSnmpv3VersionCounter, self, "increment"
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3VersionCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3VersionCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3VersionCounter
-        """
-        return self._get_property(
-            "decrement", PatternFlowSnmpv3VersionCounter, self, "decrement"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3VersionCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 3,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=3, step=1, count=1):
-        super(PatternFlowSnmpv3VersionCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class FlowSnmpv3HeaderData(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "id": {"type": "PatternFlowSnmpv3HeaderDataId"},
-        "max_size": {"type": "PatternFlowSnmpv3HeaderDataMaxSize"},
-        "flags": {"type": "FlowSnmpv3HeaderDataFlags"},
-        "security_model": {"type": "PatternFlowSnmpv3HeaderDataSecurityModel"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(FlowSnmpv3HeaderData, self).__init__()
-        self._parent = parent
-
-    @property
-    def id(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataId
-        """id getter
-
-        It is used between two SNMP entities to coordinate request messages and responses.It is used between two SNMP entities to coordinate request messages and responses.It is used between two SNMP entities to coordinate request messages and responses.
-
-        Returns: PatternFlowSnmpv3HeaderDataId
-        """
-        return self._get_property("id", PatternFlowSnmpv3HeaderDataId)
-
-    @property
-    def max_size(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataMaxSize
-        """max_size getter
-
-        The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message.The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message.The maximum message size that the sender can accept when another SNMP engine sends an SNMP message (be it response or any other message) to the sender of this message on the transport in use for this message.
-
-        Returns: PatternFlowSnmpv3HeaderDataMaxSize
-        """
-        return self._get_property("max_size", PatternFlowSnmpv3HeaderDataMaxSize)
-
-    @property
-    def flags(self):
-        # type: () -> FlowSnmpv3HeaderDataFlags
-        """flags getter
-
-        It contains several bit fields which control processing of the message.It contains several bit fields which control processing of the message.It contains several bit fields which control processing of the message.
-
-        Returns: FlowSnmpv3HeaderDataFlags
-        """
-        return self._get_property("flags", FlowSnmpv3HeaderDataFlags)
-
-    @property
-    def security_model(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataSecurityModel
-        """security_model getter
-
-        It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message.It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message.It identifies which Security Model was used by the sender to generate the message and therefore which securityModel MUST be used by the receiver to perform security processing for the message.
-
-        Returns: PatternFlowSnmpv3HeaderDataSecurityModel
-        """
-        return self._get_property(
-            "security_model", PatternFlowSnmpv3HeaderDataSecurityModel
-        )
-
-
-class PatternFlowSnmpv3HeaderDataId(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {"type": "PatternFlowSnmpv3HeaderDataIdCounter"},
-        "decrement": {"type": "PatternFlowSnmpv3HeaderDataIdCounter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 0,
-        "values": [0],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv3HeaderDataId, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataIdCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataIdCounter
-        """
-        return self._get_property(
-            "increment", PatternFlowSnmpv3HeaderDataIdCounter, self, "increment"
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataIdCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataIdCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataIdCounter
-        """
-        return self._get_property(
-            "decrement", PatternFlowSnmpv3HeaderDataIdCounter, self, "decrement"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3HeaderDataIdCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv3HeaderDataIdCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class PatternFlowSnmpv3HeaderDataMaxSize(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {"type": "PatternFlowSnmpv3HeaderDataMaxSizeCounter"},
-        "decrement": {"type": "PatternFlowSnmpv3HeaderDataMaxSizeCounter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 0,
-        "values": [0],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(PatternFlowSnmpv3HeaderDataMaxSize, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataMaxSizeCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataMaxSizeCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataMaxSizeCounter
-        """
-        return self._get_property(
-            "increment", PatternFlowSnmpv3HeaderDataMaxSizeCounter, self, "increment"
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataMaxSizeCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataMaxSizeCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataMaxSizeCounter
-        """
-        return self._get_property(
-            "decrement", PatternFlowSnmpv3HeaderDataMaxSizeCounter, self, "decrement"
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3HeaderDataMaxSizeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(PatternFlowSnmpv3HeaderDataMaxSizeCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class FlowSnmpv3HeaderDataFlags(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "reportable": {"type": bool},
-        "encrypted": {"type": bool},
-        "authenticated": {"type": bool},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "reportable": False,
-        "encrypted": False,
-        "authenticated": False,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, reportable=False, encrypted=False, authenticated=False
-    ):
-        super(FlowSnmpv3HeaderDataFlags, self).__init__()
-        self._parent = parent
-        self._set_property("reportable", reportable)
-        self._set_property("encrypted", encrypted)
-        self._set_property("authenticated", authenticated)
-
-    def set(self, reportable=None, encrypted=None, authenticated=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def reportable(self):
-        # type: () -> bool
-        """reportable getter
-
-        It is secondary aid in determining whether Report PDU MUST be sent.
-
-        Returns: bool
-        """
-        return self._get_property("reportable")
-
-    @reportable.setter
-    def reportable(self, value):
-        """reportable setter
-
-        It is secondary aid in determining whether Report PDU MUST be sent.
-
-        value: bool
-        """
-        self._set_property("reportable", value)
-
-    @property
-    def encrypted(self):
-        # type: () -> bool
-        """encrypted getter
-
-        If this flag is set, then the securityModel used by the SNMP engine which sent the message MUST also protect the scopedPDU in an SNMP message from disclosure.
-
-        Returns: bool
-        """
-        return self._get_property("encrypted")
-
-    @encrypted.setter
-    def encrypted(self, value):
-        """encrypted setter
-
-        If this flag is set, then the securityModel used by the SNMP engine which sent the message MUST also protect the scopedPDU in an SNMP message from disclosure.
-
-        value: bool
-        """
-        self._set_property("encrypted", value)
-
-    @property
-    def authenticated(self):
-        # type: () -> bool
-        """authenticated getter
-
-        If this flag is set, then the securityModel used by the SNMP engine which sent the message MUST identify the securityName on whose behalf the SNMP message was generated and MUST provide, in securityModel-specific manner, sufficient data for the receiver of the message to be able to authenticate that identification.
-
-        Returns: bool
-        """
-        return self._get_property("authenticated")
-
-    @authenticated.setter
-    def authenticated(self, value):
-        """authenticated setter
-
-        If this flag is set, then the securityModel used by the SNMP engine which sent the message MUST identify the securityName on whose behalf the SNMP message was generated and MUST provide, in securityModel-specific manner, sufficient data for the receiver of the message to be able to authenticate that identification.
-
-        value: bool
-        """
-        self._set_property("authenticated", value)
-
-
-class PatternFlowSnmpv3HeaderDataSecurityModel(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {"type": "PatternFlowSnmpv3HeaderDataSecurityModelCounter"},
-        "decrement": {"type": "PatternFlowSnmpv3HeaderDataSecurityModelCounter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 1,
-        "values": [1],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=1, values=[1]):
-        super(PatternFlowSnmpv3HeaderDataSecurityModel, self).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataSecurityModelCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataSecurityModelCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataSecurityModelCounter
-        """
-        return self._get_property(
-            "increment",
-            PatternFlowSnmpv3HeaderDataSecurityModelCounter,
-            self,
-            "increment",
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3HeaderDataSecurityModelCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3HeaderDataSecurityModelCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3HeaderDataSecurityModelCounter
-        """
-        return self._get_property(
-            "decrement",
-            PatternFlowSnmpv3HeaderDataSecurityModelCounter,
-            self,
-            "decrement",
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3HeaderDataSecurityModelCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 1,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=1, step=1, count=1):
-        super(PatternFlowSnmpv3HeaderDataSecurityModelCounter, self).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class FlowSnmpv3SecurityParameters(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "authoritative_engine_id": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-        "authoritative_engine_boots": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots"
-        },
-        "authoritative_engine_time": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime"
-        },
-        "user_name": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 32,
-        },
-        "authentication_parameters": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-        "privacy_parameters": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "authoritative_engine_id": "",
-        "user_name": "",
-        "authentication_parameters": "",
-        "privacy_parameters": "",
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        authoritative_engine_id="",
-        user_name="",
-        authentication_parameters="",
-        privacy_parameters="",
-    ):
-        super(FlowSnmpv3SecurityParameters, self).__init__()
-        self._parent = parent
-        self._set_property("authoritative_engine_id", authoritative_engine_id)
-        self._set_property("user_name", user_name)
-        self._set_property("authentication_parameters", authentication_parameters)
-        self._set_property("privacy_parameters", privacy_parameters)
-
-    def set(
-        self,
-        authoritative_engine_id=None,
-        user_name=None,
-        authentication_parameters=None,
-        privacy_parameters=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def authoritative_engine_id(self):
-        # type: () -> str
-        """authoritative_engine_id getter
-
-        It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message.
-
-        Returns: str
-        """
-        return self._get_property("authoritative_engine_id")
-
-    @authoritative_engine_id.setter
-    def authoritative_engine_id(self, value):
-        """authoritative_engine_id setter
-
-        It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message.
-
-        value: str
-        """
-        self._set_property("authoritative_engine_id", value)
-
-    @property
-    def authoritative_engine_boots(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots
-        """authoritative_engine_boots getter
-
-        It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots
-        """
-        return self._get_property(
-            "authoritative_engine_boots",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots,
-        )
-
-    @property
-    def authoritative_engine_time(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime
-        """authoritative_engine_time getter
-
-        It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime
-        """
-        return self._get_property(
-            "authoritative_engine_time",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime,
-        )
-
-    @property
-    def user_name(self):
-        # type: () -> str
-        """user_name getter
-
-        It specifies the user (principal) on whose behalf the message is being exchanged.
-
-        Returns: str
-        """
-        return self._get_property("user_name")
-
-    @user_name.setter
-    def user_name(self, value):
-        """user_name setter
-
-        It specifies the user (principal) on whose behalf the message is being exchanged.
-
-        value: str
-        """
-        self._set_property("user_name", value)
-
-    @property
-    def authentication_parameters(self):
-        # type: () -> str
-        """authentication_parameters getter
-
-        These are defined by the authentication protocol in use for the message, as defined by the usmUserAuthProtocol column in the user's entry in the usmUserTable.
-
-        Returns: str
-        """
-        return self._get_property("authentication_parameters")
-
-    @authentication_parameters.setter
-    def authentication_parameters(self, value):
-        """authentication_parameters setter
-
-        These are defined by the authentication protocol in use for the message, as defined by the usmUserAuthProtocol column in the user's entry in the usmUserTable.
-
-        value: str
-        """
-        self._set_property("authentication_parameters", value)
-
-    @property
-    def privacy_parameters(self):
-        # type: () -> str
-        """privacy_parameters getter
-
-        These are defined by the privacy protocol in use for the message, as defined by the usmUserPrivProtocol column in the user's entry in the usmUserTable).
-
-        Returns: str
-        """
-        return self._get_property("privacy_parameters")
-
-    @privacy_parameters.setter
-    def privacy_parameters(self, value):
-        """privacy_parameters setter
-
-        These are defined by the privacy protocol in use for the message, as defined by the usmUserPrivProtocol column in the user's entry in the usmUserTable).
-
-        value: str
-        """
-        self._set_property("privacy_parameters", value)
-
-
-class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter"
-        },
-        "decrement": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter"
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 0,
-        "values": [0],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBoots, self
-        ).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter
-        """
-        return self._get_property(
-            "increment",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter,
-            self,
-            "increment",
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter
-        """
-        return self._get_property(
-            "decrement",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter,
-            self,
-            "decrement",
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineBootsCounter, self
-        ).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "value",
-                "values",
-                "increment",
-                "decrement",
-            ],
-        },
-        "value": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "values": {
-            "type": list,
-            "itemtype": int,
-            "itemformat": "uint32",
-            "maximum": 2147483647,
-        },
-        "increment": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter"
-        },
-        "decrement": {
-            "type": "PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter"
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "value",
-        "value": 0,
-        "values": [0],
-    }  # type: Dict[str, Union(type)]
-
-    VALUE = "value"  # type: str
-    VALUES = "values"  # type: str
-    INCREMENT = "increment"  # type: str
-    DECREMENT = "decrement"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, value=0, values=[0]):
-        super(
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTime, self
-        ).__init__()
-        self._parent = parent
-        self._set_property("value", value)
-        self._set_property("values", values)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, value=None, values=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def increment(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter
-        """
-        return self._get_property(
-            "increment",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter,
-            self,
-            "increment",
-        )
-
-    @property
-    def decrement(self):
-        # type: () -> PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter
-        """Factory property that returns an instance of the PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter class
-
-        integer counter pattern
-
-        Returns: PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter
-        """
-        return self._get_property(
-            "decrement",
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter,
-            self,
-            "decrement",
-        )
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["decrement"], Literal["increment"], Literal["value"], Literal["values"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def value(self):
-        # type: () -> int
-        """value getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("value", value, "value")
-
-    @property
-    def values(self):
-        # type: () -> List[int]
-        """values getter
-
-        TBD
-
-        Returns: List[int]
-        """
-        return self._get_property("values")
-
-    @values.setter
-    def values(self, value):
-        """values setter
-
-        TBD
-
-        value: List[int]
-        """
-        self._set_property("values", value, "values")
-
-
-class PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "start": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 2147483647,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "start": 0,
-        "step": 1,
-        "count": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, start=0, step=1, count=1):
-        super(
-            PatternFlowSnmpv3SecurityParametersAuthoritativeEngineTimeCounter, self
-        ).__init__()
-        self._parent = parent
-        self._set_property("start", start)
-        self._set_property("step", step)
-        self._set_property("count", count)
-
-    def set(self, start=None, step=None, count=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def start(self):
-        # type: () -> int
-        """start getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("start")
-
-    @start.setter
-    def start(self, value):
-        """start setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("start", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        TBD
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        TBD
-
-        value: int
-        """
-        self._set_property("count", value)
-
-
-class FlowSnmpv3ScopedPduData(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "choice": {
-            "type": str,
-            "enum": [
-                "plain_text",
-                "encrypted_pdu",
-            ],
-        },
-        "plain_text": {"type": "FlowSnmpv3ScopedPDU"},
-        "encrypted_pdu": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "plain_text",
-        "encrypted_pdu": "",
-    }  # type: Dict[str, Union(type)]
-
-    PLAIN_TEXT = "plain_text"  # type: str
-    ENCRYPTED_PDU = "encrypted_pdu"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, choice=None, encrypted_pdu=""):
-        super(FlowSnmpv3ScopedPduData, self).__init__()
-        self._parent = parent
-        self._set_property("encrypted_pdu", encrypted_pdu)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, encrypted_pdu=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def plain_text(self):
-        # type: () -> FlowSnmpv3ScopedPDU
-        """Factory property that returns an instance of the FlowSnmpv3ScopedPDU class
-
-        It contains information to identify an administratively unique context and PDU. The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.
-
-        Returns: FlowSnmpv3ScopedPDU
-        """
-        return self._get_property("plain_text", FlowSnmpv3ScopedPDU, self, "plain_text")
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["encrypted_pdu"], Literal["plain_text"]]
-        """choice getter
-
-        TBD
-
-        Returns: Union[Literal["encrypted_pdu"], Literal["plain_text"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        TBD
-
-        value: Union[Literal["encrypted_pdu"], Literal["plain_text"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def encrypted_pdu(self):
-        # type: () -> str
-        """encrypted_pdu getter
-
-        It represents an encryptedPDU (encoded as an OCTET STRING).
-
-        Returns: str
-        """
-        return self._get_property("encrypted_pdu")
-
-    @encrypted_pdu.setter
-    def encrypted_pdu(self, value):
-        """encrypted_pdu setter
-
-        It represents an encryptedPDU (encoded as an OCTET STRING).
-
-        value: str
-        """
-        self._set_property("encrypted_pdu", value, "encrypted_pdu")
-
-
-class FlowSnmpv3ScopedPDU(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "context_engine_id": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-        "context_name": {
-            "type": str,
-            "format": "hex",
-            "maxLength": 10000,
-        },
-        "data": {"type": "FlowSnmpv2cData"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "context_engine_id": "",
-        "context_name": "",
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, context_engine_id="", context_name=""):
-        super(FlowSnmpv3ScopedPDU, self).__init__()
-        self._parent = parent
-        self._set_property("context_engine_id", context_engine_id)
-        self._set_property("context_name", context_name)
-
-    def set(self, context_engine_id=None, context_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def context_engine_id(self):
-        # type: () -> str
-        """context_engine_id getter
-
-        It is an unique identifier within an administrative domain, an SNMP entity that may realize an instance of context with particular contextName.
-
-        Returns: str
-        """
-        return self._get_property("context_engine_id")
-
-    @context_engine_id.setter
-    def context_engine_id(self, value):
-        """context_engine_id setter
-
-        It is an unique identifier within an administrative domain, an SNMP entity that may realize an instance of context with particular contextName.
-
-        value: str
-        """
-        self._set_property("context_engine_id", value)
-
-    @property
-    def context_name(self):
-        # type: () -> str
-        """context_name getter
-
-        It in conjunction with the context_engine_id field, identifies the particular context associated with the management information contained in the PDU portion of the message.
-
-        Returns: str
-        """
-        return self._get_property("context_name")
-
-    @context_name.setter
-    def context_name(self, value):
-        """context_name setter
-
-        It in conjunction with the context_engine_id field, identifies the particular context associated with the management information contained in the PDU portion of the message.
-
-        value: str
-        """
-        self._set_property("context_name", value)
-
-    @property
-    def data(self):
-        # type: () -> FlowSnmpv2cData
-        """data getter
-
-        This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/This contains the body of the SNMP message.. - Encoding of subsequent fields follow ASN.1 specification.. Refer: http://www.itu.int/ITU-T/asn1/
-
-        Returns: FlowSnmpv2cData
-        """
-        return self._get_property("data", FlowSnmpv2cData)
 
 
 class FlowHeaderIter(OpenApiIter):

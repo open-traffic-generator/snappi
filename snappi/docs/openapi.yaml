@@ -8920,12 +8920,12 @@ components:
         snmpv2c:
           $ref: '#/components/schemas/Flow.Snmpv2c'
           x-field-uid: 21
-        rsvp:
-          $ref: '#/components/schemas/Flow.Rsvp'
-          x-field-uid: 22
         snmpv3:
           $ref: '#/components/schemas/Flow.Snmpv3'
           x-field-uid: 23
+        rsvp:
+          $ref: '#/components/schemas/Flow.Rsvp'
+          x-field-uid: 22
     Flow.Custom:
       type: object
       description: |-
@@ -9680,7 +9680,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
     Flow.Snmpv2c:
       description: |-
-        SNMPv2C packet header as defined in RFC1901 and RFC3416.
+        SNMPv2C PDU as defined in RFC1901 and RFC3416.
       type: object
       required:
       - data
@@ -10026,6 +10026,243 @@ components:
           format: hex
           maxLength: 10000
           default: '00'
+          x-field-uid: 3
+    Flow.Snmpv3:
+      description: "SNMPv3 PDU as defined in RFC3412, RFC2274 and RFC2574. If SNMPv3\
+        \ PDU is being configured with intention of being accepted at the Device Under\
+        \ Test, care should be taken\nto ensure the following:\n- The user name should\
+        \ be configured to match what the SNMPv3 DUT is configured to accept.\n- If\
+        \ Authentication is enabled (note that the authentication algorithm and secret\
+        \ token are not carried in the SNMPv3 PDU):\n  - then the Authentication algorithm\
+        \ to be used must be configured to match the authentication algorithm being\
+        \ used by the DUT.     \n  - If Authentication is enabled , then the secret\
+        \ token should be configired to match the DUT's configured secret token for\
+        \ the user.          \n- The engine ID should be configured to match the DUT\
+        \ engine ID  \n- The engineBoots and engineTime parameters should be configured\
+        \ such that the DUT will accept the PDU\n- flow.metrics.enable should be set\
+        \ to false (resulting in non-availability of per flow metrics) if the implementation\
+        \ appends extra bytes to carry instrumentation data\n  since that can cause\
+        \ the packet to contain spurious extra bytes resulting in the DUT dropping\
+        \ the packet. Tx frame count can be tracked with port metrics. \n- This model\
+        \ does not support Encryption option."
+      type: object
+      properties:
+        version:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version'
+        global_data:
+          $ref: '#/components/schemas/Flow.Snmpv3.HeaderData'
+          x-field-uid: 2
+        security_parameters:
+          $ref: '#/components/schemas/Flow.Snmpv3.SecurityParameters'
+          x-field-uid: 3
+        scoped_data:
+          $ref: '#/components/schemas/Flow.Snmpv3.ScopedPdu'
+          x-field-uid: 4
+    Flow.Snmpv3.HeaderData:
+      description: |-
+        It contains administrative parameters.The fields are described in detail at  https://www.rfc-editor.org/rfc/rfc3412#section-6.
+      type: object
+      properties:
+        id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id'
+        max_size:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize'
+        flags:
+          $ref: '#/components/schemas/Flow.Snmpv3.HeaderDataFlags'
+          x-field-uid: 3
+        security_model:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel'
+    Flow.Snmpv3.HeaderDataFlags:
+      description: |-
+        It contains several bit fields which control processing of the message. The Authentication flag is set to true if the authentication_parameters object is included. The Encrypted flag is not supported and always set to false.
+      type: object
+      properties:
+        reportable:
+          description: |-
+            It is a secondary aid in determining whether a Report PDU MUST be sent.
+          type: boolean
+          default: false
+          x-field-uid: 1
+    Flow.Snmpv3.SecurityParameters:
+      description: |-
+        It is used for communication between the Security Model modules in the sending and receiving SNMP engines.          The fields are described in detail at https://datatracker.ietf.org/doc/html/rfc3411#section-5 .
+      type: object
+      properties:
+        authoritative_engine_id:
+          description: |-
+            It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message. It can have a maximum length of 32 bytes. Every SNMP endpoint should generate an unique engine id.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 64
+          x-field-uid: 1
+        authoritative_engine_boots:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots'
+        authoritative_engine_time:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime'
+        user_name:
+          description: |-
+            It specifies the user (principal) on whose behalf the message is being exchanged.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 32
+          x-field-uid: 4
+        authentication_parameters:
+          $ref: '#/components/schemas/Flow.Snmpv3.AuthenticationParameters'
+          x-field-uid: 5
+    Flow.Snmpv3.AuthenticationParameters:
+      description: "If this object is included , the Authentication flag is set to\
+        \ true in the header flags.\nThe contents of this object include which Authentication\
+        \ mechanism and the shared secret used\nin conjunction with the Engine ID\
+        \ to generate the hash bytes to be inserted into the \nmsgAuthenticationParameters\
+        \ field in the packet. \nIf the object is not included, the Authentication\
+        \ flag will not be set in the header flags and\nthe contents of the msgAuthenticationParameters\
+        \ field will be empty.\nThe device under test should be configured to use\
+        \ the same shared secret and authentication algorithm.        "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: md5
+          x-enum:
+            md5:
+              x-field-uid: 1
+            sha:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - md5
+          - sha
+        md5:
+          $ref: '#/components/schemas/Flow.Snmpv3.Md5'
+          x-field-uid: 2
+        sha:
+          $ref: '#/components/schemas/Flow.Snmpv3.Sha'
+          x-field-uid: 3
+    Flow.Snmpv3.Md5:
+      description: "There are two modes of providing the auth_key to be used to generate\
+        \ the authentication hash. Either it is directly provided as a sequence of\
+        \ 16 bytes ( 32 hex characters) or provided as a plain-text password which\
+        \ is used to generate the 16 byte auth_key.This must match the configured\
+        \ password or auth_key on the device under test for the username. The auth_token\
+        \ ( provided by user or generated from password) is used to calculate a 12\
+        \ byte authentication digest that is added to the outgoing SNMPv3 PDU as per\
+        \ https://datatracker.ietf.org/doc/html/rfc3414#section-6.3.1.        "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: password
+          x-enum:
+            password:
+              x-field-uid: 1
+            auth_key:
+              x-field-uid: 2
+            custom:
+              x-field-uid: 3
+          x-field-uid: 1
+          enum:
+          - password
+          - auth_key
+          - custom
+        password:
+          description: |-
+            The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.1
+          type: string
+          default: password
+          x-field-uid: 2
+        auth_key:
+          description: |-
+            The auth_key directly provided as a 16 byte (32 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+          type: string
+          format: hex
+          default: '000000000000000000000000000000'
+          minLength: 32
+          maxLength: 32
+          x-field-uid: 3
+        custom:
+          description: |-
+            The initial 12 bytes (24 hex characters) of the Md5 digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.
+            If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+          type: string
+          default: '000000000000000000000000'
+          format: hex
+          maxLength: 24
+          x-field-uid: 4
+    Flow.Snmpv3.Sha:
+      description: |-
+        There are two modes of providing the auth_key to be used to generate the authentication hash. Either it is directly provided as a sequence of 20 bytes ( 40 hex characters) or provided as a plain-text password which is used to generate the 16 byte auth_key. This must match the configured password or auth_key on the device under test for the username. The auth_token ( provided by user or generated from password) is used to calculate a 12 byte authentication digest that is added to the outgoing SNMPv3 PDU as per https://datatracker.ietf.org/doc/html/rfc3414#section-7.3.1 .
+      type: object
+      properties:
+        choice:
+          type: string
+          default: password
+          x-enum:
+            password:
+              x-field-uid: 1
+            auth_key:
+              x-field-uid: 2
+            custom:
+              x-field-uid: 3
+          x-field-uid: 1
+          enum:
+          - password
+          - auth_key
+          - custom
+        password:
+          description: |-
+            The password provided will be used to generate the 16-byte auth-key as per https://datatracker.ietf.org/doc/html/rfc3414#appendix-A.2.2
+          type: string
+          default: password
+          x-field-uid: 2
+        auth_key:
+          description: |-
+            The auth_key directly provided as a 20 byte (40 hex characters) to be used for creating the MD5 hash to be included in the SNMP PDU.
+          type: string
+          default: '0000000000000000000000000000000000000000'
+          format: hex
+          minLength: 40
+          maxLength: 40
+          x-field-uid: 3
+        custom:
+          description: |-
+            The initial 12 bytes (24 hex characters) of the SHA digest to be directly inserted into the SNMPv3 PDU msgAuthenticationParameters field.
+            If less than 24 hex characters are supplied, the value should be prepended with 0s so that exactly 12 bytes are sent.
+          type: string
+          default: '000000000000000000000000'
+          format: hex
+          maxLength: 24
+          x-field-uid: 4
+    Flow.Snmpv3.ScopedPdu:
+      description: |-
+        It contains information to identify an administratively unique context and a PDU.  The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.
+      type: object
+      properties:
+        context_engine_id:
+          description: |-
+            It is an unique identifier within an administrative domain,  an SNMP entity that may realize an instance of a context with a particular contextName.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 1000
+          x-field-uid: 1
+        context_name:
+          description: |-
+            It in conjunction with the context_engine_id field,  identifies the particular context associated with  the management information contained in the PDU portion of the message.
+          type: string
+          format: hex
+          default: ''
+          maxLength: 1000
+          x-field-uid: 2
+        data:
+          $ref: '#/components/schemas/Flow.Snmpv2c.Data'
           x-field-uid: 3
     Flow.Rsvp:
       description: |-
@@ -11156,158 +11393,6 @@ components:
           minLength: 1
           maxLength: 131050
           default: '0000'
-          x-field-uid: 3
-    Flow.Snmpv3:
-      description: |-
-        SNMPv3 packet header as defined in RFC3412, RFC2274 and RFC2574.
-      type: object
-      properties:
-        version:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version'
-        global_data:
-          $ref: '#/components/schemas/Flow.Snmpv3.HeaderData'
-          x-field-uid: 2
-        security_parameters:
-          $ref: '#/components/schemas/Flow.Snmpv3.SecurityParameters'
-          x-field-uid: 3
-        data:
-          $ref: '#/components/schemas/Flow.Snmpv3.ScopedPduData'
-          x-field-uid: 4
-    Flow.Snmpv3.HeaderData:
-      description: |-
-        It contains administrative parameters.
-      type: object
-      properties:
-        id:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id'
-        max_size:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize'
-        flags:
-          $ref: '#/components/schemas/Flow.Snmpv3.HeaderDataFlags'
-          x-field-uid: 3
-        security_model:
-          x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel'
-    Flow.Snmpv3.HeaderDataFlags:
-      description: |-
-        It contains several bit fields which control processing of the message.
-      type: object
-      properties:
-        reportable:
-          description: |-
-            It is a secondary aid in determining whether a Report PDU MUST be sent.
-          type: boolean
-          default: false
-          x-field-uid: 1
-        encrypted:
-          description: |-
-            If this flag is set, then the securityModel used by the SNMP  engine which sent the message MUST also protect the scopedPDU  in an SNMP message from disclosure.
-          type: boolean
-          default: false
-          x-field-uid: 2
-        authenticated:
-          description: |-
-            If this flag is set, then the securityModel used by  the SNMP engine which sent the message MUST identify  the securityName on whose behalf the SNMP message was generated and MUST provide,  in a securityModel-specific manner,  sufficient data for the receiver of the message to be able to authenticate that identification.
-          type: boolean
-          default: false
-          x-field-uid: 3
-    Flow.Snmpv3.SecurityParameters:
-      description: |-
-        It is used for communication between the Security Model modules in the sending and receiving SNMP engines.  It follows RFC2274 and RFC2574.
-      type: object
-      properties:
-        authoritative_engine_id:
-          description: |-
-            It specifies the snmpEngineID of the authoritative SNMP engine involved in the exchange of the message.
-          type: string
-          format: hex
-          default: ''
-          maxLength: 10000
-          x-field-uid: 1
-        authoritative_engine_boots:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots'
-        authoritative_engine_time:
-          x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime'
-        user_name:
-          description: |-
-            It specifies the user (principal) on whose behalf the message is being exchanged.
-          type: string
-          format: hex
-          default: ''
-          maxLength: 32
-          x-field-uid: 4
-        authentication_parameters:
-          description: |-
-            These are defined by the authentication protocol in use for the message,  as defined by the usmUserAuthProtocol column in the user's entry in the usmUserTable.
-          type: string
-          format: hex
-          maxLength: 10000
-          default: ''
-          x-field-uid: 5
-        privacy_parameters:
-          description: |-
-            These are defined by the privacy protocol in use for the message,  as defined by the usmUserPrivProtocol column in the user's entry in the usmUserTable).
-          type: string
-          format: hex
-          default: ''
-          maxLength: 10000
-          x-field-uid: 6
-    Flow.Snmpv3.ScopedPduData:
-      description: |-
-        This field represents either the plain text scopedPDU  if the encrypted flag in the snmpv3.global_data.flags is zero,  or it represents an encryptedPDU (encoded as an OCTET STRING)  which MUST be decrypted by the securityModel in use to produce a plaintext scopedPDU.
-      type: object
-      properties:
-        choice:
-          type: string
-          default: plain_text
-          x-field-uid: 1
-          x-enum:
-            plain_text:
-              x-field-uid: 1
-            encrypted_pdu:
-              x-field-uid: 2
-          enum:
-          - plain_text
-          - encrypted_pdu
-        plain_text:
-          $ref: '#/components/schemas/Flow.Snmpv3.ScopedPDU'
-          x-field-uid: 2
-        encrypted_pdu:
-          description: |-
-            It represents an encryptedPDU (encoded as an OCTET STRING).
-          type: string
-          format: hex
-          default: ''
-          maxLength: 10000
-          x-field-uid: 3
-    Flow.Snmpv3.ScopedPDU:
-      description: |-
-        It contains information to identify an administratively unique context and a PDU.  The object identifiers in the PDU refer to managed objects which are (expected to be) accessible within the specified context.
-      type: object
-      properties:
-        context_engine_id:
-          description: |-
-            It is an unique identifier within an administrative domain,  an SNMP entity that may realize an instance of a context with a particular contextName.
-          type: string
-          format: hex
-          default: ''
-          maxLength: 10000
-          x-field-uid: 1
-        context_name:
-          description: |-
-            It in conjunction with the context_engine_id field,  identifies the particular context associated with  the management information contained in the PDU portion of the message.
-          type: string
-          format: hex
-          default: ''
-          maxLength: 10000
-          x-field-uid: 2
-        data:
-          $ref: '#/components/schemas/Flow.Snmpv2c.Data'
           x-field-uid: 3
     Flow.Size:
       description: |-
@@ -32596,6 +32681,201 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Common.RequestId.Counter'
           x-field-uid: 6
+    Pattern.Flow.Snmpv3.Version:
+      description: |-
+        Version
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 3
+    Pattern.Flow.Snmpv3.HeaderData.Id:
+      description: |-
+        It is used between two SNMP entities to coordinate request messages and responses. It should be unique for each SNMP request and response generated between two SNMP endpoints.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+    Pattern.Flow.Snmpv3.HeaderData.MaxSize:
+      description: |-
+        The maximum message size that the sender can accept when another SNMP engine sends  an SNMP message (be it a response or any other message) to the sender of this message  on the transport in use for this message. The default  is set to the maximum number of bytes that can be sent in a one fragmented IPv4 PDU. The minimum value for a valid SNMPv3 PDU should be set to 484. Lower values are allowed for negative testing scenarios.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 65507
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 65507
+    Pattern.Flow.Snmpv3.HeaderData.SecurityModel:
+      description: "It identifies which Security Model was used by the sender to generate\
+        \  the message and therefore which securityModel MUST be used by the receiver\
+        \ to perform security  processing for the message. The default security_model\
+        \ is 3 which refers to User-based Security Model (USM) defined in RFC3414.\
+        \ IANA assigned values for this field are maintained at https://www.iana.org/assignments/snmp-number-spaces/snmp-number-spaces.xhtml. "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 3
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots:
+      description: |-
+        It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
+    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime:
+      description: |-
+        It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 2147483647
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 2147483647
+          x-field-uid: 3
+          default:
+          - 0
     Pattern.Flow.Rsvp.RsvpChecksum:
       description: |-
         The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum.   An all-zero value means that no checksum was transmitted.
@@ -34855,408 +35135,6 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.Version.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 3
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.Version:
-      description: |-
-        Version
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 3
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 3
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.Version.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.HeaderData.Id.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.HeaderData.Id:
-      description: |-
-        It is used between two SNMP entities to coordinate request messages and responses.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.Id.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.HeaderData.MaxSize:
-      description: |-
-        The maximum message size that the sender can accept when another SNMP engine sends  an SNMP message (be it a response or any other message) to the sender of this message  on the transport in use for this message.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.MaxSize.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.HeaderData.SecurityModel:
-      description: |-
-        It identifies which Security Model was used by the sender to generate  the message and therefore which securityModel MUST be used by the receiver to perform security  processing for the message.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 1
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.HeaderData.SecurityModel.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots:
-      description: |-
-        It specifies the snmpEngineBoots value at the authoritative SNMP engine involved in the exchange of the message.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineBoots.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 2147483647
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2147483647
-    Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime:
-      description: |-
-        It specifies the snmpEngineTime value at the authoritative SNMP engine involved in the exchange of the message.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 2147483647
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 2147483647
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Snmpv3.SecurityParameters.AuthoritativeEngineTime.Counter'
           x-field-uid: 6
     Version:
       description: |-
