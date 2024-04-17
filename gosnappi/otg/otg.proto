@@ -6688,10 +6688,16 @@ message ReceiveBins {
   // Association.
   ReceiveBinsAssociation association = 1;
 
-  // A list of filters to apply to the packet on receiving ports. If no filters are specified
-  // then all packets will be counted. A receive_bin can have multiple bin filters. The
-  // number of filters supported is determined by the implementation.
-  // When multiple filters are specified then implementation must && (and) all the filters.
+  // A list of filters to apply to the packet on receiving ports.
+  // If no filters are specified then all packets will be counted.
+  // A receive_bin can have multiple bin filters. The number of filters supported
+  // is determined by the implementation.
+  // 
+  // When multiple filters are specified then implementation must &&
+  // (and) all the filters.
+  // 
+  // Packet header filters without filter values can be used to define the structure of
+  // the packet and specify the order in which filters are applied.
   repeated FilterPacket bin_filters = 2;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -6708,7 +6714,6 @@ message ReceiveBinsAssociation {
     enum Enum {
       unspecified = 0;
       port_names = 1;
-      flow_names = 2;
     }
   }
   // The type of association.
@@ -6720,13 +6725,6 @@ message ReceiveBinsAssociation {
   // - /components/schemas/Port/properties/name
   // 
   repeated string port_names = 2;
-
-  // List of flow names.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
-  repeated string flow_names = 3;
 }
 
 // Configuration of bin filters with the packet headers
@@ -6738,24 +6736,8 @@ message FilterPacket {
       custom = 1;
       ethernet = 2;
       vlan = 3;
-      vxlan = 4;
-      ipv4 = 5;
-      ipv6 = 6;
-      pfcpause = 7;
-      ethernetpause = 8;
-      tcp = 9;
-      udp = 10;
-      gre = 11;
-      gtpv1 = 12;
-      gtpv2 = 13;
-      arp = 14;
-      icmp = 15;
-      icmpv6 = 16;
-      ppp = 17;
-      igmpv1 = 18;
-      mpls = 19;
-      snmpv2c = 20;
-      rsvp = 21;
+      ipv4 = 4;
+      ipv6 = 5;
     }
   }
   // The type of packet header we are interested in our receive bin.
@@ -6772,58 +6754,10 @@ message FilterPacket {
   FilterVlan vlan = 4;
 
   // Description missing in models
-  FilterVxlan vxlan = 5;
+  FilterIpv4 ipv4 = 5;
 
   // Description missing in models
-  FilterIpv4 ipv4 = 6;
-
-  // Description missing in models
-  FilterIpv6 ipv6 = 7;
-
-  // Description missing in models
-  FilterPfcPause pfcpause = 8;
-
-  // Description missing in models
-  FilterEthernetPause ethernetpause = 9;
-
-  // Description missing in models
-  FilterTcp tcp = 10;
-
-  // Description missing in models
-  FilterUdp udp = 11;
-
-  // Description missing in models
-  FilterGre gre = 12;
-
-  // Description missing in models
-  FilterGtpv1 gtpv1 = 13;
-
-  // Description missing in models
-  FilterGtpv2 gtpv2 = 14;
-
-  // Description missing in models
-  FilterArp arp = 15;
-
-  // Description missing in models
-  FilterIcmp icmp = 16;
-
-  // Description missing in models
-  FilterIcmpv6 icmpv6 = 17;
-
-  // Description missing in models
-  FilterPpp ppp = 18;
-
-  // Description missing in models
-  FilterIgmpv1 igmpv1 = 19;
-
-  // Description missing in models
-  FilterMpls mpls = 20;
-
-  // Description missing in models
-  FilterSnmpv2c snmpv2c = 21;
-
-  // Description missing in models
-  FilterRsvp rsvp = 22;
+  FilterIpv6 ipv6 = 6;
 }
 
 // Custom configuration for filtering packet bytes in a particular bin.
@@ -6885,38 +6819,6 @@ message FilterVlan {
 
   // Description missing in models
   FilterField tpid = 4;
-}
-
-// VXLAN packet header
-message FlowVxlan {
-
-  // Description missing in models
-  PatternFlowVxlanFlags flags = 1;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0 reserved0 = 2;
-
-  // Description missing in models
-  PatternFlowVxlanVni vni = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1 reserved1 = 4;
-}
-
-// VXLAN packet header
-message FilterVxlan {
-
-  // Description missing in models
-  FilterField flags = 1;
-
-  // Description missing in models
-  FilterField reserved0 = 2;
-
-  // Description missing in models
-  FilterField vni = 3;
-
-  // Description missing in models
-  FilterField reserved1 = 4;
 }
 
 // IPv4 packet header
@@ -7266,6 +7168,22 @@ message FilterIpv6 {
   FilterField dst = 8;
 }
 
+// VXLAN packet header
+message FlowVxlan {
+
+  // Description missing in models
+  PatternFlowVxlanFlags flags = 1;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0 reserved0 = 2;
+
+  // Description missing in models
+  PatternFlowVxlanVni vni = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1 reserved1 = 4;
+}
+
 // IEEE 802.1Qbb PFC Pause packet header.
 message FlowPfcPause {
 
@@ -7309,49 +7227,6 @@ message FlowPfcPause {
   PatternFlowPfcPausePauseClass7 pause_class_7 = 13;
 }
 
-// IEEE 802.1Qbb PFC Pause packet header.
-message FilterPfcPause {
-
-  // Description missing in models
-  FilterField dst = 1;
-
-  // Description missing in models
-  FilterField src = 2;
-
-  // Description missing in models
-  FilterField ether_type = 3;
-
-  // Description missing in models
-  FilterField control_op_code = 4;
-
-  // Description missing in models
-  FilterField class_enable_vector = 5;
-
-  // Description missing in models
-  FilterField pause_class_0 = 6;
-
-  // Description missing in models
-  FilterField pause_class_1 = 7;
-
-  // Description missing in models
-  FilterField pause_class_2 = 8;
-
-  // Description missing in models
-  FilterField pause_class_3 = 9;
-
-  // Description missing in models
-  FilterField pause_class_4 = 10;
-
-  // Description missing in models
-  FilterField pause_class_5 = 11;
-
-  // Description missing in models
-  FilterField pause_class_6 = 12;
-
-  // Description missing in models
-  FilterField pause_class_7 = 13;
-}
-
 // IEEE 802.3x global ethernet pause packet header
 message FlowEthernetPause {
 
@@ -7369,25 +7244,6 @@ message FlowEthernetPause {
 
   // Description missing in models
   PatternFlowEthernetPauseTime time = 5;
-}
-
-// IEEE 802.3x global ethernet pause packet header
-message FilterEthernetPause {
-
-  // Description missing in models
-  FilterField dst = 1;
-
-  // Description missing in models
-  FilterField src = 2;
-
-  // Description missing in models
-  FilterField ether_type = 3;
-
-  // Description missing in models
-  FilterField control_op_code = 4;
-
-  // Description missing in models
-  FilterField time = 5;
 }
 
 // TCP packet header
@@ -7442,55 +7298,6 @@ message FlowTcp {
   PatternFlowTcpChecksum checksum = 16;
 }
 
-// TCP packet header
-message FilterTcp {
-
-  // Description missing in models
-  FilterField src_port = 1;
-
-  // Description missing in models
-  FilterField dst_port = 2;
-
-  // Description missing in models
-  FilterField seq_num = 3;
-
-  // Description missing in models
-  FilterField ack_num = 4;
-
-  // Description missing in models
-  FilterField data_offset = 5;
-
-  // Description missing in models
-  FilterField ecn_ns = 6;
-
-  // Description missing in models
-  FilterField ecn_cwr = 7;
-
-  // Description missing in models
-  FilterField ecn_echo = 8;
-
-  // Description missing in models
-  FilterField ctl_urg = 9;
-
-  // Description missing in models
-  FilterField ctl_ack = 10;
-
-  // Description missing in models
-  FilterField ctl_psh = 11;
-
-  // Description missing in models
-  FilterField ctl_rst = 12;
-
-  // Description missing in models
-  FilterField ctl_syn = 13;
-
-  // Description missing in models
-  FilterField ctl_fin = 14;
-
-  // Description missing in models
-  FilterField window = 15;
-}
-
 // UDP packet header
 message FlowUdp {
 
@@ -7505,22 +7312,6 @@ message FlowUdp {
 
   // Description missing in models
   PatternFlowUdpChecksum checksum = 4;
-}
-
-// UDP packet header
-message FilterUdp {
-
-  // Description missing in models
-  FilterField src_port = 1;
-
-  // Description missing in models
-  FilterField dst_port = 2;
-
-  // Description missing in models
-  FilterField length = 3;
-
-  // Description missing in models
-  FilterField checksum = 4;
 }
 
 // Standard GRE packet header (RFC2784)
@@ -7543,28 +7334,6 @@ message FlowGre {
 
   // Description missing in models
   PatternFlowGreReserved1 reserved1 = 6;
-}
-
-// Standard GRE packet header (RFC2784)
-message FilterGre {
-
-  // Description missing in models
-  FilterField checksum_present = 1;
-
-  // Description missing in models
-  FilterField reserved0 = 2;
-
-  // Description missing in models
-  FilterField version = 3;
-
-  // Description missing in models
-  FilterField protocol = 4;
-
-  // Description missing in models
-  FilterField checksum = 5;
-
-  // Description missing in models
-  FilterField reserved1 = 6;
 }
 
 // GTPv1 packet header
@@ -7623,46 +7392,6 @@ message FlowGtpExtension {
   PatternFlowGtpExtensionNextExtensionHeader next_extension_header = 3;
 }
 
-// Description missing in models
-message FilterGtpv1 {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField protocol_type = 2;
-
-  // Description missing in models
-  FilterField reserved = 3;
-
-  // Description missing in models
-  FilterField e_flag = 4;
-
-  // Description missing in models
-  FilterField s_flag = 5;
-
-  // Description missing in models
-  FilterField pn_flag = 6;
-
-  // Description missing in models
-  FilterField message_type = 7;
-
-  // Description missing in models
-  FilterField message_length = 8;
-
-  // Description missing in models
-  FilterField teid = 9;
-
-  // Description missing in models
-  FilterField squence_number = 10;
-
-  // Description missing in models
-  FilterField n_pdu_number = 11;
-
-  // Description missing in models
-  FilterField next_extension_header_type = 12;
-}
-
 // GTPv2 packet header
 message FlowGtpv2 {
 
@@ -7694,37 +7423,6 @@ message FlowGtpv2 {
   PatternFlowGtpv2Spare2 spare2 = 9;
 }
 
-// Description missing in models
-message FilterGtpv2 {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField piggybacking_flag = 2;
-
-  // Description missing in models
-  FilterField teid_flag = 3;
-
-  // Description missing in models
-  FilterField spare1 = 4;
-
-  // Description missing in models
-  FilterField message_type = 5;
-
-  // Description missing in models
-  FilterField message_length = 6;
-
-  // Description missing in models
-  FilterField teid = 7;
-
-  // Description missing in models
-  FilterField sequence_number = 8;
-
-  // Description missing in models
-  FilterField spare2 = 9;
-}
-
 // ARP packet header
 message FlowArp {
 
@@ -7754,37 +7452,6 @@ message FlowArp {
 
   // Description missing in models
   PatternFlowArpTargetProtocolAddr target_protocol_addr = 9;
-}
-
-// ARP packet header
-message FilterArp {
-
-  // Description missing in models
-  FilterField hardware_type = 1;
-
-  // Description missing in models
-  FilterField protocol_type = 2;
-
-  // Description missing in models
-  FilterField hardware_length = 3;
-
-  // Description missing in models
-  FilterField protocol_length = 4;
-
-  // Description missing in models
-  FilterField operation = 5;
-
-  // Description missing in models
-  FilterField sender_hardware_addr = 6;
-
-  // Description missing in models
-  FilterField sender_protocol_addr = 7;
-
-  // Description missing in models
-  FilterField target_hardware_addr = 8;
-
-  // Description missing in models
-  FilterField target_protocol_addr = 9;
 }
 
 // ICMP packet header
@@ -7823,42 +7490,6 @@ message FlowIcmpEcho {
   PatternFlowIcmpEchoSequenceNumber sequence_number = 5;
 }
 
-// ICMP packet header
-message FilterIcmp {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      echo = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.echo
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterIcmpEcho echo = 2;
-}
-
-// Description missing in models
-message FilterIcmpEcho {
-
-  // Description missing in models
-  FilterField type = 1;
-
-  // Description missing in models
-  FilterField code = 2;
-
-  // Description missing in models
-  FilterField checksum = 3;
-
-  // Description missing in models
-  FilterField identifier = 4;
-
-  // Description missing in models
-  FilterField sequence_number = 5;
-}
-
 // ICMPv6 packet header
 message FlowIcmpv6 {
 
@@ -7895,42 +7526,6 @@ message FlowIcmpv6Echo {
   PatternFlowIcmpv6EchoChecksum checksum = 5;
 }
 
-// ICMPv6 packet header
-message FilterIcmpv6 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      echo = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.echo
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterIcmpv6Echo echo = 2;
-}
-
-// Description missing in models
-message FilterIcmpv6Echo {
-
-  // Description missing in models
-  FilterField type = 1;
-
-  // Description missing in models
-  FilterField code = 2;
-
-  // Description missing in models
-  FilterField identifier = 3;
-
-  // Description missing in models
-  FilterField sequence_number = 4;
-
-  // Description missing in models
-  FilterField checksum = 5;
-}
-
 // PPP packet header
 message FlowPpp {
 
@@ -7942,19 +7537,6 @@ message FlowPpp {
 
   // Description missing in models
   PatternFlowPppProtocolType protocol_type = 3;
-}
-
-// Description missing in models
-message FilterPpp {
-
-  // Description missing in models
-  FilterField address = 1;
-
-  // Description missing in models
-  FilterField control = 2;
-
-  // Description missing in models
-  FilterField protocol_type = 3;
 }
 
 // IGMPv1 packet header
@@ -7976,25 +7558,6 @@ message FlowIgmpv1 {
   PatternFlowIgmpv1GroupAddress group_address = 5;
 }
 
-// Description missing in models
-message FilterIgmpv1 {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField type = 2;
-
-  // Description missing in models
-  FilterField unused = 3;
-
-  // Description missing in models
-  FilterField checksum = 4;
-
-  // Description missing in models
-  FilterField group_address = 5;
-}
-
 // MPLS packet header; When configuring multiple such headers, the count shall not exceed
 // 20.
 message FlowMpls {
@@ -8010,22 +7573,6 @@ message FlowMpls {
 
   // Description missing in models
   PatternFlowMplsTimeToLive time_to_live = 4;
-}
-
-// Description missing in models
-message FilterMpls {
-
-  // Description missing in models
-  FilterField label = 1;
-
-  // Description missing in models
-  FilterField traffic_class = 2;
-
-  // Description missing in models
-  FilterField bottom_of_stack = 3;
-
-  // Description missing in models
-  FilterField time_to_live = 4;
 }
 
 // SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -8288,101 +7835,6 @@ message FlowSnmpv2cVariableBindingStringValue {
   // It contains the hex string to be sent.  As of now it is restricted to 10000 bytes.
   // default = 00
   optional string raw = 3;
-}
-
-// SNMPv2C packet header as defined in RFC1901 and RFC3416.
-message FilterSnmpv2c {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField community = 2;
-
-  // Description missing in models
-  FilterSnmpv2cData data = 3;
-}
-
-// This contains the body of the SNMPv2C message.
-// 
-// - Encoding of subsequent fields follow ASN.1 specification.
-// Refer: http://www.itu.int/ITU-T/asn1/
-message FilterSnmpv2cData {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      get_request = 1;
-      get_next_request = 2;
-      response = 3;
-      set_request = 4;
-      get_bulk_request = 5;
-      inform_request = 6;
-      snmpv2_trap = 7;
-      report = 8;
-    }
-  }
-  // Description missing in models
-  // required = true
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterSnmpv2cPDU get_request = 2;
-
-  // Description missing in models
-  FilterSnmpv2cPDU get_next_request = 3;
-
-  // Description missing in models
-  FilterSnmpv2cPDU response = 4;
-
-  // Description missing in models
-  FilterSnmpv2cPDU set_request = 5;
-
-  // Description missing in models
-  FilterSnmpv2cBulkPDU get_bulk_request = 6;
-
-  // Description missing in models
-  FilterSnmpv2cPDU inform_request = 7;
-
-  // Description missing in models
-  FilterSnmpv2cPDU snmpv2_trap = 8;
-
-  // Description missing in models
-  FilterSnmpv2cPDU report = 9;
-}
-
-// This contains the body of the SNMPv2C PDU.
-message FilterSnmpv2cPDU {
-
-  // Description missing in models
-  FilterField request_id = 1;
-
-  // Description missing in models
-  FilterField error_status = 2;
-
-  // Description missing in models
-  FilterField error_index = 3;
-
-  // Description missing in models
-  FilterField variable_bindings = 4;
-}
-
-// The purpose of the GetBulkRequest-PDU is to request the transfer of a potentially
-// large amount of data, including, but not limited to, the efficient and rapid retrieval
-// of large tables.
-message FilterSnmpv2cBulkPDU {
-
-  // Description missing in models
-  FilterField request_id = 1;
-
-  // Description missing in models
-  FilterField non_repeaters = 2;
-
-  // Description missing in models
-  FilterField max_repetitions = 3;
-
-  // Description missing in models
-  FilterField variable_bindings = 4;
 }
 
 // RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message
@@ -9351,575 +8803,6 @@ message FlowRSVPPathObjectsCustom {
   // is 131050 (65525 * 2 hex character per byte).
   // default = 0000
   optional string bytes = 3;
-}
-
-// Description missing in models
-message FilterRsvp {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField flag = 2;
-
-  // Description missing in models
-  FilterField rsvp_checksum = 3;
-
-  // Description missing in models
-  FilterField time_to_live = 4;
-
-  // Description missing in models
-  FilterField reserved = 5;
-
-  // Description missing in models
-  FilterField rsvp_length = 6;
-
-  // Description missing in models
-  FilterRSVPMessage message_type = 7;
-}
-
-// Description missing in models
-message FilterRSVPMessage {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      path = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.path
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathMessage path = 2;
-}
-
-// Path message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15:
-// 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST
-// 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE
-// [optional]
-message FilterRSVPPathMessage {
-
-  // Path message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE
-  // and SENDER_TSPEC objects in order.
-  repeated FilterRSVPPathObjects objects = 1;
-}
-
-// Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header
-// and the object's contents.
-message FilterRSVPPathObjects {
-
-  // Description missing in models
-  FilterRSVPPathObjectsClass class_num = 1;
-}
-
-// The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4
-// . Curently supported class numbers are for Path message type. Path message: Supported
-// Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE:
-// 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC:
-// 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported
-// in above options.
-message FilterRSVPPathObjectsClass {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      session = 1;
-      rsvp_hop = 2;
-      time_values = 3;
-      explicit_route = 4;
-      label_request = 5;
-      session_attribute = 6;
-      sender_template = 7;
-      sender_tspec = 8;
-      record_route = 9;
-      custom = 10;
-    }
-  }
-  // Description missing in models
-  // required = true
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassSession session = 2;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassRsvpHop rsvp_hop = 3;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassTimeValues time_values = 4;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassExplicitRoute explicit_route = 5;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassLabelRequest label_request = 6;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassSessionAttribute session_attribute = 7;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassSenderTemplate sender_template = 8;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassSenderTspec sender_tspec = 9;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassRecordRoute record_route = 10;
-}
-
-// Description missing in models
-message FilterRSVPPathObjectsClassSession {
-
-  // Description missing in models
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsSessionCType c_type = 2;
-}
-
-// The body of an object corresponding to the class number and c-type. Currently supported
-// c-type for SESSION object is LSP Tunnel IPv4 (7).
-message FilterRSVPPathObjectsSessionCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      lsp_tunnel_ipv4 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.lsp_tunnel_ipv4
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathSessionLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathSessionLspTunnelIpv4 {
-
-  // Description missing in models
-  FilterField ipv4_tunnel_end_point_address = 1;
-
-  // Description missing in models
-  FilterField reserved = 2;
-
-  // Description missing in models
-  FilterField tunnel_id = 3;
-
-  // A 32-bit identifier used in the SESSION that remains constant over the life of the
-  // tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of
-  // a SESSION to the ingress-egress pair may place their IPv4 address here as a globally
-  // unique identifier.
-  FilterRSVPPathSessionExtTunnelId extended_tunnel_id = 4;
-}
-
-// Description missing in models
-message FilterRSVPPathSessionExtTunnelId {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      as_integer = 1;
-      as_ipv4 = 2;
-    }
-  }
-  // 32 bit integer or IPv4 address.
-  // default = Choice.Enum.as_integer
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterField as_integer = 2;
-
-  // Description missing in models
-  FilterField as_ipv4 = 3;
-}
-
-// Description missing in models
-message FilterRSVPPathObjectsClassRsvpHop {
-
-  // Description missing in models
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsRsvpHopCType c_type = 2;
-}
-
-// Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
-message FilterRSVPPathObjectsRsvpHopCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      ipv4 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.ipv4
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathRsvpHopIpv4 ipv4 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathRsvpHopIpv4 {
-
-  // Description missing in models
-  FilterField ipv4_address = 1;
-
-  // Description missing in models
-  FilterField logical_interface_handle = 2;
-}
-
-// Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
-message FilterRSVPPathObjectsClassTimeValues {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      type_1 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.type_1
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathTimeValuesType1 type_1 = 2;
-}
-
-// Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
-message FilterRSVPPathObjectsTimeValuesCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      type_1 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.type_1
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathTimeValuesType1 type_1 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathTimeValuesType1 {
-
-  // Description missing in models
-  FilterField refresh_period_r = 1;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassExplicitRoute {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsClassExplicitRouteCType c_type = 2;
-}
-
-// Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
-message FilterRSVPPathObjectsClassExplicitRouteCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      type_1 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.type_1
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathExplicitRouteType1 type_1 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathExplicitRouteType1 {
-
-  // Description missing in models
-  FilterField subobjects = 1;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassLabelRequest {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsLabelRequestCType c_type = 2;
-}
-
-// Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range
-// (1).
-message FilterRSVPPathObjectsLabelRequestCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      without_label_range = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.without_label_range
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathLabelRequestWithoutLabelRange without_label_range = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathLabelRequestWithoutLabelRange {
-
-  // Description missing in models
-  FilterField reserved = 1;
-
-  // Description missing in models
-  FilterField l3pid = 2;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassSessionAttribute {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsSessionAttributeCType c_type = 2;
-}
-
-// Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1)
-// and LSP_Tunnel (7).
-message FilterRSVPPathObjectsSessionAttributeCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      lsp_tunnel = 1;
-      lsp_tunnel_ra = 2;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.lsp_tunnel
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathSessionAttributeLspTunnel lsp_tunnel = 2;
-
-  // Description missing in models
-  FilterRSVPPathSessionAttributeLspTunnelRa lsp_tunnel_ra = 3;
-}
-
-// Description missing in models
-message FilterRSVPPathSessionAttributeLspTunnel {
-
-  // Description missing in models
-  FilterField setup_priority = 1;
-
-  // Description missing in models
-  FilterField holding_priority = 2;
-
-  // Description missing in models
-  FilterField flags = 3;
-
-  // Description missing in models
-  FilterField name_length = 4;
-
-  // Description missing in models
-  FilterField session_name = 5;
-}
-
-// Description missing in models
-message FilterRSVPPathSessionAttributeLspTunnelRa {
-
-  // Description missing in models
-  FilterField exclude_any = 1;
-
-  // Description missing in models
-  FilterField include_any = 2;
-
-  // Description missing in models
-  FilterField include_all = 3;
-
-  // Description missing in models
-  FilterField setup_priority = 4;
-
-  // Description missing in models
-  FilterField holding_priority = 5;
-
-  // Description missing in models
-  FilterField flags = 6;
-
-  // Description missing in models
-  FilterField name_length = 7;
-
-  // Description missing in models
-  FilterField session_name = 8;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassSenderTemplate {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsSenderTemplateCType c_type = 2;
-}
-
-// Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
-message FilterRSVPPathObjectsSenderTemplateCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      lsp_tunnel_ipv4 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.lsp_tunnel_ipv4
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathSenderTemplateLspTunnelIpv4 lsp_tunnel_ipv4 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathSenderTemplateLspTunnelIpv4 {
-
-  // Description missing in models
-  FilterField ipv4_tunnel_sender_address = 1;
-
-  // Description missing in models
-  FilterField reserved = 2;
-
-  // Description missing in models
-  FilterField lsp_id = 3;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassSenderTspec {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsSenderTspecCType c_type = 2;
-}
-
-// Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
-message FilterRSVPPathObjectsSenderTspecCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      int_serv = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.int_serv
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathSenderTspecIntServ int_serv = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathSenderTspecIntServ {
-
-  // Description missing in models
-  FilterField version = 1;
-
-  // Description missing in models
-  FilterField reserved1 = 2;
-
-  // Description missing in models
-  FilterField overall_length = 3;
-
-  // Description missing in models
-  FilterField service_header = 4;
-
-  // Description missing in models
-  FilterField zero_bit = 5;
-
-  // Description missing in models
-  FilterField reserved2 = 6;
-
-  // Description missing in models
-  FilterField length_of_service_data = 7;
-
-  // Description missing in models
-  FilterField parameter_id_token_bucket_tspec = 8;
-
-  // Description missing in models
-  FilterField parameter_127_flag = 9;
-
-  // Description missing in models
-  FilterField parameter_127_length = 10;
-
-  // Description missing in models
-  FilterField token_bucket_rate = 11;
-
-  // Description missing in models
-  FilterField token_bucket_size = 12;
-
-  // Description missing in models
-  FilterField peak_data_rate = 13;
-
-  // Description missing in models
-  FilterField minimum_policed_unit = 14;
-
-  // Description missing in models
-  FilterField maximum_packet_size = 15;
-}
-
-// C-Type is specific to a class num.
-message FilterRSVPPathObjectsClassRecordRoute {
-
-  // A 16-bit field containing the total object length in bytes.  Must always be a multiple
-  // of 4 or at least 4.
-  FilterField length = 1;
-
-  // Description missing in models
-  FilterRSVPPathObjectsRecordRouteCType c_type = 2;
-}
-
-// Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
-message FilterRSVPPathObjectsRecordRouteCType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      type_1 = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.type_1
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  FilterRSVPPathRecordRouteType1 type_1 = 2;
-}
-
-// Description missing in models
-message FilterRSVPPathRecordRouteType1 {
-
-  // Description missing in models
-  FilterField subobjects = 1;
 }
 
 // The frame size which overrides the total length of the packet
@@ -11597,16 +10480,8 @@ message PortMetricsRequest {
 // Filter for received bins
 message PortReceivedBinsFilter {
 
-  // Controls inclusion/exclusion of received bins when fetching port metrics.
-  // default = True
-  optional bool include = 1;
-
-  // Controls inclusion/exclusion of received bins where each underlying attributes has
-  // zero value or absent value.
-  // default = False
-  optional bool include_empty_metrics = 2;
-
-  // List of bins to selectively fetch received bins.
+  // List of bins to selectively fetch received bins.  An empty list will return all bins
+  // configured for the port specified.
   // 
   // x-constraint:
   // - /components/schemas/ReceiveBins/properties/name
@@ -11693,10 +10568,10 @@ message PortMetric {
 message PortReceivedBins {
 
   // Name of the receive bin
-  optional string bin_name = 1;
+  optional string name = 1;
 
   // The current total number of frames adhering to the bin filter condition.
-  optional uint64 bin_value = 2;
+  optional uint64 value = 2;
 }
 
 // The container for a flow metric request.
@@ -14326,303 +13201,6 @@ message PatternFlowVlanTpid {
 }
 
 // integer counter pattern
-message PatternFlowVxlanFlagsCounter {
-
-  // Description missing in models
-  // default = 8
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanFlagsMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid
-// vxlan network id (VNI).   The other 7 bits (designated R) are reserved fields and
-// MUST be  set to zero on transmission and ignored on receipt.
-message PatternFlowVxlanFlags {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 8
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [8]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanFlagsCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanFlagsCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowVxlanReserved0Counter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanReserved0MetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 24
-  optional uint32 length = 3;
-}
-
-// Reserved field
-message PatternFlowVxlanReserved0 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0Counter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0Counter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowVxlanVniCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanVniMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 24
-  optional uint32 length = 3;
-}
-
-// VXLAN network id
-message PatternFlowVxlanVni {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 0
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowVxlanVniCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowVxlanVniCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanVniMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowVxlanReserved1Counter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanReserved1MetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Reserved field
-message PatternFlowVxlanReserved1 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1Counter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1Counter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 7;
-}
-
-// integer counter pattern
 message PatternFlowIpv4VersionCounter {
 
   // Description missing in models
@@ -16914,6 +15492,303 @@ message PatternFlowIpv6Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowVxlanFlagsCounter {
+
+  // Description missing in models
+  // default = 8
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanFlagsMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid
+// vxlan network id (VNI).   The other 7 bits (designated R) are reserved fields and
+// MUST be  set to zero on transmission and ignored on receipt.
+message PatternFlowVxlanFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 8
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [8]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanFlagsCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowVxlanReserved0Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanReserved0MetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 24
+  optional uint32 length = 3;
+}
+
+// Reserved field
+message PatternFlowVxlanReserved0 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0Counter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowVxlanVniCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanVniMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 24
+  optional uint32 length = 3;
+}
+
+// VXLAN network id
+message PatternFlowVxlanVni {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowVxlanVniCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowVxlanVniCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanVniMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowVxlanReserved1Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanReserved1MetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Reserved field
+message PatternFlowVxlanReserved1 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1Counter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 7;
 }
 
 // mac counter pattern

@@ -9042,8 +9042,15 @@ components:
           x-field-uid: 1
         bin_filters:
           description: |-
-            A list of filters to apply to the packet on receiving ports. If no filters are specified then all packets will be counted. A receive_bin can have multiple bin filters. The number of filters supported is determined by the implementation.
-            When multiple filters are specified then implementation must && (and) all the filters.
+            A list of filters to apply to the packet on receiving ports.
+            If no filters are specified then all packets will be counted.
+            A receive_bin can have multiple bin filters. The number of filters supported
+            is determined by the implementation.
+
+            When multiple filters are specified then implementation must &&
+            (and) all the filters.
+
+            Packet header filters without filter values can be used to define the structure of the packet and specify the order in which filters are applied.
           type: array
           items:
             $ref: '#/components/schemas/Filter.Packet'
@@ -9068,11 +9075,8 @@ components:
           x-enum:
             port_names:
               x-field-uid: 1
-            flow_names:
-              x-field-uid: 2
           enum:
           - port_names
-          - flow_names
         port_names:
           description: |
             List of port names.
@@ -9085,18 +9089,6 @@ components:
           x-constraint:
           - /components/schemas/Port/properties/name
           x-field-uid: 2
-        flow_names:
-          description: |
-            List of flow names.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - /components/schemas/Flow/properties/name
-          x-field-uid: 3
     Filter.Packet:
       description: |-
         Configuration of bin filters with the packet headers
@@ -9115,64 +9107,16 @@ components:
               x-field-uid: 2
             vlan:
               x-field-uid: 3
-            vxlan:
-              x-field-uid: 4
             ipv4:
-              x-field-uid: 5
+              x-field-uid: 4
             ipv6:
-              x-field-uid: 6
-            pfcpause:
-              x-field-uid: 7
-            ethernetpause:
-              x-field-uid: 8
-            tcp:
-              x-field-uid: 9
-            udp:
-              x-field-uid: 10
-            gre:
-              x-field-uid: 11
-            gtpv1:
-              x-field-uid: 12
-            gtpv2:
-              x-field-uid: 13
-            arp:
-              x-field-uid: 14
-            icmp:
-              x-field-uid: 15
-            icmpv6:
-              x-field-uid: 16
-            ppp:
-              x-field-uid: 17
-            igmpv1:
-              x-field-uid: 18
-            mpls:
-              x-field-uid: 19
-            snmpv2c:
-              x-field-uid: 20
-            rsvp:
-              x-field-uid: 21
+              x-field-uid: 5
           enum:
           - custom
           - ethernet
           - vlan
-          - vxlan
           - ipv4
           - ipv6
-          - pfcpause
-          - ethernetpause
-          - tcp
-          - udp
-          - gre
-          - gtpv1
-          - gtpv2
-          - arp
-          - icmp
-          - icmpv6
-          - ppp
-          - igmpv1
-          - mpls
-          - snmpv2c
-          - rsvp
         custom:
           description: |-
             custom
@@ -9184,60 +9128,12 @@ components:
         vlan:
           $ref: '#/components/schemas/Filter.Vlan'
           x-field-uid: 4
-        vxlan:
-          $ref: '#/components/schemas/Filter.Vxlan'
-          x-field-uid: 5
         ipv4:
           $ref: '#/components/schemas/Filter.Ipv4'
-          x-field-uid: 6
+          x-field-uid: 5
         ipv6:
           $ref: '#/components/schemas/Filter.Ipv6'
-          x-field-uid: 7
-        pfcpause:
-          $ref: '#/components/schemas/Filter.PfcPause'
-          x-field-uid: 8
-        ethernetpause:
-          $ref: '#/components/schemas/Filter.EthernetPause'
-          x-field-uid: 9
-        tcp:
-          $ref: '#/components/schemas/Filter.Tcp'
-          x-field-uid: 10
-        udp:
-          $ref: '#/components/schemas/Filter.Udp'
-          x-field-uid: 11
-        gre:
-          $ref: '#/components/schemas/Filter.Gre'
-          x-field-uid: 12
-        gtpv1:
-          $ref: '#/components/schemas/Filter.Gtpv1'
-          x-field-uid: 13
-        gtpv2:
-          $ref: '#/components/schemas/Filter.Gtpv2'
-          x-field-uid: 14
-        arp:
-          $ref: '#/components/schemas/Filter.Arp'
-          x-field-uid: 15
-        icmp:
-          $ref: '#/components/schemas/Filter.Icmp'
-          x-field-uid: 16
-        icmpv6:
-          $ref: '#/components/schemas/Filter.Icmpv6'
-          x-field-uid: 17
-        ppp:
-          $ref: '#/components/schemas/Filter.Ppp'
-          x-field-uid: 18
-        igmpv1:
-          $ref: '#/components/schemas/Filter.Igmpv1'
-          x-field-uid: 19
-        mpls:
-          $ref: '#/components/schemas/Filter.Mpls'
-          x-field-uid: 20
-        snmpv2c:
-          $ref: '#/components/schemas/Filter.Snmpv2c'
-          x-field-uid: 21
-        rsvp:
-          $ref: '#/components/schemas/Filter.Rsvp'
-          x-field-uid: 22
+          x-field-uid: 6
     Filter.Field.Custom:
       description: |-
         Custom configuration for filtering packet bytes in a particular bin.
@@ -9313,40 +9209,6 @@ components:
           $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 3
         tpid:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-    Flow.Vxlan:
-      description: |-
-        VXLAN packet header
-      type: object
-      properties:
-        flags:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags'
-        reserved0:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0'
-        vni:
-          x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni'
-        reserved1:
-          x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1'
-    Filter.Vxlan:
-      description: |-
-        VXLAN packet header
-      type: object
-      properties:
-        flags:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        reserved0:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        vni:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        reserved1:
           $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
     Flow.Ipv4:
@@ -9729,6 +9591,23 @@ components:
         dst:
           $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 8
+    Flow.Vxlan:
+      description: |-
+        VXLAN packet header
+      type: object
+      properties:
+        flags:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags'
+        reserved0:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0'
+        vni:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni'
+        reserved1:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1'
     Flow.PfcPause:
       description: |-
         IEEE 802.1Qbb PFC Pause packet header.
@@ -9773,50 +9652,6 @@ components:
         pause_class_7:
           x-field-uid: 13
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7'
-    Filter.PfcPause:
-      description: |-
-        IEEE 802.1Qbb PFC Pause packet header.
-      type: object
-      properties:
-        dst:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        src:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        ether_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        control_op_code:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        class_enable_vector:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        pause_class_0:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        pause_class_1:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        pause_class_2:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        pause_class_3:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
-        pause_class_4:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 10
-        pause_class_5:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 11
-        pause_class_6:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 12
-        pause_class_7:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 13
     Flow.EthernetPause:
       description: |-
         IEEE 802.3x global ethernet pause packet header
@@ -9837,26 +9672,6 @@ components:
         time:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time'
-    Filter.EthernetPause:
-      description: |-
-        IEEE 802.3x global ethernet pause packet header
-      type: object
-      properties:
-        dst:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        src:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        ether_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        control_op_code:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        time:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
     Flow.Tcp:
       description: |-
         TCP packet header
@@ -9910,56 +9725,6 @@ components:
         checksum:
           x-field-uid: 16
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Checksum'
-    Filter.Tcp:
-      description: |-
-        TCP packet header
-      type: object
-      properties:
-        src_port:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        dst_port:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        seq_num:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        ack_num:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        data_offset:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        ecn_ns:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        ecn_cwr:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        ecn_echo:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        ctl_urg:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
-        ctl_ack:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 10
-        ctl_psh:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 11
-        ctl_rst:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 12
-        ctl_syn:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 13
-        ctl_fin:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 14
-        window:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 15
     Flow.Udp:
       description: |-
         UDP packet header
@@ -9977,23 +9742,6 @@ components:
         checksum:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Udp.Checksum'
-    Filter.Udp:
-      description: |-
-        UDP packet header
-      type: object
-      properties:
-        src_port:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        dst_port:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
     Flow.Gre:
       description: |-
         Standard GRE packet header (RFC2784)
@@ -10017,29 +9765,6 @@ components:
         reserved1:
           x-field-uid: 6
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1'
-    Filter.Gre:
-      description: |-
-        Standard GRE packet header (RFC2784)
-      type: object
-      properties:
-        checksum_present:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        reserved0:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        protocol:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        reserved1:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
     Flow.Gtpv1:
       description: |-
         GTPv1 packet header
@@ -10100,45 +9825,6 @@ components:
         next_extension_header:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader'
-    Filter.Gtpv1:
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        protocol_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        reserved:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        e_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        s_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        pn_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        message_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        message_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        teid:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
-        squence_number:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 10
-        n_pdu_number:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 11
-        next_extension_header_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 12
     Flow.Gtpv2:
       description: |-
         GTPv2 packet header
@@ -10171,36 +9857,6 @@ components:
         spare2:
           x-field-uid: 9
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2'
-    Filter.Gtpv2:
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        piggybacking_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        teid_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        spare1:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        message_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        message_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        teid:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        sequence_number:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        spare2:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
     Flow.Arp:
       description: |-
         ARP packet header
@@ -10233,38 +9889,6 @@ components:
         target_protocol_addr:
           x-field-uid: 9
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetProtocolAddr'
-    Filter.Arp:
-      description: |-
-        ARP packet header
-      type: object
-      properties:
-        hardware_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        protocol_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        hardware_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        protocol_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        operation:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        sender_hardware_addr:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        sender_protocol_addr:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        target_hardware_addr:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        target_protocol_addr:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
     Flow.Icmp:
       description: |-
         ICMP packet header
@@ -10302,41 +9926,6 @@ components:
         sequence_number:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber'
-    Filter.Icmp:
-      description: |-
-        ICMP packet header
-      type: object
-      properties:
-        choice:
-          type: string
-          default: echo
-          x-field-uid: 1
-          x-enum:
-            echo:
-              x-field-uid: 1
-          enum:
-          - echo
-        echo:
-          $ref: '#/components/schemas/Filter.Icmp.Echo'
-          x-field-uid: 2
-    Filter.Icmp.Echo:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        code:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        identifier:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        sequence_number:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
     Flow.Icmpv6:
       description: |-
         ICMPv6 packet header
@@ -10374,41 +9963,6 @@ components:
         checksum:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Checksum'
-    Filter.Icmpv6:
-      description: |-
-        ICMPv6 packet header
-      type: object
-      properties:
-        choice:
-          type: string
-          default: echo
-          x-field-uid: 1
-          x-enum:
-            echo:
-              x-field-uid: 1
-          enum:
-          - echo
-        echo:
-          $ref: '#/components/schemas/Filter.Icmpv6.Echo'
-          x-field-uid: 2
-    Filter.Icmpv6.Echo:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        code:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        identifier:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        sequence_number:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
     Flow.Ppp:
       description: |-
         PPP packet header
@@ -10423,18 +9977,6 @@ components:
         protocol_type:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.Ppp.ProtocolType'
-    Filter.Ppp:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        control:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        protocol_type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
     Flow.Igmpv1:
       description: |-
         IGMPv1 packet header
@@ -10455,24 +9997,6 @@ components:
         group_address:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress'
-    Filter.Igmpv1:
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        type:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        unused:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        group_address:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
     Flow.Mpls:
       description: |-
         MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
@@ -10490,21 +10014,6 @@ components:
         time_to_live:
           x-field-uid: 4
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
-    Filter.Mpls:
-      type: object
-      properties:
-        label:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        traffic_class:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        bottom_of_stack:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        time_to_live:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
     Flow.Snmpv2c:
       description: |-
         SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -10854,117 +10363,6 @@ components:
           maxLength: 10000
           default: '00'
           x-field-uid: 3
-    Filter.Snmpv2c:
-      description: |-
-        SNMPv2C packet header as defined in RFC1901 and RFC3416.
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        community:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        data:
-          $ref: '#/components/schemas/Filter.Snmpv2c.Data'
-          x-field-uid: 3
-    Filter.Snmpv2c.Data:
-      description: |-
-        This contains the body of the SNMPv2C message.
-
-        - Encoding of subsequent fields follow ASN.1 specification.
-          Refer: http://www.itu.int/ITU-T/asn1/
-      type: object
-      required:
-      - choice
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          x-enum:
-            get_request:
-              x-field-uid: 1
-            get_next_request:
-              x-field-uid: 2
-            response:
-              x-field-uid: 3
-            set_request:
-              x-field-uid: 4
-            get_bulk_request:
-              x-field-uid: 5
-            inform_request:
-              x-field-uid: 6
-            snmpv2_trap:
-              x-field-uid: 7
-            report:
-              x-field-uid: 8
-          enum:
-          - get_request
-          - get_next_request
-          - response
-          - set_request
-          - get_bulk_request
-          - inform_request
-          - snmpv2_trap
-          - report
-        get_request:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 2
-        get_next_request:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 3
-        response:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 4
-        set_request:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 5
-        get_bulk_request:
-          $ref: '#/components/schemas/Filter.Snmpv2c.BulkPDU'
-          x-field-uid: 6
-        inform_request:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 7
-        snmpv2_trap:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 8
-        report:
-          $ref: '#/components/schemas/Filter.Snmpv2c.PDU'
-          x-field-uid: 9
-    Filter.Snmpv2c.PDU:
-      description: |-
-        This contains the body of the SNMPv2C PDU.
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        error_status:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        error_index:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        variable_bindings:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-    Filter.Snmpv2c.BulkPDU:
-      description: |-
-        The purpose of the GetBulkRequest-PDU is to request the transfer of a potentially large amount of data, including, but not limited to, the efficient and rapid retrieval of large tables.
-      type: object
-      properties:
-        request_id:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        non_repeaters:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        max_repetitions:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        variable_bindings:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
     Flow.Rsvp:
       description: |-
         RSVP packet header as defined in RFC2205 and RFC3209. Currently only supported message type is "Path" with mandatory objects and sub-objects.
@@ -12095,587 +11493,6 @@ components:
           maxLength: 131050
           default: '0000'
           x-field-uid: 3
-    Filter.Rsvp:
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        rsvp_checksum:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        time_to_live:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        reserved:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        rsvp_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        message_type:
-          $ref: '#/components/schemas/Filter.RSVP.Message'
-          x-field-uid: 7
-    Filter.RSVP.Message:
-      type: object
-      properties:
-        choice:
-          type: string
-          default: path
-          x-enum:
-            path:
-              x-field-uid: 1
-          x-field-uid: 1
-          enum:
-          - path
-        path:
-          $ref: '#/components/schemas/Filter.RSVP.PathMessage'
-          x-field-uid: 2
-    Filter.RSVP.PathMessage:
-      description: |-
-        "Path" message requires the following list of objects in order as defined in https://www.rfc-editor.org/rfc/rfc3209.html#page-15: 1. SESSION 2. RSVP_HOP 3. TIME_VALUES 4. EXPLICIT_ROUTE [optional] 5. LABEL_REQUEST 6. SESSION_ATTRIBUTE [optional] 7. SENDER_TEMPLATE 8. SENDER_TSPEC 9. RECORD_ROUTE [optional]
-      type: object
-      properties:
-        objects:
-          description: |-
-            "Path" message requires atleast SESSION, RSVP_HOP, TIME_VALUES, LABEL_REQUEST, SENDER_TEMPLATE and SENDER_TSPEC objects in order.
-          type: array
-          items:
-            $ref: '#/components/schemas/Filter.RSVP.PathObjects'
-          x-field-uid: 1
-    Filter.RSVP.PathObjects:
-      description: |-
-        Every RSVP object encapsulated in an RSVP message consists of a 32-bit word header and the object's contents.
-      type: object
-      properties:
-        class_num:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClass'
-          x-field-uid: 1
-    Filter.RSVP.PathObjectsClass:
-      description: |-
-        The class number is used to identify the class of an object. Defined in https://www.iana.org/assignments/rsvp-parameters/rsvp-parameters.xhtml#rsvp-parameters-4 . Curently supported class numbers are for "Path" message type. "Path" message: Supported Class numbers and it's value: SESSION: 1, RSVP_HOP: 3, TIME_VALUES: 5, EXPLICIT_ROUTE: 20, LABEL_REQUEST: 19, SESSION_ATTRIBUTE: 207, SENDER_TEMPLATE: 11, SENDER_TSPEC: 12, RECORD_ROUTE: 21, Custom: User defined bytes based on class and c-types not supported in above options.
-      type: object
-      required:
-      - choice
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          x-enum:
-            session:
-              x-field-uid: 1
-            rsvp_hop:
-              x-field-uid: 2
-            time_values:
-              x-field-uid: 3
-            explicit_route:
-              x-field-uid: 4
-            label_request:
-              x-field-uid: 5
-            session_attribute:
-              x-field-uid: 6
-            sender_template:
-              x-field-uid: 7
-            sender_tspec:
-              x-field-uid: 8
-            record_route:
-              x-field-uid: 9
-            custom:
-              x-field-uid: 10
-          enum:
-          - session
-          - rsvp_hop
-          - time_values
-          - explicit_route
-          - label_request
-          - session_attribute
-          - sender_template
-          - sender_tspec
-          - record_route
-          - custom
-        session:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSession'
-          x-field-uid: 2
-        rsvp_hop:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassRsvpHop'
-          x-field-uid: 3
-        time_values:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassTimeValues'
-          x-field-uid: 4
-        explicit_route:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassExplicitRoute'
-          x-field-uid: 5
-        label_request:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassLabelRequest'
-          x-field-uid: 6
-        session_attribute:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSessionAttribute'
-          x-field-uid: 7
-        sender_template:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSenderTemplate'
-          x-field-uid: 8
-        sender_tspec:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassSenderTspec'
-          x-field-uid: 9
-        record_route:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassRecordRoute'
-          x-field-uid: 10
-    Filter.RSVP.PathObjectsClassSession:
-      type: object
-      properties:
-        length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSessionCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsSessionCType:
-      description: |-
-        The body of an object corresponding to the class number and c-type. Currently supported c-type for SESSION object is LSP Tunnel IPv4 (7).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: lsp_tunnel_ipv4
-          x-enum:
-            lsp_tunnel_ipv4:
-              x-field-uid: 1
-          enum:
-          - lsp_tunnel_ipv4
-        lsp_tunnel_ipv4:
-          $ref: '#/components/schemas/Filter.RSVP.PathSessionLspTunnelIpv4'
-          x-field-uid: 2
-    Filter.RSVP.PathSessionLspTunnelIpv4:
-      type: object
-      properties:
-        ipv4_tunnel_end_point_address:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        reserved:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        tunnel_id:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        extended_tunnel_id:
-          description: |-
-            A 32-bit identifier used in the SESSION that remains constant over the life of the tunnel. Normally set to all zeros. Ingress nodes that wish to narrow the scope of a SESSION to the ingress-egress pair may place their IPv4 address here as a globally unique identifier.
-          $ref: '#/components/schemas/Filter.RSVP.PathSessionExtTunnelId'
-          x-field-uid: 4
-    Filter.RSVP.PathSessionExtTunnelId:
-      type: object
-      properties:
-        choice:
-          description: |-
-            32 bit integer or IPv4 address.
-          type: string
-          default: as_integer
-          x-field-uid: 1
-          x-enum:
-            as_integer:
-              x-field-uid: 1
-            as_ipv4:
-              x-field-uid: 2
-          enum:
-          - as_integer
-          - as_ipv4
-        as_integer:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        as_ipv4:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-    Filter.RSVP.PathObjectsClassRsvpHop:
-      type: object
-      properties:
-        length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsRsvpHopCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsRsvpHopCType:
-      description: |-
-        Object for RSVP_HOP class. Currently supported c-type is IPv4 (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: ipv4
-          x-enum:
-            ipv4:
-              x-field-uid: 1
-          enum:
-          - ipv4
-        ipv4:
-          $ref: '#/components/schemas/Filter.RSVP.PathRsvpHopIpv4'
-          x-field-uid: 2
-    Filter.RSVP.PathRsvpHopIpv4:
-      type: object
-      properties:
-        ipv4_address:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        logical_interface_handle:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsClassTimeValues:
-      description: |-
-        Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: type_1
-          x-enum:
-            type_1:
-              x-field-uid: 1
-          enum:
-          - type_1
-        type_1:
-          $ref: '#/components/schemas/Filter.RSVP.PathTimeValuesType1'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsTimeValuesCType:
-      description: |-
-        Object for TIME_VALUES class. Currently supported c-type is Type 1 Time Value (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: type_1
-          x-enum:
-            type_1:
-              x-field-uid: 1
-          enum:
-          - type_1
-        type_1:
-          $ref: '#/components/schemas/Filter.RSVP.PathTimeValuesType1'
-          x-field-uid: 2
-    Filter.RSVP.PathTimeValuesType1:
-      type: object
-      properties:
-        refresh_period_r:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-    Filter.RSVP.PathObjectsClassExplicitRoute:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsClassExplicitRouteCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsClassExplicitRouteCType:
-      description: |-
-        Object for EXPLICIT_ROUTE class and c-type is Type 1 Explicit Route (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          default: type_1
-          x-field-uid: 1
-          x-enum:
-            type_1:
-              x-field-uid: 1
-          enum:
-          - type_1
-        type_1:
-          $ref: '#/components/schemas/Filter.RSVP.PathExplicitRouteType1'
-          x-field-uid: 2
-    Filter.RSVP.PathExplicitRouteType1:
-      type: object
-      properties:
-        subobjects:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-    Filter.RSVP.PathObjectsClassLabelRequest:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsLabelRequestCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsLabelRequestCType:
-      description: |-
-        Object for LABEL_REQUEST class. Currently supported c-type is Without Label Range (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: without_label_range
-          x-enum:
-            without_label_range:
-              x-field-uid: 1
-          enum:
-          - without_label_range
-        without_label_range:
-          $ref: '#/components/schemas/Filter.RSVP.PathLabelRequestWithoutLabelRange'
-          x-field-uid: 2
-    Filter.RSVP.PathLabelRequestWithoutLabelRange:
-      type: object
-      properties:
-        reserved:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        l3pid:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsClassSessionAttribute:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSessionAttributeCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsSessionAttributeCType:
-      description: |-
-        Object for SESSION_ATTRIBUTE class. Currently supported c-type is LSP_Tunnel_RA (1) and LSP_Tunnel (7).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: lsp_tunnel
-          x-enum:
-            lsp_tunnel:
-              x-field-uid: 1
-            lsp_tunnel_ra:
-              x-field-uid: 2
-          enum:
-          - lsp_tunnel
-          - lsp_tunnel_ra
-        lsp_tunnel:
-          $ref: '#/components/schemas/Filter.RSVP.PathSessionAttributeLspTunnel'
-          x-field-uid: 2
-        lsp_tunnel_ra:
-          $ref: '#/components/schemas/Filter.RSVP.PathSessionAttributeLspTunnelRa'
-          x-field-uid: 3
-    Filter.RSVP.PathSessionAttributeLspTunnel:
-      type: object
-      properties:
-        setup_priority:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        holding_priority:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        flags:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        name_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        session_name:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-    Filter.RSVP.PathSessionAttributeLspTunnelRa:
-      type: object
-      properties:
-        exclude_any:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        include_any:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        include_all:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        setup_priority:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        holding_priority:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        flags:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        name_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        session_name:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-    Filter.RSVP.PathObjectsClassSenderTemplate:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSenderTemplateCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsSenderTemplateCType:
-      description: |-
-        Object for SENDER_TEMPLATE class. Currently supported c-type is LSP Tunnel IPv4 (7).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: lsp_tunnel_ipv4
-          x-enum:
-            lsp_tunnel_ipv4:
-              x-field-uid: 1
-          enum:
-          - lsp_tunnel_ipv4
-        lsp_tunnel_ipv4:
-          $ref: '#/components/schemas/Filter.RSVP.PathSenderTemplateLspTunnelIpv4'
-          x-field-uid: 2
-    Filter.RSVP.PathSenderTemplateLspTunnelIpv4:
-      type: object
-      properties:
-        ipv4_tunnel_sender_address:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        reserved:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        lsp_id:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-    Filter.RSVP.PathObjectsClassSenderTspec:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsSenderTspecCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsSenderTspecCType:
-      description: |-
-        Object for SENDER_TSPEC class. Currently supported c-type is int-serv (2).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-field-uid: 1
-          default: int_serv
-          x-enum:
-            int_serv:
-              x-field-uid: 1
-          enum:
-          - int_serv
-        int_serv:
-          $ref: '#/components/schemas/Filter.RSVP.PathSenderTspecIntServ'
-          x-field-uid: 2
-    Filter.RSVP.PathSenderTspecIntServ:
-      type: object
-      properties:
-        version:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        reserved1:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        overall_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        service_header:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-        zero_bit:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 5
-        reserved2:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 6
-        length_of_service_data:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 7
-        parameter_id_token_bucket_tspec:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 8
-        parameter_127_flag:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 9
-        parameter_127_length:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 10
-        token_bucket_rate:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 11
-        token_bucket_size:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 12
-        peak_data_rate:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 13
-        minimum_policed_unit:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 14
-        maximum_packet_size:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 15
-    Filter.RSVP.PathObjectsClassRecordRoute:
-      description: |-
-        C-Type is specific to a class num.
-      type: object
-      properties:
-        length:
-          description: |-
-            A 16-bit field containing the total object length in bytes.  Must always be a multiple of 4 or at least 4.
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        c_type:
-          $ref: '#/components/schemas/Filter.RSVP.PathObjectsRecordRouteCType'
-          x-field-uid: 2
-    Filter.RSVP.PathObjectsRecordRouteCType:
-      description: |-
-        Object for RECORD_ROUTE class. c-type is Type 1 Route Record (1).
-      type: object
-      properties:
-        choice:
-          type: string
-          default: type_1
-          x-field-uid: 1
-          x-enum:
-            type_1:
-              x-field-uid: 1
-          enum:
-          - type_1
-        type_1:
-          $ref: '#/components/schemas/Filter.RSVP.PathRecordRouteType1'
-          x-field-uid: 2
-    Filter.RSVP.PathRecordRouteType1:
-      type: object
-      properties:
-        subobjects:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -14876,21 +13693,9 @@ components:
         Filter for received bins
       type: object
       properties:
-        include:
-          description: |-
-            Controls inclusion/exclusion of received bins when fetching port metrics.
-          type: boolean
-          default: true
-          x-field-uid: 1
-        include_empty_metrics:
-          description: |-
-            Controls inclusion/exclusion of received bins where each underlying attributes has zero value or absent value.
-          type: boolean
-          default: false
-          x-field-uid: 2
         bin_names:
           description: |
-            List of bins to selectively fetch received bins.
+            List of bins to selectively fetch received bins.  An empty list will return all bins configured for the port specified.
 
             x-constraint:
             - /components/schemas/ReceiveBins/properties/name
@@ -15013,12 +13818,12 @@ components:
     Port.ReceivedBins:
       type: object
       properties:
-        bin_name:
+        name:
           description: |-
             Name of the receive bin
           type: string
           x-field-uid: 1
-        bin_value:
+        value:
           description: |-
             The current total number of frames adhering to the bin filter condition.
           type: integer
@@ -19142,435 +17947,6 @@ components:
         x9100: 37120
         x9200: 37376
         x9300: 37632
-    Pattern.Flow.Vxlan.Flags.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 8
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Vxlan.Flags.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Flags:
-      description: |-
-        Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid vxlan network id (VNI).   The other 7 bits (designated "R") are reserved fields and MUST be  set to zero on transmission and ignored on receipt.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 8
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 8
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Vxlan.Reserved0.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 16777215
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 16777215
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 16777215
-    Pattern.Flow.Vxlan.Reserved0.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 23
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 1
-          maximum: 24
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Reserved0:
-      description: |-
-        Reserved field
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 16777215
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 16777215
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Vxlan.Vni.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 16777215
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 16777215
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 16777215
-    Pattern.Flow.Vxlan.Vni.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 23
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 1
-          maximum: 24
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Vni:
-      description: |-
-        VXLAN network id
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 16777215
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 16777215
-          x-field-uid: 3
-          default:
-          - 0
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 0
-          format: uint32
-          maximum: 16777215
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Vxlan.Reserved1.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Vxlan.Reserved1.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Reserved1:
-      description: |-
-        Reserved field
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.MetricTag'
-          x-field-uid: 7
     Pattern.Flow.Ipv4.Version.Counter:
       description: |-
         integer counter pattern
@@ -23006,6 +21382,435 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Vxlan.Flags.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 8
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Vxlan.Flags.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Flags:
+      description: |-
+        Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid vxlan network id (VNI).   The other 7 bits (designated "R") are reserved fields and MUST be  set to zero on transmission and ignored on receipt.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 8
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 8
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Vxlan.Reserved0.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Vxlan.Reserved0.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 23
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 24
+          minimum: 1
+          maximum: 24
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Reserved0:
+      description: |-
+        Reserved field
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Vxlan.Vni.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Vxlan.Vni.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 23
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 24
+          minimum: 1
+          maximum: 24
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Vni:
+      description: |-
+        VXLAN network id
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 16777215
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Vxlan.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Vxlan.Reserved1.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Reserved1:
+      description: |-
+        Reserved field
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.MetricTag'
           x-field-uid: 7
     Pattern.Flow.PfcPause.Dst.Counter:
       description: |-
