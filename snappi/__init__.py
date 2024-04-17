@@ -1060,6 +1060,7 @@ from .snappi import FilterIpv4Priority
 from .snappi import FilterIpv4Tos
 from .snappi import FilterIpv4Dscp
 from .snappi import FilterIpv6
+from .snappi import FilterMpls
 from .snappi import FilterPacketIter
 from .snappi import ReceiveBinsIter
 from .snappi import Warning

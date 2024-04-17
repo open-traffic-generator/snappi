@@ -118656,6 +118656,7 @@ class FilterPacket(OpenApiObject):
                 "vlan",
                 "ipv4",
                 "ipv6",
+                "mpls",
             ],
         },
         "custom": {"type": "FilterFieldCustom"},
@@ -118663,6 +118664,7 @@ class FilterPacket(OpenApiObject):
         "vlan": {"type": "FilterVlan"},
         "ipv4": {"type": "FilterIpv4"},
         "ipv6": {"type": "FilterIpv6"},
+        "mpls": {"type": "FilterMpls"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -118676,6 +118678,7 @@ class FilterPacket(OpenApiObject):
     VLAN = "vlan"  # type: str
     IPV4 = "ipv4"  # type: str
     IPV6 = "ipv6"  # type: str
+    MPLS = "mpls"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -118747,13 +118750,24 @@ class FilterPacket(OpenApiObject):
         return self._get_property("ipv6", FilterIpv6, self, "ipv6")
 
     @property
+    def mpls(self):
+        # type: () -> FilterMpls
+        """Factory property that returns an instance of the FilterMpls class
+
+        MPLS packet header
+
+        Returns: FilterMpls
+        """
+        return self._get_property("mpls", FilterMpls, self, "mpls")
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["vlan"]]
+        # type: () -> Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["vlan"]]
         """choice getter
 
         The type of packet header we are interested in our receive bin.
 
-        Returns: Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["vlan"]]
+        Returns: Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["vlan"]]
         """
         return self._get_property("choice")
 
@@ -118763,7 +118777,7 @@ class FilterPacket(OpenApiObject):
 
         The type of packet header we are interested in our receive bin.
 
-        value: Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["vlan"]]
+        value: Union[Literal["custom"], Literal["ethernet"], Literal["ipv4"], Literal["ipv6"], Literal["mpls"], Literal["vlan"]]
         """
         self._set_property("choice", value)
 
@@ -118812,7 +118826,7 @@ class FilterFieldCustom(OpenApiObject):
         # type: () -> int
         """offset getter
 
-        The position from the starting of the packet from where we want the bytes to be considered for filtering.
+        The position from the starting of the received packet from where we want the bytes to be considered for filtering.
 
         Returns: int
         """
@@ -118822,7 +118836,7 @@ class FilterFieldCustom(OpenApiObject):
     def offset(self, value):
         """offset setter
 
-        The position from the starting of the packet from where we want the bytes to be considered for filtering.
+        The position from the starting of the received packet from where we want the bytes to be considered for filtering.
 
         value: int
         """
@@ -119601,6 +119615,71 @@ class FilterIpv6(OpenApiObject):
         return self._get_property("dst", FilterField)
 
 
+class FilterMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "label": {"type": "FilterField"},
+        "traffic_class": {"type": "FilterField"},
+        "bottom_of_stack": {"type": "FilterField"},
+        "time_to_live": {"type": "FilterField"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(FilterMpls, self).__init__()
+        self._parent = parent
+
+    @property
+    def label(self):
+        # type: () -> FilterField
+        """label getter
+
+        Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.
+
+        Returns: FilterField
+        """
+        return self._get_property("label", FilterField)
+
+    @property
+    def traffic_class(self):
+        # type: () -> FilterField
+        """traffic_class getter
+
+        Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.
+
+        Returns: FilterField
+        """
+        return self._get_property("traffic_class", FilterField)
+
+    @property
+    def bottom_of_stack(self):
+        # type: () -> FilterField
+        """bottom_of_stack getter
+
+        Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.
+
+        Returns: FilterField
+        """
+        return self._get_property("bottom_of_stack", FilterField)
+
+    @property
+    def time_to_live(self):
+        # type: () -> FilterField
+        """time_to_live getter
+
+        Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.Configuration settings for checking values within particular field in bin_filters.
+
+        Returns: FilterField
+        """
+        return self._get_property("time_to_live", FilterField)
+
+
 class FilterPacketIter(OpenApiIter):
     __slots__ = ("_parent", "_choice")
 
@@ -119612,7 +119691,7 @@ class FilterPacketIter(OpenApiIter):
         self._choice = choice
 
     def __getitem__(self, key):
-        # type: (str) -> Union[FilterEthernet, FilterFieldCustom, FilterIpv4, FilterIpv6, FilterPacket, FilterVlan]
+        # type: (str) -> Union[FilterEthernet, FilterFieldCustom, FilterIpv4, FilterIpv6, FilterMpls, FilterPacket, FilterVlan]
         return self._getitem(key)
 
     def __iter__(self):
@@ -119722,6 +119801,20 @@ class FilterPacketIter(OpenApiIter):
         item = FilterPacket()
         item.ipv6
         item.choice = "ipv6"
+        self._add(item)
+        return self
+
+    def mpls(self):
+        # type: () -> FilterPacketIter
+        """Factory method that creates an instance of the FilterMpls class
+
+        MPLS packet header
+
+        Returns: FilterPacketIter
+        """
+        item = FilterPacket()
+        item.mpls
+        item.choice = "mpls"
         self._add(item)
         return self
 

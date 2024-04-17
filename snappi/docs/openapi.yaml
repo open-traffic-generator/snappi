@@ -9111,12 +9111,15 @@ components:
               x-field-uid: 4
             ipv6:
               x-field-uid: 5
+            mpls:
+              x-field-uid: 6
           enum:
           - custom
           - ethernet
           - vlan
           - ipv4
           - ipv6
+          - mpls
         custom:
           description: |-
             custom
@@ -9134,6 +9137,9 @@ components:
         ipv6:
           $ref: '#/components/schemas/Filter.Ipv6'
           x-field-uid: 6
+        mpls:
+          $ref: '#/components/schemas/Filter.Mpls'
+          x-field-uid: 7
     Filter.Field.Custom:
       description: |-
         Custom configuration for filtering packet bytes in a particular bin.
@@ -9141,7 +9147,7 @@ components:
       properties:
         offset:
           description: |-
-            The position from the starting of the packet from where we want the bytes to be considered for filtering.
+            The position from the starting of the received packet from where we want the bytes to be considered for filtering.
           type: integer
           format: uint32
           default: 0
@@ -9591,6 +9597,40 @@ components:
         dst:
           $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 8
+    Flow.Mpls:
+      description: |-
+        MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
+      type: object
+      properties:
+        label:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label'
+        traffic_class:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass'
+        bottom_of_stack:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack'
+        time_to_live:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
+    Filter.Mpls:
+      description: |-
+        MPLS packet header
+      type: object
+      properties:
+        label:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 1
+        traffic_class:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 2
+        bottom_of_stack:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 3
+        time_to_live:
+          $ref: '#/components/schemas/Filter.Field'
+          x-field-uid: 4
     Flow.Vxlan:
       description: |-
         VXLAN packet header
@@ -9997,23 +10037,6 @@ components:
         group_address:
           x-field-uid: 5
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress'
-    Flow.Mpls:
-      description: |-
-        MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
-      type: object
-      properties:
-        label:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label'
-        traffic_class:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass'
-        bottom_of_stack:
-          x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack'
-        time_to_live:
-          x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
     Flow.Snmpv2c:
       description: |-
         SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -21383,6 +21406,448 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Mpls.Label.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 16
+          format: uint32
+          maximum: 1048575
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1048575
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1048575
+    Pattern.Flow.Mpls.Label.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 19
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 20
+          minimum: 1
+          maximum: 20
+          x-field-uid: 3
+    Pattern.Flow.Mpls.Label:
+      description: |-
+        Label of routers
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 16
+          format: uint32
+          maximum: 1048575
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1048575
+          x-field-uid: 3
+          default:
+          - 16
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 16
+          format: uint32
+          maximum: 1048575
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Mpls.TrafficClass.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 7
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 7
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 7
+    Pattern.Flow.Mpls.TrafficClass.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 2
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 3
+          minimum: 1
+          maximum: 3
+          x-field-uid: 3
+    Pattern.Flow.Mpls.TrafficClass:
+      description: |-
+        Traffic class
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 7
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 7
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Mpls.BottomOfStack.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Mpls.BottomOfStack.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 0
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          maximum: 1
+          x-field-uid: 3
+    Pattern.Flow.Mpls.BottomOfStack:
+      description: |-
+        Bottom of stack
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Mpls.TimeToLive.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 64
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Mpls.TimeToLive.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Mpls.TimeToLive:
+      description: |-
+        Time to live
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 64
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 64
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
+          x-field-uid: 7
     Pattern.Flow.Vxlan.Flags.Counter:
       description: |-
         integer counter pattern
@@ -31595,448 +32060,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Mpls.Label.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 16
-          format: uint32
-          maximum: 1048575
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1048575
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 1048575
-    Pattern.Flow.Mpls.Label.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 19
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 20
-          minimum: 1
-          maximum: 20
-          x-field-uid: 3
-    Pattern.Flow.Mpls.Label:
-      description: |-
-        Label of routers
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 16
-          format: uint32
-          maximum: 1048575
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1048575
-          x-field-uid: 3
-          default:
-          - 16
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 16
-          format: uint32
-          maximum: 1048575
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Mpls.TrafficClass.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 7
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 7
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 7
-    Pattern.Flow.Mpls.TrafficClass.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 2
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 3
-          minimum: 1
-          maximum: 3
-          x-field-uid: 3
-    Pattern.Flow.Mpls.TrafficClass:
-      description: |-
-        Traffic class
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 7
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 7
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Mpls.BottomOfStack.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 1
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 1
-    Pattern.Flow.Mpls.BottomOfStack.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 0
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 1
-          maximum: 1
-          x-field-uid: 3
-    Pattern.Flow.Mpls.BottomOfStack:
-      description: |-
-        Bottom of stack
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 1
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 1
-          format: uint32
-          maximum: 1
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Mpls.TimeToLive.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 64
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Mpls.TimeToLive.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Mpls.TimeToLive:
-      description: |-
-        Time to live
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 64
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 64
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
           x-field-uid: 7
     Pattern.Flow.Snmpv2c.Version.Counter:
       description: |-

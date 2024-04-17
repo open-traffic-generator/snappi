@@ -6738,6 +6738,7 @@ message FilterPacket {
       vlan = 3;
       ipv4 = 4;
       ipv6 = 5;
+      mpls = 6;
     }
   }
   // The type of packet header we are interested in our receive bin.
@@ -6758,13 +6759,16 @@ message FilterPacket {
 
   // Description missing in models
   FilterIpv6 ipv6 = 6;
+
+  // Description missing in models
+  FilterMpls mpls = 7;
 }
 
 // Custom configuration for filtering packet bytes in a particular bin.
 message FilterFieldCustom {
 
-  // The position from the starting of the packet from where we want the bytes to be considered
-  // for filtering.
+  // The position from the starting of the received packet from where we want the bytes
+  // to be considered for filtering.
   // default = 0
   optional uint32 offset = 1;
 
@@ -7168,6 +7172,39 @@ message FilterIpv6 {
   FilterField dst = 8;
 }
 
+// MPLS packet header; When configuring multiple such headers, the count shall not exceed
+// 20.
+message FlowMpls {
+
+  // Description missing in models
+  PatternFlowMplsLabel label = 1;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClass traffic_class = 2;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStack bottom_of_stack = 3;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLive time_to_live = 4;
+}
+
+// MPLS packet header
+message FilterMpls {
+
+  // Description missing in models
+  FilterField label = 1;
+
+  // Description missing in models
+  FilterField traffic_class = 2;
+
+  // Description missing in models
+  FilterField bottom_of_stack = 3;
+
+  // Description missing in models
+  FilterField time_to_live = 4;
+}
+
 // VXLAN packet header
 message FlowVxlan {
 
@@ -7556,23 +7593,6 @@ message FlowIgmpv1 {
 
   // Description missing in models
   PatternFlowIgmpv1GroupAddress group_address = 5;
-}
-
-// MPLS packet header; When configuring multiple such headers, the count shall not exceed
-// 20.
-message FlowMpls {
-
-  // Description missing in models
-  PatternFlowMplsLabel label = 1;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClass traffic_class = 2;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStack bottom_of_stack = 3;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLive time_to_live = 4;
 }
 
 // SNMPv2C packet header as defined in RFC1901 and RFC3416.
@@ -15495,6 +15515,308 @@ message PatternFlowIpv6Dst {
 }
 
 // integer counter pattern
+message PatternFlowMplsLabelCounter {
+
+  // Description missing in models
+  // default = 16
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsLabelMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 20
+  optional uint32 length = 3;
+}
+
+// Label of routers
+message PatternFlowMplsLabel {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 16
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [16]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 16
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowMplsLabelCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowMplsLabelCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsLabelMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowMplsTrafficClassCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsTrafficClassMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 3
+  optional uint32 length = 3;
+}
+
+// Traffic class
+message PatternFlowMplsTrafficClass {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClassCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClassCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowMplsBottomOfStackCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsBottomOfStackMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 1
+  optional uint32 length = 3;
+}
+
+// Bottom of stack
+message PatternFlowMplsBottomOfStack {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 1
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStackCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStackCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsBottomOfStackMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowMplsTimeToLiveCounter {
+
+  // Description missing in models
+  // default = 64
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsTimeToLiveMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Time to live
+message PatternFlowMplsTimeToLive {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 64
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [64]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLiveCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLiveCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
 message PatternFlowVxlanFlagsCounter {
 
   // Description missing in models
@@ -22598,308 +22920,6 @@ message PatternFlowIgmpv1GroupAddress {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIgmpv1GroupAddressMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowMplsLabelCounter {
-
-  // Description missing in models
-  // default = 16
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsLabelMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 20
-  optional uint32 length = 3;
-}
-
-// Label of routers
-message PatternFlowMplsLabel {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 16
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [16]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 16
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowMplsLabelCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowMplsLabelCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsLabelMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowMplsTrafficClassCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsTrafficClassMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 3
-  optional uint32 length = 3;
-}
-
-// Traffic class
-message PatternFlowMplsTrafficClass {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClassCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClassCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowMplsBottomOfStackCounter {
-
-  // Description missing in models
-  // default = 1
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsBottomOfStackMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 1
-  optional uint32 length = 3;
-}
-
-// Bottom of stack
-message PatternFlowMplsBottomOfStack {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [1]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 1
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStackCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStackCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsBottomOfStackMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowMplsTimeToLiveCounter {
-
-  // Description missing in models
-  // default = 64
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsTimeToLiveMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Time to live
-message PatternFlowMplsTimeToLive {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 64
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [64]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLiveCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLiveCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
