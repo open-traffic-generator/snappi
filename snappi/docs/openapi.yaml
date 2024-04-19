@@ -9012,177 +9012,17 @@ components:
       type: object
       properties:
         dst:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Ethernet.Dst'
         src:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ethernet.Src'
         ether_type:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 3
+          $ref: '#/components/schemas/Filter.Filter.Ethernet.EtherType'
         pfc_queue:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
-    ReceiveBins:
-      x-status:
-        status: under_review
-        information: There may be changes in receive_bins configuration
-      description: |-
-        Under Review: There may be changes in receive_bins configuration
-
-        Configuration for ReceiveBins settings.
-      type: object
-      required:
-      - name
-      properties:
-        association:
-          description: |-
-            Association.
-          $ref: '#/components/schemas/ReceiveBins.Association'
-          x-field-uid: 1
-        bin_filters:
-          description: |-
-            A list of filters to apply to the packet on receiving ports.
-            If no filters are specified then all packets will be counted.
-            A receive_bin can have multiple bin filters. The number of filters supported
-            is determined by the implementation.
-
-            When multiple filters are specified then implementation must &&
-            (and) all the filters.
-
-            Packet header filters without filter values can be used to define the structure of the packet and specify the order in which filters are applied.
-          type: array
-          items:
-            $ref: '#/components/schemas/Filter.Packet'
-          x-field-uid: 2
-        name:
-          x-field-uid: 3
-          description: |-
-            Globally unique name of an object. It also serves as the primary key for arrays of objects.
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-unique: global
-    ReceiveBins.Association:
-      description: |-
-        Configuration for receive_bins Association. Based on the association, receive_bins will be applied to count packets on per port or per flow.
-      type: object
-      properties:
-        choice:
-          description: |-
-            The type of association.
-          type: string
-          x-field-uid: 1
-          x-enum:
-            port_names:
-              x-field-uid: 1
-          enum:
-          - port_names
-        port_names:
-          description: |
-            List of port names.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - /components/schemas/Port/properties/name
-          x-field-uid: 2
-    Filter.Packet:
-      description: |-
-        Configuration of bin filters with the packet headers
-      type: object
-      properties:
-        choice:
-          description: |-
-            The type of packet header we are interested in our receive bin.
-          type: string
-          default: custom
-          x-field-uid: 1
-          x-enum:
-            custom:
-              x-field-uid: 1
-            ethernet:
-              x-field-uid: 2
-            vlan:
-              x-field-uid: 3
-            ipv4:
-              x-field-uid: 4
-            ipv6:
-              x-field-uid: 5
-            mpls:
-              x-field-uid: 6
-          enum:
-          - custom
-          - ethernet
-          - vlan
-          - ipv4
-          - ipv6
-          - mpls
-        custom:
-          description: |-
-            custom
-          $ref: '#/components/schemas/Filter.Field.Custom'
-          x-field-uid: 2
-        ethernet:
-          $ref: '#/components/schemas/Filter.Ethernet'
-          x-field-uid: 3
-        vlan:
-          $ref: '#/components/schemas/Filter.Vlan'
-          x-field-uid: 4
-        ipv4:
-          $ref: '#/components/schemas/Filter.Ipv4'
-          x-field-uid: 5
-        ipv6:
-          $ref: '#/components/schemas/Filter.Ipv6'
-          x-field-uid: 6
-        mpls:
-          $ref: '#/components/schemas/Filter.Mpls'
-          x-field-uid: 7
-    Filter.Field.Custom:
-      description: |-
-        Custom configuration for filtering packet bytes in a particular bin.
-      type: object
-      properties:
-        offset:
-          description: |-
-            The position from the starting of the received packet from where we want the bytes to be considered for filtering.
-          type: integer
-          format: uint32
-          default: 0
-          x-field-uid: 1
-        value:
-          x-field-uid: 2
-          description: |-
-            The value to be considered for the filtering criteria.
-          type: string
-          format: hex
-          default: '00'
-        mask:
-          x-field-uid: 3
-          description: |-
-            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
-          type: string
-          format: hex
-    Filter.Field:
-      description: |-
-        Configuration settings for checking values within a particular field in bin_filters.
-      type: object
-      properties:
-        value:
-          description: |-
-            The value to be considered for the filtering criteria.
-          type: string
-          format: hex
-          default: '00'
-          x-field-uid: 1
-        mask:
-          description: |-
-            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
-          type: string
-          format: hex
-          x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ethernet.PfcQueue'
     Flow.Vlan:
       description: |-
         VLAN packet header
@@ -9206,17 +9046,34 @@ components:
       type: object
       properties:
         priority:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Vlan.Priority'
         cfi:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Vlan.Cfi'
         id:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 3
+          $ref: '#/components/schemas/Filter.Filter.Vlan.Id'
         tpid:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
+          $ref: '#/components/schemas/Filter.Filter.Vlan.Tpid'
+    Flow.Vxlan:
+      description: |-
+        VXLAN packet header
+      type: object
+      properties:
+        flags:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags'
+        reserved0:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0'
+        vni:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni'
+        reserved1:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1'
     Flow.Ipv4:
       description: |-
         IPv4 packet header
@@ -9435,47 +9292,47 @@ components:
       type: object
       properties:
         version:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Version'
         header_length:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.HeaderLength'
         priority:
           $ref: '#/components/schemas/Filter.Ipv4.Priority'
           x-field-uid: 3
         total_length:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.TotalLength'
         identification:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 5
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Identification'
         reserved:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 6
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Reserved'
         dont_fragment:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 7
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.DontFragment'
         more_fragments:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 8
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.MoreFragments'
         fragment_offset:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 9
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.FragmentOffset'
         time_to_live:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 10
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.TimeToLive'
         protocol:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 11
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Protocol'
         header_checksum:
           $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 12
         src:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 13
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Src'
         dst:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 14
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Dst'
     Filter.Ipv4.Priority:
       description: |-
         A container for ipv4 raw, tos, dscp ip priorities.
@@ -9497,8 +9354,8 @@ components:
           - tos
           - dscp
         raw:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Priority.Raw'
         tos:
           $ref: '#/components/schemas/Filter.Ipv4.Tos'
           x-field-uid: 3
@@ -9511,34 +9368,228 @@ components:
       type: object
       properties:
         phb:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Dscp.Phb'
         ecn:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Dscp.Ecn'
     Filter.Ipv4.Tos:
       description: |-
         Type of service (TOS) packet field.
       type: object
       properties:
         precedence:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Precedence'
         delay:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Delay'
         throughput:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 3
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Throughput'
         reliability:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Reliability'
         monetary:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 5
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Monetary'
         unused:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 6
+          $ref: '#/components/schemas/Filter.Filter.Ipv4.Tos.Unused'
+    ReceiveBins:
+      x-status:
+        status: under_review
+        information: There may be changes in receive_bins configuration
+      description: |-
+        Under Review: There may be changes in receive_bins configuration
+
+        Configuration for ReceiveBins settings.
+      type: object
+      required:
+      - name
+      properties:
+        association:
+          description: |-
+            Association.
+          $ref: '#/components/schemas/ReceiveBins.Association'
+          x-field-uid: 1
+        bin_filters:
+          description: |-
+            A list of filters to apply to the packet on receiving ports.
+            If no filters are specified then all packets will be counted.
+            A receive_bin can have multiple bin filters. The number of filters supported
+            is determined by the implementation.
+
+            When multiple filters are specified then implementation must &&
+            (and) all the filters.
+
+            Packet header filters without filter values can be used to define the structure of the packet and specify the order in which filters are applied.
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter.Packet'
+          x-field-uid: 2
+        name:
+          x-field-uid: 3
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+    ReceiveBins.Association:
+      description: |-
+        Configuration for receive_bins Association. Based on the association, receive_bins will be applied to count packets on per port or per flow.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of association.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            port_names:
+              x-field-uid: 1
+          enum:
+          - port_names
+        port_names:
+          description: |
+            List of port names.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 2
+    Filter.Packet:
+      description: |-
+        Configuration of bin filters with the packet headers
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of packet header we are interested in our receive bin.
+          type: string
+          default: ethernet
+          x-field-uid: 1
+          x-enum:
+            ethernet:
+              x-field-uid: 1
+            vlan:
+              x-field-uid: 2
+            mpls:
+              x-field-uid: 3
+            ipv4:
+              x-field-uid: 4
+            ipv6:
+              x-field-uid: 5
+            custom:
+              x-field-uid: 6
+          enum:
+          - ethernet
+          - vlan
+          - mpls
+          - ipv4
+          - ipv6
+          - custom
+        ethernet:
+          $ref: '#/components/schemas/Filter.Ethernet'
+          x-field-uid: 2
+        vlan:
+          $ref: '#/components/schemas/Filter.Vlan'
+          x-field-uid: 3
+        mpls:
+          $ref: '#/components/schemas/Filter.Mpls'
+          x-field-uid: 4
+        ipv4:
+          $ref: '#/components/schemas/Filter.Ipv4'
+          x-field-uid: 5
+        ipv6:
+          $ref: '#/components/schemas/Filter.Ipv6'
+          x-field-uid: 6
+        custom:
+          description: |-
+            custom
+          $ref: '#/components/schemas/Filter.Field.Custom'
+          x-field-uid: 7
+    Filter.Field.Custom:
+      description: |-
+        Custom configuration for filtering packet bytes in a particular bin.
+      type: object
+      properties:
+        offset:
+          description: |-
+            The position from the starting of the received packet from where we want the bytes to be considered for filtering.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+        value:
+          x-field-uid: 2
+          description: |-
+            The value to be considered for the filtering criteria.
+          type: string
+          format: hex
+          default: '00'
+        mask:
+          x-field-uid: 3
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          type: string
+          format: hex
+    Filter.Field:
+      description: |-
+        Configuration settings for checking values within a particular field in bin_filters.
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          type: string
+          format: hex
+          x-field-uid: 2
+    Flow.Mpls:
+      description: |-
+        MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
+      type: object
+      properties:
+        label:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label'
+        traffic_class:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass'
+        bottom_of_stack:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack'
+        time_to_live:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
+    Filter.Mpls:
+      description: |-
+        MPLS packet header
+      type: object
+      properties:
+        label:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Mpls.Label'
+        traffic_class:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Mpls.TrafficClass'
+        bottom_of_stack:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Filter.Filter.Mpls.BottomOfStack'
+        time_to_live:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Filter.Filter.Mpls.TimeToLive'
     Flow.Ipv6:
       description: |-
         IPv6 packet header
@@ -9574,80 +9625,29 @@ components:
       type: object
       properties:
         version:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 1
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.Version'
         traffic_class:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 2
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.TrafficClass'
         flow_label:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 3
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.FlowLabel'
         payload_length:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 4
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.PayloadLength'
         next_header:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 5
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.NextHeader'
         hop_limit:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 6
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.HopLimit'
         src:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 7
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.Src'
         dst:
-          $ref: '#/components/schemas/Filter.Field'
           x-field-uid: 8
-    Flow.Mpls:
-      description: |-
-        MPLS packet header; When configuring multiple such headers, the count shall not exceed 20.
-      type: object
-      properties:
-        label:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label'
-        traffic_class:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass'
-        bottom_of_stack:
-          x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack'
-        time_to_live:
-          x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive'
-    Filter.Mpls:
-      description: |-
-        MPLS packet header
-      type: object
-      properties:
-        label:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 1
-        traffic_class:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 2
-        bottom_of_stack:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 3
-        time_to_live:
-          $ref: '#/components/schemas/Filter.Field'
-          x-field-uid: 4
-    Flow.Vxlan:
-      description: |-
-        VXLAN packet header
-      type: object
-      properties:
-        flags:
-          x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags'
-        reserved0:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0'
-        vni:
-          x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni'
-        reserved1:
-          x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1'
+          $ref: '#/components/schemas/Filter.Filter.Ipv6.Dst'
     Flow.PfcPause:
       description: |-
         IEEE 802.1Qbb PFC Pause packet header.
@@ -17970,6 +17970,435 @@ components:
         x9100: 37120
         x9200: 37376
         x9300: 37632
+    Pattern.Flow.Vxlan.Flags.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 8
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Vxlan.Flags.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Flags:
+      description: |-
+        Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid vxlan network id (VNI).   The other 7 bits (designated "R") are reserved fields and MUST be  set to zero on transmission and ignored on receipt.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 8
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 8
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Vxlan.Reserved0.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Vxlan.Reserved0.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 23
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 24
+          minimum: 1
+          maximum: 24
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Reserved0:
+      description: |-
+        Reserved field
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Vxlan.Vni.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Vxlan.Vni.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 23
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 24
+          minimum: 1
+          maximum: 24
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Vni:
+      description: |-
+        VXLAN network id
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 16777215
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Vxlan.Reserved1.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Vxlan.Reserved1.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Vxlan.Reserved1:
+      description: |-
+        Reserved field
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.MetricTag'
+          x-field-uid: 7
     Pattern.Flow.Ipv4.Version.Counter:
       description: |-
         integer counter pattern
@@ -20534,6 +20963,448 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Mpls.Label.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 16
+          format: uint32
+          maximum: 1048575
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1048575
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1048575
+    Pattern.Flow.Mpls.Label.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 19
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 20
+          minimum: 1
+          maximum: 20
+          x-field-uid: 3
+    Pattern.Flow.Mpls.Label:
+      description: |-
+        Label of routers
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 16
+          format: uint32
+          maximum: 1048575
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1048575
+          x-field-uid: 3
+          default:
+          - 16
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 16
+          format: uint32
+          maximum: 1048575
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Mpls.TrafficClass.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 7
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 7
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 7
+    Pattern.Flow.Mpls.TrafficClass.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 2
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 3
+          minimum: 1
+          maximum: 3
+          x-field-uid: 3
+    Pattern.Flow.Mpls.TrafficClass:
+      description: |-
+        Traffic class
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 7
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 7
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.MetricTag'
+          x-field-uid: 7
+    Pattern.Flow.Mpls.BottomOfStack.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Mpls.BottomOfStack.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 0
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          maximum: 1
+          x-field-uid: 3
+    Pattern.Flow.Mpls.BottomOfStack:
+      description: |-
+        Bottom of stack
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
+          x-field-uid: 7
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.MetricTag'
+          x-field-uid: 8
+    Pattern.Flow.Mpls.TimeToLive.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 64
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Mpls.TimeToLive.MetricTag:
+      description: |-
+        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          description: |-
+            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of corresponding header field
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset of corresponding header field
+          type: integer
+          format: uint32
+          default: 8
+          minimum: 1
+          maximum: 8
+          x-field-uid: 3
+    Pattern.Flow.Mpls.TimeToLive:
+      description: |-
+        Time to live
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 64
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 64
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
+          x-field-uid: 6
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
+          x-field-uid: 7
     Pattern.Flow.Ipv6.Version.Counter:
       description: |-
         integer counter pattern
@@ -21405,877 +22276,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Mpls.Label.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 16
-          format: uint32
-          maximum: 1048575
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1048575
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 1048575
-    Pattern.Flow.Mpls.Label.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 19
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 20
-          minimum: 1
-          maximum: 20
-          x-field-uid: 3
-    Pattern.Flow.Mpls.Label:
-      description: |-
-        Label of routers
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 16
-          format: uint32
-          maximum: 1048575
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1048575
-          x-field-uid: 3
-          default:
-          - 16
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 16
-          format: uint32
-          maximum: 1048575
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Mpls.TrafficClass.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 7
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 7
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 7
-    Pattern.Flow.Mpls.TrafficClass.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 2
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 3
-          minimum: 1
-          maximum: 3
-          x-field-uid: 3
-    Pattern.Flow.Mpls.TrafficClass:
-      description: |-
-        Traffic class
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 7
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 7
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Mpls.BottomOfStack.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 1
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 1
-    Pattern.Flow.Mpls.BottomOfStack.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 0
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 1
-          maximum: 1
-          x-field-uid: 3
-    Pattern.Flow.Mpls.BottomOfStack:
-      description: |-
-        Bottom of stack
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 1
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 1
-          format: uint32
-          maximum: 1
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.BottomOfStack.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Mpls.TimeToLive.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 64
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Mpls.TimeToLive.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Mpls.TimeToLive:
-      description: |-
-        Time to live
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 64
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 64
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Vxlan.Flags.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 8
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Vxlan.Flags.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Flags:
-      description: |-
-        Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid vxlan network id (VNI).   The other 7 bits (designated "R") are reserved fields and MUST be  set to zero on transmission and ignored on receipt.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 8
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 8
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Vxlan.Reserved0.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 16777215
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 16777215
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 16777215
-    Pattern.Flow.Vxlan.Reserved0.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 23
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 1
-          maximum: 24
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Reserved0:
-      description: |-
-        Reserved field
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 16777215
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 16777215
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.MetricTag'
-          x-field-uid: 7
-    Pattern.Flow.Vxlan.Vni.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 16777215
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 16777215
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 16777215
-    Pattern.Flow.Vxlan.Vni.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 23
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 1
-          maximum: 24
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Vni:
-      description: |-
-        VXLAN network id
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            auto:
-              x-field-uid: 1
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: auto
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - auto
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 16777215
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 16777215
-          x-field-uid: 3
-          default:
-          - 0
-        auto:
-          description: |-
-            The OTG implementation can provide a system generated
-            value for this property. If the OTG is unable to generate a value
-            the default value must be used.
-          type: integer
-          x-field-uid: 4
-          default: 0
-          format: uint32
-          maximum: 16777215
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
-          x-field-uid: 6
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.Counter'
-          x-field-uid: 7
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Vni.MetricTag'
-          x-field-uid: 8
-    Pattern.Flow.Vxlan.Reserved1.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 255
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 255
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 255
-    Pattern.Flow.Vxlan.Reserved1.MetricTag:
-      description: |-
-        Metric tag can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          description: |-
-            Name used to identify the metrics associated with the values applicable for configured offset and length inside corresponding header field
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-field-uid: 1
-        offset:
-          description: |-
-            Offset in bits relative to start of corresponding header field
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 7
-          x-field-uid: 2
-        length:
-          description: |-
-            Number of bits to track for metrics starting from configured offset of corresponding header field
-          type: integer
-          format: uint32
-          default: 8
-          minimum: 1
-          maximum: 8
-          x-field-uid: 3
-    Pattern.Flow.Vxlan.Reserved1:
-      description: |-
-        Reserved field
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 255
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 255
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 6
-        metric_tags:
-          description: |-
-            One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.MetricTag'
           x-field-uid: 7
     Pattern.Flow.PfcPause.Dst.Counter:
       description: |-
@@ -35106,6 +35106,902 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
           x-field-uid: 6
+    Filter.Filter.Ethernet.Dst:
+      description: |-
+        Destination MAC address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: 00:00:00:00:00:00
+          format: mac
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 12
+          default: ffffffffffff
+    Filter.Filter.Ethernet.Src:
+      description: |-
+        Source MAC address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: 00:00:00:00:00:00
+          format: mac
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 12
+          default: ffffffffffff
+    Filter.Filter.Ethernet.EtherType:
+      description: |-
+        Ethernet type
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 65535
+          format: uint32
+          maximum: 65535
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Ethernet.PfcQueue:
+      description: |-
+        Priority flow control queue
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 7
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Vlan.Priority:
+      description: |-
+        Priority code point
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 7
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Vlan.Cfi:
+      description: |-
+        Canonical format indicator or drop elegible indicator
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Vlan.Id:
+      description: |-
+        Vlan identifier
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 4095
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Vlan.Tpid:
+      description: |-
+        Protocol identifier
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 65535
+          format: uint32
+          maximum: 65535
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Ipv4.Version:
+      description: |-
+        Version
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 4
+          format: uint32
+          maximum: 15
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.HeaderLength:
+      description: |-
+        Header length
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 5
+          format: uint32
+          maximum: 15
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.TotalLength:
+      description: |-
+        Total length
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 46
+          format: uint32
+          maximum: 65535
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Ipv4.Identification:
+      description: |-
+        Identification
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 65535
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Ipv4.Reserved:
+      description: |-
+        Reserved flag.
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.DontFragment:
+      description: |-
+        Dont fragment flag If the dont_fragment flag is set and fragmentation is required to route the packet then the packet is dropped.
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.MoreFragments:
+      description: |-
+        More fragments flag
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.FragmentOffset:
+      description: |-
+        Fragment offset
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 31
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.TimeToLive:
+      description: |-
+        Time to live
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 64
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Protocol:
+      description: |-
+        Protocol, default is 61 any host internal protocol
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 61
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Src:
+      description: |-
+        Source address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: 0.0.0.0
+          format: ipv4
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
+          default: ffffffff
+    Filter.Filter.Ipv4.Dst:
+      description: |-
+        Destination address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: 0.0.0.0
+          format: ipv4
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
+          default: ffffffff
+    Filter.Filter.Ipv4.Priority.Raw:
+      description: |-
+        Raw priority
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Dscp.Phb:
+      description: |-
+        Per hop behavior
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 63
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Dscp.Ecn:
+      description: |-
+        Explicit congestion notification
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 3
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Precedence:
+      description: |-
+        Precedence
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 7
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Delay:
+      description: |-
+        Delay
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Throughput:
+      description: |-
+        Throughput
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Reliability:
+      description: |-
+        Reliability
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Monetary:
+      description: |-
+        Monetary
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv4.Tos.Unused:
+      description: |-
+        Unused
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Mpls.Label:
+      description: |-
+        Label of routers
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 16
+          format: uint32
+          maximum: 1048575
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 6
+          default: ffffff
+    Filter.Filter.Mpls.TrafficClass:
+      description: |-
+        Traffic class
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 7
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Mpls.BottomOfStack:
+      description: |-
+        Bottom of stack
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 1
+          format: uint32
+          maximum: 1
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Mpls.TimeToLive:
+      description: |-
+        Time to live
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 64
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv6.Version:
+      description: |-
+        Version number
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 6
+          format: uint32
+          maximum: 15
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv6.TrafficClass:
+      description: |-
+        Traffic class
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv6.FlowLabel:
+      description: |-
+        Flow label
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 1048575
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 6
+          default: ffffff
+    Filter.Filter.Ipv6.PayloadLength:
+      description: |-
+        Payload length
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 0
+          format: uint32
+          maximum: 65535
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 4
+          default: ffff
+    Filter.Filter.Ipv6.NextHeader:
+      description: |-
+        Next header
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 59
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv6.HopLimit:
+      description: |-
+        Hop limit
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: integer
+          default: 64
+          format: uint32
+          maximum: 255
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 2
+          default: ff
+    Filter.Filter.Ipv6.Src:
+      description: |-
+        Source address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: ::0
+          format: ipv6
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 32
+          default: ffffffffffffffffffffffffffffffff
+    Filter.Filter.Ipv6.Dst:
+      description: |-
+        Destination address
+      type: object
+      properties:
+        value:
+          description: |-
+            The value to be considered for the filtering criteria.
+          x-field-uid: 1
+          type: string
+          default: ::0
+          format: ipv6
+        mask:
+          description: |-
+            The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
+          x-field-uid: 2
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 32
+          default: ffffffffffffffffffffffffffffffff
     Version:
       description: |-
         Version details

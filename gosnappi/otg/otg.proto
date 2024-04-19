@@ -6668,129 +6668,16 @@ message FlowEthernet {
 message FilterEthernet {
 
   // Description missing in models
-  FilterField dst = 1;
+  FilterFilterEthernetDst dst = 1;
 
   // Description missing in models
-  FilterField src = 2;
+  FilterFilterEthernetSrc src = 2;
 
   // Description missing in models
-  FilterField ether_type = 3;
+  FilterFilterEthernetEtherType ether_type = 3;
 
   // Description missing in models
-  FilterField pfc_queue = 4;
-}
-
-// Under Review: There may be changes in receive_bins configuration
-// 
-// Configuration for ReceiveBins settings.
-message ReceiveBins {
-
-  // Association.
-  ReceiveBinsAssociation association = 1;
-
-  // A list of filters to apply to the packet on receiving ports.
-  // If no filters are specified then all packets will be counted.
-  // A receive_bin can have multiple bin filters. The number of filters supported
-  // is determined by the implementation.
-  // 
-  // When multiple filters are specified then implementation must &&
-  // (and) all the filters.
-  // 
-  // Packet header filters without filter values can be used to define the structure of
-  // the packet and specify the order in which filters are applied.
-  repeated FilterPacket bin_filters = 2;
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 3;
-}
-
-// Configuration for receive_bins Association. Based on the association, receive_bins
-// will be applied to count packets on per port or per flow.
-message ReceiveBinsAssociation {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      port_names = 1;
-    }
-  }
-  // The type of association.
-  optional Choice.Enum choice = 1;
-
-  // List of port names.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
-  repeated string port_names = 2;
-}
-
-// Configuration of bin filters with the packet headers
-message FilterPacket {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      custom = 1;
-      ethernet = 2;
-      vlan = 3;
-      ipv4 = 4;
-      ipv6 = 5;
-      mpls = 6;
-    }
-  }
-  // The type of packet header we are interested in our receive bin.
-  // default = Choice.Enum.custom
-  optional Choice.Enum choice = 1;
-
-  // custom
-  FilterFieldCustom custom = 2;
-
-  // Description missing in models
-  FilterEthernet ethernet = 3;
-
-  // Description missing in models
-  FilterVlan vlan = 4;
-
-  // Description missing in models
-  FilterIpv4 ipv4 = 5;
-
-  // Description missing in models
-  FilterIpv6 ipv6 = 6;
-
-  // Description missing in models
-  FilterMpls mpls = 7;
-}
-
-// Custom configuration for filtering packet bytes in a particular bin.
-message FilterFieldCustom {
-
-  // The position from the starting of the received packet from where we want the bytes
-  // to be considered for filtering.
-  // default = 0
-  optional uint32 offset = 1;
-
-  // The value to be considered for the filtering criteria.
-  // default = 00
-  optional string value = 2;
-
-  // The corresponding mask configuration for the value to be considered in order to check
-  // for a range of allowed values.
-  optional string mask = 3;
-}
-
-// Configuration settings for checking values within a particular field in bin_filters.
-message FilterField {
-
-  // The value to be considered for the filtering criteria.
-  // default = 00
-  optional string value = 1;
-
-  // The corresponding mask configuration for the value to be considered in order to check
-  // for a range of allowed values.
-  optional string mask = 2;
+  FilterFilterEthernetPfcQueue pfc_queue = 4;
 }
 
 // VLAN packet header
@@ -6813,16 +6700,32 @@ message FlowVlan {
 message FilterVlan {
 
   // Description missing in models
-  FilterField priority = 1;
+  FilterFilterVlanPriority priority = 1;
 
   // Description missing in models
-  FilterField cfi = 2;
+  FilterFilterVlanCfi cfi = 2;
 
   // Description missing in models
-  FilterField id = 3;
+  FilterFilterVlanId id = 3;
 
   // Description missing in models
-  FilterField tpid = 4;
+  FilterFilterVlanTpid tpid = 4;
+}
+
+// VXLAN packet header
+message FlowVxlan {
+
+  // Description missing in models
+  PatternFlowVxlanFlags flags = 1;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0 reserved0 = 2;
+
+  // Description missing in models
+  PatternFlowVxlanVni vni = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1 reserved1 = 4;
 }
 
 // IPv4 packet header
@@ -7017,46 +6920,46 @@ message FlowIpv4Tos {
 message FilterIpv4 {
 
   // Description missing in models
-  FilterField version = 1;
+  FilterFilterIpv4Version version = 1;
 
   // Description missing in models
-  FilterField header_length = 2;
+  FilterFilterIpv4HeaderLength header_length = 2;
 
   // Description missing in models
   FilterIpv4Priority priority = 3;
 
   // Description missing in models
-  FilterField total_length = 4;
+  FilterFilterIpv4TotalLength total_length = 4;
 
   // Description missing in models
-  FilterField identification = 5;
+  FilterFilterIpv4Identification identification = 5;
 
   // Description missing in models
-  FilterField reserved = 6;
+  FilterFilterIpv4Reserved reserved = 6;
 
   // Description missing in models
-  FilterField dont_fragment = 7;
+  FilterFilterIpv4DontFragment dont_fragment = 7;
 
   // Description missing in models
-  FilterField more_fragments = 8;
+  FilterFilterIpv4MoreFragments more_fragments = 8;
 
   // Description missing in models
-  FilterField fragment_offset = 9;
+  FilterFilterIpv4FragmentOffset fragment_offset = 9;
 
   // Description missing in models
-  FilterField time_to_live = 10;
+  FilterFilterIpv4TimeToLive time_to_live = 10;
 
   // Description missing in models
-  FilterField protocol = 11;
+  FilterFilterIpv4Protocol protocol = 11;
 
   // Description missing in models
   FilterField header_checksum = 12;
 
   // Description missing in models
-  FilterField src = 13;
+  FilterFilterIpv4Src src = 13;
 
   // Description missing in models
-  FilterField dst = 14;
+  FilterFilterIpv4Dst dst = 14;
 }
 
 // A container for ipv4 raw, tos, dscp ip priorities.
@@ -7075,7 +6978,7 @@ message FilterIpv4Priority {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  FilterField raw = 2;
+  FilterFilterIpv4PriorityRaw raw = 2;
 
   // Description missing in models
   FilterIpv4Tos tos = 3;
@@ -7088,32 +6991,178 @@ message FilterIpv4Priority {
 message FilterIpv4Dscp {
 
   // Description missing in models
-  FilterField phb = 1;
+  FilterFilterIpv4DscpPhb phb = 1;
 
   // Description missing in models
-  FilterField ecn = 2;
+  FilterFilterIpv4DscpEcn ecn = 2;
 }
 
 // Type of service (TOS) packet field.
 message FilterIpv4Tos {
 
   // Description missing in models
-  FilterField precedence = 1;
+  FilterFilterIpv4TosPrecedence precedence = 1;
 
   // Description missing in models
-  FilterField delay = 2;
+  FilterFilterIpv4TosDelay delay = 2;
 
   // Description missing in models
-  FilterField throughput = 3;
+  FilterFilterIpv4TosThroughput throughput = 3;
 
   // Description missing in models
-  FilterField reliability = 4;
+  FilterFilterIpv4TosReliability reliability = 4;
 
   // Description missing in models
-  FilterField monetary = 5;
+  FilterFilterIpv4TosMonetary monetary = 5;
 
   // Description missing in models
-  FilterField unused = 6;
+  FilterFilterIpv4TosUnused unused = 6;
+}
+
+// Under Review: There may be changes in receive_bins configuration
+// 
+// Configuration for ReceiveBins settings.
+message ReceiveBins {
+
+  // Association.
+  ReceiveBinsAssociation association = 1;
+
+  // A list of filters to apply to the packet on receiving ports.
+  // If no filters are specified then all packets will be counted.
+  // A receive_bin can have multiple bin filters. The number of filters supported
+  // is determined by the implementation.
+  // 
+  // When multiple filters are specified then implementation must &&
+  // (and) all the filters.
+  // 
+  // Packet header filters without filter values can be used to define the structure of
+  // the packet and specify the order in which filters are applied.
+  repeated FilterPacket bin_filters = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 3;
+}
+
+// Configuration for receive_bins Association. Based on the association, receive_bins
+// will be applied to count packets on per port or per flow.
+message ReceiveBinsAssociation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      port_names = 1;
+    }
+  }
+  // The type of association.
+  optional Choice.Enum choice = 1;
+
+  // List of port names.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 2;
+}
+
+// Configuration of bin filters with the packet headers
+message FilterPacket {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ethernet = 1;
+      vlan = 2;
+      mpls = 3;
+      ipv4 = 4;
+      ipv6 = 5;
+      custom = 6;
+    }
+  }
+  // The type of packet header we are interested in our receive bin.
+  // default = Choice.Enum.ethernet
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FilterEthernet ethernet = 2;
+
+  // Description missing in models
+  FilterVlan vlan = 3;
+
+  // Description missing in models
+  FilterMpls mpls = 4;
+
+  // Description missing in models
+  FilterIpv4 ipv4 = 5;
+
+  // Description missing in models
+  FilterIpv6 ipv6 = 6;
+
+  // custom
+  FilterFieldCustom custom = 7;
+}
+
+// Custom configuration for filtering packet bytes in a particular bin.
+message FilterFieldCustom {
+
+  // The position from the starting of the received packet from where we want the bytes
+  // to be considered for filtering.
+  // default = 0
+  optional uint32 offset = 1;
+
+  // The value to be considered for the filtering criteria.
+  // default = 00
+  optional string value = 2;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  optional string mask = 3;
+}
+
+// Configuration settings for checking values within a particular field in bin_filters.
+message FilterField {
+
+  // The value to be considered for the filtering criteria.
+  // default = 00
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  optional string mask = 2;
+}
+
+// MPLS packet header; When configuring multiple such headers, the count shall not exceed
+// 20.
+message FlowMpls {
+
+  // Description missing in models
+  PatternFlowMplsLabel label = 1;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClass traffic_class = 2;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStack bottom_of_stack = 3;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLive time_to_live = 4;
+}
+
+// MPLS packet header
+message FilterMpls {
+
+  // Description missing in models
+  FilterFilterMplsLabel label = 1;
+
+  // Description missing in models
+  FilterFilterMplsTrafficClass traffic_class = 2;
+
+  // Description missing in models
+  FilterFilterMplsBottomOfStack bottom_of_stack = 3;
+
+  // Description missing in models
+  FilterFilterMplsTimeToLive time_to_live = 4;
 }
 
 // IPv6 packet header
@@ -7148,77 +7197,28 @@ message FlowIpv6 {
 message FilterIpv6 {
 
   // Description missing in models
-  FilterField version = 1;
+  FilterFilterIpv6Version version = 1;
 
   // Description missing in models
-  FilterField traffic_class = 2;
+  FilterFilterIpv6TrafficClass traffic_class = 2;
 
   // Description missing in models
-  FilterField flow_label = 3;
+  FilterFilterIpv6FlowLabel flow_label = 3;
 
   // Description missing in models
-  FilterField payload_length = 4;
+  FilterFilterIpv6PayloadLength payload_length = 4;
 
   // Description missing in models
-  FilterField next_header = 5;
+  FilterFilterIpv6NextHeader next_header = 5;
 
   // Description missing in models
-  FilterField hop_limit = 6;
+  FilterFilterIpv6HopLimit hop_limit = 6;
 
   // Description missing in models
-  FilterField src = 7;
+  FilterFilterIpv6Src src = 7;
 
   // Description missing in models
-  FilterField dst = 8;
-}
-
-// MPLS packet header; When configuring multiple such headers, the count shall not exceed
-// 20.
-message FlowMpls {
-
-  // Description missing in models
-  PatternFlowMplsLabel label = 1;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClass traffic_class = 2;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStack bottom_of_stack = 3;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLive time_to_live = 4;
-}
-
-// MPLS packet header
-message FilterMpls {
-
-  // Description missing in models
-  FilterField label = 1;
-
-  // Description missing in models
-  FilterField traffic_class = 2;
-
-  // Description missing in models
-  FilterField bottom_of_stack = 3;
-
-  // Description missing in models
-  FilterField time_to_live = 4;
-}
-
-// VXLAN packet header
-message FlowVxlan {
-
-  // Description missing in models
-  PatternFlowVxlanFlags flags = 1;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0 reserved0 = 2;
-
-  // Description missing in models
-  PatternFlowVxlanVni vni = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1 reserved1 = 4;
+  FilterFilterIpv6Dst dst = 8;
 }
 
 // IEEE 802.1Qbb PFC Pause packet header.
@@ -13221,6 +13221,303 @@ message PatternFlowVlanTpid {
 }
 
 // integer counter pattern
+message PatternFlowVxlanFlagsCounter {
+
+  // Description missing in models
+  // default = 8
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanFlagsMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid
+// vxlan network id (VNI).   The other 7 bits (designated R) are reserved fields and
+// MUST be  set to zero on transmission and ignored on receipt.
+message PatternFlowVxlanFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 8
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [8]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanFlagsCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowVxlanReserved0Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanReserved0MetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 24
+  optional uint32 length = 3;
+}
+
+// Reserved field
+message PatternFlowVxlanReserved0 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanReserved0Counter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowVxlanVniCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanVniMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 24
+  optional uint32 length = 3;
+}
+
+// VXLAN network id
+message PatternFlowVxlanVni {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowVxlanVniCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowVxlanVniCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanVniMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowVxlanReserved1Counter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowVxlanReserved1MetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Reserved field
+message PatternFlowVxlanReserved1 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1Counter increment = 5;
+
+  // Description missing in models
+  PatternFlowVxlanReserved1Counter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 7;
+}
+
+// integer counter pattern
 message PatternFlowIpv4VersionCounter {
 
   // Description missing in models
@@ -14925,6 +15222,308 @@ message PatternFlowIpv4TosUnused {
 }
 
 // integer counter pattern
+message PatternFlowMplsLabelCounter {
+
+  // Description missing in models
+  // default = 16
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsLabelMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 20
+  optional uint32 length = 3;
+}
+
+// Label of routers
+message PatternFlowMplsLabel {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 16
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [16]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 16
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowMplsLabelCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowMplsLabelCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsLabelMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowMplsTrafficClassCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsTrafficClassMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 3
+  optional uint32 length = 3;
+}
+
+// Traffic class
+message PatternFlowMplsTrafficClass {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClassCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowMplsTrafficClassCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
+message PatternFlowMplsBottomOfStackCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsBottomOfStackMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 1
+  optional uint32 length = 3;
+}
+
+// Bottom of stack
+message PatternFlowMplsBottomOfStack {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 1
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStackCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowMplsBottomOfStackCounter decrement = 7;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsBottomOfStackMetricTag metric_tags = 8;
+}
+
+// integer counter pattern
+message PatternFlowMplsTimeToLiveCounter {
+
+  // Description missing in models
+  // default = 64
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Metric tag can be used to enable tracking portion of or all bits in a corresponding
+// header field for metrics per each applicable value. These would appear as tagged
+// metrics in corresponding flow metrics.
+message PatternFlowMplsTimeToLiveMetricTag {
+
+  // Name used to identify the metrics associated with the values applicable for configured
+  // offset and length inside corresponding header field
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of corresponding header field
+  // default = 0
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset of corresponding
+  // header field
+  // default = 8
+  optional uint32 length = 3;
+}
+
+// Time to live
+message PatternFlowMplsTimeToLive {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 64
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [64]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLiveCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowMplsTimeToLiveCounter decrement = 6;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits in
+  // a corresponding header field for metrics per each applicable value. These would appear
+  // as tagged metrics in corresponding flow metrics.
+  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 7;
+}
+
+// integer counter pattern
 message PatternFlowIpv6VersionCounter {
 
   // Description missing in models
@@ -15512,605 +16111,6 @@ message PatternFlowIpv6Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowMplsLabelCounter {
-
-  // Description missing in models
-  // default = 16
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsLabelMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 20
-  optional uint32 length = 3;
-}
-
-// Label of routers
-message PatternFlowMplsLabel {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 16
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [16]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 16
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowMplsLabelCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowMplsLabelCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsLabelMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowMplsTrafficClassCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsTrafficClassMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 3
-  optional uint32 length = 3;
-}
-
-// Traffic class
-message PatternFlowMplsTrafficClass {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClassCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowMplsTrafficClassCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowMplsBottomOfStackCounter {
-
-  // Description missing in models
-  // default = 1
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsBottomOfStackMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 1
-  optional uint32 length = 3;
-}
-
-// Bottom of stack
-message PatternFlowMplsBottomOfStack {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [1]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 1
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStackCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowMplsBottomOfStackCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsBottomOfStackMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowMplsTimeToLiveCounter {
-
-  // Description missing in models
-  // default = 64
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowMplsTimeToLiveMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Time to live
-message PatternFlowMplsTimeToLive {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 64
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [64]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLiveCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowMplsTimeToLiveCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowVxlanFlagsCounter {
-
-  // Description missing in models
-  // default = 8
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanFlagsMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Flags field with a bit format of RRRRIRRR. The I flag MUST be set to 1 for a valid
-// vxlan network id (VNI).   The other 7 bits (designated R) are reserved fields and
-// MUST be  set to zero on transmission and ignored on receipt.
-message PatternFlowVxlanFlags {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 8
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [8]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanFlagsCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanFlagsCounter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowVxlanReserved0Counter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanReserved0MetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 24
-  optional uint32 length = 3;
-}
-
-// Reserved field
-message PatternFlowVxlanReserved0 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0Counter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanReserved0Counter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 7;
-}
-
-// integer counter pattern
-message PatternFlowVxlanVniCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanVniMetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 24
-  optional uint32 length = 3;
-}
-
-// VXLAN network id
-message PatternFlowVxlanVni {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      auto = 1;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 0
-  optional uint32 auto = 4;
-
-  // Description missing in models
-  PatternFlowVxlanVniCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowVxlanVniCounter decrement = 7;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanVniMetricTag metric_tags = 8;
-}
-
-// integer counter pattern
-message PatternFlowVxlanReserved1Counter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Metric tag can be used to enable tracking portion of or all bits in a corresponding
-// header field for metrics per each applicable value. These would appear as tagged
-// metrics in corresponding flow metrics.
-message PatternFlowVxlanReserved1MetricTag {
-
-  // Name used to identify the metrics associated with the values applicable for configured
-  // offset and length inside corresponding header field
-  // required = true
-  optional string name = 1;
-
-  // Offset in bits relative to start of corresponding header field
-  // default = 0
-  optional uint32 offset = 2;
-
-  // Number of bits to track for metrics starting from configured offset of corresponding
-  // header field
-  // default = 8
-  optional uint32 length = 3;
-}
-
-// Reserved field
-message PatternFlowVxlanReserved1 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1Counter increment = 5;
-
-  // Description missing in models
-  PatternFlowVxlanReserved1Counter decrement = 6;
-
-  // One or more metric tags can be used to enable tracking portion of or all bits in
-  // a corresponding header field for metrics per each applicable value. These would appear
-  // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -25173,6 +25173,540 @@ message PatternFlowRSVPPathObjectsCustomType {
 
   // Description missing in models
   PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 6;
+}
+
+// Destination MAC address
+message FilterFilterEthernetDst {
+
+  // The value to be considered for the filtering criteria.
+  // default = 00:00:00:00:00:00
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffffffff
+  optional string mask = 2;
+}
+
+// Source MAC address
+message FilterFilterEthernetSrc {
+
+  // The value to be considered for the filtering criteria.
+  // default = 00:00:00:00:00:00
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffffffff
+  optional string mask = 2;
+}
+
+// Ethernet type
+message FilterFilterEthernetEtherType {
+
+  // The value to be considered for the filtering criteria.
+  // default = 65535
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Priority flow control queue
+message FilterFilterEthernetPfcQueue {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Priority code point
+message FilterFilterVlanPriority {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Canonical format indicator or drop elegible indicator
+message FilterFilterVlanCfi {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Vlan identifier
+message FilterFilterVlanId {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Protocol identifier
+message FilterFilterVlanTpid {
+
+  // The value to be considered for the filtering criteria.
+  // default = 65535
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Version
+message FilterFilterIpv4Version {
+
+  // The value to be considered for the filtering criteria.
+  // default = 4
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Header length
+message FilterFilterIpv4HeaderLength {
+
+  // The value to be considered for the filtering criteria.
+  // default = 5
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Total length
+message FilterFilterIpv4TotalLength {
+
+  // The value to be considered for the filtering criteria.
+  // default = 46
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Identification
+message FilterFilterIpv4Identification {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Reserved flag.
+message FilterFilterIpv4Reserved {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Dont fragment flag If the dont_fragment flag is set and fragmentation is required
+// to route the packet then the packet is dropped.
+message FilterFilterIpv4DontFragment {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// More fragments flag
+message FilterFilterIpv4MoreFragments {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Fragment offset
+message FilterFilterIpv4FragmentOffset {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Time to live
+message FilterFilterIpv4TimeToLive {
+
+  // The value to be considered for the filtering criteria.
+  // default = 64
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Protocol, default is 61 any host internal protocol
+message FilterFilterIpv4Protocol {
+
+  // The value to be considered for the filtering criteria.
+  // default = 61
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Source address
+message FilterFilterIpv4Src {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0.0.0.0
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffff
+  optional string mask = 2;
+}
+
+// Destination address
+message FilterFilterIpv4Dst {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0.0.0.0
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffff
+  optional string mask = 2;
+}
+
+// Raw priority
+message FilterFilterIpv4PriorityRaw {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Per hop behavior
+message FilterFilterIpv4DscpPhb {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Explicit congestion notification
+message FilterFilterIpv4DscpEcn {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Precedence
+message FilterFilterIpv4TosPrecedence {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Delay
+message FilterFilterIpv4TosDelay {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Throughput
+message FilterFilterIpv4TosThroughput {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Reliability
+message FilterFilterIpv4TosReliability {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Monetary
+message FilterFilterIpv4TosMonetary {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Unused
+message FilterFilterIpv4TosUnused {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Label of routers
+message FilterFilterMplsLabel {
+
+  // The value to be considered for the filtering criteria.
+  // default = 16
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffff
+  optional string mask = 2;
+}
+
+// Traffic class
+message FilterFilterMplsTrafficClass {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Bottom of stack
+message FilterFilterMplsBottomOfStack {
+
+  // The value to be considered for the filtering criteria.
+  // default = 1
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Time to live
+message FilterFilterMplsTimeToLive {
+
+  // The value to be considered for the filtering criteria.
+  // default = 64
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Version number
+message FilterFilterIpv6Version {
+
+  // The value to be considered for the filtering criteria.
+  // default = 6
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Traffic class
+message FilterFilterIpv6TrafficClass {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Flow label
+message FilterFilterIpv6FlowLabel {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffff
+  optional string mask = 2;
+}
+
+// Payload length
+message FilterFilterIpv6PayloadLength {
+
+  // The value to be considered for the filtering criteria.
+  // default = 0
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffff
+  optional string mask = 2;
+}
+
+// Next header
+message FilterFilterIpv6NextHeader {
+
+  // The value to be considered for the filtering criteria.
+  // default = 59
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Hop limit
+message FilterFilterIpv6HopLimit {
+
+  // The value to be considered for the filtering criteria.
+  // default = 64
+  optional uint32 value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ff
+  optional string mask = 2;
+}
+
+// Source address
+message FilterFilterIpv6Src {
+
+  // The value to be considered for the filtering criteria.
+  // default = ::0
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffffffffffffffffffffffffffff
+  optional string mask = 2;
+}
+
+// Destination address
+message FilterFilterIpv6Dst {
+
+  // The value to be considered for the filtering criteria.
+  // default = ::0
+  optional string value = 1;
+
+  // The corresponding mask configuration for the value to be considered in order to check
+  // for a range of allowed values.
+  // default = ffffffffffffffffffffffffffffffff
+  optional string mask = 2;
 }
 
 // Version details
