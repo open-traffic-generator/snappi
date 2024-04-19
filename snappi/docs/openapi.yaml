@@ -12419,6 +12419,8 @@ components:
       type: object
       required:
       - offset
+      - value
+      - mask
       properties:
         offset:
           description: |-
@@ -12431,14 +12433,12 @@ components:
             The value to be considered for the filtering criteria.
           type: string
           format: hex
-          default: '00'
           x-field-uid: 2
         mask:
           description: |-
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
           type: string
           format: hex
-          default: '00'
           x-field-uid: 3
     Error:
       description: |-
@@ -35158,6 +35158,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35182,6 +35183,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 7
           x-field-uid: 2
           type: string
           format: hex
@@ -35206,6 +35208,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 7
           x-field-uid: 2
           type: string
           format: hex
@@ -35230,6 +35233,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35254,6 +35258,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to fff
           x-field-uid: 2
           type: string
           format: hex
@@ -35278,6 +35283,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35302,6 +35308,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to f
           x-field-uid: 2
           type: string
           format: hex
@@ -35326,6 +35333,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to f
           x-field-uid: 2
           type: string
           format: hex
@@ -35350,6 +35358,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35374,6 +35383,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35398,6 +35408,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35422,6 +35433,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35446,6 +35458,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35470,6 +35483,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1f
           x-field-uid: 2
           type: string
           format: hex
@@ -35494,6 +35508,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35518,6 +35533,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35588,6 +35604,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35612,6 +35629,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 3f
           x-field-uid: 2
           type: string
           format: hex
@@ -35636,6 +35654,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 3
           x-field-uid: 2
           type: string
           format: hex
@@ -35660,6 +35679,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 7
           x-field-uid: 2
           type: string
           format: hex
@@ -35684,6 +35704,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35708,6 +35729,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35732,6 +35754,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35756,6 +35779,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35780,6 +35804,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -35804,6 +35829,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to f
           x-field-uid: 2
           type: string
           format: hex
@@ -35828,6 +35854,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35852,6 +35879,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to fffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35876,6 +35904,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ffff
           x-field-uid: 2
           type: string
           format: hex
@@ -35900,6 +35929,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35924,6 +35954,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex
@@ -35994,6 +36025,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to fffff
           x-field-uid: 2
           type: string
           format: hex
@@ -36018,6 +36050,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 7
           x-field-uid: 2
           type: string
           format: hex
@@ -36042,6 +36075,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to 1
           x-field-uid: 2
           type: string
           format: hex
@@ -36066,6 +36100,7 @@ components:
             The corresponding mask configuration for the value to be considered in order to check for a range of allowed values.
 
              0 bit signifies exact match and f signifies ignore for masking.
+             Allowed hex values are within the range of 0 to ff
           x-field-uid: 2
           type: string
           format: hex

@@ -9519,12 +9519,12 @@ message FilterFieldCustom {
   optional uint32 offset = 1;
 
   // The value to be considered for the filtering criteria.
-  // default = 00
+  // required = true
   optional string value = 2;
 
   // The corresponding mask configuration for the value to be considered in order to check
   // for a range of allowed values.
-  // default = 00
+  // required = true
   optional string mask = 3;
 }
 
@@ -25208,6 +25208,7 @@ message FilterFilterEthernetEtherType {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ffff
   // default = 0000
   optional string mask = 2;
 }
@@ -25223,6 +25224,7 @@ message FilterFilterEthernetPfcQueue {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 7
   // default = 0
   optional string mask = 2;
 }
@@ -25238,6 +25240,7 @@ message FilterFilterVlanPriority {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 7
   // default = 0
   optional string mask = 2;
 }
@@ -25253,6 +25256,7 @@ message FilterFilterVlanCfi {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25268,6 +25272,7 @@ message FilterFilterVlanId {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to fff
   // default = 000
   optional string mask = 2;
 }
@@ -25283,6 +25288,7 @@ message FilterFilterVlanTpid {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ffff
   // default = 0000
   optional string mask = 2;
 }
@@ -25298,6 +25304,7 @@ message FilterFilterIpv4Version {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to f
   // default = 0
   optional string mask = 2;
 }
@@ -25313,6 +25320,7 @@ message FilterFilterIpv4HeaderLength {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to f
   // default = 0
   optional string mask = 2;
 }
@@ -25328,6 +25336,7 @@ message FilterFilterIpv4TotalLength {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ffff
   // default = 0000
   optional string mask = 2;
 }
@@ -25343,6 +25352,7 @@ message FilterFilterIpv4Identification {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ffff
   // default = 0000
   optional string mask = 2;
 }
@@ -25358,6 +25368,7 @@ message FilterFilterIpv4Reserved {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25374,6 +25385,7 @@ message FilterFilterIpv4DontFragment {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25389,6 +25401,7 @@ message FilterFilterIpv4MoreFragments {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25404,6 +25417,7 @@ message FilterFilterIpv4FragmentOffset {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1f
   // default = 00
   optional string mask = 2;
 }
@@ -25419,6 +25433,7 @@ message FilterFilterIpv4TimeToLive {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25434,6 +25449,7 @@ message FilterFilterIpv4Protocol {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25479,6 +25495,7 @@ message FilterFilterIpv4PriorityRaw {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25494,6 +25511,7 @@ message FilterFilterIpv4DscpPhb {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 3f
   // default = 00
   optional string mask = 2;
 }
@@ -25509,6 +25527,7 @@ message FilterFilterIpv4DscpEcn {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 3
   // default = 0
   optional string mask = 2;
 }
@@ -25524,6 +25543,7 @@ message FilterFilterIpv4TosPrecedence {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 7
   // default = 0
   optional string mask = 2;
 }
@@ -25539,6 +25559,7 @@ message FilterFilterIpv4TosDelay {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25554,6 +25575,7 @@ message FilterFilterIpv4TosThroughput {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25569,6 +25591,7 @@ message FilterFilterIpv4TosReliability {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25584,6 +25607,7 @@ message FilterFilterIpv4TosMonetary {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25599,6 +25623,7 @@ message FilterFilterIpv4TosUnused {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25614,6 +25639,7 @@ message FilterFilterIpv6Version {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to f
   // default = 0
   optional string mask = 2;
 }
@@ -25629,6 +25655,7 @@ message FilterFilterIpv6TrafficClass {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25644,6 +25671,7 @@ message FilterFilterIpv6FlowLabel {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to fffff
   // default = 00000
   optional string mask = 2;
 }
@@ -25659,6 +25687,7 @@ message FilterFilterIpv6PayloadLength {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ffff
   // default = 0000
   optional string mask = 2;
 }
@@ -25674,6 +25703,7 @@ message FilterFilterIpv6NextHeader {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25689,6 +25719,7 @@ message FilterFilterIpv6HopLimit {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
@@ -25734,6 +25765,7 @@ message FilterFilterMplsLabel {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to fffff
   // default = 00000
   optional string mask = 2;
 }
@@ -25749,6 +25781,7 @@ message FilterFilterMplsTrafficClass {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 7
   // default = 0
   optional string mask = 2;
 }
@@ -25764,6 +25797,7 @@ message FilterFilterMplsBottomOfStack {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to 1
   // default = 0
   optional string mask = 2;
 }
@@ -25779,6 +25813,7 @@ message FilterFilterMplsTimeToLive {
   // for a range of allowed values.
   // 
   // 0 bit signifies exact match and f signifies ignore for masking.
+  // Allowed hex values are within the range of 0 to ff
   // default = 00
   optional string mask = 2;
 }
