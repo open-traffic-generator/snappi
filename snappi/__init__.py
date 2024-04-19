@@ -1050,6 +1050,7 @@ from .snappi import LldpSystemName
 from .snappi import LldpIter
 from .snappi import ReceiveBins
 from .snappi import ReceiveBinsAssociation
+from .snappi import ReceivePacketHeaders
 from .snappi import FilterPacket
 from .snappi import FilterEthernet
 from .snappi import FilterFilterEthernetDst
@@ -1089,7 +1090,6 @@ from .snappi import FilterFilterIpv4MoreFragments
 from .snappi import FilterFilterIpv4FragmentOffset
 from .snappi import FilterFilterIpv4TimeToLive
 from .snappi import FilterFilterIpv4Protocol
-from .snappi import FilterField
 from .snappi import FilterFilterIpv4Src
 from .snappi import FilterFilterIpv4Dst
 from .snappi import FilterIpv6
