@@ -17258,7 +17258,7 @@ components:
         Lease information of DHCP Server.
       type: object
       properties:
-        dhcp_client_name:
+        dhcp_server_name:
           description: |-
             The name of a DHCP Server.
           type: string

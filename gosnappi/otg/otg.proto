@@ -12648,7 +12648,7 @@ message Dhcpv4LeaseStateRequest {
 message Dhcpv4LeasesState {
 
   // The name of a DHCP Server.
-  optional string dhcp_client_name = 1;
+  optional string dhcp_server_name = 1;
 
   // Description missing in models
   repeated Dhcpv4LeaseState leases = 2;
