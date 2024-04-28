@@ -10298,7 +10298,7 @@ message MetricsResponse {
       lldp_metrics = 8;
       rsvp_metrics = 9;
       dhcpv4_client = 10;
-      dhcpv6_client = 11;
+      dhcpv4_server = 11;
     }
   }
   // Description missing in models

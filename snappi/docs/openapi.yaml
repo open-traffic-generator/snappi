@@ -13486,7 +13486,7 @@ components:
               x-field-uid: 9
             dhcpv4_client:
               x-field-uid: 10
-            dhcpv6_client:
+            dhcpv4_server:
               x-field-uid: 11
           enum:
           - flow_metrics
@@ -13499,7 +13499,7 @@ components:
           - lldp_metrics
           - rsvp_metrics
           - dhcpv4_client
-          - dhcpv6_client
+          - dhcpv4_server
         port_metrics:
           type: array
           items:
