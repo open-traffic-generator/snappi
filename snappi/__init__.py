@@ -1050,6 +1050,8 @@ from .snappi import LldpSystemName
 from .snappi import LldpIter
 from .snappi import ReceiveBins
 from .snappi import ReceiveBinsAssociation
+from .snappi import ReceiveBinsMode
+from .snappi import Bins
 from .snappi import ReceivePacketHeaders
 from .snappi import FilterPacket
 from .snappi import FilterEthernet
@@ -1103,6 +1105,7 @@ from .snappi import FilterFilterIpv6Src
 from .snappi import FilterFilterIpv6Dst
 from .snappi import FilterFieldCustom
 from .snappi import FilterPacketIter
+from .snappi import BinsIter
 from .snappi import ReceiveBinsIter
 from .snappi import Warning
 from .snappi import Error

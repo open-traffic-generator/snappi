@@ -54,8 +54,8 @@ message Config {
 
   // Under Review: There may be changes in receive_bins configuration
   // 
-  // The receive_bins that will be configured on traffic generator. To get metrics according
-  // to configured bins/buckets.
+  // A list of bins that can be configured on the traffic generator,
+  // allowing for the retrieval of metrics based on the configured bins/buckets.
   repeated ReceiveBins receive_bins = 10;
 }
 
@@ -9428,6 +9428,16 @@ message ReceiveBins {
   // Association.
   ReceiveBinsAssociation association = 1;
 
+  // TBD
+  ReceiveBinsMode mode = 2;
+
+  // A list of bins that can be configured for the selected association
+  repeated Bins bins = 3;
+}
+
+// Configuration for Bins settings.
+message Bins {
+
   // Description missing in models
   ReceivePacketHeaders bin_filters = 2;
 
@@ -9437,25 +9447,53 @@ message ReceiveBins {
   optional string name = 3;
 }
 
+// The mode to be followed for populating bins with received packets satisfying the
+// filter criteria.
+// 
+// 
+// Sequential mode populates bins one by one, ensuring that no two bins contain duplicate
+// packets
+// Parallel mode populates multiple bins simultaneously, allowing one or more bins to
+// contain duplicate packets.
+// 
+// 
+// If the mode is set to sequential, a default bin will automatically be created. This
+// bin will display the number of packets that did not match with any other configured
+// bin.
+message ReceiveBinsMode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      sequential = 1;
+      parallel = 2;
+    }
+  }
+  // Receive Bin Mode Options
+  // required = true
+  optional Choice.Enum choice = 1;
+}
+
 // Configuration for receive_bins Association. Based on the association, receive_bins
-// will be applied to count packets on per port or per flow.
+// will be applied to count packets on per port or any other parameters supported in
+// future.
 message ReceiveBinsAssociation {
 
   message Choice {
     enum Enum {
       unspecified = 0;
-      port_names = 1;
+      port_name = 1;
     }
   }
   // The type of association.
   optional Choice.Enum choice = 1;
 
-  // List of port names.
+  // Name of the associated port for which bins would be configured.
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  repeated string port_names = 2;
+  optional string port_name = 2;
 }
 
 // A list of filters to apply to the packet on receiving ports.
