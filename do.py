@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "enhance_x_field_auto"
+USE_OPENAPIART_BRANCH = None
 USE_MODELS_BRANCH = "traffic_over_dhcp_interface"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
