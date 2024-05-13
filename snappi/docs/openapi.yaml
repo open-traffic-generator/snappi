@@ -17196,7 +17196,7 @@ components:
         The IPv4 address associated with this DHCP Client session.
       type: object
       properties:
-        dhcp_client_name:
+        dhcp_client_names:
           description: |-
             The name of a DHCPv4 Client.
           type: string

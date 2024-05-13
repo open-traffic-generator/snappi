@@ -12611,7 +12611,7 @@ message Dhcpv4InterfaceStateRequest {
 message Dhcpv4InterfaceState {
 
   // The name of a DHCPv4 Client.
-  optional string dhcp_client_name = 1;
+  optional string dhcp_client_names = 1;
 
   // The IP address associated with this DHCP Client session.
   optional string ipv4_address = 2;
