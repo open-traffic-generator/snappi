@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.1.0
+# Open Traffic Generator API 1.4.0
 # License: MIT
 
 import importlib
@@ -4664,8 +4664,6 @@ class Device(OpenApiObject):
         "vxlan": {"type": "DeviceVxlan"},
         "name": {"type": str},
         "rsvp": {"type": "DeviceRsvp"},
-        "dhcp_server": {"type": "DeviceDhcpServer"},
-        "relay_agent": {"type": "DeviceRelayAgent"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("name",)  # type: tuple(str)
@@ -4790,28 +4788,6 @@ class Device(OpenApiObject):
         """
         return self._get_property("rsvp", DeviceRsvp)
 
-    @property
-    def dhcp_server(self):
-        # type: () -> DeviceDhcpServer
-        """dhcp_server getter
-
-        Under Review: Information TBD. Configuration for one or more IPv4 or IPv6 DHCP servers.Under Review: Information TBD. Configuration for one or more IPv4 or IPv6 DHCP servers.Under Review: Information TBD. Configuration for one or more IPv4 or IPv6 DHCP servers.The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
-
-        Returns: DeviceDhcpServer
-        """
-        return self._get_property("dhcp_server", DeviceDhcpServer)
-
-    @property
-    def relay_agent(self):
-        # type: () -> DeviceRelayAgent
-        """relay_agent getter
-
-        Under Review: Information TBD. Top level container for relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046Under Review: Information TBD. Top level container for relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046Under Review: Information TBD. Top level container for relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046This module describes model for configuration related to Relay Agents. https://datatracker.ietf.org/doc/html/rfc3046.
-
-        Returns: DeviceRelayAgent
-        """
-        return self._get_property("relay_agent", DeviceRelayAgent)
-
 
 class DeviceEthernet(OpenApiObject):
     __slots__ = "_parent"
@@ -4831,8 +4807,6 @@ class DeviceEthernet(OpenApiObject):
         },
         "vlans": {"type": "DeviceVlanIter"},
         "name": {"type": str},
-        "dhcp_v4interfaces": {"type": "DeviceDhcpv4clientIter"},
-        "dhcp_v6interfaces": {"type": "DeviceDhcpv6clientIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("mac", "name")  # type: tuple(str)
@@ -4860,7 +4834,7 @@ class DeviceEthernet(OpenApiObject):
         # type: () -> EthernetConnection
         """connection getter
 
-        Ethernet interface connection to port, LAG, VXLAN tunnel or another Chained Ethernet.Ethernet interface connection to port, LAG, VXLAN tunnel or another Chained Ethernet.Ethernet interface connection to port, LAG, VXLAN tunnel or another Chained Ethernet.Device connection to physical, LAG or another device.
+        Ethernet interface connection to port, LAG or VXLAN tunnel.Ethernet interface connection to port, LAG or VXLAN tunnel.Ethernet interface connection to port, LAG or VXLAN tunnel.Device connection to physical, LAG or another device.
 
         Returns: EthernetConnection
         """
@@ -4970,32 +4944,6 @@ class DeviceEthernet(OpenApiObject):
             raise TypeError("Cannot set required property name as None")
         self._set_property("name", value)
 
-    @property
-    def dhcp_v4interfaces(self):
-        # type: () -> DeviceDhcpv4clientIter
-        """dhcp_v4interfaces getter
-
-        List of DHCPv4 Clients Configuration.
-
-        Returns: DeviceDhcpv4clientIter
-        """
-        return self._get_property(
-            "dhcp_v4interfaces", DeviceDhcpv4clientIter, self._parent, self._choice
-        )
-
-    @property
-    def dhcp_v6interfaces(self):
-        # type: () -> DeviceDhcpv6clientIter
-        """dhcp_v6interfaces getter
-
-        List of DHCPv6 Clients Configuration.
-
-        Returns: DeviceDhcpv6clientIter
-        """
-        return self._get_property(
-            "dhcp_v6interfaces", DeviceDhcpv6clientIter, self._parent, self._choice
-        )
-
 
 class EthernetConnection(OpenApiObject):
     __slots__ = ("_parent", "_choice")
@@ -5007,13 +4955,11 @@ class EthernetConnection(OpenApiObject):
                 "port_name",
                 "lag_name",
                 "vxlan_name",
-                "chained_ethernet_name",
             ],
         },
         "port_name": {"type": str},
         "lag_name": {"type": str},
         "vxlan_name": {"type": str},
-        "chained_ethernet_name": {"type": str},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -5023,25 +4969,17 @@ class EthernetConnection(OpenApiObject):
     PORT_NAME = "port_name"  # type: str
     LAG_NAME = "lag_name"  # type: str
     VXLAN_NAME = "vxlan_name"  # type: str
-    CHAINED_ETHERNET_NAME = "chained_ethernet_name"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
     def __init__(
-        self,
-        parent=None,
-        choice=None,
-        port_name=None,
-        lag_name=None,
-        vxlan_name=None,
-        chained_ethernet_name=None,
+        self, parent=None, choice=None, port_name=None, lag_name=None, vxlan_name=None
     ):
         super(EthernetConnection, self).__init__()
         self._parent = parent
         self._set_property("port_name", port_name)
         self._set_property("lag_name", lag_name)
         self._set_property("vxlan_name", vxlan_name)
-        self._set_property("chained_ethernet_name", chained_ethernet_name)
         if (
             "choice" in self._DEFAULTS
             and choice is None
@@ -5051,21 +4989,19 @@ class EthernetConnection(OpenApiObject):
         else:
             self._set_property("choice", choice)
 
-    def set(
-        self, port_name=None, lag_name=None, vxlan_name=None, chained_ethernet_name=None
-    ):
+    def set(self, port_name=None, lag_name=None, vxlan_name=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["chained_ethernet_name"], Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
+        # type: () -> Union[Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
         """choice getter
 
-        port_name, lag_name, vxlan_name, chained_ethernet
+        port_name, lag_name or vxlan_name
 
-        Returns: Union[Literal["chained_ethernet_name"], Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
+        Returns: Union[Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
         """
         return self._get_property("choice")
 
@@ -5073,9 +5009,9 @@ class EthernetConnection(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        port_name, lag_name, vxlan_name, chained_ethernet
+        port_name, lag_name or vxlan_name
 
-        value: Union[Literal["chained_ethernet_name"], Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
+        value: Union[Literal["lag_name"], Literal["port_name"], Literal["vxlan_name"]]
         """
         self._set_property("choice", value)
 
@@ -5141,27 +5077,6 @@ class EthernetConnection(OpenApiObject):
         value: str
         """
         self._set_property("vxlan_name", value, "vxlan_name")
-
-    @property
-    def chained_ethernet_name(self):
-        # type: () -> str
-        """chained_ethernet_name getter
-
-        The unique name of the Ethernet interface behind which this Ethernet is chained. Configuring IPv4/IPv6, Loopback IPv4/Ipv6 addresses or any protocol on Chained Ethernet except DHCP Client will be restricted by the implementation.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("chained_ethernet_name")
-
-    @chained_ethernet_name.setter
-    def chained_ethernet_name(self, value):
-        """chained_ethernet_name setter
-
-        The unique name of the Ethernet interface behind which this Ethernet is chained. Configuring IPv4/IPv6, Loopback IPv4/Ipv6 addresses or any protocol on Chained Ethernet except DHCP Client will be restricted by the implementation.. x-constraint:. /components/schemas/Device.Ethernet/properties/name.
-
-        value: str
-        """
-        self._set_property("chained_ethernet_name", value, "chained_ethernet_name")
 
 
 class DeviceIpv4(OpenApiObject):
@@ -5810,519 +5725,6 @@ class DeviceIpv6Iter(OpenApiIter):
             prefix=prefix,
             name=name,
         )
-        self._add(item)
-        return item
-
-
-class DeviceDhcpv4client(OpenApiObject):
-    __slots__ = ("_parent", "_choice")
-
-    _TYPES = {
-        "name": {"type": str},
-        "choice": {
-            "type": str,
-            "enum": [
-                "first_server",
-                "server_address",
-            ],
-        },
-        "first_server": {"type": bool},
-        "server_address": {"type": "Dhcpv4clientServer"},
-        "broadcast": {"type": bool},
-        "parameters_request_list": {"type": "Dhcpv4ClientParams"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name",)  # type: tuple(str)
-
-    _DEFAULTS = {
-        "choice": "first_server",
-        "first_server": True,
-        "broadcast": False,
-    }  # type: Dict[str, Union(type)]
-
-    FIRST_SERVER = "first_server"  # type: str
-    SERVER_ADDRESS = "server_address"  # type: str
-
-    _STATUS = {
-        "self": "DeviceDhcpv4client is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self, parent=None, choice=None, name=None, first_server=True, broadcast=False
-    ):
-        super(DeviceDhcpv4client, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("first_server", first_server)
-        self._set_property("broadcast", broadcast)
-        if (
-            "choice" in self._DEFAULTS
-            and choice is None
-            and self._DEFAULTS["choice"] in self._TYPES
-        ):
-            getattr(self, self._DEFAULTS["choice"])
-        else:
-            self._set_property("choice", choice)
-
-    def set(self, name=None, first_server=None, broadcast=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def server_address(self):
-        # type: () -> Dhcpv4clientServer
-        """Factory property that returns an instance of the Dhcpv4clientServer class
-
-        The address of the DHCP server from which the subnet will accept IP addresses.
-
-        Returns: Dhcpv4clientServer
-        """
-        return self._get_property(
-            "server_address", Dhcpv4clientServer, self, "server_address"
-        )
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def choice(self):
-        # type: () -> Union[Literal["first_server"], Literal["server_address"]]
-        """choice getter
-
-        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
-
-        Returns: Union[Literal["first_server"], Literal["server_address"]]
-        """
-        return self._get_property("choice")
-
-    @choice.setter
-    def choice(self, value):
-        """choice setter
-
-        The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses. The client chooses one server from which to request configuration parameters, based on the configuration parameters offered in the DHCPOFFER messages. first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses. server_address: The address of the DHCP server from which the subnet will accept IP addresses. If server_address is selected then next field 'server_address' to be assigned with IP address.
-
-        value: Union[Literal["first_server"], Literal["server_address"]]
-        """
-        self._set_property("choice", value)
-
-    @property
-    def first_server(self):
-        # type: () -> bool
-        """first_server getter
-
-        TBD
-
-        Returns: bool
-        """
-        return self._get_property("first_server")
-
-    @first_server.setter
-    def first_server(self, value):
-        """first_server setter
-
-        TBD
-
-        value: bool
-        """
-        self._set_property("first_server", value, "first_server")
-
-    @property
-    def broadcast(self):
-        # type: () -> bool
-        """broadcast getter
-
-        If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER and DHCPACK messages.
-
-        Returns: bool
-        """
-        return self._get_property("broadcast")
-
-    @broadcast.setter
-    def broadcast(self, value):
-        """broadcast setter
-
-        If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER and DHCPACK messages.
-
-        value: bool
-        """
-        self._set_property("broadcast", value)
-
-    @property
-    def parameters_request_list(self):
-        # type: () -> Dhcpv4ClientParams
-        """parameters_request_list getter
-
-        Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.Configuration Parameter request list by emulated DHCPv4 Client.Optional parameters field request list of DHCPv4 Client.
-
-        Returns: Dhcpv4ClientParams
-        """
-        return self._get_property("parameters_request_list", Dhcpv4ClientParams)
-
-
-class Dhcpv4clientServer(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "ip": {
-            "type": str,
-            "format": "ipv4",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, ip=None):
-        super(Dhcpv4clientServer, self).__init__()
-        self._parent = parent
-        self._set_property("ip", ip)
-
-    def set(self, ip=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def ip(self):
-        # type: () -> str
-        """ip getter
-
-        The address of the DHCP server.
-
-        Returns: str
-        """
-        return self._get_property("ip")
-
-    @ip.setter
-    def ip(self, value):
-        """ip setter
-
-        The address of the DHCP server.
-
-        value: str
-        """
-        self._set_property("ip", value)
-
-
-class Dhcpv4ClientParams(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "subnet_mask": {"type": bool},
-        "router": {"type": bool},
-        "renewal_timer": {"type": bool},
-        "rebinding_timer": {"type": bool},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "subnet_mask": True,
-        "router": True,
-        "renewal_timer": False,
-        "rebinding_timer": False,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        subnet_mask=True,
-        router=True,
-        renewal_timer=False,
-        rebinding_timer=False,
-    ):
-        super(Dhcpv4ClientParams, self).__init__()
-        self._parent = parent
-        self._set_property("subnet_mask", subnet_mask)
-        self._set_property("router", router)
-        self._set_property("renewal_timer", renewal_timer)
-        self._set_property("rebinding_timer", rebinding_timer)
-
-    def set(
-        self, subnet_mask=None, router=None, renewal_timer=None, rebinding_timer=None
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def subnet_mask(self):
-        # type: () -> bool
-        """subnet_mask getter
-
-        Request for the subnet mask option specifies the client's subnet mask as per RFC950.
-
-        Returns: bool
-        """
-        return self._get_property("subnet_mask")
-
-    @subnet_mask.setter
-    def subnet_mask(self, value):
-        """subnet_mask setter
-
-        Request for the subnet mask option specifies the client's subnet mask as per RFC950.
-
-        value: bool
-        """
-        self._set_property("subnet_mask", value)
-
-    @property
-    def router(self):
-        # type: () -> bool
-        """router getter
-
-        Request for the router option that specifies list of IP addresses for routers on the client's subnet.
-
-        Returns: bool
-        """
-        return self._get_property("router")
-
-    @router.setter
-    def router(self, value):
-        """router setter
-
-        Request for the router option that specifies list of IP addresses for routers on the client's subnet.
-
-        value: bool
-        """
-        self._set_property("router", value)
-
-    @property
-    def renewal_timer(self):
-        # type: () -> bool
-        """renewal_timer getter
-
-        Request for the renewal timer, T1. When the timer expires, the client transitions from the BOUND state to the RENEWING state.
-
-        Returns: bool
-        """
-        return self._get_property("renewal_timer")
-
-    @renewal_timer.setter
-    def renewal_timer(self, value):
-        """renewal_timer setter
-
-        Request for the renewal timer, T1. When the timer expires, the client transitions from the BOUND state to the RENEWING state.
-
-        value: bool
-        """
-        self._set_property("renewal_timer", value)
-
-    @property
-    def rebinding_timer(self):
-        # type: () -> bool
-        """rebinding_timer getter
-
-        Request for the rebinding timer (T2). When expires, the client transitions to the REBINDING state.
-
-        Returns: bool
-        """
-        return self._get_property("rebinding_timer")
-
-    @rebinding_timer.setter
-    def rebinding_timer(self, value):
-        """rebinding_timer setter
-
-        Request for the rebinding timer (T2). When expires, the client transitions to the REBINDING state.
-
-        value: bool
-        """
-        self._set_property("rebinding_timer", value)
-
-
-class DeviceDhcpv4clientIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(DeviceDhcpv4clientIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[DeviceDhcpv4client, Dhcpv4clientServer]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> DeviceDhcpv4clientIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> DeviceDhcpv4client
-        return self._next()
-
-    def next(self):
-        # type: () -> DeviceDhcpv4client
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, DeviceDhcpv4client):
-            raise Exception("Item is not an instance of DeviceDhcpv4client")
-
-    def dhcpv4client(self, name=None, first_server=True, broadcast=False):
-        # type: (str,bool,bool) -> DeviceDhcpv4clientIter
-        """Factory method that creates an instance of the DeviceDhcpv4client class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
-
-        Returns: DeviceDhcpv4clientIter
-        """
-        item = DeviceDhcpv4client(
-            parent=self._parent,
-            choice=self._choice,
-            name=name,
-            first_server=first_server,
-            broadcast=broadcast,
-        )
-        self._add(item)
-        return self
-
-    def add(self, name=None, first_server=True, broadcast=False):
-        # type: (str,bool,bool) -> DeviceDhcpv4client
-        """Add method that creates and returns an instance of the DeviceDhcpv4client class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv4 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
-
-        Returns: DeviceDhcpv4client
-        """
-        item = DeviceDhcpv4client(
-            parent=self._parent,
-            choice=self._choice,
-            name=name,
-            first_server=first_server,
-            broadcast=broadcast,
-        )
-        self._add(item)
-        return item
-
-
-class DeviceDhcpv6client(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DeviceDhcpv6client is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None):
-        super(DeviceDhcpv6client, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-
-    def set(self, name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-
-class DeviceDhcpv6clientIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(DeviceDhcpv6clientIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[DeviceDhcpv6client]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> DeviceDhcpv6clientIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> DeviceDhcpv6client
-        return self._next()
-
-    def next(self):
-        # type: () -> DeviceDhcpv6client
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, DeviceDhcpv6client):
-            raise Exception("Item is not an instance of DeviceDhcpv6client")
-
-    def dhcpv6client(self, name=None):
-        # type: (str) -> DeviceDhcpv6clientIter
-        """Factory method that creates an instance of the DeviceDhcpv6client class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
-
-        Returns: DeviceDhcpv6clientIter
-        """
-        item = DeviceDhcpv6client(parent=self._parent, name=name)
-        self._add(item)
-        return self
-
-    def add(self, name=None):
-        # type: (str) -> DeviceDhcpv6client
-        """Add method that creates and returns an instance of the DeviceDhcpv6client class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv6 Client on single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
-
-        Returns: DeviceDhcpv6client
-        """
-        item = DeviceDhcpv6client(parent=self._parent, name=name)
         self._add(item)
         return item
 
@@ -10443,7 +9845,7 @@ class BgpV4Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/DhcpClient.V4/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         Returns: str
         """
@@ -10453,7 +9855,7 @@ class BgpV4Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The unique name of the IPv4, Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name. /components/schemas/DhcpClient.V4/properties/name.
+        The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv4/properties/name. /components/schemas/Device.Ipv4Loopback/properties/name.
 
         value: str
         """
@@ -21319,6 +20721,7 @@ class BgpAttributes(OpenApiObject):
             "itemformat": "ipv4",
         },
         "extended_communities": {"type": "BgpExtendedCommunityIter"},
+        "tunnel_encapsulation": {"type": "BgpAttributesTunnelEncapsulation"},
         "mp_reach": {"type": "BgpAttributesMpReachNlri"},
         "mp_unreach": {"type": "BgpAttributesMpUnreachNlri"},
     }  # type: Dict[str, str]
@@ -21550,11 +20953,24 @@ class BgpAttributes(OpenApiObject):
         )
 
     @property
+    def tunnel_encapsulation(self):
+        # type: () -> BgpAttributesTunnelEncapsulation
+        """tunnel_encapsulation getter
+
+        The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.The TUNNEL_ENCAPSULATION attribute is used by BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.. It is defined in RFC9012 and is assigned Type code of 23.
+
+        Returns: BgpAttributesTunnelEncapsulation
+        """
+        return self._get_property(
+            "tunnel_encapsulation", BgpAttributesTunnelEncapsulation
+        )
+
+    @property
     def mp_reach(self):
         # type: () -> BgpAttributesMpReachNlri
         """mp_reach getter
 
-        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_REACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 draft-ietf-idr-sr-policy-safi-02 Section 2.1 ). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpReachNlri
         """
@@ -21565,7 +20981,7 @@ class BgpAttributes(OpenApiObject):
         # type: () -> BgpAttributesMpUnreachNlri
         """mp_unreach getter
 
-        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as
+        The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73The MP_UNREACH attribute is an optional attribute which can be included in the attributes of BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.. The following AFI SAFI combinations are supported:. IPv4 Unicast with AFI as and SAFI as . IPv6 Unicast with AFI as and SAFI as . Segment Routing Policy for IPv4 Unicast with AFI as and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1). Segment Routing Policy for IPv6 Unicast with AFI as and SAFI as 73
 
         Returns: BgpAttributesMpUnreachNlri
         """
@@ -23162,6 +22578,3358 @@ class BgpAttributesOriginatorId(OpenApiObject):
         self._set_property("value", value)
 
 
+class BgpAttributesTunnelEncapsulation(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "sr_policy",
+            ],
+        },
+        "sr_policy": {"type": "BgpAttributesSegmentRoutingPolicy"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "sr_policy",
+    }  # type: Dict[str, Union(type)]
+
+    SR_POLICY = "sr_policy"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesTunnelEncapsulation, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def sr_policy(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicy
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicy class
+
+        Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.. This information is carried in TUNNEL_ENCAPSULATION attribute with type set to SR Policy (15).
+
+        Returns: BgpAttributesSegmentRoutingPolicy
+        """
+        return self._get_property(
+            "sr_policy", BgpAttributesSegmentRoutingPolicy, self, "sr_policy"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["sr_policy"]]
+        """choice getter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        Returns: Union[Literal["sr_policy"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Identifies type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+
+        value: Union[Literal["sr_policy"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicy(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "binding_segment_identifier": {"type": "BgpAttributesBsid"},
+        "srv6_binding_segment_identifier": {"type": "BgpAttributesSrv6BsidIter"},
+        "preference": {"type": "BgpAttributesSrPolicyPreference"},
+        "priority": {"type": "BgpAttributesSrPolicyPriority"},
+        "policy_name": {"type": "BgpAttributesSrPolicyPolicyName"},
+        "policy_candidate_name": {"type": "BgpAttributesSrPolicyPolicyCandidateName"},
+        "explicit_null_label_policy": {
+            "type": "BgpAttributesSrPolicyExplicitNullPolicy"
+        },
+        "segment_list": {"type": "BgpAttributesSrPolicySegmentListIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicy, self).__init__()
+        self._parent = parent
+
+    @property
+    def binding_segment_identifier(self):
+        # type: () -> BgpAttributesBsid
+        """binding_segment_identifier getter
+
+        The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent with SR Policy Tunnel Encapsulation attribute.. When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID if this value (label in MPLS, IPv6 address in SRv6) is available.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 . It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6 Binding SID sub-TLV that enables the specification of the SRv6 Endpoint Behavior should be used.
+
+        Returns: BgpAttributesBsid
+        """
+        return self._get_property("binding_segment_identifier", BgpAttributesBsid)
+
+    @property
+    def srv6_binding_segment_identifier(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        """srv6_binding_segment_identifier getter
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one. or more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        return self._get_property(
+            "srv6_binding_segment_identifier",
+            BgpAttributesSrv6BsidIter,
+            self._parent,
+            self._choice,
+        )
+
+    @property
+    def preference(self):
+        # type: () -> BgpAttributesSrPolicyPreference
+        """preference getter
+
+        Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .. Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.. It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 ..
+
+        Returns: BgpAttributesSrPolicyPreference
+        """
+        return self._get_property("preference", BgpAttributesSrPolicyPreference)
+
+    @property
+    def priority(self):
+        # type: () -> BgpAttributesSrPolicyPriority
+        """priority getter
+
+        Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.. It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPriority
+        """
+        return self._get_property("priority", BgpAttributesSrPolicyPriority)
+
+    @property
+    def policy_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyName
+        """policy_name getter
+
+        Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR Policy for which the candidate path is being advertised for debugging. - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPolicyName
+        """
+        return self._get_property("policy_name", BgpAttributesSrPolicyPolicyName)
+
+    @property
+    def policy_candidate_name(self):
+        # type: () -> BgpAttributesSrPolicyPolicyCandidateName
+        """policy_candidate_name getter
+
+        Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic name for the SR Policy candidate path for debugging. - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .
+
+        Returns: BgpAttributesSrPolicyPolicyCandidateName
+        """
+        return self._get_property(
+            "policy_candidate_name", BgpAttributesSrPolicyPolicyCandidateName
+        )
+
+    @property
+    def explicit_null_label_policy(self):
+        # type: () -> BgpAttributesSrPolicyExplicitNullPolicy
+        """explicit_null_label_policy getter
+
+        This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP. packet before other labels for IPv4 or IPv6 flows.. It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: BgpAttributesSrPolicyExplicitNullPolicy
+        """
+        return self._get_property(
+            "explicit_null_label_policy", BgpAttributesSrPolicyExplicitNullPolicy
+        )
+
+    @property
+    def segment_list(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        """segment_list getter
+
+        TBD
+
+        Returns: BgpAttributesSrPolicySegmentListIter
+        """
+        return self._get_property(
+            "segment_list",
+            BgpAttributesSrPolicySegmentListIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesBsid(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "mpls",
+                "srv6",
+            ],
+        },
+        "mpls": {"type": "BgpAttributesBsidMpls"},
+        "srv6": {"type": "BgpAttributesBsidSrv6"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    MPLS = "mpls"  # type: str
+    SRV6 = "srv6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesBsid, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def mpls(self):
+        # type: () -> BgpAttributesBsidMpls
+        """Factory property that returns an instance of the BgpAttributesBsidMpls class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
+
+        Returns: BgpAttributesBsidMpls
+        """
+        return self._get_property("mpls", BgpAttributesBsidMpls, self, "mpls")
+
+    @property
+    def srv6(self):
+        # type: () -> BgpAttributesBsidSrv6
+        """Factory property that returns an instance of the BgpAttributesBsidSrv6 class
+
+        When the active candidate path has specified Binding Segment Identifier, the SR Policy uses that BSID defined as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.2 .
+
+        Returns: BgpAttributesBsidSrv6
+        """
+        return self._get_property("srv6", BgpAttributesBsidSrv6, self, "srv6")
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["mpls"], Literal["srv6"]]
+        """choice getter
+
+        The type of Segment Identifier.
+
+        Returns: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of Segment Identifier.
+
+        value: Union[Literal["mpls"], Literal["srv6"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesBsidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, flag_specified_bsid_only=False, flag_drop_upon_invalid=False
+    ):
+        super(BgpAttributesBsidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+
+    def set(self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSidMpls(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "label": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 1048576,
+        },
+        "traffic_class": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 7,
+        },
+        "flag_bos": {"type": bool},
+        "ttl": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 63,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "label": 16,
+        "traffic_class": 0,
+        "flag_bos": True,
+        "ttl": 63,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, label=16, traffic_class=0, flag_bos=True, ttl=63):
+        super(BgpAttributesSidMpls, self).__init__()
+        self._parent = parent
+        self._set_property("label", label)
+        self._set_property("traffic_class", traffic_class)
+        self._set_property("flag_bos", flag_bos)
+        self._set_property("ttl", ttl)
+
+    def set(self, label=None, traffic_class=None, flag_bos=None, ttl=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def label(self):
+        # type: () -> int
+        """label getter
+
+        20 bit MPLS Label value.
+
+        Returns: int
+        """
+        return self._get_property("label")
+
+    @label.setter
+    def label(self, value):
+        """label setter
+
+        20 bit MPLS Label value.
+
+        value: int
+        """
+        self._set_property("label", value)
+
+    @property
+    def traffic_class(self):
+        # type: () -> int
+        """traffic_class getter
+
+        3 bits of Traffic Class.
+
+        Returns: int
+        """
+        return self._get_property("traffic_class")
+
+    @traffic_class.setter
+    def traffic_class(self, value):
+        """traffic_class setter
+
+        3 bits of Traffic Class.
+
+        value: int
+        """
+        self._set_property("traffic_class", value)
+
+    @property
+    def flag_bos(self):
+        # type: () -> bool
+        """flag_bos getter
+
+        Bottom of Stack
+
+        Returns: bool
+        """
+        return self._get_property("flag_bos")
+
+    @flag_bos.setter
+    def flag_bos(self, value):
+        """flag_bos setter
+
+        Bottom of Stack
+
+        value: bool
+        """
+        self._set_property("flag_bos", value)
+
+    @property
+    def ttl(self):
+        # type: () -> int
+        """ttl getter
+
+        8 bits Time to Live
+
+        Returns: int
+        """
+        return self._get_property("ttl")
+
+    @ttl.setter
+    def ttl(self, value):
+        """ttl setter
+
+        8 bits Time to Live
+
+        value: int
+        """
+        self._set_property("ttl", value)
+
+
+class BgpAttributesBsidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesBsidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self, flag_specified_bsid_only=None, flag_drop_upon_invalid=None, ipv6_addr=None
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+
+class BgpAttributesSrv6Bsid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flag_specified_bsid_only": {"type": bool},
+        "flag_drop_upon_invalid": {"type": bool},
+        "flag_srv6_endpoint_behavior": {"type": bool},
+        "ipv6_addr": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "flag_specified_bsid_only": False,
+        "flag_drop_upon_invalid": False,
+        "flag_srv6_endpoint_behavior": False,
+        "ipv6_addr": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        super(BgpAttributesSrv6Bsid, self).__init__()
+        self._parent = parent
+        self._set_property("flag_specified_bsid_only", flag_specified_bsid_only)
+        self._set_property("flag_drop_upon_invalid", flag_drop_upon_invalid)
+        self._set_property("flag_srv6_endpoint_behavior", flag_srv6_endpoint_behavior)
+        self._set_property("ipv6_addr", ipv6_addr)
+
+    def set(
+        self,
+        flag_specified_bsid_only=None,
+        flag_drop_upon_invalid=None,
+        flag_srv6_endpoint_behavior=None,
+        ipv6_addr=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flag_specified_bsid_only(self):
+        # type: () -> bool
+        """flag_specified_bsid_only getter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_specified_bsid_only")
+
+    @flag_specified_bsid_only.setter
+    def flag_specified_bsid_only(self, value):
+        """flag_specified_bsid_only setter
+
+        S-Flag: This flag encodes the "Specified-BSID-only" behavior. It's usage is described in section 6.2.3 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_specified_bsid_only", value)
+
+    @property
+    def flag_drop_upon_invalid(self):
+        # type: () -> bool
+        """flag_drop_upon_invalid getter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        Returns: bool
+        """
+        return self._get_property("flag_drop_upon_invalid")
+
+    @flag_drop_upon_invalid.setter
+    def flag_drop_upon_invalid(self, value):
+        """flag_drop_upon_invalid setter
+
+        I-Flag: This flag encodes the "Drop Upon Invalid" behavior. It's usage is described in section 8.2 in [RFC9256].
+
+        value: bool
+        """
+        self._set_property("flag_drop_upon_invalid", value)
+
+    @property
+    def flag_srv6_endpoint_behavior(self):
+        # type: () -> bool
+        """flag_srv6_endpoint_behavior getter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: bool
+        """
+        return self._get_property("flag_srv6_endpoint_behavior")
+
+    @flag_srv6_endpoint_behavior.setter
+    def flag_srv6_endpoint_behavior(self, value):
+        """flag_srv6_endpoint_behavior setter
+
+        B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
+
+        value: bool
+        """
+        self._set_property("flag_srv6_endpoint_behavior", value)
+
+    @property
+    def ipv6_addr(self):
+        # type: () -> str
+        """ipv6_addr getter
+
+        IPv6 address denoting the SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_addr")
+
+    @ipv6_addr.setter
+    def ipv6_addr(self, value):
+        """ipv6_addr setter
+
+        IPv6 address denoting the SRv6 SID.
+
+        value: str
+        """
+        self._set_property("ipv6_addr", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure(
+    OpenApiObject
+):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "endpoint_behaviour": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 4,
+        },
+        "lb_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "ln_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "func_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+        "arg_length": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "endpoint_behaviour": "ffff",
+        "lb_length": 0,
+        "ln_length": 0,
+        "func_length": 0,
+        "arg_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        endpoint_behaviour="ffff",
+        lb_length=0,
+        ln_length=0,
+        func_length=0,
+        arg_length=0,
+    ):
+        super(
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("endpoint_behaviour", endpoint_behaviour)
+        self._set_property("lb_length", lb_length)
+        self._set_property("ln_length", ln_length)
+        self._set_property("func_length", func_length)
+        self._set_property("arg_length", arg_length)
+
+    def set(
+        self,
+        endpoint_behaviour=None,
+        lb_length=None,
+        ln_length=None,
+        func_length=None,
+        arg_length=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def endpoint_behaviour(self):
+        # type: () -> str
+        """endpoint_behaviour getter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        Returns: str
+        """
+        return self._get_property("endpoint_behaviour")
+
+    @endpoint_behaviour.setter
+    def endpoint_behaviour(self, value):
+        """endpoint_behaviour setter
+
+        This is 2-octet field that is used to specify the SRv6 Endpoint Behavior code point for the SRv6 SID as defined in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice of SRv6 Endpoint Behavior is left to the headend. Well known 16-bit values for this field are available at https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+
+        value: str
+        """
+        self._set_property("endpoint_behaviour", value)
+
+    @property
+    def lb_length(self):
+        # type: () -> int
+        """lb_length getter
+
+        SRv6 SID Locator Block length in bits.
+
+        Returns: int
+        """
+        return self._get_property("lb_length")
+
+    @lb_length.setter
+    def lb_length(self, value):
+        """lb_length setter
+
+        SRv6 SID Locator Block length in bits.
+
+        value: int
+        """
+        self._set_property("lb_length", value)
+
+    @property
+    def ln_length(self):
+        # type: () -> int
+        """ln_length getter
+
+        SRv6 SID Locator Node length in bits.
+
+        Returns: int
+        """
+        return self._get_property("ln_length")
+
+    @ln_length.setter
+    def ln_length(self, value):
+        """ln_length setter
+
+        SRv6 SID Locator Node length in bits.
+
+        value: int
+        """
+        self._set_property("ln_length", value)
+
+    @property
+    def func_length(self):
+        # type: () -> int
+        """func_length getter
+
+        SRv6 SID Function length in bits.
+
+        Returns: int
+        """
+        return self._get_property("func_length")
+
+    @func_length.setter
+    def func_length(self, value):
+        """func_length setter
+
+        SRv6 SID Function length in bits.
+
+        value: int
+        """
+        self._set_property("func_length", value)
+
+    @property
+    def arg_length(self):
+        # type: () -> int
+        """arg_length getter
+
+        SRv6 SID Arguments length in bits.
+
+        Returns: int
+        """
+        return self._get_property("arg_length")
+
+    @arg_length.setter
+    def arg_length(self, value):
+        """arg_length setter
+
+        SRv6 SID Arguments length in bits.
+
+        value: int
+        """
+        self._set_property("arg_length", value)
+
+
+class BgpAttributesSrv6BsidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrv6BsidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrv6Bsid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrv6BsidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrv6Bsid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrv6Bsid):
+            raise Exception("Item is not an instance of BgpAttributesSrv6Bsid")
+
+    def srv6bsid(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6BsidIter
+        """Factory method that creates an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6BsidIter
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        flag_specified_bsid_only=False,
+        flag_drop_upon_invalid=False,
+        flag_srv6_endpoint_behavior=False,
+        ipv6_addr="0::0",
+    ):
+        # type: (bool,bool,bool,str) -> BgpAttributesSrv6Bsid
+        """Add method that creates and returns an instance of the BgpAttributesSrv6Bsid class
+
+        The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal the SRv6 Binding SID. related information of an SR Policy candidate path. - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy encoding to indicate one or. more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be instantiated.. The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .
+
+        Returns: BgpAttributesSrv6Bsid
+        """
+        item = BgpAttributesSrv6Bsid(
+            parent=self._parent,
+            flag_specified_bsid_only=flag_specified_bsid_only,
+            flag_drop_upon_invalid=flag_drop_upon_invalid,
+            flag_srv6_endpoint_behavior=flag_srv6_endpoint_behavior,
+            ipv6_addr=ipv6_addr,
+        )
+        self._add(item)
+        return item
+
+
+class BgpAttributesSrPolicyPreference(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPreference, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Preference sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Preference sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPriority(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSrPolicyPriority, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value to be carried in the Priority sub-tlv.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value to be carried in the Priority sub-tlv.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPolicyName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic policy name carried in the Policy Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyPolicyCandidateName(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": str,
+            "maxLength": 500,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("value",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(BgpAttributesSrPolicyPolicyCandidateName, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> str
+        """value getter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        Returns: str
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.. It is recommended that the size of the name is limited to 255 bytes.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property value as None")
+        self._set_property("value", value)
+
+
+class BgpAttributesSrPolicyExplicitNullPolicy(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "unknown",
+                "push_ipv4",
+                "push_ipv6",
+                "push_ipv4_and_ipv6",
+                "donot_push",
+            ],
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "push_ipv4_and_ipv6",
+    }  # type: Dict[str, Union(type)]
+
+    UNKNOWN = "unknown"  # type: str
+    PUSH_IPV4 = "push_ipv4"  # type: str
+    PUSH_IPV6 = "push_ipv6"  # type: str
+    PUSH_IPV4_AND_IPV6 = "push_ipv4_and_ipv6"  # type: str
+    DONOT_PUSH = "donot_push"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicyExplicitNullPolicy, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """choice getter
+
+        The Explicit NULL Label policy.
+
+        Returns: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The Explicit NULL Label policy.
+
+        value: Union[Literal["donot_push"], Literal["push_ipv4"], Literal["push_ipv4_and_ipv6"], Literal["push_ipv6"], Literal["unknown"]]
+        """
+        self._set_property("choice", value)
+
+
+class BgpAttributesSrPolicySegmentList(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "weight": {"type": "BgpAttributesSegmentRoutingPolicySegmentListWeight"},
+        "segments": {"type": "BgpAttributesSegmentRoutingPolicySegmentListSegmentIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSrPolicySegmentList, self).__init__()
+        self._parent = parent
+
+    @property
+    def weight(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """weight getter
+
+        The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.The optional Weight sub-TLV (Type 9) specifies the weight associated with given segment list. The weight is used for weighted multipath.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListWeight
+        """
+        return self._get_property(
+            "weight", BgpAttributesSegmentRoutingPolicySegmentListWeight
+        )
+
+    @property
+    def segments(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """segments getter
+
+        TBD
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        return self._get_property(
+            "segments",
+            BgpAttributesSegmentRoutingPolicySegmentListSegmentIter,
+            self._parent,
+            self._choice,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListWeight(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "value": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=0):
+        super(BgpAttributesSegmentRoutingPolicySegmentListWeight, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        Value of the weight.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Value of the weight.
+
+        value: int
+        """
+        self._set_property("value", value)
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegment(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "type_a",
+                "type_b",
+                "type_c",
+                "type_d",
+                "type_e",
+                "type_f",
+                "type_g",
+                "type_h",
+                "type_i",
+                "type_j",
+                "type_k",
+            ],
+        },
+        "type_a": {"type": "BgpAttributesSegmentRoutingPolicyTypeA"},
+        "type_b": {"type": "BgpAttributesSegmentRoutingPolicyTypeB"},
+        "type_c": {"type": "BgpAttributesSegmentRoutingPolicyTypeC"},
+        "type_d": {"type": "BgpAttributesSegmentRoutingPolicyTypeD"},
+        "type_e": {"type": "BgpAttributesSegmentRoutingPolicyTypeE"},
+        "type_f": {"type": "BgpAttributesSegmentRoutingPolicyTypeF"},
+        "type_g": {"type": "BgpAttributesSegmentRoutingPolicyTypeG"},
+        "type_h": {"type": "BgpAttributesSegmentRoutingPolicyTypeH"},
+        "type_i": {"type": "BgpAttributesSegmentRoutingPolicyTypeI"},
+        "type_j": {"type": "BgpAttributesSegmentRoutingPolicyTypeJ"},
+        "type_k": {"type": "BgpAttributesSegmentRoutingPolicyTypeK"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("choice",)  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TYPE_A = "type_a"  # type: str
+    TYPE_B = "type_b"  # type: str
+    TYPE_C = "type_c"  # type: str
+    TYPE_D = "type_d"  # type: str
+    TYPE_E = "type_e"  # type: str
+    TYPE_F = "type_f"  # type: str
+    TYPE_G = "type_g"  # type: str
+    TYPE_H = "type_h"  # type: str
+    TYPE_I = "type_i"  # type: str
+    TYPE_J = "type_j"  # type: str
+    TYPE_K = "type_k"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegment, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeA
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeA
+        """
+        return self._get_property(
+            "type_a", BgpAttributesSegmentRoutingPolicyTypeA, self, "type_a"
+        )
+
+    @property
+    def type_b(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeB
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeB
+        """
+        return self._get_property(
+            "type_b", BgpAttributesSegmentRoutingPolicyTypeB, self, "type_b"
+        )
+
+    @property
+    def type_c(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeC
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeC
+        """
+        return self._get_property(
+            "type_c", BgpAttributesSegmentRoutingPolicyTypeC, self, "type_c"
+        )
+
+    @property
+    def type_d(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeD
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeD
+        """
+        return self._get_property(
+            "type_d", BgpAttributesSegmentRoutingPolicyTypeD, self, "type_d"
+        )
+
+    @property
+    def type_e(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeE
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeE
+        """
+        return self._get_property(
+            "type_e", BgpAttributesSegmentRoutingPolicyTypeE, self, "type_e"
+        )
+
+    @property
+    def type_f(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeF
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeF
+        """
+        return self._get_property(
+            "type_f", BgpAttributesSegmentRoutingPolicyTypeF, self, "type_f"
+        )
+
+    @property
+    def type_g(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeG
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeG
+        """
+        return self._get_property(
+            "type_g", BgpAttributesSegmentRoutingPolicyTypeG, self, "type_g"
+        )
+
+    @property
+    def type_h(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeH
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeH
+        """
+        return self._get_property(
+            "type_h", BgpAttributesSegmentRoutingPolicyTypeH, self, "type_h"
+        )
+
+    @property
+    def type_i(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeI
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeI
+        """
+        return self._get_property(
+            "type_i", BgpAttributesSegmentRoutingPolicyTypeI, self, "type_i"
+        )
+
+    @property
+    def type_j(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeJ
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeJ
+        """
+        return self._get_property(
+            "type_j", BgpAttributesSegmentRoutingPolicyTypeJ, self, "type_j"
+        )
+
+    @property
+    def type_k(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeK
+        """Factory property that returns an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeK
+        """
+        return self._get_property(
+            "type_k", BgpAttributesSegmentRoutingPolicyTypeK, self, "type_k"
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """choice getter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+
+        Returns: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy. Type A: SID only, in the form of MPLS Label.. Type B: SID only, in the form of IPv6 Address.. Type C: IPv4 Prefix with optional SR Algorithm.. Type D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.. Type E: IPv4 Prefix with Local Interface ID.. Type F: IPv4 Addresses for link endpoints as Local, Remote pair.. Type G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.. Type H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.. Type I: IPv6 Global Prefix with optional SR Algorithm for SRv6.. Type J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.. Type K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+
+        value: Union[Literal["type_a"], Literal["type_b"], Literal["type_c"], Literal["type_d"], Literal["type_e"], Literal["type_f"], Literal["type_g"], Literal["type_h"], Literal["type_i"], Literal["type_j"], Literal["type_k"]]
+        """
+        if value is None:
+            raise TypeError("Cannot set required property choice as None")
+        self._set_property("choice", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeA(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(BgpAttributesSegmentRoutingPolicyTypeA, self).__init__()
+        self._parent = parent
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "v_flag": {"type": bool},
+        "a_flag": {"type": bool},
+        "s_flag": {"type": bool},
+        "b_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "v_flag": False,
+        "a_flag": False,
+        "s_flag": False,
+        "b_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, v_flag=False, a_flag=False, s_flag=False, b_flag=False
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeFlags, self).__init__()
+        self._parent = parent
+        self._set_property("v_flag", v_flag)
+        self._set_property("a_flag", a_flag)
+        self._set_property("s_flag", s_flag)
+        self._set_property("b_flag", b_flag)
+
+    def set(self, v_flag=None, a_flag=None, s_flag=None, b_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        Indicates verification of segment data in is enabled.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        Indicates verification of segment data in is enabled.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def a_flag(self):
+        # type: () -> bool
+        """a_flag getter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        Returns: bool
+        """
+        return self._get_property("a_flag")
+
+    @a_flag.setter
+    def a_flag(self, value):
+        """a_flag setter
+
+        Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+
+        value: bool
+        """
+        self._set_property("a_flag", value)
+
+    @property
+    def s_flag(self):
+        # type: () -> bool
+        """s_flag getter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        Returns: bool
+        """
+        return self._get_property("s_flag")
+
+    @s_flag.setter
+    def s_flag(self, value):
+        """s_flag setter
+
+        This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+
+        value: bool
+        """
+        self._set_property("s_flag", value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified in Section 2.4.4.2.4. of draft-ietf-idr-sr-policy-safi-02.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeB(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "srv6_sid": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "srv6_sid": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, srv6_sid="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeB, self).__init__()
+        self._parent = parent
+        self._set_property("srv6_sid", srv6_sid)
+
+    def set(self, srv6_sid=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> str
+        """srv6_sid getter
+
+        SRv6 SID.
+
+        Returns: str
+        """
+        return self._get_property("srv6_sid")
+
+    @srv6_sid.setter
+    def srv6_sid(self, value):
+        """srv6_sid setter
+
+        SRv6 SID.
+
+        value: str
+        """
+        self._set_property("srv6_sid", value)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeC(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeC, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, sr_algorithm=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeD(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeD, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeE(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "ipv4_node_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "ipv4_node_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeE, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("ipv4_node_address", ipv4_node_address)
+
+    def set(self, local_interface_id=None, ipv4_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def ipv4_node_address(self):
+        # type: () -> str
+        """ipv4_node_address getter
+
+        IPv4 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv4_node_address")
+
+    @ipv4_node_address.setter
+    def ipv4_node_address(self, value):
+        """ipv4_node_address setter
+
+        IPv4 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv4_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeF(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "remote_ipv4_address": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv4_address": "0.0.0.0",
+        "remote_ipv4_address": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeF, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv4_address", local_ipv4_address)
+        self._set_property("remote_ipv4_address", remote_ipv4_address)
+
+    def set(self, local_ipv4_address=None, remote_ipv4_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv4_address(self):
+        # type: () -> str
+        """local_ipv4_address getter
+
+        Local IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv4_address")
+
+    @local_ipv4_address.setter
+    def local_ipv4_address(self, value):
+        """local_ipv4_address setter
+
+        Local IPv4 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv4_address", value)
+
+    @property
+    def remote_ipv4_address(self):
+        # type: () -> str
+        """remote_ipv4_address getter
+
+        Remote IPv4 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv4_address")
+
+    @remote_ipv4_address.setter
+    def remote_ipv4_address(self, value):
+        """remote_ipv4_address setter
+
+        Remote IPv4 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv4_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeG(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeG, self).__init__()
+        self._parent = parent
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+
+    def set(
+        self,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeH(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "sr_mpls_sid": {"type": "BgpAttributesSidMpls"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self, parent=None, local_ipv6_address="0::0", remote_ipv6_address="0::0"
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeH, self).__init__()
+        self._parent = parent
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+
+    def set(self, local_ipv6_address=None, remote_ipv6_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def sr_mpls_sid(self):
+        # type: () -> BgpAttributesSidMpls
+        """sr_mpls_sid getter
+
+        This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. This carries 20 bit Multi Protocol Label Switching alongwith bits traffic class, bit indicating presence. or absence of Bottom-Of-Stack and bits carrying the Time to Live value. Optional SR-MPLS SID.
+
+        Returns: BgpAttributesSidMpls
+        """
+        return self._get_property("sr_mpls_sid", BgpAttributesSidMpls)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeI(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sr_algorithm=0, ipv6_node_address="0::0"):
+        super(BgpAttributesSegmentRoutingPolicyTypeI, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("ipv6_node_address", ipv6_node_address)
+
+    def set(self, sr_algorithm=None, ipv6_node_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def ipv6_node_address(self):
+        # type: () -> str
+        """ipv6_node_address getter
+
+        IPv6 address representing node.
+
+        Returns: str
+        """
+        return self._get_property("ipv6_node_address")
+
+    @ipv6_node_address.setter
+    def ipv6_node_address(self, value):
+        """ipv6_node_address setter
+
+        IPv6 address representing node.
+
+        value: str
+        """
+        self._set_property("ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSidSrv6(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "ip": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "ip": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, ip="0::0"):
+        super(BgpAttributesSidSrv6, self).__init__()
+        self._parent = parent
+        self._set_property("ip", ip)
+
+    def set(self, ip=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def ip(self):
+        # type: () -> str
+        """ip getter
+
+        TBD
+
+        Returns: str
+        """
+        return self._get_property("ip")
+
+    @ip.setter
+    def ip(self, value):
+        """ip setter
+
+        TBD
+
+        value: str
+        """
+        self._set_property("ip", value)
+
+
+class BgpAttributesSegmentRoutingPolicyTypeJ(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "local_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_interface_id": {
+            "type": int,
+            "format": "uint32",
+        },
+        "remote_ipv6_node_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "local_interface_id": 0,
+        "local_ipv6_node_address": "0::0",
+        "remote_interface_id": 0,
+        "remote_ipv6_node_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeJ, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("local_interface_id", local_interface_id)
+        self._set_property("local_ipv6_node_address", local_ipv6_node_address)
+        self._set_property("remote_interface_id", remote_interface_id)
+        self._set_property("remote_ipv6_node_address", remote_ipv6_node_address)
+
+    def set(
+        self,
+        sr_algorithm=None,
+        local_interface_id=None,
+        local_ipv6_node_address=None,
+        remote_interface_id=None,
+        remote_ipv6_node_address=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def local_interface_id(self):
+        # type: () -> int
+        """local_interface_id getter
+
+        The local Interface Index as defined in [RFC8664].
+
+        Returns: int
+        """
+        return self._get_property("local_interface_id")
+
+    @local_interface_id.setter
+    def local_interface_id(self, value):
+        """local_interface_id setter
+
+        The local Interface Index as defined in [RFC8664].
+
+        value: int
+        """
+        self._set_property("local_interface_id", value)
+
+    @property
+    def local_ipv6_node_address(self):
+        # type: () -> str
+        """local_ipv6_node_address getter
+
+        The IPv6 address representing the local node.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_node_address")
+
+    @local_ipv6_node_address.setter
+    def local_ipv6_node_address(self, value):
+        """local_ipv6_node_address setter
+
+        The IPv6 address representing the local node.
+
+        value: str
+        """
+        self._set_property("local_ipv6_node_address", value)
+
+    @property
+    def remote_interface_id(self):
+        # type: () -> int
+        """remote_interface_id getter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: int
+        """
+        return self._get_property("remote_interface_id")
+
+    @remote_interface_id.setter
+    def remote_interface_id(self, value):
+        """remote_interface_id setter
+
+        The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: int
+        """
+        self._set_property("remote_interface_id", value)
+
+    @property
+    def remote_ipv6_node_address(self):
+        # type: () -> str
+        """remote_ipv6_node_address getter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_node_address")
+
+    @remote_ipv6_node_address.setter
+    def remote_ipv6_node_address(self, value):
+        """remote_ipv6_node_address setter
+
+        IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_node_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicyTypeK(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {"type": "BgpAttributesSegmentRoutingPolicyTypeFlags"},
+        "sr_algorithm": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+        "local_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "remote_ipv6_address": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "srv6_sid": {"type": "BgpAttributesSidSrv6"},
+        "srv6_endpoint_behavior": {
+            "type": "BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "sr_algorithm": 0,
+        "local_ipv6_address": "0::0",
+        "remote_ipv6_address": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        sr_algorithm=0,
+        local_ipv6_address="0::0",
+        remote_ipv6_address="0::0",
+    ):
+        super(BgpAttributesSegmentRoutingPolicyTypeK, self).__init__()
+        self._parent = parent
+        self._set_property("sr_algorithm", sr_algorithm)
+        self._set_property("local_ipv6_address", local_ipv6_address)
+        self._set_property("remote_ipv6_address", remote_ipv6_address)
+
+    def set(self, sr_algorithm=None, local_ipv6_address=None, remote_ipv6_address=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicyTypeFlags
+        """flags getter
+
+        Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.Flags for each Segment in SEGMENT_LIST sub-tlv.. V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256. A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, , , and .. B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types , , and .. S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).. This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+
+        Returns: BgpAttributesSegmentRoutingPolicyTypeFlags
+        """
+        return self._get_property("flags", BgpAttributesSegmentRoutingPolicyTypeFlags)
+
+    @property
+    def sr_algorithm(self):
+        # type: () -> int
+        """sr_algorithm getter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        Returns: int
+        """
+        return self._get_property("sr_algorithm")
+
+    @sr_algorithm.setter
+    def sr_algorithm(self, value):
+        """sr_algorithm setter
+
+        SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to on transmission and ignored on receipt.
+
+        value: int
+        """
+        self._set_property("sr_algorithm", value)
+
+    @property
+    def local_ipv6_address(self):
+        # type: () -> str
+        """local_ipv6_address getter
+
+        Local IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("local_ipv6_address")
+
+    @local_ipv6_address.setter
+    def local_ipv6_address(self, value):
+        """local_ipv6_address setter
+
+        Local IPv6 Address.
+
+        value: str
+        """
+        self._set_property("local_ipv6_address", value)
+
+    @property
+    def remote_ipv6_address(self):
+        # type: () -> str
+        """remote_ipv6_address getter
+
+        Remote IPv6 Address.
+
+        Returns: str
+        """
+        return self._get_property("remote_ipv6_address")
+
+    @remote_ipv6_address.setter
+    def remote_ipv6_address(self, value):
+        """remote_ipv6_address setter
+
+        Remote IPv6 Address.
+
+        value: str
+        """
+        self._set_property("remote_ipv6_address", value)
+
+    @property
+    def srv6_sid(self):
+        # type: () -> BgpAttributesSidSrv6
+        """srv6_sid getter
+
+        An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.An IPv6 address denoting SRv6 SID.
+
+        Returns: BgpAttributesSidSrv6
+        """
+        return self._get_property("srv6_sid", BgpAttributesSidSrv6)
+
+    @property
+    def srv6_endpoint_behavior(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """srv6_endpoint_behavior getter
+
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node, Function, and Argument MUST be less than or equal to 128. This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+
+        Returns: BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
+        """
+        return self._get_property(
+            "srv6_endpoint_behavior",
+            BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure,
+        )
+
+
+class BgpAttributesSegmentRoutingPolicySegmentListSegmentIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = True
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSegmentRoutingPolicySegmentListSegmentIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSegmentRoutingPolicySegmentListSegment, BgpAttributesSegmentRoutingPolicyTypeA, BgpAttributesSegmentRoutingPolicyTypeB, BgpAttributesSegmentRoutingPolicyTypeC, BgpAttributesSegmentRoutingPolicyTypeD, BgpAttributesSegmentRoutingPolicyTypeE, BgpAttributesSegmentRoutingPolicyTypeF, BgpAttributesSegmentRoutingPolicyTypeG, BgpAttributesSegmentRoutingPolicyTypeH, BgpAttributesSegmentRoutingPolicyTypeI, BgpAttributesSegmentRoutingPolicyTypeJ, BgpAttributesSegmentRoutingPolicyTypeK]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSegmentRoutingPolicySegmentListSegment):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSegmentRoutingPolicySegmentListSegment"
+            )
+
+    def segment(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """Add method that creates and returns an instance of the BgpAttributesSegmentRoutingPolicySegmentListSegment class
+
+        A Segment sub-TLV describes single segment in segment list i.e., single. element of the explicit path. The Segment sub-TLVs are optional.. Segment Types and are defined as described in 2.4.4.2.. Segment Types upto are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegment
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment(
+            parent=self._parent, choice=self._choice
+        )
+        self._add(item)
+        return item
+
+    def type_a(self):
+        # type: () -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeA class
+
+        Type A: SID only, in the form of MPLS Label.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_a
+        item.choice = "type_a"
+        self._add(item)
+        return self
+
+    def type_b(self, srv6_sid="0::0"):
+        # type: (str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeB class
+
+        Type B: SID only, in the form of IPv6 address.. It is encoded as Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_b
+        item.choice = "type_b"
+        self._add(item)
+        return self
+
+    def type_c(self, sr_algorithm=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeC class
+
+        Type C: IPv4 Node Address with optional SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_c
+        item.choice = "type_c"
+        self._add(item)
+        return self
+
+    def type_d(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeD class
+
+        Type D: IPv6 Node Address with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_d
+        item.choice = "type_d"
+        self._add(item)
+        return self
+
+    def type_e(self, local_interface_id=0, ipv4_node_address="0.0.0.0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeE class
+
+        Type E: IPv4 Address and Local Interface ID with optional SID. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_e
+        item.choice = "type_e"
+        self._add(item)
+        return self
+
+    def type_f(self, local_ipv4_address="0.0.0.0", remote_ipv4_address="0.0.0.0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeF class
+
+        Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_f
+        item.choice = "type_f"
+        self._add(item)
+        return self
+
+    def type_g(
+        self,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        # type: (int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeG class
+
+        Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_g
+        item.choice = "type_g"
+        self._add(item)
+        return self
+
+    def type_h(self, local_ipv6_address="0::0", remote_ipv6_address="0::0"):
+        # type: (str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeH class
+
+        Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.. It is encoded as Segment of Type in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_h
+        item.choice = "type_h"
+        self._add(item)
+        return self
+
+    def type_i(self, sr_algorithm=0, ipv6_node_address="0::0"):
+        # type: (int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeI class
+
+        Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.. It is encoded as Segment of Type 14 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_i
+        item.choice = "type_i"
+        self._add(item)
+        return self
+
+    def type_j(
+        self,
+        sr_algorithm=0,
+        local_interface_id=0,
+        local_ipv6_node_address="0::0",
+        remote_interface_id=0,
+        remote_ipv6_node_address="0::0",
+    ):
+        # type: (int,int,str,int,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeJ class
+
+        Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional SID.. It is encoded as Segment of Type 15 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_j
+        item.choice = "type_j"
+        self._add(item)
+        return self
+
+    def type_k(
+        self, sr_algorithm=0, local_ipv6_address="0::0", remote_ipv6_address="0::0"
+    ):
+        # type: (int,str,str) -> BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """Factory method that creates an instance of the BgpAttributesSegmentRoutingPolicyTypeK class
+
+        Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.. It is encoded as Segment of Type 16 in the SEGMENT_LIST sub-tlv.
+
+        Returns: BgpAttributesSegmentRoutingPolicySegmentListSegmentIter
+        """
+        item = BgpAttributesSegmentRoutingPolicySegmentListSegment()
+        item.type_k
+        item.choice = "type_k"
+        self._add(item)
+        return self
+
+
+class BgpAttributesSrPolicySegmentListIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(BgpAttributesSrPolicySegmentListIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[BgpAttributesSrPolicySegmentList]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def next(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, BgpAttributesSrPolicySegmentList):
+            raise Exception(
+                "Item is not an instance of BgpAttributesSrPolicySegmentList"
+            )
+
+    def segmentlist(self):
+        # type: () -> BgpAttributesSrPolicySegmentListIter
+        """Factory method that creates an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentListIter
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return self
+
+    def add(self):
+        # type: () -> BgpAttributesSrPolicySegmentList
+        """Add method that creates and returns an instance of the BgpAttributesSrPolicySegmentList class
+
+        One optional SEGMENT_LIST sub-tlv encoded with type of 128.. One sub-tlv (Type 128) encodes single explicit path towards the endpoint as described in section 5.1 of [RFC9256]. The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well as an optional Weight sub-TLV.
+
+        Returns: BgpAttributesSrPolicySegmentList
+        """
+        item = BgpAttributesSrPolicySegmentList(parent=self._parent)
+        self._add(item)
+        return item
+
+
 class BgpAttributesMpReachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -23172,10 +25940,14 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("choice",)  # type: tuple(str)
@@ -23184,6 +25956,8 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -23200,6 +25974,32 @@ class BgpAttributesMpReachNlri(OpenApiObject):
             self._set_property("choice", choice)
 
     @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
+
+    @property
     def next_hop(self):
         # type: () -> BgpAttributesNextHop
         """next_hop getter
@@ -23212,12 +26012,12 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -23227,7 +26027,7 @@ class BgpAttributesMpReachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -23251,7 +26051,7 @@ class BgpAttributesMpReachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
@@ -23600,6 +26400,214 @@ class BgpOneIpv6NLRIPrefixIter(OpenApiIter):
         return item
 
 
+class BgpIpv4SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "distinguisher": {
+            "type": int,
+            "format": "uint32",
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+        "endpoint": {
+            "type": str,
+            "format": "ipv4",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0.0.0.0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0.0.0.0"):
+        super(BgpIpv4SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
+
+    def set(self, distinguisher=None, color=None, endpoint=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def distinguisher(self):
+        # type: () -> int
+        """distinguisher getter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        Returns: int
+        """
+        return self._get_property("distinguisher")
+
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        value: int
+        """
+        self._set_property("distinguisher", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+    @property
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
+
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+
+        Returns: str
+        """
+        return self._get_property("endpoint")
+
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
+
+        Identifies the endpoint of policy. The Endpoint is an IPv4 address and can be either unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+
+        value: str
+        """
+        self._set_property("endpoint", value)
+
+
+class BgpIpv6SrPolicyNLRIPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "distinguisher": {
+            "type": int,
+            "format": "uint32",
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+        "endpoint": {
+            "type": str,
+            "format": "ipv6",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "distinguisher": 1,
+        "color": 1,
+        "endpoint": "0::0",
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, distinguisher=1, color=1, endpoint="0::0"):
+        super(BgpIpv6SrPolicyNLRIPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("distinguisher", distinguisher)
+        self._set_property("color", color)
+        self._set_property("endpoint", endpoint)
+
+    def set(self, distinguisher=None, color=None, endpoint=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def distinguisher(self):
+        # type: () -> int
+        """distinguisher getter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        Returns: int
+        """
+        return self._get_property("distinguisher")
+
+    @distinguisher.setter
+    def distinguisher(self, value):
+        """distinguisher setter
+
+        The 4-octet value uniquely identifying the policy in the context of <color, endpoint> tuple. The distinguisher has no semantic value and is solely used by the SR Policy originator to make unique (from an NLRI perspective) both for multiple candidate paths of the same SR Policy as well as candidate paths of different SR Policies (i.e. with different segment lists) with the same Color and Endpoint but meant for different headends.
+
+        value: int
+        """
+        self._set_property("distinguisher", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination prefixes to steer traffic into the SR Policy as specified in section of RFC9256.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+    @property
+    def endpoint(self):
+        # type: () -> str
+        """endpoint getter
+
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
+
+        Returns: str
+        """
+        return self._get_property("endpoint")
+
+    @endpoint.setter
+    def endpoint(self, value):
+        """endpoint setter
+
+        Identifies the endpoint of policy. The Endpoint may represent single node or set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
+
+        value: str
+        """
+        self._set_property("endpoint", value)
+
+
 class BgpAttributesMpUnreachNlri(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -23609,10 +26617,14 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             "enum": [
                 "ipv4_unicast",
                 "ipv6_unicast",
+                "ipv4_srpolicy",
+                "ipv6_srpolicy",
             ],
         },
         "ipv4_unicast": {"type": "BgpOneIpv4NLRIPrefixIter"},
         "ipv6_unicast": {"type": "BgpOneIpv6NLRIPrefixIter"},
+        "ipv4_srpolicy": {"type": "BgpIpv4SrPolicyNLRIPrefix"},
+        "ipv6_srpolicy": {"type": "BgpIpv6SrPolicyNLRIPrefix"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -23621,6 +26633,8 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
     IPV4_UNICAST = "ipv4_unicast"  # type: str
     IPV6_UNICAST = "ipv6_unicast"  # type: str
+    IPV4_SRPOLICY = "ipv4_srpolicy"  # type: str
+    IPV6_SRPOLICY = "ipv6_srpolicy"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -23637,13 +26651,39 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
             self._set_property("choice", choice)
 
     @property
+    def ipv4_srpolicy(self):
+        # type: () -> BgpIpv4SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv4SrPolicyNLRIPrefix class
+
+        IPv4 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv4SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv4_srpolicy", BgpIpv4SrPolicyNLRIPrefix, self, "ipv4_srpolicy"
+        )
+
+    @property
+    def ipv6_srpolicy(self):
+        # type: () -> BgpIpv6SrPolicyNLRIPrefix
+        """Factory property that returns an instance of the BgpIpv6SrPolicyNLRIPrefix class
+
+        One IPv6 Segment Routing Policy NLRI Prefix.
+
+        Returns: BgpIpv6SrPolicyNLRIPrefix
+        """
+        return self._get_property(
+            "ipv6_srpolicy", BgpIpv6SrPolicyNLRIPrefix, self, "ipv6_srpolicy"
+        )
+
+    @property
     def choice(self):
-        # type: () -> Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        # type: () -> Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """choice getter
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        Returns: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        Returns: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         return self._get_property("choice")
 
@@ -23653,7 +26693,7 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
 
         The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
 
-        value: Union[Literal["ipv4_unicast"], Literal["ipv6_unicast"]]
+        value: Union[Literal["ipv4_srpolicy"], Literal["ipv4_unicast"], Literal["ipv6_srpolicy"], Literal["ipv6_unicast"]]
         """
         self._set_property("choice", value)
 
@@ -23675,7 +26715,7 @@ class BgpAttributesMpUnreachNlri(OpenApiObject):
         # type: () -> BgpOneIpv6NLRIPrefixIter
         """ipv6_unicast getter
 
-        SAFI of the NLRI being sent in the Update.. description: >-. List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
+        List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
 
         Returns: BgpOneIpv6NLRIPrefixIter
         """
@@ -24225,7 +27265,7 @@ class BgpV6Interface(OpenApiObject):
         # type: () -> str
         """ipv6_name getter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         Returns: str
         """
@@ -24235,7 +27275,7 @@ class BgpV6Interface(OpenApiObject):
     def ipv6_name(self, value):
         """ipv6_name setter
 
-        The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name. /components/schemas/DhcpClient.V6/properties/name.
+        The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.. x-constraint:. /components/schemas/Device.Ipv6/properties/name. /components/schemas/Device.Ipv6Loopback/properties/name.
 
         value: str
         """
@@ -29405,1163 +32445,6 @@ class RsvpLspIpv4InterfaceIter(OpenApiIter):
         Returns: RsvpLspIpv4Interface
         """
         item = RsvpLspIpv4Interface(parent=self._parent, ipv4_name=ipv4_name)
-        self._add(item)
-        return item
-
-
-class DeviceDhcpServer(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "ipv4_interfaces": {"type": "DhcpServerV4Iter"},
-        "ipv6_interfaces": {"type": "DhcpServerV6Iter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DeviceDhcpServer is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(DeviceDhcpServer, self).__init__()
-        self._parent = parent
-
-    @property
-    def ipv4_interfaces(self):
-        # type: () -> DhcpServerV4Iter
-        """ipv4_interfaces getter
-
-        This contains an array of references to IPv4 interfaces, each of which will have list of DHCPv4 servers to different destinations.
-
-        Returns: DhcpServerV4Iter
-        """
-        return self._get_property(
-            "ipv4_interfaces", DhcpServerV4Iter, self._parent, self._choice
-        )
-
-    @property
-    def ipv6_interfaces(self):
-        # type: () -> DhcpServerV6Iter
-        """ipv6_interfaces getter
-
-        This contains an array of references to IPv6 interfaces, each of which will have list of DHCPv6 servers to different destinations.
-
-        Returns: DhcpServerV6Iter
-        """
-        return self._get_property(
-            "ipv6_interfaces", DhcpServerV6Iter, self._parent, self._choice
-        )
-
-
-class DhcpServerV4(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "ipv4_name": {"type": str},
-        "address_pools": {"type": "DhcpServerV4PoolIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "ipv4_name", "address_pools")  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DhcpServerV4 is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None, ipv4_name=None):
-        super(DhcpServerV4, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("ipv4_name", ipv4_name)
-
-    def set(self, name=None, ipv4_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def ipv4_name(self):
-        # type: () -> str
-        """ipv4_name getter
-
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("ipv4_name")
-
-    @ipv4_name.setter
-    def ipv4_name(self, value):
-        """ipv4_name setter
-
-        The unique name of the IPv4 on which DHCPv4 server will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property ipv4_name as None")
-        self._set_property("ipv4_name", value)
-
-    @property
-    def address_pools(self):
-        # type: () -> DhcpServerV4PoolIter
-        """address_pools getter
-
-        List of DHCPv4 Server Lease parameters
-
-        Returns: DhcpServerV4PoolIter
-        """
-        return self._get_property(
-            "address_pools", DhcpServerV4PoolIter, self._parent, self._choice
-        )
-
-
-class DhcpServerV4Pool(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "lease_time": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 10,
-        },
-        "start_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "prefix": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 32,
-        },
-        "count": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-        },
-        "step": {
-            "type": int,
-            "format": "uint32",
-            "minimum": 1,
-        },
-        "options": {"type": "DhcpServerV4PoolOption"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "start_address")  # type: tuple(str)
-
-    _DEFAULTS = {
-        "lease_time": 86400,
-        "prefix": 24,
-        "count": 1,
-        "step": 1,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DhcpServerV4Pool is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        lease_time=86400,
-        start_address=None,
-        prefix=24,
-        count=1,
-        step=1,
-    ):
-        super(DhcpServerV4Pool, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("lease_time", lease_time)
-        self._set_property("start_address", start_address)
-        self._set_property("prefix", prefix)
-        self._set_property("count", count)
-        self._set_property("step", step)
-
-    def set(
-        self,
-        name=None,
-        lease_time=None,
-        start_address=None,
-        prefix=None,
-        count=None,
-        step=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def lease_time(self):
-        # type: () -> int
-        """lease_time getter
-
-        The Life Time length in seconds that is assigned to lease.
-
-        Returns: int
-        """
-        return self._get_property("lease_time")
-
-    @lease_time.setter
-    def lease_time(self, value):
-        """lease_time setter
-
-        The Life Time length in seconds that is assigned to lease.
-
-        value: int
-        """
-        self._set_property("lease_time", value)
-
-    @property
-    def start_address(self):
-        # type: () -> str
-        """start_address getter
-
-        The IP address of the first lease pool.
-
-        Returns: str
-        """
-        return self._get_property("start_address")
-
-    @start_address.setter
-    def start_address(self, value):
-        """start_address setter
-
-        The IP address of the first lease pool.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property start_address as None")
-        self._set_property("start_address", value)
-
-    @property
-    def prefix(self):
-        # type: () -> int
-        """prefix getter
-
-        The IPv4 network prefix length to be applied to the address.
-
-        Returns: int
-        """
-        return self._get_property("prefix")
-
-    @prefix.setter
-    def prefix(self, value):
-        """prefix setter
-
-        The IPv4 network prefix length to be applied to the address.
-
-        value: int
-        """
-        self._set_property("prefix", value)
-
-    @property
-    def count(self):
-        # type: () -> int
-        """count getter
-
-        The total number of addresses in the pool.
-
-        Returns: int
-        """
-        return self._get_property("count")
-
-    @count.setter
-    def count(self, value):
-        """count setter
-
-        The total number of addresses in the pool.
-
-        value: int
-        """
-        self._set_property("count", value)
-
-    @property
-    def step(self):
-        # type: () -> int
-        """step getter
-
-        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
-
-        Returns: int
-        """
-        return self._get_property("step")
-
-    @step.setter
-    def step(self, value):
-        """step setter
-
-        The increment value for the lease address within the lease pool. addresses are present. The value is incremented according to the Prefix Length and Step.
-
-        value: int
-        """
-        self._set_property("step", value)
-
-    @property
-    def options(self):
-        # type: () -> DhcpServerV4PoolOption
-        """options getter
-
-        Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.Optional configuration for DHCPv4 address pool for the lease.
-
-        Returns: DhcpServerV4PoolOption
-        """
-        return self._get_property("options", DhcpServerV4PoolOption)
-
-
-class DhcpServerV4PoolOption(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "router_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "primary_dns_server": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "secondary_dns_server": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "echo_relay_with_tlv_82": {"type": bool},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {
-        "router_address": "0.0.0.0",
-        "primary_dns_server": "0.0.0.0",
-        "secondary_dns_server": "0.0.0.0",
-        "echo_relay_with_tlv_82": True,
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        router_address="0.0.0.0",
-        primary_dns_server="0.0.0.0",
-        secondary_dns_server="0.0.0.0",
-        echo_relay_with_tlv_82=True,
-    ):
-        super(DhcpServerV4PoolOption, self).__init__()
-        self._parent = parent
-        self._set_property("router_address", router_address)
-        self._set_property("primary_dns_server", primary_dns_server)
-        self._set_property("secondary_dns_server", secondary_dns_server)
-        self._set_property("echo_relay_with_tlv_82", echo_relay_with_tlv_82)
-
-    def set(
-        self,
-        router_address=None,
-        primary_dns_server=None,
-        secondary_dns_server=None,
-        echo_relay_with_tlv_82=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def router_address(self):
-        # type: () -> str
-        """router_address getter
-
-        The Router address advertised by the DHCPv4 server in Offer and Ack messages.
-
-        Returns: str
-        """
-        return self._get_property("router_address")
-
-    @router_address.setter
-    def router_address(self, value):
-        """router_address setter
-
-        The Router address advertised by the DHCPv4 server in Offer and Ack messages.
-
-        value: str
-        """
-        self._set_property("router_address", value)
-
-    @property
-    def primary_dns_server(self):
-        # type: () -> str
-        """primary_dns_server getter
-
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
-
-        Returns: str
-        """
-        return self._get_property("primary_dns_server")
-
-    @primary_dns_server.setter
-    def primary_dns_server(self, value):
-        """primary_dns_server setter
-
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
-
-        value: str
-        """
-        self._set_property("primary_dns_server", value)
-
-    @property
-    def secondary_dns_server(self):
-        # type: () -> str
-        """secondary_dns_server getter
-
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
-
-        Returns: str
-        """
-        return self._get_property("secondary_dns_server")
-
-    @secondary_dns_server.setter
-    def secondary_dns_server(self, value):
-        """secondary_dns_server setter
-
-        The primary DNS server address that is offered to DHCP clients that request this information through TLV option.
-
-        value: str
-        """
-        self._set_property("secondary_dns_server", value)
-
-    @property
-    def echo_relay_with_tlv_82(self):
-        # type: () -> bool
-        """echo_relay_with_tlv_82 getter
-
-        If selected, the DHCP server includes in its replies the TLV information for the DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from DHCP relay agent, otherwise it replies without including this TLV.
-
-        Returns: bool
-        """
-        return self._get_property("echo_relay_with_tlv_82")
-
-    @echo_relay_with_tlv_82.setter
-    def echo_relay_with_tlv_82(self, value):
-        """echo_relay_with_tlv_82 setter
-
-        If selected, the DHCP server includes in its replies the TLV information for the DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from DHCP relay agent, otherwise it replies without including this TLV.
-
-        value: bool
-        """
-        self._set_property("echo_relay_with_tlv_82", value)
-
-
-class DhcpServerV4PoolIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(DhcpServerV4PoolIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[DhcpServerV4Pool]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> DhcpServerV4PoolIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> DhcpServerV4Pool
-        return self._next()
-
-    def next(self):
-        # type: () -> DhcpServerV4Pool
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, DhcpServerV4Pool):
-            raise Exception("Item is not an instance of DhcpServerV4Pool")
-
-    def pool(
-        self,
-        name=None,
-        lease_time=86400,
-        start_address=None,
-        prefix=24,
-        count=1,
-        step=1,
-    ):
-        # type: (str,int,str,int,int,int) -> DhcpServerV4PoolIter
-        """Factory method that creates an instance of the DhcpServerV4Pool class
-
-        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.
-
-        Returns: DhcpServerV4PoolIter
-        """
-        item = DhcpServerV4Pool(
-            parent=self._parent,
-            name=name,
-            lease_time=lease_time,
-            start_address=start_address,
-            prefix=prefix,
-            count=count,
-            step=step,
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        name=None,
-        lease_time=86400,
-        start_address=None,
-        prefix=24,
-        count=1,
-        step=1,
-    ):
-        # type: (str,int,str,int,int,int) -> DhcpServerV4Pool
-        """Add method that creates and returns an instance of the DhcpServerV4Pool class
-
-        Under Review: Information TBD. Configuration for DHCPv4 address pool for lease.
-
-        Returns: DhcpServerV4Pool
-        """
-        item = DhcpServerV4Pool(
-            parent=self._parent,
-            name=name,
-            lease_time=lease_time,
-            start_address=start_address,
-            prefix=prefix,
-            count=count,
-            step=step,
-        )
-        self._add(item)
-        return item
-
-
-class DhcpServerV4Iter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(DhcpServerV4Iter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[DhcpServerV4]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> DhcpServerV4Iter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> DhcpServerV4
-        return self._next()
-
-    def next(self):
-        # type: () -> DhcpServerV4
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, DhcpServerV4):
-            raise Exception("Item is not an instance of DhcpServerV4")
-
-    def v4(self, name=None, ipv4_name=None):
-        # type: (str,str) -> DhcpServerV4Iter
-        """Factory method that creates an instance of the DhcpServerV4 class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv4 Server.
-
-        Returns: DhcpServerV4Iter
-        """
-        item = DhcpServerV4(parent=self._parent, name=name, ipv4_name=ipv4_name)
-        self._add(item)
-        return self
-
-    def add(self, name=None, ipv4_name=None):
-        # type: (str,str) -> DhcpServerV4
-        """Add method that creates and returns an instance of the DhcpServerV4 class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv4 Server.
-
-        Returns: DhcpServerV4
-        """
-        item = DhcpServerV4(parent=self._parent, name=name, ipv4_name=ipv4_name)
-        self._add(item)
-        return item
-
-
-class DhcpServerV6(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "ipv6_name": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name",)  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DhcpServerV6 is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None, ipv6_name=None):
-        super(DhcpServerV6, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("ipv6_name", ipv6_name)
-
-    def set(self, name=None, ipv6_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def ipv6_name(self):
-        # type: () -> str
-        """ipv6_name getter
-
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("ipv6_name")
-
-    @ipv6_name.setter
-    def ipv6_name(self, value):
-        """ipv6_name setter
-
-        The unique name of the IPv6 on which DHCPv6 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        value: str
-        """
-        self._set_property("ipv6_name", value)
-
-
-class DhcpServerV6Iter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(DhcpServerV6Iter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[DhcpServerV6]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> DhcpServerV6Iter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> DhcpServerV6
-        return self._next()
-
-    def next(self):
-        # type: () -> DhcpServerV6
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, DhcpServerV6):
-            raise Exception("Item is not an instance of DhcpServerV6")
-
-    def v6(self, name=None, ipv6_name=None):
-        # type: (str,str) -> DhcpServerV6Iter
-        """Factory method that creates an instance of the DhcpServerV6 class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv6 Server.
-
-        Returns: DhcpServerV6Iter
-        """
-        item = DhcpServerV6(parent=self._parent, name=name, ipv6_name=ipv6_name)
-        self._add(item)
-        return self
-
-    def add(self, name=None, ipv6_name=None):
-        # type: (str,str) -> DhcpServerV6
-        """Add method that creates and returns an instance of the DhcpServerV6 class
-
-        Under Review: Information TBD. Configuration for emulated DHCPv6 Server.
-
-        Returns: DhcpServerV6
-        """
-        item = DhcpServerV6(parent=self._parent, name=name, ipv6_name=ipv6_name)
-        self._add(item)
-        return item
-
-
-class DeviceRelayAgent(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "ipv4_interfaces": {"type": "V4RAInstIter"},
-        "ipv6_interfaces": {"type": "V6RAInstIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "DeviceRelayAgent is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None):
-        super(DeviceRelayAgent, self).__init__()
-        self._parent = parent
-
-    @property
-    def ipv4_interfaces(self):
-        # type: () -> V4RAInstIter
-        """ipv4_interfaces getter
-
-        This contains an array of references to IPv4 interfaces, each of which will have list of DHCPv4 Relay Agent to different destinations.
-
-        Returns: V4RAInstIter
-        """
-        return self._get_property(
-            "ipv4_interfaces", V4RAInstIter, self._parent, self._choice
-        )
-
-    @property
-    def ipv6_interfaces(self):
-        # type: () -> V6RAInstIter
-        """ipv6_interfaces getter
-
-        This contains an array of references to IPv6 interfaces, each of which will have list of DHCPv6 Relay Agent to different destinations.
-
-        Returns: V6RAInstIter
-        """
-        return self._get_property(
-            "ipv6_interfaces", V6RAInstIter, self._parent, self._choice
-        )
-
-
-class V4RAInst(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "ipv4_name": {"type": str},
-        "client_side_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-        "server_address": {
-            "type": str,
-            "format": "ipv4",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "ipv4_name")  # type: tuple(str)
-
-    _DEFAULTS = {
-        "client_side_address": "0.0.0.0",
-        "server_address": "0.0.0.0",
-    }  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "V4RAInst is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        ipv4_name=None,
-        client_side_address="0.0.0.0",
-        server_address="0.0.0.0",
-    ):
-        super(V4RAInst, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("ipv4_name", ipv4_name)
-        self._set_property("client_side_address", client_side_address)
-        self._set_property("server_address", server_address)
-
-    def set(
-        self, name=None, ipv4_name=None, client_side_address=None, server_address=None
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def ipv4_name(self):
-        # type: () -> str
-        """ipv4_name getter
-
-        The unique name of the IPv4 on which Relay Agent V4 will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("ipv4_name")
-
-    @ipv4_name.setter
-    def ipv4_name(self, value):
-        """ipv4_name setter
-
-        The unique name of the IPv4 on which Relay Agent V4 will run.. x-constraint:. /components/schemas/Device.Ipv4/properties/name.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property ipv4_name as None")
-        self._set_property("ipv4_name", value)
-
-    @property
-    def client_side_address(self):
-        # type: () -> str
-        """client_side_address getter
-
-        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded to the DHCP server. as well
-
-        Returns: str
-        """
-        return self._get_property("client_side_address")
-
-    @client_side_address.setter
-    def client_side_address(self, value):
-        """client_side_address setter
-
-        IPv4 address for the interface attached to client's network. This IP address is used as Source IP address and Relay-Agent-IP address in the DHCP packet that is forwarded to the DHCP server. as well
-
-        value: str
-        """
-        self._set_property("client_side_address", value)
-
-    @property
-    def server_address(self):
-        # type: () -> str
-        """server_address getter
-
-        IPv4 address for DHCPv4 Server.
-
-        Returns: str
-        """
-        return self._get_property("server_address")
-
-    @server_address.setter
-    def server_address(self, value):
-        """server_address setter
-
-        IPv4 address for DHCPv4 Server.
-
-        value: str
-        """
-        self._set_property("server_address", value)
-
-
-class V4RAInstIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(V4RAInstIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[V4RAInst]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> V4RAInstIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> V4RAInst
-        return self._next()
-
-    def next(self):
-        # type: () -> V4RAInst
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, V4RAInst):
-            raise Exception("Item is not an instance of V4RAInst")
-
-    def inst(
-        self,
-        name=None,
-        ipv4_name=None,
-        client_side_address="0.0.0.0",
-        server_address="0.0.0.0",
-    ):
-        # type: (str,str,str,str) -> V4RAInstIter
-        """Factory method that creates an instance of the V4RAInst class
-
-        Under Review: Information TBD. Top level container for DHCPv4 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
-
-        Returns: V4RAInstIter
-        """
-        item = V4RAInst(
-            parent=self._parent,
-            name=name,
-            ipv4_name=ipv4_name,
-            client_side_address=client_side_address,
-            server_address=server_address,
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        name=None,
-        ipv4_name=None,
-        client_side_address="0.0.0.0",
-        server_address="0.0.0.0",
-    ):
-        # type: (str,str,str,str) -> V4RAInst
-        """Add method that creates and returns an instance of the V4RAInst class
-
-        Under Review: Information TBD. Top level container for DHCPv4 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
-
-        Returns: V4RAInst
-        """
-        item = V4RAInst(
-            parent=self._parent,
-            name=name,
-            ipv4_name=ipv4_name,
-            client_side_address=client_side_address,
-            server_address=server_address,
-        )
-        self._add(item)
-        return item
-
-
-class V6RAInst(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "ipv6_name": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ("name", "ipv6_name")  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {
-        "self": "V6RAInst is under_review, Information TBD",
-    }  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None, ipv6_name=None):
-        super(V6RAInst, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("ipv6_name", ipv6_name)
-
-    def set(self, name=None, ipv6_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        Globally unique name of an object. It also serves as the primary key for arrays of objects.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property name as None")
-        self._set_property("name", value)
-
-    @property
-    def ipv6_name(self):
-        # type: () -> str
-        """ipv6_name getter
-
-        The unique name of the IPv6 on which Relay Agent V4 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        Returns: str
-        """
-        return self._get_property("ipv6_name")
-
-    @ipv6_name.setter
-    def ipv6_name(self, value):
-        """ipv6_name setter
-
-        The unique name of the IPv6 on which Relay Agent V4 server will run.. x-constraint:. /components/schemas/Device.Ipv6/properties/name.
-
-        value: str
-        """
-        if value is None:
-            raise TypeError("Cannot set required property ipv6_name as None")
-        self._set_property("ipv6_name", value)
-
-
-class V6RAInstIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(V6RAInstIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[V6RAInst]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> V6RAInstIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> V6RAInst
-        return self._next()
-
-    def next(self):
-        # type: () -> V6RAInst
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, V6RAInst):
-            raise Exception("Item is not an instance of V6RAInst")
-
-    def inst(self, name=None, ipv6_name=None):
-        # type: (str,str) -> V6RAInstIter
-        """Factory method that creates an instance of the V6RAInst class
-
-        Under Review: Information TBD. Top level container for DHCPv6 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
-
-        Returns: V6RAInstIter
-        """
-        item = V6RAInst(parent=self._parent, name=name, ipv6_name=ipv6_name)
-        self._add(item)
-        return self
-
-    def add(self, name=None, ipv6_name=None):
-        # type: (str,str) -> V6RAInst
-        """Add method that creates and returns an instance of the V6RAInst class
-
-        Under Review: Information TBD. Top level container for DHCPv6 relay-agent configuration. Reference: https://datatracker.ietf.org/doc/html/rfc3046
-
-        Returns: V6RAInst
-        """
-        item = V6RAInst(parent=self._parent, name=name, ipv6_name=ipv6_name)
         self._add(item)
         return item
 
@@ -46477,7 +48360,6 @@ class FlowIpv4Auto(OpenApiObject):
         "choice": {
             "type": str,
             "enum": [
-                "static",
                 "dhcp",
             ],
         },
@@ -46487,7 +48369,6 @@ class FlowIpv4Auto(OpenApiObject):
 
     _DEFAULTS = {}  # type: Dict[str, Union(type)]
 
-    STATIC = "static"  # type: str
     DHCP = "dhcp"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
@@ -46506,12 +48387,12 @@ class FlowIpv4Auto(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["dhcp"], Literal["static"]]
+        # type: () -> Union[Literal["dhcp"]]
         """choice getter
 
-        The method to be used to provide the system generated value.. static option populate this property with the ip address of the specific interface its configured upon. . dhcp option populate this property based on the dynamic ip that is been allocated by the dhcp server.
+        The method to be used to provide the system generated value.. The dhcp option populates the field based on the dynamic IPv4 address that has been assigned to the DHCPv4 client by DHCPv4 server.
 
-        Returns: Union[Literal["dhcp"], Literal["static"]]
+        Returns: Union[Literal["dhcp"]]
         """
         return self._get_property("choice")
 
@@ -46519,9 +48400,9 @@ class FlowIpv4Auto(OpenApiObject):
     def choice(self, value):
         """choice setter
 
-        The method to be used to provide the system generated value.. static option populate this property with the ip address of the specific interface its configured upon. . dhcp option populate this property based on the dynamic ip that is been allocated by the dhcp server.
+        The method to be used to provide the system generated value.. The dhcp option populates the field based on the dynamic IPv4 address that has been assigned to the DHCPv4 client by DHCPv4 server.
 
-        value: Union[Literal["dhcp"], Literal["static"]]
+        value: Union[Literal["dhcp"]]
         """
         if value is None:
             raise TypeError("Cannot set required property choice as None")
@@ -60374,6 +62255,7 @@ class FlowTcp(OpenApiObject):
         "ctl_syn": {"type": "PatternFlowTcpCtlSyn"},
         "ctl_fin": {"type": "PatternFlowTcpCtlFin"},
         "window": {"type": "PatternFlowTcpWindow"},
+        "checksum": {"type": "PatternFlowTcpChecksum"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -60550,6 +62432,17 @@ class FlowTcp(OpenApiObject):
         Returns: PatternFlowTcpWindow
         """
         return self._get_property("window", PatternFlowTcpWindow)
+
+    @property
+    def checksum(self):
+        # type: () -> PatternFlowTcpChecksum
+        """checksum getter
+
+        The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.The one's complement of the one's complement sum of all 16 bit words in header and text. An all-zero value means that no checksum will be transmitted. While computing the checksum, the checksum field itself is replaced with zeros.
+
+        Returns: PatternFlowTcpChecksum
+        """
+        return self._get_property("checksum", PatternFlowTcpChecksum)
 
 
 class PatternFlowTcpSrcPort(OpenApiObject):
@@ -67109,6 +69002,129 @@ class PatternFlowTcpWindowMetricTagIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class PatternFlowTcpChecksum(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "generated",
+                "custom",
+            ],
+        },
+        "generated": {
+            "type": str,
+            "enum": [
+                "good",
+                "bad",
+            ],
+        },
+        "custom": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "choice": "generated",
+        "generated": "good",
+    }  # type: Dict[str, Union(type)]
+
+    GENERATED = "generated"  # type: str
+    CUSTOM = "custom"  # type: str
+
+    GOOD = "good"  # type: str
+    BAD = "bad"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None, generated="good", custom=None):
+        super(PatternFlowTcpChecksum, self).__init__()
+        self._parent = parent
+        self._set_property("generated", generated)
+        self._set_property("custom", custom)
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    def set(self, generated=None, custom=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["custom"], Literal["generated"]]
+        """choice getter
+
+        The type of checksum
+
+        Returns: Union[Literal["custom"], Literal["generated"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        The type of checksum
+
+        value: Union[Literal["custom"], Literal["generated"]]
+        """
+        self._set_property("choice", value)
+
+    @property
+    def generated(self):
+        # type: () -> Union[Literal["bad"], Literal["good"]]
+        """generated getter
+
+        A system generated checksum value
+
+        Returns: Union[Literal["bad"], Literal["good"]]
+        """
+        return self._get_property("generated")
+
+    @generated.setter
+    def generated(self, value):
+        """generated setter
+
+        A system generated checksum value
+
+        value: Union[Literal["bad"], Literal["good"]]
+        """
+        self._set_property("generated", value, "generated")
+
+    @property
+    def custom(self):
+        # type: () -> int
+        """custom getter
+
+        A custom checksum value
+
+        Returns: int
+        """
+        return self._get_property("custom")
+
+    @custom.setter
+    def custom(self, value):
+        """custom setter
+
+        A custom checksum value
+
+        value: int
+        """
+        self._set_property("custom", value, "custom")
 
 
 class FlowUdp(OpenApiObject):
@@ -120313,9 +122329,6 @@ class MetricsRequest(OpenApiObject):
                 "lacp",
                 "lldp",
                 "rsvp",
-                "dhcpv4_client",
-                "dhcpv4_server",
-                "dhcpv6_client",
             ],
         },
         "port": {"type": "PortMetricsRequest"},
@@ -120327,9 +122340,6 @@ class MetricsRequest(OpenApiObject):
         "lacp": {"type": "LacpMetricsRequest"},
         "lldp": {"type": "LldpMetricsRequest"},
         "rsvp": {"type": "RsvpMetricsRequest"},
-        "dhcpv4_client": {"type": "Dhcpv4ClientMetricsRequest"},
-        "dhcpv4_server": {"type": "Dhcpv4ServerMetricsRequest"},
-        "dhcpv6_client": {"type": "Dhcpv6ClientMetricsRequest"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -120347,9 +122357,6 @@ class MetricsRequest(OpenApiObject):
     LACP = "lacp"  # type: str
     LLDP = "lldp"  # type: str
     RSVP = "rsvp"  # type: str
-    DHCPV4_CLIENT = "dhcpv4_client"  # type: str
-    DHCPV4_SERVER = "dhcpv4_server"  # type: str
-    DHCPV6_CLIENT = "dhcpv6_client"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -120465,52 +122472,13 @@ class MetricsRequest(OpenApiObject):
         return self._get_property("rsvp", RsvpMetricsRequest, self, "rsvp")
 
     @property
-    def dhcpv4_client(self):
-        # type: () -> Dhcpv4ClientMetricsRequest
-        """Factory property that returns an instance of the Dhcpv4ClientMetricsRequest class
-
-        The request to retrieve DHCPv4 per client metrics/statistics.
-
-        Returns: Dhcpv4ClientMetricsRequest
-        """
-        return self._get_property(
-            "dhcpv4_client", Dhcpv4ClientMetricsRequest, self, "dhcpv4_client"
-        )
-
-    @property
-    def dhcpv4_server(self):
-        # type: () -> Dhcpv4ServerMetricsRequest
-        """Factory property that returns an instance of the Dhcpv4ServerMetricsRequest class
-
-        The request to retrieve DHCPv4 per Server metrics/statistics.
-
-        Returns: Dhcpv4ServerMetricsRequest
-        """
-        return self._get_property(
-            "dhcpv4_server", Dhcpv4ServerMetricsRequest, self, "dhcpv4_server"
-        )
-
-    @property
-    def dhcpv6_client(self):
-        # type: () -> Dhcpv6ClientMetricsRequest
-        """Factory property that returns an instance of the Dhcpv6ClientMetricsRequest class
-
-        The request to retrieve DHCPv6 per client metrics/statistics.
-
-        Returns: Dhcpv6ClientMetricsRequest
-        """
-        return self._get_property(
-            "dhcpv6_client", Dhcpv6ClientMetricsRequest, self, "dhcpv6_client"
-        )
-
-    @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        # type: () -> Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        Returns: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """
         return self._get_property("choice")
 
@@ -120520,7 +122488,7 @@ class MetricsRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["dhcpv4_client"], Literal["dhcpv4_server"], Literal["dhcpv6_client"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
+        value: Union[Literal["bgpv4"], Literal["bgpv6"], Literal["flow"], Literal["isis"], Literal["lacp"], Literal["lag"], Literal["lldp"], Literal["port"], Literal["rsvp"]]
         """
         self._set_property("choice", value)
 
@@ -121788,283 +123756,6 @@ class RsvpMetricsRequest(OpenApiObject):
         self._set_property("column_names", value)
 
 
-class Dhcpv4ClientMetricsRequest(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "client_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "column_names": {
-            "type": list,
-            "enum": [
-                "acks_received",
-                "declines_sent",
-                "discovers_sent",
-                "gateway_address",
-                "ipv4_addresses",
-                "lease_time",
-                "nacks_received",
-                "offers_received",
-                "prefix_length",
-                "rebind_time",
-                "releases_sent",
-                "renew_time",
-                "requests_sent",
-                "session_state",
-            ],
-            "itemtype": str,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    ACKS_RECEIVED = "acks_received"  # type: str
-    DECLINES_SENT = "declines_sent"  # type: str
-    DISCOVERS_SENT = "discovers_sent"  # type: str
-    GATEWAY_ADDRESS = "gateway_address"  # type: str
-    IPV4_ADDRESSES = "ipv4_addresses"  # type: str
-    LEASE_TIME = "lease_time"  # type: str
-    NACKS_RECEIVED = "nacks_received"  # type: str
-    OFFERS_RECEIVED = "offers_received"  # type: str
-    PREFIX_LENGTH = "prefix_length"  # type: str
-    REBIND_TIME = "rebind_time"  # type: str
-    RELEASES_SENT = "releases_sent"  # type: str
-    RENEW_TIME = "renew_time"  # type: str
-    REQUESTS_SENT = "requests_sent"  # type: str
-    SESSION_STATE = "session_state"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, client_names=None, column_names=None):
-        super(Dhcpv4ClientMetricsRequest, self).__init__()
-        self._parent = parent
-        self._set_property("client_names", client_names)
-        self._set_property("column_names", column_names)
-
-    def set(self, client_names=None, column_names=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def client_names(self):
-        # type: () -> List[str]
-        """client_names getter
-
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("client_names")
-
-    @client_names.setter
-    def client_names(self, value):
-        """client_names setter
-
-        The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.. x-constraint:. /components/schemas/Device.Dhcpv4client/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("client_names", value)
-
-    @property
-    def column_names(self):
-        # type: () -> List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
-        """column_names getter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 client cannot be excluded.
-
-        Returns: List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
-        """
-        return self._get_property("column_names")
-
-    @column_names.setter
-    def column_names(self, value):
-        """column_names setter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 client cannot be excluded.
-
-        value: List[Union[Literal["acks_received"], Literal["declines_sent"], Literal["discovers_sent"], Literal["gateway_address"], Literal["ipv4_addresses"], Literal["lease_time"], Literal["nacks_received"], Literal["offers_received"], Literal["prefix_length"], Literal["rebind_time"], Literal["releases_sent"], Literal["renew_time"], Literal["requests_sent"], Literal["session_state"]]]
-        """
-        self._set_property("column_names", value)
-
-
-class Dhcpv4ServerMetricsRequest(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "server_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "column_names": {
-            "type": list,
-            "enum": [
-                "acks_sent",
-                "declines_received",
-                "discovers_received",
-                "nacks_sent",
-                "offers_sent",
-                "releases_received",
-                "requests_received",
-            ],
-            "itemtype": str,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    ACKS_SENT = "acks_sent"  # type: str
-    DECLINES_RECEIVED = "declines_received"  # type: str
-    DISCOVERS_RECEIVED = "discovers_received"  # type: str
-    NACKS_SENT = "nacks_sent"  # type: str
-    OFFERS_SENT = "offers_sent"  # type: str
-    RELEASES_RECEIVED = "releases_received"  # type: str
-    REQUESTS_RECEIVED = "requests_received"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, server_names=None, column_names=None):
-        super(Dhcpv4ServerMetricsRequest, self).__init__()
-        self._parent = parent
-        self._set_property("server_names", server_names)
-        self._set_property("column_names", column_names)
-
-    def set(self, server_names=None, column_names=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def server_names(self):
-        # type: () -> List[str]
-        """server_names getter
-
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("server_names")
-
-    @server_names.setter
-    def server_names(self, value):
-        """server_names setter
-
-        The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.. x-constraint:. /components/schemas/Device.Dhcpv4Server/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("server_names", value)
-
-    @property
-    def column_names(self):
-        # type: () -> List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
-        """column_names getter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 server cannot be excluded.
-
-        Returns: List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
-        """
-        return self._get_property("column_names")
-
-    @column_names.setter
-    def column_names(self, value):
-        """column_names setter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv4 server cannot be excluded.
-
-        value: List[Union[Literal["acks_sent"], Literal["declines_received"], Literal["discovers_received"], Literal["nacks_sent"], Literal["offers_sent"], Literal["releases_received"], Literal["requests_received"]]]
-        """
-        self._set_property("column_names", value)
-
-
-class Dhcpv6ClientMetricsRequest(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "client_names": {
-            "type": list,
-            "itemtype": str,
-        },
-        "column_names": {
-            "type": list,
-            "enum": [
-                "dummy1",
-                "dummy2",
-            ],
-            "itemtype": str,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    DUMMY1 = "dummy1"  # type: str
-    DUMMY2 = "dummy2"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, client_names=None, column_names=None):
-        super(Dhcpv6ClientMetricsRequest, self).__init__()
-        self._parent = parent
-        self._set_property("client_names", client_names)
-        self._set_property("column_names", column_names)
-
-    def set(self, client_names=None, column_names=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def client_names(self):
-        # type: () -> List[str]
-        """client_names getter
-
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("client_names")
-
-    @client_names.setter
-    def client_names(self, value):
-        """client_names setter
-
-        The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.. x-constraint:. /components/schemas/Device.Dhcpv6client/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("client_names", value)
-
-    @property
-    def column_names(self):
-        # type: () -> List[Union[Literal["dummy1"], Literal["dummy2"]]]
-        """column_names getter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv6 client cannot be excluded.
-
-        Returns: List[Union[Literal["dummy1"], Literal["dummy2"]]]
-        """
-        return self._get_property("column_names")
-
-    @column_names.setter
-    def column_names(self, value):
-        """column_names setter
-
-        The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv6 client cannot be excluded.
-
-        value: List[Union[Literal["dummy1"], Literal["dummy2"]]]
-        """
-        self._set_property("column_names", value)
-
-
 class MetricsResponse(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -122081,8 +123772,6 @@ class MetricsResponse(OpenApiObject):
                 "lacp_metrics",
                 "lldp_metrics",
                 "rsvp_metrics",
-                "dhcpv4_client",
-                "dhcpv6_client",
             ],
         },
         "port_metrics": {"type": "PortMetricIter"},
@@ -122094,9 +123783,6 @@ class MetricsResponse(OpenApiObject):
         "lacp_metrics": {"type": "LacpMetricIter"},
         "lldp_metrics": {"type": "LldpMetricIter"},
         "rsvp_metrics": {"type": "RsvpMetricIter"},
-        "dhcpv4client_metrics": {"type": "Dhcpv4ClientMetricIter"},
-        "dhcpv4server_metrics": {"type": "Dhcpv4ServerMetricIter"},
-        "dhcpv6client_metrics": {"type": "Dhcpv6ClientMetricIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -122114,8 +123800,6 @@ class MetricsResponse(OpenApiObject):
     LACP_METRICS = "lacp_metrics"  # type: str
     LLDP_METRICS = "lldp_metrics"  # type: str
     RSVP_METRICS = "rsvp_metrics"  # type: str
-    DHCPV4_CLIENT = "dhcpv4_client"  # type: str
-    DHCPV6_CLIENT = "dhcpv6_client"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -122133,12 +123817,12 @@ class MetricsResponse(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        # type: () -> Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        Returns: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
         """
         return self._get_property("choice")
 
@@ -122148,7 +123832,7 @@ class MetricsResponse(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["dhcpv4_client"], Literal["dhcpv6_client"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
+        value: Union[Literal["bgpv4_metrics"], Literal["bgpv6_metrics"], Literal["flow_metrics"], Literal["isis_metrics"], Literal["lacp_metrics"], Literal["lag_metrics"], Literal["lldp_metrics"], Literal["port_metrics"], Literal["rsvp_metrics"]]
         """
         self._set_property("choice", value)
 
@@ -122267,45 +123951,6 @@ class MetricsResponse(OpenApiObject):
         """
         return self._get_property(
             "rsvp_metrics", RsvpMetricIter, self._parent, self._choice
-        )
-
-    @property
-    def dhcpv4client_metrics(self):
-        # type: () -> Dhcpv4ClientMetricIter
-        """dhcpv4client_metrics getter
-
-        TBD
-
-        Returns: Dhcpv4ClientMetricIter
-        """
-        return self._get_property(
-            "dhcpv4client_metrics", Dhcpv4ClientMetricIter, self._parent, self._choice
-        )
-
-    @property
-    def dhcpv4server_metrics(self):
-        # type: () -> Dhcpv4ServerMetricIter
-        """dhcpv4server_metrics getter
-
-        TBD
-
-        Returns: Dhcpv4ServerMetricIter
-        """
-        return self._get_property(
-            "dhcpv4server_metrics", Dhcpv4ServerMetricIter, self._parent, self._choice
-        )
-
-    @property
-    def dhcpv6client_metrics(self):
-        # type: () -> Dhcpv6ClientMetricIter
-        """dhcpv6client_metrics getter
-
-        TBD
-
-        Returns: Dhcpv6ClientMetricIter
-        """
-        return self._get_property(
-            "dhcpv6client_metrics", Dhcpv6ClientMetricIter, self._parent, self._choice
         )
 
 
@@ -128746,1067 +130391,6 @@ class RsvpMetricIter(OpenApiIter):
         return item
 
 
-class Dhcpv4ClientMetric(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "session_state": {
-            "type": str,
-            "enum": [
-                "up",
-                "down",
-            ],
-        },
-        "discovers_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "offers_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "requests_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "acks_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "nacks_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "releases_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "declines_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "ipv4_address": {"type": str},
-        "prefix_length": {
-            "type": int,
-            "format": "uint32",
-            "maximum": 32,
-        },
-        "gateway_address": {"type": str},
-        "lease_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "renew_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "rebind_time": {
-            "type": int,
-            "format": "uint32",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    UP = "up"  # type: str
-    DOWN = "down"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        session_state=None,
-        discovers_sent_count=None,
-        offers_received_count=None,
-        requests_received_count=None,
-        acks_received_count=None,
-        nacks_received_count=None,
-        releases_sent_count=None,
-        declines_sent_count=None,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
-        renew_time=None,
-        rebind_time=None,
-    ):
-        super(Dhcpv4ClientMetric, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("session_state", session_state)
-        self._set_property("discovers_sent_count", discovers_sent_count)
-        self._set_property("offers_received_count", offers_received_count)
-        self._set_property("requests_received_count", requests_received_count)
-        self._set_property("acks_received_count", acks_received_count)
-        self._set_property("nacks_received_count", nacks_received_count)
-        self._set_property("releases_sent_count", releases_sent_count)
-        self._set_property("declines_sent_count", declines_sent_count)
-        self._set_property("ipv4_address", ipv4_address)
-        self._set_property("prefix_length", prefix_length)
-        self._set_property("gateway_address", gateway_address)
-        self._set_property("lease_time", lease_time)
-        self._set_property("renew_time", renew_time)
-        self._set_property("rebind_time", rebind_time)
-
-    def set(
-        self,
-        name=None,
-        session_state=None,
-        discovers_sent_count=None,
-        offers_received_count=None,
-        requests_received_count=None,
-        acks_received_count=None,
-        nacks_received_count=None,
-        releases_sent_count=None,
-        declines_sent_count=None,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
-        renew_time=None,
-        rebind_time=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        The name of configured DHCPv4 client.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        The name of configured DHCPv4 client.
-
-        value: str
-        """
-        self._set_property("name", value)
-
-    @property
-    def session_state(self):
-        # type: () -> Union[Literal["down"], Literal["up"]]
-        """session_state getter
-
-        Session state as up or down. Up refers to an Established state when the client has valid lease and is in its normal operating BOUND state and Down refers to any other state.
-
-        Returns: Union[Literal["down"], Literal["up"]]
-        """
-        return self._get_property("session_state")
-
-    @session_state.setter
-    def session_state(self, value):
-        """session_state setter
-
-        Session state as up or down. Up refers to an Established state when the client has valid lease and is in its normal operating BOUND state and Down refers to any other state.
-
-        value: Union[Literal["down"], Literal["up"]]
-        """
-        self._set_property("session_state", value)
-
-    @property
-    def discovers_sent_count(self):
-        # type: () -> int
-        """discovers_sent_count getter
-
-        Number of DHCPDISCOVER messages sent.
-
-        Returns: int
-        """
-        return self._get_property("discovers_sent_count")
-
-    @discovers_sent_count.setter
-    def discovers_sent_count(self, value):
-        """discovers_sent_count setter
-
-        Number of DHCPDISCOVER messages sent.
-
-        value: int
-        """
-        self._set_property("discovers_sent_count", value)
-
-    @property
-    def offers_received_count(self):
-        # type: () -> int
-        """offers_received_count getter
-
-        Number of DHCPOFFER messages received.
-
-        Returns: int
-        """
-        return self._get_property("offers_received_count")
-
-    @offers_received_count.setter
-    def offers_received_count(self, value):
-        """offers_received_count setter
-
-        Number of DHCPOFFER messages received.
-
-        value: int
-        """
-        self._set_property("offers_received_count", value)
-
-    @property
-    def requests_received_count(self):
-        # type: () -> int
-        """requests_received_count getter
-
-        Number of DHCPREQUEST messages received.
-
-        Returns: int
-        """
-        return self._get_property("requests_received_count")
-
-    @requests_received_count.setter
-    def requests_received_count(self, value):
-        """requests_received_count setter
-
-        Number of DHCPREQUEST messages received.
-
-        value: int
-        """
-        self._set_property("requests_received_count", value)
-
-    @property
-    def acks_received_count(self):
-        # type: () -> int
-        """acks_received_count getter
-
-        Number of lease DHCPACK messages received.
-
-        Returns: int
-        """
-        return self._get_property("acks_received_count")
-
-    @acks_received_count.setter
-    def acks_received_count(self, value):
-        """acks_received_count setter
-
-        Number of lease DHCPACK messages received.
-
-        value: int
-        """
-        self._set_property("acks_received_count", value)
-
-    @property
-    def nacks_received_count(self):
-        # type: () -> int
-        """nacks_received_count getter
-
-        Number of negative lease DHCPNACK messages received.
-
-        Returns: int
-        """
-        return self._get_property("nacks_received_count")
-
-    @nacks_received_count.setter
-    def nacks_received_count(self, value):
-        """nacks_received_count setter
-
-        Number of negative lease DHCPNACK messages received.
-
-        value: int
-        """
-        self._set_property("nacks_received_count", value)
-
-    @property
-    def releases_sent_count(self):
-        # type: () -> int
-        """releases_sent_count getter
-
-        Number of DHCPRELEASE messages sent.
-
-        Returns: int
-        """
-        return self._get_property("releases_sent_count")
-
-    @releases_sent_count.setter
-    def releases_sent_count(self, value):
-        """releases_sent_count setter
-
-        Number of DHCPRELEASE messages sent.
-
-        value: int
-        """
-        self._set_property("releases_sent_count", value)
-
-    @property
-    def declines_sent_count(self):
-        # type: () -> int
-        """declines_sent_count getter
-
-        Number of DHCPDECLINE messages sent.
-
-        Returns: int
-        """
-        return self._get_property("declines_sent_count")
-
-    @declines_sent_count.setter
-    def declines_sent_count(self, value):
-        """declines_sent_count setter
-
-        Number of DHCPDECLINE messages sent.
-
-        value: int
-        """
-        self._set_property("declines_sent_count", value)
-
-    @property
-    def ipv4_address(self):
-        # type: () -> str
-        """ipv4_address getter
-
-        The IP address associated with this DHCP Client session.
-
-        Returns: str
-        """
-        return self._get_property("ipv4_address")
-
-    @ipv4_address.setter
-    def ipv4_address(self, value):
-        """ipv4_address setter
-
-        The IP address associated with this DHCP Client session.
-
-        value: str
-        """
-        self._set_property("ipv4_address", value)
-
-    @property
-    def prefix_length(self):
-        # type: () -> int
-        """prefix_length getter
-
-        The length of the prefix.
-
-        Returns: int
-        """
-        return self._get_property("prefix_length")
-
-    @prefix_length.setter
-    def prefix_length(self, value):
-        """prefix_length setter
-
-        The length of the prefix.
-
-        value: int
-        """
-        self._set_property("prefix_length", value)
-
-    @property
-    def gateway_address(self):
-        # type: () -> str
-        """gateway_address getter
-
-        The Gateway address associated with this DHCP Client session.
-
-        Returns: str
-        """
-        return self._get_property("gateway_address")
-
-    @gateway_address.setter
-    def gateway_address(self, value):
-        """gateway_address setter
-
-        The Gateway address associated with this DHCP Client session.
-
-        value: str
-        """
-        self._set_property("gateway_address", value)
-
-    @property
-    def lease_time(self):
-        # type: () -> int
-        """lease_time getter
-
-        The duration of the IP address lease, in seconds.
-
-        Returns: int
-        """
-        return self._get_property("lease_time")
-
-    @lease_time.setter
-    def lease_time(self, value):
-        """lease_time setter
-
-        The duration of the IP address lease, in seconds.
-
-        value: int
-        """
-        self._set_property("lease_time", value)
-
-    @property
-    def renew_time(self):
-        # type: () -> int
-        """renew_time getter
-
-        Time in seconds until the DHCPv4 client starts renewing the lease.
-
-        Returns: int
-        """
-        return self._get_property("renew_time")
-
-    @renew_time.setter
-    def renew_time(self, value):
-        """renew_time setter
-
-        Time in seconds until the DHCPv4 client starts renewing the lease.
-
-        value: int
-        """
-        self._set_property("renew_time", value)
-
-    @property
-    def rebind_time(self):
-        # type: () -> int
-        """rebind_time getter
-
-        Time in seconds until the DHCPv4 client starts rebinding.
-
-        Returns: int
-        """
-        return self._get_property("rebind_time")
-
-    @rebind_time.setter
-    def rebind_time(self, value):
-        """rebind_time setter
-
-        Time in seconds until the DHCPv4 client starts rebinding.
-
-        value: int
-        """
-        self._set_property("rebind_time", value)
-
-
-class Dhcpv4ClientMetricIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Dhcpv4ClientMetricIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv4ClientMetric]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Dhcpv4ClientMetricIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Dhcpv4ClientMetric
-        return self._next()
-
-    def next(self):
-        # type: () -> Dhcpv4ClientMetric
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv4ClientMetric):
-            raise Exception("Item is not an instance of Dhcpv4ClientMetric")
-
-    def metric(
-        self,
-        name=None,
-        session_state=None,
-        discovers_sent_count=None,
-        offers_received_count=None,
-        requests_received_count=None,
-        acks_received_count=None,
-        nacks_received_count=None,
-        releases_sent_count=None,
-        declines_sent_count=None,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
-        renew_time=None,
-        rebind_time=None,
-    ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,int,int,int) -> Dhcpv4ClientMetricIter
-        """Factory method that creates an instance of the Dhcpv4ClientMetric class
-
-        DHCPv4 per peer statistics information.
-
-        Returns: Dhcpv4ClientMetricIter
-        """
-        item = Dhcpv4ClientMetric(
-            parent=self._parent,
-            name=name,
-            session_state=session_state,
-            discovers_sent_count=discovers_sent_count,
-            offers_received_count=offers_received_count,
-            requests_received_count=requests_received_count,
-            acks_received_count=acks_received_count,
-            nacks_received_count=nacks_received_count,
-            releases_sent_count=releases_sent_count,
-            declines_sent_count=declines_sent_count,
-            ipv4_address=ipv4_address,
-            prefix_length=prefix_length,
-            gateway_address=gateway_address,
-            lease_time=lease_time,
-            renew_time=renew_time,
-            rebind_time=rebind_time,
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        name=None,
-        session_state=None,
-        discovers_sent_count=None,
-        offers_received_count=None,
-        requests_received_count=None,
-        acks_received_count=None,
-        nacks_received_count=None,
-        releases_sent_count=None,
-        declines_sent_count=None,
-        ipv4_address=None,
-        prefix_length=None,
-        gateway_address=None,
-        lease_time=None,
-        renew_time=None,
-        rebind_time=None,
-    ):
-        # type: (str,Union[Literal["down"], Literal["up"]],int,int,int,int,int,int,int,str,int,str,int,int,int) -> Dhcpv4ClientMetric
-        """Add method that creates and returns an instance of the Dhcpv4ClientMetric class
-
-        DHCPv4 per peer statistics information.
-
-        Returns: Dhcpv4ClientMetric
-        """
-        item = Dhcpv4ClientMetric(
-            parent=self._parent,
-            name=name,
-            session_state=session_state,
-            discovers_sent_count=discovers_sent_count,
-            offers_received_count=offers_received_count,
-            requests_received_count=requests_received_count,
-            acks_received_count=acks_received_count,
-            nacks_received_count=nacks_received_count,
-            releases_sent_count=releases_sent_count,
-            declines_sent_count=declines_sent_count,
-            ipv4_address=ipv4_address,
-            prefix_length=prefix_length,
-            gateway_address=gateway_address,
-            lease_time=lease_time,
-            renew_time=renew_time,
-            rebind_time=rebind_time,
-        )
-        self._add(item)
-        return item
-
-
-class Dhcpv4ServerMetric(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "discovers_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "offers_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "requests_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "acks_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "nacks_sent_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "releases_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-        "declines_received_count": {
-            "type": int,
-            "format": "uint64",
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        name=None,
-        discovers_received_count=None,
-        offers_sent_count=None,
-        requests_received_count=None,
-        acks_sent_count=None,
-        nacks_sent_count=None,
-        releases_received_count=None,
-        declines_received_count=None,
-    ):
-        super(Dhcpv4ServerMetric, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("discovers_received_count", discovers_received_count)
-        self._set_property("offers_sent_count", offers_sent_count)
-        self._set_property("requests_received_count", requests_received_count)
-        self._set_property("acks_sent_count", acks_sent_count)
-        self._set_property("nacks_sent_count", nacks_sent_count)
-        self._set_property("releases_received_count", releases_received_count)
-        self._set_property("declines_received_count", declines_received_count)
-
-    def set(
-        self,
-        name=None,
-        discovers_received_count=None,
-        offers_sent_count=None,
-        requests_received_count=None,
-        acks_sent_count=None,
-        nacks_sent_count=None,
-        releases_received_count=None,
-        declines_received_count=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        The name of configured DHCPv4 Server.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        The name of configured DHCPv4 Server.
-
-        value: str
-        """
-        self._set_property("name", value)
-
-    @property
-    def discovers_received_count(self):
-        # type: () -> int
-        """discovers_received_count getter
-
-        Number of DHCPDISCOVER messages received.
-
-        Returns: int
-        """
-        return self._get_property("discovers_received_count")
-
-    @discovers_received_count.setter
-    def discovers_received_count(self, value):
-        """discovers_received_count setter
-
-        Number of DHCPDISCOVER messages received.
-
-        value: int
-        """
-        self._set_property("discovers_received_count", value)
-
-    @property
-    def offers_sent_count(self):
-        # type: () -> int
-        """offers_sent_count getter
-
-        Number of DHCPOFFER messages sent.
-
-        Returns: int
-        """
-        return self._get_property("offers_sent_count")
-
-    @offers_sent_count.setter
-    def offers_sent_count(self, value):
-        """offers_sent_count setter
-
-        Number of DHCPOFFER messages sent.
-
-        value: int
-        """
-        self._set_property("offers_sent_count", value)
-
-    @property
-    def requests_received_count(self):
-        # type: () -> int
-        """requests_received_count getter
-
-        Number of DHCPOFFER messages received.
-
-        Returns: int
-        """
-        return self._get_property("requests_received_count")
-
-    @requests_received_count.setter
-    def requests_received_count(self, value):
-        """requests_received_count setter
-
-        Number of DHCPOFFER messages received.
-
-        value: int
-        """
-        self._set_property("requests_received_count", value)
-
-    @property
-    def acks_sent_count(self):
-        # type: () -> int
-        """acks_sent_count getter
-
-        Number of lease DHCPACK messages sent.
-
-        Returns: int
-        """
-        return self._get_property("acks_sent_count")
-
-    @acks_sent_count.setter
-    def acks_sent_count(self, value):
-        """acks_sent_count setter
-
-        Number of lease DHCPACK messages sent.
-
-        value: int
-        """
-        self._set_property("acks_sent_count", value)
-
-    @property
-    def nacks_sent_count(self):
-        # type: () -> int
-        """nacks_sent_count getter
-
-        Number of negative lease DHCPNACK messages sent.
-
-        Returns: int
-        """
-        return self._get_property("nacks_sent_count")
-
-    @nacks_sent_count.setter
-    def nacks_sent_count(self, value):
-        """nacks_sent_count setter
-
-        Number of negative lease DHCPNACK messages sent.
-
-        value: int
-        """
-        self._set_property("nacks_sent_count", value)
-
-    @property
-    def releases_received_count(self):
-        # type: () -> int
-        """releases_received_count getter
-
-        Number of DHCPRELEASE messages received.
-
-        Returns: int
-        """
-        return self._get_property("releases_received_count")
-
-    @releases_received_count.setter
-    def releases_received_count(self, value):
-        """releases_received_count setter
-
-        Number of DHCPRELEASE messages received.
-
-        value: int
-        """
-        self._set_property("releases_received_count", value)
-
-    @property
-    def declines_received_count(self):
-        # type: () -> int
-        """declines_received_count getter
-
-        Number of DHCPDECLINE messages received.
-
-        Returns: int
-        """
-        return self._get_property("declines_received_count")
-
-    @declines_received_count.setter
-    def declines_received_count(self, value):
-        """declines_received_count setter
-
-        Number of DHCPDECLINE messages received.
-
-        value: int
-        """
-        self._set_property("declines_received_count", value)
-
-
-class Dhcpv4ServerMetricIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Dhcpv4ServerMetricIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv4ServerMetric]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Dhcpv4ServerMetricIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Dhcpv4ServerMetric
-        return self._next()
-
-    def next(self):
-        # type: () -> Dhcpv4ServerMetric
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv4ServerMetric):
-            raise Exception("Item is not an instance of Dhcpv4ServerMetric")
-
-    def metric(
-        self,
-        name=None,
-        discovers_received_count=None,
-        offers_sent_count=None,
-        requests_received_count=None,
-        acks_sent_count=None,
-        nacks_sent_count=None,
-        releases_received_count=None,
-        declines_received_count=None,
-    ):
-        # type: (str,int,int,int,int,int,int,int) -> Dhcpv4ServerMetricIter
-        """Factory method that creates an instance of the Dhcpv4ServerMetric class
-
-        DHCPv4 per peer statistics information.
-
-        Returns: Dhcpv4ServerMetricIter
-        """
-        item = Dhcpv4ServerMetric(
-            parent=self._parent,
-            name=name,
-            discovers_received_count=discovers_received_count,
-            offers_sent_count=offers_sent_count,
-            requests_received_count=requests_received_count,
-            acks_sent_count=acks_sent_count,
-            nacks_sent_count=nacks_sent_count,
-            releases_received_count=releases_received_count,
-            declines_received_count=declines_received_count,
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        name=None,
-        discovers_received_count=None,
-        offers_sent_count=None,
-        requests_received_count=None,
-        acks_sent_count=None,
-        nacks_sent_count=None,
-        releases_received_count=None,
-        declines_received_count=None,
-    ):
-        # type: (str,int,int,int,int,int,int,int) -> Dhcpv4ServerMetric
-        """Add method that creates and returns an instance of the Dhcpv4ServerMetric class
-
-        DHCPv4 per peer statistics information.
-
-        Returns: Dhcpv4ServerMetric
-        """
-        item = Dhcpv4ServerMetric(
-            parent=self._parent,
-            name=name,
-            discovers_received_count=discovers_received_count,
-            offers_sent_count=offers_sent_count,
-            requests_received_count=requests_received_count,
-            acks_sent_count=acks_sent_count,
-            nacks_sent_count=nacks_sent_count,
-            releases_received_count=releases_received_count,
-            declines_received_count=declines_received_count,
-        )
-        self._add(item)
-        return item
-
-
-class Dhcpv6ClientMetric(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "name": {"type": str},
-        "dummy1": {"type": str},
-        "dummy2": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, name=None, dummy1=None, dummy2=None):
-        super(Dhcpv6ClientMetric, self).__init__()
-        self._parent = parent
-        self._set_property("name", name)
-        self._set_property("dummy1", dummy1)
-        self._set_property("dummy2", dummy2)
-
-    def set(self, name=None, dummy1=None, dummy2=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def name(self):
-        # type: () -> str
-        """name getter
-
-        The name of configured DHCPv6 client.
-
-        Returns: str
-        """
-        return self._get_property("name")
-
-    @name.setter
-    def name(self, value):
-        """name setter
-
-        The name of configured DHCPv6 client.
-
-        value: str
-        """
-        self._set_property("name", value)
-
-    @property
-    def dummy1(self):
-        # type: () -> str
-        """dummy1 getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("dummy1")
-
-    @dummy1.setter
-    def dummy1(self, value):
-        """dummy1 setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("dummy1", value)
-
-    @property
-    def dummy2(self):
-        # type: () -> str
-        """dummy2 getter
-
-        TBD
-
-        Returns: str
-        """
-        return self._get_property("dummy2")
-
-    @dummy2.setter
-    def dummy2(self, value):
-        """dummy2 setter
-
-        TBD
-
-        value: str
-        """
-        self._set_property("dummy2", value)
-
-
-class Dhcpv6ClientMetricIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Dhcpv6ClientMetricIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv6ClientMetric]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Dhcpv6ClientMetricIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Dhcpv6ClientMetric
-        return self._next()
-
-    def next(self):
-        # type: () -> Dhcpv6ClientMetric
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv6ClientMetric):
-            raise Exception("Item is not an instance of Dhcpv6ClientMetric")
-
-    def metric(self, name=None, dummy1=None, dummy2=None):
-        # type: (str,str,str) -> Dhcpv6ClientMetricIter
-        """Factory method that creates an instance of the Dhcpv6ClientMetric class
-
-        DHCPv6 per peer statistics information.
-
-        Returns: Dhcpv6ClientMetricIter
-        """
-        item = Dhcpv6ClientMetric(
-            parent=self._parent, name=name, dummy1=dummy1, dummy2=dummy2
-        )
-        self._add(item)
-        return self
-
-    def add(self, name=None, dummy1=None, dummy2=None):
-        # type: (str,str,str) -> Dhcpv6ClientMetric
-        """Add method that creates and returns an instance of the Dhcpv6ClientMetric class
-
-        DHCPv6 per peer statistics information.
-
-        Returns: Dhcpv6ClientMetric
-        """
-        item = Dhcpv6ClientMetric(
-            parent=self._parent, name=name, dummy1=dummy1, dummy2=dummy2
-        )
-        self._add(item)
-        return item
-
-
 class StatesRequest(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -129820,7 +130404,6 @@ class StatesRequest(OpenApiObject):
                 "isis_lsps",
                 "lldp_neighbors",
                 "rsvp_lsps",
-                "dhcp_v4server_leases",
             ],
         },
         "ipv4_neighbors": {"type": "Neighborsv4StatesRequest"},
@@ -129829,7 +130412,6 @@ class StatesRequest(OpenApiObject):
         "isis_lsps": {"type": "IsisLspsStateRequest"},
         "lldp_neighbors": {"type": "LldpNeighborsStateRequest"},
         "rsvp_lsps": {"type": "RsvpLspsStateRequest"},
-        "dhcp_v4server_leases": {"type": "Dhcpv4ServerLeaseStateRequest"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -129844,7 +130426,6 @@ class StatesRequest(OpenApiObject):
     ISIS_LSPS = "isis_lsps"  # type: str
     LLDP_NEIGHBORS = "lldp_neighbors"  # type: str
     RSVP_LSPS = "rsvp_lsps"  # type: str
-    DHCP_V4SERVER_LEASES = "dhcp_v4server_leases"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -129935,29 +130516,13 @@ class StatesRequest(OpenApiObject):
         return self._get_property("rsvp_lsps", RsvpLspsStateRequest, self, "rsvp_lsps")
 
     @property
-    def dhcp_v4server_leases(self):
-        # type: () -> Dhcpv4ServerLeaseStateRequest
-        """Factory property that returns an instance of the Dhcpv4ServerLeaseStateRequest class
-
-        The request to retrieve DHCP Server host allocated status.
-
-        Returns: Dhcpv4ServerLeaseStateRequest
-        """
-        return self._get_property(
-            "dhcp_v4server_leases",
-            Dhcpv4ServerLeaseStateRequest,
-            self,
-            "dhcp_v4server_leases",
-        )
-
-    @property
     def choice(self):
-        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        # type: () -> Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        Returns: Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         return self._get_property("choice")
 
@@ -129967,7 +130532,7 @@ class StatesRequest(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        value: Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         self._set_property("choice", value)
 
@@ -130763,54 +131328,6 @@ class RsvpLspsStateRequest(OpenApiObject):
         self._set_property("rsvp_router_names", value)
 
 
-class Dhcpv4ServerLeaseStateRequest(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "dhcp_server_names": {
-            "type": list,
-            "itemtype": str,
-        },
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, dhcp_server_names=None):
-        super(Dhcpv4ServerLeaseStateRequest, self).__init__()
-        self._parent = parent
-        self._set_property("dhcp_server_names", dhcp_server_names)
-
-    def set(self, dhcp_server_names=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def dhcp_server_names(self):
-        # type: () -> List[str]
-        """dhcp_server_names getter
-
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
-
-        Returns: List[str]
-        """
-        return self._get_property("dhcp_server_names")
-
-    @dhcp_server_names.setter
-    def dhcp_server_names(self, value):
-        """dhcp_server_names setter
-
-        The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.. x-constraint:. /components/schemas/Device.Dhcpv4server/properties/name.
-
-        value: List[str]
-        """
-        self._set_property("dhcp_server_names", value)
-
-
 class StatesResponse(OpenApiObject):
     __slots__ = ("_parent", "_choice")
 
@@ -130824,7 +131341,6 @@ class StatesResponse(OpenApiObject):
                 "isis_lsps",
                 "lldp_neighbors",
                 "rsvp_lsps",
-                "dhcp_v4server_leases",
             ],
         },
         "ipv4_neighbors": {"type": "Neighborsv4StateIter"},
@@ -130833,7 +131349,6 @@ class StatesResponse(OpenApiObject):
         "isis_lsps": {"type": "IsisLspsStateIter"},
         "lldp_neighbors": {"type": "LldpNeighborsStateIter"},
         "rsvp_lsps": {"type": "RsvpLspsStateIter"},
-        "dhcp_v4server_leases": {"type": "Dhcpv4ServerLeasesStateIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -130848,7 +131363,6 @@ class StatesResponse(OpenApiObject):
     ISIS_LSPS = "isis_lsps"  # type: str
     LLDP_NEIGHBORS = "lldp_neighbors"  # type: str
     RSVP_LSPS = "rsvp_lsps"  # type: str
-    DHCP_V4SERVER_LEASES = "dhcp_v4server_leases"  # type: str
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
@@ -130866,12 +131380,12 @@ class StatesResponse(OpenApiObject):
 
     @property
     def choice(self):
-        # type: () -> Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        # type: () -> Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """choice getter
 
         TBD
 
-        Returns: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        Returns: Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         return self._get_property("choice")
 
@@ -130881,7 +131395,7 @@ class StatesResponse(OpenApiObject):
 
         TBD
 
-        value: Union[Literal["bgp_prefixes"], Literal["dhcp_v4server_leases"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
+        value: Union[Literal["bgp_prefixes"], Literal["ipv4_neighbors"], Literal["ipv6_neighbors"], Literal["isis_lsps"], Literal["lldp_neighbors"], Literal["rsvp_lsps"]]
         """
         self._set_property("choice", value)
 
@@ -130961,22 +131475,6 @@ class StatesResponse(OpenApiObject):
         """
         return self._get_property(
             "rsvp_lsps", RsvpLspsStateIter, self._parent, self._choice
-        )
-
-    @property
-    def dhcp_v4server_leases(self):
-        # type: () -> Dhcpv4ServerLeasesStateIter
-        """dhcp_v4server_leases getter
-
-        TBD
-
-        Returns: Dhcpv4ServerLeasesStateIter
-        """
-        return self._get_property(
-            "dhcp_v4server_leases",
-            Dhcpv4ServerLeasesStateIter,
-            self._parent,
-            self._choice,
         )
 
 
@@ -131434,6 +131932,7 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
             "format": "ipv6",
         },
         "communities": {"type": "ResultBgpCommunityIter"},
+        "extended_communities": {"type": "ResultExtendedCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
         "local_preference": {
             "type": int,
@@ -131630,6 +132129,22 @@ class BgpPrefixIpv4UnicastState(OpenApiObject):
         """
         return self._get_property(
             "communities", ResultBgpCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> ResultExtendedCommunityIter
+        """extended_communities getter
+
+        Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities",
+            ResultExtendedCommunityIter,
+            self._parent,
+            self._choice,
         )
 
     @property
@@ -131857,6 +132372,1407 @@ class ResultBgpCommunityIter(OpenApiIter):
         item = ResultBgpCommunity(
             parent=self._parent, type=type, as_number=as_number, as_custom=as_custom
         )
+        self._add(item)
+        return item
+
+
+class ResultExtendedCommunity(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "raw": {
+            "type": str,
+            "format": "hex",
+            "maxLength": 16,
+        },
+        "structured": {"type": "ResultExtendedCommunityStructured"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, raw=None):
+        super(ResultExtendedCommunity, self).__init__()
+        self._parent = parent
+        self._set_property("raw", raw)
+
+    def set(self, raw=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def raw(self):
+        # type: () -> str
+        """raw getter
+
+        The raw byte contents of the bytes received in the Extended Community as 16 hex characters.
+
+        Returns: str
+        """
+        return self._get_property("raw")
+
+    @raw.setter
+    def raw(self, value):
+        """raw setter
+
+        The raw byte contents of the bytes received in the Extended Community as 16 hex characters.
+
+        value: str
+        """
+        self._set_property("raw", value)
+
+    @property
+    def structured(self):
+        # type: () -> ResultExtendedCommunityStructured
+        """structured getter
+
+        The Extended Communities Attribute is optional BGP attribute,defined in RFC4360 with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-bytes value. It is divided into two main parts. The first bytes of the community encode type and optonal sub-type field.. The last bytes (or bytes for types without sub-type) carry unique set of data in format defined by the type and optional sub-type field. Extended communities provide larger range for grouping or categorizing communities.The Extended Communities Attribute is optional BGP attribute,defined in RFC4360 with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-bytes value. It is divided into two main parts. The first bytes of the community encode type and optonal sub-type field.. The last bytes (or bytes for types without sub-type) carry unique set of data in format defined by the type and optional sub-type field. Extended communities provide larger range for grouping or categorizing communities.The Extended Communities Attribute is optional BGP attribute,defined in RFC4360 with the Type Code 16. Community and Extended Communities attributes are utilized to trigger routing decisions, such as acceptance, rejection, preference, or redistribution. An extended community is an 8-bytes value. It is divided into two main parts. The first bytes of the community encode type and optonal sub-type field.. The last bytes (or bytes for types without sub-type) carry unique set of data in format defined by the type and optional sub-type field. Extended communities provide larger range for grouping or categorizing communities.
+
+        Returns: ResultExtendedCommunityStructured
+        """
+        return self._get_property("structured", ResultExtendedCommunityStructured)
+
+
+class ResultExtendedCommunityStructured(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "transitive_2octet_as_type",
+                "transitive_ipv4_address_type",
+                "transitive_4octet_as_type",
+                "transitive_opaque_type",
+                "non_transitive_2octet_as_type",
+            ],
+        },
+        "transitive_2octet_as_type": {
+            "type": "ResultExtendedCommunityTransitive2OctetAsType"
+        },
+        "transitive_ipv4_address_type": {
+            "type": "ResultExtendedCommunityTransitiveIpv4AddressType"
+        },
+        "transitive_4octet_as_type": {
+            "type": "ResultExtendedCommunityTransitive4OctetAsType"
+        },
+        "transitive_opaque_type": {
+            "type": "ResultExtendedCommunityTransitiveOpaqueType"
+        },
+        "non_transitive_2octet_as_type": {
+            "type": "ResultExtendedCommunityNonTransitive2OctetAsType"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    TRANSITIVE_2OCTET_AS_TYPE = "transitive_2octet_as_type"  # type: str
+    TRANSITIVE_IPV4_ADDRESS_TYPE = "transitive_ipv4_address_type"  # type: str
+    TRANSITIVE_4OCTET_AS_TYPE = "transitive_4octet_as_type"  # type: str
+    TRANSITIVE_OPAQUE_TYPE = "transitive_opaque_type"  # type: str
+    NON_TRANSITIVE_2OCTET_AS_TYPE = "non_transitive_2octet_as_type"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityStructured, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def transitive_2octet_as_type(self):
+        # type: () -> ResultExtendedCommunityTransitive2OctetAsType
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive2OctetAsType class
+
+        The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00
+
+        Returns: ResultExtendedCommunityTransitive2OctetAsType
+        """
+        return self._get_property(
+            "transitive_2octet_as_type",
+            ResultExtendedCommunityTransitive2OctetAsType,
+            self,
+            "transitive_2octet_as_type",
+        )
+
+    @property
+    def transitive_ipv4_address_type(self):
+        # type: () -> ResultExtendedCommunityTransitiveIpv4AddressType
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveIpv4AddressType class
+
+        The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+
+        Returns: ResultExtendedCommunityTransitiveIpv4AddressType
+        """
+        return self._get_property(
+            "transitive_ipv4_address_type",
+            ResultExtendedCommunityTransitiveIpv4AddressType,
+            self,
+            "transitive_ipv4_address_type",
+        )
+
+    @property
+    def transitive_4octet_as_type(self):
+        # type: () -> ResultExtendedCommunityTransitive4OctetAsType
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive4OctetAsType class
+
+        The Transitive Four-Octet AS-Specific Extended Community is sent as type 0x02. It is defined in RFC 5668.
+
+        Returns: ResultExtendedCommunityTransitive4OctetAsType
+        """
+        return self._get_property(
+            "transitive_4octet_as_type",
+            ResultExtendedCommunityTransitive4OctetAsType,
+            self,
+            "transitive_4octet_as_type",
+        )
+
+    @property
+    def transitive_opaque_type(self):
+        # type: () -> ResultExtendedCommunityTransitiveOpaqueType
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveOpaqueType class
+
+        The Transitive Opaque Extended Community is sent as type 0x03.
+
+        Returns: ResultExtendedCommunityTransitiveOpaqueType
+        """
+        return self._get_property(
+            "transitive_opaque_type",
+            ResultExtendedCommunityTransitiveOpaqueType,
+            self,
+            "transitive_opaque_type",
+        )
+
+    @property
+    def non_transitive_2octet_as_type(self):
+        # type: () -> ResultExtendedCommunityNonTransitive2OctetAsType
+        """Factory property that returns an instance of the ResultExtendedCommunityNonTransitive2OctetAsType class
+
+        The Non-Transitive Two-Octet AS-Specific Extended Community is sent as type 0x40.
+
+        Returns: ResultExtendedCommunityNonTransitive2OctetAsType
+        """
+        return self._get_property(
+            "non_transitive_2octet_as_type",
+            ResultExtendedCommunityNonTransitive2OctetAsType,
+            self,
+            "non_transitive_2octet_as_type",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["non_transitive_2octet_as_type"], Literal["transitive_2octet_as_type"], Literal["transitive_4octet_as_type"], Literal["transitive_ipv4_address_type"], Literal["transitive_opaque_type"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityTransitive2OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityTransitive2OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP Update message. It is sent with sub-type as 0x02.
+
+        Returns: ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+
+        Returns: ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "local_4byte_admin": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=None, local_4byte_admin=None):
+        super(ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget, self).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("local_4byte_admin", local_4byte_admin)
+
+    def set(self, global_2byte_as=None, local_4byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def local_4byte_admin(self):
+        # type: () -> int
+        """local_4byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_4byte_admin")
+
+    @local_4byte_admin.setter
+    def local_4byte_admin(self, value):
+        """local_4byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_4byte_admin", value)
+
+
+class ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "local_4byte_admin": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=None, local_4byte_admin=None):
+        super(ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin, self).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("local_4byte_admin", local_4byte_admin)
+
+    def set(self, global_2byte_as=None, local_4byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The two octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def local_4byte_admin(self):
+        # type: () -> int
+        """local_4byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_4byte_admin")
+
+    @local_4byte_admin.setter
+    def local_4byte_admin(self, value):
+        """local_4byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_4byte_admin", value)
+
+
+class ResultExtendedCommunityTransitiveIpv4AddressType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityTransitiveIpv4AddressType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP. It is sent with sub-type as 0x02.
+
+        Returns: ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.
+
+        Returns: ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_ipv4_admin": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_ipv4_admin=None, local_2byte_admin=None):
+        super(
+            ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("global_ipv4_admin", global_ipv4_admin)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_ipv4_admin=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_ipv4_admin(self):
+        # type: () -> str
+        """global_ipv4_admin getter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        Returns: str
+        """
+        return self._get_property("global_ipv4_admin")
+
+    @global_ipv4_admin.setter
+    def global_ipv4_admin(self, value):
+        """global_ipv4_admin setter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        value: str
+        """
+        self._set_property("global_ipv4_admin", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_ipv4_admin": {
+            "type": str,
+            "format": "ipv4",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_ipv4_admin=None, local_2byte_admin=None):
+        super(
+            ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("global_ipv4_admin", global_ipv4_admin)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_ipv4_admin=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_ipv4_admin(self):
+        # type: () -> str
+        """global_ipv4_admin getter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        Returns: str
+        """
+        return self._get_property("global_ipv4_admin")
+
+    @global_ipv4_admin.setter
+    def global_ipv4_admin(self, value):
+        """global_ipv4_admin setter
+
+        An IPv4 unicast address assigned by one of the Internet registries.
+
+        value: str
+        """
+        self._set_property("global_ipv4_admin", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class ResultExtendedCommunityTransitive4OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "route_target_subtype",
+                "route_origin_subtype",
+            ],
+        },
+        "route_target_subtype": {
+            "type": "ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget"
+        },
+        "route_origin_subtype": {
+            "type": "ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ROUTE_TARGET_SUBTYPE = "route_target_subtype"  # type: str
+    ROUTE_ORIGIN_SUBTYPE = "route_origin_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityTransitive4OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def route_target_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget class
+
+        The Route Target Community identifies one or more routers that may receive set of routes (that carry this Community) carried by BGP. It is sent with sub-type as 0x02
+
+        Returns: ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget
+        """
+        return self._get_property(
+            "route_target_subtype",
+            ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget,
+            self,
+            "route_target_subtype",
+        )
+
+    @property
+    def route_origin_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin class
+
+        The Route Origin Community identifies one or more routers that inject set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+
+        Returns: ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin
+        """
+        return self._get_property(
+            "route_origin_subtype",
+            ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin,
+            self,
+            "route_origin_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["route_origin_subtype"], Literal["route_target_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_4byte_as": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_4byte_as=None, local_2byte_admin=None):
+        super(ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget, self).__init__()
+        self._parent = parent
+        self._set_property("global_4byte_as", global_4byte_as)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_4byte_as=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_4byte_as(self):
+        # type: () -> int
+        """global_4byte_as getter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_4byte_as")
+
+    @global_4byte_as.setter
+    def global_4byte_as(self, value):
+        """global_4byte_as setter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_4byte_as", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_4byte_as": {
+            "type": int,
+            "format": "uint32",
+        },
+        "local_2byte_admin": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_4byte_as=None, local_2byte_admin=None):
+        super(ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin, self).__init__()
+        self._parent = parent
+        self._set_property("global_4byte_as", global_4byte_as)
+        self._set_property("local_2byte_admin", local_2byte_admin)
+
+    def set(self, global_4byte_as=None, local_2byte_admin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_4byte_as(self):
+        # type: () -> int
+        """global_4byte_as getter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        Returns: int
+        """
+        return self._get_property("global_4byte_as")
+
+    @global_4byte_as.setter
+    def global_4byte_as(self, value):
+        """global_4byte_as setter
+
+        The four octet IANA assigned AS value assigned to the Autonomous System.
+
+        value: int
+        """
+        self._set_property("global_4byte_as", value)
+
+    @property
+    def local_2byte_admin(self):
+        # type: () -> int
+        """local_2byte_admin getter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        Returns: int
+        """
+        return self._get_property("local_2byte_admin")
+
+    @local_2byte_admin.setter
+    def local_2byte_admin(self, value):
+        """local_2byte_admin setter
+
+        The Local Administrator sub-field contains number from numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+
+        value: int
+        """
+        self._set_property("local_2byte_admin", value)
+
+
+class ResultExtendedCommunityTransitiveOpaqueType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "color_subtype",
+                "encapsulation_subtype",
+            ],
+        },
+        "color_subtype": {"type": "ResultExtendedCommunityTransitiveOpaqueTypeColor"},
+        "encapsulation_subtype": {
+            "type": "ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    COLOR_SUBTYPE = "color_subtype"  # type: str
+    ENCAPSULATION_SUBTYPE = "encapsulation_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityTransitiveOpaqueType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def color_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitiveOpaqueTypeColor
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveOpaqueTypeColor class
+
+        The Color Community contains locally administrator defined 'color' value which is used in conjunction with Encapsulation attribute to decide whether data packet can be transmitted on certain tunnel or not. It is defined in RFC9012 and sent with sub-type as 0x0b.
+
+        Returns: ResultExtendedCommunityTransitiveOpaqueTypeColor
+        """
+        return self._get_property(
+            "color_subtype",
+            ResultExtendedCommunityTransitiveOpaqueTypeColor,
+            self,
+            "color_subtype",
+        )
+
+    @property
+    def encapsulation_subtype(self):
+        # type: () -> ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation
+        """Factory property that returns an instance of the ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation class
+
+        This identifies the type of tunneling technology being signalled. It is defined in RFC9012 and sent with sub-type as 0x0c.
+
+        Returns: ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation
+        """
+        return self._get_property(
+            "encapsulation_subtype",
+            ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation,
+            self,
+            "encapsulation_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["color_subtype"], Literal["encapsulation_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityTransitiveOpaqueTypeColor(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "flags": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "color": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, flags=None, color=None):
+        super(ResultExtendedCommunityTransitiveOpaqueTypeColor, self).__init__()
+        self._parent = parent
+        self._set_property("flags", flags)
+        self._set_property("color", color)
+
+    def set(self, flags=None, color=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def flags(self):
+        # type: () -> int
+        """flags getter
+
+        Two octet flag values.
+
+        Returns: int
+        """
+        return self._get_property("flags")
+
+    @flags.setter
+    def flags(self, value):
+        """flags setter
+
+        Two octet flag values.
+
+        value: int
+        """
+        self._set_property("flags", value)
+
+    @property
+    def color(self):
+        # type: () -> int
+        """color getter
+
+        The color value is user defined and configured locally and used to determine whether data packet can be transmitted on certain tunnel or not. in conjunction with the Encapsulation attribute. It is defined in RFC9012.
+
+        Returns: int
+        """
+        return self._get_property("color")
+
+    @color.setter
+    def color(self, value):
+        """color setter
+
+        The color value is user defined and configured locally and used to determine whether data packet can be transmitted on certain tunnel or not. in conjunction with the Encapsulation attribute. It is defined in RFC9012.
+
+        value: int
+        """
+        self._set_property("color", value)
+
+
+class ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "reserved": {
+            "type": int,
+            "format": "uint32",
+        },
+        "tunnel_type": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, reserved=None, tunnel_type=None):
+        super(ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation, self).__init__()
+        self._parent = parent
+        self._set_property("reserved", reserved)
+        self._set_property("tunnel_type", tunnel_type)
+
+    def set(self, reserved=None, tunnel_type=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def reserved(self):
+        # type: () -> int
+        """reserved getter
+
+        Four bytes of reserved values. Normally set to on transmit and ignored on receive.
+
+        Returns: int
+        """
+        return self._get_property("reserved")
+
+    @reserved.setter
+    def reserved(self, value):
+        """reserved setter
+
+        Four bytes of reserved values. Normally set to on transmit and ignored on receive.
+
+        value: int
+        """
+        self._set_property("reserved", value)
+
+    @property
+    def tunnel_type(self):
+        # type: () -> int
+        """tunnel_type getter
+
+        Identifies the type of tunneling technology being signalled. Initially defined in RFC5512 and extended in RFC9012.. Some of the important tunnel types include - L2TPv3 over IP [RFC9012], - GRE [RFC9012], - IP in IP [RFC9012],. 8 VXLAN Encapsulation [RFC8365],. 9 NVGRE Encapsulation [RFC8365],. 10 MPLS Encapsulation [RFC8365],. 15 SR TE Policy Type [draft-ietf-idr-segment-routing-te-policy],. 19 Geneve Encapsulation [RFC8926]
+
+        Returns: int
+        """
+        return self._get_property("tunnel_type")
+
+    @tunnel_type.setter
+    def tunnel_type(self, value):
+        """tunnel_type setter
+
+        Identifies the type of tunneling technology being signalled. Initially defined in RFC5512 and extended in RFC9012.. Some of the important tunnel types include - L2TPv3 over IP [RFC9012], - GRE [RFC9012], - IP in IP [RFC9012],. 8 VXLAN Encapsulation [RFC8365],. 9 NVGRE Encapsulation [RFC8365],. 10 MPLS Encapsulation [RFC8365],. 15 SR TE Policy Type [draft-ietf-idr-segment-routing-te-policy],. 19 Geneve Encapsulation [RFC8926]
+
+        value: int
+        """
+        self._set_property("tunnel_type", value)
+
+
+class ResultExtendedCommunityNonTransitive2OctetAsType(OpenApiObject):
+    __slots__ = ("_parent", "_choice")
+
+    _TYPES = {
+        "choice": {
+            "type": str,
+            "enum": [
+                "link_bandwidth_subtype",
+            ],
+        },
+        "link_bandwidth_subtype": {
+            "type": "ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth"
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    LINK_BANDWIDTH_SUBTYPE = "link_bandwidth_subtype"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityNonTransitive2OctetAsType, self).__init__()
+        self._parent = parent
+        if (
+            "choice" in self._DEFAULTS
+            and choice is None
+            and self._DEFAULTS["choice"] in self._TYPES
+        ):
+            getattr(self, self._DEFAULTS["choice"])
+        else:
+            self._set_property("choice", choice)
+
+    @property
+    def link_bandwidth_subtype(self):
+        # type: () -> ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
+        """Factory property that returns an instance of the ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth class
+
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. It is sent with sub-type as 0x04.
+
+        Returns: ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
+        """
+        return self._get_property(
+            "link_bandwidth_subtype",
+            ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth,
+            self,
+            "link_bandwidth_subtype",
+        )
+
+    @property
+    def choice(self):
+        # type: () -> Union[Literal["link_bandwidth_subtype"]]
+        """choice getter
+
+        TBD
+
+        Returns: Union[Literal["link_bandwidth_subtype"]]
+        """
+        return self._get_property("choice")
+
+    @choice.setter
+    def choice(self, value):
+        """choice setter
+
+        TBD
+
+        value: Union[Literal["link_bandwidth_subtype"]]
+        """
+        self._set_property("choice", value)
+
+
+class ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "global_2byte_as": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 65535,
+        },
+        "bandwidth": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, global_2byte_as=None, bandwidth=None):
+        super(
+            ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth, self
+        ).__init__()
+        self._parent = parent
+        self._set_property("global_2byte_as", global_2byte_as)
+        self._set_property("bandwidth", bandwidth)
+
+    def set(self, global_2byte_as=None, bandwidth=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def global_2byte_as(self):
+        # type: () -> int
+        """global_2byte_as getter
+
+        The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+
+        Returns: int
+        """
+        return self._get_property("global_2byte_as")
+
+    @global_2byte_as.setter
+    def global_2byte_as(self, value):
+        """global_2byte_as setter
+
+        The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+
+        value: int
+        """
+        self._set_property("global_2byte_as", value)
+
+    @property
+    def bandwidth(self):
+        # type: () -> float
+        """bandwidth getter
+
+        Bandwidth of the link in bytes per second. 1 Kbps is 1000 bytes per second and Mbps is 1000 Kbps per second )
+
+        Returns: float
+        """
+        return self._get_property("bandwidth")
+
+    @bandwidth.setter
+    def bandwidth(self, value):
+        """bandwidth setter
+
+        Bandwidth of the link in bytes per second. 1 Kbps is 1000 bytes per second and Mbps is 1000 Kbps per second )
+
+        value: float
+        """
+        self._set_property("bandwidth", value)
+
+
+class ResultExtendedCommunityIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(ResultExtendedCommunityIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[ResultExtendedCommunity]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> ResultExtendedCommunityIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> ResultExtendedCommunity
+        return self._next()
+
+    def next(self):
+        # type: () -> ResultExtendedCommunity
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, ResultExtendedCommunity):
+            raise Exception("Item is not an instance of ResultExtendedCommunity")
+
+    def extendedcommunity(self, raw=None):
+        # type: (str) -> ResultExtendedCommunityIter
+        """Factory method that creates an instance of the ResultExtendedCommunity class
+
+        Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunityIter
+        """
+        item = ResultExtendedCommunity(parent=self._parent, raw=raw)
+        self._add(item)
+        return self
+
+    def add(self, raw=None):
+        # type: (str) -> ResultExtendedCommunity
+        """Add method that creates and returns an instance of the ResultExtendedCommunity class
+
+        Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunity
+        """
+        item = ResultExtendedCommunity(parent=self._parent, raw=raw)
         self._add(item)
         return item
 
@@ -132162,6 +134078,7 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
             "format": "ipv6",
         },
         "communities": {"type": "ResultBgpCommunityIter"},
+        "extended_communities": {"type": "ResultExtendedCommunityIter"},
         "as_path": {"type": "ResultBgpAsPath"},
         "local_preference": {
             "type": int,
@@ -132358,6 +134275,22 @@ class BgpPrefixIpv6UnicastState(OpenApiObject):
         """
         return self._get_property(
             "communities", ResultBgpCommunityIter, self._parent, self._choice
+        )
+
+    @property
+    def extended_communities(self):
+        # type: () -> ResultExtendedCommunityIter
+        """extended_communities getter
+
+        Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+
+        Returns: ResultExtendedCommunityIter
+        """
+        return self._get_property(
+            "extended_communities",
+            ResultExtendedCommunityIter,
+            self._parent,
+            self._choice,
         )
 
     @property
@@ -136640,458 +138573,6 @@ class RsvpLspsStateIter(OpenApiIter):
         return item
 
 
-class Dhcpv4ServerLeasesState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "dhcp_client_name": {"type": str},
-        "leases": {"type": "Dhcpv4ServerLeaseStateIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, dhcp_client_name=None):
-        super(Dhcpv4ServerLeasesState, self).__init__()
-        self._parent = parent
-        self._set_property("dhcp_client_name", dhcp_client_name)
-
-    def set(self, dhcp_client_name=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def dhcp_client_name(self):
-        # type: () -> str
-        """dhcp_client_name getter
-
-        The name of DHCP Server.
-
-        Returns: str
-        """
-        return self._get_property("dhcp_client_name")
-
-    @dhcp_client_name.setter
-    def dhcp_client_name(self, value):
-        """dhcp_client_name setter
-
-        The name of DHCP Server.
-
-        value: str
-        """
-        self._set_property("dhcp_client_name", value)
-
-    @property
-    def leases(self):
-        # type: () -> Dhcpv4ServerLeaseStateIter
-        """leases getter
-
-        TBD
-
-        Returns: Dhcpv4ServerLeaseStateIter
-        """
-        return self._get_property(
-            "leases", Dhcpv4ServerLeaseStateIter, self._parent, self._choice
-        )
-
-
-class Dhcpv4ServerLeaseState(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "address": {"type": str},
-        "valid_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "preferred_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "renew_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "rebind_time": {
-            "type": int,
-            "format": "uint32",
-        },
-        "client_id": {"type": str},
-        "circuit_id": {"type": str},
-        "remote_id": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(
-        self,
-        parent=None,
-        address=None,
-        valid_time=None,
-        preferred_time=None,
-        renew_time=None,
-        rebind_time=None,
-        client_id=None,
-        circuit_id=None,
-        remote_id=None,
-    ):
-        super(Dhcpv4ServerLeaseState, self).__init__()
-        self._parent = parent
-        self._set_property("address", address)
-        self._set_property("valid_time", valid_time)
-        self._set_property("preferred_time", preferred_time)
-        self._set_property("renew_time", renew_time)
-        self._set_property("rebind_time", rebind_time)
-        self._set_property("client_id", client_id)
-        self._set_property("circuit_id", circuit_id)
-        self._set_property("remote_id", remote_id)
-
-    def set(
-        self,
-        address=None,
-        valid_time=None,
-        preferred_time=None,
-        renew_time=None,
-        rebind_time=None,
-        client_id=None,
-        circuit_id=None,
-        remote_id=None,
-    ):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def address(self):
-        # type: () -> str
-        """address getter
-
-        The IPv4 address associated with this lease.
-
-        Returns: str
-        """
-        return self._get_property("address")
-
-    @address.setter
-    def address(self, value):
-        """address setter
-
-        The IPv4 address associated with this lease.
-
-        value: str
-        """
-        self._set_property("address", value)
-
-    @property
-    def valid_time(self):
-        # type: () -> int
-        """valid_time getter
-
-        The time in seconds, IP address lease will expire.
-
-        Returns: int
-        """
-        return self._get_property("valid_time")
-
-    @valid_time.setter
-    def valid_time(self, value):
-        """valid_time setter
-
-        The time in seconds, IP address lease will expire.
-
-        value: int
-        """
-        self._set_property("valid_time", value)
-
-    @property
-    def preferred_time(self):
-        # type: () -> int
-        """preferred_time getter
-
-        The time in seconds, elapsed time since address has been renewed.
-
-        Returns: int
-        """
-        return self._get_property("preferred_time")
-
-    @preferred_time.setter
-    def preferred_time(self, value):
-        """preferred_time setter
-
-        The time in seconds, elapsed time since address has been renewed.
-
-        value: int
-        """
-        self._set_property("preferred_time", value)
-
-    @property
-    def renew_time(self):
-        # type: () -> int
-        """renew_time getter
-
-        Time in seconds until the DHCPv4 client starts renewing the lease.
-
-        Returns: int
-        """
-        return self._get_property("renew_time")
-
-    @renew_time.setter
-    def renew_time(self, value):
-        """renew_time setter
-
-        Time in seconds until the DHCPv4 client starts renewing the lease.
-
-        value: int
-        """
-        self._set_property("renew_time", value)
-
-    @property
-    def rebind_time(self):
-        # type: () -> int
-        """rebind_time getter
-
-        Time in seconds until the DHCPv4 client starts rebinding.
-
-        Returns: int
-        """
-        return self._get_property("rebind_time")
-
-    @rebind_time.setter
-    def rebind_time(self, value):
-        """rebind_time setter
-
-        Time in seconds until the DHCPv4 client starts rebinding.
-
-        value: int
-        """
-        self._set_property("rebind_time", value)
-
-    @property
-    def client_id(self):
-        # type: () -> str
-        """client_id getter
-
-        The ID of the DHCPv4 client holding this lease.
-
-        Returns: str
-        """
-        return self._get_property("client_id")
-
-    @client_id.setter
-    def client_id(self, value):
-        """client_id setter
-
-        The ID of the DHCPv4 client holding this lease.
-
-        value: str
-        """
-        self._set_property("client_id", value)
-
-    @property
-    def circuit_id(self):
-        # type: () -> str
-        """circuit_id getter
-
-        The Circuit ID option found in the last request message.
-
-        Returns: str
-        """
-        return self._get_property("circuit_id")
-
-    @circuit_id.setter
-    def circuit_id(self, value):
-        """circuit_id setter
-
-        The Circuit ID option found in the last request message.
-
-        value: str
-        """
-        self._set_property("circuit_id", value)
-
-    @property
-    def remote_id(self):
-        # type: () -> str
-        """remote_id getter
-
-        The Remote ID option found in the last request message.
-
-        Returns: str
-        """
-        return self._get_property("remote_id")
-
-    @remote_id.setter
-    def remote_id(self, value):
-        """remote_id setter
-
-        The Remote ID option found in the last request message.
-
-        value: str
-        """
-        self._set_property("remote_id", value)
-
-
-class Dhcpv4ServerLeaseStateIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Dhcpv4ServerLeaseStateIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv4ServerLeaseState]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Dhcpv4ServerLeaseStateIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Dhcpv4ServerLeaseState
-        return self._next()
-
-    def next(self):
-        # type: () -> Dhcpv4ServerLeaseState
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv4ServerLeaseState):
-            raise Exception("Item is not an instance of Dhcpv4ServerLeaseState")
-
-    def state(
-        self,
-        address=None,
-        valid_time=None,
-        preferred_time=None,
-        renew_time=None,
-        rebind_time=None,
-        client_id=None,
-        circuit_id=None,
-        remote_id=None,
-    ):
-        # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseStateIter
-        """Factory method that creates an instance of the Dhcpv4ServerLeaseState class
-
-        IPv4 unicast prefix.
-
-        Returns: Dhcpv4ServerLeaseStateIter
-        """
-        item = Dhcpv4ServerLeaseState(
-            parent=self._parent,
-            address=address,
-            valid_time=valid_time,
-            preferred_time=preferred_time,
-            renew_time=renew_time,
-            rebind_time=rebind_time,
-            client_id=client_id,
-            circuit_id=circuit_id,
-            remote_id=remote_id,
-        )
-        self._add(item)
-        return self
-
-    def add(
-        self,
-        address=None,
-        valid_time=None,
-        preferred_time=None,
-        renew_time=None,
-        rebind_time=None,
-        client_id=None,
-        circuit_id=None,
-        remote_id=None,
-    ):
-        # type: (str,int,int,int,int,str,str,str) -> Dhcpv4ServerLeaseState
-        """Add method that creates and returns an instance of the Dhcpv4ServerLeaseState class
-
-        IPv4 unicast prefix.
-
-        Returns: Dhcpv4ServerLeaseState
-        """
-        item = Dhcpv4ServerLeaseState(
-            parent=self._parent,
-            address=address,
-            valid_time=valid_time,
-            preferred_time=preferred_time,
-            renew_time=renew_time,
-            rebind_time=rebind_time,
-            client_id=client_id,
-            circuit_id=circuit_id,
-            remote_id=remote_id,
-        )
-        self._add(item)
-        return item
-
-
-class Dhcpv4ServerLeasesStateIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Dhcpv4ServerLeasesStateIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Dhcpv4ServerLeasesState]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Dhcpv4ServerLeasesStateIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Dhcpv4ServerLeasesState
-        return self._next()
-
-    def next(self):
-        # type: () -> Dhcpv4ServerLeasesState
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Dhcpv4ServerLeasesState):
-            raise Exception("Item is not an instance of Dhcpv4ServerLeasesState")
-
-    def state(self, dhcp_client_name=None):
-        # type: (str) -> Dhcpv4ServerLeasesStateIter
-        """Factory method that creates an instance of the Dhcpv4ServerLeasesState class
-
-        Lease information of DHCP Server.
-
-        Returns: Dhcpv4ServerLeasesStateIter
-        """
-        item = Dhcpv4ServerLeasesState(
-            parent=self._parent, dhcp_client_name=dhcp_client_name
-        )
-        self._add(item)
-        return self
-
-    def add(self, dhcp_client_name=None):
-        # type: (str) -> Dhcpv4ServerLeasesState
-        """Add method that creates and returns an instance of the Dhcpv4ServerLeasesState class
-
-        Lease information of DHCP Server.
-
-        Returns: Dhcpv4ServerLeasesState
-        """
-        item = Dhcpv4ServerLeasesState(
-            parent=self._parent, dhcp_client_name=dhcp_client_name
-        )
-        self._add(item)
-        return item
-
-
 class CaptureRequest(OpenApiObject):
     __slots__ = "_parent"
 
@@ -137243,7 +138724,7 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.1.0"
+        self._version_meta.api_spec_version = "1.4.0"
         self._version_meta.sdk_version = "1.4.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
