@@ -17531,7 +17531,7 @@ components:
         The request to IPv4 address associated with this DHCP Client session.
       type: object
       properties:
-        dhcp_client_name:
+        dhcp_client_names:
           description: |
             The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.
 
@@ -17548,7 +17548,7 @@ components:
         The IPv4 address associated with this DHCP Client session.
       type: object
       properties:
-        dhcp_client_names:
+        dhcp_client_name:
           description: |-
             The name of a DHCPv4 Client.
           type: string
