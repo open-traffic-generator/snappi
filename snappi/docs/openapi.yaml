@@ -936,13 +936,8 @@ components:
           x-field-uid: 3
     Device.Dhcpv4client:
       description: |-
-        Under Review: Information TBD
-
         Configuration for emulated DHCPv4 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
       type: object
-      x-status:
-        status: under_review
-        information: Information TBD
       required:
       - name
       properties:
@@ -8601,13 +8596,8 @@ components:
           - loose
     Device.DhcpServer:
       description: |-
-        Under Review: Information TBD
-
         Configuration for one or more IPv4 or IPv6 DHCP servers.
       type: object
-      x-status:
-        status: under_review
-        information: Information TBD
       properties:
         ipv4_interfaces:
           description: "This contains an array of references to IPv4 interfaces, each\
@@ -8619,13 +8609,8 @@ components:
           x-field-uid: 2
     DhcpServer.V4:
       description: |-
-        Under Review: Information TBD
-
         Configuration for emulated DHCPv4 Server.
       type: object
-      x-status:
-        status: under_review
-        information: Information TBD
       required:
       - name
       - ipv4_name
@@ -8657,13 +8642,8 @@ components:
           x-field-uid: 3
     DhcpServerV4.Pool:
       description: |-
-        Under Review: Information TBD
-
         Configuration for DHCPv4 address pool for a lease.
       type: object
-      x-status:
-        status: under_review
-        information: Information TBD
       required:
       - start_address
       properties:

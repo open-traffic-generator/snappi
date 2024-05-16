@@ -486,8 +486,6 @@ message DeviceIpv6GatewayMAC {
   optional string value = 3;
 }
 
-// Under Review: Information TBD
-// 
 // Configuration for emulated DHCPv4 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
 message DeviceDhcpv4client {
 
@@ -6382,8 +6380,6 @@ message RsvpEroSubobject {
   optional HopType.Enum hop_type = 5;
 }
 
-// Under Review: Information TBD
-// 
 // Configuration for one or more IPv4 or IPv6 DHCP servers.
 message DeviceDhcpServer {
 
@@ -6392,8 +6388,6 @@ message DeviceDhcpServer {
   repeated DhcpServerV4 ipv4_interfaces = 2;
 }
 
-// Under Review: Information TBD
-// 
 // Configuration for emulated DHCPv4 Server.
 message DhcpServerV4 {
 
@@ -6414,8 +6408,6 @@ message DhcpServerV4 {
   repeated DhcpServerV4Pool address_pools = 3;
 }
 
-// Under Review: Information TBD
-// 
 // Configuration for DHCPv4 address pool for a lease.
 message DhcpServerV4Pool {
 
