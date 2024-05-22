@@ -304,6 +304,8 @@ from .snappi import PatternFlowEthernetPfcQueue
 from .snappi import PatternFlowEthernetPfcQueueCounter
 from .snappi import PatternFlowEthernetPfcQueueMetricTag
 from .snappi import PatternFlowEthernetPfcQueueMetricTagIter
+from .snappi import FlowEthernetFCS
+from .snappi import FlowEthernetGenerated
 from .snappi import FlowVlan
 from .snappi import PatternFlowVlanPriority
 from .snappi import PatternFlowVlanPriorityCounter
