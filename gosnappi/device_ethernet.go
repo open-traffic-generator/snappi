@@ -13,13 +13,14 @@ import (
 // ***** DeviceEthernet *****
 type deviceEthernet struct {
 	validation
-	obj                 *otg.DeviceEthernet
-	marshaller          marshalDeviceEthernet
-	unMarshaller        unMarshalDeviceEthernet
-	connectionHolder    EthernetConnection
-	ipv4AddressesHolder DeviceEthernetDeviceIpv4Iter
-	ipv6AddressesHolder DeviceEthernetDeviceIpv6Iter
-	vlansHolder         DeviceEthernetDeviceVlanIter
+	obj                    *otg.DeviceEthernet
+	marshaller             marshalDeviceEthernet
+	unMarshaller           unMarshalDeviceEthernet
+	connectionHolder       EthernetConnection
+	ipv4AddressesHolder    DeviceEthernetDeviceIpv4Iter
+	ipv6AddressesHolder    DeviceEthernetDeviceIpv6Iter
+	vlansHolder            DeviceEthernetDeviceVlanIter
+	dhcpv4InterfacesHolder DeviceEthernetDeviceDhcpv4ClientIter
 }
 
 func NewDeviceEthernet() DeviceEthernet {
@@ -251,6 +252,7 @@ func (obj *deviceEthernet) setNil() {
 	obj.ipv4AddressesHolder = nil
 	obj.ipv6AddressesHolder = nil
 	obj.vlansHolder = nil
+	obj.dhcpv4InterfacesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -306,6 +308,8 @@ type DeviceEthernet interface {
 	Name() string
 	// SetName assigns string provided by user to DeviceEthernet
 	SetName(value string) DeviceEthernet
+	// Dhcpv4Interfaces returns DeviceEthernetDeviceDhcpv4ClientIterIter, set in DeviceEthernet
+	Dhcpv4Interfaces() DeviceEthernetDeviceDhcpv4ClientIter
 	setNil()
 }
 
@@ -653,6 +657,93 @@ func (obj *deviceEthernet) SetName(value string) DeviceEthernet {
 	return obj
 }
 
+// List of DHCPv4 Clients Configuration.
+// Dhcpv4Interfaces returns a []DeviceDhcpv4Client
+func (obj *deviceEthernet) Dhcpv4Interfaces() DeviceEthernetDeviceDhcpv4ClientIter {
+	if len(obj.obj.Dhcpv4Interfaces) == 0 {
+		obj.obj.Dhcpv4Interfaces = []*otg.DeviceDhcpv4Client{}
+	}
+	if obj.dhcpv4InterfacesHolder == nil {
+		obj.dhcpv4InterfacesHolder = newDeviceEthernetDeviceDhcpv4ClientIter(&obj.obj.Dhcpv4Interfaces).setMsg(obj)
+	}
+	return obj.dhcpv4InterfacesHolder
+}
+
+type deviceEthernetDeviceDhcpv4ClientIter struct {
+	obj                     *deviceEthernet
+	deviceDhcpv4ClientSlice []DeviceDhcpv4Client
+	fieldPtr                *[]*otg.DeviceDhcpv4Client
+}
+
+func newDeviceEthernetDeviceDhcpv4ClientIter(ptr *[]*otg.DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter {
+	return &deviceEthernetDeviceDhcpv4ClientIter{fieldPtr: ptr}
+}
+
+type DeviceEthernetDeviceDhcpv4ClientIter interface {
+	setMsg(*deviceEthernet) DeviceEthernetDeviceDhcpv4ClientIter
+	Items() []DeviceDhcpv4Client
+	Add() DeviceDhcpv4Client
+	Append(items ...DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter
+	Set(index int, newObj DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter
+	Clear() DeviceEthernetDeviceDhcpv4ClientIter
+	clearHolderSlice() DeviceEthernetDeviceDhcpv4ClientIter
+	appendHolderSlice(item DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter
+}
+
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) setMsg(msg *deviceEthernet) DeviceEthernetDeviceDhcpv4ClientIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&deviceDhcpv4Client{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) Items() []DeviceDhcpv4Client {
+	return obj.deviceDhcpv4ClientSlice
+}
+
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) Add() DeviceDhcpv4Client {
+	newObj := &otg.DeviceDhcpv4Client{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &deviceDhcpv4Client{obj: newObj}
+	newLibObj.setDefault()
+	obj.deviceDhcpv4ClientSlice = append(obj.deviceDhcpv4ClientSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) Append(items ...DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.deviceDhcpv4ClientSlice = append(obj.deviceDhcpv4ClientSlice, item)
+	}
+	return obj
+}
+
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) Set(index int, newObj DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.deviceDhcpv4ClientSlice[index] = newObj
+	return obj
+}
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) Clear() DeviceEthernetDeviceDhcpv4ClientIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.DeviceDhcpv4Client{}
+		obj.deviceDhcpv4ClientSlice = []DeviceDhcpv4Client{}
+	}
+	return obj
+}
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) clearHolderSlice() DeviceEthernetDeviceDhcpv4ClientIter {
+	if len(obj.deviceDhcpv4ClientSlice) > 0 {
+		obj.deviceDhcpv4ClientSlice = []DeviceDhcpv4Client{}
+	}
+	return obj
+}
+func (obj *deviceEthernetDeviceDhcpv4ClientIter) appendHolderSlice(item DeviceDhcpv4Client) DeviceEthernetDeviceDhcpv4ClientIter {
+	obj.deviceDhcpv4ClientSlice = append(obj.deviceDhcpv4ClientSlice, item)
+	return obj
+}
+
 func (obj *deviceEthernet) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -732,6 +823,21 @@ func (obj *deviceEthernet) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceEthernet")
 	}
+
+	if len(obj.obj.Dhcpv4Interfaces) != 0 {
+
+		if set_default {
+			obj.Dhcpv4Interfaces().clearHolderSlice()
+			for _, item := range obj.obj.Dhcpv4Interfaces {
+				obj.Dhcpv4Interfaces().appendHolderSlice(&deviceDhcpv4Client{obj: item})
+			}
+		}
+		for _, item := range obj.Dhcpv4Interfaces().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *deviceEthernet) setDefault() {

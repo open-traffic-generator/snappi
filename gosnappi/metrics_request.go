@@ -13,18 +13,20 @@ import (
 // ***** MetricsRequest *****
 type metricsRequest struct {
 	validation
-	obj          *otg.MetricsRequest
-	marshaller   marshalMetricsRequest
-	unMarshaller unMarshalMetricsRequest
-	portHolder   PortMetricsRequest
-	flowHolder   FlowMetricsRequest
-	bgpv4Holder  Bgpv4MetricsRequest
-	bgpv6Holder  Bgpv6MetricsRequest
-	isisHolder   IsisMetricsRequest
-	lagHolder    LagMetricsRequest
-	lacpHolder   LacpMetricsRequest
-	lldpHolder   LldpMetricsRequest
-	rsvpHolder   RsvpMetricsRequest
+	obj                *otg.MetricsRequest
+	marshaller         marshalMetricsRequest
+	unMarshaller       unMarshalMetricsRequest
+	portHolder         PortMetricsRequest
+	flowHolder         FlowMetricsRequest
+	bgpv4Holder        Bgpv4MetricsRequest
+	bgpv6Holder        Bgpv6MetricsRequest
+	isisHolder         IsisMetricsRequest
+	lagHolder          LagMetricsRequest
+	lacpHolder         LacpMetricsRequest
+	lldpHolder         LldpMetricsRequest
+	rsvpHolder         RsvpMetricsRequest
+	dhcpv4ClientHolder Dhcpv4ClientMetricsRequest
+	dhcpv4ServerHolder Dhcpv4ServerMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -261,6 +263,8 @@ func (obj *metricsRequest) setNil() {
 	obj.lacpHolder = nil
 	obj.lldpHolder = nil
 	obj.rsvpHolder = nil
+	obj.dhcpv4ClientHolder = nil
+	obj.dhcpv4ServerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -366,6 +370,22 @@ type MetricsRequest interface {
 	SetRsvp(value RsvpMetricsRequest) MetricsRequest
 	// HasRsvp checks if Rsvp has been set in MetricsRequest
 	HasRsvp() bool
+	// Dhcpv4Client returns Dhcpv4ClientMetricsRequest, set in MetricsRequest.
+	// Dhcpv4ClientMetricsRequest is the request to retrieve DHCPv4 per client metrics/statistics.
+	Dhcpv4Client() Dhcpv4ClientMetricsRequest
+	// SetDhcpv4Client assigns Dhcpv4ClientMetricsRequest provided by user to MetricsRequest.
+	// Dhcpv4ClientMetricsRequest is the request to retrieve DHCPv4 per client metrics/statistics.
+	SetDhcpv4Client(value Dhcpv4ClientMetricsRequest) MetricsRequest
+	// HasDhcpv4Client checks if Dhcpv4Client has been set in MetricsRequest
+	HasDhcpv4Client() bool
+	// Dhcpv4Server returns Dhcpv4ServerMetricsRequest, set in MetricsRequest.
+	// Dhcpv4ServerMetricsRequest is the request to retrieve DHCPv4 per Server metrics/statistics.
+	Dhcpv4Server() Dhcpv4ServerMetricsRequest
+	// SetDhcpv4Server assigns Dhcpv4ServerMetricsRequest provided by user to MetricsRequest.
+	// Dhcpv4ServerMetricsRequest is the request to retrieve DHCPv4 per Server metrics/statistics.
+	SetDhcpv4Server(value Dhcpv4ServerMetricsRequest) MetricsRequest
+	// HasDhcpv4Server checks if Dhcpv4Server has been set in MetricsRequest
+	HasDhcpv4Server() bool
 	setNil()
 }
 
@@ -373,25 +393,29 @@ type MetricsRequestChoiceEnum string
 
 // Enum of Choice on MetricsRequest
 var MetricsRequestChoice = struct {
-	PORT  MetricsRequestChoiceEnum
-	FLOW  MetricsRequestChoiceEnum
-	BGPV4 MetricsRequestChoiceEnum
-	BGPV6 MetricsRequestChoiceEnum
-	ISIS  MetricsRequestChoiceEnum
-	LAG   MetricsRequestChoiceEnum
-	LACP  MetricsRequestChoiceEnum
-	LLDP  MetricsRequestChoiceEnum
-	RSVP  MetricsRequestChoiceEnum
+	PORT          MetricsRequestChoiceEnum
+	FLOW          MetricsRequestChoiceEnum
+	BGPV4         MetricsRequestChoiceEnum
+	BGPV6         MetricsRequestChoiceEnum
+	ISIS          MetricsRequestChoiceEnum
+	LAG           MetricsRequestChoiceEnum
+	LACP          MetricsRequestChoiceEnum
+	LLDP          MetricsRequestChoiceEnum
+	RSVP          MetricsRequestChoiceEnum
+	DHCPV4_CLIENT MetricsRequestChoiceEnum
+	DHCPV4_SERVER MetricsRequestChoiceEnum
 }{
-	PORT:  MetricsRequestChoiceEnum("port"),
-	FLOW:  MetricsRequestChoiceEnum("flow"),
-	BGPV4: MetricsRequestChoiceEnum("bgpv4"),
-	BGPV6: MetricsRequestChoiceEnum("bgpv6"),
-	ISIS:  MetricsRequestChoiceEnum("isis"),
-	LAG:   MetricsRequestChoiceEnum("lag"),
-	LACP:  MetricsRequestChoiceEnum("lacp"),
-	LLDP:  MetricsRequestChoiceEnum("lldp"),
-	RSVP:  MetricsRequestChoiceEnum("rsvp"),
+	PORT:          MetricsRequestChoiceEnum("port"),
+	FLOW:          MetricsRequestChoiceEnum("flow"),
+	BGPV4:         MetricsRequestChoiceEnum("bgpv4"),
+	BGPV6:         MetricsRequestChoiceEnum("bgpv6"),
+	ISIS:          MetricsRequestChoiceEnum("isis"),
+	LAG:           MetricsRequestChoiceEnum("lag"),
+	LACP:          MetricsRequestChoiceEnum("lacp"),
+	LLDP:          MetricsRequestChoiceEnum("lldp"),
+	RSVP:          MetricsRequestChoiceEnum("rsvp"),
+	DHCPV4_CLIENT: MetricsRequestChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER: MetricsRequestChoiceEnum("dhcpv4_server"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -413,6 +437,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dhcpv4Server = nil
+	obj.dhcpv4ServerHolder = nil
+	obj.obj.Dhcpv4Client = nil
+	obj.dhcpv4ClientHolder = nil
 	obj.obj.Rsvp = nil
 	obj.rsvpHolder = nil
 	obj.obj.Lldp = nil
@@ -466,6 +494,14 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.RSVP {
 		obj.obj.Rsvp = NewRsvpMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.DHCPV4_CLIENT {
+		obj.obj.Dhcpv4Client = NewDhcpv4ClientMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.DHCPV4_SERVER {
+		obj.obj.Dhcpv4Server = NewDhcpv4ServerMetricsRequest().msg()
 	}
 
 	return obj
@@ -723,6 +759,62 @@ func (obj *metricsRequest) SetRsvp(value RsvpMetricsRequest) MetricsRequest {
 	return obj
 }
 
+// description is TBD
+// Dhcpv4Client returns a Dhcpv4ClientMetricsRequest
+func (obj *metricsRequest) Dhcpv4Client() Dhcpv4ClientMetricsRequest {
+	if obj.obj.Dhcpv4Client == nil {
+		obj.setChoice(MetricsRequestChoice.DHCPV4_CLIENT)
+	}
+	if obj.dhcpv4ClientHolder == nil {
+		obj.dhcpv4ClientHolder = &dhcpv4ClientMetricsRequest{obj: obj.obj.Dhcpv4Client}
+	}
+	return obj.dhcpv4ClientHolder
+}
+
+// description is TBD
+// Dhcpv4Client returns a Dhcpv4ClientMetricsRequest
+func (obj *metricsRequest) HasDhcpv4Client() bool {
+	return obj.obj.Dhcpv4Client != nil
+}
+
+// description is TBD
+// SetDhcpv4Client sets the Dhcpv4ClientMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetDhcpv4Client(value Dhcpv4ClientMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.DHCPV4_CLIENT)
+	obj.dhcpv4ClientHolder = nil
+	obj.obj.Dhcpv4Client = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Dhcpv4Server returns a Dhcpv4ServerMetricsRequest
+func (obj *metricsRequest) Dhcpv4Server() Dhcpv4ServerMetricsRequest {
+	if obj.obj.Dhcpv4Server == nil {
+		obj.setChoice(MetricsRequestChoice.DHCPV4_SERVER)
+	}
+	if obj.dhcpv4ServerHolder == nil {
+		obj.dhcpv4ServerHolder = &dhcpv4ServerMetricsRequest{obj: obj.obj.Dhcpv4Server}
+	}
+	return obj.dhcpv4ServerHolder
+}
+
+// description is TBD
+// Dhcpv4Server returns a Dhcpv4ServerMetricsRequest
+func (obj *metricsRequest) HasDhcpv4Server() bool {
+	return obj.obj.Dhcpv4Server != nil
+}
+
+// description is TBD
+// SetDhcpv4Server sets the Dhcpv4ServerMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetDhcpv4Server(value Dhcpv4ServerMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.DHCPV4_SERVER)
+	obj.dhcpv4ServerHolder = nil
+	obj.obj.Dhcpv4Server = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -771,6 +863,16 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rsvp != nil {
 
 		obj.Rsvp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv4Client != nil {
+
+		obj.Dhcpv4Client().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv4Server != nil {
+
+		obj.Dhcpv4Server().validateObj(vObj, set_default)
 	}
 
 }
@@ -822,6 +924,16 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Rsvp != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.RSVP
+	}
+
+	if obj.obj.Dhcpv4Client != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.DHCPV4_CLIENT
+	}
+
+	if obj.obj.Dhcpv4Server != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.DHCPV4_SERVER
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

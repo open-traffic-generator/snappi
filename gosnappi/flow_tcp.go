@@ -31,6 +31,7 @@ type flowTcp struct {
 	ctlSynHolder     PatternFlowTcpCtlSyn
 	ctlFinHolder     PatternFlowTcpCtlFin
 	windowHolder     PatternFlowTcpWindow
+	checksumHolder   PatternFlowTcpChecksum
 }
 
 func NewFlowTcp() FlowTcp {
@@ -273,6 +274,7 @@ func (obj *flowTcp) setNil() {
 	obj.ctlSynHolder = nil
 	obj.ctlFinHolder = nil
 	obj.windowHolder = nil
+	obj.checksumHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -420,6 +422,14 @@ type FlowTcp interface {
 	SetWindow(value PatternFlowTcpWindow) FlowTcp
 	// HasWindow checks if Window has been set in FlowTcp
 	HasWindow() bool
+	// Checksum returns PatternFlowTcpChecksum, set in FlowTcp.
+	// PatternFlowTcpChecksum is the one's complement of the one's complement sum of all 16 bit words in header and text.  An all-zero value means that no checksum will be transmitted.   While computing the checksum, the checksum field itself is replaced with zeros.
+	Checksum() PatternFlowTcpChecksum
+	// SetChecksum assigns PatternFlowTcpChecksum provided by user to FlowTcp.
+	// PatternFlowTcpChecksum is the one's complement of the one's complement sum of all 16 bit words in header and text.  An all-zero value means that no checksum will be transmitted.   While computing the checksum, the checksum field itself is replaced with zeros.
+	SetChecksum(value PatternFlowTcpChecksum) FlowTcp
+	// HasChecksum checks if Checksum has been set in FlowTcp
+	HasChecksum() bool
 	setNil()
 }
 
@@ -843,6 +853,34 @@ func (obj *flowTcp) SetWindow(value PatternFlowTcpWindow) FlowTcp {
 	return obj
 }
 
+// description is TBD
+// Checksum returns a PatternFlowTcpChecksum
+func (obj *flowTcp) Checksum() PatternFlowTcpChecksum {
+	if obj.obj.Checksum == nil {
+		obj.obj.Checksum = NewPatternFlowTcpChecksum().msg()
+	}
+	if obj.checksumHolder == nil {
+		obj.checksumHolder = &patternFlowTcpChecksum{obj: obj.obj.Checksum}
+	}
+	return obj.checksumHolder
+}
+
+// description is TBD
+// Checksum returns a PatternFlowTcpChecksum
+func (obj *flowTcp) HasChecksum() bool {
+	return obj.obj.Checksum != nil
+}
+
+// description is TBD
+// SetChecksum sets the PatternFlowTcpChecksum value in the FlowTcp object
+func (obj *flowTcp) SetChecksum(value PatternFlowTcpChecksum) FlowTcp {
+
+	obj.checksumHolder = nil
+	obj.obj.Checksum = value.msg()
+
+	return obj
+}
+
 func (obj *flowTcp) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -921,6 +959,11 @@ func (obj *flowTcp) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Window != nil {
 
 		obj.Window().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Checksum != nil {
+
+		obj.Checksum().validateObj(vObj, set_default)
 	}
 
 }

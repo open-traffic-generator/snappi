@@ -23,6 +23,7 @@ type device struct {
 	bgpHolder           DeviceBgpRouter
 	vxlanHolder         DeviceVxlan
 	rsvpHolder          DeviceRsvp
+	dhcpServerHolder    DeviceDhcpServer
 }
 
 func NewDevice() Device {
@@ -257,6 +258,7 @@ func (obj *device) setNil() {
 	obj.bgpHolder = nil
 	obj.vxlanHolder = nil
 	obj.rsvpHolder = nil
+	obj.dhcpServerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -326,6 +328,14 @@ type Device interface {
 	SetRsvp(value DeviceRsvp) Device
 	// HasRsvp checks if Rsvp has been set in Device
 	HasRsvp() bool
+	// DhcpServer returns DeviceDhcpServer, set in Device.
+	// DeviceDhcpServer is configuration for one or more IPv4 or IPv6 DHCP servers.
+	DhcpServer() DeviceDhcpServer
+	// SetDhcpServer assigns DeviceDhcpServer provided by user to Device.
+	// DeviceDhcpServer is configuration for one or more IPv4 or IPv6 DHCP servers.
+	SetDhcpServer(value DeviceDhcpServer) Device
+	// HasDhcpServer checks if DhcpServer has been set in Device
+	HasDhcpServer() bool
 	setNil()
 }
 
@@ -718,6 +728,34 @@ func (obj *device) SetRsvp(value DeviceRsvp) Device {
 	return obj
 }
 
+// The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+// DhcpServer returns a DeviceDhcpServer
+func (obj *device) DhcpServer() DeviceDhcpServer {
+	if obj.obj.DhcpServer == nil {
+		obj.obj.DhcpServer = NewDeviceDhcpServer().msg()
+	}
+	if obj.dhcpServerHolder == nil {
+		obj.dhcpServerHolder = &deviceDhcpServer{obj: obj.obj.DhcpServer}
+	}
+	return obj.dhcpServerHolder
+}
+
+// The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+// DhcpServer returns a DeviceDhcpServer
+func (obj *device) HasDhcpServer() bool {
+	return obj.obj.DhcpServer != nil
+}
+
+// The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+// SetDhcpServer sets the DeviceDhcpServer value in the Device object
+func (obj *device) SetDhcpServer(value DeviceDhcpServer) Device {
+
+	obj.dhcpServerHolder = nil
+	obj.obj.DhcpServer = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -788,6 +826,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rsvp != nil {
 
 		obj.Rsvp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.DhcpServer != nil {
+
+		obj.DhcpServer().validateObj(vObj, set_default)
 	}
 
 }

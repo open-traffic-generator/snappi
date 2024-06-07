@@ -13,18 +13,20 @@ import (
 // ***** MetricsResponse *****
 type metricsResponse struct {
 	validation
-	obj                *otg.MetricsResponse
-	marshaller         marshalMetricsResponse
-	unMarshaller       unMarshalMetricsResponse
-	portMetricsHolder  MetricsResponsePortMetricIter
-	flowMetricsHolder  MetricsResponseFlowMetricIter
-	bgpv4MetricsHolder MetricsResponseBgpv4MetricIter
-	bgpv6MetricsHolder MetricsResponseBgpv6MetricIter
-	isisMetricsHolder  MetricsResponseIsisMetricIter
-	lagMetricsHolder   MetricsResponseLagMetricIter
-	lacpMetricsHolder  MetricsResponseLacpMetricIter
-	lldpMetricsHolder  MetricsResponseLldpMetricIter
-	rsvpMetricsHolder  MetricsResponseRsvpMetricIter
+	obj                       *otg.MetricsResponse
+	marshaller                marshalMetricsResponse
+	unMarshaller              unMarshalMetricsResponse
+	portMetricsHolder         MetricsResponsePortMetricIter
+	flowMetricsHolder         MetricsResponseFlowMetricIter
+	bgpv4MetricsHolder        MetricsResponseBgpv4MetricIter
+	bgpv6MetricsHolder        MetricsResponseBgpv6MetricIter
+	isisMetricsHolder         MetricsResponseIsisMetricIter
+	lagMetricsHolder          MetricsResponseLagMetricIter
+	lacpMetricsHolder         MetricsResponseLacpMetricIter
+	lldpMetricsHolder         MetricsResponseLldpMetricIter
+	rsvpMetricsHolder         MetricsResponseRsvpMetricIter
+	dhcpv4ClientMetricsHolder MetricsResponseDhcpv4ClientMetricIter
+	dhcpv4ServerMetricsHolder MetricsResponseDhcpv4ServerMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -261,6 +263,8 @@ func (obj *metricsResponse) setNil() {
 	obj.lacpMetricsHolder = nil
 	obj.lldpMetricsHolder = nil
 	obj.rsvpMetricsHolder = nil
+	obj.dhcpv4ClientMetricsHolder = nil
+	obj.dhcpv4ServerMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -294,6 +298,10 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -312,6 +320,10 @@ type MetricsResponse interface {
 	LldpMetrics() MetricsResponseLldpMetricIter
 	// RsvpMetrics returns MetricsResponseRsvpMetricIterIter, set in MetricsResponse
 	RsvpMetrics() MetricsResponseRsvpMetricIter
+	// Dhcpv4ClientMetrics returns MetricsResponseDhcpv4ClientMetricIterIter, set in MetricsResponse
+	Dhcpv4ClientMetrics() MetricsResponseDhcpv4ClientMetricIter
+	// Dhcpv4ServerMetrics returns MetricsResponseDhcpv4ServerMetricIterIter, set in MetricsResponse
+	Dhcpv4ServerMetrics() MetricsResponseDhcpv4ServerMetricIter
 	setNil()
 }
 
@@ -328,6 +340,8 @@ var MetricsResponseChoice = struct {
 	LACP_METRICS  MetricsResponseChoiceEnum
 	LLDP_METRICS  MetricsResponseChoiceEnum
 	RSVP_METRICS  MetricsResponseChoiceEnum
+	DHCPV4_CLIENT MetricsResponseChoiceEnum
+	DHCPV4_SERVER MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:  MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:  MetricsResponseChoiceEnum("port_metrics"),
@@ -338,10 +352,22 @@ var MetricsResponseChoice = struct {
 	LACP_METRICS:  MetricsResponseChoiceEnum("lacp_metrics"),
 	LLDP_METRICS:  MetricsResponseChoiceEnum("lldp_metrics"),
 	RSVP_METRICS:  MetricsResponseChoiceEnum("rsvp_metrics"),
+	DHCPV4_CLIENT: MetricsResponseChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER: MetricsResponseChoiceEnum("dhcpv4_server"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+}
+
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // description is TBD
@@ -1200,6 +1226,180 @@ func (obj *metricsResponseRsvpMetricIter) appendHolderSlice(item RsvpMetric) Met
 	return obj
 }
 
+// description is TBD
+// Dhcpv4ClientMetrics returns a []Dhcpv4ClientMetric
+func (obj *metricsResponse) Dhcpv4ClientMetrics() MetricsResponseDhcpv4ClientMetricIter {
+	if len(obj.obj.Dhcpv4ClientMetrics) == 0 {
+		obj.obj.Dhcpv4ClientMetrics = []*otg.Dhcpv4ClientMetric{}
+	}
+	if obj.dhcpv4ClientMetricsHolder == nil {
+		obj.dhcpv4ClientMetricsHolder = newMetricsResponseDhcpv4ClientMetricIter(&obj.obj.Dhcpv4ClientMetrics).setMsg(obj)
+	}
+	return obj.dhcpv4ClientMetricsHolder
+}
+
+type metricsResponseDhcpv4ClientMetricIter struct {
+	obj                     *metricsResponse
+	dhcpv4ClientMetricSlice []Dhcpv4ClientMetric
+	fieldPtr                *[]*otg.Dhcpv4ClientMetric
+}
+
+func newMetricsResponseDhcpv4ClientMetricIter(ptr *[]*otg.Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter {
+	return &metricsResponseDhcpv4ClientMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseDhcpv4ClientMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseDhcpv4ClientMetricIter
+	Items() []Dhcpv4ClientMetric
+	Add() Dhcpv4ClientMetric
+	Append(items ...Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter
+	Set(index int, newObj Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter
+	Clear() MetricsResponseDhcpv4ClientMetricIter
+	clearHolderSlice() MetricsResponseDhcpv4ClientMetricIter
+	appendHolderSlice(item Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter
+}
+
+func (obj *metricsResponseDhcpv4ClientMetricIter) setMsg(msg *metricsResponse) MetricsResponseDhcpv4ClientMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv4ClientMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseDhcpv4ClientMetricIter) Items() []Dhcpv4ClientMetric {
+	return obj.dhcpv4ClientMetricSlice
+}
+
+func (obj *metricsResponseDhcpv4ClientMetricIter) Add() Dhcpv4ClientMetric {
+	newObj := &otg.Dhcpv4ClientMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv4ClientMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv4ClientMetricSlice = append(obj.dhcpv4ClientMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseDhcpv4ClientMetricIter) Append(items ...Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv4ClientMetricSlice = append(obj.dhcpv4ClientMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseDhcpv4ClientMetricIter) Set(index int, newObj Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv4ClientMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseDhcpv4ClientMetricIter) Clear() MetricsResponseDhcpv4ClientMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv4ClientMetric{}
+		obj.dhcpv4ClientMetricSlice = []Dhcpv4ClientMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseDhcpv4ClientMetricIter) clearHolderSlice() MetricsResponseDhcpv4ClientMetricIter {
+	if len(obj.dhcpv4ClientMetricSlice) > 0 {
+		obj.dhcpv4ClientMetricSlice = []Dhcpv4ClientMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseDhcpv4ClientMetricIter) appendHolderSlice(item Dhcpv4ClientMetric) MetricsResponseDhcpv4ClientMetricIter {
+	obj.dhcpv4ClientMetricSlice = append(obj.dhcpv4ClientMetricSlice, item)
+	return obj
+}
+
+// description is TBD
+// Dhcpv4ServerMetrics returns a []Dhcpv4ServerMetric
+func (obj *metricsResponse) Dhcpv4ServerMetrics() MetricsResponseDhcpv4ServerMetricIter {
+	if len(obj.obj.Dhcpv4ServerMetrics) == 0 {
+		obj.obj.Dhcpv4ServerMetrics = []*otg.Dhcpv4ServerMetric{}
+	}
+	if obj.dhcpv4ServerMetricsHolder == nil {
+		obj.dhcpv4ServerMetricsHolder = newMetricsResponseDhcpv4ServerMetricIter(&obj.obj.Dhcpv4ServerMetrics).setMsg(obj)
+	}
+	return obj.dhcpv4ServerMetricsHolder
+}
+
+type metricsResponseDhcpv4ServerMetricIter struct {
+	obj                     *metricsResponse
+	dhcpv4ServerMetricSlice []Dhcpv4ServerMetric
+	fieldPtr                *[]*otg.Dhcpv4ServerMetric
+}
+
+func newMetricsResponseDhcpv4ServerMetricIter(ptr *[]*otg.Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter {
+	return &metricsResponseDhcpv4ServerMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseDhcpv4ServerMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseDhcpv4ServerMetricIter
+	Items() []Dhcpv4ServerMetric
+	Add() Dhcpv4ServerMetric
+	Append(items ...Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter
+	Set(index int, newObj Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter
+	Clear() MetricsResponseDhcpv4ServerMetricIter
+	clearHolderSlice() MetricsResponseDhcpv4ServerMetricIter
+	appendHolderSlice(item Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter
+}
+
+func (obj *metricsResponseDhcpv4ServerMetricIter) setMsg(msg *metricsResponse) MetricsResponseDhcpv4ServerMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv4ServerMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseDhcpv4ServerMetricIter) Items() []Dhcpv4ServerMetric {
+	return obj.dhcpv4ServerMetricSlice
+}
+
+func (obj *metricsResponseDhcpv4ServerMetricIter) Add() Dhcpv4ServerMetric {
+	newObj := &otg.Dhcpv4ServerMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv4ServerMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv4ServerMetricSlice = append(obj.dhcpv4ServerMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseDhcpv4ServerMetricIter) Append(items ...Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv4ServerMetricSlice = append(obj.dhcpv4ServerMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseDhcpv4ServerMetricIter) Set(index int, newObj Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv4ServerMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseDhcpv4ServerMetricIter) Clear() MetricsResponseDhcpv4ServerMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv4ServerMetric{}
+		obj.dhcpv4ServerMetricSlice = []Dhcpv4ServerMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseDhcpv4ServerMetricIter) clearHolderSlice() MetricsResponseDhcpv4ServerMetricIter {
+	if len(obj.dhcpv4ServerMetricSlice) > 0 {
+		obj.dhcpv4ServerMetricSlice = []Dhcpv4ServerMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseDhcpv4ServerMetricIter) appendHolderSlice(item Dhcpv4ServerMetric) MetricsResponseDhcpv4ServerMetricIter {
+	obj.dhcpv4ServerMetricSlice = append(obj.dhcpv4ServerMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1326,6 +1526,34 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.RsvpMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Dhcpv4ClientMetrics) != 0 {
+
+		if set_default {
+			obj.Dhcpv4ClientMetrics().clearHolderSlice()
+			for _, item := range obj.obj.Dhcpv4ClientMetrics {
+				obj.Dhcpv4ClientMetrics().appendHolderSlice(&dhcpv4ClientMetric{obj: item})
+			}
+		}
+		for _, item := range obj.Dhcpv4ClientMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Dhcpv4ServerMetrics) != 0 {
+
+		if set_default {
+			obj.Dhcpv4ServerMetrics().clearHolderSlice()
+			for _, item := range obj.obj.Dhcpv4ServerMetrics {
+				obj.Dhcpv4ServerMetrics().appendHolderSlice(&dhcpv4ServerMetric{obj: item})
+			}
+		}
+		for _, item := range obj.Dhcpv4ServerMetrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

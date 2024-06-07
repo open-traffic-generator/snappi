@@ -13,12 +13,14 @@ import (
 // ***** BgpAttributesMpReachNlri *****
 type bgpAttributesMpReachNlri struct {
 	validation
-	obj               *otg.BgpAttributesMpReachNlri
-	marshaller        marshalBgpAttributesMpReachNlri
-	unMarshaller      unMarshalBgpAttributesMpReachNlri
-	nextHopHolder     BgpAttributesNextHop
-	ipv4UnicastHolder BgpAttributesMpReachNlriBgpOneIpv4NLRIPrefixIter
-	ipv6UnicastHolder BgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIter
+	obj                *otg.BgpAttributesMpReachNlri
+	marshaller         marshalBgpAttributesMpReachNlri
+	unMarshaller       unMarshalBgpAttributesMpReachNlri
+	nextHopHolder      BgpAttributesNextHop
+	ipv4UnicastHolder  BgpAttributesMpReachNlriBgpOneIpv4NLRIPrefixIter
+	ipv6UnicastHolder  BgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIter
+	ipv4SrpolicyHolder BgpIpv4SrPolicyNLRIPrefix
+	ipv6SrpolicyHolder BgpIpv6SrPolicyNLRIPrefix
 }
 
 func NewBgpAttributesMpReachNlri() BgpAttributesMpReachNlri {
@@ -249,6 +251,8 @@ func (obj *bgpAttributesMpReachNlri) setNil() {
 	obj.nextHopHolder = nil
 	obj.ipv4UnicastHolder = nil
 	obj.ipv6UnicastHolder = nil
+	obj.ipv4SrpolicyHolder = nil
+	obj.ipv6SrpolicyHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -258,6 +262,8 @@ func (obj *bgpAttributesMpReachNlri) setNil() {
 // The following AFI / SAFI combinations are supported:
 // - IPv4 Unicast with AFI as 1 and SAFI as 1
 // - IPv6 Unicast with AFI as 2 and SAFI as 1
+// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02 Section 2.1 )
+// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 type BgpAttributesMpReachNlri interface {
 	Validation
 	// msg marshals BgpAttributesMpReachNlri to protobuf object *otg.BgpAttributesMpReachNlri
@@ -295,6 +301,22 @@ type BgpAttributesMpReachNlri interface {
 	Ipv4Unicast() BgpAttributesMpReachNlriBgpOneIpv4NLRIPrefixIter
 	// Ipv6Unicast returns BgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIterIter, set in BgpAttributesMpReachNlri
 	Ipv6Unicast() BgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIter
+	// Ipv4Srpolicy returns BgpIpv4SrPolicyNLRIPrefix, set in BgpAttributesMpReachNlri.
+	// BgpIpv4SrPolicyNLRIPrefix is iPv4 Segment Routing Policy NLRI Prefix.
+	Ipv4Srpolicy() BgpIpv4SrPolicyNLRIPrefix
+	// SetIpv4Srpolicy assigns BgpIpv4SrPolicyNLRIPrefix provided by user to BgpAttributesMpReachNlri.
+	// BgpIpv4SrPolicyNLRIPrefix is iPv4 Segment Routing Policy NLRI Prefix.
+	SetIpv4Srpolicy(value BgpIpv4SrPolicyNLRIPrefix) BgpAttributesMpReachNlri
+	// HasIpv4Srpolicy checks if Ipv4Srpolicy has been set in BgpAttributesMpReachNlri
+	HasIpv4Srpolicy() bool
+	// Ipv6Srpolicy returns BgpIpv6SrPolicyNLRIPrefix, set in BgpAttributesMpReachNlri.
+	// BgpIpv6SrPolicyNLRIPrefix is one IPv6 Segment Routing Policy NLRI Prefix.
+	Ipv6Srpolicy() BgpIpv6SrPolicyNLRIPrefix
+	// SetIpv6Srpolicy assigns BgpIpv6SrPolicyNLRIPrefix provided by user to BgpAttributesMpReachNlri.
+	// BgpIpv6SrPolicyNLRIPrefix is one IPv6 Segment Routing Policy NLRI Prefix.
+	SetIpv6Srpolicy(value BgpIpv6SrPolicyNLRIPrefix) BgpAttributesMpReachNlri
+	// HasIpv6Srpolicy checks if Ipv6Srpolicy has been set in BgpAttributesMpReachNlri
+	HasIpv6Srpolicy() bool
 	setNil()
 }
 
@@ -330,11 +352,15 @@ type BgpAttributesMpReachNlriChoiceEnum string
 
 // Enum of Choice on BgpAttributesMpReachNlri
 var BgpAttributesMpReachNlriChoice = struct {
-	IPV4_UNICAST BgpAttributesMpReachNlriChoiceEnum
-	IPV6_UNICAST BgpAttributesMpReachNlriChoiceEnum
+	IPV4_UNICAST  BgpAttributesMpReachNlriChoiceEnum
+	IPV6_UNICAST  BgpAttributesMpReachNlriChoiceEnum
+	IPV4_SRPOLICY BgpAttributesMpReachNlriChoiceEnum
+	IPV6_SRPOLICY BgpAttributesMpReachNlriChoiceEnum
 }{
-	IPV4_UNICAST: BgpAttributesMpReachNlriChoiceEnum("ipv4_unicast"),
-	IPV6_UNICAST: BgpAttributesMpReachNlriChoiceEnum("ipv6_unicast"),
+	IPV4_UNICAST:  BgpAttributesMpReachNlriChoiceEnum("ipv4_unicast"),
+	IPV6_UNICAST:  BgpAttributesMpReachNlriChoiceEnum("ipv6_unicast"),
+	IPV4_SRPOLICY: BgpAttributesMpReachNlriChoiceEnum("ipv4_srpolicy"),
+	IPV6_SRPOLICY: BgpAttributesMpReachNlriChoiceEnum("ipv6_srpolicy"),
 }
 
 func (obj *bgpAttributesMpReachNlri) Choice() BgpAttributesMpReachNlriChoiceEnum {
@@ -350,6 +376,10 @@ func (obj *bgpAttributesMpReachNlri) setChoice(value BgpAttributesMpReachNlriCho
 	}
 	enumValue := otg.BgpAttributesMpReachNlri_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ipv6Srpolicy = nil
+	obj.ipv6SrpolicyHolder = nil
+	obj.obj.Ipv4Srpolicy = nil
+	obj.ipv4SrpolicyHolder = nil
 	obj.obj.Ipv6Unicast = nil
 	obj.ipv6UnicastHolder = nil
 	obj.obj.Ipv4Unicast = nil
@@ -361,6 +391,14 @@ func (obj *bgpAttributesMpReachNlri) setChoice(value BgpAttributesMpReachNlriCho
 
 	if value == BgpAttributesMpReachNlriChoice.IPV6_UNICAST {
 		obj.obj.Ipv6Unicast = []*otg.BgpOneIpv6NLRIPrefix{}
+	}
+
+	if value == BgpAttributesMpReachNlriChoice.IPV4_SRPOLICY {
+		obj.obj.Ipv4Srpolicy = NewBgpIpv4SrPolicyNLRIPrefix().msg()
+	}
+
+	if value == BgpAttributesMpReachNlriChoice.IPV6_SRPOLICY {
+		obj.obj.Ipv6Srpolicy = NewBgpIpv6SrPolicyNLRIPrefix().msg()
 	}
 
 	return obj
@@ -453,8 +491,6 @@ func (obj *bgpAttributesMpReachNlriBgpOneIpv4NLRIPrefixIter) appendHolderSlice(i
 	return obj
 }
 
-// SAFI of the NLRI being sent in the Update.
-// description: >-
 // List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
 // Ipv6Unicast returns a []BgpOneIpv6NLRIPrefix
 func (obj *bgpAttributesMpReachNlri) Ipv6Unicast() BgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIter {
@@ -542,6 +578,62 @@ func (obj *bgpAttributesMpReachNlriBgpOneIpv6NLRIPrefixIter) appendHolderSlice(i
 	return obj
 }
 
+// IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+// Ipv4Srpolicy returns a BgpIpv4SrPolicyNLRIPrefix
+func (obj *bgpAttributesMpReachNlri) Ipv4Srpolicy() BgpIpv4SrPolicyNLRIPrefix {
+	if obj.obj.Ipv4Srpolicy == nil {
+		obj.setChoice(BgpAttributesMpReachNlriChoice.IPV4_SRPOLICY)
+	}
+	if obj.ipv4SrpolicyHolder == nil {
+		obj.ipv4SrpolicyHolder = &bgpIpv4SrPolicyNLRIPrefix{obj: obj.obj.Ipv4Srpolicy}
+	}
+	return obj.ipv4SrpolicyHolder
+}
+
+// IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+// Ipv4Srpolicy returns a BgpIpv4SrPolicyNLRIPrefix
+func (obj *bgpAttributesMpReachNlri) HasIpv4Srpolicy() bool {
+	return obj.obj.Ipv4Srpolicy != nil
+}
+
+// IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+// SetIpv4Srpolicy sets the BgpIpv4SrPolicyNLRIPrefix value in the BgpAttributesMpReachNlri object
+func (obj *bgpAttributesMpReachNlri) SetIpv4Srpolicy(value BgpIpv4SrPolicyNLRIPrefix) BgpAttributesMpReachNlri {
+	obj.setChoice(BgpAttributesMpReachNlriChoice.IPV4_SRPOLICY)
+	obj.ipv4SrpolicyHolder = nil
+	obj.obj.Ipv4Srpolicy = value.msg()
+
+	return obj
+}
+
+// IPv6 endpoint with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI .
+// Ipv6Srpolicy returns a BgpIpv6SrPolicyNLRIPrefix
+func (obj *bgpAttributesMpReachNlri) Ipv6Srpolicy() BgpIpv6SrPolicyNLRIPrefix {
+	if obj.obj.Ipv6Srpolicy == nil {
+		obj.setChoice(BgpAttributesMpReachNlriChoice.IPV6_SRPOLICY)
+	}
+	if obj.ipv6SrpolicyHolder == nil {
+		obj.ipv6SrpolicyHolder = &bgpIpv6SrPolicyNLRIPrefix{obj: obj.obj.Ipv6Srpolicy}
+	}
+	return obj.ipv6SrpolicyHolder
+}
+
+// IPv6 endpoint with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI .
+// Ipv6Srpolicy returns a BgpIpv6SrPolicyNLRIPrefix
+func (obj *bgpAttributesMpReachNlri) HasIpv6Srpolicy() bool {
+	return obj.obj.Ipv6Srpolicy != nil
+}
+
+// IPv6 endpoint with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI .
+// SetIpv6Srpolicy sets the BgpIpv6SrPolicyNLRIPrefix value in the BgpAttributesMpReachNlri object
+func (obj *bgpAttributesMpReachNlri) SetIpv6Srpolicy(value BgpIpv6SrPolicyNLRIPrefix) BgpAttributesMpReachNlri {
+	obj.setChoice(BgpAttributesMpReachNlriChoice.IPV6_SRPOLICY)
+	obj.ipv6SrpolicyHolder = nil
+	obj.obj.Ipv6Srpolicy = value.msg()
+
+	return obj
+}
+
 func (obj *bgpAttributesMpReachNlri) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -585,6 +677,16 @@ func (obj *bgpAttributesMpReachNlri) validateObj(vObj *validation, set_default b
 
 	}
 
+	if obj.obj.Ipv4Srpolicy != nil {
+
+		obj.Ipv4Srpolicy().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ipv6Srpolicy != nil {
+
+		obj.Ipv6Srpolicy().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *bgpAttributesMpReachNlri) setDefault() {
@@ -599,6 +701,16 @@ func (obj *bgpAttributesMpReachNlri) setDefault() {
 	if len(obj.obj.Ipv6Unicast) > 0 {
 		choices_set += 1
 		choice = BgpAttributesMpReachNlriChoice.IPV6_UNICAST
+	}
+
+	if obj.obj.Ipv4Srpolicy != nil {
+		choices_set += 1
+		choice = BgpAttributesMpReachNlriChoice.IPV4_SRPOLICY
+	}
+
+	if obj.obj.Ipv6Srpolicy != nil {
+		choices_set += 1
+		choice = BgpAttributesMpReachNlriChoice.IPV6_SRPOLICY
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

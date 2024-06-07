@@ -27,6 +27,7 @@ type bgpAttributes struct {
 	communityHolder              BgpAttributesBgpAttributesCommunityIter
 	originatorIdHolder           BgpAttributesOriginatorId
 	extendedCommunitiesHolder    BgpAttributesBgpExtendedCommunityIter
+	tunnelEncapsulationHolder    BgpAttributesTunnelEncapsulation
 	mpReachHolder                BgpAttributesMpReachNlri
 	mpUnreachHolder              BgpAttributesMpUnreachNlri
 }
@@ -267,6 +268,7 @@ func (obj *bgpAttributes) setNil() {
 	obj.communityHolder = nil
 	obj.originatorIdHolder = nil
 	obj.extendedCommunitiesHolder = nil
+	obj.tunnelEncapsulationHolder = nil
 	obj.mpReachHolder = nil
 	obj.mpUnreachHolder = nil
 	obj.validationErrors = nil
@@ -440,17 +442,31 @@ type BgpAttributes interface {
 	SetClusterIds(value []string) BgpAttributes
 	// ExtendedCommunities returns BgpAttributesBgpExtendedCommunityIterIter, set in BgpAttributes
 	ExtendedCommunities() BgpAttributesBgpExtendedCommunityIter
+	// TunnelEncapsulation returns BgpAttributesTunnelEncapsulation, set in BgpAttributes.
+	// BgpAttributesTunnelEncapsulation is the TUNNEL_ENCAPSULATION  attribute is used by a BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.
+	// It is defined in RFC9012 and is assigned a Type code of 23.
+	TunnelEncapsulation() BgpAttributesTunnelEncapsulation
+	// SetTunnelEncapsulation assigns BgpAttributesTunnelEncapsulation provided by user to BgpAttributes.
+	// BgpAttributesTunnelEncapsulation is the TUNNEL_ENCAPSULATION  attribute is used by a BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.
+	// It is defined in RFC9012 and is assigned a Type code of 23.
+	SetTunnelEncapsulation(value BgpAttributesTunnelEncapsulation) BgpAttributes
+	// HasTunnelEncapsulation checks if TunnelEncapsulation has been set in BgpAttributes
+	HasTunnelEncapsulation() bool
 	// MpReach returns BgpAttributesMpReachNlri, set in BgpAttributes.
 	// BgpAttributesMpReachNlri is the MP_REACH attribute is an optional attribute which can be included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
 	// The following AFI / SAFI combinations are supported:
 	// - IPv4 Unicast with AFI as 1 and SAFI as 1
 	// - IPv6 Unicast with AFI as 2 and SAFI as 1
+	// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02 Section 2.1 )
+	// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 	MpReach() BgpAttributesMpReachNlri
 	// SetMpReach assigns BgpAttributesMpReachNlri provided by user to BgpAttributes.
 	// BgpAttributesMpReachNlri is the MP_REACH attribute is an optional attribute which can be included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
 	// The following AFI / SAFI combinations are supported:
 	// - IPv4 Unicast with AFI as 1 and SAFI as 1
 	// - IPv6 Unicast with AFI as 2 and SAFI as 1
+	// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02 Section 2.1 )
+	// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 	SetMpReach(value BgpAttributesMpReachNlri) BgpAttributes
 	// HasMpReach checks if MpReach has been set in BgpAttributes
 	HasMpReach() bool
@@ -459,12 +475,16 @@ type BgpAttributes interface {
 	// The following AFI / SAFI combinations are supported:
 	// - IPv4 Unicast with AFI as 1 and SAFI as 1
 	// - IPv6 Unicast with AFI as 2 and SAFI as 1
+	// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1)
+	// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 	MpUnreach() BgpAttributesMpUnreachNlri
 	// SetMpUnreach assigns BgpAttributesMpUnreachNlri provided by user to BgpAttributes.
 	// BgpAttributesMpUnreachNlri is the MP_UNREACH attribute is an optional attribute which can be included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
 	// The following AFI / SAFI combinations are supported:
 	// - IPv4 Unicast with AFI as 1 and SAFI as 1
 	// - IPv6 Unicast with AFI as 2 and SAFI as 1
+	// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02 Section 2.1)
+	// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 	SetMpUnreach(value BgpAttributesMpUnreachNlri) BgpAttributes
 	// HasMpUnreach checks if MpUnreach has been set in BgpAttributes
 	HasMpUnreach() bool
@@ -1048,6 +1068,34 @@ func (obj *bgpAttributesBgpExtendedCommunityIter) appendHolderSlice(item BgpExte
 }
 
 // description is TBD
+// TunnelEncapsulation returns a BgpAttributesTunnelEncapsulation
+func (obj *bgpAttributes) TunnelEncapsulation() BgpAttributesTunnelEncapsulation {
+	if obj.obj.TunnelEncapsulation == nil {
+		obj.obj.TunnelEncapsulation = NewBgpAttributesTunnelEncapsulation().msg()
+	}
+	if obj.tunnelEncapsulationHolder == nil {
+		obj.tunnelEncapsulationHolder = &bgpAttributesTunnelEncapsulation{obj: obj.obj.TunnelEncapsulation}
+	}
+	return obj.tunnelEncapsulationHolder
+}
+
+// description is TBD
+// TunnelEncapsulation returns a BgpAttributesTunnelEncapsulation
+func (obj *bgpAttributes) HasTunnelEncapsulation() bool {
+	return obj.obj.TunnelEncapsulation != nil
+}
+
+// description is TBD
+// SetTunnelEncapsulation sets the BgpAttributesTunnelEncapsulation value in the BgpAttributes object
+func (obj *bgpAttributes) SetTunnelEncapsulation(value BgpAttributesTunnelEncapsulation) BgpAttributes {
+
+	obj.tunnelEncapsulationHolder = nil
+	obj.obj.TunnelEncapsulation = value.msg()
+
+	return obj
+}
+
+// description is TBD
 // MpReach returns a BgpAttributesMpReachNlri
 func (obj *bgpAttributes) MpReach() BgpAttributesMpReachNlri {
 	if obj.obj.MpReach == nil {
@@ -1197,6 +1245,11 @@ func (obj *bgpAttributes) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.TunnelEncapsulation != nil {
+
+		obj.TunnelEncapsulation().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.MpReach != nil {

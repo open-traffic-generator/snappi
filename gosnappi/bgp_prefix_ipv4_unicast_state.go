@@ -13,11 +13,12 @@ import (
 // ***** BgpPrefixIpv4UnicastState *****
 type bgpPrefixIpv4UnicastState struct {
 	validation
-	obj               *otg.BgpPrefixIpv4UnicastState
-	marshaller        marshalBgpPrefixIpv4UnicastState
-	unMarshaller      unMarshalBgpPrefixIpv4UnicastState
-	communitiesHolder BgpPrefixIpv4UnicastStateResultBgpCommunityIter
-	asPathHolder      ResultBgpAsPath
+	obj                       *otg.BgpPrefixIpv4UnicastState
+	marshaller                marshalBgpPrefixIpv4UnicastState
+	unMarshaller              unMarshalBgpPrefixIpv4UnicastState
+	communitiesHolder         BgpPrefixIpv4UnicastStateResultBgpCommunityIter
+	extendedCommunitiesHolder BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	asPathHolder              ResultBgpAsPath
 }
 
 func NewBgpPrefixIpv4UnicastState() BgpPrefixIpv4UnicastState {
@@ -246,6 +247,7 @@ func (obj *bgpPrefixIpv4UnicastState) Clone() (BgpPrefixIpv4UnicastState, error)
 
 func (obj *bgpPrefixIpv4UnicastState) setNil() {
 	obj.communitiesHolder = nil
+	obj.extendedCommunitiesHolder = nil
 	obj.asPathHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -312,6 +314,8 @@ type BgpPrefixIpv4UnicastState interface {
 	HasIpv6NextHop() bool
 	// Communities returns BgpPrefixIpv4UnicastStateResultBgpCommunityIterIter, set in BgpPrefixIpv4UnicastState
 	Communities() BgpPrefixIpv4UnicastStateResultBgpCommunityIter
+	// ExtendedCommunities returns BgpPrefixIpv4UnicastStateResultExtendedCommunityIterIter, set in BgpPrefixIpv4UnicastState
+	ExtendedCommunities() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
 	// AsPath returns ResultBgpAsPath, set in BgpPrefixIpv4UnicastState.
 	// ResultBgpAsPath is this attribute identifies the autonomous systems through  which routing information carried in this UPDATE message has passed.
 	AsPath() ResultBgpAsPath
@@ -568,6 +572,93 @@ func (obj *bgpPrefixIpv4UnicastStateResultBgpCommunityIter) appendHolderSlice(it
 	return obj
 }
 
+// Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+// ExtendedCommunities returns a []ResultExtendedCommunity
+func (obj *bgpPrefixIpv4UnicastState) ExtendedCommunities() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	if len(obj.obj.ExtendedCommunities) == 0 {
+		obj.obj.ExtendedCommunities = []*otg.ResultExtendedCommunity{}
+	}
+	if obj.extendedCommunitiesHolder == nil {
+		obj.extendedCommunitiesHolder = newBgpPrefixIpv4UnicastStateResultExtendedCommunityIter(&obj.obj.ExtendedCommunities).setMsg(obj)
+	}
+	return obj.extendedCommunitiesHolder
+}
+
+type bgpPrefixIpv4UnicastStateResultExtendedCommunityIter struct {
+	obj                          *bgpPrefixIpv4UnicastState
+	resultExtendedCommunitySlice []ResultExtendedCommunity
+	fieldPtr                     *[]*otg.ResultExtendedCommunity
+}
+
+func newBgpPrefixIpv4UnicastStateResultExtendedCommunityIter(ptr *[]*otg.ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	return &bgpPrefixIpv4UnicastStateResultExtendedCommunityIter{fieldPtr: ptr}
+}
+
+type BgpPrefixIpv4UnicastStateResultExtendedCommunityIter interface {
+	setMsg(*bgpPrefixIpv4UnicastState) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	Items() []ResultExtendedCommunity
+	Add() ResultExtendedCommunity
+	Append(items ...ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	Set(index int, newObj ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	Clear() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	clearHolderSlice() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+	appendHolderSlice(item ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter
+}
+
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) setMsg(msg *bgpPrefixIpv4UnicastState) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&resultExtendedCommunity{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) Items() []ResultExtendedCommunity {
+	return obj.resultExtendedCommunitySlice
+}
+
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) Add() ResultExtendedCommunity {
+	newObj := &otg.ResultExtendedCommunity{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &resultExtendedCommunity{obj: newObj}
+	newLibObj.setDefault()
+	obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) Append(items ...ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) Set(index int, newObj ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.resultExtendedCommunitySlice[index] = newObj
+	return obj
+}
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) Clear() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.ResultExtendedCommunity{}
+		obj.resultExtendedCommunitySlice = []ResultExtendedCommunity{}
+	}
+	return obj
+}
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) clearHolderSlice() BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	if len(obj.resultExtendedCommunitySlice) > 0 {
+		obj.resultExtendedCommunitySlice = []ResultExtendedCommunity{}
+	}
+	return obj
+}
+func (obj *bgpPrefixIpv4UnicastStateResultExtendedCommunityIter) appendHolderSlice(item ResultExtendedCommunity) BgpPrefixIpv4UnicastStateResultExtendedCommunityIter {
+	obj.resultExtendedCommunitySlice = append(obj.resultExtendedCommunitySlice, item)
+	return obj
+}
+
 // description is TBD
 // AsPath returns a ResultBgpAsPath
 func (obj *bgpPrefixIpv4UnicastState) AsPath() ResultBgpAsPath {
@@ -682,6 +773,20 @@ func (obj *bgpPrefixIpv4UnicastState) validateObj(vObj *validation, set_default 
 			}
 		}
 		for _, item := range obj.Communities().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.ExtendedCommunities) != 0 {
+
+		if set_default {
+			obj.ExtendedCommunities().clearHolderSlice()
+			for _, item := range obj.obj.ExtendedCommunities {
+				obj.ExtendedCommunities().appendHolderSlice(&resultExtendedCommunity{obj: item})
+			}
+		}
+		for _, item := range obj.ExtendedCommunities().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

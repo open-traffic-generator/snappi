@@ -13,15 +13,17 @@ import (
 // ***** StatesRequest *****
 type statesRequest struct {
 	validation
-	obj                 *otg.StatesRequest
-	marshaller          marshalStatesRequest
-	unMarshaller        unMarshalStatesRequest
-	ipv4NeighborsHolder Neighborsv4StatesRequest
-	ipv6NeighborsHolder Neighborsv6StatesRequest
-	bgpPrefixesHolder   BgpPrefixStateRequest
-	isisLspsHolder      IsisLspsStateRequest
-	lldpNeighborsHolder LldpNeighborsStateRequest
-	rsvpLspsHolder      RsvpLspsStateRequest
+	obj                    *otg.StatesRequest
+	marshaller             marshalStatesRequest
+	unMarshaller           unMarshalStatesRequest
+	ipv4NeighborsHolder    Neighborsv4StatesRequest
+	ipv6NeighborsHolder    Neighborsv6StatesRequest
+	bgpPrefixesHolder      BgpPrefixStateRequest
+	isisLspsHolder         IsisLspsStateRequest
+	lldpNeighborsHolder    LldpNeighborsStateRequest
+	rsvpLspsHolder         RsvpLspsStateRequest
+	dhcpv4InterfacesHolder Dhcpv4InterfaceStateRequest
+	dhcpv4LeasesHolder     Dhcpv4LeaseStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -255,6 +257,8 @@ func (obj *statesRequest) setNil() {
 	obj.isisLspsHolder = nil
 	obj.lldpNeighborsHolder = nil
 	obj.rsvpLspsHolder = nil
+	obj.dhcpv4InterfacesHolder = nil
+	obj.dhcpv4LeasesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -336,6 +340,22 @@ type StatesRequest interface {
 	SetRsvpLsps(value RsvpLspsStateRequest) StatesRequest
 	// HasRsvpLsps checks if RsvpLsps has been set in StatesRequest
 	HasRsvpLsps() bool
+	// Dhcpv4Interfaces returns Dhcpv4InterfaceStateRequest, set in StatesRequest.
+	// Dhcpv4InterfaceStateRequest is the request for assigned IPv4 address information associated with DHCP Client sessions.
+	Dhcpv4Interfaces() Dhcpv4InterfaceStateRequest
+	// SetDhcpv4Interfaces assigns Dhcpv4InterfaceStateRequest provided by user to StatesRequest.
+	// Dhcpv4InterfaceStateRequest is the request for assigned IPv4 address information associated with DHCP Client sessions.
+	SetDhcpv4Interfaces(value Dhcpv4InterfaceStateRequest) StatesRequest
+	// HasDhcpv4Interfaces checks if Dhcpv4Interfaces has been set in StatesRequest
+	HasDhcpv4Interfaces() bool
+	// Dhcpv4Leases returns Dhcpv4LeaseStateRequest, set in StatesRequest.
+	// Dhcpv4LeaseStateRequest is the request to retrieve DHCP Server host allocated status.
+	Dhcpv4Leases() Dhcpv4LeaseStateRequest
+	// SetDhcpv4Leases assigns Dhcpv4LeaseStateRequest provided by user to StatesRequest.
+	// Dhcpv4LeaseStateRequest is the request to retrieve DHCP Server host allocated status.
+	SetDhcpv4Leases(value Dhcpv4LeaseStateRequest) StatesRequest
+	// HasDhcpv4Leases checks if Dhcpv4Leases has been set in StatesRequest
+	HasDhcpv4Leases() bool
 	setNil()
 }
 
@@ -343,19 +363,23 @@ type StatesRequestChoiceEnum string
 
 // Enum of Choice on StatesRequest
 var StatesRequestChoice = struct {
-	IPV4_NEIGHBORS StatesRequestChoiceEnum
-	IPV6_NEIGHBORS StatesRequestChoiceEnum
-	BGP_PREFIXES   StatesRequestChoiceEnum
-	ISIS_LSPS      StatesRequestChoiceEnum
-	LLDP_NEIGHBORS StatesRequestChoiceEnum
-	RSVP_LSPS      StatesRequestChoiceEnum
+	IPV4_NEIGHBORS    StatesRequestChoiceEnum
+	IPV6_NEIGHBORS    StatesRequestChoiceEnum
+	BGP_PREFIXES      StatesRequestChoiceEnum
+	ISIS_LSPS         StatesRequestChoiceEnum
+	LLDP_NEIGHBORS    StatesRequestChoiceEnum
+	RSVP_LSPS         StatesRequestChoiceEnum
+	DHCPV4_INTERFACES StatesRequestChoiceEnum
+	DHCPV4_LEASES     StatesRequestChoiceEnum
 }{
-	IPV4_NEIGHBORS: StatesRequestChoiceEnum("ipv4_neighbors"),
-	IPV6_NEIGHBORS: StatesRequestChoiceEnum("ipv6_neighbors"),
-	BGP_PREFIXES:   StatesRequestChoiceEnum("bgp_prefixes"),
-	ISIS_LSPS:      StatesRequestChoiceEnum("isis_lsps"),
-	LLDP_NEIGHBORS: StatesRequestChoiceEnum("lldp_neighbors"),
-	RSVP_LSPS:      StatesRequestChoiceEnum("rsvp_lsps"),
+	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
+	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
+	BGP_PREFIXES:      StatesRequestChoiceEnum("bgp_prefixes"),
+	ISIS_LSPS:         StatesRequestChoiceEnum("isis_lsps"),
+	LLDP_NEIGHBORS:    StatesRequestChoiceEnum("lldp_neighbors"),
+	RSVP_LSPS:         StatesRequestChoiceEnum("rsvp_lsps"),
+	DHCPV4_INTERFACES: StatesRequestChoiceEnum("dhcpv4_interfaces"),
+	DHCPV4_LEASES:     StatesRequestChoiceEnum("dhcpv4_leases"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -377,6 +401,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dhcpv4Leases = nil
+	obj.dhcpv4LeasesHolder = nil
+	obj.obj.Dhcpv4Interfaces = nil
+	obj.dhcpv4InterfacesHolder = nil
 	obj.obj.RsvpLsps = nil
 	obj.rsvpLspsHolder = nil
 	obj.obj.LldpNeighbors = nil
@@ -412,6 +440,14 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.RSVP_LSPS {
 		obj.obj.RsvpLsps = NewRsvpLspsStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.DHCPV4_INTERFACES {
+		obj.obj.Dhcpv4Interfaces = NewDhcpv4InterfaceStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.DHCPV4_LEASES {
+		obj.obj.Dhcpv4Leases = NewDhcpv4LeaseStateRequest().msg()
 	}
 
 	return obj
@@ -585,6 +621,62 @@ func (obj *statesRequest) SetRsvpLsps(value RsvpLspsStateRequest) StatesRequest 
 	return obj
 }
 
+// description is TBD
+// Dhcpv4Interfaces returns a Dhcpv4InterfaceStateRequest
+func (obj *statesRequest) Dhcpv4Interfaces() Dhcpv4InterfaceStateRequest {
+	if obj.obj.Dhcpv4Interfaces == nil {
+		obj.setChoice(StatesRequestChoice.DHCPV4_INTERFACES)
+	}
+	if obj.dhcpv4InterfacesHolder == nil {
+		obj.dhcpv4InterfacesHolder = &dhcpv4InterfaceStateRequest{obj: obj.obj.Dhcpv4Interfaces}
+	}
+	return obj.dhcpv4InterfacesHolder
+}
+
+// description is TBD
+// Dhcpv4Interfaces returns a Dhcpv4InterfaceStateRequest
+func (obj *statesRequest) HasDhcpv4Interfaces() bool {
+	return obj.obj.Dhcpv4Interfaces != nil
+}
+
+// description is TBD
+// SetDhcpv4Interfaces sets the Dhcpv4InterfaceStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetDhcpv4Interfaces(value Dhcpv4InterfaceStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.DHCPV4_INTERFACES)
+	obj.dhcpv4InterfacesHolder = nil
+	obj.obj.Dhcpv4Interfaces = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Dhcpv4Leases returns a Dhcpv4LeaseStateRequest
+func (obj *statesRequest) Dhcpv4Leases() Dhcpv4LeaseStateRequest {
+	if obj.obj.Dhcpv4Leases == nil {
+		obj.setChoice(StatesRequestChoice.DHCPV4_LEASES)
+	}
+	if obj.dhcpv4LeasesHolder == nil {
+		obj.dhcpv4LeasesHolder = &dhcpv4LeaseStateRequest{obj: obj.obj.Dhcpv4Leases}
+	}
+	return obj.dhcpv4LeasesHolder
+}
+
+// description is TBD
+// Dhcpv4Leases returns a Dhcpv4LeaseStateRequest
+func (obj *statesRequest) HasDhcpv4Leases() bool {
+	return obj.obj.Dhcpv4Leases != nil
+}
+
+// description is TBD
+// SetDhcpv4Leases sets the Dhcpv4LeaseStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetDhcpv4Leases(value Dhcpv4LeaseStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.DHCPV4_LEASES)
+	obj.dhcpv4LeasesHolder = nil
+	obj.obj.Dhcpv4Leases = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -618,6 +710,16 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.RsvpLsps != nil {
 
 		obj.RsvpLsps().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv4Interfaces != nil {
+
+		obj.Dhcpv4Interfaces().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv4Leases != nil {
+
+		obj.Dhcpv4Leases().validateObj(vObj, set_default)
 	}
 
 }
@@ -654,6 +756,16 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.RsvpLsps != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.RSVP_LSPS
+	}
+
+	if obj.obj.Dhcpv4Interfaces != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.DHCPV4_INTERFACES
+	}
+
+	if obj.obj.Dhcpv4Leases != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.DHCPV4_LEASES
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
