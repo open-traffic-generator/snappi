@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.1.0
+  version: 1.5.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -613,6 +613,12 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        dhcpv4_interfaces:
+          description: "List of DHCPv4 Clients Configuration. "
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Dhcpv4client'
+          x-field-uid: 9
       required:
       - mac
       - name
@@ -947,6 +953,84 @@ components:
           format: mac
           default: 00:00:00:00:00:00
           x-field-uid: 3
+    Device.Dhcpv4client:
+      description: |-
+        Configuration for emulated DHCPv4 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        choice:
+          description: |-
+            The client receives one or more DHCPOFFER messages from one or more servers and client may choose to wait for multiple responses.
+            The client chooses one server from which to request configuration
+            parameters, based on the configuration parameters offered in the DHCPOFFER messages.
+            - first_server: if selected, the subnet accepts the IP addresses offered by the first server to respond with an offer of IP addresses.
+            - server_address: The address of the DHCP server from which the subnet will accept IP addresses.
+          type: string
+          default: first_server
+          x-field-uid: 2
+          x-enum:
+            first_server:
+              x-field-uid: 1
+            server_address:
+              x-field-uid: 2
+          enum:
+          - first_server
+          - server_address
+        server_address:
+          description: |-
+            The address of the DHCP server.
+          type: string
+          format: ipv4
+          x-field-uid: 4
+        broadcast:
+          description: |-
+            If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER and DHCPACK messages.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        parameters_request_list:
+          description: |-
+            Optional parameters field request list of DHCPv4 Client.
+          $ref: '#/components/schemas/Dhcpv4Client.Params'
+          x-field-uid: 6
+    Dhcpv4Client.Params:
+      description: |-
+        Configuration Parameter request list by emulated DHCPv4 Client.
+      type: object
+      properties:
+        subnet_mask:
+          description: "Request for the subnet mask option specifies the client's\
+            \ subnet mask as per RFC950. "
+          type: boolean
+          default: true
+          x-field-uid: 1
+        router:
+          description: |-
+            Request for the router option that specifies a list of IP addresses for routers on the client's subnet.
+          type: boolean
+          default: true
+          x-field-uid: 2
+        renewal_timer:
+          description: |-
+            Request for the renewal timer, T1. When the timer expires, the client transitions from the BOUND state to the RENEWING state.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        rebinding_timer:
+          description: |-
+            Request for the rebinding timer (T2). When expires, the client transitions to the REBINDING state.
+          type: boolean
+          default: false
+          x-field-uid: 4
     Layer1:
       description: |-
         A container for layer1 settings.
@@ -1586,6 +1670,11 @@ components:
             The properties of an RSVP router and its children.
           $ref: '#/components/schemas/Device.Rsvp'
           x-field-uid: 8
+        dhcp_server:
+          description: |-
+            The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+          $ref: '#/components/schemas/Device.DhcpServer'
+          x-field-uid: 9
       required:
       - name
     Protocol.Options:
@@ -2854,20 +2943,23 @@ components:
       properties:
         ipv4_name:
           description: |
-            The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for this list of BGP peers.
+            The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
+            - /components/schemas/DhcpClient.V4/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
+            - /components/schemas/DhcpClient.V4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
           - /components/schemas/Device.Ipv4Loopback/properties/name
+          - /components/schemas/DhcpClient.V4/properties/name
           x-field-uid: 1
         peers:
           description: |-
@@ -5651,6 +5743,68 @@ components:
           format: uint32
           default: 1
           x-field-uid: 1
+    Bgp.Ipv4SrPolicyNLRIPrefix:
+      description: |-
+        IPv4 Segment Routing Policy NLRI Prefix.
+      type: object
+      properties:
+        distinguisher:
+          description: "The 4-octet value uniquely identifying the policy in the context\
+            \ of <color, endpoint> tuple.  The distinguisher has no semantic value\
+            \ and is solely used by the SR Policy originator to make unique (from\
+            \ an NLRI perspective)  both for multiple candidate paths of the same\
+            \ SR Policy as well as candidate paths of different SR Policies  (i.e.\
+            \ with different segment lists) with the same Color and Endpoint but meant\
+            \ for different headends. "
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 1
+        color:
+          description: |-
+            4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination  prefixes to steer traffic into the SR Policy as specified in section 8 of RFC9256.
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 2
+        endpoint:
+          description: |-
+            Identifies the endpoint of a policy.  The Endpoint is an IPv4 address and can be either a unicast or an unspecified address (0.0.0.0) as specified in section 2.1 of RFC9256.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 3
+    Bgp.Ipv6SrPolicyNLRIPrefix:
+      description: |-
+        One IPv6 Segment Routing Policy NLRI Prefix.
+      type: object
+      properties:
+        distinguisher:
+          description: "The 4-octet value uniquely identifying the policy in the context\
+            \ of <color, endpoint> tuple.  The distinguisher has no semantic value\
+            \ and is solely used by the SR Policy originator to make unique (from\
+            \ an NLRI perspective)  both for multiple candidate paths of the same\
+            \ SR Policy as well as candidate paths of different SR Policies  (i.e.\
+            \ with different segment lists) with the same Color and Endpoint but meant\
+            \ for different headends. "
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 1
+        color:
+          description: |-
+            4-octet value identifying (with the endpoint) the policy. The color is used to match the color of the destination  prefixes to steer traffic into the SR Policy as specified in section 8 of RFC9256.
+          type: integer
+          format: uint32
+          default: 1
+          x-field-uid: 2
+        endpoint:
+          description: |-
+            Identifies the endpoint of a policy.  The Endpoint may represent a single node or a set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can be either a unicast or an unspecified address (0::0) as specified in section 2.1 of RFC9256.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
     Bgp.Attributes:
       description: |-
         Attributes carried in the Update packet alongwith the reach/unreach prefixes.
@@ -5747,6 +5901,9 @@ components:
           items:
             $ref: '#/components/schemas/Bgp.ExtendedCommunity'
           x-field-uid: 14
+        tunnel_encapsulation:
+          $ref: '#/components/schemas/Bgp.Attributes.TunnelEncapsulation'
+          x-field-uid: 15
         mp_reach:
           $ref: '#/components/schemas/Bgp.Attributes.MpReachNlri'
           x-field-uid: 16
@@ -6159,7 +6316,10 @@ components:
       description: "The MP_REACH attribute is an optional attribute which can be included\
         \ in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
         The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
-        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 "
+        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 \n-\
+        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.1 )\n- Segment Routing Policy for IPv6 Unicast with AFI as 2 and\
+        \ SAFI as 73"
       type: object
       required:
       - choice
@@ -6177,9 +6337,15 @@ components:
               x-field-uid: 1
             ipv6_unicast:
               x-field-uid: 2
+            ipv4_srpolicy:
+              x-field-uid: 3
+            ipv6_srpolicy:
+              x-field-uid: 4
           enum:
           - ipv4_unicast
           - ipv6_unicast
+          - ipv4_srpolicy
+          - ipv6_srpolicy
         ipv4_unicast:
           description: |-
             List of IPv4 prefixes being sent in the IPv4 Unicast MPREACH_NLRI .
@@ -6189,18 +6355,29 @@ components:
           x-field-uid: 3
         ipv6_unicast:
           description: |-
-            SAFI of the NLRI being sent in the Update.
-                   description: >-
             List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
           type: array
           items:
             $ref: '#/components/schemas/Bgp.OneIpv6NLRIPrefix'
           x-field-uid: 4
+        ipv4_srpolicy:
+          description: |-
+            IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+          $ref: '#/components/schemas/Bgp.Ipv4SrPolicyNLRIPrefix'
+          x-field-uid: 5
+        ipv6_srpolicy:
+          description: "IPv6 endpoint with Segment Routing Policy being sent in the\
+            \ IPv6 MPREACH_NLRI .          "
+          $ref: '#/components/schemas/Bgp.Ipv6SrPolicyNLRIPrefix'
+          x-field-uid: 6
     Bgp.Attributes.MpUnreachNlri:
       description: "The MP_UNREACH attribute is an optional attribute which can be\
         \ included in the attributes of a BGP Update message as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\n\
         The following AFI / SAFI combinations are supported:\n- IPv4 Unicast with\
-        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 "
+        \ AFI as 1 and SAFI as 1 \n- IPv6 Unicast with AFI as 2 and SAFI as 1 \n-\
+        \ Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.1)\n- Segment Routing Policy for IPv6 Unicast with AFI as 2 and\
+        \ SAFI as 73"
       type: object
       properties:
         choice:
@@ -6213,9 +6390,15 @@ components:
               x-field-uid: 1
             ipv6_unicast:
               x-field-uid: 2
+            ipv4_srpolicy:
+              x-field-uid: 3
+            ipv6_srpolicy:
+              x-field-uid: 4
           enum:
           - ipv4_unicast
           - ipv6_unicast
+          - ipv4_srpolicy
+          - ipv6_srpolicy
         ipv4_unicast:
           description: |-
             List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
@@ -6225,13 +6408,21 @@ components:
           x-field-uid: 2
         ipv6_unicast:
           description: |-
-            SAFI of the NLRI being sent in the Update.
-                   description: >-
             List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
           type: array
           items:
             $ref: '#/components/schemas/Bgp.OneIpv6NLRIPrefix'
           x-field-uid: 3
+        ipv4_srpolicy:
+          description: |-
+            IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+          $ref: '#/components/schemas/Bgp.Ipv4SrPolicyNLRIPrefix'
+          x-field-uid: 4
+        ipv6_srpolicy:
+          description: "IPv6 endpoint with Segment Routing Policy being sent in the\
+            \ IPv4 MPUNREACH_NLRI .          "
+          $ref: '#/components/schemas/Bgp.Ipv6SrPolicyNLRIPrefix'
+          x-field-uid: 5
     Bgp.Attributes.MultiExitDiscriminator:
       description: "Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to\
         \ help in the route selection process. "
@@ -6267,6 +6458,861 @@ components:
           type: string
           format: ipv4
           default: 0.0.0.0
+          x-field-uid: 1
+    Bgp.Attributes.TunnelEncapsulation:
+      description: |-
+        The TUNNEL_ENCAPSULATION  attribute is used by a BGP speaker to inform other BGP speakers how to encapsulate packets that need to be sent to it.
+        It is defined in RFC9012 and is assigned a Type code of 23.
+      properties:
+        choice:
+          description: |-
+            Identifies a type of tunnel. The field contains values from the IANA registry "BGP Tunnel Encapsulation Attribute Tunnel Types".
+          type: string
+          x-field-uid: 1
+          x-enum:
+            sr_policy:
+              x-field-uid: 1
+          default: sr_policy
+          enum:
+          - sr_policy
+        sr_policy:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy'
+          x-field-uid: 2
+    Bgp.Attributes.SegmentRoutingPolicy:
+      description: "Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.\n\
+        This information is carried in TUNNEL_ENCAPSULATION attribute with type set\
+        \ to  SR Policy (15). "
+      type: object
+      properties:
+        binding_segment_identifier:
+          $ref: '#/components/schemas/Bgp.Attributes.Bsid'
+          x-field-uid: 1
+        srv6_binding_segment_identifier:
+          description: "The SRv6 Binding SID sub-TLV is an optional sub-TLV of type\
+            \ 20 that is used to signal the SRv6 Binding SID\nrelated information\
+            \ of an SR Policy candidate path. \n  - More than one SRv6 Binding SID\
+            \ sub-TLVs MAY be signaled in the same SR Policy encoding to indicate\
+            \ one\n    or more SRv6 SIDs, each with potentially different SRv6 Endpoint\
+            \ Behaviors to be instantiated.\n  - The format of the sub-TLV is defined\
+            \ in draft-ietf-idr-sr-policy-safi-02 Section 2.4.3 .       "
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.Srv6Bsid'
+          x-field-uid: 2
+        preference:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.Preference'
+          x-field-uid: 3
+        priority:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.Priority'
+          x-field-uid: 4
+        policy_name:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.PolicyName'
+          x-field-uid: 5
+        policy_candidate_name:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.PolicyCandidateName'
+          x-field-uid: 6
+        explicit_null_label_policy:
+          $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.ExplicitNullPolicy'
+          x-field-uid: 7
+        segment_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.SrPolicy.SegmentList'
+          x-field-uid: 8
+    Bgp.Attributes.Bsid:
+      description: "The Binding Segment Identifier is an optional sub-tlv of type\
+        \ 13 that can be sent with a SR Policy \nTunnel Encapsulation attribute.\n\
+        When the active candidate path has a specified Binding Segment Identifier,\
+        \ the SR Policy uses that \nBSID if this value (label in MPLS, IPv6 address\
+        \ in SRv6) is available.\n- The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.4.2 . \n- It is recommended that if SRv6 Binding SID is desired\
+        \ to be signalled, the SRv6 Binding SID sub-TLV that enables \n  the specification\
+        \ of the SRv6 Endpoint Behavior should be used."
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: "The type of Segment Identifier.   "
+          type: string
+          x-field-uid: 1
+          x-enum:
+            mpls:
+              x-field-uid: 1
+            srv6:
+              x-field-uid: 2
+          enum:
+          - mpls
+          - srv6
+        mpls:
+          $ref: '#/components/schemas/Bgp.Attributes.Bsid.Mpls'
+          x-field-uid: 2
+        srv6:
+          $ref: '#/components/schemas/Bgp.Attributes.Bsid.Srv6'
+          x-field-uid: 3
+    Bgp.Attributes.Bsid.Mpls:
+      description: "When the active candidate path has a specified Binding Segment\
+        \ Identifier, the SR Policy uses that BSID defined \nas a MPLS label.The format\
+        \ of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02  Section 2.4.2\
+        \ ."
+      type: object
+      properties:
+        flag_specified_bsid_only:
+          description: "S-Flag: This flag encodes the \"Specified-BSID-only\" behavior.\
+            \ It's usage is \ndescribed in section 6.2.3 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 1
+        flag_drop_upon_invalid:
+          description: "I-Flag: This flag encodes the \"Drop Upon Invalid\" behavior.\
+            \ \nIt's usage is described in section 8.2 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 2
+        mpls_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 3
+    Bgp.Attributes.Bsid.Srv6:
+      description: "When the active candidate path has a specified Binding Segment\
+        \ Identifier, the SR Policy uses that BSID defined \nas an IPv6 Address.The\
+        \ format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section\
+        \ 2.4.2 ."
+      type: object
+      properties:
+        flag_specified_bsid_only:
+          description: "S-Flag: This flag encodes the \"Specified-BSID-only\" behavior.\
+            \ It's usage is \ndescribed in section 6.2.3 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 1
+        flag_drop_upon_invalid:
+          description: "I-Flag: This flag encodes the \"Drop Upon Invalid\" behavior.\
+            \ \nIt's usage is described in section 8.2 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 2
+        ipv6_addr:
+          description: |-
+            IPv6 address denoting the SRv6 SID.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+    Bgp.Attributes.Srv6Bsid:
+      description: "The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20\
+        \ that is used to signal the SRv6 Binding SID\nrelated information of an SR\
+        \ Policy candidate path. \n  - More than one SRv6 Binding SID sub-TLVs MAY\
+        \ be signaled in the same SR Policy encoding to indicate one or\n    more\
+        \ SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be\
+        \ instantiated.\n  - The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02\
+        \ Section 2.4.3 ."
+      type: object
+      properties:
+        flag_specified_bsid_only:
+          description: "S-Flag: This flag encodes the \"Specified-BSID-only\" behavior.\
+            \ It's usage is \ndescribed in section 6.2.3 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 1
+        flag_drop_upon_invalid:
+          description: "I-Flag: This flag encodes the \"Drop Upon Invalid\" behavior.\
+            \ \nIt's usage is described in section 8.2 in [RFC9256]."
+          type: boolean
+          default: false
+          x-field-uid: 2
+        flag_srv6_endpoint_behavior:
+          description: "B-Flag: This flag, when set, indicates the presence of the\
+            \ SRv6 Endpoint Behavior \nand SID Structure encoding specified in Section\
+            \ 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02."
+          type: boolean
+          default: false
+          x-field-uid: 3
+        ipv6_addr:
+          description: |-
+            IPv6 address denoting the SRv6 SID.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 4
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 5
+    Bgp.Attributes.Sid.Mpls:
+      description: "This carries a 20 bit Multi Protocol Label Switching alongwith\
+        \ 3 bits traffic class, 1 bit indicating presence\nor absence of Bottom-Of-Stack\
+        \ and 8 bits carrying the Time to Live value. "
+      type: object
+      properties:
+        label:
+          description: |-
+            20 bit MPLS Label value.
+          type: integer
+          format: uint32
+          default: 16
+          maximum: 1048576
+          x-field-uid: 1
+        traffic_class:
+          description: |-
+            3 bits of Traffic Class.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 2
+        flag_bos:
+          description: |-
+            Bottom of Stack
+          type: boolean
+          default: true
+          x-field-uid: 3
+        ttl:
+          description: |-
+            8 bits Time to Live
+          type: integer
+          format: uint32
+          default: 63
+          maximum: 63
+          x-field-uid: 4
+    Bgp.Attributes.Sid.Srv6:
+      description: |-
+        An IPv6 address denoting a SRv6 SID.
+      type: object
+      properties:
+        ip:
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 1
+    Bgp.Attributes.SrPolicy.Preference:
+      description: |
+        Optional Preference sub-tlv (Type 12) is used to select the best candidate path for an SR Policy.
+        It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .
+      type: object
+      properties:
+        value:
+          description: |-
+            Value to be carried in the Preference sub-tlv.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+    Bgp.Attributes.SrPolicy.Priority:
+      description: |-
+        Optional Priority sub-tlv (Type 15) used to select the order in which policies should be re-computed.
+        - It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
+      type: object
+      properties:
+        value:
+          description: "Value to be carried in the Priority sub-tlv.            "
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 1
+    Bgp.Attributes.SrPolicy.PolicyCandidateName:
+      description: "Optional Policy Candidate Path Name sub-tlv (Type 129) which carries\
+        \ the symbolic name for the SR Policy candidate path \nfor debugging.    \n\
+        - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 ."
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          description: |-
+            Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate Path Name sub-tlv.
+            It is recommended that the size of the name is limited to 255 bytes.
+          type: string
+          maxLength: 500
+          x-field-uid: 1
+    Bgp.Attributes.SrPolicy.PolicyName:
+      description: "Optional Policy Name sub-tlv (Type 130) which carries the symbolic\
+        \ name for the SR Policy for which the \ncandidate path is being advertised\
+        \ for debugging.    \n- It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02\
+        \ ."
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          description: |-
+            Value of the symbolic policy name carried in the Policy Name sub-tlv.
+            It is recommended that the size of the name is limited to 255 bytes.
+          type: string
+          maxLength: 500
+          x-field-uid: 1
+    Bgp.Attributes.SrPolicy.ExplicitNullPolicy:
+      description: |-
+        This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label must be pushed on an unlabeled IP
+        packet before other labels for IPv4 or IPv6 flows.
+        - It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
+      properties:
+        choice:
+          description: |-
+            The Explicit NULL Label policy.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            unknown:
+              x-field-uid: 1
+            push_ipv4:
+              x-field-uid: 2
+            push_ipv6:
+              x-field-uid: 3
+            push_ipv4_and_ipv6:
+              x-field-uid: 4
+            donot_push:
+              x-field-uid: 5
+          default: push_ipv4_and_ipv6
+          enum:
+          - unknown
+          - push_ipv4
+          - push_ipv6
+          - push_ipv4_and_ipv6
+          - donot_push
+    Bgp.Attributes.SrPolicy.SegmentList:
+      description: "One optional SEGMENT_LIST sub-tlv encoded with type of 128.\n\
+        One sub-tlv (Type 128) encodes a single explicit path towards the endpoint\
+        \ as described in \nsection 5.1 of [RFC9256]. \nThe Segment List sub-TLV includes\
+        \ the elements of the paths (i.e., segments) as well \nas an optional Weight\
+        \ sub-TLV."
+      type: object
+      properties:
+        weight:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Weight'
+          x-field-uid: 1
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Segment'
+          x-field-uid: 2
+    Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Weight:
+      description: |-
+        The optional Weight sub-TLV (Type 9) specifies the weight associated with a given segment list. The weight is used for weighted multipath.
+      type: object
+      properties:
+        value:
+          description: |-
+            Value of the weight.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 1
+    Bgp.Attributes.SegmentRoutingPolicy.SegmentList.Segment:
+      description: "A Segment sub-TLV describes a single segment in a segment list\
+        \  i.e., a single\nelement of the explicit path. The Segment sub-TLVs are\
+        \ optional.\nSegment Types A and B are defined as described in 2.4.4.2.\n\
+        Segment Types C upto K are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03\
+        \  .      "
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy
+            - Type  A: SID only, in the form of MPLS Label.
+            - Type  B: SID only, in the form of IPv6 Address.
+            - Type  C: IPv4 Prefix with optional SR Algorithm.
+            - Type  D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.
+            - Type  E: IPv4 Prefix with Local Interface ID.
+            - Type  F: IPv4 Addresses for link endpoints as Local, Remote pair.
+            - Type  G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SR-MPLS.
+            - Type  H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.
+            - Type  I: IPv6 Global Prefix with optional SR Algorithm for SRv6.
+            - Type  J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair for SRv6.
+            - Type  K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            type_a:
+              x-field-uid: 1
+            type_b:
+              x-field-uid: 2
+            type_c:
+              x-field-uid: 3
+            type_d:
+              x-field-uid: 4
+            type_e:
+              x-field-uid: 5
+            type_f:
+              x-field-uid: 6
+            type_g:
+              x-field-uid: 7
+            type_h:
+              x-field-uid: 8
+            type_i:
+              x-field-uid: 9
+            type_j:
+              x-field-uid: 10
+            type_k:
+              x-field-uid: 11
+          enum:
+          - type_a
+          - type_b
+          - type_c
+          - type_d
+          - type_e
+          - type_f
+          - type_g
+          - type_h
+          - type_i
+          - type_j
+          - type_k
+        type_a:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeA'
+          x-field-uid: 2
+        type_b:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeB'
+          x-field-uid: 3
+        type_c:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeC'
+          x-field-uid: 4
+        type_d:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeD'
+          x-field-uid: 5
+        type_e:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeE'
+          x-field-uid: 6
+        type_f:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeF'
+          x-field-uid: 7
+        type_g:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeG'
+          x-field-uid: 8
+        type_h:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeH'
+          x-field-uid: 9
+        type_i:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeI'
+          x-field-uid: 10
+        type_j:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeJ'
+          x-field-uid: 11
+        type_k:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeK'
+          x-field-uid: 12
+    Bgp.Attributes.SegmentRoutingPolicy.TypeA:
+      description: |-
+        Type A: SID only, in the form of MPLS Label.
+        It is encoded as a Segment of Type 1 in the SEGMENT_LIST sub-tlv.
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        mpls_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 2
+    Bgp.Attributes.SegmentRoutingPolicy.TypeB:
+      description: |-
+        Type B: SID only, in the form of IPv6 address.
+        It is encoded as a Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        srv6_sid:
+          description: |-
+            SRv6 SID.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 2
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 3
+    Bgp.Attributes.SegmentRoutingPolicy.TypeC:
+      description: |-
+        Type C: IPv4 Node Address with optional SID.
+        It is encoded as a Segment of Type 3 in the SEGMENT_LIST sub-tlv.
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        ipv4_node_address:
+          description: |-
+            IPv4 address representing a node.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 3
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 4
+    Bgp.Attributes.SegmentRoutingPolicy.TypeD:
+      description: "Type D: IPv6 Node Address with optional SID for SR MPLS.\nIt is\
+        \ encoded as a Segment of Type 4 in the SEGMENT_LIST sub-tlv.        "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        ipv6_node_address:
+          description: |-
+            IPv6 address representing a node.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 4
+    Bgp.Attributes.SegmentRoutingPolicy.TypeE:
+      description: "Type E: IPv4 Address and Local Interface ID with optional SID\n\
+        It is encoded as a Segment of Type 5 in the SEGMENT_LIST sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        local_interface_id:
+          description: |-
+            The Interface Index as defined in [RFC8664].
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        ipv4_node_address:
+          description: |-
+            IPv4 address representing a node.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 3
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 4
+    Bgp.Attributes.SegmentRoutingPolicy.TypeF:
+      description: "Type F: IPv4 Local and Remote addresses with optional SR-MPLS\
+        \ SID.\nIt is encoded as a Segment of Type 6 in the SEGMENT_LIST sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        local_ipv4_address:
+          description: |-
+            Local IPv4 Address.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 2
+        remote_ipv4_address:
+          description: |-
+            Remote IPv4 Address.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 3
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 4
+    Bgp.Attributes.SegmentRoutingPolicy.TypeG:
+      description: "Type G: IPv6 Address, Interface ID for local and remote pair with\
+        \ optional SID for SR MPLS.\nIt is encoded as a Segment of Type 7 in the SEGMENT_LIST\
+        \ sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        local_interface_id:
+          description: |-
+            The local Interface Index as defined in [RFC8664].
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        local_ipv6_node_address:
+          description: |-
+            The IPv6 address representing the local node.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        remote_interface_id:
+          description: |-
+            The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 4
+        remote_ipv6_node_address:
+          description: |-
+            IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 5
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 6
+    Bgp.Attributes.SegmentRoutingPolicy.TypeH:
+      description: "Type H: IPv6 Local and Remote addresses with optional SID for\
+        \ SR MPLS.\nIt is encoded as a Segment of Type 8 in the SEGMENT_LIST sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        local_ipv6_address:
+          description: |-
+            Local IPv6 Address.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 2
+        remote_ipv6_address:
+          description: |-
+            Remote IPv6 Address.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        sr_mpls_sid:
+          description: |-
+            Optional SR-MPLS SID.
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Mpls'
+          x-field-uid: 6
+    Bgp.Attributes.SegmentRoutingPolicy.TypeI:
+      description: "Type I: IPv6 Node Address with optional SR Algorithm and optional\
+        \ SRv6 SID.\nIt is encoded as a Segment of Type 14 in the SEGMENT_LIST sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        ipv6_node_address:
+          description: |-
+            IPv6 address representing a node.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        srv6_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
+          x-field-uid: 4
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 5
+    Bgp.Attributes.SegmentRoutingPolicy.TypeJ:
+      description: "Type J: IPv6 Address, Interface ID for local and remote pair for\
+        \ SRv6 with optional SID.\nIt is encoded as a Segment of Type 15 in the SEGMENT_LIST\
+        \ sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        local_interface_id:
+          description: |-
+            The local Interface Index as defined in [RFC8664].
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
+        local_ipv6_node_address:
+          description: |-
+            The IPv6 address representing the local node.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 4
+        remote_interface_id:
+          description: |-
+            The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 5
+        remote_ipv6_node_address:
+          description: |-
+            IPv6 address representing the remote node. The value MAY be set to zero when the local node address and interface identifiers are sufficient to describe the link.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 6
+        srv6_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
+          x-field-uid: 7
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 8
+    Bgp.Attributes.SegmentRoutingPolicy.TypeK:
+      description: "Type K: IPv6 Local and Remote addresses for SRv6 with optional\
+        \ SID.\nIt is encoded as a Segment of Type 16 in the SEGMENT_LIST sub-tlv. "
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.TypeFlags'
+          x-field-uid: 1
+        sr_algorithm:
+          description: |-
+            SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be set to 0 on transmission and ignored on receipt.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        local_ipv6_address:
+          description: |-
+            Local IPv6 Address.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 3
+        remote_ipv6_address:
+          description: |-
+            Remote IPv6 Address.
+          type: string
+          format: ipv6
+          default: 0::0
+          x-field-uid: 4
+        srv6_sid:
+          $ref: '#/components/schemas/Bgp.Attributes.Sid.Srv6'
+          x-field-uid: 5
+        srv6_endpoint_behavior:
+          $ref: '#/components/schemas/Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure'
+          x-field-uid: 6
+    Bgp.Attributes.SegmentRoutingPolicy.TypeFlags:
+      description: |-
+        Flags for each Segment in SEGMENT_LIST sub-tlv.
+        - V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256
+        - A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C, D , I , J and K .
+        - B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding applicable to Segment Types B , I , J and K .
+        - S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).
+                  This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+      type: object
+      properties:
+        v_flag:
+          description: "Indicates verification of segment data in is enabled.    \
+            \        "
+          type: boolean
+          default: false
+          x-field-uid: 1
+        a_flag:
+          description: "Indicates presence of SR Algorithm field applicable to Segment\
+            \ Types 3, 4, and 9.           "
+          type: boolean
+          default: false
+          x-field-uid: 2
+        s_flag:
+          description: |-
+            This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending on the segment type.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        b_flag:
+          description: "Indicates presence of SRv6 Endpoint Behavior and SID Structure\
+            \ encoding specified in Section 2.4.4.2.4\nof draft-ietf-idr-sr-policy-safi-02.\
+            \         "
+          type: boolean
+          default: false
+          x-field-uid: 4
+    Bgp.Attributes.SegmentRoutingPolicy.SRv6SIDEndpointBehaviorAndStructure:
+      description: |-
+        Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of lengths for Locator Block, Locator Node,  Function, and Argument MUST be less than or equal to 128. - This is specified in draft-ietf-idr-sr-policy-safi-02 Section 2.4.4.2.4
+      type: object
+      properties:
+        endpoint_behaviour:
+          description: "This is a 2-octet field that is used to specify the SRv6 Endpoint\
+            \ Behavior code point for the SRv6 SID as defined \nin section 9.2 of\
+            \ [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice\
+            \ of SRv6 Endpoint Behavior is \nleft to the headend. Well known 16-bit\
+            \ values for this field are available at \nhttps://www.iana.org/assignments/segment-routing/segment-routing.xhtml\
+            \ ."
+          type: string
+          format: hex
+          default: ffff
+          maxLength: 4
+          x-field-uid: 1
+        lb_length:
+          description: |-
+            SRv6 SID Locator Block length in bits.
+          type: integer
+          format: uint32
+          maximum: 128
+          default: 0
+          x-field-uid: 2
+        ln_length:
+          description: |-
+            SRv6 SID Locator Node length in bits.
+          type: integer
+          format: uint32
+          maximum: 128
+          default: 0
+          x-field-uid: 3
+        func_length:
+          description: |-
+            SRv6 SID Function length in bits.
+          type: integer
+          format: uint32
+          maximum: 128
+          default: 0
+          x-field-uid: 4
+        arg_length:
+          description: |-
+            SRv6 SID Arguments length in bits.
+          type: integer
+          format: uint32
+          maximum: 128
+          default: 0
+          x-field-uid: 5
+    Bgp.NLRIPrefixSegmentRoutingDistinguisher:
+      description: |-
+        Optional field in the NLRI carrying the distinguisher for Segment Routing Policy NLRI with SAFI 73.
+      type: object
+      properties:
+        value:
+          description: "The value of the optional Segment Routing distinguisher of\
+            \ the prefix. "
+          type: integer
+          format: uint32
+          default: 1
           x-field-uid: 1
     Bgp.V6Peer:
       description: |-
@@ -6400,20 +7446,23 @@ components:
       properties:
         ipv6_name:
           description: |
-            The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this list of BGP peers.
+            The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
+            - /components/schemas/DhcpClient.V6/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
+            - /components/schemas/DhcpClient.V6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
           - /components/schemas/Device.Ipv6Loopback/properties/name
+          - /components/schemas/DhcpClient.V6/properties/name
           x-field-uid: 1
         peers:
           description: |-
@@ -7612,6 +8661,144 @@ components:
           enum:
           - strict
           - loose
+    Device.DhcpServer:
+      description: |-
+        Configuration for one or more IPv4 or IPv6 DHCP servers.
+      type: object
+      properties:
+        ipv4_interfaces:
+          description: |-
+            This contains an array of references to IPv4 interfaces, each of which will contain one DHCPv4 server.
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/DhcpServer.V4'
+          x-field-uid: 2
+    DhcpServer.V4:
+      description: |-
+        Configuration for emulated DHCPv4 Server.
+      type: object
+      required:
+      - name
+      - ipv4_name
+      - address_pools
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        ipv4_name:
+          description: |
+            The unique name of the IPv4 on which DHCPv4 server will run.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4/properties/name
+          x-field-uid: 2
+        address_pools:
+          description: |-
+            List of DHCPv4 Server Lease parameters
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpServerV4.Pool'
+          x-field-uid: 3
+    DhcpServerV4.Pool:
+      description: |-
+        Configuration for DHCPv4 address pool for a lease.
+      type: object
+      required:
+      - start_address
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        lease_time:
+          description: |-
+            The duration of time in seconds that is assigned to a lease.
+          type: integer
+          format: uint32
+          minimum: 10
+          default: 86400
+          x-field-uid: 2
+        start_address:
+          description: |-
+            The IPv4 address of the first lease pool.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+        prefix_length:
+          description: "The IPv4 network prefix length to be applied to the address. "
+          type: integer
+          format: uint32
+          default: 24
+          maximum: 32
+          x-field-uid: 4
+        count:
+          description: |-
+            The total number of addresses in the pool.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 5
+        step:
+          description: |-
+            The increment value for the lease address within the lease pool. The value is incremented according to the prefix_length and step.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 6
+        options:
+          description: |-
+            Optional configuration for DHCPv4 address pool for the lease.
+          $ref: '#/components/schemas/DhcpServerV4.PoolOption'
+          x-field-uid: 7
+    DhcpServerV4.PoolOption:
+      description: |-
+        Optional configuration for DHCPv4 address pool for the lease.
+      type: object
+      properties:
+        router_address:
+          description: |-
+            The Router address advertised by the DHCPv4 server in Offer and Ack messages.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        primary_dns_server:
+          description: |-
+            The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 2
+        secondary_dns_server:
+          description: |-
+            The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 3
+        echo_relay_with_tlv_82:
+          description: |-
+            If selected, the DHCP server includes in its replies the TLV information for the DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from a DHCP relay agent, otherwise it replies without including this TLV.
+          type: boolean
+          default: true
+          x-field-uid: 4
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -8534,6 +9721,9 @@ components:
         window:
           x-field-uid: 15
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window'
+        checksum:
+          x-field-uid: 16
+          $ref: '#/components/schemas/Pattern.Flow.Tcp.Checksum'
     Flow.Udp:
       description: |-
         UDP packet header
@@ -12381,6 +13571,10 @@ components:
               x-field-uid: 8
             rsvp:
               x-field-uid: 9
+            dhcpv4_client:
+              x-field-uid: 10
+            dhcpv4_server:
+              x-field-uid: 11
           enum:
           - port
           - flow
@@ -12391,6 +13585,8 @@ components:
           - lacp
           - lldp
           - rsvp
+          - dhcpv4_client
+          - dhcpv4_server
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -12418,6 +13614,12 @@ components:
         rsvp:
           $ref: '#/components/schemas/Rsvp.Metrics.Request'
           x-field-uid: 10
+        dhcpv4_client:
+          $ref: '#/components/schemas/Dhcpv4Client.Metrics.Request'
+          x-field-uid: 11
+        dhcpv4_server:
+          $ref: '#/components/schemas/Dhcpv4Server.Metrics.Request'
+          x-field-uid: 12
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -12446,6 +13648,10 @@ components:
               x-field-uid: 8
             rsvp_metrics:
               x-field-uid: 9
+            dhcpv4_client:
+              x-field-uid: 10
+            dhcpv4_server:
+              x-field-uid: 11
           enum:
           - flow_metrics
           - port_metrics
@@ -12456,6 +13662,8 @@ components:
           - lacp_metrics
           - lldp_metrics
           - rsvp_metrics
+          - dhcpv4_client
+          - dhcpv4_server
         port_metrics:
           type: array
           items:
@@ -12501,6 +13709,16 @@ components:
           items:
             $ref: '#/components/schemas/Rsvp.Metric'
           x-field-uid: 10
+        dhcpv4client_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv4Client.Metric'
+          x-field-uid: 11
+        dhcpv4server_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv4Server.Metric'
+          x-field-uid: 12
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -14478,6 +15696,212 @@ components:
           type: integer
           format: uint64
           x-field-uid: 31
+    Dhcpv4Client.Metrics.Request:
+      description: |-
+        The request to retrieve DHCPv4 per client metrics/statistics.
+      type: object
+      properties:
+        client_names:
+          description: |
+            The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4client/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4client/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv4client/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned.  The name of the DHCPv4 client cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              discovers_sent:
+                x-field-uid: 1
+              offers_received:
+                x-field-uid: 2
+              requests_sent:
+                x-field-uid: 3
+              acks_received:
+                x-field-uid: 4
+              nacks_received:
+                x-field-uid: 5
+              releases_sent:
+                x-field-uid: 6
+              declines_sent:
+                x-field-uid: 7
+            enum:
+            - discovers_sent
+            - offers_received
+            - requests_sent
+            - acks_received
+            - nacks_received
+            - releases_sent
+            - declines_sent
+          x-field-uid: 2
+    Dhcpv4Client.Metric:
+      description: |-
+        DHCPv4 per peer statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured DHCPv4 client.
+          type: string
+          x-field-uid: 1
+        discovers_sent:
+          description: |-
+            Number of DHCPDISCOVER messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        offers_received:
+          description: |-
+            Number of DHCPOFFER messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        requests_sent:
+          description: |-
+            Number of DHCPREQUEST messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        acks_received:
+          description: |-
+            Number of lease DHCPACK messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        nacks_received:
+          description: |-
+            Number of negative lease DHCPNACK messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        releases_sent:
+          description: |-
+            Number of DHCPRELEASE messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        declines_sent:
+          description: |-
+            Number of DHCPDECLINE messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+    Dhcpv4Server.Metrics.Request:
+      description: |-
+        The request to retrieve DHCPv4 per Server metrics/statistics.
+      type: object
+      properties:
+        server_names:
+          description: |
+            The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4Server/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4Server/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv4Server/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned.  The name of the DHCPv4 server cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              discovers_received:
+                x-field-uid: 1
+              offers_sent:
+                x-field-uid: 2
+              requests_received:
+                x-field-uid: 3
+              acks_sent:
+                x-field-uid: 4
+              nacks_sent:
+                x-field-uid: 5
+              releases_received:
+                x-field-uid: 6
+              declines_received:
+                x-field-uid: 7
+            enum:
+            - discovers_received
+            - offers_sent
+            - requests_received
+            - acks_sent
+            - nacks_sent
+            - releases_received
+            - declines_received
+          x-field-uid: 2
+    Dhcpv4Server.Metric:
+      description: |-
+        DHCPv4 per peer statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured DHCPv4 Server.
+          type: string
+          x-field-uid: 1
+        discovers_received:
+          description: |-
+            Number of DHCPDISCOVER messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        offers_sent:
+          description: |-
+            Number of DHCPOFFER messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        requests_received:
+          description: |-
+            Number of DHCPOFFER messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        acks_sent:
+          description: |-
+            Number of lease DHCPACK messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        nacks_sent:
+          description: |-
+            Number of negative lease DHCPNACK messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        releases_received:
+          description: |-
+            Number of DHCPRELEASE messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        declines_received:
+          description: |-
+            Number of DHCPDECLINE messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 8
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -14500,6 +15924,10 @@ components:
               x-field-uid: 5
             rsvp_lsps:
               x-field-uid: 6
+            dhcpv4_interfaces:
+              x-field-uid: 7
+            dhcpv4_leases:
+              x-field-uid: 8
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -14507,6 +15935,8 @@ components:
           - isis_lsps
           - lldp_neighbors
           - rsvp_lsps
+          - dhcpv4_interfaces
+          - dhcpv4_leases
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -14525,6 +15955,12 @@ components:
         rsvp_lsps:
           $ref: '#/components/schemas/RsvpLsps.State.Request'
           x-field-uid: 7
+        dhcpv4_interfaces:
+          $ref: '#/components/schemas/Dhcpv4Interface.State.Request'
+          x-field-uid: 8
+        dhcpv4_leases:
+          $ref: '#/components/schemas/Dhcpv4Lease.State.Request'
+          x-field-uid: 9
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -14547,6 +15983,10 @@ components:
               x-field-uid: 5
             rsvp_lsps:
               x-field-uid: 6
+            dhcpv4_interfaces:
+              x-field-uid: 7
+            dhcpv4_leases:
+              x-field-uid: 8
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -14554,6 +15994,8 @@ components:
           - isis_lsps
           - lldp_neighbors
           - rsvp_lsps
+          - dhcpv4_interfaces
+          - dhcpv4_leases
         ipv4_neighbors:
           type: array
           items:
@@ -14584,6 +16026,16 @@ components:
           items:
             $ref: '#/components/schemas/RsvpLsps.State'
           x-field-uid: 7
+        dhcpv4_interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv4Interface.State'
+          x-field-uid: 8
+        dhcpv4_leases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv4Leases.State'
+          x-field-uid: 9
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -14887,6 +16339,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 11
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
@@ -14960,6 +16419,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 11
         as_path:
           x-field-uid: 8
           $ref: '#/components/schemas/Result.BgpAsPath'
@@ -14975,6 +16441,344 @@ components:
             The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
           type: integer
           format: uint32
+    Result.ExtendedCommunity:
+      description: |-
+        Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the 'structured' format which is an optional field.
+      type: object
+      properties:
+        raw:
+          description: "The raw byte contents of the 8 bytes received in the Extended\
+            \ Community as 16 hex characters.              "
+          type: string
+          format: hex
+          maxLength: 16
+          x-field-uid: 1
+        structured:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunityStructured'
+    Result.ExtendedCommunityStructured:
+      description: "The Extended Communities Attribute is a optional BGP attribute,defined\
+        \ in RFC4360 with the Type Code 16. \nCommunity and Extended Communities \
+        \ attributes are utilized to trigger routing decisions, such as acceptance,\
+        \ rejection,  preference, or redistribution. \nAn extended community is an\
+        \ 8-bytes value. It is divided into two main parts. The first 2 bytes of the\
+        \ community  encode a type and optonal sub-type field.\nThe last 6 bytes (or\
+        \ 7 bytes for types without a sub-type) carry a unique set of data in a format\
+        \ defined by the type and optional sub-type field. \nExtended communities\
+        \ provide a larger  range for grouping or categorizing communities."
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            transitive_2octet_as_type:
+              x-field-uid: 1
+            transitive_ipv4_address_type:
+              x-field-uid: 2
+            transitive_4octet_as_type:
+              x-field-uid: 3
+            transitive_opaque_type:
+              x-field-uid: 4
+            non_transitive_2octet_as_type:
+              x-field-uid: 5
+          x-field-uid: 1
+          enum:
+          - transitive_2octet_as_type
+          - transitive_ipv4_address_type
+          - transitive_4octet_as_type
+          - transitive_opaque_type
+          - non_transitive_2octet_as_type
+        transitive_2octet_as_type:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType'
+        transitive_ipv4_address_type:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveIpv4AddressType'
+        transitive_4octet_as_type:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive4OctetAsType'
+        transitive_opaque_type:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveOpaqueType'
+        non_transitive_2octet_as_type:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Result.ExtendedCommunity.NonTransitive2OctetAsType'
+    Result.ExtendedCommunity.Transitive2OctetAsType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP Update\
+        \ message.  It is sent with sub-type as 0x02.            "
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The two octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        local_4byte_admin:
+          type: integer
+          format: uint32
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Result.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The two octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        local_4byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+    Result.ExtendedCommunity.Transitive2OctetAsType:
+      description: "The Transitive Two-Octet AS-Specific Extended Community is sent\
+        \ as type 0x00 .         "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin'
+    Result.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.
+      type: object
+      properties:
+        global_ipv4_admin:
+          description: "An IPv4 unicast address assigned by one of the Internet registries.\
+            \            "
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        local_2byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which  the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 2
+    Result.ExtendedCommunity.TransitiveIpv4AddressType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP.\
+        \  It is sent with sub-type as 0x02.             "
+      type: object
+      properties:
+        global_ipv4_admin:
+          description: "An IPv4 unicast address assigned by one of the Internet registries. "
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        local_2byte_admin:
+          type: integer
+          format: uint32
+          maximum: 65535
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which  the IP address carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Result.ExtendedCommunity.TransitiveIpv4AddressType:
+      description: |-
+        The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveIpv4AddressType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin'
+    Result.ExtendedCommunity.Transitive4OctetAsType.RouteTarget:
+      description: "The Route Target Community identifies one or more routers that\
+        \ may receive a set of routes (that carry this Community) carried by BGP.\
+        \  It is sent with sub-type as 0x02              "
+      type: object
+      properties:
+        global_4byte_as:
+          description: |-
+            The four octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        local_2byte_admin:
+          type: integer
+          format: uint32
+          maximum: 65535
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          x-field-uid: 2
+    Result.ExtendedCommunity.Transitive4OctetAsType.RouteOrigin:
+      description: |-
+        The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+      type: object
+      properties:
+        global_4byte_as:
+          description: |-
+            The four octet IANA assigned AS value assigned to the Autonomous System.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        local_2byte_admin:
+          description: |-
+            The Local Administrator sub-field contains a number from a numbering space that is administered by the organization to which the Autonomous System number carried in the Global Administrator sub-field has been assigned by an appropriate authority.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 2
+    Result.ExtendedCommunity.Transitive4OctetAsType:
+      description: "The Transitive Four-Octet AS-Specific Extended Community is sent\
+        \ as type 0x02. It is defined in RFC 5668.       "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            route_target_subtype:
+              x-field-uid: 1
+            route_origin_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - route_target_subtype
+          - route_origin_subtype
+        route_target_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive4OctetAsType.RouteTarget'
+        route_origin_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive4OctetAsType.RouteOrigin'
+    Result.ExtendedCommunity.TransitiveOpaqueType.Color:
+      description: "The Color Community contains locally administrator defined 'color'\
+        \ value which is used in conjunction with Encapsulation  attribute to decide\
+        \ whether a data packet can be transmitted on a certain tunnel or not. It\
+        \ is defined in RFC9012 and sent with sub-type as 0x0b.             "
+      type: object
+      properties:
+        flags:
+          description: "Two octet flag values. "
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        color:
+          type: integer
+          format: uint32
+          description: "The color value is user defined and configured locally and\
+            \ used to determine whether a data packet can be transmitted on a certain\
+            \ tunnel or not\nin conjunction with the Encapsulation attribute. It is\
+            \ defined in RFC9012.           "
+          x-field-uid: 2
+    Result.ExtendedCommunity.TransitiveOpaqueType.Encapsulation:
+      description: |-
+        This identifies the type of tunneling technology being signalled. It is defined in RFC9012 and sent with sub-type as 0x0c.
+      type: object
+      properties:
+        reserved:
+          description: "Four bytes of reserved values. Normally set to 0 on transmit\
+            \ and ignored on receive. "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        tunnel_type:
+          description: "Identifies the type of tunneling technology being signalled.\
+            \ Initially defined in RFC5512 and extended in RFC9012.\nSome of the important\
+            \ tunnel types include \n- 1 L2TPv3 over IP\t[RFC9012],           \n-\
+            \ 2\tGRE\t[RFC9012],          \n- 7\tIP in IP\t[RFC9012],\n- 8\tVXLAN\
+            \ Encapsulation\t[RFC8365],\n- 9\tNVGRE Encapsulation\t[RFC8365],\n- 10\t\
+            MPLS Encapsulation\t[RFC8365],\n- 15\tSR TE Policy Type\t[draft-ietf-idr-segment-routing-te-policy],\n\
+            - 19\tGeneve Encapsulation\t[RFC8926]"
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 2
+    Result.ExtendedCommunity.TransitiveOpaqueType:
+      description: |-
+        The Transitive Opaque Extended Community is sent as type 0x03.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            color_subtype:
+              x-field-uid: 1
+            encapsulation_subtype:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - color_subtype
+          - encapsulation_subtype
+        color_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveOpaqueType.Color'
+        encapsulation_subtype:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Result.ExtendedCommunity.TransitiveOpaqueType.Encapsulation'
+    Result.ExtendedCommunity.NonTransitive2OctetAsType.LinkBandwidth:
+      description: |-
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. It is sent with sub-type as 0x04.
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        bandwidth:
+          description: |-
+            Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and 1 Mbps is 1000 Kbps per second )
+          type: number
+          format: float
+          x-field-uid: 2
+    Result.ExtendedCommunity.NonTransitive2OctetAsType:
+      description: "The Non-Transitive Two-Octet AS-Specific Extended Community is\
+        \ sent as type 0x40.         "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            link_bandwidth_subtype:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - link_bandwidth_subtype
+        link_bandwidth_subtype:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Result.ExtendedCommunity.NonTransitive2OctetAsType.LinkBandwidth'
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.
@@ -15967,6 +17771,157 @@ components:
           - asn4
           - label
           - unnumbered_interface
+    Dhcpv4Interface.State.Request:
+      description: |-
+        The request for assigned IPv4 address information associated with DHCP Client sessions.
+      type: object
+      properties:
+        dhcp_client_names:
+          description: |
+            The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4client/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4client/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv4client/properties/name
+          x-field-uid: 1
+    Dhcpv4Interface.State:
+      description: |-
+        The IPv4 address associated with this DHCP Client session.
+      type: object
+      properties:
+        dhcp_client_name:
+          description: |-
+            The name of a DHCPv4 Client.
+          type: string
+          x-field-uid: 1
+        ipv4_address:
+          description: |-
+            The IPv4 address associated with this DHCP Client session.
+          type: string
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The length of the prefix.
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 3
+        gateway_address:
+          description: |-
+            The Gateway Ipv4 address associated with this DHCP Client session.
+          type: string
+          x-field-uid: 4
+        lease_time:
+          description: |-
+            The duration of the IPv4 address lease, in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        renew_time:
+          description: |-
+            Time in seconds until the DHCPv4 client starts renewing the lease.
+          type: integer
+          format: uint32
+          x-field-uid: 6
+        rebind_time:
+          description: |-
+            Time in seconds until the DHCPv4 client starts rebinding.
+          type: integer
+          format: uint32
+          x-field-uid: 7
+    Dhcpv4Lease.State.Request:
+      description: |-
+        The request to retrieve DHCP Server host allocated status.
+      type: object
+      properties:
+        dhcp_server_names:
+          description: |
+            The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4server/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv4server/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv4server/properties/name
+          x-field-uid: 1
+    Dhcpv4Leases.State:
+      description: |-
+        Lease information of DHCP Server.
+      type: object
+      properties:
+        dhcp_server_name:
+          description: |-
+            The name of a DHCP Server.
+          type: string
+          x-field-uid: 1
+        leases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv4Lease.State'
+          x-field-uid: 2
+    Dhcpv4Lease.State:
+      description: |-
+        IPv4 address lease state.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IPv4 address associated with this lease.
+          type: string
+          x-field-uid: 1
+        valid_time:
+          description: |-
+            The time in seconds after which the IPv4 address lease will expire.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        preferred_time:
+          description: |-
+            The elapsed time in seconds since the address has been renewed.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        renew_time:
+          description: |-
+            Time in seconds until the DHCPv4 client starts renewing the lease.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        rebind_time:
+          description: |-
+            Time in seconds until the DHCPv4 client starts rebinding.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        client_id:
+          description: |-
+            The ID of the DHCPv4 client holding this lease.
+          type: string
+          x-field-uid: 6
+        circuit_id:
+          description: |-
+            The Circuit ID option found in the last request message.
+          type: string
+          x-field-uid: 7
+        remote_id:
+          description: |-
+            The Remote ID option found in the last request message.
+          type: string
+          x-field-uid: 8
     Capture.Request:
       description: |-
         The capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
@@ -24130,6 +26085,46 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.MetricTag'
           x-field-uid: 7
+    Pattern.Flow.Tcp.Checksum:
+      description: |-
+        The one's complement of the one's complement sum of all 16 bit words in header and text.  An all-zero value means that no checksum will be transmitted.   While computing the checksum, the checksum field itself is replaced with zeros.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The type of checksum
+          type: string
+          x-enum:
+            generated:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          default: generated
+          x-field-uid: 1
+          enum:
+          - generated
+          - custom
+        generated:
+          description: |-
+            A system generated checksum value
+          type: string
+          x-enum:
+            good:
+              x-field-uid: 1
+            bad:
+              x-field-uid: 2
+          default: good
+          x-field-uid: 2
+          enum:
+          - good
+          - bad
+        custom:
+          description: |-
+            A custom checksum value
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 3
     Pattern.Flow.Udp.SrcPort.Counter:
       description: |-
         integer counter pattern
