@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.5.1
+  version: 1.6.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -8951,6 +8951,7 @@ components:
           - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Device.Dhcpv4client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -8973,6 +8974,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
         rx_names:
           type: array
           items:
@@ -8989,6 +8991,7 @@ components:
           - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Device.Dhcpv4client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -9011,6 +9014,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
     Flow.Header:
       description: |-
         Configuration for all traffic packet headers
@@ -9467,6 +9471,25 @@ components:
         unused:
           x-field-uid: 6
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused'
+    Flow.Ipv4.Auto:
+      description: |-
+        The OTG implementation can provide a system generated, value for this property.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            The method to be used to provide the system generated value.
+
+            The dhcp option populates the field based on the dynamic IPv4 address that has been assigned to the DHCPv4 client by a DHCPv4 server.
+          type: string
+          x-enum:
+            dhcp:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - dhcp
     Flow.Ipv6:
       description: |-
         IPv6 packet header
@@ -20184,6 +20207,8 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
+            auto:
+              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
@@ -20195,6 +20220,7 @@ components:
           enum:
           - value
           - values
+          - auto
           - increment
           - decrement
           - random
@@ -20211,22 +20237,25 @@ components:
           x-field-uid: 3
           default:
           - 0.0.0.0
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
+          x-field-uid: 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.Counter'
-          x-field-uid: 6
+          x-field-uid: 7
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.MetricTag'
-          x-field-uid: 7
+          x-field-uid: 8
         random:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.Random'
-          x-field-uid: 8
+          x-field-uid: 9
     Pattern.Flow.Ipv4.Dst.Counter:
       description: |-
         ipv4 counter pattern
@@ -20322,6 +20351,8 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
+            auto:
+              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
@@ -20333,6 +20364,7 @@ components:
           enum:
           - value
           - values
+          - auto
           - increment
           - decrement
           - random
@@ -20349,22 +20381,25 @@ components:
           x-field-uid: 3
           default:
           - 0.0.0.0
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
+          x-field-uid: 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.Counter'
-          x-field-uid: 6
+          x-field-uid: 7
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.MetricTag'
-          x-field-uid: 7
+          x-field-uid: 8
         random:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.Random'
-          x-field-uid: 8
+          x-field-uid: 9
     Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter:
       description: |-
         integer counter pattern
@@ -32526,41 +32561,6 @@ components:
           minimum: 1
           maximum: 20
           x-field-uid: 3
-    Pattern.Flow.Mpls.Label.Random:
-      description: |-
-        integer random pattern
-      type: object
-      properties:
-        min:
-          description: |-
-            The minimum possible value generated by the random value generator.
-          type: integer
-          x-field-uid: 1
-          default: 16
-          format: uint32
-          maximum: 1048575
-        max:
-          description: |-
-            The maximum possible value generated by the random value generator.
-          type: integer
-          x-field-uid: 2
-          default: 1048575
-          format: uint32
-          maximum: 1048575
-        seed:
-          description: |-
-            The seed value to initialize the random value generator to a deterministic state.
-          type: integer
-          default: 1
-          format: uint32
-          x-field-uid: 3
-        count:
-          description: |-
-            The total number of values to be generated by the random value generator.
-          type: integer
-          default: 1
-          format: uint32
-          x-field-uid: 4
     Pattern.Flow.Mpls.Label:
       description: |-
         Label of routers
@@ -32579,8 +32579,6 @@ components:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
-            random:
-              x-field-uid: 6
           default: auto
           x-field-uid: 1
           enum:
@@ -32589,7 +32587,6 @@ components:
           - auto
           - increment
           - decrement
-          - random
         value:
           type: integer
           x-field-uid: 2
@@ -32628,9 +32625,6 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.MetricTag'
           x-field-uid: 8
-        random:
-          $ref: '#/components/schemas/Pattern.Flow.Mpls.Label.Random'
-          x-field-uid: 9
     Pattern.Flow.Mpls.TrafficClass.Counter:
       description: |-
         integer counter pattern
