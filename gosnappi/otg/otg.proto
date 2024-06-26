@@ -13149,15 +13149,15 @@ message PatternFlowEthernetSrc {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowEthernetSrcCounter increment = 4;
+  PatternFlowEthernetSrcCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetSrcCounter decrement = 5;
+  PatternFlowEthernetSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetSrcMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetSrcMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13300,15 +13300,15 @@ message PatternFlowEthernetPfcQueue {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPfcQueueCounter increment = 4;
+  PatternFlowEthernetPfcQueueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPfcQueueCounter decrement = 5;
+  PatternFlowEthernetPfcQueueCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPfcQueueMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPfcQueueMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13372,15 +13372,15 @@ message PatternFlowVlanPriority {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVlanPriorityCounter increment = 4;
+  PatternFlowVlanPriorityCounter increment = 5;
 
   // Description missing in models
-  PatternFlowVlanPriorityCounter decrement = 5;
+  PatternFlowVlanPriorityCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVlanPriorityMetricTag metric_tags = 6;
+  repeated PatternFlowVlanPriorityMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13444,15 +13444,15 @@ message PatternFlowVlanCfi {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVlanCfiCounter increment = 4;
+  PatternFlowVlanCfiCounter increment = 5;
 
   // Description missing in models
-  PatternFlowVlanCfiCounter decrement = 5;
+  PatternFlowVlanCfiCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVlanCfiMetricTag metric_tags = 6;
+  repeated PatternFlowVlanCfiMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13516,15 +13516,15 @@ message PatternFlowVlanId {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVlanIdCounter increment = 4;
+  PatternFlowVlanIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowVlanIdCounter decrement = 5;
+  PatternFlowVlanIdCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVlanIdMetricTag metric_tags = 6;
+  repeated PatternFlowVlanIdMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13588,15 +13588,15 @@ message PatternFlowVlanTpid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVlanTpidCounter increment = 4;
+  PatternFlowVlanTpidCounter increment = 5;
 
   // Description missing in models
-  PatternFlowVlanTpidCounter decrement = 5;
+  PatternFlowVlanTpidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVlanTpidMetricTag metric_tags = 6;
+  repeated PatternFlowVlanTpidMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13662,15 +13662,15 @@ message PatternFlowVxlanFlags {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVxlanFlagsCounter increment = 4;
+  PatternFlowVxlanFlagsCounter increment = 5;
 
   // Description missing in models
-  PatternFlowVxlanFlagsCounter decrement = 5;
+  PatternFlowVxlanFlagsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 6;
+  repeated PatternFlowVxlanFlagsMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13734,15 +13734,15 @@ message PatternFlowVxlanReserved0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVxlanReserved0Counter increment = 4;
+  PatternFlowVxlanReserved0Counter increment = 5;
 
   // Description missing in models
-  PatternFlowVxlanReserved0Counter decrement = 5;
+  PatternFlowVxlanReserved0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 6;
+  repeated PatternFlowVxlanReserved0MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13885,15 +13885,15 @@ message PatternFlowVxlanReserved1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowVxlanReserved1Counter increment = 4;
+  PatternFlowVxlanReserved1Counter increment = 5;
 
   // Description missing in models
-  PatternFlowVxlanReserved1Counter decrement = 5;
+  PatternFlowVxlanReserved1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 6;
+  repeated PatternFlowVxlanReserved1MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -13957,15 +13957,15 @@ message PatternFlowIpv4Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4VersionCounter increment = 4;
+  PatternFlowIpv4VersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4VersionCounter decrement = 5;
+  PatternFlowIpv4VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4VersionMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4VersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14187,15 +14187,15 @@ message PatternFlowIpv4Identification {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4IdentificationCounter increment = 4;
+  PatternFlowIpv4IdentificationCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4IdentificationCounter decrement = 5;
+  PatternFlowIpv4IdentificationCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4IdentificationMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4IdentificationMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14259,15 +14259,15 @@ message PatternFlowIpv4Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4ReservedCounter increment = 4;
+  PatternFlowIpv4ReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4ReservedCounter decrement = 5;
+  PatternFlowIpv4ReservedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4ReservedMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4ReservedMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14332,15 +14332,15 @@ message PatternFlowIpv4DontFragment {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4DontFragmentCounter increment = 4;
+  PatternFlowIpv4DontFragmentCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4DontFragmentCounter decrement = 5;
+  PatternFlowIpv4DontFragmentCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4DontFragmentMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4DontFragmentMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14404,15 +14404,15 @@ message PatternFlowIpv4MoreFragments {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4MoreFragmentsCounter increment = 4;
+  PatternFlowIpv4MoreFragmentsCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4MoreFragmentsCounter decrement = 5;
+  PatternFlowIpv4MoreFragmentsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4MoreFragmentsMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4MoreFragmentsMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14476,15 +14476,15 @@ message PatternFlowIpv4FragmentOffset {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4FragmentOffsetCounter increment = 4;
+  PatternFlowIpv4FragmentOffsetCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4FragmentOffsetCounter decrement = 5;
+  PatternFlowIpv4FragmentOffsetCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4FragmentOffsetMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4FragmentOffsetMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14548,15 +14548,15 @@ message PatternFlowIpv4TimeToLive {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TimeToLiveCounter increment = 4;
+  PatternFlowIpv4TimeToLiveCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TimeToLiveCounter decrement = 5;
+  PatternFlowIpv4TimeToLiveCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TimeToLiveMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TimeToLiveMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -14860,10 +14860,10 @@ message PatternFlowIpv4OptionsCustomTypeCopiedFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter increment = 4;
+  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter decrement = 5;
+  PatternFlowIpv4OptionsCustomTypeCopiedFlagCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -14907,10 +14907,10 @@ message PatternFlowIpv4OptionsCustomTypeOptionClass {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeOptionClassCounter increment = 4;
+  PatternFlowIpv4OptionsCustomTypeOptionClassCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeOptionClassCounter decrement = 5;
+  PatternFlowIpv4OptionsCustomTypeOptionClassCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -14954,10 +14954,10 @@ message PatternFlowIpv4OptionsCustomTypeOptionNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter increment = 4;
+  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter decrement = 5;
+  PatternFlowIpv4OptionsCustomTypeOptionNumberCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -15021,15 +15021,15 @@ message PatternFlowIpv4PriorityRaw {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4PriorityRawCounter increment = 4;
+  PatternFlowIpv4PriorityRawCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4PriorityRawCounter decrement = 5;
+  PatternFlowIpv4PriorityRawCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4PriorityRawMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4PriorityRawMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15093,15 +15093,15 @@ message PatternFlowIpv4DscpPhb {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4DscpPhbCounter increment = 4;
+  PatternFlowIpv4DscpPhbCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4DscpPhbCounter decrement = 5;
+  PatternFlowIpv4DscpPhbCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4DscpPhbMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4DscpPhbMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15165,15 +15165,15 @@ message PatternFlowIpv4DscpEcn {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4DscpEcnCounter increment = 4;
+  PatternFlowIpv4DscpEcnCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4DscpEcnCounter decrement = 5;
+  PatternFlowIpv4DscpEcnCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4DscpEcnMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4DscpEcnMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15237,15 +15237,15 @@ message PatternFlowIpv4TosPrecedence {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosPrecedenceCounter increment = 4;
+  PatternFlowIpv4TosPrecedenceCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosPrecedenceCounter decrement = 5;
+  PatternFlowIpv4TosPrecedenceCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosPrecedenceMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosPrecedenceMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15309,15 +15309,15 @@ message PatternFlowIpv4TosDelay {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosDelayCounter increment = 4;
+  PatternFlowIpv4TosDelayCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosDelayCounter decrement = 5;
+  PatternFlowIpv4TosDelayCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosDelayMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosDelayMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15381,15 +15381,15 @@ message PatternFlowIpv4TosThroughput {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosThroughputCounter increment = 4;
+  PatternFlowIpv4TosThroughputCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosThroughputCounter decrement = 5;
+  PatternFlowIpv4TosThroughputCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosThroughputMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosThroughputMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15453,15 +15453,15 @@ message PatternFlowIpv4TosReliability {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosReliabilityCounter increment = 4;
+  PatternFlowIpv4TosReliabilityCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosReliabilityCounter decrement = 5;
+  PatternFlowIpv4TosReliabilityCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosReliabilityMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosReliabilityMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15525,15 +15525,15 @@ message PatternFlowIpv4TosMonetary {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosMonetaryCounter increment = 4;
+  PatternFlowIpv4TosMonetaryCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosMonetaryCounter decrement = 5;
+  PatternFlowIpv4TosMonetaryCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosMonetaryMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosMonetaryMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15597,15 +15597,15 @@ message PatternFlowIpv4TosUnused {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv4TosUnusedCounter increment = 4;
+  PatternFlowIpv4TosUnusedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4TosUnusedCounter decrement = 5;
+  PatternFlowIpv4TosUnusedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4TosUnusedMetricTag metric_tags = 6;
+  repeated PatternFlowIpv4TosUnusedMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15669,15 +15669,15 @@ message PatternFlowIpv6Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv6VersionCounter increment = 4;
+  PatternFlowIpv6VersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6VersionCounter decrement = 5;
+  PatternFlowIpv6VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6VersionMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6VersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15741,15 +15741,15 @@ message PatternFlowIpv6TrafficClass {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv6TrafficClassCounter increment = 4;
+  PatternFlowIpv6TrafficClassCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6TrafficClassCounter decrement = 5;
+  PatternFlowIpv6TrafficClassCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6TrafficClassMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6TrafficClassMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -15813,15 +15813,15 @@ message PatternFlowIpv6FlowLabel {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv6FlowLabelCounter increment = 4;
+  PatternFlowIpv6FlowLabelCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6FlowLabelCounter decrement = 5;
+  PatternFlowIpv6FlowLabelCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6FlowLabelMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6FlowLabelMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16043,15 +16043,15 @@ message PatternFlowIpv6HopLimit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIpv6HopLimitCounter increment = 4;
+  PatternFlowIpv6HopLimitCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6HopLimitCounter decrement = 5;
+  PatternFlowIpv6HopLimitCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6HopLimitMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6HopLimitMetricTag metric_tags = 7;
 }
 
 // ipv6 counter pattern
@@ -16115,15 +16115,15 @@ message PatternFlowIpv6Src {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowIpv6SrcCounter increment = 4;
+  PatternFlowIpv6SrcCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6SrcCounter decrement = 5;
+  PatternFlowIpv6SrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6SrcMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6SrcMetricTag metric_tags = 7;
 }
 
 // ipv6 counter pattern
@@ -16187,15 +16187,15 @@ message PatternFlowIpv6Dst {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowIpv6DstCounter increment = 4;
+  PatternFlowIpv6DstCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv6DstCounter decrement = 5;
+  PatternFlowIpv6DstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv6DstMetricTag metric_tags = 6;
+  repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -16259,15 +16259,15 @@ message PatternFlowPfcPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowPfcPauseDstCounter increment = 4;
+  PatternFlowPfcPauseDstCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPauseDstCounter decrement = 5;
+  PatternFlowPfcPauseDstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPauseDstMetricTag metric_tags = 6;
+  repeated PatternFlowPfcPauseDstMetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -16331,15 +16331,15 @@ message PatternFlowPfcPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowPfcPauseSrcCounter increment = 4;
+  PatternFlowPfcPauseSrcCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPauseSrcCounter decrement = 5;
+  PatternFlowPfcPauseSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPauseSrcMetricTag metric_tags = 6;
+  repeated PatternFlowPfcPauseSrcMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16403,15 +16403,15 @@ message PatternFlowPfcPauseEtherType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPauseEtherTypeCounter increment = 4;
+  PatternFlowPfcPauseEtherTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPauseEtherTypeCounter decrement = 5;
+  PatternFlowPfcPauseEtherTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPauseEtherTypeMetricTag metric_tags = 6;
+  repeated PatternFlowPfcPauseEtherTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16475,15 +16475,15 @@ message PatternFlowPfcPauseControlOpCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPauseControlOpCodeCounter increment = 4;
+  PatternFlowPfcPauseControlOpCodeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPauseControlOpCodeCounter decrement = 5;
+  PatternFlowPfcPauseControlOpCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPauseControlOpCodeMetricTag metric_tags = 6;
+  repeated PatternFlowPfcPauseControlOpCodeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16547,15 +16547,15 @@ message PatternFlowPfcPauseClassEnableVector {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPauseClassEnableVectorCounter increment = 4;
+  PatternFlowPfcPauseClassEnableVectorCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPauseClassEnableVectorCounter decrement = 5;
+  PatternFlowPfcPauseClassEnableVectorCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPauseClassEnableVectorMetricTag metric_tags = 6;
+  repeated PatternFlowPfcPauseClassEnableVectorMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16619,15 +16619,15 @@ message PatternFlowPfcPausePauseClass0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass0Counter increment = 4;
+  PatternFlowPfcPausePauseClass0Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass0Counter decrement = 5;
+  PatternFlowPfcPausePauseClass0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass0MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass0MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16691,15 +16691,15 @@ message PatternFlowPfcPausePauseClass1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass1Counter increment = 4;
+  PatternFlowPfcPausePauseClass1Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass1Counter decrement = 5;
+  PatternFlowPfcPausePauseClass1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass1MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass1MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16763,15 +16763,15 @@ message PatternFlowPfcPausePauseClass2 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass2Counter increment = 4;
+  PatternFlowPfcPausePauseClass2Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass2Counter decrement = 5;
+  PatternFlowPfcPausePauseClass2Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass2MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass2MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16835,15 +16835,15 @@ message PatternFlowPfcPausePauseClass3 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass3Counter increment = 4;
+  PatternFlowPfcPausePauseClass3Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass3Counter decrement = 5;
+  PatternFlowPfcPausePauseClass3Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass3MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass3MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16907,15 +16907,15 @@ message PatternFlowPfcPausePauseClass4 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass4Counter increment = 4;
+  PatternFlowPfcPausePauseClass4Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass4Counter decrement = 5;
+  PatternFlowPfcPausePauseClass4Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass4MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass4MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -16979,15 +16979,15 @@ message PatternFlowPfcPausePauseClass5 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass5Counter increment = 4;
+  PatternFlowPfcPausePauseClass5Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass5Counter decrement = 5;
+  PatternFlowPfcPausePauseClass5Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass5MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass5MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17051,15 +17051,15 @@ message PatternFlowPfcPausePauseClass6 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass6Counter increment = 4;
+  PatternFlowPfcPausePauseClass6Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass6Counter decrement = 5;
+  PatternFlowPfcPausePauseClass6Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass6MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass6MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17123,15 +17123,15 @@ message PatternFlowPfcPausePauseClass7 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass7Counter increment = 4;
+  PatternFlowPfcPausePauseClass7Counter increment = 5;
 
   // Description missing in models
-  PatternFlowPfcPausePauseClass7Counter decrement = 5;
+  PatternFlowPfcPausePauseClass7Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPfcPausePauseClass7MetricTag metric_tags = 6;
+  repeated PatternFlowPfcPausePauseClass7MetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -17195,15 +17195,15 @@ message PatternFlowEthernetPauseDst {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPauseDstCounter increment = 4;
+  PatternFlowEthernetPauseDstCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPauseDstCounter decrement = 5;
+  PatternFlowEthernetPauseDstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPauseDstMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPauseDstMetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -17267,15 +17267,15 @@ message PatternFlowEthernetPauseSrc {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPauseSrcCounter increment = 4;
+  PatternFlowEthernetPauseSrcCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPauseSrcCounter decrement = 5;
+  PatternFlowEthernetPauseSrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPauseSrcMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPauseSrcMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17339,15 +17339,15 @@ message PatternFlowEthernetPauseEtherType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPauseEtherTypeCounter increment = 4;
+  PatternFlowEthernetPauseEtherTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPauseEtherTypeCounter decrement = 5;
+  PatternFlowEthernetPauseEtherTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPauseEtherTypeMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPauseEtherTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17411,15 +17411,15 @@ message PatternFlowEthernetPauseControlOpCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPauseControlOpCodeCounter increment = 4;
+  PatternFlowEthernetPauseControlOpCodeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPauseControlOpCodeCounter decrement = 5;
+  PatternFlowEthernetPauseControlOpCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPauseControlOpCodeMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPauseControlOpCodeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17483,15 +17483,15 @@ message PatternFlowEthernetPauseTime {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowEthernetPauseTimeCounter increment = 4;
+  PatternFlowEthernetPauseTimeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowEthernetPauseTimeCounter decrement = 5;
+  PatternFlowEthernetPauseTimeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowEthernetPauseTimeMetricTag metric_tags = 6;
+  repeated PatternFlowEthernetPauseTimeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17555,15 +17555,15 @@ message PatternFlowTcpSrcPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpSrcPortCounter increment = 4;
+  PatternFlowTcpSrcPortCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpSrcPortCounter decrement = 5;
+  PatternFlowTcpSrcPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpSrcPortMetricTag metric_tags = 6;
+  repeated PatternFlowTcpSrcPortMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17627,15 +17627,15 @@ message PatternFlowTcpDstPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpDstPortCounter increment = 4;
+  PatternFlowTcpDstPortCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpDstPortCounter decrement = 5;
+  PatternFlowTcpDstPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpDstPortMetricTag metric_tags = 6;
+  repeated PatternFlowTcpDstPortMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17699,15 +17699,15 @@ message PatternFlowTcpSeqNum {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpSeqNumCounter increment = 4;
+  PatternFlowTcpSeqNumCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpSeqNumCounter decrement = 5;
+  PatternFlowTcpSeqNumCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpSeqNumMetricTag metric_tags = 6;
+  repeated PatternFlowTcpSeqNumMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17771,15 +17771,15 @@ message PatternFlowTcpAckNum {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpAckNumCounter increment = 4;
+  PatternFlowTcpAckNumCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpAckNumCounter decrement = 5;
+  PatternFlowTcpAckNumCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpAckNumMetricTag metric_tags = 6;
+  repeated PatternFlowTcpAckNumMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17843,15 +17843,15 @@ message PatternFlowTcpDataOffset {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpDataOffsetCounter increment = 4;
+  PatternFlowTcpDataOffsetCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpDataOffsetCounter decrement = 5;
+  PatternFlowTcpDataOffsetCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpDataOffsetMetricTag metric_tags = 6;
+  repeated PatternFlowTcpDataOffsetMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17915,15 +17915,15 @@ message PatternFlowTcpEcnNs {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpEcnNsCounter increment = 4;
+  PatternFlowTcpEcnNsCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpEcnNsCounter decrement = 5;
+  PatternFlowTcpEcnNsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpEcnNsMetricTag metric_tags = 6;
+  repeated PatternFlowTcpEcnNsMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -17987,15 +17987,15 @@ message PatternFlowTcpEcnCwr {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpEcnCwrCounter increment = 4;
+  PatternFlowTcpEcnCwrCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpEcnCwrCounter decrement = 5;
+  PatternFlowTcpEcnCwrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpEcnCwrMetricTag metric_tags = 6;
+  repeated PatternFlowTcpEcnCwrMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18060,15 +18060,15 @@ message PatternFlowTcpEcnEcho {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpEcnEchoCounter increment = 4;
+  PatternFlowTcpEcnEchoCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpEcnEchoCounter decrement = 5;
+  PatternFlowTcpEcnEchoCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpEcnEchoMetricTag metric_tags = 6;
+  repeated PatternFlowTcpEcnEchoMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18132,15 +18132,15 @@ message PatternFlowTcpCtlUrg {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlUrgCounter increment = 4;
+  PatternFlowTcpCtlUrgCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlUrgCounter decrement = 5;
+  PatternFlowTcpCtlUrgCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlUrgMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlUrgMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18204,15 +18204,15 @@ message PatternFlowTcpCtlAck {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlAckCounter increment = 4;
+  PatternFlowTcpCtlAckCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlAckCounter decrement = 5;
+  PatternFlowTcpCtlAckCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlAckMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlAckMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18276,15 +18276,15 @@ message PatternFlowTcpCtlPsh {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlPshCounter increment = 4;
+  PatternFlowTcpCtlPshCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlPshCounter decrement = 5;
+  PatternFlowTcpCtlPshCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlPshMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlPshMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18348,15 +18348,15 @@ message PatternFlowTcpCtlRst {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlRstCounter increment = 4;
+  PatternFlowTcpCtlRstCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlRstCounter decrement = 5;
+  PatternFlowTcpCtlRstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlRstMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlRstMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18420,15 +18420,15 @@ message PatternFlowTcpCtlSyn {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlSynCounter increment = 4;
+  PatternFlowTcpCtlSynCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlSynCounter decrement = 5;
+  PatternFlowTcpCtlSynCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlSynMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlSynMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18492,15 +18492,15 @@ message PatternFlowTcpCtlFin {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpCtlFinCounter increment = 4;
+  PatternFlowTcpCtlFinCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpCtlFinCounter decrement = 5;
+  PatternFlowTcpCtlFinCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpCtlFinMetricTag metric_tags = 6;
+  repeated PatternFlowTcpCtlFinMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18564,15 +18564,15 @@ message PatternFlowTcpWindow {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowTcpWindowCounter increment = 4;
+  PatternFlowTcpWindowCounter increment = 5;
 
   // Description missing in models
-  PatternFlowTcpWindowCounter decrement = 5;
+  PatternFlowTcpWindowCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowTcpWindowMetricTag metric_tags = 6;
+  repeated PatternFlowTcpWindowMetricTag metric_tags = 7;
 }
 
 // The one's complement of the one's complement sum of all 16 bit words in header and
@@ -18667,15 +18667,15 @@ message PatternFlowUdpSrcPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowUdpSrcPortCounter increment = 4;
+  PatternFlowUdpSrcPortCounter increment = 5;
 
   // Description missing in models
-  PatternFlowUdpSrcPortCounter decrement = 5;
+  PatternFlowUdpSrcPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowUdpSrcPortMetricTag metric_tags = 6;
+  repeated PatternFlowUdpSrcPortMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18739,15 +18739,15 @@ message PatternFlowUdpDstPort {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowUdpDstPortCounter increment = 4;
+  PatternFlowUdpDstPortCounter increment = 5;
 
   // Description missing in models
-  PatternFlowUdpDstPortCounter decrement = 5;
+  PatternFlowUdpDstPortCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowUdpDstPortMetricTag metric_tags = 6;
+  repeated PatternFlowUdpDstPortMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18811,15 +18811,15 @@ message PatternFlowUdpLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowUdpLengthCounter increment = 4;
+  PatternFlowUdpLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowUdpLengthCounter decrement = 5;
+  PatternFlowUdpLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowUdpLengthMetricTag metric_tags = 6;
+  repeated PatternFlowUdpLengthMetricTag metric_tags = 7;
 }
 
 // UDP checksum
@@ -18912,15 +18912,15 @@ message PatternFlowGreChecksumPresent {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGreChecksumPresentCounter increment = 4;
+  PatternFlowGreChecksumPresentCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGreChecksumPresentCounter decrement = 5;
+  PatternFlowGreChecksumPresentCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGreChecksumPresentMetricTag metric_tags = 6;
+  repeated PatternFlowGreChecksumPresentMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -18984,15 +18984,15 @@ message PatternFlowGreReserved0 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGreReserved0Counter increment = 4;
+  PatternFlowGreReserved0Counter increment = 5;
 
   // Description missing in models
-  PatternFlowGreReserved0Counter decrement = 5;
+  PatternFlowGreReserved0Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGreReserved0MetricTag metric_tags = 6;
+  repeated PatternFlowGreReserved0MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19056,15 +19056,15 @@ message PatternFlowGreVersion {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGreVersionCounter increment = 4;
+  PatternFlowGreVersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGreVersionCounter decrement = 5;
+  PatternFlowGreVersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGreVersionMetricTag metric_tags = 6;
+  repeated PatternFlowGreVersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19128,15 +19128,15 @@ message PatternFlowGreProtocol {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGreProtocolCounter increment = 4;
+  PatternFlowGreProtocolCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGreProtocolCounter decrement = 5;
+  PatternFlowGreProtocolCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGreProtocolMetricTag metric_tags = 6;
+  repeated PatternFlowGreProtocolMetricTag metric_tags = 7;
 }
 
 // Optional checksum of GRE header and payload. Only present if the checksum_present
@@ -19230,15 +19230,15 @@ message PatternFlowGreReserved1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGreReserved1Counter increment = 4;
+  PatternFlowGreReserved1Counter increment = 5;
 
   // Description missing in models
-  PatternFlowGreReserved1Counter decrement = 5;
+  PatternFlowGreReserved1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGreReserved1MetricTag metric_tags = 6;
+  repeated PatternFlowGreReserved1MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19302,15 +19302,15 @@ message PatternFlowGtpv1Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1VersionCounter increment = 4;
+  PatternFlowGtpv1VersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1VersionCounter decrement = 5;
+  PatternFlowGtpv1VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1VersionMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1VersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19374,15 +19374,15 @@ message PatternFlowGtpv1ProtocolType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1ProtocolTypeCounter increment = 4;
+  PatternFlowGtpv1ProtocolTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1ProtocolTypeCounter decrement = 5;
+  PatternFlowGtpv1ProtocolTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1ProtocolTypeMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1ProtocolTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19446,15 +19446,15 @@ message PatternFlowGtpv1Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1ReservedCounter increment = 4;
+  PatternFlowGtpv1ReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1ReservedCounter decrement = 5;
+  PatternFlowGtpv1ReservedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1ReservedMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1ReservedMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19518,15 +19518,15 @@ message PatternFlowGtpv1EFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1EFlagCounter increment = 4;
+  PatternFlowGtpv1EFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1EFlagCounter decrement = 5;
+  PatternFlowGtpv1EFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1EFlagMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1EFlagMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19590,15 +19590,15 @@ message PatternFlowGtpv1SFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1SFlagCounter increment = 4;
+  PatternFlowGtpv1SFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1SFlagCounter decrement = 5;
+  PatternFlowGtpv1SFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1SFlagMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1SFlagMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19662,15 +19662,15 @@ message PatternFlowGtpv1PnFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1PnFlagCounter increment = 4;
+  PatternFlowGtpv1PnFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1PnFlagCounter decrement = 5;
+  PatternFlowGtpv1PnFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1PnFlagMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1PnFlagMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19735,15 +19735,15 @@ message PatternFlowGtpv1MessageType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1MessageTypeCounter increment = 4;
+  PatternFlowGtpv1MessageTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1MessageTypeCounter decrement = 5;
+  PatternFlowGtpv1MessageTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1MessageTypeMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1MessageTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19808,15 +19808,15 @@ message PatternFlowGtpv1MessageLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1MessageLengthCounter increment = 4;
+  PatternFlowGtpv1MessageLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1MessageLengthCounter decrement = 5;
+  PatternFlowGtpv1MessageLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1MessageLengthMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1MessageLengthMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19880,15 +19880,15 @@ message PatternFlowGtpv1Teid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1TeidCounter increment = 4;
+  PatternFlowGtpv1TeidCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1TeidCounter decrement = 5;
+  PatternFlowGtpv1TeidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1TeidMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1TeidMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -19953,15 +19953,15 @@ message PatternFlowGtpv1SquenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1SquenceNumberCounter increment = 4;
+  PatternFlowGtpv1SquenceNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1SquenceNumberCounter decrement = 5;
+  PatternFlowGtpv1SquenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1SquenceNumberMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1SquenceNumberMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20026,15 +20026,15 @@ message PatternFlowGtpv1NPduNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1NPduNumberCounter increment = 4;
+  PatternFlowGtpv1NPduNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1NPduNumberCounter decrement = 5;
+  PatternFlowGtpv1NPduNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1NPduNumberMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1NPduNumberMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20099,15 +20099,15 @@ message PatternFlowGtpv1NextExtensionHeaderType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 4;
+  PatternFlowGtpv1NextExtensionHeaderTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 5;
+  PatternFlowGtpv1NextExtensionHeaderTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv1NextExtensionHeaderTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20173,15 +20173,15 @@ message PatternFlowGtpExtensionExtensionLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpExtensionExtensionLengthCounter increment = 4;
+  PatternFlowGtpExtensionExtensionLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpExtensionExtensionLengthCounter decrement = 5;
+  PatternFlowGtpExtensionExtensionLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpExtensionExtensionLengthMetricTag metric_tags = 6;
+  repeated PatternFlowGtpExtensionExtensionLengthMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20245,15 +20245,15 @@ message PatternFlowGtpExtensionContents {
   repeated uint64 values = 3;
 
   // Description missing in models
-  PatternFlowGtpExtensionContentsCounter increment = 4;
+  PatternFlowGtpExtensionContentsCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpExtensionContentsCounter decrement = 5;
+  PatternFlowGtpExtensionContentsCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpExtensionContentsMetricTag metric_tags = 6;
+  repeated PatternFlowGtpExtensionContentsMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20318,15 +20318,15 @@ message PatternFlowGtpExtensionNextExtensionHeader {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 4;
+  PatternFlowGtpExtensionNextExtensionHeaderCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 5;
+  PatternFlowGtpExtensionNextExtensionHeaderCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTag metric_tags = 6;
+  repeated PatternFlowGtpExtensionNextExtensionHeaderMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20390,15 +20390,15 @@ message PatternFlowGtpv2Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2VersionCounter increment = 4;
+  PatternFlowGtpv2VersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2VersionCounter decrement = 5;
+  PatternFlowGtpv2VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2VersionMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2VersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20463,15 +20463,15 @@ message PatternFlowGtpv2PiggybackingFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2PiggybackingFlagCounter increment = 4;
+  PatternFlowGtpv2PiggybackingFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2PiggybackingFlagCounter decrement = 5;
+  PatternFlowGtpv2PiggybackingFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2PiggybackingFlagMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2PiggybackingFlagMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20537,15 +20537,15 @@ message PatternFlowGtpv2TeidFlag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2TeidFlagCounter increment = 4;
+  PatternFlowGtpv2TeidFlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2TeidFlagCounter decrement = 5;
+  PatternFlowGtpv2TeidFlagCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2TeidFlagMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2TeidFlagMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20609,15 +20609,15 @@ message PatternFlowGtpv2Spare1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2Spare1Counter increment = 4;
+  PatternFlowGtpv2Spare1Counter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2Spare1Counter decrement = 5;
+  PatternFlowGtpv2Spare1Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2Spare1MetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2Spare1MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20682,15 +20682,15 @@ message PatternFlowGtpv2MessageType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2MessageTypeCounter increment = 4;
+  PatternFlowGtpv2MessageTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2MessageTypeCounter decrement = 5;
+  PatternFlowGtpv2MessageTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2MessageTypeMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2MessageTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20755,15 +20755,15 @@ message PatternFlowGtpv2MessageLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2MessageLengthCounter increment = 4;
+  PatternFlowGtpv2MessageLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2MessageLengthCounter decrement = 5;
+  PatternFlowGtpv2MessageLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2MessageLengthMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2MessageLengthMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20828,15 +20828,15 @@ message PatternFlowGtpv2Teid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2TeidCounter increment = 4;
+  PatternFlowGtpv2TeidCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2TeidCounter decrement = 5;
+  PatternFlowGtpv2TeidCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2TeidMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2TeidMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20900,15 +20900,15 @@ message PatternFlowGtpv2SequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2SequenceNumberCounter increment = 4;
+  PatternFlowGtpv2SequenceNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2SequenceNumberCounter decrement = 5;
+  PatternFlowGtpv2SequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2SequenceNumberMetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2SequenceNumberMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -20972,15 +20972,15 @@ message PatternFlowGtpv2Spare2 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowGtpv2Spare2Counter increment = 4;
+  PatternFlowGtpv2Spare2Counter increment = 5;
 
   // Description missing in models
-  PatternFlowGtpv2Spare2Counter decrement = 5;
+  PatternFlowGtpv2Spare2Counter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowGtpv2Spare2MetricTag metric_tags = 6;
+  repeated PatternFlowGtpv2Spare2MetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21044,15 +21044,15 @@ message PatternFlowArpHardwareType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowArpHardwareTypeCounter increment = 4;
+  PatternFlowArpHardwareTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpHardwareTypeCounter decrement = 5;
+  PatternFlowArpHardwareTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpHardwareTypeMetricTag metric_tags = 6;
+  repeated PatternFlowArpHardwareTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21116,15 +21116,15 @@ message PatternFlowArpProtocolType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowArpProtocolTypeCounter increment = 4;
+  PatternFlowArpProtocolTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpProtocolTypeCounter decrement = 5;
+  PatternFlowArpProtocolTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpProtocolTypeMetricTag metric_tags = 6;
+  repeated PatternFlowArpProtocolTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21188,15 +21188,15 @@ message PatternFlowArpHardwareLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowArpHardwareLengthCounter increment = 4;
+  PatternFlowArpHardwareLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpHardwareLengthCounter decrement = 5;
+  PatternFlowArpHardwareLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpHardwareLengthMetricTag metric_tags = 6;
+  repeated PatternFlowArpHardwareLengthMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21260,15 +21260,15 @@ message PatternFlowArpProtocolLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowArpProtocolLengthCounter increment = 4;
+  PatternFlowArpProtocolLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpProtocolLengthCounter decrement = 5;
+  PatternFlowArpProtocolLengthCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpProtocolLengthMetricTag metric_tags = 6;
+  repeated PatternFlowArpProtocolLengthMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21332,15 +21332,15 @@ message PatternFlowArpOperation {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowArpOperationCounter increment = 4;
+  PatternFlowArpOperationCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpOperationCounter decrement = 5;
+  PatternFlowArpOperationCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpOperationMetricTag metric_tags = 6;
+  repeated PatternFlowArpOperationMetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -21404,15 +21404,15 @@ message PatternFlowArpSenderHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowArpSenderHardwareAddrCounter increment = 4;
+  PatternFlowArpSenderHardwareAddrCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpSenderHardwareAddrCounter decrement = 5;
+  PatternFlowArpSenderHardwareAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpSenderHardwareAddrMetricTag metric_tags = 6;
+  repeated PatternFlowArpSenderHardwareAddrMetricTag metric_tags = 7;
 }
 
 // ipv4 counter pattern
@@ -21476,15 +21476,15 @@ message PatternFlowArpSenderProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowArpSenderProtocolAddrCounter increment = 4;
+  PatternFlowArpSenderProtocolAddrCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpSenderProtocolAddrCounter decrement = 5;
+  PatternFlowArpSenderProtocolAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpSenderProtocolAddrMetricTag metric_tags = 6;
+  repeated PatternFlowArpSenderProtocolAddrMetricTag metric_tags = 7;
 }
 
 // mac counter pattern
@@ -21548,15 +21548,15 @@ message PatternFlowArpTargetHardwareAddr {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowArpTargetHardwareAddrCounter increment = 4;
+  PatternFlowArpTargetHardwareAddrCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpTargetHardwareAddrCounter decrement = 5;
+  PatternFlowArpTargetHardwareAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpTargetHardwareAddrMetricTag metric_tags = 6;
+  repeated PatternFlowArpTargetHardwareAddrMetricTag metric_tags = 7;
 }
 
 // ipv4 counter pattern
@@ -21620,15 +21620,15 @@ message PatternFlowArpTargetProtocolAddr {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowArpTargetProtocolAddrCounter increment = 4;
+  PatternFlowArpTargetProtocolAddrCounter increment = 5;
 
   // Description missing in models
-  PatternFlowArpTargetProtocolAddrCounter decrement = 5;
+  PatternFlowArpTargetProtocolAddrCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowArpTargetProtocolAddrMetricTag metric_tags = 6;
+  repeated PatternFlowArpTargetProtocolAddrMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21692,15 +21692,15 @@ message PatternFlowIcmpEchoType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpEchoTypeCounter increment = 4;
+  PatternFlowIcmpEchoTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpEchoTypeCounter decrement = 5;
+  PatternFlowIcmpEchoTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpEchoTypeMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpEchoTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21764,15 +21764,15 @@ message PatternFlowIcmpEchoCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpEchoCodeCounter increment = 4;
+  PatternFlowIcmpEchoCodeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpEchoCodeCounter decrement = 5;
+  PatternFlowIcmpEchoCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpEchoCodeMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpEchoCodeMetricTag metric_tags = 7;
 }
 
 // ICMP checksum
@@ -21865,15 +21865,15 @@ message PatternFlowIcmpEchoIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpEchoIdentifierCounter increment = 4;
+  PatternFlowIcmpEchoIdentifierCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpEchoIdentifierCounter decrement = 5;
+  PatternFlowIcmpEchoIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpEchoIdentifierMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpEchoIdentifierMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -21937,15 +21937,15 @@ message PatternFlowIcmpEchoSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpEchoSequenceNumberCounter increment = 4;
+  PatternFlowIcmpEchoSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpEchoSequenceNumberCounter decrement = 5;
+  PatternFlowIcmpEchoSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpEchoSequenceNumberMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpEchoSequenceNumberMetricTag metric_tags = 7;
 }
 
 // ICMP checksum
@@ -22038,15 +22038,15 @@ message PatternFlowIcmpNextFieldsIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpNextFieldsIdentifierCounter increment = 4;
+  PatternFlowIcmpNextFieldsIdentifierCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpNextFieldsIdentifierCounter decrement = 5;
+  PatternFlowIcmpNextFieldsIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpNextFieldsIdentifierMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpNextFieldsIdentifierMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22110,15 +22110,15 @@ message PatternFlowIcmpNextFieldsSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 4;
+  PatternFlowIcmpNextFieldsSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 5;
+  PatternFlowIcmpNextFieldsSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpNextFieldsSequenceNumberMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22182,15 +22182,15 @@ message PatternFlowIcmpv6EchoType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoTypeCounter increment = 4;
+  PatternFlowIcmpv6EchoTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoTypeCounter decrement = 5;
+  PatternFlowIcmpv6EchoTypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpv6EchoTypeMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpv6EchoTypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22254,15 +22254,15 @@ message PatternFlowIcmpv6EchoCode {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoCodeCounter increment = 4;
+  PatternFlowIcmpv6EchoCodeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoCodeCounter decrement = 5;
+  PatternFlowIcmpv6EchoCodeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpv6EchoCodeMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpv6EchoCodeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22326,15 +22326,15 @@ message PatternFlowIcmpv6EchoIdentifier {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoIdentifierCounter increment = 4;
+  PatternFlowIcmpv6EchoIdentifierCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoIdentifierCounter decrement = 5;
+  PatternFlowIcmpv6EchoIdentifierCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpv6EchoIdentifierMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpv6EchoIdentifierMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22398,15 +22398,15 @@ message PatternFlowIcmpv6EchoSequenceNumber {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoSequenceNumberCounter increment = 4;
+  PatternFlowIcmpv6EchoSequenceNumberCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 5;
+  PatternFlowIcmpv6EchoSequenceNumberCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTag metric_tags = 6;
+  repeated PatternFlowIcmpv6EchoSequenceNumberMetricTag metric_tags = 7;
 }
 
 // ICMPv6 checksum
@@ -22528,15 +22528,15 @@ message PatternFlowPppAddress {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPppAddressCounter increment = 4;
+  PatternFlowPppAddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPppAddressCounter decrement = 5;
+  PatternFlowPppAddressCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPppAddressMetricTag metric_tags = 6;
+  repeated PatternFlowPppAddressMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22600,15 +22600,15 @@ message PatternFlowPppControl {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowPppControlCounter increment = 4;
+  PatternFlowPppControlCounter increment = 5;
 
   // Description missing in models
-  PatternFlowPppControlCounter decrement = 5;
+  PatternFlowPppControlCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowPppControlMetricTag metric_tags = 6;
+  repeated PatternFlowPppControlMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22751,15 +22751,15 @@ message PatternFlowIgmpv1Version {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIgmpv1VersionCounter increment = 4;
+  PatternFlowIgmpv1VersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIgmpv1VersionCounter decrement = 5;
+  PatternFlowIgmpv1VersionCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIgmpv1VersionMetricTag metric_tags = 6;
+  repeated PatternFlowIgmpv1VersionMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22823,15 +22823,15 @@ message PatternFlowIgmpv1Type {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIgmpv1TypeCounter increment = 4;
+  PatternFlowIgmpv1TypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIgmpv1TypeCounter decrement = 5;
+  PatternFlowIgmpv1TypeCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIgmpv1TypeMetricTag metric_tags = 6;
+  repeated PatternFlowIgmpv1TypeMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -22895,15 +22895,15 @@ message PatternFlowIgmpv1Unused {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowIgmpv1UnusedCounter increment = 4;
+  PatternFlowIgmpv1UnusedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIgmpv1UnusedCounter decrement = 5;
+  PatternFlowIgmpv1UnusedCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIgmpv1UnusedMetricTag metric_tags = 6;
+  repeated PatternFlowIgmpv1UnusedMetricTag metric_tags = 7;
 }
 
 // Checksum
@@ -22996,15 +22996,15 @@ message PatternFlowIgmpv1GroupAddress {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowIgmpv1GroupAddressCounter increment = 4;
+  PatternFlowIgmpv1GroupAddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIgmpv1GroupAddressCounter decrement = 5;
+  PatternFlowIgmpv1GroupAddressCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIgmpv1GroupAddressMetricTag metric_tags = 6;
+  repeated PatternFlowIgmpv1GroupAddressMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -23147,15 +23147,15 @@ message PatternFlowMplsTrafficClass {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowMplsTrafficClassCounter increment = 4;
+  PatternFlowMplsTrafficClassCounter increment = 5;
 
   // Description missing in models
-  PatternFlowMplsTrafficClassCounter decrement = 5;
+  PatternFlowMplsTrafficClassCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 6;
+  repeated PatternFlowMplsTrafficClassMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -23298,15 +23298,15 @@ message PatternFlowMplsTimeToLive {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowMplsTimeToLiveCounter increment = 4;
+  PatternFlowMplsTimeToLiveCounter increment = 5;
 
   // Description missing in models
-  PatternFlowMplsTimeToLiveCounter decrement = 5;
+  PatternFlowMplsTimeToLiveCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 6;
+  repeated PatternFlowMplsTimeToLiveMetricTag metric_tags = 7;
 }
 
 // integer counter pattern
@@ -23350,10 +23350,10 @@ message PatternFlowSnmpv2cVersion {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVersionCounter increment = 4;
+  PatternFlowSnmpv2cVersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVersionCounter decrement = 5;
+  PatternFlowSnmpv2cVersionCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23402,10 +23402,10 @@ message PatternFlowSnmpv2cPDURequestId {
   repeated int32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cPDURequestIdCounter increment = 4;
+  PatternFlowSnmpv2cPDURequestIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cPDURequestIdCounter decrement = 5;
+  PatternFlowSnmpv2cPDURequestIdCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23450,10 +23450,10 @@ message PatternFlowSnmpv2cPDUErrorIndex {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cPDUErrorIndexCounter increment = 4;
+  PatternFlowSnmpv2cPDUErrorIndexCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cPDUErrorIndexCounter decrement = 5;
+  PatternFlowSnmpv2cPDUErrorIndexCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23502,10 +23502,10 @@ message PatternFlowSnmpv2cBulkPDURequestId {
   repeated int32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cBulkPDURequestIdCounter increment = 4;
+  PatternFlowSnmpv2cBulkPDURequestIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cBulkPDURequestIdCounter decrement = 5;
+  PatternFlowSnmpv2cBulkPDURequestIdCounter decrement = 6;
 }
 
 // One variable binding in the Response-PDU is requested for the first non_repeaters
@@ -23575,10 +23575,10 @@ message PatternFlowSnmpv2cBulkPDUMaxRepetitions {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter increment = 4;
+  PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter decrement = 5;
+  PatternFlowSnmpv2cBulkPDUMaxRepetitionsCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23622,10 +23622,10 @@ message PatternFlowSnmpv2cVariableBindingValueIntegerValue {
   repeated int32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueIntegerValueCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -23669,10 +23669,10 @@ message PatternFlowSnmpv2cVariableBindingValueIpAddressValue {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueIpAddressValueCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23716,10 +23716,10 @@ message PatternFlowSnmpv2cVariableBindingValueCounterValue {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueCounterValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueCounterValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueCounterValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueCounterValueCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23763,10 +23763,10 @@ message PatternFlowSnmpv2cVariableBindingValueTimeticksValue {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueTimeticksValueCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23810,10 +23810,10 @@ message PatternFlowSnmpv2cVariableBindingValueBigCounterValue {
   repeated uint64 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueBigCounterValueCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23857,10 +23857,10 @@ message PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValue {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter increment = 4;
+  PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter decrement = 5;
+  PatternFlowSnmpv2cVariableBindingValueUnsignedIntegerValueCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -23909,10 +23909,10 @@ message PatternFlowSnmpv2cCommonRequestId {
   repeated int32 values = 3;
 
   // Description missing in models
-  PatternFlowSnmpv2cCommonRequestIdCounter increment = 4;
+  PatternFlowSnmpv2cCommonRequestIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowSnmpv2cCommonRequestIdCounter decrement = 5;
+  PatternFlowSnmpv2cCommonRequestIdCounter decrement = 6;
 }
 
 // The one's complement of the one's complement sum of the message, with the checksum
@@ -23987,10 +23987,10 @@ message PatternFlowRsvpTimeToLive {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRsvpTimeToLiveCounter increment = 4;
+  PatternFlowRsvpTimeToLiveCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRsvpTimeToLiveCounter decrement = 5;
+  PatternFlowRsvpTimeToLiveCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24034,10 +24034,10 @@ message PatternFlowRsvpReserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRsvpReservedCounter increment = 4;
+  PatternFlowRsvpReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRsvpReservedCounter decrement = 5;
+  PatternFlowRsvpReservedCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -24081,10 +24081,10 @@ message PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddress {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter increment = 4;
+  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter decrement = 5;
+  PatternFlowRSVPPathSessionLspTunnelIpv4Ipv4TunnelEndPointAddressCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24128,10 +24128,10 @@ message PatternFlowRSVPPathSessionLspTunnelIpv4Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter increment = 4;
+  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter decrement = 5;
+  PatternFlowRSVPPathSessionLspTunnelIpv4ReservedCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24176,10 +24176,10 @@ message PatternFlowRSVPPathSessionLspTunnelIpv4TunnelId {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter increment = 4;
+  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter decrement = 5;
+  PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24223,10 +24223,10 @@ message PatternFlowRSVPPathSessionExtTunnelIdAsInteger {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter increment = 4;
+  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter decrement = 5;
+  PatternFlowRSVPPathSessionExtTunnelIdAsIntegerCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -24270,10 +24270,10 @@ message PatternFlowRSVPPathSessionExtTunnelIdAsIpv4 {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter increment = 4;
+  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter decrement = 5;
+  PatternFlowRSVPPathSessionExtTunnelIdAsIpv4Counter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -24318,10 +24318,10 @@ message PatternFlowRSVPPathRsvpHopIpv4Ipv4Address {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter increment = 4;
+  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter decrement = 5;
+  PatternFlowRSVPPathRsvpHopIpv4Ipv4AddressCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24368,10 +24368,10 @@ message PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter increment = 4;
+  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter decrement = 5;
+  PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24415,10 +24415,10 @@ message PatternFlowRSVPPathTimeValuesType1RefreshPeriodR {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter increment = 4;
+  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter decrement = 5;
+  PatternFlowRSVPPathTimeValuesType1RefreshPeriodRCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24464,10 +24464,10 @@ message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter increment = 4;
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter decrement = 5;
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBitCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -24512,10 +24512,10 @@ message PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4Address {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter increment = 4;
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter decrement = 5;
+  PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixIpv4AddressCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24561,10 +24561,10 @@ message PatternFlowRSVPPathExplicitRouteType1ASNumberLBit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter increment = 4;
+  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter decrement = 5;
+  PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24609,10 +24609,10 @@ message PatternFlowRSVPPathLabelRequestWithoutLabelRangeReserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter increment = 4;
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter decrement = 5;
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeReservedCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24658,10 +24658,10 @@ message PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pid {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter increment = 4;
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter decrement = 5;
+  PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3pidCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -24705,10 +24705,10 @@ message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddress {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter increment = 4;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter decrement = 5;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Ipv4TunnelSenderAddressCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24752,10 +24752,10 @@ message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4Reserved {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter increment = 4;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter decrement = 5;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24800,10 +24800,10 @@ message PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspId {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter increment = 4;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter decrement = 5;
+  PatternFlowRSVPPathSenderTemplateLspTunnelIpv4LspIdCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24847,10 +24847,10 @@ message PatternFlowRSVPPathSenderTspecIntServVersion {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServVersionCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServVersionCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServVersionCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServVersionCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24894,10 +24894,10 @@ message PatternFlowRSVPPathSenderTspecIntServReserved1 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServReserved1Counter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServReserved1Counter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServReserved1Counter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServReserved1Counter decrement = 6;
 }
 
 // integer counter pattern
@@ -24941,10 +24941,10 @@ message PatternFlowRSVPPathSenderTspecIntServOverallLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServOverallLengthCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -24988,10 +24988,10 @@ message PatternFlowRSVPPathSenderTspecIntServServiceHeader {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServServiceHeaderCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25035,10 +25035,10 @@ message PatternFlowRSVPPathSenderTspecIntServZeroBit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServZeroBitCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25082,10 +25082,10 @@ message PatternFlowRSVPPathSenderTspecIntServReserved2 {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServReserved2Counter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServReserved2Counter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServReserved2Counter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServReserved2Counter decrement = 6;
 }
 
 // integer counter pattern
@@ -25129,10 +25129,10 @@ message PatternFlowRSVPPathSenderTspecIntServLengthOfServiceData {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServLengthOfServiceDataCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25176,10 +25176,10 @@ message PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspecCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25223,10 +25223,10 @@ message PatternFlowRSVPPathSenderTspecIntServParameter127Flag {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServParameter127FlagCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25270,10 +25270,10 @@ message PatternFlowRSVPPathSenderTspecIntServParameter127Length {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25318,10 +25318,10 @@ message PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnit {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServMinimumPolicedUnitCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25367,10 +25367,10 @@ message PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter increment = 4;
+  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter decrement = 5;
+  PatternFlowRSVPPathSenderTspecIntServMaximumPacketSizeCounter decrement = 6;
 }
 
 // ipv4 counter pattern
@@ -25415,10 +25415,10 @@ message PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4Address {
   repeated string values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter increment = 4;
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter decrement = 5;
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressIpv4AddressCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -25462,10 +25462,10 @@ message PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter increment = 4;
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter decrement = 5;
+  PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLengthCounter decrement = 6;
 }
 
 // 0x01 = Global label. This flag indicates that the label will be understood if received
@@ -25556,10 +25556,10 @@ message PatternFlowRSVPPathObjectsCustomType {
   repeated uint32 values = 3;
 
   // Description missing in models
-  PatternFlowRSVPPathObjectsCustomTypeCounter increment = 4;
+  PatternFlowRSVPPathObjectsCustomTypeCounter increment = 5;
 
   // Description missing in models
-  PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 5;
+  PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 6;
 }
 
 // Version details

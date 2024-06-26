@@ -17892,17 +17892,17 @@ components:
           - 00:00:00:00:00:00
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.Src.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.Src.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ethernet.Src.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ethernet.EtherType.Counter:
       description: |-
         integer counter pattern
@@ -18125,17 +18125,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.PfcQueue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ethernet.PfcQueue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ethernet.PfcQueue.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vlan.Priority.Counter:
       description: |-
         integer counter pattern
@@ -18229,17 +18229,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Priority.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Priority.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Priority.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vlan.Cfi.Counter:
       description: |-
         integer counter pattern
@@ -18333,17 +18333,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Cfi.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Cfi.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Cfi.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vlan.Id.Counter:
       description: |-
         integer counter pattern
@@ -18437,17 +18437,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Id.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Id.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Id.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vlan.Tpid.Counter:
       description: |-
         integer counter pattern
@@ -18547,17 +18547,17 @@ components:
           - 65535
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vlan.Tpid.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         x8100: 33024
         x88A8: 34984
@@ -18657,17 +18657,17 @@ components:
           - 8
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vxlan.Flags.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vxlan.Reserved0.Counter:
       description: |-
         integer counter pattern
@@ -18761,17 +18761,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved0.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Vxlan.Vni.Counter:
       description: |-
         integer counter pattern
@@ -18982,17 +18982,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Vxlan.Reserved1.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.Version.Counter:
       description: |-
         integer counter pattern
@@ -19086,17 +19086,17 @@ components:
           - 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.HeaderLength.Counter:
       description: |-
         integer counter pattern
@@ -19424,17 +19424,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Identification.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Identification.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Identification.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -19528,17 +19528,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Reserved.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.DontFragment.Counter:
       description: |-
         integer counter pattern
@@ -19632,17 +19632,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.DontFragment.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.DontFragment.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.DontFragment.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.MoreFragments.Counter:
       description: |-
         integer counter pattern
@@ -19736,17 +19736,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.MoreFragments.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.MoreFragments.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.MoreFragments.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.FragmentOffset.Counter:
       description: |-
         integer counter pattern
@@ -19840,17 +19840,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.FragmentOffset.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.FragmentOffset.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.FragmentOffset.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.TimeToLive.Counter:
       description: |-
         integer counter pattern
@@ -19944,17 +19944,17 @@ components:
           - 64
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.TimeToLive.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.TimeToLive.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.TimeToLive.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.Protocol.Counter:
       description: |-
         integer counter pattern
@@ -20388,10 +20388,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
       x-constants:
         not_copied: 0
         copied: 1
@@ -20462,10 +20462,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionClass.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
       x-constants:
         control: 0
         reserved: 3
@@ -20533,10 +20533,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Ipv4.Priority.Raw.Counter:
       description: |-
         integer counter pattern
@@ -20630,17 +20630,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Priority.Raw.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Priority.Raw.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Priority.Raw.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv4.Dscp.Phb.Counter:
       description: |-
         integer counter pattern
@@ -20756,17 +20756,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Phb.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         default: 0
         cs1: 8
@@ -20887,17 +20887,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dscp.Ecn.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         non_capable: 0
         capable_transport_0: 1
@@ -21005,17 +21005,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Precedence.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         routine: 0
         priority: 1
@@ -21121,17 +21121,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Delay.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         normal: 0
         low: 1
@@ -21231,17 +21231,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Throughput.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         normal: 0
         low: 1
@@ -21341,17 +21341,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Reliability.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         normal: 0
         low: 1
@@ -21451,17 +21451,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Monetary.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         normal: 0
         low: 1
@@ -21558,17 +21558,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.Version.Counter:
       description: |-
         integer counter pattern
@@ -21662,17 +21662,17 @@ components:
           - 6
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.TrafficClass.Counter:
       description: |-
         integer counter pattern
@@ -21766,17 +21766,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.TrafficClass.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.TrafficClass.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.TrafficClass.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.FlowLabel.Counter:
       description: |-
         integer counter pattern
@@ -21870,17 +21870,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.FlowLabel.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.FlowLabel.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.FlowLabel.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.PayloadLength.Counter:
       description: |-
         integer counter pattern
@@ -22232,17 +22232,17 @@ components:
           - 64
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.HopLimit.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.HopLimit.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.HopLimit.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.Src.Counter:
       description: |-
         ipv6 counter pattern
@@ -22331,17 +22331,17 @@ components:
           - ::0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Src.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Src.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Src.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Ipv6.Dst.Counter:
       description: |-
         ipv6 counter pattern
@@ -22430,17 +22430,17 @@ components:
           - ::0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.Dst.Counter:
       description: |-
         mac counter pattern
@@ -22529,17 +22529,17 @@ components:
           - 01:80:c2:00:00:01
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.Dst.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.Dst.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.Dst.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.Src.Counter:
       description: |-
         mac counter pattern
@@ -22628,17 +22628,17 @@ components:
           - 00:00:00:00:00:00
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.Src.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.Src.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.Src.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.EtherType.Counter:
       description: |-
         integer counter pattern
@@ -22734,17 +22734,17 @@ components:
           - 34824
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.EtherType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         x8808: 34824
     Pattern.Flow.PfcPause.ControlOpCode.Counter:
@@ -22840,17 +22840,17 @@ components:
           - 257
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ControlOpCode.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ControlOpCode.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.ControlOpCode.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.ClassEnableVector.Counter:
       description: |-
         integer counter pattern
@@ -22944,17 +22944,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ClassEnableVector.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.ClassEnableVector.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.ClassEnableVector.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass0.Counter:
       description: |-
         integer counter pattern
@@ -23048,17 +23048,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass0.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass0.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass0.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass1.Counter:
       description: |-
         integer counter pattern
@@ -23152,17 +23152,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass1.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass1.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass1.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass2.Counter:
       description: |-
         integer counter pattern
@@ -23256,17 +23256,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass2.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass2.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass2.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass3.Counter:
       description: |-
         integer counter pattern
@@ -23360,17 +23360,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass3.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass3.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass3.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass4.Counter:
       description: |-
         integer counter pattern
@@ -23464,17 +23464,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass4.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass4.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass4.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass5.Counter:
       description: |-
         integer counter pattern
@@ -23568,17 +23568,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass5.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass5.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass5.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass6.Counter:
       description: |-
         integer counter pattern
@@ -23672,17 +23672,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass6.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass6.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass6.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.PfcPause.PauseClass7.Counter:
       description: |-
         integer counter pattern
@@ -23776,17 +23776,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.PfcPause.PauseClass7.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.EthernetPause.Dst.Counter:
       description: |-
         mac counter pattern
@@ -23875,17 +23875,17 @@ components:
           - 01:80:c2:00:00:01
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Dst.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Dst.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Dst.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.EthernetPause.Src.Counter:
       description: |-
         mac counter pattern
@@ -23974,17 +23974,17 @@ components:
           - 00:00:00:00:00:00
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Src.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Src.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Src.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.EthernetPause.EtherType.Counter:
       description: |-
         integer counter pattern
@@ -24080,17 +24080,17 @@ components:
           - 34824
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.EtherType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         flow_control: 34824
     Pattern.Flow.EthernetPause.ControlOpCode.Counter:
@@ -24186,17 +24186,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.ControlOpCode.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.ControlOpCode.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.ControlOpCode.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.EthernetPause.Time.Counter:
       description: |-
         integer counter pattern
@@ -24290,17 +24290,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.EthernetPause.Time.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.SrcPort.Counter:
       description: |-
         integer counter pattern
@@ -24394,17 +24394,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SrcPort.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SrcPort.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.SrcPort.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.DstPort.Counter:
       description: |-
         integer counter pattern
@@ -24498,17 +24498,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DstPort.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DstPort.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.DstPort.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.SeqNum.Counter:
       description: |-
         integer counter pattern
@@ -24597,17 +24597,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SeqNum.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.SeqNum.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.SeqNum.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.AckNum.Counter:
       description: |-
         integer counter pattern
@@ -24696,17 +24696,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.AckNum.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.AckNum.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.AckNum.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.DataOffset.Counter:
       description: |-
         integer counter pattern
@@ -24800,17 +24800,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DataOffset.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.DataOffset.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.DataOffset.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.EcnNs.Counter:
       description: |-
         integer counter pattern
@@ -24904,17 +24904,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnNs.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnNs.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnNs.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.EcnCwr.Counter:
       description: |-
         integer counter pattern
@@ -25008,17 +25008,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnCwr.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnCwr.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnCwr.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.EcnEcho.Counter:
       description: |-
         integer counter pattern
@@ -25112,17 +25112,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnEcho.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnEcho.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.EcnEcho.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlUrg.Counter:
       description: |-
         integer counter pattern
@@ -25216,17 +25216,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlUrg.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlUrg.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlUrg.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlAck.Counter:
       description: |-
         integer counter pattern
@@ -25320,17 +25320,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlAck.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlAck.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlAck.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlPsh.Counter:
       description: |-
         integer counter pattern
@@ -25423,17 +25423,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlPsh.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlPsh.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlPsh.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlRst.Counter:
       description: |-
         integer counter pattern
@@ -25526,17 +25526,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlRst.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlRst.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlRst.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlSyn.Counter:
       description: |-
         integer counter pattern
@@ -25629,17 +25629,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlSyn.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlSyn.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlSyn.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.CtlFin.Counter:
       description: |-
         integer counter pattern
@@ -25732,17 +25732,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlFin.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlFin.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.CtlFin.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.Window.Counter:
       description: |-
         integer counter pattern
@@ -25836,17 +25836,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Tcp.Window.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Tcp.Checksum:
       description: |-
         The one's complement of the one's complement sum of all 16 bit words in header and text.  An all-zero value means that no checksum will be transmitted.   While computing the checksum, the checksum field itself is replaced with zeros.
@@ -25980,17 +25980,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.SrcPort.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Udp.SrcPort.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Udp.SrcPort.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Udp.DstPort.Counter:
       description: |-
         integer counter pattern
@@ -26084,17 +26084,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.DstPort.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Udp.DstPort.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Udp.DstPort.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Udp.Length.Counter:
       description: |-
         integer counter pattern
@@ -26188,17 +26188,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Udp.Length.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Udp.Length.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Udp.Length.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Udp.Checksum:
       description: |-
         UDP checksum
@@ -26332,17 +26332,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.ChecksumPresent.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gre.ChecksumPresent.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.ChecksumPresent.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gre.Reserved0.Counter:
       description: |-
         integer counter pattern
@@ -26436,17 +26436,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved0.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved0.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved0.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gre.Version.Counter:
       description: |-
         integer counter pattern
@@ -26540,17 +26540,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gre.Protocol.Counter:
       description: |-
         integer counter pattern
@@ -26647,17 +26647,17 @@ components:
           - 2048
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         ipv4: 2048
         ipv6: 34525
@@ -26794,17 +26794,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Reserved1.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.Version.Counter:
       description: |-
         integer counter pattern
@@ -26898,17 +26898,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.ProtocolType.Counter:
       description: |-
         integer counter pattern
@@ -27002,17 +27002,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.ProtocolType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.ProtocolType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.ProtocolType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -27106,17 +27106,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Reserved.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.EFlag.Counter:
       description: |-
         integer counter pattern
@@ -27210,17 +27210,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.EFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.EFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.EFlag.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.SFlag.Counter:
       description: |-
         integer counter pattern
@@ -27314,17 +27314,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SFlag.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.PnFlag.Counter:
       description: |-
         integer counter pattern
@@ -27418,17 +27418,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.PnFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.PnFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.PnFlag.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.MessageType.Counter:
       description: |-
         integer counter pattern
@@ -27522,17 +27522,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.MessageLength.Counter:
       description: |-
         integer counter pattern
@@ -27626,17 +27626,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.MessageLength.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.Teid.Counter:
       description: |-
         integer counter pattern
@@ -27725,17 +27725,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Teid.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Teid.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.Teid.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.SquenceNumber.Counter:
       description: |-
         integer counter pattern
@@ -27829,17 +27829,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SquenceNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SquenceNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.SquenceNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.NPduNumber.Counter:
       description: |-
         integer counter pattern
@@ -27933,17 +27933,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NPduNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NPduNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NPduNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv1.NextExtensionHeaderType.Counter:
       description: |-
         integer counter pattern
@@ -28037,17 +28037,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NextExtensionHeaderType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NextExtensionHeaderType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv1.NextExtensionHeaderType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.GtpExtension.ExtensionLength.Counter:
       description: |-
         integer counter pattern
@@ -28141,17 +28141,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.ExtensionLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.ExtensionLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.GtpExtension.ExtensionLength.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.GtpExtension.Contents.Counter:
       description: |-
         integer counter pattern
@@ -28245,17 +28245,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.Contents.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.Contents.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.GtpExtension.Contents.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.GtpExtension.NextExtensionHeader.Counter:
       description: |-
         integer counter pattern
@@ -28349,17 +28349,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.GtpExtension.NextExtensionHeader.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.Version.Counter:
       description: |-
         integer counter pattern
@@ -28453,17 +28453,17 @@ components:
           - 2
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.PiggybackingFlag.Counter:
       description: |-
         integer counter pattern
@@ -28557,17 +28557,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.PiggybackingFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.PiggybackingFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.PiggybackingFlag.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.TeidFlag.Counter:
       description: |-
         integer counter pattern
@@ -28661,17 +28661,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.TeidFlag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.TeidFlag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.TeidFlag.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.Spare1.Counter:
       description: |-
         integer counter pattern
@@ -28765,17 +28765,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare1.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare1.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare1.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.MessageType.Counter:
       description: |-
         integer counter pattern
@@ -28869,17 +28869,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.MessageLength.Counter:
       description: |-
         integer counter pattern
@@ -28973,17 +28973,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.MessageLength.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.Teid.Counter:
       description: |-
         integer counter pattern
@@ -29072,17 +29072,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Teid.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Teid.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Teid.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.SequenceNumber.Counter:
       description: |-
         integer counter pattern
@@ -29176,17 +29176,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.SequenceNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.SequenceNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.SequenceNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Gtpv2.Spare2.Counter:
       description: |-
         integer counter pattern
@@ -29280,17 +29280,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gtpv2.Spare2.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.HardwareType.Counter:
       description: |-
         integer counter pattern
@@ -29386,17 +29386,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         ethernet: 1
     Pattern.Flow.Arp.ProtocolType.Counter:
@@ -29495,17 +29495,17 @@ components:
           - 2048
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolType.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         ipv4: 2048
         ipv6: 34525
@@ -29602,17 +29602,17 @@ components:
           - 6
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.HardwareLength.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.ProtocolLength.Counter:
       description: |-
         integer counter pattern
@@ -29706,17 +29706,17 @@ components:
           - 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.ProtocolLength.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.Operation.Counter:
       description: |-
         integer counter pattern
@@ -29813,17 +29813,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.Operation.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         request: 1
         reply: 2
@@ -29915,17 +29915,17 @@ components:
           - 00:00:00:00:00:00
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.SenderHardwareAddr.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.SenderHardwareAddr.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.SenderHardwareAddr.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.SenderProtocolAddr.Counter:
       description: |-
         ipv4 counter pattern
@@ -30014,17 +30014,17 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.SenderProtocolAddr.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.SenderProtocolAddr.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.SenderProtocolAddr.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.TargetHardwareAddr.Counter:
       description: |-
         mac counter pattern
@@ -30113,17 +30113,17 @@ components:
           - 00:00:00:00:00:00
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetHardwareAddr.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetHardwareAddr.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.TargetHardwareAddr.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Arp.TargetProtocolAddr.Counter:
       description: |-
         ipv4 counter pattern
@@ -30212,17 +30212,17 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetProtocolAddr.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Arp.TargetProtocolAddr.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Arp.TargetProtocolAddr.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmp.Echo.Type.Counter:
       description: |-
         integer counter pattern
@@ -30319,17 +30319,17 @@ components:
           - 8
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Type.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         reply: 0
         request: 8
@@ -30426,17 +30426,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Code.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Code.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Code.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmp.Echo.Checksum:
       description: |-
         ICMP checksum
@@ -30570,17 +30570,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Identifier.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Identifier.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.Identifier.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmp.Echo.SequenceNumber.Counter:
       description: |-
         integer counter pattern
@@ -30674,17 +30674,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.Echo.SequenceNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmp.Common.Checksum:
       description: |-
         ICMP checksum
@@ -30818,17 +30818,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.Identifier.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.Identifier.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.Identifier.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmp.NextFields.SequenceNumber.Counter:
       description: |-
         integer counter pattern
@@ -30922,17 +30922,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.SequenceNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.SequenceNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmp.NextFields.SequenceNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmpv6.Echo.Type.Counter:
       description: |-
         integer counter pattern
@@ -31029,17 +31029,17 @@ components:
           - 128
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Type.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         request: 128
         reply: 129
@@ -31136,17 +31136,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Code.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Code.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Code.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmpv6.Echo.Identifier.Counter:
       description: |-
         integer counter pattern
@@ -31240,17 +31240,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Identifier.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Identifier.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.Identifier.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmpv6.Echo.SequenceNumber.Counter:
       description: |-
         integer counter pattern
@@ -31344,17 +31344,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.SequenceNumber.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.SequenceNumber.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Icmpv6.Echo.SequenceNumber.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Icmpv6.Echo.Checksum:
       description: |-
         ICMPv6 checksum
@@ -31530,17 +31530,17 @@ components:
           - 255
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Address.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         standard_address: 255
     Pattern.Flow.Ppp.Control.Counter:
@@ -31638,17 +31638,17 @@ components:
           - 3
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ppp.Control.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         unnumbered_data: 3
     Pattern.Flow.Ppp.ProtocolType.Counter:
@@ -31861,17 +31861,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Version.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Igmpv1.Type.Counter:
       description: |-
         integer counter pattern
@@ -31968,17 +31968,17 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Type.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
       x-constants:
         query: 1
         report: 2
@@ -32075,17 +32075,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Unused.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Unused.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.Unused.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Igmpv1.Checksum:
       description: |-
         Checksum
@@ -32214,17 +32214,17 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Igmpv1.GroupAddress.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Mpls.Label.Counter:
       description: |-
         integer counter pattern
@@ -32435,17 +32435,17 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Mpls.TrafficClass.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Mpls.BottomOfStack.Counter:
       description: |-
         integer counter pattern
@@ -32656,17 +32656,17 @@ components:
           - 64
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Mpls.TimeToLive.MetricTag'
-          x-field-uid: 6
+          x-field-uid: 7
     Pattern.Flow.Snmpv2c.Version.Counter:
       description: |-
         integer counter pattern
@@ -32730,10 +32730,10 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.PDU.RequestId.Counter:
       description: |-
         integer counter pattern
@@ -32794,10 +32794,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.RequestId.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.RequestId.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter:
       description: |-
         integer counter pattern
@@ -32856,10 +32856,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.PDU.ErrorIndex.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter:
       description: |-
         integer counter pattern
@@ -32920,10 +32920,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.RequestId.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.BulkPDU.NonRepeaters:
       description: |-
         One variable binding in the Response-PDU is requested for the first non_repeaters variable bindings in the GetBulkRequest.
@@ -33012,10 +33012,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.BulkPDU.MaxRepetitions.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter:
       description: |-
         integer counter pattern
@@ -33074,10 +33074,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IntegerValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter:
       description: |-
         ipv4 counter pattern
@@ -33136,10 +33136,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.IpAddressValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter:
       description: |-
         integer counter pattern
@@ -33198,10 +33198,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.CounterValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter:
       description: |-
         integer counter pattern
@@ -33260,10 +33260,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.TimeticksValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter:
       description: |-
         integer counter pattern
@@ -33322,10 +33322,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.BigCounterValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter:
       description: |-
         integer counter pattern
@@ -33384,10 +33384,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.VariableBindingValue.UnsignedIntegerValue.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Snmpv2c.Common.RequestId.Counter:
       description: |-
         integer counter pattern
@@ -33448,10 +33448,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Common.RequestId.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Snmpv2c.Common.RequestId.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Rsvp.RsvpChecksum:
       description: |-
         The one's complement of the one's complement sum of the message, with the checksum field replaced by zero for the purpose of computing the checksum.   An all-zero value means that no checksum was transmitted.
@@ -33555,10 +33555,10 @@ components:
           - 64
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Rsvp.TimeToLive.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Rsvp.TimeToLive.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.Rsvp.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -33621,10 +33621,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Rsvp.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Rsvp.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter:
       description: |-
         ipv4 counter pattern
@@ -33683,10 +33683,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Ipv4TunnelEndPointAddress.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -33750,10 +33750,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter:
       description: |-
         integer counter pattern
@@ -33817,10 +33817,10 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionLspTunnelIpv4.TunnelId.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter:
       description: |-
         integer counter pattern
@@ -33879,10 +33879,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsInteger.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter:
       description: |-
         ipv4 counter pattern
@@ -33941,10 +33941,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSessionExtTunnelId.AsIpv4.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter:
       description: |-
         ipv4 counter pattern
@@ -34003,10 +34003,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.Ipv4Address.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter:
       description: |-
         integer counter pattern
@@ -34065,10 +34065,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRsvpHopIpv4.LogicalInterfaceHandle.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter:
       description: |-
         integer counter pattern
@@ -34127,10 +34127,10 @@ components:
           - 30000
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathTimeValuesType1.RefreshPeriodR.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter:
       description: |-
         integer counter pattern
@@ -34194,10 +34194,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.LBit.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter:
       description: |-
         ipv4 counter pattern
@@ -34256,10 +34256,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1Ipv4Prefix.Ipv4Address.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter:
       description: |-
         integer counter pattern
@@ -34323,10 +34323,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathExplicitRouteType1ASNumber.LBit.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -34390,10 +34390,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter:
       description: |-
         integer counter pattern
@@ -34458,10 +34458,10 @@ components:
           - 2048
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathLabelRequestWithoutLabelRange.L3pid.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter:
       description: |-
         ipv4 counter pattern
@@ -34520,10 +34520,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Ipv4TunnelSenderAddress.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter:
       description: |-
         integer counter pattern
@@ -34587,10 +34587,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.Reserved.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter:
       description: |-
         integer counter pattern
@@ -34654,10 +34654,10 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTemplateLspTunnelIpv4.LspId.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter:
       description: |-
         integer counter pattern
@@ -34721,10 +34721,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Version.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter:
       description: |-
         integer counter pattern
@@ -34788,10 +34788,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved1.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter:
       description: |-
         integer counter pattern
@@ -34855,10 +34855,10 @@ components:
           - 7
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.OverallLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter:
       description: |-
         integer counter pattern
@@ -34922,10 +34922,10 @@ components:
           - 1
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ServiceHeader.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter:
       description: |-
         integer counter pattern
@@ -34989,10 +34989,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ZeroBit.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter:
       description: |-
         integer counter pattern
@@ -35056,10 +35056,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Reserved2.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter:
       description: |-
         integer counter pattern
@@ -35123,10 +35123,10 @@ components:
           - 6
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.LengthOfServiceData.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter:
       description: |-
         integer counter pattern
@@ -35190,10 +35190,10 @@ components:
           - 127
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.ParameterIdTokenBucketTspec.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter:
       description: |-
         integer counter pattern
@@ -35257,10 +35257,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Flag.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter:
       description: |-
         integer counter pattern
@@ -35324,10 +35324,10 @@ components:
           - 5
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.Parameter127Length.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter:
       description: |-
         integer counter pattern
@@ -35386,10 +35386,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MinimumPolicedUnit.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter:
       description: |-
         integer counter pattern
@@ -35448,10 +35448,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathSenderTspecIntServ.MaximumPacketSize.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter:
       description: |-
         ipv4 counter pattern
@@ -35510,10 +35510,10 @@ components:
           - 0.0.0.0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.Ipv4Address.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter:
       description: |-
         integer counter pattern
@@ -35577,10 +35577,10 @@ components:
           - 32
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathRecordRouteType1Ipv4Address.PrefixLength.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Pattern.Flow.RSVP.PathRecordRouteType1Label.Flags:
       description: |-
         0x01 = Global label. This flag indicates that the label will be understood if received on any interface.
@@ -35708,10 +35708,10 @@ components:
           - 0
         increment:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
-          x-field-uid: 4
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
-          x-field-uid: 5
+          x-field-uid: 6
     Version:
       description: |-
         Version details
