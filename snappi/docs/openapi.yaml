@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.6.1
+  version: 1.6.2
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -20476,21 +20476,21 @@ components:
           x-field-uid: 3
           default:
           - 0.0.0.0
-        auto:
-          $ref: '#/components/schemas/Flow.Ipv4.Auto'
-          x-field-uid: 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.Counter'
-          x-field-uid: 6
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.Counter'
-          x-field-uid: 7
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.MetricTag'
+          x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
           x-field-uid: 8
     Pattern.Flow.Ipv4.Dst.Counter:
       description: |-
@@ -20581,21 +20581,21 @@ components:
           x-field-uid: 3
           default:
           - 0.0.0.0
-        auto:
-          $ref: '#/components/schemas/Flow.Ipv4.Auto'
-          x-field-uid: 4
         increment:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.Counter'
-          x-field-uid: 6
+          x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.Counter'
-          x-field-uid: 7
+          x-field-uid: 6
         metric_tags:
           description: |-
             One or more metric tags can be used to enable tracking portion of or all bits in a corresponding header field for metrics per each applicable value. These would appear as tagged metrics in corresponding flow metrics.
           type: array
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.MetricTag'
+          x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
           x-field-uid: 8
     Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter:
       description: |-

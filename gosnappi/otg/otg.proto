@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.6.1
+/* Open Traffic Generator API 1.6.2
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -15027,18 +15027,18 @@ message PatternFlowIpv4Src {
   repeated string values = 3;
 
   // Description missing in models
-  FlowIpv4Auto auto = 4;
+  PatternFlowIpv4SrcCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4SrcCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowIpv4SrcCounter decrement = 7;
+  PatternFlowIpv4SrcCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4SrcMetricTag metric_tags = 8;
+  repeated PatternFlowIpv4SrcMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
 }
 
 // ipv4 counter pattern
@@ -15103,18 +15103,18 @@ message PatternFlowIpv4Dst {
   repeated string values = 3;
 
   // Description missing in models
-  FlowIpv4Auto auto = 4;
+  PatternFlowIpv4DstCounter increment = 5;
 
   // Description missing in models
-  PatternFlowIpv4DstCounter increment = 6;
-
-  // Description missing in models
-  PatternFlowIpv4DstCounter decrement = 7;
+  PatternFlowIpv4DstCounter decrement = 6;
 
   // One or more metric tags can be used to enable tracking portion of or all bits in
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
-  repeated PatternFlowIpv4DstMetricTag metric_tags = 8;
+  repeated PatternFlowIpv4DstMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
 }
 
 // integer counter pattern
