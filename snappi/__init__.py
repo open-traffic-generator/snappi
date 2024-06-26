@@ -40,6 +40,13 @@ from .snappi import DeviceIpv6Iter
 from .snappi import DeviceDhcpv4client
 from .snappi import Dhcpv4ClientParams
 from .snappi import DeviceDhcpv4clientIter
+from .snappi import DeviceDhcpv6client
+from .snappi import DeviceDhcpv6clientIaType
+from .snappi import DeviceDhcpv6clientIaTimeValue
+from .snappi import DeviceDhcpv6clientDuidType
+from .snappi import DeviceDhcpv6clientNoDuid
+from .snappi import DeviceDhcpv6clientDuidValue
+from .snappi import DeviceDhcpv6clientIter
 from .snappi import DeviceEthernetIter
 from .snappi import DeviceIpv4Loopback
 from .snappi import DeviceIpv4LoopbackIter
@@ -278,6 +285,15 @@ from .snappi import DhcpServerV4Pool
 from .snappi import DhcpServerV4PoolOption
 from .snappi import DhcpServerV4PoolIter
 from .snappi import DhcpServerV4Iter
+from .snappi import DhcpServerV6
+from .snappi import DhcpV6ServerDns
+from .snappi import DhcpV6ServerSecondaryDns
+from .snappi import DhcpV6ServerLease
+from .snappi import Dhcpv6ServerIaType
+from .snappi import Dhcpv6ServerPoolInfo
+from .snappi import Dhcpv6ServerIapdPoolInfo
+from .snappi import DhcpV6ServerLeaseIter
+from .snappi import DhcpServerV6Iter
 from .snappi import DeviceIter
 from .snappi import Flow
 from .snappi import FlowTxRx
@@ -423,7 +439,6 @@ from .snappi import PatternFlowIpv4Src
 from .snappi import PatternFlowIpv4SrcCounter
 from .snappi import PatternFlowIpv4SrcMetricTag
 from .snappi import PatternFlowIpv4SrcMetricTagIter
-from .snappi import FlowIpv4Auto
 from .snappi import PatternFlowIpv4Dst
 from .snappi import PatternFlowIpv4DstCounter
 from .snappi import PatternFlowIpv4DstMetricTag
@@ -468,6 +483,7 @@ from .snappi import PatternFlowIpv6Src
 from .snappi import PatternFlowIpv6SrcCounter
 from .snappi import PatternFlowIpv6SrcMetricTag
 from .snappi import PatternFlowIpv6SrcMetricTagIter
+from .snappi import FlowIpv6Auto
 from .snappi import PatternFlowIpv6Dst
 from .snappi import PatternFlowIpv6DstCounter
 from .snappi import PatternFlowIpv6DstMetricTag
@@ -1124,6 +1140,8 @@ from .snappi import LldpMetricsRequest
 from .snappi import RsvpMetricsRequest
 from .snappi import Dhcpv4ClientMetricsRequest
 from .snappi import Dhcpv4ServerMetricsRequest
+from .snappi import Dhcpv6ClientMetricsRequest
+from .snappi import Dhcpv6ServerMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1154,6 +1172,10 @@ from .snappi import Dhcpv4ClientMetric
 from .snappi import Dhcpv4ClientMetricIter
 from .snappi import Dhcpv4ServerMetric
 from .snappi import Dhcpv4ServerMetricIter
+from .snappi import Dhcpv6ClientMetric
+from .snappi import Dhcpv6ClientMetricIter
+from .snappi import Dhcpv6ServerMetric
+from .snappi import Dhcpv6ServerMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
@@ -1167,6 +1189,8 @@ from .snappi import LldpNeighborsStateRequest
 from .snappi import RsvpLspsStateRequest
 from .snappi import Dhcpv4InterfaceStateRequest
 from .snappi import Dhcpv4LeaseStateRequest
+from .snappi import Dhcpv6InterfaceStateRequest
+from .snappi import Dhcpv6LeaseStateRequest
 from .snappi import StatesResponse
 from .snappi import Neighborsv4State
 from .snappi import Neighborsv4StateIter
@@ -1250,6 +1274,12 @@ from .snappi import Dhcpv4LeasesState
 from .snappi import Dhcpv4LeaseState
 from .snappi import Dhcpv4LeaseStateIter
 from .snappi import Dhcpv4LeasesStateIter
+from .snappi import Dhcpv6InterfaceState
+from .snappi import Dhcpv6InterfaceStateIter
+from .snappi import Dhcpv6LeasesState
+from .snappi import Dhcpv6ServerLeaseState
+from .snappi import Dhcpv6ServerLeaseStateIter
+from .snappi import Dhcpv6LeasesStateIter
 from .snappi import CaptureRequest
 from .snappi import Version
 from .snappi import Api
