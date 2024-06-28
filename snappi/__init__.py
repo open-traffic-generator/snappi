@@ -57,6 +57,7 @@ from .snappi import LinkStateTEIter
 from .snappi import IsisInterfaceAuthentication
 from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
+from .snappi import IsisInterfaceExternalNeighbor
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
