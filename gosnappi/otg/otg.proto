@@ -14714,7 +14714,10 @@ message PatternFlowIpv4SrcRandom {
   // default = 255.255.255.255
   optional string max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -14731,9 +14734,9 @@ message PatternFlowIpv4Src {
       unspecified = 0;
       value = 2;
       values = 3;
-      auto = 1;
       increment = 4;
       decrement = 5;
+      auto = 1;
       random = 6;
     }
   }
@@ -14762,6 +14765,9 @@ message PatternFlowIpv4Src {
 
   // Description missing in models
   FlowIpv4Auto auto = 8;
+
+  // Description missing in models
+  PatternFlowIpv4SrcRandom random = 9;
 }
 
 // ipv4 counter pattern
@@ -14811,7 +14817,10 @@ message PatternFlowIpv4DstRandom {
   // default = 255.255.255.255
   optional string max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -14828,9 +14837,9 @@ message PatternFlowIpv4Dst {
       unspecified = 0;
       value = 2;
       values = 3;
-      auto = 1;
       increment = 4;
       decrement = 5;
+      auto = 1;
       random = 6;
     }
   }
@@ -14859,6 +14868,9 @@ message PatternFlowIpv4Dst {
 
   // Description missing in models
   FlowIpv4Auto auto = 8;
+
+  // Description missing in models
+  PatternFlowIpv4DstRandom random = 9;
 }
 
 // integer counter pattern
@@ -15841,7 +15853,10 @@ message PatternFlowIpv6FlowLabelRandom {
   // default = 1048575
   optional uint32 max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -17607,7 +17622,10 @@ message PatternFlowTcpSrcPortRandom {
   // default = 65535
   optional uint32 max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -17703,7 +17721,10 @@ message PatternFlowTcpDstPortRandom {
   // default = 65535
   optional uint32 max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -18767,7 +18788,10 @@ message PatternFlowUdpSrcPortRandom {
   // default = 65535
   optional uint32 max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 
@@ -18863,7 +18887,10 @@ message PatternFlowUdpDstPortRandom {
   // default = 65535
   optional uint32 max = 2;
 
-  // The seed value to initialize the random value generator to a deterministic state.
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
   // default = 1
   optional uint32 seed = 3;
 

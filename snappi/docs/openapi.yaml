@@ -20183,7 +20183,7 @@ components:
           format: ipv4
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -20207,12 +20207,12 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
-            auto:
-              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
+            auto:
+              x-field-uid: 1
             random:
               x-field-uid: 6
           default: value
@@ -20220,9 +20220,9 @@ components:
           enum:
           - value
           - values
-          - auto
           - increment
           - decrement
+          - auto
           - random
         value:
           type: string
@@ -20327,7 +20327,7 @@ components:
           format: ipv4
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -20351,12 +20351,12 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
-            auto:
-              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
+            auto:
+              x-field-uid: 1
             random:
               x-field-uid: 6
           default: value
@@ -20364,9 +20364,9 @@ components:
           enum:
           - value
           - values
-          - auto
           - increment
           - decrement
+          - auto
           - random
         value:
           type: string
@@ -21931,7 +21931,7 @@ components:
           maximum: 1048575
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -24496,7 +24496,7 @@ components:
           maximum: 65535
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -24641,7 +24641,7 @@ components:
           maximum: 65535
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -26164,7 +26164,7 @@ components:
           maximum: 65535
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
@@ -26309,7 +26309,7 @@ components:
           maximum: 65535
         seed:
           description: |-
-            The seed value to initialize the random value generator to a deterministic state.
+            The seed value is used to initialize the random number generator to a deterministic state. If the user provides a seed value of 0, the implementation will generate a sequence of non-deterministic random values. For any other seed value, the sequence of random numbers will be generated in a deterministic manner (specific to the implementation).
           type: integer
           default: 1
           format: uint32
