@@ -420,11 +420,10 @@ from .snappi import PatternFlowIpv4ProtocolMetricTag
 from .snappi import PatternFlowIpv4ProtocolMetricTagIter
 from .snappi import PatternFlowIpv4HeaderChecksum
 from .snappi import PatternFlowIpv4Src
-from .snappi import FlowIpv4Auto
 from .snappi import PatternFlowIpv4SrcCounter
 from .snappi import PatternFlowIpv4SrcMetricTag
 from .snappi import PatternFlowIpv4SrcMetricTagIter
-from .snappi import PatternFlowIpv4SrcRandom
+from .snappi import FlowIpv4Auto
 from .snappi import PatternFlowIpv4Dst
 from .snappi import PatternFlowIpv4DstCounter
 from .snappi import PatternFlowIpv4DstMetricTag
