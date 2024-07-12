@@ -1142,7 +1142,8 @@ message IsisInterface {
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet. The underlying Ethernet Interface can an emulated
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
-  // to by an internal link or an external link.
+  // by  a primary (internal to a simulated topology)  or a secondary link (connected
+  // to a device behind a different simulated topology).
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1207,11 +1208,6 @@ message IsisInterface {
   // objects.
   // required = true
   optional string name = 13;
-
-  // If 'eth_name' is refer to a simulated interface and thats connected to an external
-  // interface.
-  // Then some properties of the connected neighbor should be defined here.
-  IsisInterfaceExternalNeighbor simulated_external_neighbor = 14;
 }
 
 // Configuration for the properties of Level 1 Hello.
@@ -1228,22 +1224,6 @@ message IsisInterfaceLevel {
   // The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
   // default = 30
   optional uint32 dead_interval = 3;
-}
-
-// For a simulated interface thats connected to an external interface. The system id,
-// and IP address of the other end are required to populated here.
-message IsisInterfaceExternalNeighbor {
-
-  // The System ID for this emulated ISIS router, e.g. 660100010001.
-  optional string system_id = 1;
-
-  // Assign an IPv4 address if the link is off IPv4 type.
-  // The IPv4 address
-  optional string ipv4_address = 2;
-
-  // Assign an IPv4 address if the link is off IPv4 type.
-  // The IPv6 address.
-  optional string ipv6_address = 3;
 }
 
 // Configuration of properties per interface per topology when multiple topologies are

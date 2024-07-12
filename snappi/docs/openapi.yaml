@@ -1804,7 +1804,7 @@ components:
       properties:
         eth_name:
           description: |
-            The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected to by an internal link or an external link.
+            The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -1906,12 +1906,6 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
-        simulated_external_neighbor:
-          description: |-
-            If 'eth_name' is refer to a simulated interface and thats connected to an external interface.
-            Then some properties of the connected neighbor should be defined here.
-          $ref: '#/components/schemas/IsisInterface.ExternalNeighbor'
-          x-field-uid: 14
     IsisInterface.Level:
       description: |-
         Configuration for the properties of Level 1 Hello.
@@ -1938,31 +1932,6 @@ components:
           format: uint32
           default: 30
           x-field-uid: 3
-    IsisInterface.ExternalNeighbor:
-      description: |-
-        For a simulated interface thats connected to an external interface. The system id, and IP address of the other end are required to populated here.
-      type: object
-      properties:
-        system_id:
-          description: |-
-            The System ID for this emulated ISIS router, e.g. "660100010001".
-          type: string
-          format: hex
-          x-field-uid: 1
-        ipv4_address:
-          description: |-
-            Assign an IPv4 address if the link is off IPv4 type.
-            The IPv4 address
-          x-field-uid: 2
-          type: string
-          format: ipv4
-        ipv6_address:
-          description: |-
-            Assign an IPv4 address if the link is off IPv4 type.
-            The IPv6 address.
-          x-field-uid: 3
-          type: string
-          format: ipv6
     Isis.MT:
       description: |-
         Configuration of properties per interface per topology when multiple topologies are configured in an ISIS router.
