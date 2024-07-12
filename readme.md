@@ -97,4 +97,4 @@ def test_quickstart():
         time.sleep(0.1)
 ```
 
-Forcing republish again of snappi sdk from dev branch.
+Forcing republish of snappi sdk from dev branch.
