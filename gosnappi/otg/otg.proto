@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.5.1
+/* Open Traffic Generator API 1.6.2
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -6749,6 +6749,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // 
   // x-constraint:
@@ -6761,6 +6762,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -6776,6 +6778,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // 
   // x-constraint:
@@ -6788,6 +6791,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   repeated string rx_names = 3;
 }
@@ -7159,6 +7163,23 @@ message FlowIpv4Tos {
 
   // Description missing in models
   PatternFlowIpv4TosUnused unused = 6;
+}
+
+// The OTG implementation can provide a system generated, value for this property.
+message FlowIpv4Auto {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dhcp = 1;
+    }
+  }
+  // The method to be used to provide the system generated value.
+  // 
+  // The dhcp option populates the field based on the dynamic IPv4 address that has been
+  // assigned to the DHCPv4 client by a DHCPv4 server.
+  // required = true
+  optional Choice.Enum choice = 1;
 }
 
 // IPv6 packet header
@@ -14988,6 +15009,7 @@ message PatternFlowIpv4Src {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto = 1;
       increment = 4;
       decrement = 5;
     }
@@ -15014,6 +15036,9 @@ message PatternFlowIpv4Src {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv4SrcMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
 }
 
 // ipv4 counter pattern
@@ -15060,6 +15085,7 @@ message PatternFlowIpv4Dst {
       unspecified = 0;
       value = 2;
       values = 3;
+      auto = 1;
       increment = 4;
       decrement = 5;
     }
@@ -15086,6 +15112,9 @@ message PatternFlowIpv4Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv4DstMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
 }
 
 // integer counter pattern

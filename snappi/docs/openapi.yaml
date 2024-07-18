@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.5.1
+  version: 1.6.2
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -9038,6 +9038,7 @@ components:
           - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Device.Dhcpv4client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -9060,6 +9061,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
 
 
             x-constraint:
@@ -9072,6 +9074,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
         rx_names:
           type: array
           items:
@@ -9088,6 +9091,7 @@ components:
           - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Device.Dhcpv4client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -9110,6 +9114,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
 
 
             x-constraint:
@@ -9122,6 +9127,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
     Flow.Header:
       description: |-
         Configuration for all traffic packet headers
@@ -9578,6 +9584,25 @@ components:
         unused:
           x-field-uid: 6
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Tos.Unused'
+    Flow.Ipv4.Auto:
+      description: |-
+        The OTG implementation can provide a system generated, value for this property.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: |-
+            The method to be used to provide the system generated value.
+
+            The dhcp option populates the field based on the dynamic IPv4 address that has been assigned to the DHCPv4 client by a DHCPv4 server.
+          type: string
+          x-enum:
+            dhcp:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - dhcp
     Flow.Ipv6:
       description: |-
         IPv6 packet header
@@ -20424,6 +20449,8 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
+            auto:
+              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
@@ -20433,6 +20460,7 @@ components:
           enum:
           - value
           - values
+          - auto
           - increment
           - decrement
         value:
@@ -20461,6 +20489,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Src.MetricTag'
           x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
+          x-field-uid: 8
     Pattern.Flow.Ipv4.Dst.Counter:
       description: |-
         ipv4 counter pattern
@@ -20523,6 +20554,8 @@ components:
               x-field-uid: 2
             values:
               x-field-uid: 3
+            auto:
+              x-field-uid: 1
             increment:
               x-field-uid: 4
             decrement:
@@ -20532,6 +20565,7 @@ components:
           enum:
           - value
           - values
+          - auto
           - increment
           - decrement
         value:
@@ -20560,6 +20594,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst.MetricTag'
           x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv4.Auto'
+          x-field-uid: 8
     Pattern.Flow.Ipv4Options.Custom.Type.CopiedFlag.Counter:
       description: |-
         integer counter pattern
