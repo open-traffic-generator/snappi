@@ -19,6 +19,7 @@ type patternFlowIpv4Dst struct {
 	incrementHolder  PatternFlowIpv4DstCounter
 	decrementHolder  PatternFlowIpv4DstCounter
 	metricTagsHolder PatternFlowIpv4DstPatternFlowIpv4DstMetricTagIter
+	autoHolder       FlowIpv4Auto
 }
 
 func NewPatternFlowIpv4Dst() PatternFlowIpv4Dst {
@@ -249,6 +250,7 @@ func (obj *patternFlowIpv4Dst) setNil() {
 	obj.incrementHolder = nil
 	obj.decrementHolder = nil
 	obj.metricTagsHolder = nil
+	obj.autoHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -310,6 +312,11 @@ type PatternFlowIpv4Dst interface {
 	HasDecrement() bool
 	// MetricTags returns PatternFlowIpv4DstPatternFlowIpv4DstMetricTagIterIter, set in PatternFlowIpv4Dst
 	MetricTags() PatternFlowIpv4DstPatternFlowIpv4DstMetricTagIter
+	// Auto returns FlowIpv4Auto, set in PatternFlowIpv4Dst.
+	// FlowIpv4Auto is the OTG implementation can provide a system generated, value for this property.
+	Auto() FlowIpv4Auto
+	// HasAuto checks if Auto has been set in PatternFlowIpv4Dst
+	HasAuto() bool
 	setNil()
 }
 
@@ -319,11 +326,13 @@ type PatternFlowIpv4DstChoiceEnum string
 var PatternFlowIpv4DstChoice = struct {
 	VALUE     PatternFlowIpv4DstChoiceEnum
 	VALUES    PatternFlowIpv4DstChoiceEnum
+	AUTO      PatternFlowIpv4DstChoiceEnum
 	INCREMENT PatternFlowIpv4DstChoiceEnum
 	DECREMENT PatternFlowIpv4DstChoiceEnum
 }{
 	VALUE:     PatternFlowIpv4DstChoiceEnum("value"),
 	VALUES:    PatternFlowIpv4DstChoiceEnum("values"),
+	AUTO:      PatternFlowIpv4DstChoiceEnum("auto"),
 	INCREMENT: PatternFlowIpv4DstChoiceEnum("increment"),
 	DECREMENT: PatternFlowIpv4DstChoiceEnum("decrement"),
 }
@@ -347,6 +356,8 @@ func (obj *patternFlowIpv4Dst) setChoice(value PatternFlowIpv4DstChoiceEnum) Pat
 	}
 	enumValue := otg.PatternFlowIpv4Dst_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Auto = nil
+	obj.autoHolder = nil
 	obj.obj.Decrement = nil
 	obj.decrementHolder = nil
 	obj.obj.Increment = nil
@@ -370,6 +381,10 @@ func (obj *patternFlowIpv4Dst) setChoice(value PatternFlowIpv4DstChoiceEnum) Pat
 
 	if value == PatternFlowIpv4DstChoice.DECREMENT {
 		obj.obj.Decrement = NewPatternFlowIpv4DstCounter().msg()
+	}
+
+	if value == PatternFlowIpv4DstChoice.AUTO {
+		obj.obj.Auto = NewFlowIpv4Auto().msg()
 	}
 
 	return obj
@@ -565,6 +580,24 @@ func (obj *patternFlowIpv4DstPatternFlowIpv4DstMetricTagIter) appendHolderSlice(
 	return obj
 }
 
+// description is TBD
+// Auto returns a FlowIpv4Auto
+func (obj *patternFlowIpv4Dst) Auto() FlowIpv4Auto {
+	if obj.obj.Auto == nil {
+		obj.setChoice(PatternFlowIpv4DstChoice.AUTO)
+	}
+	if obj.autoHolder == nil {
+		obj.autoHolder = &flowIpv4Auto{obj: obj.obj.Auto}
+	}
+	return obj.autoHolder
+}
+
+// description is TBD
+// Auto returns a FlowIpv4Auto
+func (obj *patternFlowIpv4Dst) HasAuto() bool {
+	return obj.obj.Auto != nil
+}
+
 func (obj *patternFlowIpv4Dst) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -612,6 +645,11 @@ func (obj *patternFlowIpv4Dst) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.Auto != nil {
+
+		obj.Auto().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *patternFlowIpv4Dst) setDefault() {
@@ -626,6 +664,11 @@ func (obj *patternFlowIpv4Dst) setDefault() {
 	if len(obj.obj.Values) > 0 {
 		choices_set += 1
 		choice = PatternFlowIpv4DstChoice.VALUES
+	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4DstChoice.AUTO
 	}
 
 	if obj.obj.Increment != nil {

@@ -19,6 +19,7 @@ type patternFlowIpv4Src struct {
 	incrementHolder  PatternFlowIpv4SrcCounter
 	decrementHolder  PatternFlowIpv4SrcCounter
 	metricTagsHolder PatternFlowIpv4SrcPatternFlowIpv4SrcMetricTagIter
+	autoHolder       FlowIpv4Auto
 }
 
 func NewPatternFlowIpv4Src() PatternFlowIpv4Src {
@@ -249,6 +250,7 @@ func (obj *patternFlowIpv4Src) setNil() {
 	obj.incrementHolder = nil
 	obj.decrementHolder = nil
 	obj.metricTagsHolder = nil
+	obj.autoHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -310,6 +312,11 @@ type PatternFlowIpv4Src interface {
 	HasDecrement() bool
 	// MetricTags returns PatternFlowIpv4SrcPatternFlowIpv4SrcMetricTagIterIter, set in PatternFlowIpv4Src
 	MetricTags() PatternFlowIpv4SrcPatternFlowIpv4SrcMetricTagIter
+	// Auto returns FlowIpv4Auto, set in PatternFlowIpv4Src.
+	// FlowIpv4Auto is the OTG implementation can provide a system generated, value for this property.
+	Auto() FlowIpv4Auto
+	// HasAuto checks if Auto has been set in PatternFlowIpv4Src
+	HasAuto() bool
 	setNil()
 }
 
@@ -319,11 +326,13 @@ type PatternFlowIpv4SrcChoiceEnum string
 var PatternFlowIpv4SrcChoice = struct {
 	VALUE     PatternFlowIpv4SrcChoiceEnum
 	VALUES    PatternFlowIpv4SrcChoiceEnum
+	AUTO      PatternFlowIpv4SrcChoiceEnum
 	INCREMENT PatternFlowIpv4SrcChoiceEnum
 	DECREMENT PatternFlowIpv4SrcChoiceEnum
 }{
 	VALUE:     PatternFlowIpv4SrcChoiceEnum("value"),
 	VALUES:    PatternFlowIpv4SrcChoiceEnum("values"),
+	AUTO:      PatternFlowIpv4SrcChoiceEnum("auto"),
 	INCREMENT: PatternFlowIpv4SrcChoiceEnum("increment"),
 	DECREMENT: PatternFlowIpv4SrcChoiceEnum("decrement"),
 }
@@ -347,6 +356,8 @@ func (obj *patternFlowIpv4Src) setChoice(value PatternFlowIpv4SrcChoiceEnum) Pat
 	}
 	enumValue := otg.PatternFlowIpv4Src_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Auto = nil
+	obj.autoHolder = nil
 	obj.obj.Decrement = nil
 	obj.decrementHolder = nil
 	obj.obj.Increment = nil
@@ -370,6 +381,10 @@ func (obj *patternFlowIpv4Src) setChoice(value PatternFlowIpv4SrcChoiceEnum) Pat
 
 	if value == PatternFlowIpv4SrcChoice.DECREMENT {
 		obj.obj.Decrement = NewPatternFlowIpv4SrcCounter().msg()
+	}
+
+	if value == PatternFlowIpv4SrcChoice.AUTO {
+		obj.obj.Auto = NewFlowIpv4Auto().msg()
 	}
 
 	return obj
@@ -565,6 +580,24 @@ func (obj *patternFlowIpv4SrcPatternFlowIpv4SrcMetricTagIter) appendHolderSlice(
 	return obj
 }
 
+// description is TBD
+// Auto returns a FlowIpv4Auto
+func (obj *patternFlowIpv4Src) Auto() FlowIpv4Auto {
+	if obj.obj.Auto == nil {
+		obj.setChoice(PatternFlowIpv4SrcChoice.AUTO)
+	}
+	if obj.autoHolder == nil {
+		obj.autoHolder = &flowIpv4Auto{obj: obj.obj.Auto}
+	}
+	return obj.autoHolder
+}
+
+// description is TBD
+// Auto returns a FlowIpv4Auto
+func (obj *patternFlowIpv4Src) HasAuto() bool {
+	return obj.obj.Auto != nil
+}
+
 func (obj *patternFlowIpv4Src) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -612,6 +645,11 @@ func (obj *patternFlowIpv4Src) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.Auto != nil {
+
+		obj.Auto().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *patternFlowIpv4Src) setDefault() {
@@ -626,6 +664,11 @@ func (obj *patternFlowIpv4Src) setDefault() {
 	if len(obj.obj.Values) > 0 {
 		choices_set += 1
 		choice = PatternFlowIpv4SrcChoice.VALUES
+	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowIpv4SrcChoice.AUTO
 	}
 
 	if obj.obj.Increment != nil {
