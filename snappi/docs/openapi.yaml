@@ -1025,6 +1025,7 @@ components:
       type: object
       required:
       - name
+      - client_identifier
       properties:
         name:
           x-field-uid: 1
@@ -1039,12 +1040,70 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
-        ia_type:
-          $ref: '#/components/schemas/Device.Dhcpv6client.IaType'
+        client_identifier:
+          description: "The client identifier option is used to carry a DUID identifying\
+            \ a client between a client and a server.            "
+          $ref: '#/components/schemas/Dhcpv6Options.ClientIdentifier'
           x-field-uid: 3
-        duid_type:
-          $ref: '#/components/schemas/Device.Dhcpv6client.DuidType'
+        server_identifier:
+          description: "A client uses multicast to reach all servers or an individual\
+            \ server. An individual server is indicated by \nspecifying that server's\
+            \ DUID in a Server Identifier option in the client's message (all servers\
+            \ will receive \nthis message but only the indicated server will respond).\
+            \ All servers are indicated by not supplying this option.            "
+          $ref: '#/components/schemas/Dhcpv6Options.Identifier'
           x-field-uid: 4
+        ia_type:
+          description: "Each IA has an associated IAID. Differnet IA options represent\
+            \ different types of IPv6 addresses and parameters \naccepted by DHCPv6\
+            \ clients each used in different context by an IPv6 node."
+          $ref: '#/components/schemas/Device.Dhcpv6client.IaType'
+          x-field-uid: 5
+        duid_type:
+          description: |-
+            Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify each other.
+          $ref: '#/components/schemas/Device.Dhcpv6client.DuidType'
+          x-field-uid: 6
+        iana:
+          description: "The Identity Association for non temporary Addresses option\
+            \ (IA_NA option) is used to carry an IA_NA, it's parameters \nand the\
+            \ non-temporary addresses associated with the IA_NA."
+          $ref: '#/components/schemas/Dhcpv6Options.Iana'
+          x-field-uid: 7
+        iata:
+          description: "The Identity Association for the Temporary Addresses (IA_TA)\
+            \ option is used to carry an IA_TA, it's parameters and \nthe addresses\
+            \ associated with the IA_TA."
+          $ref: '#/components/schemas/Dhcpv6Options.Iata'
+          x-field-uid: 8
+        options:
+          description: |-
+            List of options in a message between a client and a server.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Options.OptionsRequest'
+          x-field-uid: 9
+        vendor_class:
+          description: "The vendor class option is used by a client to identify the\
+            \ vendor that manufactured the hardware on which \nthe client is running.\
+            \ The information contained in the data area of this option is contained\
+            \ in one or more \nopaque fields that identify details of the hardware\
+            \ configuration."
+          $ref: '#/components/schemas/Dhcpv6Options.VendorClass'
+          x-field-uid: 10
+        vendor_info:
+          description: |-
+            This option is used by clients to exchange vendor-specific information with servers.
+          $ref: '#/components/schemas/Dhcpv6Options.VendorInfo'
+          x-field-uid: 11
+        fqdn:
+          description: "DHCPv6 server needs to know the FQDN of the client for the\
+            \ addresses for the client's IA_NA bindings in order to \nupdate the IPv6-address-to-FQDN\
+            \ mapping. This option allows the client to convey its FQDN to the server.\
+            \ The Client \nFQDN option also contains Flags that DHCPv6 clients and\
+            \ servers use to negotiate who does which update."
+          $ref: '#/components/schemas/Dhcpv6Options.Fqdn'
+          x-field-uid: 12
     Device.Dhcpv6client.IaType:
       type: object
       properties:
@@ -1103,7 +1162,7 @@ components:
       properties:
         choice:
           description: |-
-            Each DHCP client and server has a DUID. DHCP clients use DUIDs to identify a server in messages where a server  .needs to be identified.
+            Each DHCP client and server has a DUID. DHCP clients use DUIDs to identify a server in messages where a server needs  to be identified.
           type: string
           default: llt
           x-field-uid: 1
@@ -1121,7 +1180,7 @@ components:
         llt:
           $ref: '#/components/schemas/Device.Dhcpv6client.NoDuid'
           x-field-uid: 2
-        em:
+        en:
           $ref: '#/components/schemas/Device.Dhcpv6client.DuidValue'
           x-field-uid: 3
         ll:
@@ -1154,6 +1213,432 @@ components:
       description: |-
         The container for DUID-LL and DUID-LLT.
       type: object
+    Dhcpv6Options.ClientIdentifier:
+      type: object
+      properties:
+        choice:
+          description: |-
+            The client identifier option is used to carry a DUID. The option code is 1. The client identifier identifies a client. In auto mode, The OTG implementation will provide a system generated value for this property.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            identifier:
+              x-field-uid: 2
+          enum:
+          - auto
+          - identifier
+        identifier:
+          $ref: '#/components/schemas/Dhcpv6Options.Identifier'
+          x-field-uid: 2
+    Dhcpv6Options.ServerIdentifier:
+      type: object
+      properties:
+        choice:
+          description: |-
+            The server identifier option is used to carry a DUID. The option code is 2. The server identifier identifies  a server. In auto mode, The OTG implementation will provide a system generated value for this property.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            identifier:
+              x-field-uid: 2
+          enum:
+          - auto
+          - identifier
+        identifier:
+          $ref: '#/components/schemas/Dhcpv6Options.Identifier'
+          x-field-uid: 2
+    Dhcpv6Options.Identifier:
+      type: object
+      properties:
+        choice:
+          description: |-
+            The Identifier option is used to carry a DUID. The Identifier option can be either client or server. Client identifier identifies a client while the server identifier identifies the server.
+          type: string
+          default: duid_ll
+          x-field-uid: 1
+          x-enum:
+            duid_llt:
+              x-field-uid: 1
+            duid_en:
+              x-field-uid: 2
+            duid_ll:
+              x-field-uid: 3
+            duid_uuid:
+              x-field-uid: 4
+          enum:
+          - duid_llt
+          - duid_en
+          - duid_ll
+          - duid_uuid
+        duid_llt:
+          $ref: '#/components/schemas/Dhcpv6Options.DuidLlt'
+          x-field-uid: 2
+        duid_en:
+          $ref: '#/components/schemas/Dhcpv6Options.DuidEn'
+          x-field-uid: 3
+        duid_ll:
+          $ref: '#/components/schemas/Dhcpv6Options.DuidLl'
+          x-field-uid: 4
+        duid_uuid:
+          $ref: '#/components/schemas/Dhcpv6Options.DuidUuid'
+          x-field-uid: 5
+    Dhcpv6Options.DuidLlt:
+      description: |-
+        DUID based on Link Layer address plus time. Hardware Type will be auto assigned to ethernet type.
+      type: object
+      required:
+      - time
+      - link_layer_address
+      properties:
+        time:
+          description: "The time value is the time that the DUID is generated represented\
+            \ in seconds since midnight (UTC), January 1, \n2000, modulo 2^32.   \
+            \         "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        link_layer_address:
+          description: "The link-layer address is stored in canonical form, as described\
+            \ in RFC 2464.           "
+          $ref: '#/components/schemas/Dhcpv6Options.LinkLayerAddress'
+          x-field-uid: 2
+    Dhcpv6Options.DuidEn:
+      description: |-
+        DUID assigned by vendor based on enterprise number.
+      type: object
+      required:
+      - enterprise_number
+      - identifier
+      properties:
+        enterprise_number:
+          description: "Vendor's registered private enterprise number as maintained\
+            \ by IANA.            "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        identifier:
+          description: "The unique identifier assigned by the vendor.           "
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
+          x-field-uid: 2
+    Dhcpv6Options.DuidLl:
+      description: |-
+        DUID based on Link Layer address. Hardware Type will be auto assigned to ethernet type.
+      type: object
+      required:
+      - link_layer_address
+      properties:
+        link_layer_address:
+          description: "The link-layer address is stored in canonical form, as described\
+            \ in RFC 2464.           "
+          $ref: '#/components/schemas/Dhcpv6Options.LinkLayerAddress'
+          x-field-uid: 1
+    Dhcpv6Options.DuidUuid:
+      description: |-
+        DUID embedded a Universally Unique IDentifier (UUID).
+      type: object
+      required:
+      - uuid
+      properties:
+        uuid:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Dhcpv6Options.DuidUuid.Uuid'
+    Dhcpv6Options.LinkLayerAddress:
+      description: "The link-layer address configured in DUID llt of DUID ll. If configured\
+        \ on client for server identifier then user must specify the choice as value. "
+      type: object
+      properties:
+        choice:
+          description: |-
+            In auto mode the system generated value is set for this property, while if the choice is selected as value,  a user configured value will be used for this property.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            The OTG implementation must provide a system generated value for this property.
+          type: string
+          format: mac
+          x-field-uid: 2
+        value:
+          description: |-
+            User must specify a value if mode is not auto.
+          type: string
+          format: mac
+          x-field-uid: 3
+    Dhcpv6Options.Iana:
+      description: |-
+        The Identity Association for non temporary Addresses option (IA_NA option) is used to carry an IA_NA, the  parameters associated with the IA_NA, and the non-temporary addresses associated with the IA_NA. The option code is 3.  In a message sent by a client to a server, values in the t1 and t2 fields indicate the client's preference for those  parameters. The client sets t1 and t2 to 0 if it has no preference for those values.
+      type: object
+      required:
+      - iaid
+      properties:
+        iaid:
+          description: "The unique identifier for this IA_NA, the IAID must be unique\
+            \ among the identifiers for all of this client's IA_NAs. \nThe number\
+            \ space for IA_NA IAIDs is separate from the number space for IA_TA IAIDs.\
+            \          "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        t1:
+          description: "The time at which the client contacts the server from which\
+            \ the addresses in the IA_NA were obtained to extend the \nlifetimes of\
+            \ the addresses assigned to the IA_NA. T1 is a time duration relative\
+            \ to the current time of day expressed \nin units of seconds.        \
+            \  "
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        t2:
+          description: "The time at which the client contacts any available server\
+            \ to extend the lifetimes of the addresses assigned to the \nIA_NA. T2\
+            \ is a time duration relative to the current time of day expressed in\
+            \ units of seconds."
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
+    Dhcpv6Options.Iata:
+      description: |-
+        The Identity Association for the Temporary Addresses (IA_TA) option is used to carry an IA_TA, the parameters associated  with the IA_TA and the addresses associated with the IA_TA. All of the addresses in this option are used by the client as  temporary addresses. The option code is 4.
+      type: object
+      required:
+      - iaid
+      properties:
+        iaid:
+          description: "The unique identifier for this IA_TA, the IAID must be unique\
+            \ among the identifiers for all of this client's IA_TAs. \nThe number\
+            \ space for IA_TA IAIDs is separate from the number space for IA_NA IAIDs.\
+            \          "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+    Dhcpv6Options.IaAddress:
+      description: |-
+        The IA Address option is used to specify IPv6 addresses associated with an IA_NA or an IA_TA. The IA Address option must be  encapsulated in the Options field of an IA_NA or IA_TA option. The option code is 5.
+      type: object
+      properties:
+        ip:
+          description: |-
+            The IPv6 address associated with an IA_NA or an IA_TA.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        preferred_lifetime:
+          description: |-
+            The preferred lifetime for the IPv6 address in expressed in units of seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        valid_lifetime:
+          description: |-
+            The valid lifetime for the IPv6 address in expressed in units of seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+    Dhcpv6Options.OptionsRequest:
+      type: object
+      properties:
+        choice:
+          description: "The Option Request option is used to identify a list of options\
+            \ in a message between a client and a server. The  option code is 6. -\
+            \ Vendor_specific information option, requested by clients for vendor-specific\
+            \ informations from servers. - DNS Recursive Name Server Option, requested\
+            \ by clients to get the list ofIPv6 addresses of DNS recursive name \n\
+            \  servers to which DNS queries may be sent by the client resolver in\
+            \ order of preference.\n- Client FQDN option - indicates whether the client\
+            \ or the DHCP server should update DNS with the AAAA record \n  corresponding\
+            \ to the assigned IPv6 address and the FQDN provided in this option. The\
+            \ DHCP server always updates \n  the PTR record.\n- bootfile_url, if client\
+            \ is configured for network booting then the client must use this option\
+            \ to obtain the boot \n  file url from the server.\n- sztp. Securely provision\
+            \ a networking device when it is booting in a factory-default state."
+          type: string
+          default: vendor_information
+          x-field-uid: 1
+          x-enum:
+            vendor_information:
+              x-field-uid: 1
+            name_servers:
+              x-field-uid: 2
+            fqdn:
+              x-field-uid: 3
+            bootfile_url:
+              x-field-uid: 4
+            sztp:
+              x-field-uid: 5
+            custom:
+              x-field-uid: 6
+          enum:
+          - vendor_information
+          - name_servers
+          - fqdn
+          - bootfile_url
+          - sztp
+          - custom
+        custom:
+          $ref: '#/components/schemas/Dhcpv6Options.Custom'
+          x-field-uid: 2
+    Dhcpv6Options.Custom:
+      description: |-
+        The Custom option is used to provide a not well known option in the message between a client and a server.
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: |-
+            The type of the Custom option TLV.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        value:
+          description: |-
+            The value of the Custom option TLV.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+    Dhcpv6Options.VendorClass:
+      description: |-
+        This option is used by a client to identify the vendor that manufactured the hardware on which the client is running. The option code is 16.
+      type: object
+      required:
+      - enterprise_number
+      - class_data
+      properties:
+        enterprise_number:
+          description: |-
+            The vendor's registered Enterprise Number as registered with IANA.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        class_data:
+          description: |-
+            The opaque data representing the hardware configuration of the host on which the client is running. Examples of  class data instances might include the version of the operating system the client is running or the amount of memory  installed on the client.
+          type: array
+          items:
+            type: string
+          x-field-uid: 2
+    Dhcpv6Options.VendorInfo:
+      description: |-
+        This option is used by clients and servers to exchange vendor-specific information. The option code is 17.
+      type: object
+      required:
+      - enterprise_number
+      - option_data
+      properties:
+        enterprise_number:
+          description: |-
+            The vendor's registered Enterprise Number as registered with IANA.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        option_data:
+          description: |-
+            An opaque object of octets,interpreted by vendor-specific code on the clients and servers.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Options.VendorSpecificOptions'
+          x-field-uid: 2
+    Dhcpv6Options.VendorSpecificOptions:
+      description: |-
+        The encapsulated vendor-specific options field is encoded as a sequence of code/length/value fields of  identical format to the DHCP options field. The option codes are defined by the vendor identified in the  enterprise-number field and are not managed by IANA.
+      type: object
+      required:
+      - code
+      - data
+      properties:
+        code:
+          description: |-
+            The code for the encapsulated option.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        data:
+          description: |-
+            The data for the encapsulated option.
+          type: string
+          x-field-uid: 2
+    Dhcpv6Options.Fqdn:
+      description: |-
+        DHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client  FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which updates. The option code is 39.
+      type: object
+      required:
+      - domain_name
+      properties:
+        flag_s:
+          description: |-
+            The "S" bit indicates whether the server should or should not perform the AAAA RR (FQDN-to-address) DNS updates.  A client sets the bit to 0 to indicate that the server should not perform the updates and 1 to indicate that the  server should perform the updates. The state of the bit in the reply from the server indicates the action to be  taken by the server. If it is 1, the server has taken responsibility for AAAA RR updates for the FQDN.
+          type: boolean
+          default: true
+          x-field-uid: 1
+        flag_o:
+          description: |-
+            The "O" bit indicates whether the server has overridden the client's preference for the "S" bit. A client must set this  bit to 0. A server must set this bit to 1 if the "S" bit in its reply to the client does not match the "S" bit received  from the client.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        flag_n:
+          description: |-
+            The "N" bit indicates whether the server should not perform any DNS updates. A client sets this bit to 0 to request that  the server should perform updates (the PTR RR and possibly the AAAA RR based on the "S" bit) or to 1 to request that the  server should not perform any DNS updates. A server sets the "N" bit to indicate whether the server shall (0) or shall not (1)  perform DNS updates. If the "N" bit is 1, the "S" bit MUST be 0.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        domain_name:
+          description: |-
+            The Domain Name part of the option carries all or part of the FQDN of a DHCPv6 client. A client MAY also leave the  Domain Name field empty if it desires the server to provide a name. A fully qualified domain name (FQDN) is the complete  address of an internet host or computer. It provides its exact location within the domain name system (DNS) by specifying  the hostname, domain name and top-level domain (TLD). An FQDN isn't the same as a URL but rather is a part of it that fully  identifies the server to which the request is addressed. An FQDN doesn't carry the TCP/IP protocol information, such as Hypertext  Transfer Protocol (HTTP) or Hypertext Transfer Protocol Secure (HTTPS), which is always used at the beginning of a URL. Therefore,  adding the prefix http:// or https:// to the FQDN turns it into a full URL. One example can be microsoft.com.
+          type: string
+          x-field-uid: 4
+    Dhcpv6Options.BootfileUrl:
+      description: |-
+        The server sends this option to inform the client about a URL to a boot file. This information is required for booting  over the network includes the details about the server on which the boot files can be found, the protocol to be used for  the download (for example,HTTP or TFTP, and the path and name of the boot file on the server. The option code is 59. The URL will contain the network communication protocol, a subdomain, a domain name, and its extension. If the host in the URL  is expressed using an IPv6 address rather than a domain name, the address in the URL then must be enclosed in "[" and "]"  characters, conforming to [RFC3986]. Eg of a boot file url can be "tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi".
+      type: object
+      required:
+      - url
+      properties:
+        url:
+          description: |-
+            The URL for the boot file. It must comply with STD 66 format.
+          type: string
+          x-field-uid: 1
+        bootfile_params:
+          description: |-
+            They are used to specify parameters for the boot file (similar to the command line arguments in most modern operating  systems). For example, these parameters could be used to specify the root file system of the OS kernel, or the location  from which a second-stage boot-loader program can download its configuration file.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Options.BootFileParams'
+          x-field-uid: 2
+    Dhcpv6Options.BootFileParams:
+      description: |-
+        The option code is 60. They are used to specify parameters for the boot file (similar to the command line arguments in most  modern operating systems).  For example, these parameters could be used to specify the root file system of the OS kernel, or  the location from which a second-stage boot-loader program can download its configuration file.
+      type: object
+      required:
+      - parameter
+      properties:
+        parameter:
+          description: |-
+            UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
+          type: string
+          x-field-uid: 1
     Layer1:
       description: |-
         A container for layer1 settings.
@@ -8889,6 +9374,7 @@ components:
       - name
       - ipv6_name
       - leases
+      - server_identifier
       properties:
         name:
           x-field-uid: 1
@@ -8919,17 +9405,38 @@ components:
           type: boolean
           default: false
           x-field-uid: 4
+        server_identifier:
+          description: "The server identifier option is used to carry a DUID identifying\
+            \ a server between a client and a server.            "
+          $ref: '#/components/schemas/Dhcpv6Options.ServerIdentifier'
+          x-field-uid: 5
         dns:
           description: "Additional DHCP server primary dns and other configuration\
             \ options.            "
           $ref: '#/components/schemas/DhcpV6Server.Dns'
-          x-field-uid: 5
+          x-field-uid: 6
         leases:
           description: "Array of DHCP pools configured on a server.            "
           type: array
           items:
             $ref: '#/components/schemas/DhcpV6Server.Lease'
-          x-field-uid: 6
+          x-field-uid: 7
+        ia_address:
+          description: "The IA Address option is used to specify IPv6 addresses associated\
+            \ with an IA_NA or an IA_TA.            "
+          $ref: '#/components/schemas/Dhcpv6Options.IaAddress'
+          x-field-uid: 8
+        vendor_info:
+          description: |-
+            This option is used by servers to exchange vendor-specific information with clients.
+          $ref: '#/components/schemas/Dhcpv6Options.VendorInfo'
+          x-field-uid: 9
+        bootfile_url:
+          description: |-
+            The server sends this option to inform the client about a URL to a boot file which client will use for
+            network boots.
+          $ref: '#/components/schemas/Dhcpv6Options.BootfileUrl'
+          x-field-uid: 10
     DhcpV6Server.Lease:
       description: "One DHCP pool configuration on a server.        "
       type: object
@@ -9064,13 +9571,15 @@ components:
           description: |-
             The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
           type: string
-          format: ipv4
+          format: ipv6
           x-field-uid: 1
         secondary_dns:
           description: "DHCP server secondary dns configuration options. If included\
             \ secondary DNS server address will be offered to \nDHCP clients that\
-            \ request this information through a TLV option           "
-          $ref: '#/components/schemas/DhcpV6Server.SecondaryDns'
+            \ request this information through a TLV option."
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpV6Server.SecondaryDns'
           x-field-uid: 2
     DhcpV6Server.SecondaryDns:
       description: |-
@@ -9081,7 +9590,7 @@ components:
           description: |-
             The secondary DNS server address that is offered to DHCP clients that request this information through a TLV option.
           type: string
-          format: ipv4
+          format: ipv6
           x-field-uid: 1
     Flow:
       description: |-
@@ -18584,6 +19093,34 @@ components:
           x-constraint:
           - /components/schemas/Port/properties/name
           x-field-uid: 1
+    Pattern.Dhcpv6Options.DuidUuid.Uuid:
+      description: "The Universally Unique IDentifier embedded in DUID.           "
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+        value:
+          type: integer
+          x-field-uid: 2
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
     Pattern.Flow.Ethernet.Dst.Counter:
       description: |-
         mac counter pattern
