@@ -424,10 +424,12 @@ from .snappi import PatternFlowIpv4SrcCounter
 from .snappi import PatternFlowIpv4SrcMetricTag
 from .snappi import PatternFlowIpv4SrcMetricTagIter
 from .snappi import FlowIpv4Auto
+from .snappi import PatternFlowIpv4SrcRandom
 from .snappi import PatternFlowIpv4Dst
 from .snappi import PatternFlowIpv4DstCounter
 from .snappi import PatternFlowIpv4DstMetricTag
 from .snappi import PatternFlowIpv4DstMetricTagIter
+from .snappi import PatternFlowIpv4DstRandom
 from .snappi import FlowIpv4Options
 from .snappi import FlowIpv4OptionsCustom
 from .snappi import FlowIpv4OptionsCustomType
@@ -452,6 +454,7 @@ from .snappi import PatternFlowIpv6FlowLabel
 from .snappi import PatternFlowIpv6FlowLabelCounter
 from .snappi import PatternFlowIpv6FlowLabelMetricTag
 from .snappi import PatternFlowIpv6FlowLabelMetricTagIter
+from .snappi import PatternFlowIpv6FlowLabelRandom
 from .snappi import PatternFlowIpv6PayloadLength
 from .snappi import PatternFlowIpv6PayloadLengthCounter
 from .snappi import PatternFlowIpv6PayloadLengthMetricTag
@@ -551,10 +554,12 @@ from .snappi import PatternFlowTcpSrcPort
 from .snappi import PatternFlowTcpSrcPortCounter
 from .snappi import PatternFlowTcpSrcPortMetricTag
 from .snappi import PatternFlowTcpSrcPortMetricTagIter
+from .snappi import PatternFlowTcpSrcPortRandom
 from .snappi import PatternFlowTcpDstPort
 from .snappi import PatternFlowTcpDstPortCounter
 from .snappi import PatternFlowTcpDstPortMetricTag
 from .snappi import PatternFlowTcpDstPortMetricTagIter
+from .snappi import PatternFlowTcpDstPortRandom
 from .snappi import PatternFlowTcpSeqNum
 from .snappi import PatternFlowTcpSeqNumCounter
 from .snappi import PatternFlowTcpSeqNumMetricTag
@@ -613,10 +618,12 @@ from .snappi import PatternFlowUdpSrcPort
 from .snappi import PatternFlowUdpSrcPortCounter
 from .snappi import PatternFlowUdpSrcPortMetricTag
 from .snappi import PatternFlowUdpSrcPortMetricTagIter
+from .snappi import PatternFlowUdpSrcPortRandom
 from .snappi import PatternFlowUdpDstPort
 from .snappi import PatternFlowUdpDstPortCounter
 from .snappi import PatternFlowUdpDstPortMetricTag
 from .snappi import PatternFlowUdpDstPortMetricTagIter
+from .snappi import PatternFlowUdpDstPortRandom
 from .snappi import PatternFlowUdpLength
 from .snappi import PatternFlowUdpLengthCounter
 from .snappi import PatternFlowUdpLengthMetricTag
