@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
+USE_OPENAPIART_BRANCH = "split_gosnappi"
 USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
@@ -109,6 +109,7 @@ def generate_sdk():
         package_dir="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
         package_name=go_pkg_name,
         sdk_version=sdk_version,
+        split=False,
     ).GenerateGoServer(
         module_path="github.com/open-traffic-generator/snappi/%s" % go_pkg_name,
         models_prefix=go_pkg_name,
