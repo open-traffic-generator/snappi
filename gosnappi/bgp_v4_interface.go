@@ -286,12 +286,7 @@ type BgpV4Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/DhcpClient.V4/properties/name
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/DhcpClient.V4/properties/name
+// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // Ipv4Name returns a string
 func (obj *bgpV4Interface) Ipv4Name() string {
@@ -305,12 +300,7 @@ func (obj *bgpV4Interface) Ipv4Name() string {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/DhcpClient.V4/properties/name
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/DhcpClient.V4/properties/name
+// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // SetIpv4Name sets the string value in the BgpV4Interface object
 func (obj *bgpV4Interface) SetIpv4Name(value string) BgpV4Interface {

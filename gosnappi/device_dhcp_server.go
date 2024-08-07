@@ -17,6 +17,7 @@ type deviceDhcpServer struct {
 	marshaller           marshalDeviceDhcpServer
 	unMarshaller         unMarshalDeviceDhcpServer
 	ipv4InterfacesHolder DeviceDhcpServerDhcpServerV4Iter
+	ipv6InterfacesHolder DeviceDhcpServerDhcpServerV6Iter
 }
 
 func NewDeviceDhcpServer() DeviceDhcpServer {
@@ -245,6 +246,7 @@ func (obj *deviceDhcpServer) Clone() (DeviceDhcpServer, error) {
 
 func (obj *deviceDhcpServer) setNil() {
 	obj.ipv4InterfacesHolder = nil
+	obj.ipv6InterfacesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -274,6 +276,8 @@ type DeviceDhcpServer interface {
 	setDefault()
 	// Ipv4Interfaces returns DeviceDhcpServerDhcpServerV4IterIter, set in DeviceDhcpServer
 	Ipv4Interfaces() DeviceDhcpServerDhcpServerV4Iter
+	// Ipv6Interfaces returns DeviceDhcpServerDhcpServerV6IterIter, set in DeviceDhcpServer
+	Ipv6Interfaces() DeviceDhcpServerDhcpServerV6Iter
 	setNil()
 }
 
@@ -364,6 +368,93 @@ func (obj *deviceDhcpServerDhcpServerV4Iter) appendHolderSlice(item DhcpServerV4
 	return obj
 }
 
+// This contains an array of references to IPv6 interfaces, each of which will contain one DHCPv6 server.
+// Ipv6Interfaces returns a []DhcpServerV6
+func (obj *deviceDhcpServer) Ipv6Interfaces() DeviceDhcpServerDhcpServerV6Iter {
+	if len(obj.obj.Ipv6Interfaces) == 0 {
+		obj.obj.Ipv6Interfaces = []*otg.DhcpServerV6{}
+	}
+	if obj.ipv6InterfacesHolder == nil {
+		obj.ipv6InterfacesHolder = newDeviceDhcpServerDhcpServerV6Iter(&obj.obj.Ipv6Interfaces).setMsg(obj)
+	}
+	return obj.ipv6InterfacesHolder
+}
+
+type deviceDhcpServerDhcpServerV6Iter struct {
+	obj               *deviceDhcpServer
+	dhcpServerV6Slice []DhcpServerV6
+	fieldPtr          *[]*otg.DhcpServerV6
+}
+
+func newDeviceDhcpServerDhcpServerV6Iter(ptr *[]*otg.DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter {
+	return &deviceDhcpServerDhcpServerV6Iter{fieldPtr: ptr}
+}
+
+type DeviceDhcpServerDhcpServerV6Iter interface {
+	setMsg(*deviceDhcpServer) DeviceDhcpServerDhcpServerV6Iter
+	Items() []DhcpServerV6
+	Add() DhcpServerV6
+	Append(items ...DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter
+	Set(index int, newObj DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter
+	Clear() DeviceDhcpServerDhcpServerV6Iter
+	clearHolderSlice() DeviceDhcpServerDhcpServerV6Iter
+	appendHolderSlice(item DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter
+}
+
+func (obj *deviceDhcpServerDhcpServerV6Iter) setMsg(msg *deviceDhcpServer) DeviceDhcpServerDhcpServerV6Iter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpServerV6{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *deviceDhcpServerDhcpServerV6Iter) Items() []DhcpServerV6 {
+	return obj.dhcpServerV6Slice
+}
+
+func (obj *deviceDhcpServerDhcpServerV6Iter) Add() DhcpServerV6 {
+	newObj := &otg.DhcpServerV6{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpServerV6{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpServerV6Slice = append(obj.dhcpServerV6Slice, newLibObj)
+	return newLibObj
+}
+
+func (obj *deviceDhcpServerDhcpServerV6Iter) Append(items ...DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpServerV6Slice = append(obj.dhcpServerV6Slice, item)
+	}
+	return obj
+}
+
+func (obj *deviceDhcpServerDhcpServerV6Iter) Set(index int, newObj DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpServerV6Slice[index] = newObj
+	return obj
+}
+func (obj *deviceDhcpServerDhcpServerV6Iter) Clear() DeviceDhcpServerDhcpServerV6Iter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.DhcpServerV6{}
+		obj.dhcpServerV6Slice = []DhcpServerV6{}
+	}
+	return obj
+}
+func (obj *deviceDhcpServerDhcpServerV6Iter) clearHolderSlice() DeviceDhcpServerDhcpServerV6Iter {
+	if len(obj.dhcpServerV6Slice) > 0 {
+		obj.dhcpServerV6Slice = []DhcpServerV6{}
+	}
+	return obj
+}
+func (obj *deviceDhcpServerDhcpServerV6Iter) appendHolderSlice(item DhcpServerV6) DeviceDhcpServerDhcpServerV6Iter {
+	obj.dhcpServerV6Slice = append(obj.dhcpServerV6Slice, item)
+	return obj
+}
+
 func (obj *deviceDhcpServer) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -378,6 +469,20 @@ func (obj *deviceDhcpServer) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Ipv4Interfaces().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Ipv6Interfaces) != 0 {
+
+		if set_default {
+			obj.Ipv6Interfaces().clearHolderSlice()
+			for _, item := range obj.obj.Ipv6Interfaces {
+				obj.Ipv6Interfaces().appendHolderSlice(&dhcpServerV6{obj: item})
+			}
+		}
+		for _, item := range obj.Ipv6Interfaces().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
