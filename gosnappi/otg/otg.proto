@@ -51,6 +51,9 @@ message Config {
 
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
+
+  // The traffic profile configures on L47 configs.
+  repeated Trafficprofile trafficprofile = 10;
 }
 
 // Global configuration options.
@@ -121,10 +124,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -238,6 +237,15 @@ message DeviceEthernetBase {
   // objects.
   // required = true
   optional string name = 4;
+
+  // The total number of addresses in the range/count.
+  // default = 1
+  optional int32 count = 5;
+
+  // Increments the MAC address.  The value is incremented according to the MAC count
+  // and Step.
+  // default = 00:00:00:00:00:01
+  optional string step = 6;
 }
 
 // An Ethernet interface with IPv4 and IPv6 addresses.
@@ -271,6 +279,15 @@ message DeviceEthernet {
 
   // List of DHCPv4 Clients Configuration.
   repeated DeviceDhcpv4client dhcpv4_interfaces = 9;
+
+  // The total number of addresses in the range/count.
+  // default = 1
+  optional int32 count = 10;
+
+  // Increments the MAC address.  The value is incremented according to the MAC count
+  // and Step.
+  // default = 00:00:00:00:00:01
+  optional string step = 11;
 }
 
 // Ethernet interface connection to a port, LAG or VXLAN tunnel.
@@ -292,17 +309,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -311,11 +320,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -353,6 +357,18 @@ message DeviceVlan {
   // objects.
   // required = true
   optional string name = 4;
+
+  // The total number of addresses in the range.
+  // default = 1
+  optional int32 count = 5;
+
+  // Increments the Valn ID.
+  // default = 1
+  optional int32 step = 6;
+
+  // The max number of addresses per range.
+  // default = 1
+  optional int32 per_count = 7;
 }
 
 // An IPv4 interface with gateway
@@ -371,12 +387,21 @@ message DeviceIpv4 {
 
   // The prefix of the IPv4 address.
   // default = 24
-  optional uint32 prefix = 4;
+  optional int32 prefix = 4;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
   optional string name = 5;
+
+  // The total number of addresses in the range.
+  // default = 1
+  optional int32 count = 6;
+
+  // Increments the MAC address.  The value is incremented according to the MAC count
+  // and Step.
+  // default = 0.0.0.1
+  optional string step = 7;
 }
 
 // An IPv4 Loopback interface.
@@ -384,10 +409,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -462,10 +483,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -582,10 +599,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -637,16 +650,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -787,17 +794,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1052,6 +1053,12 @@ message Device {
 
   // The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
   DeviceDhcpServer dhcp_server = 9;
+
+  // The properties of TCP and its children.
+  repeated DeviceTcp tcps = 10;
+
+  // The properties of HTTP and its children.
+  repeated DeviceHttp https = 11;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1118,10 +1125,6 @@ message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1942,12 +1945,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/DhcpClient.V4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/DhcpClient.V4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -2707,8 +2704,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3168,8 +3163,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -5525,12 +5518,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/DhcpClient.V6/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/DhcpClient.V6/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -5792,11 +5779,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -5820,11 +5802,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -5988,10 +5965,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -6053,11 +6026,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -6483,10 +6451,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -6550,6 +6514,846 @@ message DhcpServerV4PoolOption {
   optional bool echo_relay_with_tlv_82 = 4;
 }
 
+// TCP configs.
+message DeviceTcp {
+
+  // IPv4/v6 interface name
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4Base/properties/name
+  // - /components/schemas/Device.Ipv6Base/properties/name
+  // 
+  // required = true
+  optional string ip_interface_name = 1;
+
+  // Keep alive time for TCP. The Keep-alive Time value is expressed in seconds.
+  // default = 7200
+  optional float keep_alive_time = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 3;
+
+  // The number of seconds between repeated keep-alive probes.
+  // default = 75
+  optional float keep_alive_interval = 4;
+
+  // The TCP read buffer size.
+  // default = 4096
+  optional int32 receive_buffer_size = 5;
+
+  // The TCP write buffer size.
+  // default = 4096
+  optional int32 transmit_buffer_size = 6;
+
+  // It enables the automatic tcp buffer for receive/transmit buffer size.If set to true,
+  // for certain test configurations, the  values configured for the TCP read and write
+  // buffer sizes are ignored and values selected by IxLoad are used instead. If set to
+  // false, buffer size adjustment is disabled and the configured values for the TCP read
+  // and write buffer sizes are used.
+  // default = True
+  optional bool adjust_tcp_buffers = 8;
+
+  // The minimum retransmission timeout value for tcp packet in milliseconds.It accepts
+  // the default value of 200ms
+  // default = 200
+  optional int32 retransmission_minimum_timeout = 9;
+
+  // The maximum retransmission timeout value for tcp packet in milliseconds.It accepts
+  // the default value of 120000ms
+  // default = 120000
+  optional int32 retransmission_maximum_timeout = 10;
+
+  // Minimum TCP source port value. It specifies which ports to use for client connections.
+  // The Min value specifies the lower bound (the lowest permissible port number).It accepts
+  // the default value of 1024
+  // default = 1024
+  optional int32 minimum_source_port = 11;
+
+  // Maximum TCP source port value. The Maximum source port value specifies the upper
+  // bound (the highest permissible port  number). It accepts the default value of 65535.
+  // default = 65535
+  optional int32 maximum_source_port = 12;
+
+  // It specifies the number of bytes separating packets in a stream.The default value
+  // is 8, the minimum is 8, and the maximum is 8191
+  // default = 8
+  optional int32 inter_packet_gap = 13;
+
+  // It specifies the inter packet delay number in micro seconds in a stream.The default
+  // value is 0
+  // default = 0
+  optional int32 inter_packet_delay = 14;
+
+  // It represents fragment Reassembly Timer. The number of seconds the TCP should keep
+  // IP fragments before discarding it. The default value is 30.
+  // default = 30
+  optional int32 ip_fragment_time = 15;
+
+  // It represents the FIN Timeout. The number of seconds the client or server waits to
+  // receive a final FIN before closing a socket. A FIN Timeout is usually used to prevent
+  // denial-of-service attacks. The default value is 60
+  // default = 60
+  optional int32 fin_timeout = 16;
+
+  // It refers the number of times an un-acknowledged SYN for an active TCP connection
+  // will be re-transmitted.The default value is 5
+  // default = 5
+  optional int32 syn_retries = 17;
+
+  // It refers the number of times an un-acknowledged SYN-ACK for a passive TCP connection
+  // will be re-transmitted.The default value is 5
+  // default = 5
+  optional int32 synack_retries = 18;
+
+  // It refers the retransmit retries 1. The number of times TCP will attempt to retransmit
+  // a segment on an established connection. If the number of retransmit attempts exceeds
+  // this value, TCP requests that the network layer update the route. The default is
+  // the RFC 1122 specified minimum of 3 retransmissions. The default value is 3
+  // default = 3
+  optional int32 retansmit_retries1 = 19;
+
+  // It refers the retransmit retries 2. If the number of retransmissions of the same
+  // segment reaches this threshold, TCP closes the connection. The default value is 15,
+  // which corresponds to a duration of approximately between 13 to 30 minutes, depending
+  // on the retransmission timeout.
+  // default = 15
+  optional int32 retransmit_retries2 = 20;
+
+  // It refers to the number of duplicate ACKs that are required to indicate that a packet
+  // was lost.Changing this value is not  recommended. The default is 3, the minimum is
+  // 0, and the maximum is 255.
+  // default = 3
+  optional int32 packet_reordering = 21;
+
+  // It refers to the delayed acks count in segments . The default value is 0.
+  // default = 0
+  optional int32 delayed_acks_segments = 22;
+
+  // It refers to the delayed acks timeout in milliseconds . The default value is 0.
+  // default = 0
+  optional int32 delayed_acks_timeout = 23;
+
+  // It enables UDP port randomization.If this option is set, each new sockets will be
+  // bound to a random port.
+  // default = False
+  optional bool port_randomization = 24;
+
+  // It disables the Path MTU Discovery.It accepts a boolean value of true or false.
+  // default = True
+  optional bool disable_path_mtu = 25;
+
+  // It refers to the TCP window scaling.It is reserved. It accepts a boolean value of
+  // true or false.
+  // default = False
+  optional bool window_scaling = 26;
+
+  // It enables the RFC 2018 TCP Selective Acknowledgement. It accepts a boolean value
+  // of true or false.
+  // default = True
+  optional bool selective_ack = 27;
+
+  // If true, allows the reuse of TIME-WAIT sockets for new connections.Enable this option
+  // only if you are certain that it is safe from a protocol viewpoint.
+  // default = False
+  optional bool time_wait_reuse = 28;
+
+  // It enables the fast recycling of TIME-WAIT sockets. Enabling this option is not recommended
+  // when working with NAT (Network Address Translation).
+  // default = False
+  optional bool time_wait_recycle = 29;
+
+  // It enables the RFC 1323 strict behavior. Specifically, if a packet has TSOPT set,
+  // but does not have the ACK bit set, the TSecr field in the TSOPT will be zero in that
+  // packet.
+  // default = False
+  optional bool time_wait_rfc1323_strict = 30;
+
+  // If true, the client or server inserts a timestamp into each packet.Enabling the TCP
+  // Timestamp option adds 12 bytes to the TCP header. This has the effect of reducing
+  // the effective MSS configured.
+  // default = True
+  optional bool packet_timestamps = 31;
+
+  // It enables the Explicit Congestion Notification.
+  // default = False
+  optional bool explicit_congestion_notification = 32;
+
+  // Reserved
+  // default = 0
+  optional int32 bic = 33;
+
+  // Reserved
+  // default = 2
+  optional int32 vegas_alpha = 34;
+
+  // Reserved
+  // default = False
+  optional bool rfc1337 = 35;
+
+  // Reserved
+  // default = 24576
+  optional int32 mem_low = 36;
+
+  // Reserved
+  // default = 262144
+  optional int32 maximum_wmem = 37;
+
+  // Reserved
+  // default = 0
+  optional int32 westwood = 38;
+
+  // Reserved
+  // default = 0
+  optional int32 avoid_vegas_congestion = 39;
+
+  // Reserved
+  // default = 262144
+  optional int32 maximum_rmem = 40;
+
+  // Reserved
+  // default = 0
+  optional int32 orphan_retries = 41;
+
+  // The maximum number of sockets that can be in the TIME_WAIT state in the system. The
+  // purpose of this limit is to prevent simple DoS attacks. If this number is exceeded,
+  // the socket is closed and a warning is displayed.
+  // default = 180000
+  optional int32 maximum_time_wait_buckets = 42;
+
+  // Reserved
+  // default = 0
+  optional int32 low_latency = 43;
+
+  // Reserved
+  // default = 4096
+  optional int32 minimum_rmem = 44;
+
+  // Reserved
+  // default = 2
+  optional int32 window_scale = 45;
+
+  // Reserved
+  // default = 262144
+  optional int32 wmem_default = 46;
+
+  // Reserved
+  // default = 4096
+  optional int32 minimum_wmem = 47;
+
+  // Reserved
+  // default = False
+  optional bool stdurg = 48;
+
+  // Reserved
+  // default = 1024
+  optional int32 maximum_syn_backlog = 49;
+
+  // Reserved
+  // default = True
+  optional bool dsack = 50;
+
+  // Reserved
+  // default = False
+  optional bool abort_on_overflow = 51;
+
+  // Fragment Reassembly Timer. ReThe number of seconds the TCP should keep IP fragments
+  // before discarding them
+  // default = 0
+  optional int32 fragment_reassembly_timer = 52;
+
+  // Reserved
+  // default = 6
+  optional int32 vegas_beta = 53;
+
+  // Reserved
+  // default = 8192
+  optional int32 maximum_orphans = 54;
+
+  // Reserved
+  // default = 32768
+  optional int32 mem_pressure = 55;
+
+  // Reserved
+  // default = 0
+  optional int32 moderate_receive_buffer = 56;
+
+  // Reserved
+  // default = False
+  optional bool no_metrics_save = 57;
+
+  // Reserved
+  // default = True
+  optional bool retrans_collapse = 58;
+
+  // Reserved
+  // default = 262144
+  optional int32 rmem_default = 59;
+
+  // Reserved
+  // default = 49152
+  optional int32 mem_high = 60;
+
+  // Reserved
+  // default = 2
+  optional int32 vegas_gamma = 61;
+
+  // Reserved
+  // default = True
+  optional bool fack = 62;
+
+  // Reserved
+  // default = 14
+  optional int32 bic_low_window = 63;
+
+  // Reserved
+  // default = 31
+  optional int32 app_win = 64;
+
+  // Number of keep-alive probes sent out before determining that a link is down.
+  // default = 9
+  optional float keep_alive_probes = 65;
+}
+
+// HTTP configs.
+// Globally unique name of an object. It also serves as the primary key for arrays of
+// objects.
+message DeviceHttp {
+
+  // TCP interface name
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Tcp/properties/name
+  // 
+  optional string tcp_name = 1;
+
+  message PriorityFlowControlClass {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+      v20 = 3;
+      v21 = 4;
+    }
+  }
+  // It specifies the priority class in priority flow control in HTTP client.
+  // default = PriorityFlowControlClass.Enum.v10
+  optional PriorityFlowControlClass.Enum priority_flow_control_class = 2;
+
+  // It enables the setting of the TOS(Type of Service) bits in the header of the HTTP
+  // packets. It accepts the boolean value of True or False
+  // default = False
+  optional bool enable_tos = 3;
+
+  message PrecedenceTos {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+      v20 = 3;
+      v21 = 4;
+      v30 = 5;
+      v31 = 6;
+      v40 = 7;
+    }
+  }
+  // It specifies the setting of the IP Precedence bits(TOS bit 0-2) in the header of
+  // the HTTP packets
+  // default = PrecedenceTos.Enum.v10
+  optional PrecedenceTos.Enum precedence_tos = 4;
+
+  message DelayTos {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+    }
+  }
+  // It specifies the setting of the delay bit(TOS bit 3) in the header of the HTTP packets
+  // default = DelayTos.Enum.v10
+  optional DelayTos.Enum delay_tos = 5;
+
+  message ThroughputTos {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+    }
+  }
+  // It specifies the setting of the throughput bit(TOS bit 4) in the header of the HTTP
+  // packets
+  // default = ThroughputTos.Enum.v10
+  optional ThroughputTos.Enum throughput_tos = 6;
+
+  message UrlStatsCounturlStatsCount {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+    }
+  }
+  // It specifies the setting of the reliability bit(TOS bit 5) in the header of the HTTP
+  // packets
+  // default = UrlStatsCounturlStatsCount.Enum.v10
+  optional UrlStatsCounturlStatsCount.Enum url_stats_counturl_stats_count = 7;
+
+  // It refers to the number of URL statistics to display in Statistics (StatViewer) window.
+  // default = 10
+  optional float url_stats_count = 8;
+
+  // It disables the priority flow control in HTTP client.It accepts the value of 0 or
+  // 1
+  // default = 0
+  optional float disable_priority_flow_control = 9;
+
+  // It enables the vlan_priority which sets the VLAN priority for the activity.
+  // default = False
+  optional bool enable_vlan_priority = 10;
+
+  // It accepts the vlan priority value.(only if enable_vlan_priority is enabled)
+  // default = 0
+  optional float vlan_priority = 11;
+
+  // It specifies the TCP Maximum Segment Size in the MSS (RX) field
+  // default = 1460
+  optional float esm = 12;
+
+  // It enables the use of the esm option in client. It accepts the boolean value of True
+  // or False
+  // default = False
+  optional bool enable_esm = 13;
+
+  // It refers to Time To Live of packets in seconds.
+  // default = 64
+  optional float time_to_live_value = 14;
+
+  message TcpCloseOption {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+      v20 = 3;
+    }
+  }
+  // It refers to the method of closing tcp connections in client. It takes the value
+  // of 0 or 1 or 2.
+  // default = TcpCloseOption.Enum.v10
+  optional TcpCloseOption.Enum tcp_close_option = 15;
+
+  // It enables the client to calculate a checksum for a received page and compares
+  // default = False
+  optional bool enable_integrity_check_support = 16;
+
+  // If enableTos is true, this option specifies the IP Precedence /TOS.
+  // default = 0
+  optional float type_of_service = 17;
+
+  // It indicates the server to enable the high performance with the simulated user.It
+  // accepts either True or False
+  // default = False
+  optional bool high_perf_with_simulated_user = 18;
+
+  // The properties of HTTP Client.
+  repeated HttpClient clients = 19;
+
+  // The properties of HTTP server.
+  repeated HttpServer servers = 20;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 21;
+
+  // HTTP Profile
+  // default = Chrome
+  optional string profile = 22;
+
+  // HTTP Version
+  // default = HTTP11
+  optional string version = 23;
+
+  // It enables the connection persistence count throughout the test.
+  // default = 0
+  optional string connection_persistence = 24;
+}
+
+// One or more HTTP Client configurations and its HTTP methods configs.
+message HttpClient {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 1;
+
+  // HTTP Version
+  // default = 1
+  optional string version = 2;
+
+  // cookie_jar_size the number of cookies that will be saved for each client. The maximum
+  // value of this is 300. (only if enable_cookie_support is enabled)
+  // default = 10
+  optional int32 cookie_jar_size = 3;
+
+  // cookie_reject_probability indicates the probability, from 0 or 1, that a client will
+  // reject a request for a cookie(s) contents from the server.  (only if enable_cookie_support
+  // is enabled)
+  // default = 0
+  optional bool cookie_reject_probability = 4;
+
+  // The client will support cookie retention, as indicated in the cookie_jar_size and
+  // cookie_reject_probability
+  // default = False
+  optional bool enable_cookie_support = 5;
+
+  // HTTP command timeout timer in seconds
+  // default = 600
+  optional float command_timeout = 6;
+
+  // HTTP command timeout timer in milliseconds
+  // default = 0
+  optional float command_timeout_ms = 7;
+
+  // The client will support http_proxy by setting 0 or 1,
+  // default = False
+  optional bool enable_proxy = 8;
+
+  // HTTP client maintains KeepAlive to indicates the connection, either true or false.
+  // default = False
+  optional bool keep_alive = 9;
+
+  // It refers to a maximum number of connections that a single user can have/open at
+  // any given time in the client
+  // default = 3
+  optional float max_sessions = 10;
+
+  // max_streams is the maximum number of concurrent streams in each HTTP client .
+  // default = 1
+  optional float max_streams = 11;
+
+  // It indicates the maximum number of requests that the client will send before waiting
+  // for a response.
+  // default = 1
+  optional float max_pipeline = 12;
+
+  // It enables the user to control the number of transactions that occur during a single
+  // connection.
+  // default = 1
+  optional float max_persistent_requests = 13;
+
+  // It enables the transaction count throughout the test.
+  // default = 0
+  optional float exact_transactions = 14;
+
+  // It enables the client follows HTTP Redirect commands from the server.
+  // default = False
+  optional bool follow_http_redirects = 15;
+
+  // It enables the client decodes pages that have been encoded using a supported encoding
+  // method.
+  // default = False
+  optional bool enable_decompress_support = 16;
+
+  // It enables cookies are maintained on a per-connection basis instead of on a per-user
+  // basis.It takes the boolean value either true or false
+  // default = False
+  optional bool enable_per_conn_cookie_support = 17;
+
+  message IpPreference {
+    enum Enum {
+      unspecified = 0;
+      v10 = 1;
+      v11 = 2;
+      v20 = 3;
+      v21 = 4;
+    }
+  }
+  // It has the mixture of IPv4 and IPv6 addresses are available on the client network,
+  // 
+  // default = IpPreference.Enum.v20
+  optional IpPreference.Enum ip_preference = 18;
+
+  // It specifies client to support large headers. It accepts boolean value of True or
+  // False
+  // default = False
+  optional bool enable_large_header = 19;
+
+  // It specifies the length of header data. It accepts integer values. Minimum = 1,024,
+  // maximum =1,0240
+  // default = 1024
+  optional float max_header_len = 20;
+
+  // It specifies the show response of header distribution stats.
+  // default = False
+  optional bool per_header_percent_dist = 21;
+
+  // It enables the client with authentication profile attached to it.
+  // default = False
+  optional bool enable_auth = 22;
+
+  // It enables the server includes the ACK for the previous packet in the same packet
+  // as the next packet.
+  // default = True
+  optional bool piggy_back_ack = 23;
+
+  // It enables the client for data to be exchanged during the sender's initial TCP SYN.
+  // default = False
+  optional bool tcp_fast_open = 24;
+
+  // It specifies the contnet length Deviation tolerance value.
+  // default = 0
+  optional float content_length_deviation_tolerance = 25;
+
+  // It disables the DNS Resolution Cache in HTTP client.
+  // default = False
+  optional bool disable_dns_resolution_cache = 26;
+
+  // It enables consecutive ips per session for HTTP client.
+  // default = False
+  optional bool enable_consecutive_ips_per_session = 27;
+
+  // It enables to bring up all connections first option for HTTP client.
+  // default = False
+  optional bool enable_achieve_cc_first = 28;
+
+  // It enables uniform traffic distribution across all connections in HTTP client.
+  // default = False
+  optional bool enable_traffic_distribution_for_cc = 29;
+
+  // It enables uniform traffic distribution across all connections in HTTP client.
+  optional string browser_emulation_name = 31;
+
+  // The HTTP methods such as GET, POST and its properties.
+  repeated HttpMethod methods = 32;
+}
+
+// Description missing in models
+message HttpMethod {
+
+  // Description missing in models
+  repeated MethodGet get = 1;
+
+  // Description missing in models
+  repeated MethodPost post = 2;
+
+  // Description missing in models
+  repeated MethodPut put = 3;
+
+  // Description missing in models
+  repeated MethodDelete delete = 4;
+
+  // Description missing in models
+  repeated MethodHeader header = 5;
+}
+
+// A GET operation of HTTP
+message MethodGet {
+
+  // Server name/IP address
+  // required = true
+  optional string destination = 1;
+
+  // The page name to perform get opertaion.
+  // required = true
+  optional string page = 2;
+
+  // The abort allows to perform an operation at one of two places-before request or after
+  // request
+  optional string abort = 3;
+
+  // When a HTTP Client Profile is created there is an associated ID, created for each
+  // profile.  Default =-1
+  // default = -1
+  optional float profile = 4;
+
+  // It specify parameter names and values,they can occur in any order.
+  // default = None
+  optional string name_value_args = 5;
+
+  // It enables the Direct Server Run,the responses are sent directly from the servers
+  // to the clients
+  // default = False
+  optional bool enable_direct_server_return = 6;
+}
+
+// A POST operation of HTTP
+message MethodPost {
+
+  // The Server name/IP address
+  // required = true
+  optional string destination = 1;
+
+  // The page name to perform post opertaion.
+  // required = true
+  optional string page = 2;
+
+  // The abort allows to perform an operation at one of two places-before request or after
+  // request
+  // default = None
+  optional string abort = 3;
+
+  // When a HTTP Client Profile is created there is an associated ID, created for each
+  // profile.  Default =-1
+  // default = -1
+  optional float profile = 4;
+
+  // It specify parameter names and values,they can occur in any order.
+  // default =
+  optional string name_value_args = 5;
+
+  // The name and path of the file to be posted on the server.
+  // default =
+  optional string arguments = 6;
+
+  // An MD5 check sum header is included with the requests sent to the server.Default
+  // = 0
+  // default = 0
+  optional float send_md5_check_sum_header = 7;
+
+  // It enables chunked-transfer encoding if set to a numeric value. Default = None.
+  // default = None
+  optional string chunk_size = 8;
+}
+
+// A PUT operation of HTTP
+message MethodPut {
+
+  // The Server name/IP address
+  // required = true
+  optional string destination = 1;
+
+  // The page name to perform put opertaion.
+  // required = true
+  optional string page = 2;
+
+  // The abort allows to perform an operation at one of two places-before request or after
+  // request
+  // default = None
+  optional string abort = 3;
+
+  // When a HTTP Client Profile is created there is an associated ID, created for each
+  // profile.  Default =-1
+  // default = -1
+  optional float profile = 4;
+
+  // It specify parameter names and values,they can occur in any order.
+  // default =
+  optional string name_value_args = 5;
+
+  // The name and path of the file to be posted on the server.
+  // default =
+  optional string arguments = 6;
+
+  // An MD5 check sum header is included with the requests sent to the server.Default
+  // = 0
+  // default = 0
+  optional float send_md5_check_sum_header = 7;
+
+  // It enables chunked-transfer encoding if set to a numeric value. Default = None.
+  // default = None
+  optional string chunk_size = 8;
+}
+
+// A Delete operation of HTTP
+message MethodDelete {
+
+  // The Server name/IP address
+  // required = true
+  optional string destination = 1;
+
+  // The page name to perform delete opertaion.
+  // required = true
+  optional string page = 2;
+
+  // The abort allows to perform an operation at one of two places-before request or after
+  // request
+  // default = None
+  optional string abort = 3;
+
+  // When a HTTP Client Profile is created there is an associated ID, created for each
+  // profile.  Default =-1
+  // default = -1
+  optional float profile = 4;
+}
+
+// A header operation of HTTP
+message MethodHeader {
+
+  // The Server name/IP address
+  // required = true
+  optional string destination = 1;
+
+  // The page name to perform header opertaion.
+  // required = true
+  optional string page = 2;
+
+  // The abort allows to perform an operation at one of two places-before request or after
+  // request
+  // default = None
+  optional string abort = 3;
+
+  // When a HTTP Client Profile is created there is an associated ID, created for each
+  // profile.  Default =-1
+  // default = -1
+  optional float profile = 4;
+
+  // It specify parameter names and values,they can occur in any order.
+  // default =
+  optional string name_value_args = 5;
+}
+
+// One or more HTTP Server configurations.
+message HttpServer {
+
+  // It specifies the reset timeout in milliseconds and it is enabled only if tcp tear
+  // down of option - 'send RST after timeout' is selected.
+  // default = 100
+  optional float rst_timeout = 1;
+
+  // It enables to HTTP2  version for HTTP server.
+  // default = False
+  optional bool enable_http2 = 2;
+
+  // The port number to which the HTTP server will respond to non-SSL requests.
+  // default = 80
+  optional int32 port = 3;
+
+  // The number of seconds that the server will wait for input on an open connection before
+  // closing the session with a 408 error.
+  // default = 300
+  optional int32 request_timeout = 4;
+
+  // It indicates the maximum length of time, in milliseconds, that the HTTP server delays
+  // sending a response.
+  // default = 0
+  optional float maximum_response_delay = 5;
+
+  // It indicates the minimum length of time, in milliseconds, that the HTTP server delays
+  // sending a response.
+  // default = 0
+  optional float minimum_response_delay = 6;
+
+  // It indicates the HTTP server upgrading or not.
+  // default = False
+  optional bool dont_expect_upgrade = 7;
+
+  // It indicates the server with corresponding url stats, If true, the statistics from
+  // a returned page, records the server IP address from where the page is sent.
+  // default = False
+  optional bool enable_per_server_per_url_stat = 8;
+
+  // It specifies the URL Page size (in bytes) in Web pages in HTTP server. Default value
+  // is 1024
+  // default = 1024
+  optional float url_page_size = 9;
+
+  // It enables the setting of the Chunk Transfer-Encoding in HTTP packets. It accepts
+  // the boolean value of True or False
+  // default = False
+  optional bool enable_chunk_encoding = 10;
+
+  // It true, the server calculates checksums for the pages it sends to the client.
+  // default = False
+  optional bool enable_md5_checksum = 11;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -6573,10 +7377,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -6643,16 +7443,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -6661,19 +7454,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -6751,35 +7534,9 @@ message FlowRouter {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -9344,12 +10101,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -9419,10 +10170,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9552,6 +10299,139 @@ message LldpSystemName {
   optional string value = 3;
 }
 
+// A container for L47 traffic configurations.
+message Trafficprofile {
+
+  // application protocol config name on which traffic be applied.
+  repeated string app = 1;
+
+  // Objective types such as simulated user, connection per seconds, concurrent connection
+  // etc, 1st item of a list is primary objective and remaining items are secondary objective.
+  repeated string objective_type = 2;
+
+  // Objective value such as for objective_type, 1st item of a list is primary objective
+  // value and remaining items are secondary objective values.
+  repeated int32 objective_value = 3;
+
+  // timeline configurations.
+  repeated TrafficprofileSegment segment = 4;
+
+  // Timeline is list of segments configured.
+  repeated string timeline = 5;
+
+  // primary objective
+  repeated TrafficprofileObjective objectives = 6;
+}
+
+// One or more HTTP Client configurations and its HTTP methods configs.
+message TrafficprofileSegment {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 1;
+
+  // Start duration in seconds
+  optional int32 start = 2;
+
+  // Duration in seconds
+  optional int32 duration = 3;
+
+  // Rate
+  optional int32 rate = 4;
+
+  // Target
+  optional int32 target = 5;
+}
+
+// objective config such simulated user, thoughput, conncurrent connections, connection
+// per sec.
+message TrafficprofileObjective {
+
+  // Description missing in models
+  ObjectiveSimulatedUser simulated_user = 2;
+
+  // Description missing in models
+  ObjectiveThroughput throughput = 3;
+
+  // Description missing in models
+  ObjectiveConnectionConncurrent concurrent_connections = 4;
+
+  // Description missing in models
+  ObjectiveConnectionPerSeconds connection_per_sec = 5;
+}
+
+// simulated user traffic
+message ObjectiveSimulatedUser {
+
+  message RampUpType {
+    enum Enum {
+      unspecified = 0;
+      users_intervals = 1;
+      max_pending_user = 2;
+      immediate = 3;
+    }
+  }
+  // Ramp up type to defines the type of user execution profiles during the ramp_up_time,
+  // .
+  // default = RampUpType.Enum.users_intervals
+  optional RampUpType.Enum ramp_up_type = 1;
+
+  // Value applied to ramp_up_type to either bring up users at a certain rate.
+  optional int32 ramp_up_value = 2;
+
+  // Amount of time when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional int32 sustain_time = 3;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional int32 ramp_down_time = 4;
+}
+
+// Throughput traffic
+message ObjectiveThroughput {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_time = 2;
+}
+
+// Conncurrent connections objectives
+message ObjectiveConnectionConncurrent {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_time = 2;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_value = 3;
+}
+
+// Conncurrent connections objectives
+message ObjectiveConnectionPerSeconds {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_time = 2;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_value = 3;
+}
+
 // Error response generated while serving API request.
 message Error {
 
@@ -9631,6 +10511,7 @@ message ControlState {
       port = 1;
       protocol = 2;
       traffic = 3;
+      app = 4;
     }
   }
   // Description missing in models
@@ -9645,6 +10526,9 @@ message ControlState {
 
   // Description missing in models
   StateTraffic traffic = 4;
+
+  // Description missing in models
+  StateApp app = 5;
 }
 
 // States associated with configured ports.
@@ -9718,14 +10602,35 @@ message StateProtocol {
   StateProtocolIsis isis = 6;
 }
 
+// States associated with app traffic for l47
+message StateApp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      state = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      start = 1;
+      stop = 2;
+      abort = 3;
+    }
+  }
+  // State of app traffic ...
+  optional State.Enum state = 2;
+}
+
 // Sets the link of configured ports.
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9755,10 +10660,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -9780,10 +10681,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -9845,13 +10742,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -9896,10 +10786,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -9921,10 +10807,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9970,11 +10852,6 @@ message StateProtocolBgpPeers {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message State {
@@ -10014,10 +10891,6 @@ message StateProtocolIsisRouters {
 
   // The names of ISIS routers for which the state has to be applied. An empty or null
   // list will control all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -10172,18 +11045,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -10205,10 +11072,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -10275,18 +11138,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -10308,10 +11165,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -10371,10 +11224,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -10426,10 +11275,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
@@ -10566,10 +11411,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -10598,10 +11439,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10673,10 +11510,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -10911,10 +11744,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -11041,10 +11870,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -11167,10 +11992,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -11308,10 +12129,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -11338,10 +12155,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -11396,18 +12209,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11528,10 +12333,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -11590,10 +12391,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -11754,10 +12551,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -11811,10 +12604,6 @@ message Dhcpv4ServerMetricsRequest {
 
   // The names of DHCPv4 Servers to return results for. An empty list will return results
   // for all DHCPv4 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
@@ -11967,10 +12756,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -12000,10 +12785,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -12029,11 +12810,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -12587,10 +13363,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -12904,10 +13676,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -13066,10 +13834,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -13204,10 +13968,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -13241,10 +14001,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -13295,10 +14051,6 @@ message Dhcpv4LeaseState {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name

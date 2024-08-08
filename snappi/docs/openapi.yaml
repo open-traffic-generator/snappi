@@ -297,6 +297,13 @@ components:
           items:
             $ref: '#/components/schemas/Lldp'
           x-field-uid: 9
+        trafficprofile:
+          description: |-
+            The traffic profile configures on L47 configs.
+          type: array
+          items:
+            $ref: '#/components/schemas/Trafficprofile'
+          x-field-uid: 10
     Config.Options:
       description: |-
         Global configuration options.
@@ -388,8 +395,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -561,6 +567,20 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        count:
+          description: |-
+            The total number of addresses in the range/count.
+          type: integer
+          default: 1
+          minimum: 1
+          x-field-uid: 5
+        step:
+          description: |-
+            Increments the MAC address.  The value is incremented according to the MAC count and Step.
+          type: string
+          format: mac
+          default: 00:00:00:00:00:01
+          x-field-uid: 6
     Device.Ethernet:
       description: |-
         An Ethernet interface with IPv4 and IPv6 addresses.
@@ -619,6 +639,20 @@ components:
           items:
             $ref: '#/components/schemas/Device.Dhcpv4client'
           x-field-uid: 9
+        count:
+          x-field-uid: 10
+          description: |-
+            The total number of addresses in the range/count.
+          type: integer
+          default: 1
+          minimum: 1
+        step:
+          x-field-uid: 11
+          description: |-
+            Increments the MAC address.  The value is incremented according to the MAC count and Step.
+          type: string
+          format: mac
+          default: 00:00:00:00:00:01
       required:
       - mac
       - name
@@ -649,10 +683,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -663,10 +693,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -674,11 +700,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -739,6 +760,27 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        count:
+          description: |-
+            The total number of addresses in the range.
+          type: integer
+          default: 1
+          minimum: 1
+          x-field-uid: 5
+        step:
+          description: |-
+            Increments the Valn ID.
+          type: integer
+          default: 1
+          minimum: 1
+          x-field-uid: 6
+        per_count:
+          description: |-
+            The max number of addresses per range.
+          type: integer
+          default: 1
+          minimum: 1
+          x-field-uid: 7
       required:
       - name
     Device.Ipv4:
@@ -770,7 +812,6 @@ components:
           description: |-
             The prefix of the IPv4 address.
           type: integer
-          format: uint32
           minimum: 1
           maximum: 32
           default: 24
@@ -781,6 +822,20 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        count:
+          x-field-uid: 6
+          description: |-
+            The total number of addresses in the range.
+          type: integer
+          default: 1
+          minimum: 1
+        step:
+          x-field-uid: 7
+          description: |-
+            Increments the MAC address.  The value is incremented according to the MAC count and Step.
+          type: string
+          format: ipv4
+          default: 0.0.0.1
     Device.Ipv4Loopback:
       description: |-
         An IPv4 Loopback interface.
@@ -792,10 +847,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface behind which this Loopback  interface will be created.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -900,8 +951,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1041,8 +1091,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -1136,8 +1185,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -1148,8 +1195,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -1357,8 +1402,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -1368,10 +1411,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -1675,6 +1714,20 @@ components:
             The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
           $ref: '#/components/schemas/Device.DhcpServer'
           x-field-uid: 9
+        tcps:
+          description: |-
+            The properties of TCP and its children.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Tcp'
+          x-field-uid: 10
+        https:
+          description: |-
+            The properties of HTTP and its children.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Http'
+          x-field-uid: 11
       required:
       - name
     Protocol.Options:
@@ -1783,8 +1836,7 @@ components:
         eth_name:
           description: "The unique name of the Ethernet interface on which ISIS is\
             \ running. Two ISIS interfaces cannot share the same Ethernet.       \
-            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \  \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2949,12 +3001,6 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
             - /components/schemas/DhcpClient.V4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/DhcpClient.V4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -3894,8 +3940,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -4426,8 +4470,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -7452,12 +7494,6 @@ components:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
             - /components/schemas/DhcpClient.V6/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/DhcpClient.V6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -7776,11 +7812,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -7817,11 +7848,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -8031,7 +8057,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -8120,11 +8145,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -8696,10 +8716,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -8799,6 +8815,1161 @@ components:
           type: boolean
           default: true
           x-field-uid: 4
+    Device.Tcp:
+      description: |-
+        TCP configs.
+      type: object
+      required:
+      - ip_interface_name
+      properties:
+        ip_interface_name:
+          description: |
+            IPv4/v6 interface name
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4Base/properties/name
+            - /components/schemas/Device.Ipv6Base/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4Base/properties/name
+          - /components/schemas/Device.Ipv6Base/properties/name
+          x-field-uid: 1
+        keep_alive_time:
+          description: |-
+            Keep alive time for TCP. The Keep-alive Time value is expressed in seconds.
+          type: number
+          default: 7200
+          x-field-uid: 2
+        name:
+          x-field-uid: 3
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        keep_alive_interval:
+          description: |-
+            The number of seconds between repeated keep-alive probes.
+          type: number
+          default: 75
+          x-field-uid: 4
+        receive_buffer_size:
+          description: |-
+            The TCP read buffer size.
+          type: integer
+          default: 4096
+          x-field-uid: 5
+        transmit_buffer_size:
+          description: |-
+            The TCP write buffer size.
+          type: integer
+          default: 4096
+          x-field-uid: 6
+        adjust_tcp_buffers:
+          description: |-
+            It enables the automatic tcp buffer for receive/transmit buffer size.If set to true, for certain test configurations, the  values configured for the TCP read and write buffer sizes are ignored and values selected by IxLoad are used instead. If set to false, buffer size adjustment is disabled and the configured values for the TCP read and write buffer sizes are used.
+          type: boolean
+          default: true
+          x-field-uid: 8
+        retransmission_minimum_timeout:
+          description: |-
+            The minimum retransmission timeout value for tcp packet in milliseconds.It accepts the default value of 200ms
+          type: integer
+          default: 200
+          x-field-uid: 9
+        retransmission_maximum_timeout:
+          description: |-
+            The maximum retransmission timeout value for tcp packet in milliseconds.It accepts the default value of 120000ms
+          type: integer
+          default: 120000
+          x-field-uid: 10
+        minimum_source_port:
+          description: |-
+            Minimum TCP source port value. It specifies which ports to use for client connections. The Min value specifies the lower bound (the lowest permissible port number).It accepts the default value of 1024
+          type: integer
+          default: 1024
+          x-field-uid: 11
+        maximum_source_port:
+          description: |-
+            Maximum TCP source port value. The Maximum source port value specifies the upper bound (the highest permissible port  number). It accepts the default value of 65535.
+          type: integer
+          default: 65535
+          x-field-uid: 12
+        inter_packet_gap:
+          description: |-
+            It specifies the number of bytes separating packets in a stream.The default value is 8, the minimum is 8, and the maximum is 8191
+          type: integer
+          default: 8
+          minimum: 8
+          maximum: 8191
+          x-field-uid: 13
+        inter_packet_delay:
+          description: |-
+            It specifies the inter packet delay number in micro seconds in a stream.The default value is 0
+          type: integer
+          default: 0
+          x-field-uid: 14
+        ip_fragment_time:
+          description: |-
+            It represents fragment Reassembly Timer. The number of seconds the TCP should keep IP fragments before discarding it. The default value is 30.
+          type: integer
+          default: 30
+          x-field-uid: 15
+        fin_timeout:
+          description: |-
+            It represents the FIN Timeout. The number of seconds the client or server waits to receive a final FIN before closing a socket. A FIN Timeout is usually used to prevent denial-of-service attacks. The default value is "60"
+          type: integer
+          default: 60
+          x-field-uid: 16
+        syn_retries:
+          description: |-
+            It refers the number of times an un-acknowledged SYN for an active TCP connection will be re-transmitted.The default value is "5"
+          type: integer
+          default: 5
+          x-field-uid: 17
+        synack_retries:
+          description: |-
+            It refers the number of times an un-acknowledged SYN-ACK for a passive TCP connection will be re-transmitted.The default value is "5"
+          type: integer
+          default: 5
+          x-field-uid: 18
+        retansmit_retries1:
+          description: |-
+            It refers the retransmit retries 1. The number of times TCP will attempt to retransmit a segment on an established connection. If the number of retransmit attempts exceeds this value, TCP requests that the network layer update the route. The default is the RFC 1122 specified minimum of 3 retransmissions. The default value is "3"
+          type: integer
+          default: 3
+          x-field-uid: 19
+        retransmit_retries2:
+          description: |-
+            It refers the retransmit retries 2. If the number of retransmissions of the same segment reaches this threshold, TCP closes the connection. The default value is 15, which corresponds to a duration of approximately between 13 to 30 minutes, depending on the retransmission timeout.
+          type: integer
+          default: 15
+          x-field-uid: 20
+        packet_reordering:
+          description: |-
+            It refers to the number of duplicate ACKs that are required to indicate that a packet was lost.Changing this value is not  recommended. The default is 3, the minimum is 0, and the maximum is 255.
+          type: integer
+          default: 3
+          minimum: 0
+          maximum: 255
+          x-field-uid: 21
+        delayed_acks_segments:
+          description: |-
+            It refers to the delayed acks count in segments . The default value is 0.
+          type: integer
+          default: 0
+          x-field-uid: 22
+        delayed_acks_timeout:
+          description: |-
+            It refers to the delayed acks timeout in milliseconds . The default value is 0.
+          type: integer
+          default: 0
+          x-field-uid: 23
+        port_randomization:
+          description: |-
+            It enables UDP port randomization.If this option is set, each new sockets will be bound to a random port.
+          type: boolean
+          default: false
+          x-field-uid: 24
+        disable_path_mtu:
+          description: |-
+            It disables the Path MTU Discovery.It accepts a boolean value of true or false.
+          type: boolean
+          default: true
+          x-field-uid: 25
+        window_scaling:
+          description: |-
+            It refers to the TCP window scaling.It is reserved. It accepts a boolean value of true or false.
+          type: boolean
+          default: false
+          x-field-uid: 26
+        selective_ack:
+          description: |-
+            It enables the RFC 2018 TCP Selective Acknowledgement. It accepts a boolean value of true or false.
+          type: boolean
+          default: true
+          x-field-uid: 27
+        time_wait_reuse:
+          description: |-
+            If true, allows the reuse of TIME-WAIT sockets for new connections.Enable this option only if you are certain that it is safe from a protocol viewpoint.
+          type: boolean
+          default: false
+          x-field-uid: 28
+        time_wait_recycle:
+          description: |-
+            It enables the fast recycling of TIME-WAIT sockets. Enabling this option is not recommended when working with NAT (Network Address Translation).
+          type: boolean
+          default: false
+          x-field-uid: 29
+        time_wait_rfc1323_strict:
+          description: |-
+            It enables the RFC 1323 strict behavior. Specifically, if a packet has TSOPT set, but does not have the ACK bit set, the TSecr field in the TSOPT will be zero in that packet.
+          type: boolean
+          default: false
+          x-field-uid: 30
+        packet_timestamps:
+          description: |-
+            If true, the client or server inserts a timestamp into each packet.Enabling the TCP Timestamp option adds 12 bytes to the TCP header. This has the effect of reducing the effective MSS configured.
+          type: boolean
+          default: true
+          x-field-uid: 31
+        explicit_congestion_notification:
+          description: |-
+            It enables the Explicit Congestion Notification.
+          type: boolean
+          default: false
+          x-field-uid: 32
+        bic:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 33
+        vegas_alpha:
+          description: |-
+            Reserved
+          type: integer
+          default: 2
+          x-field-uid: 34
+        rfc1337:
+          description: |-
+            Reserved
+          type: boolean
+          default: false
+          x-field-uid: 35
+        mem_low:
+          description: |-
+            Reserved
+          type: integer
+          default: 24576
+          x-field-uid: 36
+        maximum_wmem:
+          description: |-
+            Reserved
+          type: integer
+          default: 262144
+          x-field-uid: 37
+        westwood:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 38
+        avoid_vegas_congestion:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 39
+        maximum_rmem:
+          description: |-
+            Reserved
+          type: integer
+          default: 262144
+          x-field-uid: 40
+        orphan_retries:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 41
+        maximum_time_wait_buckets:
+          description: |-
+            The maximum number of sockets that can be in the TIME_WAIT state in the system. The purpose of this limit is to prevent simple DoS attacks. If this number is exceeded, the socket is closed and a warning is displayed.
+          type: integer
+          default: 180000
+          minimum: 0
+          x-field-uid: 42
+        low_latency:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 43
+        minimum_rmem:
+          description: |-
+            Reserved
+          type: integer
+          default: 4096
+          x-field-uid: 44
+        window_scale:
+          description: |-
+            Reserved
+          type: integer
+          default: 2
+          x-field-uid: 45
+        wmem_default:
+          description: |-
+            Reserved
+          type: integer
+          default: 262144
+          x-field-uid: 46
+        minimum_wmem:
+          description: |-
+            Reserved
+          type: integer
+          default: 4096
+          x-field-uid: 47
+        stdurg:
+          description: |-
+            Reserved
+          type: boolean
+          default: false
+          x-field-uid: 48
+        maximum_syn_backlog:
+          description: |-
+            Reserved
+          type: integer
+          default: 1024
+          x-field-uid: 49
+        dsack:
+          description: |-
+            Reserved
+          type: boolean
+          default: true
+          x-field-uid: 50
+        abort_on_overflow:
+          description: |-
+            Reserved
+          type: boolean
+          default: false
+          x-field-uid: 51
+        fragment_reassembly_timer:
+          description: |-
+            Fragment Reassembly Timer. ReThe number of seconds the TCP should keep IP fragments before discarding them
+          type: integer
+          default: 0
+          x-field-uid: 52
+        vegas_beta:
+          description: |-
+            Reserved
+          type: integer
+          default: 6
+          x-field-uid: 53
+        maximum_orphans:
+          description: |-
+            Reserved
+          type: integer
+          default: 8192
+          x-field-uid: 54
+        mem_pressure:
+          description: |-
+            Reserved
+          type: integer
+          default: 32768
+          x-field-uid: 55
+        moderate_receive_buffer:
+          description: |-
+            Reserved
+          type: integer
+          default: 0
+          x-field-uid: 56
+        no_metrics_save:
+          description: |-
+            Reserved
+          type: boolean
+          default: false
+          x-field-uid: 57
+        retrans_collapse:
+          description: |-
+            Reserved
+          type: boolean
+          default: true
+          x-field-uid: 58
+        rmem_default:
+          description: |-
+            Reserved
+          type: integer
+          default: 262144
+          x-field-uid: 59
+        mem_high:
+          description: |-
+            Reserved
+          type: integer
+          default: 49152
+          x-field-uid: 60
+        vegas_gamma:
+          description: |-
+            Reserved
+          type: integer
+          default: 2
+          x-field-uid: 61
+        fack:
+          description: |-
+            Reserved
+          type: boolean
+          default: true
+          x-field-uid: 62
+        bic_low_window:
+          description: |-
+            Reserved
+          type: integer
+          default: 14
+          x-field-uid: 63
+        app_win:
+          description: |-
+            Reserved
+          type: integer
+          default: 31
+          x-field-uid: 64
+        keep_alive_probes:
+          description: |-
+            Number of keep-alive probes sent out before determining that a link is down.
+          type: number
+          default: 9
+          x-field-uid: 65
+    Device.Http:
+      description: |-
+        HTTP configs.
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+      type: object
+      properties:
+        tcp_name:
+          description: |
+            TCP interface name
+
+            x-constraint:
+            - /components/schemas/Device.Tcp/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Tcp/properties/name
+          x-field-uid: 1
+        priority_flow_control_class:
+          description: |-
+            It specifies the priority class in priority flow control in HTTP client.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+            v20:
+              x-field-uid: 3
+            v21:
+              x-field-uid: 4
+          default: v10
+          enum:
+          - v10
+          - v11
+          - v20
+          - v21
+        enable_tos:
+          description: |-
+            It enables the setting of the TOS(Type of Service) bits in the header of the HTTP packets. It accepts the boolean value of True or False
+          type: boolean
+          default: false
+          x-field-uid: 3
+        precedence_tos:
+          description: |-
+            It specifies the setting of the IP Precedence bits(TOS bit 0-2) in the header of the HTTP packets
+          type: string
+          x-field-uid: 4
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+            v20:
+              x-field-uid: 3
+            v21:
+              x-field-uid: 4
+            v30:
+              x-field-uid: 5
+            v31:
+              x-field-uid: 6
+            v40:
+              x-field-uid: 7
+          default: v10
+          enum:
+          - v10
+          - v11
+          - v20
+          - v21
+          - v30
+          - v31
+          - v40
+        delay_tos:
+          description: |-
+            It specifies the setting of the delay bit(TOS bit 3) in the header of the HTTP packets
+          type: string
+          x-field-uid: 5
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+          default: v10
+          enum:
+          - v10
+          - v11
+        throughput_tos:
+          description: |-
+            It specifies the setting of the throughput bit(TOS bit 4) in the header of the HTTP packets
+          type: string
+          x-field-uid: 6
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+          default: v10
+          enum:
+          - v10
+          - v11
+        url_stats_counturl_stats_count:
+          description: |-
+            It specifies the setting of the reliability bit(TOS bit 5) in the header of the HTTP packets
+          type: string
+          x-field-uid: 7
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+          default: v10
+          enum:
+          - v10
+          - v11
+        url_stats_count:
+          description: |-
+            It refers to the number of URL statistics to display in Statistics (StatViewer) window.
+          type: number
+          default: 10
+          minimum: 10
+          maximum: 1000
+          x-field-uid: 8
+        disable_priority_flow_control:
+          description: |-
+            It disables the priority flow control in HTTP client.It accepts the value of 0 or 1
+          type: number
+          default: 0
+          x-field-uid: 9
+        enable_vlan_priority:
+          description: |-
+            It enables the vlan_priority which sets the VLAN priority for the activity.
+          type: boolean
+          default: false
+          x-field-uid: 10
+        vlan_priority:
+          description: |-
+            It accepts the vlan priority value.(only if enable_vlan_priority is enabled)
+          type: number
+          default: 0
+          x-field-uid: 11
+        esm:
+          description: |-
+            It specifies the TCP Maximum Segment Size in the MSS (RX) field
+          type: number
+          default: 1460
+          x-field-uid: 12
+        enable_esm:
+          description: |-
+            It enables the use of the esm option in client. It accepts the boolean value of True or False
+          type: boolean
+          default: false
+          x-field-uid: 13
+        time_to_live_value:
+          description: |-
+            It refers to Time To Live of packets in seconds.
+          type: number
+          default: 64
+          x-field-uid: 14
+        tcp_close_option:
+          description: |-
+            It refers to the method of closing tcp connections in client. It takes the value of 0 or 1 or 2.
+          type: string
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+            v20:
+              x-field-uid: 3
+          default: v10
+          x-field-uid: 15
+          enum:
+          - v10
+          - v11
+          - v20
+        enable_integrity_check_support:
+          description: |-
+            It enables the client to calculate a checksum for a received page and compares
+          type: boolean
+          default: false
+          x-field-uid: 16
+        type_of_service:
+          description: |-
+            If enableTos is true, this option specifies the IP Precedence /TOS.
+          type: number
+          default: 0
+          x-field-uid: 17
+        high_perf_with_simulated_user:
+          description: |-
+            It indicates the server to enable the high performance with the simulated user.It accepts either True or False
+          type: boolean
+          default: false
+          x-field-uid: 18
+        clients:
+          description: |-
+            The properties of HTTP Client.
+          type: array
+          items:
+            $ref: '#/components/schemas/Http.Client'
+          x-field-uid: 19
+        servers:
+          description: |-
+            The properties of HTTP server.
+          type: array
+          items:
+            $ref: '#/components/schemas/Http.Server'
+          x-field-uid: 20
+        name:
+          x-field-uid: 21
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        profile:
+          description: |-
+            HTTP Profile
+          type: string
+          default: Chrome
+          x-field-uid: 22
+        version:
+          description: |-
+            HTTP Version
+          type: string
+          default: HTTP11
+          x-field-uid: 23
+        connection_persistence:
+          description: |-
+            It enables the connection persistence count throughout the test.
+          type: string
+          default: '0'
+          x-field-uid: 24
+      pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+      x-field-uid: 1
+      x-unique: global
+    Http.Client:
+      description: "One or more HTTP Client configurations and its HTTP methods configs. "
+      type: object
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        version:
+          description: |-
+            HTTP Version
+          type: string
+          default: '1'
+          x-field-uid: 2
+        cookie_jar_size:
+          description: |-
+            cookie_jar_size the number of cookies that will be saved for each client. The maximum value of this is 300. (only if enable_cookie_support is enabled)
+          type: integer
+          default: 10
+          x-field-uid: 3
+        cookie_reject_probability:
+          description: |-
+            cookie_reject_probability indicates the probability, from 0 or 1, that a client will reject a request for a cookie(s) contents from the server.  (only if enable_cookie_support is enabled)
+          type: boolean
+          default: 0
+          x-field-uid: 4
+        enable_cookie_support:
+          description: |-
+            The client will support cookie retention, as indicated in the cookie_jar_size and cookie_reject_probability
+          type: boolean
+          default: false
+          x-field-uid: 5
+        command_timeout:
+          description: |-
+            HTTP command timeout timer in seconds
+          type: number
+          default: 600
+          x-field-uid: 6
+        command_timeout_ms:
+          description: |-
+            HTTP command timeout timer in milliseconds
+          type: number
+          default: 0
+          x-field-uid: 7
+        enable_proxy:
+          description: "The client will support http_proxy by setting 0 or 1, "
+          type: boolean
+          default: false
+          x-field-uid: 8
+        keep_alive:
+          description: |-
+            HTTP client maintains KeepAlive to indicates the connection, either true or false.
+          type: boolean
+          default: false
+          x-field-uid: 9
+        max_sessions:
+          description: |-
+            It refers to a maximum number of connections that a single user can have/open at any given time in the client
+          type: number
+          default: 3
+          x-field-uid: 10
+        max_streams:
+          description: |-
+            max_streams is the maximum number of concurrent streams in each HTTP client .
+          type: number
+          default: 1
+          x-field-uid: 11
+        max_pipeline:
+          description: |-
+            It indicates the maximum number of requests that the client will send before waiting for a response.
+          type: number
+          default: 1
+          x-field-uid: 12
+        max_persistent_requests:
+          description: |-
+            It enables the user to control the number of transactions that occur during a single connection.
+          type: number
+          default: 1
+          x-field-uid: 13
+        exact_transactions:
+          description: |-
+            It enables the transaction count throughout the test.
+          type: number
+          default: 0
+          x-field-uid: 14
+        follow_http_redirects:
+          description: |-
+            It enables the client follows HTTP Redirect commands from the server.
+          type: boolean
+          default: false
+          x-field-uid: 15
+        enable_decompress_support:
+          description: |-
+            It enables the client decodes pages that have been encoded using a supported encoding method.
+          type: boolean
+          default: false
+          x-field-uid: 16
+        enable_per_conn_cookie_support:
+          description: |-
+            It enables cookies are maintained on a per-connection basis instead of on a per-user basis.It takes the boolean value either true or false
+          type: boolean
+          default: false
+          x-field-uid: 17
+        ip_preference:
+          description: "It has the mixture of IPv4 and IPv6 addresses are available\
+            \ on the client network, "
+          type: string
+          x-enum:
+            v10:
+              x-field-uid: 1
+            v11:
+              x-field-uid: 2
+            v20:
+              x-field-uid: 3
+            v21:
+              x-field-uid: 4
+          default: v20
+          x-field-uid: 18
+          enum:
+          - v10
+          - v11
+          - v20
+          - v21
+        enable_large_header:
+          description: |-
+            It specifies client to support large headers. It accepts boolean value of True or False
+          type: boolean
+          default: false
+          x-field-uid: 19
+        max_header_len:
+          description: |-
+            It specifies the length of header data. It accepts integer values. Minimum = 1,024, maximum =1,0240
+          type: number
+          default: 1024
+          minimum: 1024
+          maximum: 10240
+          x-field-uid: 20
+        per_header_percent_dist:
+          description: |-
+            It specifies the show response of header distribution stats.
+          type: boolean
+          default: false
+          x-field-uid: 21
+        enable_auth:
+          description: |-
+            It enables the client with authentication profile attached to it.
+          type: boolean
+          default: false
+          x-field-uid: 22
+        piggy_back_ack:
+          description: |-
+            It enables the server includes the ACK for the previous packet in the same packet as the next packet.
+          type: boolean
+          default: true
+          x-field-uid: 23
+        tcp_fast_open:
+          description: |-
+            It enables the client for data to be exchanged during the sender's initial TCP SYN.
+          type: boolean
+          default: false
+          x-field-uid: 24
+        content_length_deviation_tolerance:
+          description: |-
+            It specifies the contnet length Deviation tolerance value.
+          type: number
+          default: 0
+          x-field-uid: 25
+        disable_dns_resolution_cache:
+          description: |-
+            It disables the DNS Resolution Cache in HTTP client.
+          type: boolean
+          default: false
+          x-field-uid: 26
+        enable_consecutive_ips_per_session:
+          description: |-
+            It enables consecutive ips per session for HTTP client.
+          type: boolean
+          default: false
+          x-field-uid: 27
+        enable_achieve_cc_first:
+          description: |-
+            It enables to bring up all connections first option for HTTP client.
+          type: boolean
+          default: false
+          x-field-uid: 28
+        enable_traffic_distribution_for_cc:
+          description: |-
+            It enables uniform traffic distribution across all connections in HTTP client.
+          type: boolean
+          default: false
+          x-field-uid: 29
+        browser_emulation_name:
+          description: |-
+            It enables uniform traffic distribution across all connections in HTTP client.
+          type: string
+          x-field-uid: 31
+        methods:
+          description: "The HTTP methods such as GET, POST and its properties. "
+          type: array
+          items:
+            $ref: '#/components/schemas/Http.Method'
+          x-field-uid: 32
+    Http.Method:
+      type: object
+      properties:
+        get:
+          x-field-uid: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/Method.Get'
+        post:
+          x-field-uid: 2
+          type: array
+          items:
+            $ref: '#/components/schemas/Method.Post'
+        put:
+          x-field-uid: 3
+          type: array
+          items:
+            $ref: '#/components/schemas/Method.Put'
+        delete:
+          x-field-uid: 4
+          type: array
+          items:
+            $ref: '#/components/schemas/Method.Delete'
+        header:
+          x-field-uid: 5
+          type: array
+          items:
+            $ref: '#/components/schemas/Method.Header'
+    Method.Get:
+      description: |-
+        A GET operation of HTTP
+      type: object
+      required:
+      - destination
+      - page
+      properties:
+        destination:
+          description: |-
+            Server name/IP address
+          type: string
+          x-field-uid: 1
+        page:
+          description: |-
+            The page name to perform get opertaion.
+          type: string
+          x-field-uid: 2
+        abort:
+          description: |-
+            The abort allows to perform an operation at one of two places-before request or after request
+          type: string
+          x-field-uid: 3
+        profile:
+          description: |-
+            When a HTTP Client Profile is created there is an associated ID, created for each profile.  Default =-1
+          type: number
+          x-field-uid: 4
+          default: -1
+        name_value_args:
+          description: "It specify parameter names and values,they can occur in any\
+            \ order. "
+          type: string
+          x-field-uid: 5
+          default: None
+        enable_direct_server_return:
+          description: |-
+            It enables the Direct Server Run,the responses are sent directly from the servers to the clients
+          type: boolean
+          x-field-uid: 6
+          default: false
+    Method.Post:
+      description: |-
+        A POST operation of HTTP
+      type: object
+      required:
+      - destination
+      - page
+      properties:
+        destination:
+          description: |-
+            The Server name/IP address
+          type: string
+          x-field-uid: 1
+        page:
+          description: |-
+            The page name to perform post opertaion.
+          type: string
+          x-field-uid: 2
+        abort:
+          description: |-
+            The abort allows to perform an operation at one of two places-before request or after request
+          type: string
+          x-field-uid: 3
+          default: None
+        profile:
+          description: |-
+            When a HTTP Client Profile is created there is an associated ID, created for each profile.  Default =-1
+          type: number
+          x-field-uid: 4
+          default: -1
+        name_value_args:
+          description: "It specify parameter names and values,they can occur in any\
+            \ order. "
+          type: string
+          x-field-uid: 5
+          default: ''
+        arguments:
+          description: |-
+            The name and path of the file to be posted on the server.
+          type: string
+          x-field-uid: 6
+          default: ''
+        send_md5_check_sum_header:
+          description: |-
+            An MD5 check sum header is included with the requests sent to the server.Default = 0
+          type: number
+          x-field-uid: 7
+          default: 0
+        chunk_size:
+          description: |-
+            It enables chunked-transfer encoding if set to a numeric value. Default = "None".
+          type: string
+          x-field-uid: 8
+          default: None
+    Method.Put:
+      description: |-
+        A PUT operation of HTTP
+      type: object
+      required:
+      - destination
+      - page
+      properties:
+        destination:
+          description: |-
+            The Server name/IP address
+          type: string
+          x-field-uid: 1
+        page:
+          description: |-
+            The page name to perform put opertaion.
+          type: string
+          x-field-uid: 2
+        abort:
+          description: |-
+            The abort allows to perform an operation at one of two places-before request or after request
+          type: string
+          x-field-uid: 3
+          default: None
+        profile:
+          description: |-
+            When a HTTP Client Profile is created there is an associated ID, created for each profile.  Default =-1
+          type: number
+          x-field-uid: 4
+          default: -1
+        name_value_args:
+          description: "It specify parameter names and values,they can occur in any\
+            \ order. "
+          type: string
+          x-field-uid: 5
+          default: ''
+        arguments:
+          description: |-
+            The name and path of the file to be posted on the server.
+          type: string
+          x-field-uid: 6
+          default: ''
+        send_md5_check_sum_header:
+          description: |-
+            An MD5 check sum header is included with the requests sent to the server.Default = 0
+          type: number
+          x-field-uid: 7
+          default: 0
+        chunk_size:
+          description: |-
+            It enables chunked-transfer encoding if set to a numeric value. Default = "None".
+          type: string
+          x-field-uid: 8
+          default: None
+    Method.Delete:
+      description: |-
+        A Delete operation of HTTP
+      type: object
+      required:
+      - destination
+      - page
+      properties:
+        destination:
+          description: |-
+            The Server name/IP address
+          type: string
+          x-field-uid: 1
+        page:
+          description: |-
+            The page name to perform delete opertaion.
+          type: string
+          x-field-uid: 2
+        abort:
+          description: |-
+            The abort allows to perform an operation at one of two places-before request or after request
+          type: string
+          x-field-uid: 3
+          default: None
+        profile:
+          description: |-
+            When a HTTP Client Profile is created there is an associated ID, created for each profile.  Default =-1
+          type: number
+          x-field-uid: 4
+          default: -1
+    Method.Header:
+      description: |-
+        A header operation of HTTP
+      type: object
+      required:
+      - destination
+      - page
+      properties:
+        destination:
+          description: |-
+            The Server name/IP address
+          type: string
+          x-field-uid: 1
+        page:
+          description: |-
+            The page name to perform header opertaion.
+          type: string
+          x-field-uid: 2
+        abort:
+          description: |-
+            The abort allows to perform an operation at one of two places-before request or after request
+          type: string
+          x-field-uid: 3
+          default: None
+        profile:
+          description: |-
+            When a HTTP Client Profile is created there is an associated ID, created for each profile.  Default =-1
+          type: number
+          x-field-uid: 4
+          default: -1
+        name_value_args:
+          description: "It specify parameter names and values,they can occur in any\
+            \ order. "
+          type: string
+          x-field-uid: 5
+          default: ''
+    Http.Server:
+      description: "One or more HTTP Server configurations. "
+      type: object
+      properties:
+        rst_timeout:
+          description: |-
+            It specifies the reset timeout in milliseconds and it is enabled only if tcp tear down of option - 'send RST after timeout' is selected.
+          type: number
+          default: 100
+          x-field-uid: 1
+        enable_http2:
+          description: |-
+            It enables to HTTP2  version for HTTP server.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        port:
+          description: |-
+            The port number to which the HTTP server will respond to non-SSL requests.
+          type: integer
+          default: 80
+          x-field-uid: 3
+        request_timeout:
+          description: |-
+            The number of seconds that the server will wait for input on an open connection before closing the session with a 408 error.
+          type: integer
+          default: 300
+          x-field-uid: 4
+        maximum_response_delay:
+          description: |-
+            It indicates the maximum length of time, in milliseconds, that the HTTP server delays sending a response.
+          type: number
+          default: 0
+          x-field-uid: 5
+        minimum_response_delay:
+          description: |-
+            It indicates the minimum length of time, in milliseconds, that the HTTP server delays sending a response.
+          type: number
+          default: 0
+          x-field-uid: 6
+        dont_expect_upgrade:
+          description: |-
+            It indicates the HTTP server upgrading or not.
+          type: boolean
+          default: false
+          x-field-uid: 7
+        enable_per_server_per_url_stat:
+          description: |-
+            It indicates the server with corresponding url stats, If true, the statistics from a returned page, records the server IP address from where the page is sent.
+          type: boolean
+          default: false
+          x-field-uid: 8
+        url_page_size:
+          description: |-
+            It specifies the URL Page size (in bytes) in Web pages in HTTP server. Default value is 1024
+          type: number
+          default: 1024
+          x-field-uid: 9
+        enable_chunk_encoding:
+          description: |-
+            It enables the setting of the Chunk Transfer-Encoding in HTTP packets. It accepts the boolean value of True or False
+          type: boolean
+          default: false
+          x-field-uid: 10
+        enable_md5_checksum:
+          description: "It true, the server calculates checksums for the pages it\
+            \ sends to the client. "
+          type: boolean
+          default: false
+          x-field-uid: 11
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -8830,10 +10001,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -8914,11 +10082,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -8928,14 +10091,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -8951,11 +10107,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -9062,19 +10213,6 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
         rx_names:
           type: array
           items:
@@ -9103,19 +10241,6 @@ components:
           x-field-uid: 3
           description: |
             TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -12193,8 +13318,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -12291,10 +13415,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12458,6 +13578,192 @@ components:
             User must specify a value if mode is not auto.
           type: string
           x-field-uid: 3
+    Trafficprofile:
+      description: |-
+        A container for L47 traffic configurations.
+      type: object
+      properties:
+        app:
+          description: |-
+            application protocol config name on which traffic be applied.
+          type: array
+          items:
+            type: string
+          x-field-uid: 1
+        objective_type:
+          description: |-
+            Objective types such as simulated user, connection per seconds, concurrent connection etc, 1st item of a list is primary objective and remaining items are secondary objective.
+          type: array
+          items:
+            type: string
+          x-field-uid: 2
+        objective_value:
+          description: |-
+            Objective value such as for objective_type, 1st item of a list is primary objective value and remaining items are secondary objective values.
+          type: array
+          items:
+            type: integer
+          x-field-uid: 3
+        segment:
+          description: |-
+            timeline configurations.
+          type: array
+          items:
+            $ref: '#/components/schemas/Trafficprofile.Segment'
+          x-field-uid: 4
+        timeline:
+          description: |-
+            Timeline is list of segments configured.
+          type: array
+          items:
+            type: string
+          x-field-uid: 5
+        objectives:
+          description: |-
+            primary objective
+          type: array
+          items:
+            $ref: '#/components/schemas/Trafficprofile.Objective'
+          x-field-uid: 6
+    Trafficprofile.Segment:
+      description: "One or more HTTP Client configurations and its HTTP methods configs. "
+      type: object
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        start:
+          description: |-
+            Start duration in seconds
+          type: integer
+          x-field-uid: 2
+        duration:
+          description: |-
+            Duration in seconds
+          type: integer
+          x-field-uid: 3
+        rate:
+          description: |-
+            Rate
+          type: integer
+          x-field-uid: 4
+        target:
+          description: |-
+            Target
+          type: integer
+          x-field-uid: 5
+    Trafficprofile.Objective:
+      description: |-
+        objective config such simulated user, thoughput, conncurrent connections, connection per sec.
+      type: object
+      properties:
+        simulated_user:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Objective.Simulated.User'
+        throughput:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Objective.Throughput'
+        concurrent_connections:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Objective.Connection.Conncurrent'
+        connection_per_sec:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Objective.Connection.Per.Seconds'
+    Objective.Simulated.User:
+      description: |-
+        simulated user traffic
+      type: object
+      properties:
+        ramp_up_type:
+          description: |-
+            Ramp up type to defines the type of user execution profiles during the ramp_up_time, .
+          type: string
+          x-field-uid: 1
+          x-enum:
+            users_intervals:
+              x-field-uid: 1
+            max_pending_user:
+              x-field-uid: 2
+            immediate:
+              x-field-uid: 3
+          default: users_intervals
+          enum:
+          - users_intervals
+          - max_pending_user
+          - immediate
+        ramp_up_value:
+          description: |-
+            Value applied to ramp_up_type to either bring up users at a certain rate.
+          type: integer
+          x-field-uid: 2
+        sustain_time:
+          description: |-
+            Amount of time when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: integer
+          x-field-uid: 3
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: integer
+          x-field-uid: 4
+    Objective.Throughput:
+      description: "Throughput traffic "
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 2
+    Objective.Connection.Conncurrent:
+      description: |-
+        Conncurrent connections objectives
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 2
+        ramp_down_value:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 3
+    Objective.Connection.Per.Seconds:
+      description: |-
+        Conncurrent connections objectives
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 2
+        ramp_down_value:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 3
     Error:
       description: |-
         Error response generated while serving API request.
@@ -12571,11 +13877,14 @@ components:
               x-field-uid: 2
             traffic:
               x-field-uid: 3
+            app:
+              x-field-uid: 4
           x-field-uid: 1
           enum:
           - port
           - protocol
           - traffic
+          - app
         port:
           $ref: '#/components/schemas/State.Port'
           x-field-uid: 2
@@ -12585,6 +13894,9 @@ components:
         traffic:
           $ref: '#/components/schemas/State.Traffic'
           x-field-uid: 4
+        app:
+          $ref: '#/components/schemas/State.App'
+          x-field-uid: 5
     State.Port:
       description: |-
         States associated with configured ports.
@@ -12669,6 +13981,37 @@ components:
         isis:
           $ref: '#/components/schemas/State.Protocol.Isis'
           x-field-uid: 6
+    State.App:
+      description: |-
+        States associated with app traffic for l47
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            state:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - state
+        state:
+          description: |-
+            State of app traffic ...
+          type: string
+          x-field-uid: 2
+          x-enum:
+            start:
+              x-field-uid: 1
+            stop:
+              x-field-uid: 2
+            abort:
+              x-field-uid: 3
+          enum:
+          - start
+          - stop
+          - abort
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -12679,10 +14022,6 @@ components:
         port_names:
           description: |
             The names of target ports. An empty or null list will target all ports.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12719,10 +14058,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -12753,10 +14088,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -12826,13 +14157,6 @@ components:
             - /components/schemas/Bgp.V6RouteRange/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -12891,10 +14215,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -12923,10 +14243,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -12976,11 +14292,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -13035,10 +14346,6 @@ components:
         router_names:
           description: |
             The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -13220,8 +14527,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -13232,10 +14537,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -13273,10 +14574,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -13355,8 +14652,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -13367,10 +14662,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -13408,10 +14699,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -13475,10 +14762,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
@@ -13546,10 +14829,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Device.Bgp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bgp/properties/name
@@ -13755,10 +15034,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -13816,10 +15091,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -13924,10 +15195,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -14288,10 +15555,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -14498,10 +15761,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -14705,10 +15964,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -14982,10 +16237,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -15037,10 +16288,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -15123,10 +16370,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -15136,10 +16379,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -15337,10 +16576,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -15428,10 +16663,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -15732,10 +16963,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -15832,10 +17059,6 @@ components:
         server_names:
           description: |
             The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4Server/properties/name
@@ -16072,10 +17295,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -16118,10 +17337,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -16161,11 +17376,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -16902,10 +18112,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -17366,10 +18572,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -17599,10 +18801,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -17807,10 +19005,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -17870,10 +19064,6 @@ components:
         dhcp_server_names:
           description: |
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4server/properties/name
@@ -17957,10 +19147,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
