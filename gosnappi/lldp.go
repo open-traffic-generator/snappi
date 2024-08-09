@@ -20,6 +20,7 @@ type lldp struct {
 	chassisIdHolder  LldpChassisId
 	portIdHolder     LldpPortId
 	systemNameHolder LldpSystemName
+	orgInfosHolder   LldpLldpOrgInfoIter
 }
 
 func NewLldp() Lldp {
@@ -251,6 +252,7 @@ func (obj *lldp) setNil() {
 	obj.chassisIdHolder = nil
 	obj.portIdHolder = nil
 	obj.systemNameHolder = nil
+	obj.orgInfosHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -324,6 +326,8 @@ type Lldp interface {
 	Name() string
 	// SetName assigns string provided by user to Lldp
 	SetName(value string) Lldp
+	// OrgInfos returns LldpLldpOrgInfoIterIter, set in Lldp
+	OrgInfos() LldpLldpOrgInfoIter
 	setNil()
 }
 
@@ -493,6 +497,93 @@ func (obj *lldp) SetName(value string) Lldp {
 	return obj
 }
 
+// The Organization Information is used to define the organization specific TLVs. The organization specific TLV is defined in IEEE 802.1AB-2016 specification. This category is provided to allow different organizations, such as  IEEE 802.1, IEEE 802.3, IETF, as well as individual software and equipment vendors, to define TLVs that advertise  information to remote entities attached to the same media.
+// OrgInfos returns a []LldpOrgInfo
+func (obj *lldp) OrgInfos() LldpLldpOrgInfoIter {
+	if len(obj.obj.OrgInfos) == 0 {
+		obj.obj.OrgInfos = []*otg.LldpOrgInfo{}
+	}
+	if obj.orgInfosHolder == nil {
+		obj.orgInfosHolder = newLldpLldpOrgInfoIter(&obj.obj.OrgInfos).setMsg(obj)
+	}
+	return obj.orgInfosHolder
+}
+
+type lldpLldpOrgInfoIter struct {
+	obj              *lldp
+	lldpOrgInfoSlice []LldpOrgInfo
+	fieldPtr         *[]*otg.LldpOrgInfo
+}
+
+func newLldpLldpOrgInfoIter(ptr *[]*otg.LldpOrgInfo) LldpLldpOrgInfoIter {
+	return &lldpLldpOrgInfoIter{fieldPtr: ptr}
+}
+
+type LldpLldpOrgInfoIter interface {
+	setMsg(*lldp) LldpLldpOrgInfoIter
+	Items() []LldpOrgInfo
+	Add() LldpOrgInfo
+	Append(items ...LldpOrgInfo) LldpLldpOrgInfoIter
+	Set(index int, newObj LldpOrgInfo) LldpLldpOrgInfoIter
+	Clear() LldpLldpOrgInfoIter
+	clearHolderSlice() LldpLldpOrgInfoIter
+	appendHolderSlice(item LldpOrgInfo) LldpLldpOrgInfoIter
+}
+
+func (obj *lldpLldpOrgInfoIter) setMsg(msg *lldp) LldpLldpOrgInfoIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&lldpOrgInfo{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *lldpLldpOrgInfoIter) Items() []LldpOrgInfo {
+	return obj.lldpOrgInfoSlice
+}
+
+func (obj *lldpLldpOrgInfoIter) Add() LldpOrgInfo {
+	newObj := &otg.LldpOrgInfo{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &lldpOrgInfo{obj: newObj}
+	newLibObj.setDefault()
+	obj.lldpOrgInfoSlice = append(obj.lldpOrgInfoSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *lldpLldpOrgInfoIter) Append(items ...LldpOrgInfo) LldpLldpOrgInfoIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.lldpOrgInfoSlice = append(obj.lldpOrgInfoSlice, item)
+	}
+	return obj
+}
+
+func (obj *lldpLldpOrgInfoIter) Set(index int, newObj LldpOrgInfo) LldpLldpOrgInfoIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.lldpOrgInfoSlice[index] = newObj
+	return obj
+}
+func (obj *lldpLldpOrgInfoIter) Clear() LldpLldpOrgInfoIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.LldpOrgInfo{}
+		obj.lldpOrgInfoSlice = []LldpOrgInfo{}
+	}
+	return obj
+}
+func (obj *lldpLldpOrgInfoIter) clearHolderSlice() LldpLldpOrgInfoIter {
+	if len(obj.lldpOrgInfoSlice) > 0 {
+		obj.lldpOrgInfoSlice = []LldpOrgInfo{}
+	}
+	return obj
+}
+func (obj *lldpLldpOrgInfoIter) appendHolderSlice(item LldpOrgInfo) LldpLldpOrgInfoIter {
+	obj.lldpOrgInfoSlice = append(obj.lldpOrgInfoSlice, item)
+	return obj
+}
+
 func (obj *lldp) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -547,6 +638,21 @@ func (obj *lldp) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Lldp")
 	}
+
+	if len(obj.obj.OrgInfos) != 0 {
+
+		if set_default {
+			obj.OrgInfos().clearHolderSlice()
+			for _, item := range obj.obj.OrgInfos {
+				obj.OrgInfos().appendHolderSlice(&lldpOrgInfo{obj: item})
+			}
+		}
+		for _, item := range obj.OrgInfos().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *lldp) setDefault() {

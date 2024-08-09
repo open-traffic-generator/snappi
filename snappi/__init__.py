@@ -1064,6 +1064,9 @@ from .snappi import LldpChassisMacSubType
 from .snappi import LldpPortId
 from .snappi import LldpPortInterfaceNameSubType
 from .snappi import LldpSystemName
+from .snappi import LldpOrgInfo
+from .snappi import LldpOrgInfoType
+from .snappi import LldpOrgInfoIter
 from .snappi import LldpIter
 from .snappi import Warning
 from .snappi import Error

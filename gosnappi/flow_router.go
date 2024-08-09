@@ -354,18 +354,6 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // TxNames returns a []string
 func (obj *flowRouter) TxNames() []string {
 	if obj.obj.TxNames == nil {
@@ -375,18 +363,6 @@ func (obj *flowRouter) TxNames() []string {
 }
 
 // TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -425,18 +401,6 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // RxNames returns a []string
 func (obj *flowRouter) RxNames() []string {
 	if obj.obj.RxNames == nil {
@@ -446,18 +410,6 @@ func (obj *flowRouter) RxNames() []string {
 }
 
 // TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
