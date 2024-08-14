@@ -270,27 +270,33 @@ type Dhcpv6ServerIapdPoolInfo interface {
 	SetStartPrefixAddress(value string) Dhcpv6ServerIapdPoolInfo
 	// HasStartPrefixAddress checks if StartPrefixAddress has been set in Dhcpv6ServerIapdPoolInfo
 	HasStartPrefixAddress() bool
-	// Prefix returns uint32, set in Dhcpv6ServerIapdPoolInfo.
-	Prefix() uint32
-	// SetPrefix assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
-	SetPrefix(value uint32) Dhcpv6ServerIapdPoolInfo
-	// HasPrefix checks if Prefix has been set in Dhcpv6ServerIapdPoolInfo
-	HasPrefix() bool
-	// Size returns uint32, set in Dhcpv6ServerIapdPoolInfo.
-	Size() uint32
-	// SetSize assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
-	SetSize(value uint32) Dhcpv6ServerIapdPoolInfo
-	// HasSize checks if Size has been set in Dhcpv6ServerIapdPoolInfo
-	HasSize() bool
-	// Step returns uint32, set in Dhcpv6ServerIapdPoolInfo.
-	Step() uint32
-	// SetStep assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
-	SetStep(value uint32) Dhcpv6ServerIapdPoolInfo
-	// HasStep checks if Step has been set in Dhcpv6ServerIapdPoolInfo
-	HasStep() bool
+	// ConfiguredPrefixLen returns uint32, set in Dhcpv6ServerIapdPoolInfo.
+	ConfiguredPrefixLen() uint32
+	// SetConfiguredPrefixLen assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
+	SetConfiguredPrefixLen(value uint32) Dhcpv6ServerIapdPoolInfo
+	// HasConfiguredPrefixLen checks if ConfiguredPrefixLen has been set in Dhcpv6ServerIapdPoolInfo
+	HasConfiguredPrefixLen() bool
+	// PrefixSize returns uint32, set in Dhcpv6ServerIapdPoolInfo.
+	PrefixSize() uint32
+	// SetPrefixSize assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
+	SetPrefixSize(value uint32) Dhcpv6ServerIapdPoolInfo
+	// HasPrefixSize checks if PrefixSize has been set in Dhcpv6ServerIapdPoolInfo
+	HasPrefixSize() bool
+	// PrefixStep returns uint32, set in Dhcpv6ServerIapdPoolInfo.
+	PrefixStep() uint32
+	// SetPrefixStep assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
+	SetPrefixStep(value uint32) Dhcpv6ServerIapdPoolInfo
+	// HasPrefixStep checks if PrefixStep has been set in Dhcpv6ServerIapdPoolInfo
+	HasPrefixStep() bool
+	// AdvertisedPrefixLen returns uint32, set in Dhcpv6ServerIapdPoolInfo.
+	AdvertisedPrefixLen() uint32
+	// SetAdvertisedPrefixLen assigns uint32 provided by user to Dhcpv6ServerIapdPoolInfo
+	SetAdvertisedPrefixLen(value uint32) Dhcpv6ServerIapdPoolInfo
+	// HasAdvertisedPrefixLen checks if AdvertisedPrefixLen has been set in Dhcpv6ServerIapdPoolInfo
+	HasAdvertisedPrefixLen() bool
 }
 
-// The IP address of the first prefix pool.
+// The first IP address of the prefix pool.
 // StartPrefixAddress returns a string
 func (obj *dhcpv6ServerIapdPoolInfo) StartPrefixAddress() string {
 
@@ -298,13 +304,13 @@ func (obj *dhcpv6ServerIapdPoolInfo) StartPrefixAddress() string {
 
 }
 
-// The IP address of the first prefix pool.
+// The first IP address of the prefix pool.
 // StartPrefixAddress returns a string
 func (obj *dhcpv6ServerIapdPoolInfo) HasStartPrefixAddress() bool {
 	return obj.obj.StartPrefixAddress != nil
 }
 
-// The IP address of the first prefix pool.
+// The first IP address of the prefix pool.
 // SetStartPrefixAddress sets the string value in the Dhcpv6ServerIapdPoolInfo object
 func (obj *dhcpv6ServerIapdPoolInfo) SetStartPrefixAddress(value string) Dhcpv6ServerIapdPoolInfo {
 
@@ -312,69 +318,91 @@ func (obj *dhcpv6ServerIapdPoolInfo) SetStartPrefixAddress(value string) Dhcpv6S
 	return obj
 }
 
-// The IPv6 network prefix length to be applied to the address.
-// Prefix returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) Prefix() uint32 {
+// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// ConfiguredPrefixLen returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) ConfiguredPrefixLen() uint32 {
 
-	return *obj.obj.Prefix
+	return *obj.obj.ConfiguredPrefixLen
 
 }
 
-// The IPv6 network prefix length to be applied to the address.
-// Prefix returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) HasPrefix() bool {
-	return obj.obj.Prefix != nil
+// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// ConfiguredPrefixLen returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) HasConfiguredPrefixLen() bool {
+	return obj.obj.ConfiguredPrefixLen != nil
 }
 
-// The IPv6 network prefix length to be applied to the address.
-// SetPrefix sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
-func (obj *dhcpv6ServerIapdPoolInfo) SetPrefix(value uint32) Dhcpv6ServerIapdPoolInfo {
+// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// SetConfiguredPrefixLen sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
+func (obj *dhcpv6ServerIapdPoolInfo) SetConfiguredPrefixLen(value uint32) Dhcpv6ServerIapdPoolInfo {
 
-	obj.obj.Prefix = &value
+	obj.obj.ConfiguredPrefixLen = &value
 	return obj
 }
 
 // The total number of addresses in the pool.
-// Size returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) Size() uint32 {
+// PrefixSize returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) PrefixSize() uint32 {
 
-	return *obj.obj.Size
+	return *obj.obj.PrefixSize
 
 }
 
 // The total number of addresses in the pool.
-// Size returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) HasSize() bool {
-	return obj.obj.Size != nil
+// PrefixSize returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) HasPrefixSize() bool {
+	return obj.obj.PrefixSize != nil
 }
 
 // The total number of addresses in the pool.
-// SetSize sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
-func (obj *dhcpv6ServerIapdPoolInfo) SetSize(value uint32) Dhcpv6ServerIapdPoolInfo {
+// SetPrefixSize sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
+func (obj *dhcpv6ServerIapdPoolInfo) SetPrefixSize(value uint32) Dhcpv6ServerIapdPoolInfo {
 
-	obj.obj.Size = &value
+	obj.obj.PrefixSize = &value
 	return obj
 }
 
 // The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
-// Step returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) Step() uint32 {
+// PrefixStep returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) PrefixStep() uint32 {
 
-	return *obj.obj.Step
+	return *obj.obj.PrefixStep
 
 }
 
 // The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
-// Step returns a uint32
-func (obj *dhcpv6ServerIapdPoolInfo) HasStep() bool {
-	return obj.obj.Step != nil
+// PrefixStep returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) HasPrefixStep() bool {
+	return obj.obj.PrefixStep != nil
 }
 
 // The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
-// SetStep sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
-func (obj *dhcpv6ServerIapdPoolInfo) SetStep(value uint32) Dhcpv6ServerIapdPoolInfo {
+// SetPrefixStep sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
+func (obj *dhcpv6ServerIapdPoolInfo) SetPrefixStep(value uint32) Dhcpv6ServerIapdPoolInfo {
 
-	obj.obj.Step = &value
+	obj.obj.PrefixStep = &value
+	return obj
+}
+
+// The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6 client.
+// AdvertisedPrefixLen returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) AdvertisedPrefixLen() uint32 {
+
+	return *obj.obj.AdvertisedPrefixLen
+
+}
+
+// The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6 client.
+// AdvertisedPrefixLen returns a uint32
+func (obj *dhcpv6ServerIapdPoolInfo) HasAdvertisedPrefixLen() bool {
+	return obj.obj.AdvertisedPrefixLen != nil
+}
+
+// The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6 client.
+// SetAdvertisedPrefixLen sets the uint32 value in the Dhcpv6ServerIapdPoolInfo object
+func (obj *dhcpv6ServerIapdPoolInfo) SetAdvertisedPrefixLen(value uint32) Dhcpv6ServerIapdPoolInfo {
+
+	obj.obj.AdvertisedPrefixLen = &value
 	return obj
 }
 
@@ -392,32 +420,42 @@ func (obj *dhcpv6ServerIapdPoolInfo) validateObj(vObj *validation, set_default b
 
 	}
 
-	if obj.obj.Prefix != nil {
+	if obj.obj.ConfiguredPrefixLen != nil {
 
-		if *obj.obj.Prefix > 128 {
+		if *obj.obj.ConfiguredPrefixLen > 128 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Dhcpv6ServerIapdPoolInfo.Prefix <= 128 but Got %d", *obj.obj.Prefix))
+				fmt.Sprintf("0 <= Dhcpv6ServerIapdPoolInfo.ConfiguredPrefixLen <= 128 but Got %d", *obj.obj.ConfiguredPrefixLen))
 		}
 
 	}
 
-	if obj.obj.Size != nil {
+	if obj.obj.PrefixSize != nil {
 
-		if *obj.obj.Size < 1 || *obj.obj.Size > 1000000 {
+		if *obj.obj.PrefixSize < 1 || *obj.obj.PrefixSize > 1000000 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= Dhcpv6ServerIapdPoolInfo.Size <= 1000000 but Got %d", *obj.obj.Size))
+				fmt.Sprintf("1 <= Dhcpv6ServerIapdPoolInfo.PrefixSize <= 1000000 but Got %d", *obj.obj.PrefixSize))
 		}
 
 	}
 
-	if obj.obj.Step != nil {
+	if obj.obj.PrefixStep != nil {
 
-		if *obj.obj.Step < 1 || *obj.obj.Step > 4294967295 {
+		if *obj.obj.PrefixStep < 1 || *obj.obj.PrefixStep > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= Dhcpv6ServerIapdPoolInfo.Step <= 4294967295 but Got %d", *obj.obj.Step))
+				fmt.Sprintf("1 <= Dhcpv6ServerIapdPoolInfo.PrefixStep <= 4294967295 but Got %d", *obj.obj.PrefixStep))
+		}
+
+	}
+
+	if obj.obj.AdvertisedPrefixLen != nil {
+
+		if *obj.obj.AdvertisedPrefixLen > 128 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Dhcpv6ServerIapdPoolInfo.AdvertisedPrefixLen <= 128 but Got %d", *obj.obj.AdvertisedPrefixLen))
 		}
 
 	}
@@ -425,14 +463,17 @@ func (obj *dhcpv6ServerIapdPoolInfo) validateObj(vObj *validation, set_default b
 }
 
 func (obj *dhcpv6ServerIapdPoolInfo) setDefault() {
-	if obj.obj.Prefix == nil {
-		obj.SetPrefix(64)
+	if obj.obj.ConfiguredPrefixLen == nil {
+		obj.SetConfiguredPrefixLen(64)
 	}
-	if obj.obj.Size == nil {
-		obj.SetSize(10)
+	if obj.obj.PrefixSize == nil {
+		obj.SetPrefixSize(10)
 	}
-	if obj.obj.Step == nil {
-		obj.SetStep(1)
+	if obj.obj.PrefixStep == nil {
+		obj.SetPrefixStep(1)
+	}
+	if obj.obj.AdvertisedPrefixLen == nil {
+		obj.SetAdvertisedPrefixLen(64)
 	}
 
 }

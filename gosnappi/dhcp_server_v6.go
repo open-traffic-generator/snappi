@@ -13,13 +13,11 @@ import (
 // ***** DhcpServerV6 *****
 type dhcpServerV6 struct {
 	validation
-	obj               *otg.DhcpServerV6
-	marshaller        marshalDhcpServerV6
-	unMarshaller      unMarshalDhcpServerV6
-	dnsHolder         DhcpV6ServerDns
-	leasesHolder      DhcpServerV6DhcpV6ServerLeaseIter
-	vendorInfoHolder  Dhcpv6ServerOptionsVendorInfo
-	bootfileUrlHolder Dhcpv6ServerOptionsBootfileUrl
+	obj           *otg.DhcpServerV6
+	marshaller    marshalDhcpServerV6
+	unMarshaller  unMarshalDhcpServerV6
+	leasesHolder  DhcpServerV6DhcpV6ServerLeaseIter
+	optionsHolder Dhcpv6ServerOptions
 }
 
 func NewDhcpServerV6() DhcpServerV6 {
@@ -247,10 +245,8 @@ func (obj *dhcpServerV6) Clone() (DhcpServerV6, error) {
 }
 
 func (obj *dhcpServerV6) setNil() {
-	obj.dnsHolder = nil
 	obj.leasesHolder = nil
-	obj.vendorInfoHolder = nil
-	obj.bootfileUrlHolder = nil
+	obj.optionsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -298,32 +294,16 @@ type DhcpServerV6 interface {
 	SetReconfigureViaRelayAgent(value bool) DhcpServerV6
 	// HasReconfigureViaRelayAgent checks if ReconfigureViaRelayAgent has been set in DhcpServerV6
 	HasReconfigureViaRelayAgent() bool
-	// Dns returns DhcpV6ServerDns, set in DhcpServerV6.
-	// DhcpV6ServerDns is optional Dns configuration for DHCPv6 server.
-	Dns() DhcpV6ServerDns
-	// SetDns assigns DhcpV6ServerDns provided by user to DhcpServerV6.
-	// DhcpV6ServerDns is optional Dns configuration for DHCPv6 server.
-	SetDns(value DhcpV6ServerDns) DhcpServerV6
-	// HasDns checks if Dns has been set in DhcpServerV6
-	HasDns() bool
 	// Leases returns DhcpServerV6DhcpV6ServerLeaseIterIter, set in DhcpServerV6
 	Leases() DhcpServerV6DhcpV6ServerLeaseIter
-	// VendorInfo returns Dhcpv6ServerOptionsVendorInfo, set in DhcpServerV6.
-	// Dhcpv6ServerOptionsVendorInfo is this option is used by servers to exchange vendor-specific information. The option code is 17.
-	VendorInfo() Dhcpv6ServerOptionsVendorInfo
-	// SetVendorInfo assigns Dhcpv6ServerOptionsVendorInfo provided by user to DhcpServerV6.
-	// Dhcpv6ServerOptionsVendorInfo is this option is used by servers to exchange vendor-specific information. The option code is 17.
-	SetVendorInfo(value Dhcpv6ServerOptionsVendorInfo) DhcpServerV6
-	// HasVendorInfo checks if VendorInfo has been set in DhcpServerV6
-	HasVendorInfo() bool
-	// BootfileUrl returns Dhcpv6ServerOptionsBootfileUrl, set in DhcpServerV6.
-	// Dhcpv6ServerOptionsBootfileUrl is the server sends this option to inform the client about a URL to a boot file. This information is required for booting  over the network includes the details about the server on which the boot files can be found, the protocol to be used for  the download (for example,HTTP or TFTP, and the path and name of the boot file on the server. The option code is 59. The URL will contain the network communication protocol, a subdomain, a domain name, and its extension. If the host in the URL  is expressed using an IPv6 address rather than a domain name, the address in the URL then must be enclosed in "[" and "]"  characters, conforming to [RFC3986]. Eg of a boot file url can be "tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi".
-	BootfileUrl() Dhcpv6ServerOptionsBootfileUrl
-	// SetBootfileUrl assigns Dhcpv6ServerOptionsBootfileUrl provided by user to DhcpServerV6.
-	// Dhcpv6ServerOptionsBootfileUrl is the server sends this option to inform the client about a URL to a boot file. This information is required for booting  over the network includes the details about the server on which the boot files can be found, the protocol to be used for  the download (for example,HTTP or TFTP, and the path and name of the boot file on the server. The option code is 59. The URL will contain the network communication protocol, a subdomain, a domain name, and its extension. If the host in the URL  is expressed using an IPv6 address rather than a domain name, the address in the URL then must be enclosed in "[" and "]"  characters, conforming to [RFC3986]. Eg of a boot file url can be "tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi".
-	SetBootfileUrl(value Dhcpv6ServerOptionsBootfileUrl) DhcpServerV6
-	// HasBootfileUrl checks if BootfileUrl has been set in DhcpServerV6
-	HasBootfileUrl() bool
+	// Options returns Dhcpv6ServerOptions, set in DhcpServerV6.
+	// Dhcpv6ServerOptions is dHCP server options, these configured options are sent in Dhcp server messages.
+	Options() Dhcpv6ServerOptions
+	// SetOptions assigns Dhcpv6ServerOptions provided by user to DhcpServerV6.
+	// Dhcpv6ServerOptions is dHCP server options, these configured options are sent in Dhcp server messages.
+	SetOptions(value Dhcpv6ServerOptions) DhcpServerV6
+	// HasOptions checks if Options has been set in DhcpServerV6
+	HasOptions() bool
 	setNil()
 }
 
@@ -408,34 +388,6 @@ func (obj *dhcpServerV6) HasReconfigureViaRelayAgent() bool {
 func (obj *dhcpServerV6) SetReconfigureViaRelayAgent(value bool) DhcpServerV6 {
 
 	obj.obj.ReconfigureViaRelayAgent = &value
-	return obj
-}
-
-// Additional DHCP server primary dns and other configuration options.
-// Dns returns a DhcpV6ServerDns
-func (obj *dhcpServerV6) Dns() DhcpV6ServerDns {
-	if obj.obj.Dns == nil {
-		obj.obj.Dns = NewDhcpV6ServerDns().msg()
-	}
-	if obj.dnsHolder == nil {
-		obj.dnsHolder = &dhcpV6ServerDns{obj: obj.obj.Dns}
-	}
-	return obj.dnsHolder
-}
-
-// Additional DHCP server primary dns and other configuration options.
-// Dns returns a DhcpV6ServerDns
-func (obj *dhcpServerV6) HasDns() bool {
-	return obj.obj.Dns != nil
-}
-
-// Additional DHCP server primary dns and other configuration options.
-// SetDns sets the DhcpV6ServerDns value in the DhcpServerV6 object
-func (obj *dhcpServerV6) SetDns(value DhcpV6ServerDns) DhcpServerV6 {
-
-	obj.dnsHolder = nil
-	obj.obj.Dns = value.msg()
-
 	return obj
 }
 
@@ -526,61 +478,30 @@ func (obj *dhcpServerV6DhcpV6ServerLeaseIter) appendHolderSlice(item DhcpV6Serve
 	return obj
 }
 
-// This option is used by servers to exchange vendor-specific information with clients.
-// VendorInfo returns a Dhcpv6ServerOptionsVendorInfo
-func (obj *dhcpServerV6) VendorInfo() Dhcpv6ServerOptionsVendorInfo {
-	if obj.obj.VendorInfo == nil {
-		obj.obj.VendorInfo = NewDhcpv6ServerOptionsVendorInfo().msg()
+// Optional DHCPv4 Server options that are sent in Dhcp server messages.
+// Options returns a Dhcpv6ServerOptions
+func (obj *dhcpServerV6) Options() Dhcpv6ServerOptions {
+	if obj.obj.Options == nil {
+		obj.obj.Options = NewDhcpv6ServerOptions().msg()
 	}
-	if obj.vendorInfoHolder == nil {
-		obj.vendorInfoHolder = &dhcpv6ServerOptionsVendorInfo{obj: obj.obj.VendorInfo}
+	if obj.optionsHolder == nil {
+		obj.optionsHolder = &dhcpv6ServerOptions{obj: obj.obj.Options}
 	}
-	return obj.vendorInfoHolder
+	return obj.optionsHolder
 }
 
-// This option is used by servers to exchange vendor-specific information with clients.
-// VendorInfo returns a Dhcpv6ServerOptionsVendorInfo
-func (obj *dhcpServerV6) HasVendorInfo() bool {
-	return obj.obj.VendorInfo != nil
+// Optional DHCPv4 Server options that are sent in Dhcp server messages.
+// Options returns a Dhcpv6ServerOptions
+func (obj *dhcpServerV6) HasOptions() bool {
+	return obj.obj.Options != nil
 }
 
-// This option is used by servers to exchange vendor-specific information with clients.
-// SetVendorInfo sets the Dhcpv6ServerOptionsVendorInfo value in the DhcpServerV6 object
-func (obj *dhcpServerV6) SetVendorInfo(value Dhcpv6ServerOptionsVendorInfo) DhcpServerV6 {
+// Optional DHCPv4 Server options that are sent in Dhcp server messages.
+// SetOptions sets the Dhcpv6ServerOptions value in the DhcpServerV6 object
+func (obj *dhcpServerV6) SetOptions(value Dhcpv6ServerOptions) DhcpServerV6 {
 
-	obj.vendorInfoHolder = nil
-	obj.obj.VendorInfo = value.msg()
-
-	return obj
-}
-
-// The server sends this option to inform the client about a URL to a boot file which client will use for
-// network boots.
-// BootfileUrl returns a Dhcpv6ServerOptionsBootfileUrl
-func (obj *dhcpServerV6) BootfileUrl() Dhcpv6ServerOptionsBootfileUrl {
-	if obj.obj.BootfileUrl == nil {
-		obj.obj.BootfileUrl = NewDhcpv6ServerOptionsBootfileUrl().msg()
-	}
-	if obj.bootfileUrlHolder == nil {
-		obj.bootfileUrlHolder = &dhcpv6ServerOptionsBootfileUrl{obj: obj.obj.BootfileUrl}
-	}
-	return obj.bootfileUrlHolder
-}
-
-// The server sends this option to inform the client about a URL to a boot file which client will use for
-// network boots.
-// BootfileUrl returns a Dhcpv6ServerOptionsBootfileUrl
-func (obj *dhcpServerV6) HasBootfileUrl() bool {
-	return obj.obj.BootfileUrl != nil
-}
-
-// The server sends this option to inform the client about a URL to a boot file which client will use for
-// network boots.
-// SetBootfileUrl sets the Dhcpv6ServerOptionsBootfileUrl value in the DhcpServerV6 object
-func (obj *dhcpServerV6) SetBootfileUrl(value Dhcpv6ServerOptionsBootfileUrl) DhcpServerV6 {
-
-	obj.bootfileUrlHolder = nil
-	obj.obj.BootfileUrl = value.msg()
+	obj.optionsHolder = nil
+	obj.obj.Options = value.msg()
 
 	return obj
 }
@@ -600,11 +521,6 @@ func (obj *dhcpServerV6) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Ipv6Name is required field on interface DhcpServerV6")
 	}
 
-	if obj.obj.Dns != nil {
-
-		obj.Dns().validateObj(vObj, set_default)
-	}
-
 	if len(obj.obj.Leases) != 0 {
 
 		if set_default {
@@ -619,14 +535,9 @@ func (obj *dhcpServerV6) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.VendorInfo != nil {
+	if obj.obj.Options != nil {
 
-		obj.VendorInfo().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.BootfileUrl != nil {
-
-		obj.BootfileUrl().validateObj(vObj, set_default)
+		obj.Options().validateObj(vObj, set_default)
 	}
 
 }

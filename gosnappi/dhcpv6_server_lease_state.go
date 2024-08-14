@@ -306,6 +306,12 @@ type Dhcpv6ServerLeaseState interface {
 	SetRemoteId(value string) Dhcpv6ServerLeaseState
 	// HasRemoteId checks if RemoteId has been set in Dhcpv6ServerLeaseState
 	HasRemoteId() bool
+	// InterfaceId returns string, set in Dhcpv6ServerLeaseState.
+	InterfaceId() string
+	// SetInterfaceId assigns string provided by user to Dhcpv6ServerLeaseState
+	SetInterfaceId(value string) Dhcpv6ServerLeaseState
+	// HasInterfaceId checks if InterfaceId has been set in Dhcpv6ServerLeaseState
+	HasInterfaceId() bool
 }
 
 // The IPv6 address associated with this lease.
@@ -459,6 +465,28 @@ func (obj *dhcpv6ServerLeaseState) HasRemoteId() bool {
 func (obj *dhcpv6ServerLeaseState) SetRemoteId(value string) Dhcpv6ServerLeaseState {
 
 	obj.obj.RemoteId = &value
+	return obj
+}
+
+// The Interface ID option found in the last request message.
+// InterfaceId returns a string
+func (obj *dhcpv6ServerLeaseState) InterfaceId() string {
+
+	return *obj.obj.InterfaceId
+
+}
+
+// The Interface ID option found in the last request message.
+// InterfaceId returns a string
+func (obj *dhcpv6ServerLeaseState) HasInterfaceId() bool {
+	return obj.obj.InterfaceId != nil
+}
+
+// The Interface ID option found in the last request message.
+// SetInterfaceId sets the string value in the Dhcpv6ServerLeaseState object
+func (obj *dhcpv6ServerLeaseState) SetInterfaceId(value string) Dhcpv6ServerLeaseState {
+
+	obj.obj.InterfaceId = &value
 	return obj
 }
 

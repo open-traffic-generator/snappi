@@ -568,35 +568,53 @@ message DeviceDhcpv6client {
   // default = False
   optional bool rapid_commit = 2;
 
+  // Each IA has an associated IAID. Differnet IA options represent different types of
+  // IPv6 addresses and parameters
+  // accepted by DHCPv6 clients each used in different context by an IPv6 node.
+  DeviceDhcpv6clientIaType ia_type = 3;
+
+  // Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify
+  // each other.
+  DeviceDhcpv6clientDuidType duid_type = 4;
+
+  // The options requested by a client from a server in the options request option.
+  DeviceDhcpv6ClientOptionsRequest options_request = 5;
+
+  // Optional DHCPv4 Client options that are sent in Dhcp client messages.
+  DeviceDhcpv6ClientOptions options = 6;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptionsRequest {
+
+  // List of options requested by a client from a server.
+  repeated Dhcpv6ClientOptionsOptionsRequest request = 1;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsOptionsRequestIncludedMessages associated_dhcp_messages = 2;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptions {
+
   // A client uses multicast to reach all servers or an individual server. An individual
   // server is indicated by
   // specifying that server's DUID in a Server Identifier option in the client's message
   // (all servers will receive
   // this message but only the indicated server will respond). All servers are indicated
   // by not supplying this option.
-  Dhcpv6ClientOptionsServerIdentifier server_identifier = 3;
-
-  // Each IA has an associated IAID. Differnet IA options represent different types of
-  // IPv6 addresses and parameters
-  // accepted by DHCPv6 clients each used in different context by an IPv6 node.
-  DeviceDhcpv6clientIaType ia_type = 4;
-
-  // Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify
-  // each other.
-  DeviceDhcpv6clientDuidType duid_type = 5;
-
-  // List of options in a message between a client and a server.
-  repeated Dhcpv6ClientOptionsOptionsRequest options = 6;
+  Dhcpv6ClientOptionsServerIdentifier server_identifier = 1;
 
   // The vendor class option is used by a client to identify the vendor that manufactured
   // the hardware on which
   // the client is running. The information contained in the data area of this option
   // is contained in one or more
   // opaque fields that identify details of the hardware configuration.
-  Dhcpv6ClientOptionsVendorClass vendor_class = 7;
+  Dhcpv6ClientOptionsVendorClass vendor_class = 2;
 
   // This option is used by clients to exchange vendor-specific information with servers.
-  Dhcpv6ClientOptionsVendorInfo vendor_info = 8;
+  Dhcpv6ClientOptionsVendorInfo vendor_info = 3;
 
   // DHCPv6 server needs to know the FQDN of the client for the addresses for the client's
   // IA_NA bindings in order to
@@ -604,7 +622,7 @@ message DeviceDhcpv6client {
   // its FQDN to the server. The Client
   // FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate
   // who does which update.
-  Dhcpv6ClientOptionsFqdn fqdn = 9;
+  Dhcpv6ClientOptionsFqdn fqdn = 4;
 }
 
 // Description missing in models
@@ -891,10 +909,6 @@ message Dhcpv6ClientOptionsOptionsRequest {
 
   // Description missing in models
   Dhcpv6ClientOptionsCustom custom = 2;
-
-  // The list of dhcpv6 client messages where this option is included.
-  // required = true
-  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
 }
 
 // The Custom option is used to provide a not so well known option in the message between
@@ -923,6 +937,26 @@ message Dhcpv6ClientOptionsVendorClass {
   // The dhcpv6 client messages where this option is included.
   // required = true
   Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The dhcpv6 client messages where the option will be included. If all is selected
+// the selected option will be added in the all the Dhcpv6 client messages, else based
+// on the selection in particular Dhcpv6 client messages the option will be included.
+message Dhcpv6ClientOptionsOptionsRequestIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  Dhcpv6ClientOptionsMessageType msg_types = 2;
 }
 
 // The dhcpv6 client messages where the option will be included. If all is selected
@@ -7083,19 +7117,26 @@ message DhcpServerV6 {
   // default = False
   optional bool reconfigure_via_relay_agent = 4;
 
-  // Additional DHCP server primary dns and other configuration options.
-  DhcpV6ServerDns dns = 5;
-
   // Array of DHCP pools configured on a server.
-  repeated DhcpV6ServerLease leases = 6;
+  repeated DhcpV6ServerLease leases = 5;
+
+  // Optional DHCPv4 Server options that are sent in Dhcp server messages.
+  Dhcpv6ServerOptions options = 6;
+}
+
+// DHCP server options, these configured options are sent in Dhcp server messages.
+message Dhcpv6ServerOptions {
+
+  // Additional DHCP server primary dns and other configuration options.
+  DhcpV6ServerDns dns = 1;
 
   // This option is used by servers to exchange vendor-specific information with clients.
-  Dhcpv6ServerOptionsVendorInfo vendor_info = 7;
+  Dhcpv6ServerOptionsVendorInfo vendor_info = 2;
 
   // The server sends this option to inform the client about a URL to a boot file which
   // client will use for
   // network boots.
-  Dhcpv6ServerOptionsBootfileUrl bootfile_url = 8;
+  Dhcpv6ServerOptionsBootfileUrl bootfile_url = 3;
 }
 
 // One DHCP pool configuration on a server.
@@ -7140,25 +7181,28 @@ message Dhcpv6ServerIaType {
   Dhcpv6ServerIapdPoolInfo iapd = 4;
 
   // Description missing in models
-  Dhcpv6ServerPoolInfo ianapd = 5;
+  Dhcpv6ServerIanapdPoolInfo ianapd = 5;
 }
 
-// The container for pool configurations for IA types iana,iata and ianapd.
+// The container for pool configurations for IA types iana and iata.
 message Dhcpv6ServerPoolInfo {
 
-  // The IP address of the first lease pool.
+  // The first IP address of the lease pool.
   optional string start_address = 1;
 
-  // The IPv6 network prefix length to be applied to the address.
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
   // default = 64
-  optional uint32 prefix = 2;
+  optional uint32 prefix_len = 2;
 
   // The total number of addresses in the pool.
   // default = 1
   optional uint32 size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
-  // are present. The value is incremented according to the Prefix Length and Step.
+  // are present. The value is incremented according to the configured Prefix Length and
+  // Step.
   // default = 1
   optional uint32 step = 4;
 }
@@ -7166,21 +7210,38 @@ message Dhcpv6ServerPoolInfo {
 // The container for prefix pool configurations for IA type iapd.
 message Dhcpv6ServerIapdPoolInfo {
 
-  // The IP address of the first prefix pool.
+  // The first IP address of the prefix pool.
   optional string start_prefix_address = 1;
 
-  // The IPv6 network prefix length to be applied to the address.
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
   // default = 64
-  optional uint32 prefix = 2;
+  optional uint32 configured_prefix_len = 2;
 
   // The total number of addresses in the pool.
   // default = 10
-  optional uint32 size = 3;
+  optional uint32 prefix_size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
   // are present. The value is incremented according to the Prefix Length and Step.
   // default = 1
-  optional uint32 step = 4;
+  optional uint32 prefix_step = 4;
+
+  // The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6
+  // client.
+  // default = 64
+  optional uint32 advertised_prefix_len = 5;
+}
+
+// The container for pool configurations for IA type ianapd.
+message Dhcpv6ServerIanapdPoolInfo {
+
+  // The pool configurations for IA types iana in ianapd.
+  Dhcpv6ServerPoolInfo iana = 1;
+
+  // The pool configurations for IA types iapd in ianapd.
+  Dhcpv6ServerIapdPoolInfo iapd = 2;
 }
 
 // Optional Dns configuration for DHCPv6 server.
@@ -12516,7 +12577,7 @@ message Dhcpv6ServerMetric {
   // Number of DHCPREQUEST messages received.
   optional uint64 requests_received = 5;
 
-  // Number of naks send for DHCPREQUEST messages.
+  // Number of naks sent for DHCPREQUEST messages.
   optional uint64 nacks_sent = 6;
 
   // Number of DHCP Confirm messages received.
@@ -12543,7 +12604,7 @@ message Dhcpv6ServerMetric {
   // Number of DHCP Relay agent forward messages received.
   optional uint64 relay_forwards_received = 14;
 
-  // Number of DHCP reply messages send to Relay agent.
+  // Number of DHCP reply messages sent to Relay agent.
   optional uint64 relay_replies_sent = 15;
 
   // Number of DHCP Reconfigure messages sent.
@@ -13974,23 +14035,26 @@ message Dhcpv6InterfaceState {
   // The name of a DHCPv6 Client.
   optional string dhcp_client_name = 1;
 
-  // The IPv6 address associated with this DHCP Client session.
-  optional string ipv6_address = 2;
+  // The IPv6 IAPD address associated with this DHCP Client session.
+  optional string ipv6_iapd_address = 2;
 
-  // The length of the prefix.
-  optional uint32 prefix_length = 3;
+  // The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+  optional uint32 iapd_prefix_length = 3;
+
+  // The IPv6 address associated with this DHCP Client session.
+  optional string ipv6_address = 4;
 
   // The Gateway IPV6 address associated with this DHCP Client session.
-  optional string gateway_address = 4;
+  optional string gateway_address = 5;
 
   // The duration of the IPv6 address lease, in seconds.
-  optional uint32 lease_time = 5;
+  optional uint32 lease_time = 6;
 
   // Time in seconds until the DHCPv6 client starts renewing the lease.
-  optional uint32 renew_time = 6;
+  optional uint32 renew_time = 7;
 
   // Time in seconds until the DHCPv6 client starts rebinding.
-  optional uint32 rebind_time = 7;
+  optional uint32 rebind_time = 8;
 }
 
 // The request to retrieve DHCP Server host allocated status.
@@ -14038,6 +14102,9 @@ message Dhcpv6ServerLeaseState {
 
   // The Remote ID option found in the last request message.
   optional string remote_id = 7;
+
+  // The Interface ID option found in the last request message.
+  optional string interface_id = 8;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the

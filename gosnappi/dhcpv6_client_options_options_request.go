@@ -13,11 +13,10 @@ import (
 // ***** Dhcpv6ClientOptionsOptionsRequest *****
 type dhcpv6ClientOptionsOptionsRequest struct {
 	validation
-	obj                          *otg.Dhcpv6ClientOptionsOptionsRequest
-	marshaller                   marshalDhcpv6ClientOptionsOptionsRequest
-	unMarshaller                 unMarshalDhcpv6ClientOptionsOptionsRequest
-	customHolder                 Dhcpv6ClientOptionsCustom
-	associatedDhcpMessagesHolder Dhcpv6ClientOptionsIncludedMessages
+	obj          *otg.Dhcpv6ClientOptionsOptionsRequest
+	marshaller   marshalDhcpv6ClientOptionsOptionsRequest
+	unMarshaller unMarshalDhcpv6ClientOptionsOptionsRequest
+	customHolder Dhcpv6ClientOptionsCustom
 }
 
 func NewDhcpv6ClientOptionsOptionsRequest() Dhcpv6ClientOptionsOptionsRequest {
@@ -246,7 +245,6 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) Clone() (Dhcpv6ClientOptionsOption
 
 func (obj *dhcpv6ClientOptionsOptionsRequest) setNil() {
 	obj.customHolder = nil
-	obj.associatedDhcpMessagesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -280,14 +278,14 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	setChoice(value Dhcpv6ClientOptionsOptionsRequestChoiceEnum) Dhcpv6ClientOptionsOptionsRequest
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsOptionsRequest
 	HasChoice() bool
-	// getter for Fqdn to set choice.
-	Fqdn()
-	// getter for BootfileUrl to set choice.
-	BootfileUrl()
 	// getter for NameServers to set choice.
 	NameServers()
+	// getter for Fqdn to set choice.
+	Fqdn()
 	// getter for VendorInformation to set choice.
 	VendorInformation()
+	// getter for BootfileUrl to set choice.
+	BootfileUrl()
 	// getter for Sztp to set choice.
 	Sztp()
 	// Custom returns Dhcpv6ClientOptionsCustom, set in Dhcpv6ClientOptionsOptionsRequest.
@@ -298,12 +296,6 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	SetCustom(value Dhcpv6ClientOptionsCustom) Dhcpv6ClientOptionsOptionsRequest
 	// HasCustom checks if Custom has been set in Dhcpv6ClientOptionsOptionsRequest
 	HasCustom() bool
-	// AssociatedDhcpMessages returns Dhcpv6ClientOptionsIncludedMessages, set in Dhcpv6ClientOptionsOptionsRequest.
-	// Dhcpv6ClientOptionsIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
-	AssociatedDhcpMessages() Dhcpv6ClientOptionsIncludedMessages
-	// SetAssociatedDhcpMessages assigns Dhcpv6ClientOptionsIncludedMessages provided by user to Dhcpv6ClientOptionsOptionsRequest.
-	// Dhcpv6ClientOptionsIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
-	SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsIncludedMessages) Dhcpv6ClientOptionsOptionsRequest
 	setNil()
 }
 
@@ -330,24 +322,24 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) Choice() Dhcpv6ClientOptionsOption
 	return Dhcpv6ClientOptionsOptionsRequestChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Fqdn to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
-}
-
-// getter for BootfileUrl to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
-}
-
 // getter for NameServers to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
 }
 
+// getter for Fqdn to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
+}
+
 // getter for VendorInformation to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) VendorInformation() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.VENDOR_INFORMATION)
+}
+
+// getter for BootfileUrl to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
 }
 
 // getter for Sztp to set choice
@@ -415,28 +407,6 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) SetCustom(value Dhcpv6ClientOption
 	return obj
 }
 
-// The list of dhcpv6 client messages where this option is included.
-// AssociatedDhcpMessages returns a Dhcpv6ClientOptionsIncludedMessages
-func (obj *dhcpv6ClientOptionsOptionsRequest) AssociatedDhcpMessages() Dhcpv6ClientOptionsIncludedMessages {
-	if obj.obj.AssociatedDhcpMessages == nil {
-		obj.obj.AssociatedDhcpMessages = NewDhcpv6ClientOptionsIncludedMessages().msg()
-	}
-	if obj.associatedDhcpMessagesHolder == nil {
-		obj.associatedDhcpMessagesHolder = &dhcpv6ClientOptionsIncludedMessages{obj: obj.obj.AssociatedDhcpMessages}
-	}
-	return obj.associatedDhcpMessagesHolder
-}
-
-// The list of dhcpv6 client messages where this option is included.
-// SetAssociatedDhcpMessages sets the Dhcpv6ClientOptionsIncludedMessages value in the Dhcpv6ClientOptionsOptionsRequest object
-func (obj *dhcpv6ClientOptionsOptionsRequest) SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsIncludedMessages) Dhcpv6ClientOptionsOptionsRequest {
-
-	obj.associatedDhcpMessagesHolder = nil
-	obj.obj.AssociatedDhcpMessages = value.msg()
-
-	return obj
-}
-
 func (obj *dhcpv6ClientOptionsOptionsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -445,16 +415,6 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) validateObj(vObj *validation, set_
 	if obj.obj.Custom != nil {
 
 		obj.Custom().validateObj(vObj, set_default)
-	}
-
-	// AssociatedDhcpMessages is required
-	if obj.obj.AssociatedDhcpMessages == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "AssociatedDhcpMessages is required field on interface Dhcpv6ClientOptionsOptionsRequest")
-	}
-
-	if obj.obj.AssociatedDhcpMessages != nil {
-
-		obj.AssociatedDhcpMessages().validateObj(vObj, set_default)
 	}
 
 }

@@ -13,16 +13,13 @@ import (
 // ***** DeviceDhcpv6Client *****
 type deviceDhcpv6Client struct {
 	validation
-	obj                    *otg.DeviceDhcpv6Client
-	marshaller             marshalDeviceDhcpv6Client
-	unMarshaller           unMarshalDeviceDhcpv6Client
-	serverIdentifierHolder Dhcpv6ClientOptionsServerIdentifier
-	iaTypeHolder           DeviceDhcpv6ClientIaType
-	duidTypeHolder         DeviceDhcpv6ClientDuidType
-	optionsHolder          DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	vendorClassHolder      Dhcpv6ClientOptionsVendorClass
-	vendorInfoHolder       Dhcpv6ClientOptionsVendorInfo
-	fqdnHolder             Dhcpv6ClientOptionsFqdn
+	obj                  *otg.DeviceDhcpv6Client
+	marshaller           marshalDeviceDhcpv6Client
+	unMarshaller         unMarshalDeviceDhcpv6Client
+	iaTypeHolder         DeviceDhcpv6ClientIaType
+	duidTypeHolder       DeviceDhcpv6ClientDuidType
+	optionsRequestHolder DeviceDhcpv6ClientOptionsRequest
+	optionsHolder        DeviceDhcpv6ClientOptions
 }
 
 func NewDeviceDhcpv6Client() DeviceDhcpv6Client {
@@ -250,13 +247,10 @@ func (obj *deviceDhcpv6Client) Clone() (DeviceDhcpv6Client, error) {
 }
 
 func (obj *deviceDhcpv6Client) setNil() {
-	obj.serverIdentifierHolder = nil
 	obj.iaTypeHolder = nil
 	obj.duidTypeHolder = nil
+	obj.optionsRequestHolder = nil
 	obj.optionsHolder = nil
-	obj.vendorClassHolder = nil
-	obj.vendorInfoHolder = nil
-	obj.fqdnHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -294,14 +288,6 @@ type DeviceDhcpv6Client interface {
 	SetRapidCommit(value bool) DeviceDhcpv6Client
 	// HasRapidCommit checks if RapidCommit has been set in DeviceDhcpv6Client
 	HasRapidCommit() bool
-	// ServerIdentifier returns Dhcpv6ClientOptionsServerIdentifier, set in DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsServerIdentifier is description is TBD
-	ServerIdentifier() Dhcpv6ClientOptionsServerIdentifier
-	// SetServerIdentifier assigns Dhcpv6ClientOptionsServerIdentifier provided by user to DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsServerIdentifier is description is TBD
-	SetServerIdentifier(value Dhcpv6ClientOptionsServerIdentifier) DeviceDhcpv6Client
-	// HasServerIdentifier checks if ServerIdentifier has been set in DeviceDhcpv6Client
-	HasServerIdentifier() bool
 	// IaType returns DeviceDhcpv6ClientIaType, set in DeviceDhcpv6Client.
 	IaType() DeviceDhcpv6ClientIaType
 	// SetIaType assigns DeviceDhcpv6ClientIaType provided by user to DeviceDhcpv6Client.
@@ -314,32 +300,22 @@ type DeviceDhcpv6Client interface {
 	SetDuidType(value DeviceDhcpv6ClientDuidType) DeviceDhcpv6Client
 	// HasDuidType checks if DuidType has been set in DeviceDhcpv6Client
 	HasDuidType() bool
-	// Options returns DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIterIter, set in DeviceDhcpv6Client
-	Options() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	// VendorClass returns Dhcpv6ClientOptionsVendorClass, set in DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsVendorClass is this option is used by a client to identify the vendor that manufactured the hardware on which the client is running. The option code is 16.
-	VendorClass() Dhcpv6ClientOptionsVendorClass
-	// SetVendorClass assigns Dhcpv6ClientOptionsVendorClass provided by user to DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsVendorClass is this option is used by a client to identify the vendor that manufactured the hardware on which the client is running. The option code is 16.
-	SetVendorClass(value Dhcpv6ClientOptionsVendorClass) DeviceDhcpv6Client
-	// HasVendorClass checks if VendorClass has been set in DeviceDhcpv6Client
-	HasVendorClass() bool
-	// VendorInfo returns Dhcpv6ClientOptionsVendorInfo, set in DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsVendorInfo is this option is used by clients to exchange vendor-specific information. The option code is 17.
-	VendorInfo() Dhcpv6ClientOptionsVendorInfo
-	// SetVendorInfo assigns Dhcpv6ClientOptionsVendorInfo provided by user to DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsVendorInfo is this option is used by clients to exchange vendor-specific information. The option code is 17.
-	SetVendorInfo(value Dhcpv6ClientOptionsVendorInfo) DeviceDhcpv6Client
-	// HasVendorInfo checks if VendorInfo has been set in DeviceDhcpv6Client
-	HasVendorInfo() bool
-	// Fqdn returns Dhcpv6ClientOptionsFqdn, set in DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsFqdn is dHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client  FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which updates. The option code is 39.
-	Fqdn() Dhcpv6ClientOptionsFqdn
-	// SetFqdn assigns Dhcpv6ClientOptionsFqdn provided by user to DeviceDhcpv6Client.
-	// Dhcpv6ClientOptionsFqdn is dHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client  FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which updates. The option code is 39.
-	SetFqdn(value Dhcpv6ClientOptionsFqdn) DeviceDhcpv6Client
-	// HasFqdn checks if Fqdn has been set in DeviceDhcpv6Client
-	HasFqdn() bool
+	// OptionsRequest returns DeviceDhcpv6ClientOptionsRequest, set in DeviceDhcpv6Client.
+	// DeviceDhcpv6ClientOptionsRequest is dHCP client options, these configured options are sent in Dhcp client messages.
+	OptionsRequest() DeviceDhcpv6ClientOptionsRequest
+	// SetOptionsRequest assigns DeviceDhcpv6ClientOptionsRequest provided by user to DeviceDhcpv6Client.
+	// DeviceDhcpv6ClientOptionsRequest is dHCP client options, these configured options are sent in Dhcp client messages.
+	SetOptionsRequest(value DeviceDhcpv6ClientOptionsRequest) DeviceDhcpv6Client
+	// HasOptionsRequest checks if OptionsRequest has been set in DeviceDhcpv6Client
+	HasOptionsRequest() bool
+	// Options returns DeviceDhcpv6ClientOptions, set in DeviceDhcpv6Client.
+	// DeviceDhcpv6ClientOptions is dHCP client options, these configured options are sent in Dhcp client messages.
+	Options() DeviceDhcpv6ClientOptions
+	// SetOptions assigns DeviceDhcpv6ClientOptions provided by user to DeviceDhcpv6Client.
+	// DeviceDhcpv6ClientOptions is dHCP client options, these configured options are sent in Dhcp client messages.
+	SetOptions(value DeviceDhcpv6ClientOptions) DeviceDhcpv6Client
+	// HasOptions checks if Options has been set in DeviceDhcpv6Client
+	HasOptions() bool
 	setNil()
 }
 
@@ -378,40 +354,6 @@ func (obj *deviceDhcpv6Client) HasRapidCommit() bool {
 func (obj *deviceDhcpv6Client) SetRapidCommit(value bool) DeviceDhcpv6Client {
 
 	obj.obj.RapidCommit = &value
-	return obj
-}
-
-// A client uses multicast to reach all servers or an individual server. An individual server is indicated by
-// specifying that server's DUID in a Server Identifier option in the client's message (all servers will receive
-// this message but only the indicated server will respond). All servers are indicated by not supplying this option.
-// ServerIdentifier returns a Dhcpv6ClientOptionsServerIdentifier
-func (obj *deviceDhcpv6Client) ServerIdentifier() Dhcpv6ClientOptionsServerIdentifier {
-	if obj.obj.ServerIdentifier == nil {
-		obj.obj.ServerIdentifier = NewDhcpv6ClientOptionsServerIdentifier().msg()
-	}
-	if obj.serverIdentifierHolder == nil {
-		obj.serverIdentifierHolder = &dhcpv6ClientOptionsServerIdentifier{obj: obj.obj.ServerIdentifier}
-	}
-	return obj.serverIdentifierHolder
-}
-
-// A client uses multicast to reach all servers or an individual server. An individual server is indicated by
-// specifying that server's DUID in a Server Identifier option in the client's message (all servers will receive
-// this message but only the indicated server will respond). All servers are indicated by not supplying this option.
-// ServerIdentifier returns a Dhcpv6ClientOptionsServerIdentifier
-func (obj *deviceDhcpv6Client) HasServerIdentifier() bool {
-	return obj.obj.ServerIdentifier != nil
-}
-
-// A client uses multicast to reach all servers or an individual server. An individual server is indicated by
-// specifying that server's DUID in a Server Identifier option in the client's message (all servers will receive
-// this message but only the indicated server will respond). All servers are indicated by not supplying this option.
-// SetServerIdentifier sets the Dhcpv6ClientOptionsServerIdentifier value in the DeviceDhcpv6Client object
-func (obj *deviceDhcpv6Client) SetServerIdentifier(value Dhcpv6ClientOptionsServerIdentifier) DeviceDhcpv6Client {
-
-	obj.serverIdentifierHolder = nil
-	obj.obj.ServerIdentifier = value.msg()
-
 	return obj
 }
 
@@ -474,185 +416,58 @@ func (obj *deviceDhcpv6Client) SetDuidType(value DeviceDhcpv6ClientDuidType) Dev
 	return obj
 }
 
-// List of options in a message between a client and a server.
-// Options returns a []Dhcpv6ClientOptionsOptionsRequest
-func (obj *deviceDhcpv6Client) Options() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	if len(obj.obj.Options) == 0 {
-		obj.obj.Options = []*otg.Dhcpv6ClientOptionsOptionsRequest{}
+// The options requested by a client from a server in the options request option.
+// OptionsRequest returns a DeviceDhcpv6ClientOptionsRequest
+func (obj *deviceDhcpv6Client) OptionsRequest() DeviceDhcpv6ClientOptionsRequest {
+	if obj.obj.OptionsRequest == nil {
+		obj.obj.OptionsRequest = NewDeviceDhcpv6ClientOptionsRequest().msg()
+	}
+	if obj.optionsRequestHolder == nil {
+		obj.optionsRequestHolder = &deviceDhcpv6ClientOptionsRequest{obj: obj.obj.OptionsRequest}
+	}
+	return obj.optionsRequestHolder
+}
+
+// The options requested by a client from a server in the options request option.
+// OptionsRequest returns a DeviceDhcpv6ClientOptionsRequest
+func (obj *deviceDhcpv6Client) HasOptionsRequest() bool {
+	return obj.obj.OptionsRequest != nil
+}
+
+// The options requested by a client from a server in the options request option.
+// SetOptionsRequest sets the DeviceDhcpv6ClientOptionsRequest value in the DeviceDhcpv6Client object
+func (obj *deviceDhcpv6Client) SetOptionsRequest(value DeviceDhcpv6ClientOptionsRequest) DeviceDhcpv6Client {
+
+	obj.optionsRequestHolder = nil
+	obj.obj.OptionsRequest = value.msg()
+
+	return obj
+}
+
+// Optional DHCPv4 Client options that are sent in Dhcp client messages.
+// Options returns a DeviceDhcpv6ClientOptions
+func (obj *deviceDhcpv6Client) Options() DeviceDhcpv6ClientOptions {
+	if obj.obj.Options == nil {
+		obj.obj.Options = NewDeviceDhcpv6ClientOptions().msg()
 	}
 	if obj.optionsHolder == nil {
-		obj.optionsHolder = newDeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter(&obj.obj.Options).setMsg(obj)
+		obj.optionsHolder = &deviceDhcpv6ClientOptions{obj: obj.obj.Options}
 	}
 	return obj.optionsHolder
 }
 
-type deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter struct {
-	obj                                    *deviceDhcpv6Client
-	dhcpv6ClientOptionsOptionsRequestSlice []Dhcpv6ClientOptionsOptionsRequest
-	fieldPtr                               *[]*otg.Dhcpv6ClientOptionsOptionsRequest
+// Optional DHCPv4 Client options that are sent in Dhcp client messages.
+// Options returns a DeviceDhcpv6ClientOptions
+func (obj *deviceDhcpv6Client) HasOptions() bool {
+	return obj.obj.Options != nil
 }
 
-func newDeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter(ptr *[]*otg.Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	return &deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter{fieldPtr: ptr}
-}
+// Optional DHCPv4 Client options that are sent in Dhcp client messages.
+// SetOptions sets the DeviceDhcpv6ClientOptions value in the DeviceDhcpv6Client object
+func (obj *deviceDhcpv6Client) SetOptions(value DeviceDhcpv6ClientOptions) DeviceDhcpv6Client {
 
-type DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter interface {
-	setMsg(*deviceDhcpv6Client) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	Items() []Dhcpv6ClientOptionsOptionsRequest
-	Add() Dhcpv6ClientOptionsOptionsRequest
-	Append(items ...Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	Set(index int, newObj Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	Clear() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	clearHolderSlice() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-	appendHolderSlice(item Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter
-}
-
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) setMsg(msg *deviceDhcpv6Client) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&dhcpv6ClientOptionsOptionsRequest{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) Items() []Dhcpv6ClientOptionsOptionsRequest {
-	return obj.dhcpv6ClientOptionsOptionsRequestSlice
-}
-
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) Add() Dhcpv6ClientOptionsOptionsRequest {
-	newObj := &otg.Dhcpv6ClientOptionsOptionsRequest{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &dhcpv6ClientOptionsOptionsRequest{obj: newObj}
-	newLibObj.setDefault()
-	obj.dhcpv6ClientOptionsOptionsRequestSlice = append(obj.dhcpv6ClientOptionsOptionsRequestSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) Append(items ...Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.dhcpv6ClientOptionsOptionsRequestSlice = append(obj.dhcpv6ClientOptionsOptionsRequestSlice, item)
-	}
-	return obj
-}
-
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) Set(index int, newObj Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.dhcpv6ClientOptionsOptionsRequestSlice[index] = newObj
-	return obj
-}
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) Clear() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Dhcpv6ClientOptionsOptionsRequest{}
-		obj.dhcpv6ClientOptionsOptionsRequestSlice = []Dhcpv6ClientOptionsOptionsRequest{}
-	}
-	return obj
-}
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) clearHolderSlice() DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	if len(obj.dhcpv6ClientOptionsOptionsRequestSlice) > 0 {
-		obj.dhcpv6ClientOptionsOptionsRequestSlice = []Dhcpv6ClientOptionsOptionsRequest{}
-	}
-	return obj
-}
-func (obj *deviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter) appendHolderSlice(item Dhcpv6ClientOptionsOptionsRequest) DeviceDhcpv6ClientDhcpv6ClientOptionsOptionsRequestIter {
-	obj.dhcpv6ClientOptionsOptionsRequestSlice = append(obj.dhcpv6ClientOptionsOptionsRequestSlice, item)
-	return obj
-}
-
-// The vendor class option is used by a client to identify the vendor that manufactured the hardware on which
-// the client is running. The information contained in the data area of this option is contained in one or more
-// opaque fields that identify details of the hardware configuration.
-// VendorClass returns a Dhcpv6ClientOptionsVendorClass
-func (obj *deviceDhcpv6Client) VendorClass() Dhcpv6ClientOptionsVendorClass {
-	if obj.obj.VendorClass == nil {
-		obj.obj.VendorClass = NewDhcpv6ClientOptionsVendorClass().msg()
-	}
-	if obj.vendorClassHolder == nil {
-		obj.vendorClassHolder = &dhcpv6ClientOptionsVendorClass{obj: obj.obj.VendorClass}
-	}
-	return obj.vendorClassHolder
-}
-
-// The vendor class option is used by a client to identify the vendor that manufactured the hardware on which
-// the client is running. The information contained in the data area of this option is contained in one or more
-// opaque fields that identify details of the hardware configuration.
-// VendorClass returns a Dhcpv6ClientOptionsVendorClass
-func (obj *deviceDhcpv6Client) HasVendorClass() bool {
-	return obj.obj.VendorClass != nil
-}
-
-// The vendor class option is used by a client to identify the vendor that manufactured the hardware on which
-// the client is running. The information contained in the data area of this option is contained in one or more
-// opaque fields that identify details of the hardware configuration.
-// SetVendorClass sets the Dhcpv6ClientOptionsVendorClass value in the DeviceDhcpv6Client object
-func (obj *deviceDhcpv6Client) SetVendorClass(value Dhcpv6ClientOptionsVendorClass) DeviceDhcpv6Client {
-
-	obj.vendorClassHolder = nil
-	obj.obj.VendorClass = value.msg()
-
-	return obj
-}
-
-// This option is used by clients to exchange vendor-specific information with servers.
-// VendorInfo returns a Dhcpv6ClientOptionsVendorInfo
-func (obj *deviceDhcpv6Client) VendorInfo() Dhcpv6ClientOptionsVendorInfo {
-	if obj.obj.VendorInfo == nil {
-		obj.obj.VendorInfo = NewDhcpv6ClientOptionsVendorInfo().msg()
-	}
-	if obj.vendorInfoHolder == nil {
-		obj.vendorInfoHolder = &dhcpv6ClientOptionsVendorInfo{obj: obj.obj.VendorInfo}
-	}
-	return obj.vendorInfoHolder
-}
-
-// This option is used by clients to exchange vendor-specific information with servers.
-// VendorInfo returns a Dhcpv6ClientOptionsVendorInfo
-func (obj *deviceDhcpv6Client) HasVendorInfo() bool {
-	return obj.obj.VendorInfo != nil
-}
-
-// This option is used by clients to exchange vendor-specific information with servers.
-// SetVendorInfo sets the Dhcpv6ClientOptionsVendorInfo value in the DeviceDhcpv6Client object
-func (obj *deviceDhcpv6Client) SetVendorInfo(value Dhcpv6ClientOptionsVendorInfo) DeviceDhcpv6Client {
-
-	obj.vendorInfoHolder = nil
-	obj.obj.VendorInfo = value.msg()
-
-	return obj
-}
-
-// DHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to
-// update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client
-// FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which update.
-// Fqdn returns a Dhcpv6ClientOptionsFqdn
-func (obj *deviceDhcpv6Client) Fqdn() Dhcpv6ClientOptionsFqdn {
-	if obj.obj.Fqdn == nil {
-		obj.obj.Fqdn = NewDhcpv6ClientOptionsFqdn().msg()
-	}
-	if obj.fqdnHolder == nil {
-		obj.fqdnHolder = &dhcpv6ClientOptionsFqdn{obj: obj.obj.Fqdn}
-	}
-	return obj.fqdnHolder
-}
-
-// DHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to
-// update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client
-// FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which update.
-// Fqdn returns a Dhcpv6ClientOptionsFqdn
-func (obj *deviceDhcpv6Client) HasFqdn() bool {
-	return obj.obj.Fqdn != nil
-}
-
-// DHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to
-// update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client
-// FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which update.
-// SetFqdn sets the Dhcpv6ClientOptionsFqdn value in the DeviceDhcpv6Client object
-func (obj *deviceDhcpv6Client) SetFqdn(value Dhcpv6ClientOptionsFqdn) DeviceDhcpv6Client {
-
-	obj.fqdnHolder = nil
-	obj.obj.Fqdn = value.msg()
+	obj.optionsHolder = nil
+	obj.obj.Options = value.msg()
 
 	return obj
 }
@@ -667,11 +482,6 @@ func (obj *deviceDhcpv6Client) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceDhcpv6Client")
 	}
 
-	if obj.obj.ServerIdentifier != nil {
-
-		obj.ServerIdentifier().validateObj(vObj, set_default)
-	}
-
 	if obj.obj.IaType != nil {
 
 		obj.IaType().validateObj(vObj, set_default)
@@ -682,33 +492,14 @@ func (obj *deviceDhcpv6Client) validateObj(vObj *validation, set_default bool) {
 		obj.DuidType().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Options) != 0 {
+	if obj.obj.OptionsRequest != nil {
 
-		if set_default {
-			obj.Options().clearHolderSlice()
-			for _, item := range obj.obj.Options {
-				obj.Options().appendHolderSlice(&dhcpv6ClientOptionsOptionsRequest{obj: item})
-			}
-		}
-		for _, item := range obj.Options().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
+		obj.OptionsRequest().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.VendorClass != nil {
+	if obj.obj.Options != nil {
 
-		obj.VendorClass().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.VendorInfo != nil {
-
-		obj.VendorInfo().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Fqdn != nil {
-
-		obj.Fqdn().validateObj(vObj, set_default)
+		obj.Options().validateObj(vObj, set_default)
 	}
 
 }

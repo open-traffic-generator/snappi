@@ -472,7 +472,7 @@ func (obj *dhcpv6ServerMetric) SetRequestsReceived(value uint64) Dhcpv6ServerMet
 	return obj
 }
 
-// Number of naks send for DHCPREQUEST messages.
+// Number of naks sent for DHCPREQUEST messages.
 // NacksSent returns a uint64
 func (obj *dhcpv6ServerMetric) NacksSent() uint64 {
 
@@ -480,13 +480,13 @@ func (obj *dhcpv6ServerMetric) NacksSent() uint64 {
 
 }
 
-// Number of naks send for DHCPREQUEST messages.
+// Number of naks sent for DHCPREQUEST messages.
 // NacksSent returns a uint64
 func (obj *dhcpv6ServerMetric) HasNacksSent() bool {
 	return obj.obj.NacksSent != nil
 }
 
-// Number of naks send for DHCPREQUEST messages.
+// Number of naks sent for DHCPREQUEST messages.
 // SetNacksSent sets the uint64 value in the Dhcpv6ServerMetric object
 func (obj *dhcpv6ServerMetric) SetNacksSent(value uint64) Dhcpv6ServerMetric {
 
@@ -670,7 +670,7 @@ func (obj *dhcpv6ServerMetric) SetRelayForwardsReceived(value uint64) Dhcpv6Serv
 	return obj
 }
 
-// Number of DHCP reply messages send to Relay agent.
+// Number of DHCP reply messages sent to Relay agent.
 // RelayRepliesSent returns a uint64
 func (obj *dhcpv6ServerMetric) RelayRepliesSent() uint64 {
 
@@ -678,13 +678,13 @@ func (obj *dhcpv6ServerMetric) RelayRepliesSent() uint64 {
 
 }
 
-// Number of DHCP reply messages send to Relay agent.
+// Number of DHCP reply messages sent to Relay agent.
 // RelayRepliesSent returns a uint64
 func (obj *dhcpv6ServerMetric) HasRelayRepliesSent() bool {
 	return obj.obj.RelayRepliesSent != nil
 }
 
-// Number of DHCP reply messages send to Relay agent.
+// Number of DHCP reply messages sent to Relay agent.
 // SetRelayRepliesSent sets the uint64 value in the Dhcpv6ServerMetric object
 func (obj *dhcpv6ServerMetric) SetRelayRepliesSent(value uint64) Dhcpv6ServerMetric {
 

@@ -19,7 +19,7 @@ type dhcpv6ServerIaType struct {
 	ianaHolder   Dhcpv6ServerPoolInfo
 	iataHolder   Dhcpv6ServerPoolInfo
 	iapdHolder   Dhcpv6ServerIapdPoolInfo
-	ianapdHolder Dhcpv6ServerPoolInfo
+	ianapdHolder Dhcpv6ServerIanapdPoolInfo
 }
 
 func NewDhcpv6ServerIaType() Dhcpv6ServerIaType {
@@ -285,18 +285,18 @@ type Dhcpv6ServerIaType interface {
 	// HasChoice checks if Choice has been set in Dhcpv6ServerIaType
 	HasChoice() bool
 	// Iana returns Dhcpv6ServerPoolInfo, set in Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
+	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana and iata.
 	Iana() Dhcpv6ServerPoolInfo
 	// SetIana assigns Dhcpv6ServerPoolInfo provided by user to Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
+	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana and iata.
 	SetIana(value Dhcpv6ServerPoolInfo) Dhcpv6ServerIaType
 	// HasIana checks if Iana has been set in Dhcpv6ServerIaType
 	HasIana() bool
 	// Iata returns Dhcpv6ServerPoolInfo, set in Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
+	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana and iata.
 	Iata() Dhcpv6ServerPoolInfo
 	// SetIata assigns Dhcpv6ServerPoolInfo provided by user to Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
+	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana and iata.
 	SetIata(value Dhcpv6ServerPoolInfo) Dhcpv6ServerIaType
 	// HasIata checks if Iata has been set in Dhcpv6ServerIaType
 	HasIata() bool
@@ -308,12 +308,12 @@ type Dhcpv6ServerIaType interface {
 	SetIapd(value Dhcpv6ServerIapdPoolInfo) Dhcpv6ServerIaType
 	// HasIapd checks if Iapd has been set in Dhcpv6ServerIaType
 	HasIapd() bool
-	// Ianapd returns Dhcpv6ServerPoolInfo, set in Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
-	Ianapd() Dhcpv6ServerPoolInfo
-	// SetIanapd assigns Dhcpv6ServerPoolInfo provided by user to Dhcpv6ServerIaType.
-	// Dhcpv6ServerPoolInfo is the container for pool configurations for IA types iana,iata and ianapd.
-	SetIanapd(value Dhcpv6ServerPoolInfo) Dhcpv6ServerIaType
+	// Ianapd returns Dhcpv6ServerIanapdPoolInfo, set in Dhcpv6ServerIaType.
+	// Dhcpv6ServerIanapdPoolInfo is the container for pool configurations for IA type ianapd.
+	Ianapd() Dhcpv6ServerIanapdPoolInfo
+	// SetIanapd assigns Dhcpv6ServerIanapdPoolInfo provided by user to Dhcpv6ServerIaType.
+	// Dhcpv6ServerIanapdPoolInfo is the container for pool configurations for IA type ianapd.
+	SetIanapd(value Dhcpv6ServerIanapdPoolInfo) Dhcpv6ServerIaType
 	// HasIanapd checks if Ianapd has been set in Dhcpv6ServerIaType
 	HasIanapd() bool
 	setNil()
@@ -375,7 +375,7 @@ func (obj *dhcpv6ServerIaType) setChoice(value Dhcpv6ServerIaTypeChoiceEnum) Dhc
 	}
 
 	if value == Dhcpv6ServerIaTypeChoice.IANAPD {
-		obj.obj.Ianapd = NewDhcpv6ServerPoolInfo().msg()
+		obj.obj.Ianapd = NewDhcpv6ServerIanapdPoolInfo().msg()
 	}
 
 	return obj
@@ -466,26 +466,26 @@ func (obj *dhcpv6ServerIaType) SetIapd(value Dhcpv6ServerIapdPoolInfo) Dhcpv6Ser
 }
 
 // description is TBD
-// Ianapd returns a Dhcpv6ServerPoolInfo
-func (obj *dhcpv6ServerIaType) Ianapd() Dhcpv6ServerPoolInfo {
+// Ianapd returns a Dhcpv6ServerIanapdPoolInfo
+func (obj *dhcpv6ServerIaType) Ianapd() Dhcpv6ServerIanapdPoolInfo {
 	if obj.obj.Ianapd == nil {
 		obj.setChoice(Dhcpv6ServerIaTypeChoice.IANAPD)
 	}
 	if obj.ianapdHolder == nil {
-		obj.ianapdHolder = &dhcpv6ServerPoolInfo{obj: obj.obj.Ianapd}
+		obj.ianapdHolder = &dhcpv6ServerIanapdPoolInfo{obj: obj.obj.Ianapd}
 	}
 	return obj.ianapdHolder
 }
 
 // description is TBD
-// Ianapd returns a Dhcpv6ServerPoolInfo
+// Ianapd returns a Dhcpv6ServerIanapdPoolInfo
 func (obj *dhcpv6ServerIaType) HasIanapd() bool {
 	return obj.obj.Ianapd != nil
 }
 
 // description is TBD
-// SetIanapd sets the Dhcpv6ServerPoolInfo value in the Dhcpv6ServerIaType object
-func (obj *dhcpv6ServerIaType) SetIanapd(value Dhcpv6ServerPoolInfo) Dhcpv6ServerIaType {
+// SetIanapd sets the Dhcpv6ServerIanapdPoolInfo value in the Dhcpv6ServerIaType object
+func (obj *dhcpv6ServerIaType) SetIanapd(value Dhcpv6ServerIanapdPoolInfo) Dhcpv6ServerIaType {
 	obj.setChoice(Dhcpv6ServerIaTypeChoice.IANAPD)
 	obj.ianapdHolder = nil
 	obj.obj.Ianapd = value.msg()

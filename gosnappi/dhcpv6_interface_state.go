@@ -270,18 +270,24 @@ type Dhcpv6InterfaceState interface {
 	SetDhcpClientName(value string) Dhcpv6InterfaceState
 	// HasDhcpClientName checks if DhcpClientName has been set in Dhcpv6InterfaceState
 	HasDhcpClientName() bool
+	// Ipv6IapdAddress returns string, set in Dhcpv6InterfaceState.
+	Ipv6IapdAddress() string
+	// SetIpv6IapdAddress assigns string provided by user to Dhcpv6InterfaceState
+	SetIpv6IapdAddress(value string) Dhcpv6InterfaceState
+	// HasIpv6IapdAddress checks if Ipv6IapdAddress has been set in Dhcpv6InterfaceState
+	HasIpv6IapdAddress() bool
+	// IapdPrefixLength returns uint32, set in Dhcpv6InterfaceState.
+	IapdPrefixLength() uint32
+	// SetIapdPrefixLength assigns uint32 provided by user to Dhcpv6InterfaceState
+	SetIapdPrefixLength(value uint32) Dhcpv6InterfaceState
+	// HasIapdPrefixLength checks if IapdPrefixLength has been set in Dhcpv6InterfaceState
+	HasIapdPrefixLength() bool
 	// Ipv6Address returns string, set in Dhcpv6InterfaceState.
 	Ipv6Address() string
 	// SetIpv6Address assigns string provided by user to Dhcpv6InterfaceState
 	SetIpv6Address(value string) Dhcpv6InterfaceState
 	// HasIpv6Address checks if Ipv6Address has been set in Dhcpv6InterfaceState
 	HasIpv6Address() bool
-	// PrefixLength returns uint32, set in Dhcpv6InterfaceState.
-	PrefixLength() uint32
-	// SetPrefixLength assigns uint32 provided by user to Dhcpv6InterfaceState
-	SetPrefixLength(value uint32) Dhcpv6InterfaceState
-	// HasPrefixLength checks if PrefixLength has been set in Dhcpv6InterfaceState
-	HasPrefixLength() bool
 	// GatewayAddress returns string, set in Dhcpv6InterfaceState.
 	GatewayAddress() string
 	// SetGatewayAddress assigns string provided by user to Dhcpv6InterfaceState
@@ -330,6 +336,50 @@ func (obj *dhcpv6InterfaceState) SetDhcpClientName(value string) Dhcpv6Interface
 	return obj
 }
 
+// The IPv6 IAPD address associated with this DHCP Client session.
+// Ipv6IapdAddress returns a string
+func (obj *dhcpv6InterfaceState) Ipv6IapdAddress() string {
+
+	return *obj.obj.Ipv6IapdAddress
+
+}
+
+// The IPv6 IAPD address associated with this DHCP Client session.
+// Ipv6IapdAddress returns a string
+func (obj *dhcpv6InterfaceState) HasIpv6IapdAddress() bool {
+	return obj.obj.Ipv6IapdAddress != nil
+}
+
+// The IPv6 IAPD address associated with this DHCP Client session.
+// SetIpv6IapdAddress sets the string value in the Dhcpv6InterfaceState object
+func (obj *dhcpv6InterfaceState) SetIpv6IapdAddress(value string) Dhcpv6InterfaceState {
+
+	obj.obj.Ipv6IapdAddress = &value
+	return obj
+}
+
+// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+// IapdPrefixLength returns a uint32
+func (obj *dhcpv6InterfaceState) IapdPrefixLength() uint32 {
+
+	return *obj.obj.IapdPrefixLength
+
+}
+
+// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+// IapdPrefixLength returns a uint32
+func (obj *dhcpv6InterfaceState) HasIapdPrefixLength() bool {
+	return obj.obj.IapdPrefixLength != nil
+}
+
+// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+// SetIapdPrefixLength sets the uint32 value in the Dhcpv6InterfaceState object
+func (obj *dhcpv6InterfaceState) SetIapdPrefixLength(value uint32) Dhcpv6InterfaceState {
+
+	obj.obj.IapdPrefixLength = &value
+	return obj
+}
+
 // The IPv6 address associated with this DHCP Client session.
 // Ipv6Address returns a string
 func (obj *dhcpv6InterfaceState) Ipv6Address() string {
@@ -349,28 +399,6 @@ func (obj *dhcpv6InterfaceState) HasIpv6Address() bool {
 func (obj *dhcpv6InterfaceState) SetIpv6Address(value string) Dhcpv6InterfaceState {
 
 	obj.obj.Ipv6Address = &value
-	return obj
-}
-
-// The length of the prefix.
-// PrefixLength returns a uint32
-func (obj *dhcpv6InterfaceState) PrefixLength() uint32 {
-
-	return *obj.obj.PrefixLength
-
-}
-
-// The length of the prefix.
-// PrefixLength returns a uint32
-func (obj *dhcpv6InterfaceState) HasPrefixLength() bool {
-	return obj.obj.PrefixLength != nil
-}
-
-// The length of the prefix.
-// SetPrefixLength sets the uint32 value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetPrefixLength(value uint32) Dhcpv6InterfaceState {
-
-	obj.obj.PrefixLength = &value
 	return obj
 }
 
@@ -467,12 +495,12 @@ func (obj *dhcpv6InterfaceState) validateObj(vObj *validation, set_default bool)
 		obj.setDefault()
 	}
 
-	if obj.obj.PrefixLength != nil {
+	if obj.obj.IapdPrefixLength != nil {
 
-		if *obj.obj.PrefixLength > 128 {
+		if *obj.obj.IapdPrefixLength > 128 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Dhcpv6InterfaceState.PrefixLength <= 128 but Got %d", *obj.obj.PrefixLength))
+				fmt.Sprintf("0 <= Dhcpv6InterfaceState.IapdPrefixLength <= 128 but Got %d", *obj.obj.IapdPrefixLength))
 		}
 
 	}
