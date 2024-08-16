@@ -286,12 +286,12 @@ type BgpV6Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
-// - /components/schemas/DhcpClient.V6/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
-// - /components/schemas/DhcpClient.V6/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // Ipv6Name returns a string
 func (obj *bgpV6Interface) Ipv6Name() string {
@@ -305,12 +305,12 @@ func (obj *bgpV6Interface) Ipv6Name() string {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
-// - /components/schemas/DhcpClient.V6/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
-// - /components/schemas/DhcpClient.V6/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // SetIpv6Name sets the string value in the BgpV6Interface object
 func (obj *bgpV6Interface) SetIpv6Name(value string) BgpV6Interface {

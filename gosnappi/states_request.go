@@ -24,6 +24,8 @@ type statesRequest struct {
 	rsvpLspsHolder         RsvpLspsStateRequest
 	dhcpv4InterfacesHolder Dhcpv4InterfaceStateRequest
 	dhcpv4LeasesHolder     Dhcpv4LeaseStateRequest
+	dhcpv6InterfacesHolder Dhcpv6InterfaceStateRequest
+	dhcpv6LeasesHolder     Dhcpv6LeaseStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -259,6 +261,8 @@ func (obj *statesRequest) setNil() {
 	obj.rsvpLspsHolder = nil
 	obj.dhcpv4InterfacesHolder = nil
 	obj.dhcpv4LeasesHolder = nil
+	obj.dhcpv6InterfacesHolder = nil
+	obj.dhcpv6LeasesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -356,6 +360,22 @@ type StatesRequest interface {
 	SetDhcpv4Leases(value Dhcpv4LeaseStateRequest) StatesRequest
 	// HasDhcpv4Leases checks if Dhcpv4Leases has been set in StatesRequest
 	HasDhcpv4Leases() bool
+	// Dhcpv6Interfaces returns Dhcpv6InterfaceStateRequest, set in StatesRequest.
+	// Dhcpv6InterfaceStateRequest is the request for assigned IPv6 address information associated with DHCP Client sessions.
+	Dhcpv6Interfaces() Dhcpv6InterfaceStateRequest
+	// SetDhcpv6Interfaces assigns Dhcpv6InterfaceStateRequest provided by user to StatesRequest.
+	// Dhcpv6InterfaceStateRequest is the request for assigned IPv6 address information associated with DHCP Client sessions.
+	SetDhcpv6Interfaces(value Dhcpv6InterfaceStateRequest) StatesRequest
+	// HasDhcpv6Interfaces checks if Dhcpv6Interfaces has been set in StatesRequest
+	HasDhcpv6Interfaces() bool
+	// Dhcpv6Leases returns Dhcpv6LeaseStateRequest, set in StatesRequest.
+	// Dhcpv6LeaseStateRequest is the request to retrieve DHCP Server host allocated status.
+	Dhcpv6Leases() Dhcpv6LeaseStateRequest
+	// SetDhcpv6Leases assigns Dhcpv6LeaseStateRequest provided by user to StatesRequest.
+	// Dhcpv6LeaseStateRequest is the request to retrieve DHCP Server host allocated status.
+	SetDhcpv6Leases(value Dhcpv6LeaseStateRequest) StatesRequest
+	// HasDhcpv6Leases checks if Dhcpv6Leases has been set in StatesRequest
+	HasDhcpv6Leases() bool
 	setNil()
 }
 
@@ -371,6 +391,8 @@ var StatesRequestChoice = struct {
 	RSVP_LSPS         StatesRequestChoiceEnum
 	DHCPV4_INTERFACES StatesRequestChoiceEnum
 	DHCPV4_LEASES     StatesRequestChoiceEnum
+	DHCPV6_INTERFACES StatesRequestChoiceEnum
+	DHCPV6_LEASES     StatesRequestChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
@@ -380,6 +402,8 @@ var StatesRequestChoice = struct {
 	RSVP_LSPS:         StatesRequestChoiceEnum("rsvp_lsps"),
 	DHCPV4_INTERFACES: StatesRequestChoiceEnum("dhcpv4_interfaces"),
 	DHCPV4_LEASES:     StatesRequestChoiceEnum("dhcpv4_leases"),
+	DHCPV6_INTERFACES: StatesRequestChoiceEnum("dhcpv6_interfaces"),
+	DHCPV6_LEASES:     StatesRequestChoiceEnum("dhcpv6_leases"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -401,6 +425,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dhcpv6Leases = nil
+	obj.dhcpv6LeasesHolder = nil
+	obj.obj.Dhcpv6Interfaces = nil
+	obj.dhcpv6InterfacesHolder = nil
 	obj.obj.Dhcpv4Leases = nil
 	obj.dhcpv4LeasesHolder = nil
 	obj.obj.Dhcpv4Interfaces = nil
@@ -448,6 +476,14 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.DHCPV4_LEASES {
 		obj.obj.Dhcpv4Leases = NewDhcpv4LeaseStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.DHCPV6_INTERFACES {
+		obj.obj.Dhcpv6Interfaces = NewDhcpv6InterfaceStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.DHCPV6_LEASES {
+		obj.obj.Dhcpv6Leases = NewDhcpv6LeaseStateRequest().msg()
 	}
 
 	return obj
@@ -677,6 +713,62 @@ func (obj *statesRequest) SetDhcpv4Leases(value Dhcpv4LeaseStateRequest) StatesR
 	return obj
 }
 
+// description is TBD
+// Dhcpv6Interfaces returns a Dhcpv6InterfaceStateRequest
+func (obj *statesRequest) Dhcpv6Interfaces() Dhcpv6InterfaceStateRequest {
+	if obj.obj.Dhcpv6Interfaces == nil {
+		obj.setChoice(StatesRequestChoice.DHCPV6_INTERFACES)
+	}
+	if obj.dhcpv6InterfacesHolder == nil {
+		obj.dhcpv6InterfacesHolder = &dhcpv6InterfaceStateRequest{obj: obj.obj.Dhcpv6Interfaces}
+	}
+	return obj.dhcpv6InterfacesHolder
+}
+
+// description is TBD
+// Dhcpv6Interfaces returns a Dhcpv6InterfaceStateRequest
+func (obj *statesRequest) HasDhcpv6Interfaces() bool {
+	return obj.obj.Dhcpv6Interfaces != nil
+}
+
+// description is TBD
+// SetDhcpv6Interfaces sets the Dhcpv6InterfaceStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetDhcpv6Interfaces(value Dhcpv6InterfaceStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.DHCPV6_INTERFACES)
+	obj.dhcpv6InterfacesHolder = nil
+	obj.obj.Dhcpv6Interfaces = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Dhcpv6Leases returns a Dhcpv6LeaseStateRequest
+func (obj *statesRequest) Dhcpv6Leases() Dhcpv6LeaseStateRequest {
+	if obj.obj.Dhcpv6Leases == nil {
+		obj.setChoice(StatesRequestChoice.DHCPV6_LEASES)
+	}
+	if obj.dhcpv6LeasesHolder == nil {
+		obj.dhcpv6LeasesHolder = &dhcpv6LeaseStateRequest{obj: obj.obj.Dhcpv6Leases}
+	}
+	return obj.dhcpv6LeasesHolder
+}
+
+// description is TBD
+// Dhcpv6Leases returns a Dhcpv6LeaseStateRequest
+func (obj *statesRequest) HasDhcpv6Leases() bool {
+	return obj.obj.Dhcpv6Leases != nil
+}
+
+// description is TBD
+// SetDhcpv6Leases sets the Dhcpv6LeaseStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetDhcpv6Leases(value Dhcpv6LeaseStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.DHCPV6_LEASES)
+	obj.dhcpv6LeasesHolder = nil
+	obj.obj.Dhcpv6Leases = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -720,6 +812,16 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Dhcpv4Leases != nil {
 
 		obj.Dhcpv4Leases().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv6Interfaces != nil {
+
+		obj.Dhcpv6Interfaces().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Dhcpv6Leases != nil {
+
+		obj.Dhcpv6Leases().validateObj(vObj, set_default)
 	}
 
 }
@@ -766,6 +868,16 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.Dhcpv4Leases != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.DHCPV4_LEASES
+	}
+
+	if obj.obj.Dhcpv6Interfaces != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.DHCPV6_INTERFACES
+	}
+
+	if obj.obj.Dhcpv6Leases != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.DHCPV6_LEASES
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

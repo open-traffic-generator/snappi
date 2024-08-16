@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.7.1
+  version: 1.8.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -619,6 +619,13 @@ components:
           items:
             $ref: '#/components/schemas/Device.Dhcpv4client'
           x-field-uid: 9
+        dhcpv6_interfaces:
+          description: |-
+            List of DHCPv6 Clients Configuration.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Dhcpv6client'
+          x-field-uid: 10
       required:
       - mac
       - name
@@ -1031,6 +1038,785 @@ components:
           type: boolean
           default: false
           x-field-uid: 4
+    Device.Dhcpv6client:
+      description: |-
+        Configuration for emulated DHCPv6 Client on a single Interface. If the DHCPv6 Client receives one or more  DHCPv6 ADVERTISE messages from one or more servers then the client chooses one server from which to request  configuration parameters, based on the configuration parameters offered by the server in the DHCPv6 ADVERTISE  messages. If all configuration parameters match then the first server will be chosen. https://www.rfc-editor.org/rfc/rfc8415.html
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        rapid_commit:
+          description: |-
+            If Rapid Commit is set, client initiates Rapid Commit two-message exchange by including Rapid Commit option  in Solicit message.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        ia_type:
+          description: "Each IA has an associated IAID. Differnet IA options represent\
+            \ different types of IPv6 addresses and parameters \naccepted by DHCPv6\
+            \ clients each used in different context by an IPv6 node."
+          $ref: '#/components/schemas/Device.Dhcpv6client.IaType'
+          x-field-uid: 3
+        duid_type:
+          description: |-
+            Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify each other.
+          $ref: '#/components/schemas/Device.Dhcpv6client.DuidType'
+          x-field-uid: 4
+        options_request:
+          description: |-
+            The options requested by a client from a server in the options request option.
+          $ref: '#/components/schemas/Device.Dhcpv6Client.OptionsRequest'
+          x-field-uid: 5
+        options:
+          description: |-
+            Optional DHCPv4 Client options that are sent in Dhcp client messages.
+          $ref: '#/components/schemas/Device.Dhcpv6Client.Options'
+          x-field-uid: 6
+    Device.Dhcpv6Client.OptionsRequest:
+      description: |-
+        DHCP client options, these configured options are sent in Dhcp client messages.
+      type: object
+      required:
+      - request
+      - associated_dhcp_messages
+      properties:
+        request:
+          description: |-
+            List of options requested by a client from a server.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6ClientOptions.OptionsRequest'
+          x-field-uid: 1
+        associated_dhcp_messages:
+          description: |-
+            The list of dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.OptionsRequestIncludedMessages'
+          x-field-uid: 2
+    Device.Dhcpv6Client.Options:
+      description: |-
+        DHCP client options, these configured options are sent in Dhcp client messages.
+      type: object
+      properties:
+        server_identifier:
+          description: "A client uses multicast to reach all servers or an individual\
+            \ server. An individual server is indicated by \nspecifying that server's\
+            \ DUID in a Server Identifier option in the client's message (all servers\
+            \ will receive \nthis message but only the indicated server will respond).\
+            \ All servers are indicated by not supplying this option.            "
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.ServerIdentifier'
+          x-field-uid: 1
+        vendor_class:
+          description: "The vendor class option is used by a client to identify the\
+            \ vendor that manufactured the hardware on which \nthe client is running.\
+            \ The information contained in the data area of this option is contained\
+            \ in one or more \nopaque fields that identify details of the hardware\
+            \ configuration."
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.VendorClass'
+          x-field-uid: 2
+        vendor_info:
+          description: |-
+            This option is used by clients to exchange vendor-specific information with servers.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.VendorInfo'
+          x-field-uid: 3
+        fqdn:
+          description: "DHCPv6 server needs to know the FQDN of the client for the\
+            \ addresses for the client's IA_NA bindings in order to \nupdate the IPv6-address-to-FQDN\
+            \ mapping. This option allows the client to convey its FQDN to the server.\
+            \ The Client \nFQDN option also contains Flags that DHCPv6 clients and\
+            \ servers use to negotiate who does which update."
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.Fqdn'
+          x-field-uid: 4
+    Device.Dhcpv6client.IaType:
+      type: object
+      properties:
+        choice:
+          description: |-
+            Identity Association: Each IA has an associated IAID. IA_NA and IA_TA options represent different types of  IPv6 addresses and parameters accepted by DHCPv6 clients each used in different context by an IPv6 node. IA_NA  is the Identity Association for Non-temporary Addresses option. IA_TA is the Identity Association for Temporary  Addresses option. IA_PD and IA_NAPD options represent one or more IPv6 prefix and parameters. IA_PD is the Identity  Association for Prefix Delegation and IA_NAPD s the Identity Association for Temporary Prefix Delegation.
+          type: string
+          default: iana
+          x-field-uid: 1
+          x-enum:
+            iana:
+              x-field-uid: 1
+            iata:
+              x-field-uid: 2
+            iapd:
+              x-field-uid: 3
+            ianapd:
+              x-field-uid: 4
+          enum:
+          - iana
+          - iata
+          - iapd
+          - ianapd
+        iana:
+          $ref: '#/components/schemas/Device.Dhcpv6client.IaTimeValue'
+          x-field-uid: 2
+        iapd:
+          $ref: '#/components/schemas/Device.Dhcpv6client.IaTimeValue'
+          x-field-uid: 3
+        ianapd:
+          $ref: '#/components/schemas/Device.Dhcpv6client.IaTimeValue'
+          x-field-uid: 4
+    Device.Dhcpv6client.IaTimeValue:
+      description: |-
+        The container for the suggested times at which the client contacts the server or any available server.
+      type: object
+      properties:
+        t1:
+          description: |-
+            The suggested time at which the client contacts the server from which the addresses were obtained to  extend the lifetimes of the addresses assigned. T1 is a time duration relative to the current time expressed  in units of seconds. If set to 0 server will ignore it. If the maximum value is specified it means infinite time.
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          default: 302400
+          x-field-uid: 1
+        t2:
+          description: |-
+            The suggested time at which the client contacts any available server to extend the lifetimes of the addresses assigned.  T2 is a time duration relative to the current time expressed in units of seconds. If set to 0 server will ignore it. If  the maximum value is specified it means infinite time
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          default: 483840
+          x-field-uid: 2
+    Device.Dhcpv6client.DuidType:
+      type: object
+      properties:
+        choice:
+          description: |-
+            Each DHCP client and server has a DUID. DHCP clients use DUIDs to identify a server in messages where a server needs  to be identified.
+          type: string
+          default: llt
+          x-field-uid: 1
+          x-enum:
+            llt:
+              x-field-uid: 1
+            en:
+              x-field-uid: 2
+            ll:
+              x-field-uid: 3
+          enum:
+          - llt
+          - en
+          - ll
+        llt:
+          $ref: '#/components/schemas/Device.Dhcpv6client.NoDuid'
+          x-field-uid: 2
+        en:
+          $ref: '#/components/schemas/Device.Dhcpv6client.DuidValue'
+          x-field-uid: 3
+        ll:
+          $ref: '#/components/schemas/Device.Dhcpv6client.NoDuid'
+          x-field-uid: 4
+    Device.Dhcpv6client.DuidValue:
+      description: |-
+        The container for the DUID-EN. This consists of the 4-octet vendor's registered Private Enterprise Number  as maintained by IANA [IANA-PEN] followed by a unique identifier assigned by the vendor.
+      type: object
+      properties:
+        enterprise_id:
+          description: |-
+            4-octet vendor's registered Private Enterprise Number as maintained by IANA [IANA-PEN].
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 2147483647
+          default: 10
+          x-field-uid: 1
+        vendor_id:
+          description: |-
+            Unique identifier assigned by the vendor.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 2147483647
+          default: 10
+          x-field-uid: 2
+    Device.Dhcpv6client.NoDuid:
+      description: |-
+        The container for DUID-LL and DUID-LLT.
+      type: object
+    Dhcpv6ClientOptions.ServerIdentifier:
+      type: object
+      properties:
+        choice:
+          description: |-
+            The Identifier option is used to carry a DUID. The option code is 2. The server identifier identifies  a server. This option is used when client wants to contact a particular server.
+          type: string
+          default: duid_ll
+          x-field-uid: 1
+          x-enum:
+            duid_llt:
+              x-field-uid: 1
+            duid_en:
+              x-field-uid: 2
+            duid_ll:
+              x-field-uid: 3
+            duid_uuid:
+              x-field-uid: 4
+          enum:
+          - duid_llt
+          - duid_en
+          - duid_ll
+          - duid_uuid
+        duid_llt:
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidLlt'
+          x-field-uid: 2
+        duid_en:
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidEn'
+          x-field-uid: 3
+        duid_ll:
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidLl'
+          x-field-uid: 4
+        duid_uuid:
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidUuid'
+          x-field-uid: 5
+    Dhcpv6ClientOptions.DuidLlt:
+      description: |-
+        DUID based on Link Layer address plus time. Hardware Type will be auto assigned to ethernet type.
+      type: object
+      required:
+      - time
+      - link_layer_address
+      properties:
+        time:
+          description: "The time value is the time that the DUID is generated represented\
+            \ in seconds since midnight (UTC), January 1, \n2000, modulo 2^32. The\
+            \ DUID generatation time will the current time when dhcpv6 client contacts\
+            \ the server.           "
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        link_layer_address:
+          description: "The link-layer address is stored in canonical form, as described\
+            \ in RFC 2464.     "
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.LinkLayerAddress'
+          x-field-uid: 2
+    Dhcpv6ClientOptions.DuidEn:
+      description: |-
+        DUID assigned by vendor based on enterprise number.
+      type: object
+      required:
+      - enterprise_number
+      - identifier
+      properties:
+        enterprise_number:
+          description: "Vendor's registered private enterprise number as maintained\
+            \ by IANA.            "
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          x-field-uid: 1
+        identifier:
+          description: "The unique identifier assigned by the vendor.           "
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
+          x-field-uid: 2
+    Dhcpv6ClientOptions.DuidLl:
+      description: |-
+        DUID based on Link Layer address. Hardware Type will be auto assigned to ethernet type.
+      type: object
+      required:
+      - link_layer_address
+      properties:
+        link_layer_address:
+          description: "The link-layer address is stored in canonical form, as described\
+            \ in RFC 2464.           "
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.LinkLayerAddress'
+          x-field-uid: 1
+    Dhcpv6ClientOptions.DuidUuid:
+      description: |-
+        DUID embedded a Universally Unique IDentifier (UUID). A UUID is an identifier that is unique across both  space and time, with respect to the space of all UUIDs.
+      type: object
+      properties:
+        version:
+          description: "The version number is in the most significant 4 bits of the\
+            \ timestamp (bits 4 through 7 of the time_hi_and_version field).     \
+            \      "
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidUuidVersion'
+          x-field-uid: 1
+        variant:
+          description: "The variant field determines the layout of the UUID. It is\
+            \ multiplexed with clock_seq_hi_and_reserved.           "
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.DuidUuidVariant'
+          x-field-uid: 2
+        time_low:
+          description: "The low field of the timestamp.            "
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
+        time_mid:
+          description: "The middle field of the timestamp.            "
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 65535
+          x-field-uid: 4
+        time_hi_and_version:
+          description: "The high field of the timestamp multiplexed with the version\
+            \ number.            "
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 4095
+          x-field-uid: 5
+        clock_seq_hi_and_reserved:
+          description: "The high field of the clock sequence multiplexed with the\
+            \ variant.     "
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 31
+          x-field-uid: 6
+        clock_seq_low:
+          description: "The low field of the clock sequence.     "
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 127
+          x-field-uid: 7
+        node:
+          description: "The spatially unique node identifier.     "
+          type: string
+          format: mac
+          default: 00:00:00:00:00:00
+          x-field-uid: 8
+    Dhcpv6ClientOptions.DuidUuidVersion:
+      description: |-
+        The version number is in the most significant 4 bits of the timestamp (bits 4 through 7 of the time_hi_and_version field).
+      type: object
+      properties:
+        choice:
+          description: |-
+            The version values are from 1 to 5 in the most significant 4 bits of the timestamp (bits 4 through 7 of the  time_hi_and_version field).
+          type: string
+          default: v_1
+          x-field-uid: 1
+          x-enum:
+            v_1:
+              x-field-uid: 1
+            v_2:
+              x-field-uid: 2
+            v_3:
+              x-field-uid: 3
+            v_4:
+              x-field-uid: 4
+            v_5:
+              x-field-uid: 5
+          enum:
+          - v_1
+          - v_2
+          - v_3
+          - v_4
+          - v_5
+    Dhcpv6ClientOptions.DuidUuidVariant:
+      description: |-
+        The variant field determines the layout of the UUID.  That is, the interpretation of all other bits in the  UUID depends on the setting of the bits in the variant field).
+      type: object
+      properties:
+        choice:
+          description: |-
+            The current variants are ncs, dce,microsoft guid and reserved.
+          type: string
+          default: ncs
+          x-field-uid: 1
+          x-enum:
+            ncs:
+              x-field-uid: 1
+            dce:
+              x-field-uid: 2
+            guid:
+              x-field-uid: 3
+            var_reserved:
+              x-field-uid: 4
+          enum:
+          - ncs
+          - dce
+          - guid
+          - var_reserved
+    Dhcpv6ClientOptions.LinkLayerAddress:
+      description: |-
+        The link-layer address configured in DUID llt or DUID ll.
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          description: |-
+            The MAC address that becomes part of DUID llt or DUID ll.
+          type: string
+          format: mac
+          x-field-uid: 3
+    Dhcpv6ClientOptions.OptionsRequest:
+      type: object
+      properties:
+        choice:
+          description: "The Option Request option is used to identify a list of options\
+            \ in a message between a client and a server. The  option code is 6. -\
+            \ Vendor_specific information option, requested by clients for vendor-specific\
+            \ informations from servers. - DNS Recursive Name Server Option, requested\
+            \ by clients to get the list ofIPv6 addresses of DNS recursive name \n\
+            \  servers to which DNS queries may be sent by the client resolver in\
+            \ order of preference.\n- Client FQDN option - indicates whether the client\
+            \ or the DHCP server should update DNS with the AAAA record \n  corresponding\
+            \ to the assigned IPv6 address and the FQDN provided in this option. The\
+            \ DHCP server always updates \n  the PTR record.\n- bootfile_url, if client\
+            \ is configured for network booting then the client must use this option\
+            \ to obtain the boot \n  file url from the server.\n- sztp. Securely provision\
+            \ a networking device when it is booting in a factory-default state."
+          type: string
+          default: vendor_information
+          x-field-uid: 1
+          x-enum:
+            vendor_information:
+              x-field-uid: 1
+            name_servers:
+              x-field-uid: 2
+            fqdn:
+              x-field-uid: 3
+            bootfile_url:
+              x-field-uid: 4
+            sztp:
+              x-field-uid: 5
+            custom:
+              x-field-uid: 6
+          enum:
+          - vendor_information
+          - name_servers
+          - fqdn
+          - bootfile_url
+          - sztp
+          - custom
+        custom:
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.Custom'
+          x-field-uid: 2
+    Dhcpv6ClientOptions.Custom:
+      description: |-
+        The Custom option is used to provide a not so well known option in the message between a client and a server.
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          description: |-
+            The type of the Custom option TLV.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+    Dhcpv6ClientOptions.VendorClass:
+      description: |-
+        This option is used by a client to identify the vendor that manufactured the hardware on which the client is running. The option code is 16.
+      type: object
+      required:
+      - enterprise_number
+      - class_data
+      - associated_dhcp_messages
+      properties:
+        enterprise_number:
+          description: |-
+            The vendor's registered Enterprise Number as registered with IANA.
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          x-field-uid: 1
+        class_data:
+          description: |-
+            The opaque data representing the hardware configuration of the host on which the client is running. Examples of  class data instances might include the version of the operating system the client is running or the amount of memory  installed on the client.
+          type: array
+          items:
+            type: string
+          x-field-uid: 2
+        associated_dhcp_messages:
+          description: |-
+            The dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.IncludedMessages'
+          x-field-uid: 3
+    Dhcpv6ClientOptions.OptionsRequestIncludedMessages:
+      description: |-
+        The dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The client message name where the option is included, by default it is all.
+          type: string
+          default: all
+          x-field-uid: 1
+          x-enum:
+            all:
+              x-field-uid: 1
+            msg_types:
+              x-field-uid: 2
+          enum:
+          - all
+          - msg_types
+        msg_types:
+          description: |-
+            User must specify the Dhcpv6 message type.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.MessageType'
+          x-field-uid: 2
+    Dhcpv6ClientOptions.IncludedMessages:
+      description: |-
+        The dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The client message name where the option is included, by default it is all.
+          type: string
+          default: all
+          x-field-uid: 1
+          x-enum:
+            all:
+              x-field-uid: 1
+            msg_types:
+              x-field-uid: 2
+          enum:
+          - all
+          - msg_types
+        msg_types:
+          description: |-
+            User must specify the Dhcpv6 message type.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6ClientOptions.MessageType'
+          x-field-uid: 2
+    Dhcpv6ClientOptions.MessageType:
+      description: |-
+        The dhcpv6 client messages where the option will be included.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The client message name where the option is included, by default it is all.
+          type: string
+          default: solicit
+          x-field-uid: 1
+          x-enum:
+            solicit:
+              x-field-uid: 1
+            request:
+              x-field-uid: 2
+            inform_request:
+              x-field-uid: 3
+            release:
+              x-field-uid: 4
+            renew:
+              x-field-uid: 5
+            rebind:
+              x-field-uid: 6
+          enum:
+          - solicit
+          - request
+          - inform_request
+          - release
+          - renew
+          - rebind
+    Dhcpv6ClientOptions.VendorInfo:
+      description: |-
+        This option is used by clients to exchange vendor-specific information. The option code is 17.
+      type: object
+      required:
+      - enterprise_number
+      - option_data
+      - associated_dhcp_messages
+      properties:
+        enterprise_number:
+          description: |-
+            The vendor's registered Enterprise Number as registered with IANA.
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          x-field-uid: 1
+        option_data:
+          description: |-
+            An opaque object of octets,interpreted by vendor-specific code on the clients and servers.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Options.VendorSpecificOptions'
+          x-field-uid: 2
+        associated_dhcp_messages:
+          description: |-
+            The list of dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.IncludedMessages'
+          x-field-uid: 3
+    Dhcpv6ServerOptions.VendorInfo:
+      description: |-
+        This option is used by servers to exchange vendor-specific information. The option code is 17.
+      type: object
+      required:
+      - enterprise_number
+      - option_data
+      - associated_dhcp_messages
+      properties:
+        enterprise_number:
+          description: |-
+            The vendor's registered Enterprise Number as registered with IANA.
+          type: integer
+          format: uint32
+          maximum: 4294967295
+          x-field-uid: 1
+        option_data:
+          description: |-
+            An opaque object of octets,interpreted by vendor-specific code on the clients and servers.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Options.VendorSpecificOptions'
+          x-field-uid: 2
+        associated_dhcp_messages:
+          description: |-
+            The list of dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ServerOptions.IncludedMessages'
+          x-field-uid: 3
+    Dhcpv6ServerOptions.IncludedMessages:
+      description: |-
+        The dhcpv6 server messages where the option will be included. If all is selected the selected option will be added  in the all the Dhcpv6 server messages, else based on the selection in particular Dhcpv6 server messages the option  will be included.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The server message name where the option is included, by default it is all.
+          type: string
+          default: all
+          x-field-uid: 1
+          x-enum:
+            all:
+              x-field-uid: 1
+            msg_types:
+              x-field-uid: 2
+          enum:
+          - all
+          - msg_types
+        msg_types:
+          description: |-
+            User must specify the Dhcpv6 message type.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6ServerOptions.MessageType'
+          x-field-uid: 2
+    Dhcpv6ServerOptions.MessageType:
+      description: |-
+        The dhcpv6 server messages where the option will be included.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The server message name where the option is included, by default it is all.
+          type: string
+          default: advertise
+          x-field-uid: 1
+          x-enum:
+            advertise:
+              x-field-uid: 1
+            reply:
+              x-field-uid: 2
+            re_configure:
+              x-field-uid: 3
+          enum:
+          - advertise
+          - reply
+          - re_configure
+    Dhcpv6Options.VendorSpecificOptions:
+      description: |-
+        The encapsulated vendor-specific options field is encoded as a sequence of code/length/value fields of  identical format to the DHCP options field. The option codes are defined by the vendor identified in the  enterprise-number field and are not managed by IANA.
+      type: object
+      required:
+      - code
+      - data
+      properties:
+        code:
+          description: |-
+            The code for the encapsulated option.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        data:
+          description: |-
+            The data for the encapsulated option.
+          type: string
+          x-field-uid: 2
+    Dhcpv6ClientOptions.Fqdn:
+      description: |-
+        DHCPv6 server needs to know the FQDN of the client for the addresses for the client's IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows the client to convey its FQDN to the server. The Client  FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate who does which updates. The option code is 39.
+      type: object
+      required:
+      - domain_name
+      properties:
+        flag_s:
+          description: |-
+            The "S" bit indicates whether the server should or should not perform the AAAA RR (FQDN-to-address) DNS updates.  A client sets the bit to 0 to indicate that the server should not perform the updates and 1 to indicate that the  server should perform the updates. The state of the bit in the reply from the server indicates the action to be  taken by the server. If it is 1, the server has taken responsibility for AAAA RR updates for the FQDN.
+          type: boolean
+          default: true
+          x-field-uid: 1
+        flag_o:
+          description: |-
+            The "O" bit indicates whether the server has overridden the client's preference for the "S" bit. A client must set this  bit to 0. A server must set this bit to 1 if the "S" bit in its reply to the client does not match the "S" bit received  from the client.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        flag_n:
+          description: |-
+            The "N" bit indicates whether the server should not perform any DNS updates. A client sets this bit to 0 to request that  the server should perform updates (the PTR RR and possibly the AAAA RR based on the "S" bit) or to 1 to request that the  server should not perform any DNS updates. A server sets the "N" bit to indicate whether the server shall (0) or shall not (1)  perform DNS updates. If the "N" bit is 1, the "S" bit MUST be 0.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        domain_name:
+          description: |-
+            The Domain Name part of the option carries all or part of the FQDN of a DHCPv6 client. A client MAY also leave the  Domain Name field empty if it desires the server to provide a name. A fully qualified domain name (FQDN) is the complete  address of an internet host or computer. It provides its exact location within the domain name system (DNS) by specifying  the hostname, domain name and top-level domain (TLD). An FQDN isn't the same as a URL but rather is a part of it that fully  identifies the server to which the request is addressed. An FQDN doesn't carry the TCP/IP protocol information, such as Hypertext  Transfer Protocol (HTTP) or Hypertext Transfer Protocol Secure (HTTPS), which is always used at the beginning of a URL. Therefore,  adding the prefix http:// or https:// to the FQDN turns it into a full URL. One example can be microsoft.com.
+          type: string
+          x-field-uid: 4
+        associated_dhcp_messages:
+          description: |-
+            The list of dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.IncludedMessages'
+          x-field-uid: 5
+    Dhcpv6ServerOptions.BootfileUrl:
+      description: |-
+        The server sends this option to inform the client about a URL to a boot file. This information is required for booting  over the network includes the details about the server on which the boot files can be found, the protocol to be used for  the download (for example,HTTP or TFTP, and the path and name of the boot file on the server. The option code is 59. The URL will contain the network communication protocol, a subdomain, a domain name, and its extension. If the host in the URL  is expressed using an IPv6 address rather than a domain name, the address in the URL then must be enclosed in "[" and "]"  characters, conforming to [RFC3986]. Eg of a boot file url can be "tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi".
+      type: object
+      required:
+      - url
+      properties:
+        url:
+          description: |-
+            The URL for the boot file. It must comply with STD 66 format.
+          type: string
+          x-field-uid: 1
+        bootfile_params:
+          description: |-
+            They are used to specify parameters for the boot file (similar to the command line arguments in most modern operating  systems). For example, these parameters could be used to specify the root file system of the OS kernel, or the location  from which a second-stage boot-loader program can download its configuration file.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6ServerOptions.BootFileParams'
+          x-field-uid: 2
+        associated_dhcp_messages:
+          description: |-
+            The list of dhcpv6 client messages where this option is included.
+          $ref: '#/components/schemas/Dhcpv6ServerOptions.IncludedMessages'
+          x-field-uid: 3
+    Dhcpv6ServerOptions.BootFileParams:
+      description: |-
+        The option code is 60. They are used to specify parameters for the boot file (similar to the command line arguments in most  modern operating systems).  For example, these parameters could be used to specify the root file system of the OS kernel, or  the location from which a second-stage boot-loader program can download its configuration file.
+      type: object
+      required:
+      - parameter
+      properties:
+        parameter:
+          description: |-
+            UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
+          type: string
+          x-field-uid: 1
     Layer1:
       description: |-
         A container for layer1 settings.
@@ -2948,18 +3734,18 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/DhcpClient.V4/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/DhcpClient.V4/properties/name
+            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
           - /components/schemas/Device.Ipv4Loopback/properties/name
-          - /components/schemas/DhcpClient.V4/properties/name
+          - /components/schemas/Device.Dhcpv4client/properties/name
           x-field-uid: 1
         peers:
           description: |-
@@ -7451,18 +8237,18 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/DhcpClient.V6/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/DhcpClient.V6/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
           - /components/schemas/Device.Ipv6Loopback/properties/name
-          - /components/schemas/DhcpClient.V6/properties/name
+          - /components/schemas/Device.Dhcpv6client/properties/name
           x-field-uid: 1
         peers:
           description: |-
@@ -8667,13 +9453,19 @@ components:
       type: object
       properties:
         ipv4_interfaces:
-          description: |-
-            This contains an array of references to IPv4 interfaces, each of which will contain one DHCPv4 server.
+          description: "This contains an array of references to IPv4 interfaces, each\
+            \ of which will contain one DHCPv4 server.  "
           type: array
-          maxItems: 10
           items:
             $ref: '#/components/schemas/DhcpServer.V4'
           x-field-uid: 2
+        ipv6_interfaces:
+          description: |-
+            This contains an array of references to IPv6 interfaces, each of which will contain one DHCPv6 server.
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpServer.V6'
+          x-field-uid: 3
     DhcpServer.V4:
       description: |-
         Configuration for emulated DHCPv4 Server.
@@ -8753,6 +9545,7 @@ components:
           format: uint32
           default: 1
           minimum: 1
+          maximum: 1000000
           x-field-uid: 5
         step:
           description: |-
@@ -8799,6 +9592,262 @@ components:
           type: boolean
           default: true
           x-field-uid: 4
+    DhcpServer.V6:
+      description: |-
+        Configuration for emulated DHCPv6 Server.
+      type: object
+      required:
+      - name
+      - ipv6_name
+      - leases
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        ipv6_name:
+          description: |
+            The unique name of the IPv6 on which DHCPv6 server will run.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv6/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ipv6/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv6/properties/name
+          x-field-uid: 2
+        rapid_commit:
+          description: |-
+            If Rapid Commit is set, server responds to client initiated Rapid Commit two-message exchanges.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        reconfigure_via_relay_agent:
+          description: |-
+            If the server does not have an address to which it can send the Reconfigure message directly to the client, the  server uses a Relay-reply message to send the Reconfigure message to a relay agent that will relay the message to the client.
+          type: boolean
+          default: false
+          x-field-uid: 4
+        leases:
+          description: "Array of DHCP pools configured on a server.            "
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpV6Server.Lease'
+          x-field-uid: 5
+        options:
+          description: |-
+            Optional DHCPv4 Server options that are sent in Dhcp server messages.
+          $ref: '#/components/schemas/Dhcpv6Server.Options'
+          x-field-uid: 6
+    Dhcpv6Server.Options:
+      description: |-
+        DHCP server options, these configured options are sent in Dhcp server messages.
+      type: object
+      properties:
+        dns:
+          description: "Additional DHCP server primary dns and other configuration\
+            \ options.            "
+          $ref: '#/components/schemas/DhcpV6Server.Dns'
+          x-field-uid: 1
+        vendor_info:
+          description: |-
+            This option is used by servers to exchange vendor-specific information with clients.
+          $ref: '#/components/schemas/Dhcpv6ServerOptions.VendorInfo'
+          x-field-uid: 2
+        bootfile_url:
+          description: |-
+            The server sends this option to inform the client about a URL to a boot file which client will use for
+            network boots.
+          $ref: '#/components/schemas/Dhcpv6ServerOptions.BootfileUrl'
+          x-field-uid: 3
+    DhcpV6Server.Lease:
+      description: "One DHCP pool configuration on a server.        "
+      type: object
+      required:
+      - ia_type
+      properties:
+        lease_time:
+          description: |-
+            The Life Time length in seconds that is assigned to a lease if the requesting DHCP client does not specify a specific expiration time.
+          type: integer
+          format: uint32
+          minimum: 300
+          maximum: 30000000
+          default: 86400
+          x-field-uid: 1
+        ia_type:
+          $ref: '#/components/schemas/Dhcpv6Server.IaType'
+          x-field-uid: 5
+    Dhcpv6Server.IaType:
+      type: object
+      properties:
+        choice:
+          description: |-
+            Identity Association: a collection of leases assigned to a client. Each IA has an associated IAID.  Each IA holds one type of lease, like an identity association for temporary addresses (IA_TA) holds  temporary addresses, and an identity association for prefix delegation (IA_PD).
+          type: string
+          default: iana
+          x-field-uid: 1
+          x-enum:
+            iana:
+              x-field-uid: 1
+            iata:
+              x-field-uid: 2
+            iapd:
+              x-field-uid: 3
+            ianapd:
+              x-field-uid: 4
+          enum:
+          - iana
+          - iata
+          - iapd
+          - ianapd
+        iana:
+          $ref: '#/components/schemas/Dhcpv6Server.PoolInfo'
+          x-field-uid: 2
+        iata:
+          $ref: '#/components/schemas/Dhcpv6Server.PoolInfo'
+          x-field-uid: 3
+        iapd:
+          $ref: '#/components/schemas/Dhcpv6Server.IapdPoolInfo'
+          x-field-uid: 4
+        ianapd:
+          $ref: '#/components/schemas/Dhcpv6Server.IanapdPoolInfo'
+          x-field-uid: 5
+    Dhcpv6Server.PoolInfo:
+      description: |-
+        The container for pool configurations for IA types iana and iata.
+      type: object
+      properties:
+        start_address:
+          description: |-
+            The first IP address of the lease pool.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_len:
+          description: |-
+            The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+          type: integer
+          format: uint32
+          default: 64
+          maximum: 128
+          x-field-uid: 2
+        size:
+          description: |-
+            The total number of addresses in the pool.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          maximum: 1000000
+          x-field-uid: 3
+        step:
+          description: |-
+            The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the configured Prefix Length and Step.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 4
+    Dhcpv6Server.IapdPoolInfo:
+      description: |-
+        The container for prefix pool configurations for IA type iapd.
+      type: object
+      properties:
+        start_prefix_address:
+          description: |-
+            The first IP address of the prefix pool.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        configured_prefix_len:
+          description: "The IPv6 network prefix length is used for incrementing the\
+            \ lease address within the lease pool where multiple addresses are configured\
+            \ by using the size field. The address is incremented using the configured\
+            \ Prefix Length and Step. "
+          type: integer
+          format: uint32
+          default: 64
+          maximum: 128
+          x-field-uid: 2
+        prefix_size:
+          description: |-
+            The total number of addresses in the pool.
+          type: integer
+          format: uint32
+          default: 10
+          minimum: 1
+          maximum: 1000000
+          x-field-uid: 3
+        prefix_step:
+          description: |-
+            The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 4
+        advertised_prefix_len:
+          description: "The prefix length of the IPv6 prefix that the Dhcpv6 server\
+            \ offers to the Dhcpv6 client. "
+          type: integer
+          format: uint32
+          default: 64
+          maximum: 128
+          x-field-uid: 5
+    Dhcpv6Server.IanapdPoolInfo:
+      description: |-
+        The container for pool configurations for IA type ianapd.
+      type: object
+      properties:
+        iana:
+          description: |-
+            The pool configurations for IA types iana in ianapd.
+          $ref: '#/components/schemas/Dhcpv6Server.PoolInfo'
+          x-field-uid: 1
+        iapd:
+          description: |-
+            The pool configurations for IA types iapd in ianapd.
+          $ref: '#/components/schemas/Dhcpv6Server.IapdPoolInfo'
+          x-field-uid: 2
+    DhcpV6Server.Dns:
+      description: |-
+        Optional Dns configuration for DHCPv6 server.
+      type: object
+      required:
+      - primary
+      properties:
+        primary:
+          description: |-
+            The primary DNS server address that is offered to DHCP clients that request this information through a TLV option.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        secondary_dns:
+          description: "DHCP server secondary dns configuration options. If included\
+            \ secondary DNS server address will be offered to \nDHCP clients that\
+            \ request this information through a TLV option."
+          type: array
+          items:
+            $ref: '#/components/schemas/DhcpV6Server.SecondaryDns'
+          x-field-uid: 2
+    DhcpV6Server.SecondaryDns:
+      description: |-
+        Advanced Dns configuration for DHCPv6 server.
+      type: object
+      properties:
+        ip:
+          description: |-
+            The secondary DNS server address that is offered to DHCP clients that request this information through a TLV option.
+          type: string
+          format: ipv6
+          x-field-uid: 1
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -9039,6 +10088,7 @@ components:
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
+          - /components/schemas/Device.Dhcpv6client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -9062,6 +10112,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
 
 
             x-constraint:
@@ -9075,6 +10126,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
           type: array
           items:
@@ -9092,6 +10144,7 @@ components:
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
+          - /components/schemas/Device.Dhcpv6client/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -9115,6 +10168,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
 
 
             x-constraint:
@@ -9128,6 +10182,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Device.Dhcpv6client/properties/name
     Flow.Header:
       description: |-
         Configuration for all traffic packet headers
@@ -9632,6 +10687,24 @@ components:
         dst:
           x-field-uid: 8
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst'
+    Flow.Ipv6.Auto:
+      description: |-
+        The OTG implementation can provide a system generated, value for this property.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          description: "The method to be used to provide the system generated value.\n\
+            The dhcp option populates the field based on the dynamic IPv6 address\
+            \ that has been assigned to the DHCPv6 client \nby a DHCPv6 server."
+          type: string
+          x-enum:
+            dhcp:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - dhcp
     Flow.PfcPause:
       description: |-
         IEEE 802.1Qbb PFC Pause packet header.
@@ -13600,6 +14673,10 @@ components:
               x-field-uid: 10
             dhcpv4_server:
               x-field-uid: 11
+            dhcpv6_client:
+              x-field-uid: 12
+            dhcpv6_server:
+              x-field-uid: 13
           enum:
           - port
           - flow
@@ -13612,6 +14689,8 @@ components:
           - rsvp
           - dhcpv4_client
           - dhcpv4_server
+          - dhcpv6_client
+          - dhcpv6_server
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -13645,6 +14724,12 @@ components:
         dhcpv4_server:
           $ref: '#/components/schemas/Dhcpv4Server.Metrics.Request'
           x-field-uid: 12
+        dhcpv6_client:
+          $ref: '#/components/schemas/Dhcpv6Client.Metrics.Request'
+          x-field-uid: 13
+        dhcpv6_server:
+          $ref: '#/components/schemas/Dhcpv6Server.Metrics.Request'
+          x-field-uid: 14
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -13677,6 +14762,10 @@ components:
               x-field-uid: 10
             dhcpv4_server:
               x-field-uid: 11
+            dhcpv6_client:
+              x-field-uid: 12
+            dhcpv6_server:
+              x-field-uid: 13
           enum:
           - flow_metrics
           - port_metrics
@@ -13689,6 +14778,8 @@ components:
           - rsvp_metrics
           - dhcpv4_client
           - dhcpv4_server
+          - dhcpv6_client
+          - dhcpv6_server
         port_metrics:
           type: array
           items:
@@ -13744,6 +14835,16 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv4Server.Metric'
           x-field-uid: 12
+        dhcpv6client_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Client.Metric'
+          x-field-uid: 13
+        dhcpv6server_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Server.Metric'
+          x-field-uid: 14
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -15927,6 +17028,338 @@ components:
           type: integer
           format: uint64
           x-field-uid: 8
+    Dhcpv6Client.Metrics.Request:
+      description: |-
+        The request to retrieve DHCPv6 per client metrics/statistics.
+      type: object
+      properties:
+        client_names:
+          description: |
+            The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6client/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6client/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv6client/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv6 client cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              solicits_sent:
+                x-field-uid: 1
+              advertisements_received:
+                x-field-uid: 2
+              advertisements_ignored:
+                x-field-uid: 3
+              requests_sent:
+                x-field-uid: 4
+              nacks_received:
+                x-field-uid: 5
+              replies_received:
+                x-field-uid: 6
+              information_requests_sent:
+                x-field-uid: 7
+              renews_sent:
+                x-field-uid: 8
+              rebinds_sent:
+                x-field-uid: 9
+              releases_sent:
+                x-field-uid: 10
+              reconfigures_received:
+                x-field-uid: 11
+              rapid_commit_solicits_sent:
+                x-field-uid: 12
+              rapid_commit_replies_received:
+                x-field-uid: 13
+            enum:
+            - solicits_sent
+            - advertisements_received
+            - advertisements_ignored
+            - requests_sent
+            - nacks_received
+            - replies_received
+            - information_requests_sent
+            - renews_sent
+            - rebinds_sent
+            - releases_sent
+            - reconfigures_received
+            - rapid_commit_solicits_sent
+            - rapid_commit_replies_received
+          x-field-uid: 2
+    Dhcpv6Client.Metric:
+      description: |-
+        DHCPv6 per peer statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured DHCPv6 client.
+          type: string
+          x-field-uid: 1
+        solicits_sent:
+          description: |-
+            Number of DHCPSOLICIT messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        advertisements_received:
+          description: |-
+            Number of DHCPADVERTISE messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        advertisements_ignored:
+          description: |-
+            Number of DHCPADVERTISE messages ignored.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        requests_sent:
+          description: |-
+            Number of DHCPREQUEST messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        nacks_received:
+          description: |-
+            Number of negative lease DHCPNACK messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        replies_received:
+          description: |-
+            Number of DHCPOFFER messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        information_requests_sent:
+          description: |-
+            Number of DHCP Inform requests sent.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        renews_sent:
+          description: |-
+            Number of DHCP renew messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        rebinds_sent:
+          description: |-
+            Number of DHCP rebind messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        releases_sent:
+          description: |-
+            Number of DHCP Release messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        reconfigures_received:
+          description: |-
+            Number of DHCP Reconfigure messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        rapid_commit_solicits_sent:
+          description: |-
+            Number of rapid commit DHCPSOLICIT messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        rapid_commit_replies_received:
+          description: |-
+            Number of rapid commit DHCP Reply messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+    Dhcpv6Server.Metrics.Request:
+      description: |-
+        The request to retrieve DHCPv6 per Server metrics/statistics.
+      type: object
+      properties:
+        server_names:
+          description: |
+            The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6Server/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6Server/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv6Server/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the DHCPv6 server cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              solicits_received:
+                x-field-uid: 1
+              solicits_ignored:
+                x-field-uid: 2
+              advertisements_sent:
+                x-field-uid: 3
+              requests_received:
+                x-field-uid: 4
+              nacks_sent:
+                x-field-uid: 5
+              confirms_received:
+                x-field-uid: 6
+              renewals_received:
+                x-field-uid: 7
+              rebinds_received:
+                x-field-uid: 8
+              replies_sent:
+                x-field-uid: 9
+              releases_received:
+                x-field-uid: 10
+              declines_received:
+                x-field-uid: 11
+              information_requests_received:
+                x-field-uid: 12
+              relay_forwards_received:
+                x-field-uid: 13
+              relay_replies_sent:
+                x-field-uid: 14
+              reconfigures_sent:
+                x-field-uid: 15
+            enum:
+            - solicits_received
+            - solicits_ignored
+            - advertisements_sent
+            - requests_received
+            - nacks_sent
+            - confirms_received
+            - renewals_received
+            - rebinds_received
+            - replies_sent
+            - releases_received
+            - declines_received
+            - information_requests_received
+            - relay_forwards_received
+            - relay_replies_sent
+            - reconfigures_sent
+          x-field-uid: 2
+    Dhcpv6Server.Metric:
+      description: |-
+        DHCPv6 per server statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured DHCPv6 Server.
+          type: string
+          x-field-uid: 1
+        solicits_received:
+          description: |-
+            Number of DHCPSOLICIT messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        solicits_ignored:
+          description: |-
+            Number of DHCPSOLICIT messages ignored.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        advertisements_sent:
+          description: |-
+            Number of DHCP Advertise messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        requests_received:
+          description: |-
+            Number of DHCPREQUEST messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        nacks_sent:
+          description: |-
+            Number of naks sent for DHCPREQUEST messages.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        confirms_received:
+          description: |-
+            Number of DHCP Confirm messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        renewals_received:
+          description: |-
+            Number of DHCP Renewal messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        rebinds_received:
+          description: |-
+            Number of DHCP Rebind messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        replies_sent:
+          description: |-
+            Number of DHCP Reply messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        releases_received:
+          description: |-
+            Number of DHCP Release messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        declines_received:
+          description: |-
+            Number of DHCP Decline messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        information_requests_received:
+          description: |-
+            Number of DHCP Information Request messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        relay_forwards_received:
+          description: |-
+            Number of DHCP Relay agent forward messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        relay_replies_sent:
+          description: |-
+            Number of DHCP reply messages sent to Relay agent.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        reconfigures_sent:
+          description: |-
+            Number of DHCP Reconfigure messages sent.
+          type: integer
+          format: uint64
+          x-field-uid: 16
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -15953,6 +17386,10 @@ components:
               x-field-uid: 7
             dhcpv4_leases:
               x-field-uid: 8
+            dhcpv6_interfaces:
+              x-field-uid: 9
+            dhcpv6_leases:
+              x-field-uid: 10
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -15962,6 +17399,8 @@ components:
           - rsvp_lsps
           - dhcpv4_interfaces
           - dhcpv4_leases
+          - dhcpv6_interfaces
+          - dhcpv6_leases
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -15986,6 +17425,12 @@ components:
         dhcpv4_leases:
           $ref: '#/components/schemas/Dhcpv4Lease.State.Request'
           x-field-uid: 9
+        dhcpv6_interfaces:
+          $ref: '#/components/schemas/Dhcpv6Interface.State.Request'
+          x-field-uid: 10
+        dhcpv6_leases:
+          $ref: '#/components/schemas/Dhcpv6Lease.State.Request'
+          x-field-uid: 11
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -16012,6 +17457,10 @@ components:
               x-field-uid: 7
             dhcpv4_leases:
               x-field-uid: 8
+            dhcpv6_interfaces:
+              x-field-uid: 9
+            dhcpv6_leases:
+              x-field-uid: 10
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -16021,6 +17470,8 @@ components:
           - rsvp_lsps
           - dhcpv4_interfaces
           - dhcpv4_leases
+          - dhcpv6_interfaces
+          - dhcpv6_leases
         ipv4_neighbors:
           type: array
           items:
@@ -16061,6 +17512,16 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv4Leases.State'
           x-field-uid: 9
+        dhcpv6_interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Interface.State'
+          x-field-uid: 10
+        dhcpv6_leases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Leases.State'
+          x-field-uid: 11
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -17945,6 +19406,162 @@ components:
         remote_id:
           description: |-
             The Remote ID option found in the last request message.
+          type: string
+          x-field-uid: 8
+    Dhcpv6Interface.State.Request:
+      description: |-
+        The request for assigned IPv6 address information associated with DHCP Client sessions.
+      type: object
+      properties:
+        dhcp_client_names:
+          description: |
+            The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6client/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6client/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv6client/properties/name
+          x-field-uid: 1
+    Dhcpv6Interface.State:
+      description: |-
+        The IPv6 address associated with this DHCP Client session.
+      type: object
+      properties:
+        dhcp_client_name:
+          description: |-
+            The name of a DHCPv6 Client.
+          type: string
+          x-field-uid: 1
+        ipv6_iapd_address:
+          description: |-
+            The IPv6 IAPD address associated with this DHCP Client session.
+          type: string
+          x-field-uid: 2
+        iapd_prefix_length:
+          description: |-
+            The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 3
+        ipv6_address:
+          description: |-
+            The IPv6 address associated with this DHCP Client session.
+          type: string
+          x-field-uid: 4
+        gateway_address:
+          description: |-
+            The Gateway IPV6 address associated with this DHCP Client session.
+          type: string
+          x-field-uid: 5
+        lease_time:
+          description: |-
+            The duration of the IPv6 address lease, in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 6
+        renew_time:
+          description: |-
+            Time in seconds until the DHCPv6 client starts renewing the lease.
+          type: integer
+          format: uint32
+          x-field-uid: 7
+        rebind_time:
+          description: |-
+            Time in seconds until the DHCPv6 client starts rebinding.
+          type: integer
+          format: uint32
+          x-field-uid: 8
+    Dhcpv6Lease.State.Request:
+      description: |-
+        The request to retrieve DHCP Server host allocated status.
+      type: object
+      properties:
+        dhcp_server_names:
+          description: |
+            The names of DHCPv6 server to return results for. An empty list will return results for all DHCPv6 servers.
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6server/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Dhcpv6server/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Dhcpv6server/properties/name
+          x-field-uid: 1
+    Dhcpv6Leases.State:
+      description: |-
+        Lease information of DHCP Server.
+      type: object
+      properties:
+        dhcp_server_name:
+          description: |-
+            The name of a DHCP Server.
+          type: string
+          x-field-uid: 1
+        leases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6ServerLease.State'
+          x-field-uid: 2
+    Dhcpv6ServerLease.State:
+      description: |-
+        IPv6 unicast prefix.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IPv6 address associated with this lease.
+          type: string
+          x-field-uid: 1
+        valid_time:
+          description: |-
+            The time in seconds, IP address lease will expire.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        preferred_time:
+          description: |-
+            The time in seconds, elapsed time since address has been renewed.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        renew_time:
+          description: |-
+            Time in seconds until the DHCPv6 client starts renewing the lease.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        rebind_time:
+          description: |-
+            Time in seconds until the DHCPv6 client starts rebinding.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        client_id:
+          description: |-
+            The ID of the DHCPv6 client holding this lease.
+          type: string
+          x-field-uid: 6
+        remote_id:
+          description: |-
+            The Remote ID option found in the last request message.
+          type: string
+          x-field-uid: 7
+        interface_id:
+          description: |-
+            The Interface ID option found in the last request message.
           type: string
           x-field-uid: 8
     Capture.Request:
@@ -22703,6 +24320,8 @@ components:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
+            auto:
+              x-field-uid: 1
           default: value
           x-field-uid: 1
           enum:
@@ -22710,6 +24329,7 @@ components:
           - values
           - increment
           - decrement
+          - auto
         value:
           type: string
           x-field-uid: 2
@@ -22736,6 +24356,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Src.MetricTag'
           x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv6.Auto'
+          x-field-uid: 8
     Pattern.Flow.Ipv6.Dst.Counter:
       description: |-
         ipv6 counter pattern
@@ -22802,6 +24425,8 @@ components:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
+            auto:
+              x-field-uid: 1
           default: value
           x-field-uid: 1
           enum:
@@ -22809,6 +24434,7 @@ components:
           - values
           - increment
           - decrement
+          - auto
         value:
           type: string
           x-field-uid: 2
@@ -22835,6 +24461,9 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst.MetricTag'
           x-field-uid: 7
+        auto:
+          $ref: '#/components/schemas/Flow.Ipv6.Auto'
+          x-field-uid: 8
     Pattern.Flow.PfcPause.Dst.Counter:
       description: |-
         mac counter pattern

@@ -511,10 +511,10 @@ func (obj *dhcpServerV4Pool) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count < 1 || *obj.obj.Count > 4294967295 {
+		if *obj.obj.Count < 1 || *obj.obj.Count > 1000000 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= DhcpServerV4Pool.Count <= 4294967295 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("1 <= DhcpServerV4Pool.Count <= 1000000 but Got %d", *obj.obj.Count))
 		}
 
 	}

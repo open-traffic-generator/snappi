@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.7.1
+/* Open Traffic Generator API 1.8.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -271,6 +271,9 @@ message DeviceEthernet {
 
   // List of DHCPv4 Clients Configuration.
   repeated DeviceDhcpv4client dhcpv4_interfaces = 9;
+
+  // List of DHCPv6 Clients Configuration.
+  repeated DeviceDhcpv6client dhcpv6_interfaces = 10;
 }
 
 // Ethernet interface connection to a port, LAG or VXLAN tunnel.
@@ -571,6 +574,623 @@ message Dhcpv4ClientParams {
   // REBINDING state.
   // default = False
   optional bool rebinding_timer = 4;
+}
+
+// Configuration for emulated DHCPv6 Client on a single Interface. If the DHCPv6 Client
+// receives one or more  DHCPv6 ADVERTISE messages from one or more servers then the
+// client chooses one server from which to request  configuration parameters, based
+// on the configuration parameters offered by the server in the DHCPv6 ADVERTISE  messages.
+// If all configuration parameters match then the first server will be chosen. https://www.rfc-editor.org/rfc/rfc8415.html
+message DeviceDhcpv6client {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // If Rapid Commit is set, client initiates Rapid Commit two-message exchange by including
+  // Rapid Commit option  in Solicit message.
+  // default = False
+  optional bool rapid_commit = 2;
+
+  // Each IA has an associated IAID. Differnet IA options represent different types of
+  // IPv6 addresses and parameters
+  // accepted by DHCPv6 clients each used in different context by an IPv6 node.
+  DeviceDhcpv6clientIaType ia_type = 3;
+
+  // Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify
+  // each other.
+  DeviceDhcpv6clientDuidType duid_type = 4;
+
+  // The options requested by a client from a server in the options request option.
+  DeviceDhcpv6ClientOptionsRequest options_request = 5;
+
+  // Optional DHCPv4 Client options that are sent in Dhcp client messages.
+  DeviceDhcpv6ClientOptions options = 6;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptionsRequest {
+
+  // List of options requested by a client from a server.
+  repeated Dhcpv6ClientOptionsOptionsRequest request = 1;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsOptionsRequestIncludedMessages associated_dhcp_messages = 2;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptions {
+
+  // A client uses multicast to reach all servers or an individual server. An individual
+  // server is indicated by
+  // specifying that server's DUID in a Server Identifier option in the client's message
+  // (all servers will receive
+  // this message but only the indicated server will respond). All servers are indicated
+  // by not supplying this option.
+  Dhcpv6ClientOptionsServerIdentifier server_identifier = 1;
+
+  // The vendor class option is used by a client to identify the vendor that manufactured
+  // the hardware on which
+  // the client is running. The information contained in the data area of this option
+  // is contained in one or more
+  // opaque fields that identify details of the hardware configuration.
+  Dhcpv6ClientOptionsVendorClass vendor_class = 2;
+
+  // This option is used by clients to exchange vendor-specific information with servers.
+  Dhcpv6ClientOptionsVendorInfo vendor_info = 3;
+
+  // DHCPv6 server needs to know the FQDN of the client for the addresses for the client's
+  // IA_NA bindings in order to
+  // update the IPv6-address-to-FQDN mapping. This option allows the client to convey
+  // its FQDN to the server. The Client
+  // FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate
+  // who does which update.
+  Dhcpv6ClientOptionsFqdn fqdn = 4;
+}
+
+// Description missing in models
+message DeviceDhcpv6clientIaType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      iana = 1;
+      iata = 2;
+      iapd = 3;
+      ianapd = 4;
+    }
+  }
+  // Identity Association: Each IA has an associated IAID. IA_NA and IA_TA options represent
+  // different types of  IPv6 addresses and parameters accepted by DHCPv6 clients each
+  // used in different context by an IPv6 node. IA_NA  is the Identity Association for
+  // Non-temporary Addresses option. IA_TA is the Identity Association for Temporary
+  // Addresses option. IA_PD and IA_NAPD options represent one or more IPv6 prefix and
+  // parameters. IA_PD is the Identity  Association for Prefix Delegation and IA_NAPD
+  // s the Identity Association for Temporary Prefix Delegation.
+  // default = Choice.Enum.iana
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue iana = 2;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue iapd = 3;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue ianapd = 4;
+}
+
+// The container for the suggested times at which the client contacts the server or
+// any available server.
+message DeviceDhcpv6clientIaTimeValue {
+
+  // The suggested time at which the client contacts the server from which the addresses
+  // were obtained to  extend the lifetimes of the addresses assigned. T1 is a time duration
+  // relative to the current time expressed  in units of seconds. If set to 0 server will
+  // ignore it. If the maximum value is specified it means infinite time.
+  // default = 302400
+  optional uint32 t1 = 1;
+
+  // The suggested time at which the client contacts any available server to extend the
+  // lifetimes of the addresses assigned.  T2 is a time duration relative to the current
+  // time expressed in units of seconds. If set to 0 server will ignore it. If  the maximum
+  // value is specified it means infinite time
+  // default = 483840
+  optional uint32 t2 = 2;
+}
+
+// Description missing in models
+message DeviceDhcpv6clientDuidType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      llt = 1;
+      en = 2;
+      ll = 3;
+    }
+  }
+  // Each DHCP client and server has a DUID. DHCP clients use DUIDs to identify a server
+  // in messages where a server needs  to be identified.
+  // default = Choice.Enum.llt
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceDhcpv6clientNoDuid llt = 2;
+
+  // Description missing in models
+  DeviceDhcpv6clientDuidValue en = 3;
+
+  // Description missing in models
+  DeviceDhcpv6clientNoDuid ll = 4;
+}
+
+// The container for the DUID-EN. This consists of the 4-octet vendor's registered Private
+// Enterprise Number  as maintained by IANA [IANA-PEN] followed by a unique identifier
+// assigned by the vendor.
+message DeviceDhcpv6clientDuidValue {
+
+  // 4-octet vendor's registered Private Enterprise Number as maintained by IANA [IANA-PEN].
+  // default = 10
+  optional uint32 enterprise_id = 1;
+
+  // Unique identifier assigned by the vendor.
+  // default = 10
+  optional uint32 vendor_id = 2;
+}
+
+// The container for DUID-LL and DUID-LLT.
+message DeviceDhcpv6clientNoDuid {
+}
+
+// Description missing in models
+message Dhcpv6ClientOptionsServerIdentifier {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      duid_llt = 1;
+      duid_en = 2;
+      duid_ll = 3;
+      duid_uuid = 4;
+    }
+  }
+  // The Identifier option is used to carry a DUID. The option code is 2. The server identifier
+  // identifies  a server. This option is used when client wants to contact a particular
+  // server.
+  // default = Choice.Enum.duid_ll
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidLlt duid_llt = 2;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidEn duid_en = 3;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidLl duid_ll = 4;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidUuid duid_uuid = 5;
+}
+
+// DUID based on Link Layer address plus time. Hardware Type will be auto assigned to
+// ethernet type.
+message Dhcpv6ClientOptionsDuidLlt {
+
+  // The time value is the time that the DUID is generated represented in seconds since
+  // midnight (UTC), January 1,
+  // 2000, modulo 2^32. The DUID generatation time will the current time when dhcpv6 client
+  // contacts the server.
+  // required = true
+  optional uint32 time = 1;
+
+  // The link-layer address is stored in canonical form, as described in RFC 2464.
+  // 
+  // required = true
+  Dhcpv6ClientOptionsLinkLayerAddress link_layer_address = 2;
+}
+
+// DUID assigned by vendor based on enterprise number.
+message Dhcpv6ClientOptionsDuidEn {
+
+  // Vendor's registered private enterprise number as maintained by IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // The unique identifier assigned by the vendor.
+  // required = true
+  optional string identifier = 2;
+}
+
+// DUID based on Link Layer address. Hardware Type will be auto assigned to ethernet
+// type.
+message Dhcpv6ClientOptionsDuidLl {
+
+  // The link-layer address is stored in canonical form, as described in RFC 2464.
+  // 
+  // required = true
+  Dhcpv6ClientOptionsLinkLayerAddress link_layer_address = 1;
+}
+
+// DUID embedded a Universally Unique IDentifier (UUID). A UUID is an identifier that
+// is unique across both  space and time, with respect to the space of all UUIDs.
+message Dhcpv6ClientOptionsDuidUuid {
+
+  // The version number is in the most significant 4 bits of the timestamp (bits 4 through
+  // 7 of the time_hi_and_version field).
+  Dhcpv6ClientOptionsDuidUuidVersion version = 1;
+
+  // The variant field determines the layout of the UUID. It is multiplexed with clock_seq_hi_and_reserved.
+  // 
+  Dhcpv6ClientOptionsDuidUuidVariant variant = 2;
+
+  // The low field of the timestamp.
+  // default = 0
+  optional uint32 time_low = 3;
+
+  // The middle field of the timestamp.
+  // default = 0
+  optional uint32 time_mid = 4;
+
+  // The high field of the timestamp multiplexed with the version number.
+  // default = 0
+  optional uint32 time_hi_and_version = 5;
+
+  // The high field of the clock sequence multiplexed with the variant.
+  // default = 0
+  optional uint32 clock_seq_hi_and_reserved = 6;
+
+  // The low field of the clock sequence.
+  // default = 0
+  optional uint32 clock_seq_low = 7;
+
+  // The spatially unique node identifier.
+  // default = 00:00:00:00:00:00
+  optional string node = 8;
+}
+
+// The version number is in the most significant 4 bits of the timestamp (bits 4 through
+// 7 of the time_hi_and_version field).
+message Dhcpv6ClientOptionsDuidUuidVersion {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      v_1 = 1;
+      v_2 = 2;
+      v_3 = 3;
+      v_4 = 4;
+      v_5 = 5;
+    }
+  }
+  // The version values are from 1 to 5 in the most significant 4 bits of the timestamp
+  // (bits 4 through 7 of the  time_hi_and_version field).
+  // default = Choice.Enum.v_1
+  optional Choice.Enum choice = 1;
+}
+
+// The variant field determines the layout of the UUID.  That is, the interpretation
+// of all other bits in the  UUID depends on the setting of the bits in the variant
+// field).
+message Dhcpv6ClientOptionsDuidUuidVariant {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ncs = 1;
+      dce = 2;
+      guid = 3;
+      var_reserved = 4;
+    }
+  }
+  // The current variants are ncs, dce,microsoft guid and reserved.
+  // default = Choice.Enum.ncs
+  optional Choice.Enum choice = 1;
+}
+
+// The link-layer address configured in DUID llt or DUID ll.
+message Dhcpv6ClientOptionsLinkLayerAddress {
+
+  // The MAC address that becomes part of DUID llt or DUID ll.
+  // required = true
+  optional string value = 3;
+}
+
+// Description missing in models
+message Dhcpv6ClientOptionsOptionsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      vendor_information = 1;
+      name_servers = 2;
+      fqdn = 3;
+      bootfile_url = 4;
+      sztp = 5;
+      custom = 6;
+    }
+  }
+  // The Option Request option is used to identify a list of options in a message between
+  // a client and a server. The  option code is 6. - Vendor_specific information option,
+  // requested by clients for vendor-specific informations from servers. - DNS Recursive
+  // Name Server Option, requested by clients to get the list ofIPv6 addresses of DNS
+  // recursive name
+  // servers to which DNS queries may be sent by the client resolver in order of preference.
+  // - Client FQDN option - indicates whether the client or the DHCP server should update
+  // DNS with the AAAA record
+  // corresponding to the assigned IPv6 address and the FQDN provided in this option.
+  // The DHCP server always updates
+  // the PTR record.
+  // - bootfile_url, if client is configured for network booting then the client must
+  // use this option to obtain the boot
+  // file url from the server.
+  // - sztp. Securely provision a networking device when it is booting in a factory-default
+  // state.
+  // default = Choice.Enum.vendor_information
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsCustom custom = 2;
+}
+
+// The Custom option is used to provide a not so well known option in the message between
+// a client and a server.
+message Dhcpv6ClientOptionsCustom {
+
+  // The type of the Custom option TLV.
+  // required = true
+  optional uint32 type = 1;
+}
+
+// This option is used by a client to identify the vendor that manufactured the hardware
+// on which the client is running. The option code is 16.
+message Dhcpv6ClientOptionsVendorClass {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // The opaque data representing the hardware configuration of the host on which the
+  // client is running. Examples of  class data instances might include the version of
+  // the operating system the client is running or the amount of memory  installed on
+  // the client.
+  repeated string class_data = 2;
+
+  // The dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The dhcpv6 client messages where the option will be included. If all is selected
+// the selected option will be added in the all the Dhcpv6 client messages, else based
+// on the selection in particular Dhcpv6 client messages the option will be included.
+message Dhcpv6ClientOptionsOptionsRequestIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  Dhcpv6ClientOptionsMessageType msg_types = 2;
+}
+
+// The dhcpv6 client messages where the option will be included. If all is selected
+// the selected option will be added in the all the Dhcpv6 client messages, else based
+// on the selection in particular Dhcpv6 client messages the option will be included.
+message Dhcpv6ClientOptionsIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  repeated Dhcpv6ClientOptionsMessageType msg_types = 2;
+}
+
+// The dhcpv6 client messages where the option will be included.
+message Dhcpv6ClientOptionsMessageType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      solicit = 1;
+      request = 2;
+      inform_request = 3;
+      release = 4;
+      renew = 5;
+      rebind = 6;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.solicit
+  optional Choice.Enum choice = 1;
+}
+
+// This option is used by clients to exchange vendor-specific information. The option
+// code is 17.
+message Dhcpv6ClientOptionsVendorInfo {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // An opaque object of octets,interpreted by vendor-specific code on the clients and
+  // servers.
+  repeated Dhcpv6OptionsVendorSpecificOptions option_data = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// This option is used by servers to exchange vendor-specific information. The option
+// code is 17.
+message Dhcpv6ServerOptionsVendorInfo {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // An opaque object of octets,interpreted by vendor-specific code on the clients and
+  // servers.
+  repeated Dhcpv6OptionsVendorSpecificOptions option_data = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ServerOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The dhcpv6 server messages where the option will be included. If all is selected
+// the selected option will be added  in the all the Dhcpv6 server messages, else based
+// on the selection in particular Dhcpv6 server messages the option  will be included.
+message Dhcpv6ServerOptionsIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The server message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  repeated Dhcpv6ServerOptionsMessageType msg_types = 2;
+}
+
+// The dhcpv6 server messages where the option will be included.
+message Dhcpv6ServerOptionsMessageType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      advertise = 1;
+      reply = 2;
+      re_configure = 3;
+    }
+  }
+  // The server message name where the option is included, by default it is all.
+  // default = Choice.Enum.advertise
+  optional Choice.Enum choice = 1;
+}
+
+// The encapsulated vendor-specific options field is encoded as a sequence of code/length/value
+// fields of  identical format to the DHCP options field. The option codes are defined
+// by the vendor identified in the  enterprise-number field and are not managed by IANA.
+message Dhcpv6OptionsVendorSpecificOptions {
+
+  // The code for the encapsulated option.
+  // required = true
+  optional uint32 code = 1;
+
+  // The data for the encapsulated option.
+  // required = true
+  optional string data = 2;
+}
+
+// DHCPv6 server needs to know the FQDN of the client for the addresses for the client's
+// IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows
+// the client to convey its FQDN to the server. The Client  FQDN option also contains
+// Flags that DHCPv6 clients and servers use to negotiate who does which updates. The
+// option code is 39.
+message Dhcpv6ClientOptionsFqdn {
+
+  // The S bit indicates whether the server should or should not perform the AAAA RR (FQDN-to-address)
+  // DNS updates.  A client sets the bit to 0 to indicate that the server should not perform
+  // the updates and 1 to indicate that the  server should perform the updates. The state
+  // of the bit in the reply from the server indicates the action to be  taken by the
+  // server. If it is 1, the server has taken responsibility for AAAA RR updates for the
+  // FQDN.
+  // default = True
+  optional bool flag_s = 1;
+
+  // The O bit indicates whether the server has overridden the client's preference for
+  // the S bit. A client must set this  bit to 0. A server must set this bit to 1 if the
+  // S bit in its reply to the client does not match the S bit received  from the client.
+  // default = False
+  optional bool flag_o = 2;
+
+  // The N bit indicates whether the server should not perform any DNS updates. A client
+  // sets this bit to 0 to request that  the server should perform updates (the PTR RR
+  // and possibly the AAAA RR based on the S bit) or to 1 to request that the  server
+  // should not perform any DNS updates. A server sets the N bit to indicate whether the
+  // server shall (0) or shall not (1)  perform DNS updates. If the N bit is 1, the S
+  // bit MUST be 0.
+  // default = False
+  optional bool flag_n = 3;
+
+  // The Domain Name part of the option carries all or part of the FQDN of a DHCPv6 client.
+  // A client MAY also leave the  Domain Name field empty if it desires the server to
+  // provide a name. A fully qualified domain name (FQDN) is the complete  address of
+  // an internet host or computer. It provides its exact location within the domain name
+  // system (DNS) by specifying  the hostname, domain name and top-level domain (TLD).
+  // An FQDN isn't the same as a URL but rather is a part of it that fully  identifies
+  // the server to which the request is addressed. An FQDN doesn't carry the TCP/IP protocol
+  // information, such as Hypertext  Transfer Protocol (HTTP) or Hypertext Transfer Protocol
+  // Secure (HTTPS), which is always used at the beginning of a URL. Therefore,  adding
+  // the prefix http:// or https:// to the FQDN turns it into a full URL. One example
+  // can be microsoft.com.
+  // required = true
+  optional string domain_name = 4;
+
+  // The list of dhcpv6 client messages where this option is included.
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 5;
+}
+
+// The server sends this option to inform the client about a URL to a boot file. This
+// information is required for booting  over the network includes the details about
+// the server on which the boot files can be found, the protocol to be used for  the
+// download (for example,HTTP or TFTP, and the path and name of the boot file on the
+// server. The option code is 59. The URL will contain the network communication protocol,
+// a subdomain, a domain name, and its extension. If the host in the URL  is expressed
+// using an IPv6 address rather than a domain name, the address in the URL then must
+// be enclosed in [ and ]  characters, conforming to [RFC3986]. Eg of a boot file url
+// can be tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi.
+message Dhcpv6ServerOptionsBootfileUrl {
+
+  // The URL for the boot file. It must comply with STD 66 format.
+  // required = true
+  optional string url = 1;
+
+  // They are used to specify parameters for the boot file (similar to the command line
+  // arguments in most modern operating  systems). For example, these parameters could
+  // be used to specify the root file system of the OS kernel, or the location  from which
+  // a second-stage boot-loader program can download its configuration file.
+  repeated Dhcpv6ServerOptionsBootFileParams bootfile_params = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  Dhcpv6ServerOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The option code is 60. They are used to specify parameters for the boot file (similar
+// to the command line arguments in most  modern operating systems).  For example, these
+// parameters could be used to specify the root file system of the OS kernel, or  the
+// location from which a second-stage boot-loader program can download its configuration
+// file.
+message Dhcpv6ServerOptionsBootFileParams {
+
+  // UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
+  // required = true
+  optional string parameter = 1;
 }
 
 // A container for layer1 settings.
@@ -1940,13 +2560,13 @@ message BgpV4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/DhcpClient.V4/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/DhcpClient.V4/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // required = true
   optional string ipv4_name = 1;
@@ -5523,13 +6143,13 @@ message BgpV6Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/DhcpClient.V6/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/DhcpClient.V6/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // required = true
   optional string ipv6_name = 1;
@@ -6468,6 +7088,10 @@ message DeviceDhcpServer {
   // This contains an array of references to IPv4 interfaces, each of which will contain
   // one DHCPv4 server.
   repeated DhcpServerV4 ipv4_interfaces = 2;
+
+  // This contains an array of references to IPv6 interfaces, each of which will contain
+  // one DHCPv6 server.
+  repeated DhcpServerV6 ipv6_interfaces = 3;
 }
 
 // Configuration for emulated DHCPv4 Server.
@@ -6548,6 +7172,186 @@ message DhcpServerV4PoolOption {
   // a DHCP relay agent, otherwise it replies without including this TLV.
   // default = True
   optional bool echo_relay_with_tlv_82 = 4;
+}
+
+// Configuration for emulated DHCPv6 Server.
+message DhcpServerV6 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv6 on which DHCPv6 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 2;
+
+  // If Rapid Commit is set, server responds to client initiated Rapid Commit two-message
+  // exchanges.
+  // default = False
+  optional bool rapid_commit = 3;
+
+  // If the server does not have an address to which it can send the Reconfigure message
+  // directly to the client, the  server uses a Relay-reply message to send the Reconfigure
+  // message to a relay agent that will relay the message to the client.
+  // default = False
+  optional bool reconfigure_via_relay_agent = 4;
+
+  // Array of DHCP pools configured on a server.
+  repeated DhcpV6ServerLease leases = 5;
+
+  // Optional DHCPv4 Server options that are sent in Dhcp server messages.
+  Dhcpv6ServerOptions options = 6;
+}
+
+// DHCP server options, these configured options are sent in Dhcp server messages.
+message Dhcpv6ServerOptions {
+
+  // Additional DHCP server primary dns and other configuration options.
+  DhcpV6ServerDns dns = 1;
+
+  // This option is used by servers to exchange vendor-specific information with clients.
+  Dhcpv6ServerOptionsVendorInfo vendor_info = 2;
+
+  // The server sends this option to inform the client about a URL to a boot file which
+  // client will use for
+  // network boots.
+  Dhcpv6ServerOptionsBootfileUrl bootfile_url = 3;
+}
+
+// One DHCP pool configuration on a server.
+message DhcpV6ServerLease {
+
+  // The Life Time length in seconds that is assigned to a lease if the requesting DHCP
+  // client does not specify a specific expiration time.
+  // default = 86400
+  optional uint32 lease_time = 1;
+
+  // Description missing in models
+  // required = true
+  Dhcpv6ServerIaType ia_type = 5;
+}
+
+// Description missing in models
+message Dhcpv6ServerIaType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      iana = 1;
+      iata = 2;
+      iapd = 3;
+      ianapd = 4;
+    }
+  }
+  // Identity Association: a collection of leases assigned to a client. Each IA has an
+  // associated IAID.  Each IA holds one type of lease, like an identity association for
+  // temporary addresses (IA_TA) holds  temporary addresses, and an identity association
+  // for prefix delegation (IA_PD).
+  // default = Choice.Enum.iana
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ServerPoolInfo iana = 2;
+
+  // Description missing in models
+  Dhcpv6ServerPoolInfo iata = 3;
+
+  // Description missing in models
+  Dhcpv6ServerIapdPoolInfo iapd = 4;
+
+  // Description missing in models
+  Dhcpv6ServerIanapdPoolInfo ianapd = 5;
+}
+
+// The container for pool configurations for IA types iana and iata.
+message Dhcpv6ServerPoolInfo {
+
+  // The first IP address of the lease pool.
+  optional string start_address = 1;
+
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
+  // default = 64
+  optional uint32 prefix_len = 2;
+
+  // The total number of addresses in the pool.
+  // default = 1
+  optional uint32 size = 3;
+
+  // The increment value for the lease address within the lease pool where multiple addresses
+  // are present. The value is incremented according to the configured Prefix Length and
+  // Step.
+  // default = 1
+  optional uint32 step = 4;
+}
+
+// The container for prefix pool configurations for IA type iapd.
+message Dhcpv6ServerIapdPoolInfo {
+
+  // The first IP address of the prefix pool.
+  optional string start_prefix_address = 1;
+
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
+  // default = 64
+  optional uint32 configured_prefix_len = 2;
+
+  // The total number of addresses in the pool.
+  // default = 10
+  optional uint32 prefix_size = 3;
+
+  // The increment value for the lease address within the lease pool where multiple addresses
+  // are present. The value is incremented according to the Prefix Length and Step.
+  // default = 1
+  optional uint32 prefix_step = 4;
+
+  // The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6
+  // client.
+  // default = 64
+  optional uint32 advertised_prefix_len = 5;
+}
+
+// The container for pool configurations for IA type ianapd.
+message Dhcpv6ServerIanapdPoolInfo {
+
+  // The pool configurations for IA types iana in ianapd.
+  Dhcpv6ServerPoolInfo iana = 1;
+
+  // The pool configurations for IA types iapd in ianapd.
+  Dhcpv6ServerIapdPoolInfo iapd = 2;
+}
+
+// Optional Dns configuration for DHCPv6 server.
+message DhcpV6ServerDns {
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  // required = true
+  optional string primary = 1;
+
+  // DHCP server secondary dns configuration options. If included secondary DNS server
+  // address will be offered to
+  // DHCP clients that request this information through a TLV option.
+  repeated DhcpV6ServerSecondaryDns secondary_dns = 2;
+}
+
+// Advanced Dns configuration for DHCPv6 server.
+message DhcpV6ServerSecondaryDns {
+
+  // The secondary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  optional string ip = 1;
 }
 
 // A high level data plane traffic flow.
@@ -6750,6 +7554,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
@@ -6763,6 +7568,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -6779,6 +7585,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
@@ -6792,6 +7599,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
 }
@@ -7208,6 +8016,23 @@ message FlowIpv6 {
 
   // Description missing in models
   PatternFlowIpv6Dst dst = 8;
+}
+
+// The OTG implementation can provide a system generated, value for this property.
+message FlowIpv6Auto {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dhcp = 1;
+    }
+  }
+  // The method to be used to provide the system generated value.
+  // The dhcp option populates the field based on the dynamic IPv6 address that has been
+  // assigned to the DHCPv6 client
+  // by a DHCPv6 server.
+  // required = true
+  optional Choice.Enum choice = 1;
 }
 
 // IEEE 802.1Qbb PFC Pause packet header.
@@ -10460,6 +11285,8 @@ message MetricsRequest {
       rsvp = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
+      dhcpv6_client = 12;
+      dhcpv6_server = 13;
     }
   }
   // Description missing in models
@@ -10498,6 +11325,12 @@ message MetricsRequest {
 
   // Description missing in models
   Dhcpv4ServerMetricsRequest dhcpv4_server = 12;
+
+  // Description missing in models
+  Dhcpv6ClientMetricsRequest dhcpv6_client = 13;
+
+  // Description missing in models
+  Dhcpv6ServerMetricsRequest dhcpv6_server = 14;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -10517,6 +11350,8 @@ message MetricsResponse {
       rsvp_metrics = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
+      dhcpv6_client = 12;
+      dhcpv6_server = 13;
     }
   }
   // Description missing in models
@@ -10555,6 +11390,12 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Dhcpv4ServerMetric dhcpv4server_metrics = 12;
+
+  // Description missing in models
+  repeated Dhcpv6ClientMetric dhcpv6client_metrics = 13;
+
+  // Description missing in models
+  repeated Dhcpv6ServerMetric dhcpv6server_metrics = 14;
 }
 
 // The port result request to the traffic generator
@@ -11867,6 +12708,184 @@ message Dhcpv4ServerMetric {
   optional uint64 declines_received = 8;
 }
 
+// The request to retrieve DHCPv6 per client metrics/statistics.
+message Dhcpv6ClientMetricsRequest {
+
+  // The names of DHCPv6 clients to return results for. An empty list will return results
+  // for all DHCPv6 client.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  repeated string client_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      solicits_sent = 1;
+      advertisements_received = 2;
+      advertisements_ignored = 3;
+      requests_sent = 4;
+      nacks_received = 5;
+      replies_received = 6;
+      information_requests_sent = 7;
+      renews_sent = 8;
+      rebinds_sent = 9;
+      releases_sent = 10;
+      reconfigures_received = 11;
+      rapid_commit_solicits_sent = 12;
+      rapid_commit_replies_received = 13;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv6 client cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv6 per peer statistics information.
+message Dhcpv6ClientMetric {
+
+  // The name of a configured DHCPv6 client.
+  optional string name = 1;
+
+  // Number of DHCPSOLICIT messages sent.
+  optional uint64 solicits_sent = 2;
+
+  // Number of DHCPADVERTISE messages received.
+  optional uint64 advertisements_received = 3;
+
+  // Number of DHCPADVERTISE messages ignored.
+  optional uint64 advertisements_ignored = 4;
+
+  // Number of DHCPREQUEST messages sent.
+  optional uint64 requests_sent = 5;
+
+  // Number of negative lease DHCPNACK messages received.
+  optional uint64 nacks_received = 6;
+
+  // Number of DHCPOFFER messages received.
+  optional uint64 replies_received = 7;
+
+  // Number of DHCP Inform requests sent.
+  optional uint64 information_requests_sent = 8;
+
+  // Number of DHCP renew messages sent.
+  optional uint64 renews_sent = 9;
+
+  // Number of DHCP rebind messages sent.
+  optional uint64 rebinds_sent = 10;
+
+  // Number of DHCP Release messages sent.
+  optional uint64 releases_sent = 11;
+
+  // Number of DHCP Reconfigure messages received.
+  optional uint64 reconfigures_received = 12;
+
+  // Number of rapid commit DHCPSOLICIT messages sent.
+  optional uint64 rapid_commit_solicits_sent = 13;
+
+  // Number of rapid commit DHCP Reply messages received.
+  optional uint64 rapid_commit_replies_received = 14;
+}
+
+// The request to retrieve DHCPv6 per Server metrics/statistics.
+message Dhcpv6ServerMetricsRequest {
+
+  // The names of DHCPv6 Servers to return results for. An empty list will return results
+  // for all DHCPv6 Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6Server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6Server/properties/name
+  // 
+  repeated string server_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      solicits_received = 1;
+      solicits_ignored = 2;
+      advertisements_sent = 3;
+      requests_received = 4;
+      nacks_sent = 5;
+      confirms_received = 6;
+      renewals_received = 7;
+      rebinds_received = 8;
+      replies_sent = 9;
+      releases_received = 10;
+      declines_received = 11;
+      information_requests_received = 12;
+      relay_forwards_received = 13;
+      relay_replies_sent = 14;
+      reconfigures_sent = 15;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv6 server cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv6 per server statistics information.
+message Dhcpv6ServerMetric {
+
+  // The name of a configured DHCPv6 Server.
+  optional string name = 1;
+
+  // Number of DHCPSOLICIT messages received.
+  optional uint64 solicits_received = 2;
+
+  // Number of DHCPSOLICIT messages ignored.
+  optional uint64 solicits_ignored = 3;
+
+  // Number of DHCP Advertise messages sent.
+  optional uint64 advertisements_sent = 4;
+
+  // Number of DHCPREQUEST messages received.
+  optional uint64 requests_received = 5;
+
+  // Number of naks sent for DHCPREQUEST messages.
+  optional uint64 nacks_sent = 6;
+
+  // Number of DHCP Confirm messages received.
+  optional uint64 confirms_received = 7;
+
+  // Number of DHCP Renewal messages received.
+  optional uint64 renewals_received = 8;
+
+  // Number of DHCP Rebind messages received.
+  optional uint64 rebinds_received = 9;
+
+  // Number of DHCP Reply messages sent.
+  optional uint64 replies_sent = 10;
+
+  // Number of DHCP Release messages received.
+  optional uint64 releases_received = 11;
+
+  // Number of DHCP Decline messages received.
+  optional uint64 declines_received = 12;
+
+  // Number of DHCP Information Request messages received.
+  optional uint64 information_requests_received = 13;
+
+  // Number of DHCP Relay agent forward messages received.
+  optional uint64 relay_forwards_received = 14;
+
+  // Number of DHCP reply messages sent to Relay agent.
+  optional uint64 relay_replies_sent = 15;
+
+  // Number of DHCP Reconfigure messages sent.
+  optional uint64 reconfigures_sent = 16;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -11881,6 +12900,8 @@ message StatesRequest {
       rsvp_lsps = 6;
       dhcpv4_interfaces = 7;
       dhcpv4_leases = 8;
+      dhcpv6_interfaces = 9;
+      dhcpv6_leases = 10;
     }
   }
   // Description missing in models
@@ -11910,6 +12931,12 @@ message StatesRequest {
 
   // Description missing in models
   Dhcpv4LeaseStateRequest dhcpv4_leases = 9;
+
+  // Description missing in models
+  Dhcpv6InterfaceStateRequest dhcpv6_interfaces = 10;
+
+  // Description missing in models
+  Dhcpv6LeaseStateRequest dhcpv6_leases = 11;
 }
 
 // Response containing chosen traffic generator states
@@ -11926,6 +12953,8 @@ message StatesResponse {
       rsvp_lsps = 6;
       dhcpv4_interfaces = 7;
       dhcpv4_leases = 8;
+      dhcpv6_interfaces = 9;
+      dhcpv6_leases = 10;
     }
   }
   // Description missing in models
@@ -11955,6 +12984,12 @@ message StatesResponse {
 
   // Description missing in models
   repeated Dhcpv4LeasesState dhcpv4_leases = 9;
+
+  // Description missing in models
+  repeated Dhcpv6InterfaceState dhcpv6_interfaces = 10;
+
+  // Description missing in models
+  repeated Dhcpv6LeasesState dhcpv6_leases = 11;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -13288,6 +14323,104 @@ message Dhcpv4LeaseState {
 
   // The Remote ID option found in the last request message.
   optional string remote_id = 8;
+}
+
+// The request for assigned IPv6 address information associated with DHCP Client sessions.
+message Dhcpv6InterfaceStateRequest {
+
+  // The names of DHCPv6 client to return results for. An empty list will return results
+  // for all DHCPv6 Client address information.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  repeated string dhcp_client_names = 1;
+}
+
+// The IPv6 address associated with this DHCP Client session.
+message Dhcpv6InterfaceState {
+
+  // The name of a DHCPv6 Client.
+  optional string dhcp_client_name = 1;
+
+  // The IPv6 IAPD address associated with this DHCP Client session.
+  optional string ipv6_iapd_address = 2;
+
+  // The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
+  optional uint32 iapd_prefix_length = 3;
+
+  // The IPv6 address associated with this DHCP Client session.
+  optional string ipv6_address = 4;
+
+  // The Gateway IPV6 address associated with this DHCP Client session.
+  optional string gateway_address = 5;
+
+  // The duration of the IPv6 address lease, in seconds.
+  optional uint32 lease_time = 6;
+
+  // Time in seconds until the DHCPv6 client starts renewing the lease.
+  optional uint32 renew_time = 7;
+
+  // Time in seconds until the DHCPv6 client starts rebinding.
+  optional uint32 rebind_time = 8;
+}
+
+// The request to retrieve DHCP Server host allocated status.
+message Dhcpv6LeaseStateRequest {
+
+  // The names of DHCPv6 server to return results for. An empty list will return results
+  // for all DHCPv6 servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6server/properties/name
+  // 
+  repeated string dhcp_server_names = 1;
+}
+
+// Lease information of DHCP Server.
+message Dhcpv6LeasesState {
+
+  // The name of a DHCP Server.
+  optional string dhcp_server_name = 1;
+
+  // Description missing in models
+  repeated Dhcpv6ServerLeaseState leases = 2;
+}
+
+// IPv6 unicast prefix.
+message Dhcpv6ServerLeaseState {
+
+  // The IPv6 address associated with this lease.
+  optional string address = 1;
+
+  // The time in seconds, IP address lease will expire.
+  optional uint32 valid_time = 2;
+
+  // The time in seconds, elapsed time since address has been renewed.
+  optional uint32 preferred_time = 3;
+
+  // Time in seconds until the DHCPv6 client starts renewing the lease.
+  optional uint32 renew_time = 4;
+
+  // Time in seconds until the DHCPv6 client starts rebinding.
+  optional uint32 rebind_time = 5;
+
+  // The ID of the DHCPv6 client holding this lease.
+  optional string client_id = 6;
+
+  // The Remote ID option found in the last request message.
+  optional string remote_id = 7;
+
+  // The Interface ID option found in the last request message.
+  optional string interface_id = 8;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the
@@ -16479,6 +17612,7 @@ message PatternFlowIpv6Src {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
     }
   }
   // Description missing in models
@@ -16503,6 +17637,9 @@ message PatternFlowIpv6Src {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6SrcMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv6Auto auto = 8;
 }
 
 // ipv6 counter pattern
@@ -16551,6 +17688,7 @@ message PatternFlowIpv6Dst {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
     }
   }
   // Description missing in models
@@ -16575,6 +17713,9 @@ message PatternFlowIpv6Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv6Auto auto = 8;
 }
 
 // mac counter pattern

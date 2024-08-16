@@ -24,6 +24,8 @@ type statesResponse struct {
 	rsvpLspsHolder         StatesResponseRsvpLspsStateIter
 	dhcpv4InterfacesHolder StatesResponseDhcpv4InterfaceStateIter
 	dhcpv4LeasesHolder     StatesResponseDhcpv4LeasesStateIter
+	dhcpv6InterfacesHolder StatesResponseDhcpv6InterfaceStateIter
+	dhcpv6LeasesHolder     StatesResponseDhcpv6LeasesStateIter
 }
 
 func NewStatesResponse() StatesResponse {
@@ -259,6 +261,8 @@ func (obj *statesResponse) setNil() {
 	obj.rsvpLspsHolder = nil
 	obj.dhcpv4InterfacesHolder = nil
 	obj.dhcpv4LeasesHolder = nil
+	obj.dhcpv6InterfacesHolder = nil
+	obj.dhcpv6LeasesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -308,6 +312,10 @@ type StatesResponse interface {
 	Dhcpv4Interfaces() StatesResponseDhcpv4InterfaceStateIter
 	// Dhcpv4Leases returns StatesResponseDhcpv4LeasesStateIterIter, set in StatesResponse
 	Dhcpv4Leases() StatesResponseDhcpv4LeasesStateIter
+	// Dhcpv6Interfaces returns StatesResponseDhcpv6InterfaceStateIterIter, set in StatesResponse
+	Dhcpv6Interfaces() StatesResponseDhcpv6InterfaceStateIter
+	// Dhcpv6Leases returns StatesResponseDhcpv6LeasesStateIterIter, set in StatesResponse
+	Dhcpv6Leases() StatesResponseDhcpv6LeasesStateIter
 	setNil()
 }
 
@@ -323,6 +331,8 @@ var StatesResponseChoice = struct {
 	RSVP_LSPS         StatesResponseChoiceEnum
 	DHCPV4_INTERFACES StatesResponseChoiceEnum
 	DHCPV4_LEASES     StatesResponseChoiceEnum
+	DHCPV6_INTERFACES StatesResponseChoiceEnum
+	DHCPV6_LEASES     StatesResponseChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesResponseChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesResponseChoiceEnum("ipv6_neighbors"),
@@ -332,6 +342,8 @@ var StatesResponseChoice = struct {
 	RSVP_LSPS:         StatesResponseChoiceEnum("rsvp_lsps"),
 	DHCPV4_INTERFACES: StatesResponseChoiceEnum("dhcpv4_interfaces"),
 	DHCPV4_LEASES:     StatesResponseChoiceEnum("dhcpv4_leases"),
+	DHCPV6_INTERFACES: StatesResponseChoiceEnum("dhcpv6_interfaces"),
+	DHCPV6_LEASES:     StatesResponseChoiceEnum("dhcpv6_leases"),
 }
 
 func (obj *statesResponse) Choice() StatesResponseChoiceEnum {
@@ -353,6 +365,10 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 	}
 	enumValue := otg.StatesResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Dhcpv6Leases = nil
+	obj.dhcpv6LeasesHolder = nil
+	obj.obj.Dhcpv6Interfaces = nil
+	obj.dhcpv6InterfacesHolder = nil
 	obj.obj.Dhcpv4Leases = nil
 	obj.dhcpv4LeasesHolder = nil
 	obj.obj.Dhcpv4Interfaces = nil
@@ -400,6 +416,14 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 
 	if value == StatesResponseChoice.DHCPV4_LEASES {
 		obj.obj.Dhcpv4Leases = []*otg.Dhcpv4LeasesState{}
+	}
+
+	if value == StatesResponseChoice.DHCPV6_INTERFACES {
+		obj.obj.Dhcpv6Interfaces = []*otg.Dhcpv6InterfaceState{}
+	}
+
+	if value == StatesResponseChoice.DHCPV6_LEASES {
+		obj.obj.Dhcpv6Leases = []*otg.Dhcpv6LeasesState{}
 	}
 
 	return obj
@@ -1101,6 +1125,180 @@ func (obj *statesResponseDhcpv4LeasesStateIter) appendHolderSlice(item Dhcpv4Lea
 	return obj
 }
 
+// description is TBD
+// Dhcpv6Interfaces returns a []Dhcpv6InterfaceState
+func (obj *statesResponse) Dhcpv6Interfaces() StatesResponseDhcpv6InterfaceStateIter {
+	if len(obj.obj.Dhcpv6Interfaces) == 0 {
+		obj.setChoice(StatesResponseChoice.DHCPV6_INTERFACES)
+	}
+	if obj.dhcpv6InterfacesHolder == nil {
+		obj.dhcpv6InterfacesHolder = newStatesResponseDhcpv6InterfaceStateIter(&obj.obj.Dhcpv6Interfaces).setMsg(obj)
+	}
+	return obj.dhcpv6InterfacesHolder
+}
+
+type statesResponseDhcpv6InterfaceStateIter struct {
+	obj                       *statesResponse
+	dhcpv6InterfaceStateSlice []Dhcpv6InterfaceState
+	fieldPtr                  *[]*otg.Dhcpv6InterfaceState
+}
+
+func newStatesResponseDhcpv6InterfaceStateIter(ptr *[]*otg.Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter {
+	return &statesResponseDhcpv6InterfaceStateIter{fieldPtr: ptr}
+}
+
+type StatesResponseDhcpv6InterfaceStateIter interface {
+	setMsg(*statesResponse) StatesResponseDhcpv6InterfaceStateIter
+	Items() []Dhcpv6InterfaceState
+	Add() Dhcpv6InterfaceState
+	Append(items ...Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter
+	Set(index int, newObj Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter
+	Clear() StatesResponseDhcpv6InterfaceStateIter
+	clearHolderSlice() StatesResponseDhcpv6InterfaceStateIter
+	appendHolderSlice(item Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter
+}
+
+func (obj *statesResponseDhcpv6InterfaceStateIter) setMsg(msg *statesResponse) StatesResponseDhcpv6InterfaceStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv6InterfaceState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *statesResponseDhcpv6InterfaceStateIter) Items() []Dhcpv6InterfaceState {
+	return obj.dhcpv6InterfaceStateSlice
+}
+
+func (obj *statesResponseDhcpv6InterfaceStateIter) Add() Dhcpv6InterfaceState {
+	newObj := &otg.Dhcpv6InterfaceState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv6InterfaceState{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv6InterfaceStateSlice = append(obj.dhcpv6InterfaceStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *statesResponseDhcpv6InterfaceStateIter) Append(items ...Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv6InterfaceStateSlice = append(obj.dhcpv6InterfaceStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *statesResponseDhcpv6InterfaceStateIter) Set(index int, newObj Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv6InterfaceStateSlice[index] = newObj
+	return obj
+}
+func (obj *statesResponseDhcpv6InterfaceStateIter) Clear() StatesResponseDhcpv6InterfaceStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv6InterfaceState{}
+		obj.dhcpv6InterfaceStateSlice = []Dhcpv6InterfaceState{}
+	}
+	return obj
+}
+func (obj *statesResponseDhcpv6InterfaceStateIter) clearHolderSlice() StatesResponseDhcpv6InterfaceStateIter {
+	if len(obj.dhcpv6InterfaceStateSlice) > 0 {
+		obj.dhcpv6InterfaceStateSlice = []Dhcpv6InterfaceState{}
+	}
+	return obj
+}
+func (obj *statesResponseDhcpv6InterfaceStateIter) appendHolderSlice(item Dhcpv6InterfaceState) StatesResponseDhcpv6InterfaceStateIter {
+	obj.dhcpv6InterfaceStateSlice = append(obj.dhcpv6InterfaceStateSlice, item)
+	return obj
+}
+
+// description is TBD
+// Dhcpv6Leases returns a []Dhcpv6LeasesState
+func (obj *statesResponse) Dhcpv6Leases() StatesResponseDhcpv6LeasesStateIter {
+	if len(obj.obj.Dhcpv6Leases) == 0 {
+		obj.setChoice(StatesResponseChoice.DHCPV6_LEASES)
+	}
+	if obj.dhcpv6LeasesHolder == nil {
+		obj.dhcpv6LeasesHolder = newStatesResponseDhcpv6LeasesStateIter(&obj.obj.Dhcpv6Leases).setMsg(obj)
+	}
+	return obj.dhcpv6LeasesHolder
+}
+
+type statesResponseDhcpv6LeasesStateIter struct {
+	obj                    *statesResponse
+	dhcpv6LeasesStateSlice []Dhcpv6LeasesState
+	fieldPtr               *[]*otg.Dhcpv6LeasesState
+}
+
+func newStatesResponseDhcpv6LeasesStateIter(ptr *[]*otg.Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter {
+	return &statesResponseDhcpv6LeasesStateIter{fieldPtr: ptr}
+}
+
+type StatesResponseDhcpv6LeasesStateIter interface {
+	setMsg(*statesResponse) StatesResponseDhcpv6LeasesStateIter
+	Items() []Dhcpv6LeasesState
+	Add() Dhcpv6LeasesState
+	Append(items ...Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter
+	Set(index int, newObj Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter
+	Clear() StatesResponseDhcpv6LeasesStateIter
+	clearHolderSlice() StatesResponseDhcpv6LeasesStateIter
+	appendHolderSlice(item Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter
+}
+
+func (obj *statesResponseDhcpv6LeasesStateIter) setMsg(msg *statesResponse) StatesResponseDhcpv6LeasesStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv6LeasesState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *statesResponseDhcpv6LeasesStateIter) Items() []Dhcpv6LeasesState {
+	return obj.dhcpv6LeasesStateSlice
+}
+
+func (obj *statesResponseDhcpv6LeasesStateIter) Add() Dhcpv6LeasesState {
+	newObj := &otg.Dhcpv6LeasesState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv6LeasesState{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv6LeasesStateSlice = append(obj.dhcpv6LeasesStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *statesResponseDhcpv6LeasesStateIter) Append(items ...Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv6LeasesStateSlice = append(obj.dhcpv6LeasesStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *statesResponseDhcpv6LeasesStateIter) Set(index int, newObj Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv6LeasesStateSlice[index] = newObj
+	return obj
+}
+func (obj *statesResponseDhcpv6LeasesStateIter) Clear() StatesResponseDhcpv6LeasesStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv6LeasesState{}
+		obj.dhcpv6LeasesStateSlice = []Dhcpv6LeasesState{}
+	}
+	return obj
+}
+func (obj *statesResponseDhcpv6LeasesStateIter) clearHolderSlice() StatesResponseDhcpv6LeasesStateIter {
+	if len(obj.dhcpv6LeasesStateSlice) > 0 {
+		obj.dhcpv6LeasesStateSlice = []Dhcpv6LeasesState{}
+	}
+	return obj
+}
+func (obj *statesResponseDhcpv6LeasesStateIter) appendHolderSlice(item Dhcpv6LeasesState) StatesResponseDhcpv6LeasesStateIter {
+	obj.dhcpv6LeasesStateSlice = append(obj.dhcpv6LeasesStateSlice, item)
+	return obj
+}
+
 func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1218,6 +1416,34 @@ func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.Dhcpv6Interfaces) != 0 {
+
+		if set_default {
+			obj.Dhcpv6Interfaces().clearHolderSlice()
+			for _, item := range obj.obj.Dhcpv6Interfaces {
+				obj.Dhcpv6Interfaces().appendHolderSlice(&dhcpv6InterfaceState{obj: item})
+			}
+		}
+		for _, item := range obj.Dhcpv6Interfaces().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Dhcpv6Leases) != 0 {
+
+		if set_default {
+			obj.Dhcpv6Leases().clearHolderSlice()
+			for _, item := range obj.obj.Dhcpv6Leases {
+				obj.Dhcpv6Leases().appendHolderSlice(&dhcpv6LeasesState{obj: item})
+			}
+		}
+		for _, item := range obj.Dhcpv6Leases().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *statesResponse) setDefault() {
@@ -1262,6 +1488,16 @@ func (obj *statesResponse) setDefault() {
 	if len(obj.obj.Dhcpv4Leases) > 0 {
 		choices_set += 1
 		choice = StatesResponseChoice.DHCPV4_LEASES
+	}
+
+	if len(obj.obj.Dhcpv6Interfaces) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.DHCPV6_INTERFACES
+	}
+
+	if len(obj.obj.Dhcpv6Leases) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.DHCPV6_LEASES
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

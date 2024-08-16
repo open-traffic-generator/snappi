@@ -19,6 +19,7 @@ type patternFlowIpv6Src struct {
 	incrementHolder  PatternFlowIpv6SrcCounter
 	decrementHolder  PatternFlowIpv6SrcCounter
 	metricTagsHolder PatternFlowIpv6SrcPatternFlowIpv6SrcMetricTagIter
+	autoHolder       FlowIpv6Auto
 }
 
 func NewPatternFlowIpv6Src() PatternFlowIpv6Src {
@@ -249,6 +250,7 @@ func (obj *patternFlowIpv6Src) setNil() {
 	obj.incrementHolder = nil
 	obj.decrementHolder = nil
 	obj.metricTagsHolder = nil
+	obj.autoHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -310,6 +312,11 @@ type PatternFlowIpv6Src interface {
 	HasDecrement() bool
 	// MetricTags returns PatternFlowIpv6SrcPatternFlowIpv6SrcMetricTagIterIter, set in PatternFlowIpv6Src
 	MetricTags() PatternFlowIpv6SrcPatternFlowIpv6SrcMetricTagIter
+	// Auto returns FlowIpv6Auto, set in PatternFlowIpv6Src.
+	// FlowIpv6Auto is the OTG implementation can provide a system generated, value for this property.
+	Auto() FlowIpv6Auto
+	// HasAuto checks if Auto has been set in PatternFlowIpv6Src
+	HasAuto() bool
 	setNil()
 }
 
@@ -321,11 +328,13 @@ var PatternFlowIpv6SrcChoice = struct {
 	VALUES    PatternFlowIpv6SrcChoiceEnum
 	INCREMENT PatternFlowIpv6SrcChoiceEnum
 	DECREMENT PatternFlowIpv6SrcChoiceEnum
+	AUTO      PatternFlowIpv6SrcChoiceEnum
 }{
 	VALUE:     PatternFlowIpv6SrcChoiceEnum("value"),
 	VALUES:    PatternFlowIpv6SrcChoiceEnum("values"),
 	INCREMENT: PatternFlowIpv6SrcChoiceEnum("increment"),
 	DECREMENT: PatternFlowIpv6SrcChoiceEnum("decrement"),
+	AUTO:      PatternFlowIpv6SrcChoiceEnum("auto"),
 }
 
 func (obj *patternFlowIpv6Src) Choice() PatternFlowIpv6SrcChoiceEnum {
@@ -347,6 +356,8 @@ func (obj *patternFlowIpv6Src) setChoice(value PatternFlowIpv6SrcChoiceEnum) Pat
 	}
 	enumValue := otg.PatternFlowIpv6Src_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Auto = nil
+	obj.autoHolder = nil
 	obj.obj.Decrement = nil
 	obj.decrementHolder = nil
 	obj.obj.Increment = nil
@@ -370,6 +381,10 @@ func (obj *patternFlowIpv6Src) setChoice(value PatternFlowIpv6SrcChoiceEnum) Pat
 
 	if value == PatternFlowIpv6SrcChoice.DECREMENT {
 		obj.obj.Decrement = NewPatternFlowIpv6SrcCounter().msg()
+	}
+
+	if value == PatternFlowIpv6SrcChoice.AUTO {
+		obj.obj.Auto = NewFlowIpv6Auto().msg()
 	}
 
 	return obj
@@ -565,6 +580,24 @@ func (obj *patternFlowIpv6SrcPatternFlowIpv6SrcMetricTagIter) appendHolderSlice(
 	return obj
 }
 
+// description is TBD
+// Auto returns a FlowIpv6Auto
+func (obj *patternFlowIpv6Src) Auto() FlowIpv6Auto {
+	if obj.obj.Auto == nil {
+		obj.setChoice(PatternFlowIpv6SrcChoice.AUTO)
+	}
+	if obj.autoHolder == nil {
+		obj.autoHolder = &flowIpv6Auto{obj: obj.obj.Auto}
+	}
+	return obj.autoHolder
+}
+
+// description is TBD
+// Auto returns a FlowIpv6Auto
+func (obj *patternFlowIpv6Src) HasAuto() bool {
+	return obj.obj.Auto != nil
+}
+
 func (obj *patternFlowIpv6Src) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -612,6 +645,11 @@ func (obj *patternFlowIpv6Src) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.Auto != nil {
+
+		obj.Auto().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *patternFlowIpv6Src) setDefault() {
@@ -636,6 +674,11 @@ func (obj *patternFlowIpv6Src) setDefault() {
 	if obj.obj.Decrement != nil {
 		choices_set += 1
 		choice = PatternFlowIpv6SrcChoice.DECREMENT
+	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowIpv6SrcChoice.AUTO
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
