@@ -278,6 +278,8 @@ type BgpAttributesCommunity interface {
 	Choice() BgpAttributesCommunityChoiceEnum
 	// setChoice assigns BgpAttributesCommunityChoiceEnum provided by user to BgpAttributesCommunity
 	setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity
+	// getter for NoLlgr to set choice.
+	NoLlgr()
 	// getter for NoAdvertised to set choice.
 	NoAdvertised()
 	// getter for NoExportSubconfed to set choice.
@@ -286,8 +288,6 @@ type BgpAttributesCommunity interface {
 	NoExport()
 	// getter for LlgrStale to set choice.
 	LlgrStale()
-	// getter for NoLlgr to set choice.
-	NoLlgr()
 	// CustomCommunity returns BgpAttributesCustomCommunity, set in BgpAttributesCommunity.
 	// BgpAttributesCustomCommunity is user defined COMMUNITY attribute containing 2 byte AS and custom 2 byte value defined by the administrator of the domain.
 	CustomCommunity() BgpAttributesCustomCommunity
@@ -322,6 +322,11 @@ func (obj *bgpAttributesCommunity) Choice() BgpAttributesCommunityChoiceEnum {
 	return BgpAttributesCommunityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for NoLlgr to set choice
+func (obj *bgpAttributesCommunity) NoLlgr() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_LLGR)
+}
+
 // getter for NoAdvertised to set choice
 func (obj *bgpAttributesCommunity) NoAdvertised() {
 	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
@@ -340,11 +345,6 @@ func (obj *bgpAttributesCommunity) NoExport() {
 // getter for LlgrStale to set choice
 func (obj *bgpAttributesCommunity) LlgrStale() {
 	obj.setChoice(BgpAttributesCommunityChoice.LLGR_STALE)
-}
-
-// getter for NoLlgr to set choice
-func (obj *bgpAttributesCommunity) NoLlgr() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_LLGR)
 }
 
 func (obj *bgpAttributesCommunity) setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity {
