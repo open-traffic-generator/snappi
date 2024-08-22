@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.8.0
+  version: 1.9.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -1097,7 +1097,7 @@ components:
         associated_dhcp_messages:
           description: |-
             The list of dhcpv6 client messages where this option is included.
-          $ref: '#/components/schemas/Dhcpv6ClientOptions.OptionsRequestIncludedMessages'
+          $ref: '#/components/schemas/Dhcpv6ClientOptions.IncludedMessages'
           x-field-uid: 2
     Device.Dhcpv6Client.Options:
       description: |-
@@ -1541,30 +1541,6 @@ components:
             The dhcpv6 client messages where this option is included.
           $ref: '#/components/schemas/Dhcpv6ClientOptions.IncludedMessages'
           x-field-uid: 3
-    Dhcpv6ClientOptions.OptionsRequestIncludedMessages:
-      description: |-
-        The dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
-      type: object
-      properties:
-        choice:
-          description: |-
-            The client message name where the option is included, by default it is all.
-          type: string
-          default: all
-          x-field-uid: 1
-          x-enum:
-            all:
-              x-field-uid: 1
-            msg_types:
-              x-field-uid: 2
-          enum:
-          - all
-          - msg_types
-        msg_types:
-          description: |-
-            User must specify the Dhcpv6 message type.
-          $ref: '#/components/schemas/Dhcpv6ClientOptions.MessageType'
-          x-field-uid: 2
     Dhcpv6ClientOptions.IncludedMessages:
       description: |-
         The dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
@@ -13346,6 +13322,13 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        org_infos:
+          description: |-
+            The Organization Information is used to define the organization specific TLVs. The organization specific TLV is defined in IEEE 802.1AB-2016 specification. This category is provided to allow different organizations, such as  IEEE 802.1, IEEE 802.3, IETF, as well as individual software and equipment vendors, to define TLVs that advertise  information to remote entities attached to the same media.
+          type: array
+          items:
+            $ref: '#/components/schemas/Lldp.OrgInfo'
+          x-field-uid: 8
     Lldp.Connection:
       description: "LLDP connection to a test port. In future if more connection options\
         \ arise  LLDP connection object will be enhanced. "
@@ -13531,6 +13514,60 @@ components:
             User must specify a value if mode is not auto.
           type: string
           x-field-uid: 3
+    Lldp.OrgInfo:
+      description: "The organization specific information configured in the Organization\
+        \ Specific TLV. "
+      type: object
+      properties:
+        oui:
+          description: "The organizationally unique identifier field shall contain\
+            \ the organization's OUI as defined in Clause 9 of IEEE  Std 802. It is\
+            \ a 24 bit number that uniquely identifies a vendor, manufacturer, or\
+            \ other organizations. "
+          type: string
+          format: hex
+          maxLength: 6
+          minLength: 6
+          default: 0080C2
+          x-field-uid: 1
+        subtype:
+          description: |-
+            The organizationally defined subtype field shall contain a unique subtype value assigned by the defining organization.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 127
+          default: 1
+          x-field-uid: 2
+        information:
+          description: |-
+            Contains the organizationally defined information. The actual format of the organizationally defined information string  field is organizationally specific and can contain either binary or alpha-numeric information that is instance specific  for the particular TLV type and subtype. Alpha-numeric information are encoded in UTF-8 (as specified in IETF RFC 3629).  Or include one or more information fields with their associated field-type identifiers, designators similar to those in  the Management Address TLV.
+          $ref: '#/components/schemas/Lldp.OrgInfoType'
+          x-field-uid: 3
+    Lldp.OrgInfoType:
+      description: |-
+        Contains either the Alpha-numeric information encoded in UTF-8 (as specified in IETF RFC 3629) or include one or more information fields with  their associated field-type identifiers designators, similar to those in the Management Address TLV. Currently only one choice as info is given in future if required it can be extended to define sub tlvs.
+      type: object
+      properties:
+        choice:
+          description: |-
+            In info mode the organizationally defined information contain either binary or alpha-numeric information encoded in UTF-8  (as specified in IETF RFC 3629).
+          type: string
+          default: info
+          x-field-uid: 1
+          x-enum:
+            info:
+              x-field-uid: 1
+          enum:
+          - info
+        info:
+          description: |-
+            The organizationally defined information encoded in UTF-8 (as specified in IETF RFC 3629). This byte stream can be of any  length from 1 to 507 bytes. In the info byte stream, one byte is represented as string of 2 characters, for example 2  character string (0x)AB represents value of a single byte. So the maximum length of this attribute is 1014 (507 * 2 hex  characters per byte).
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 1014
+          x-field-uid: 2
     Error:
       description: |-
         Error response generated while serving API request.

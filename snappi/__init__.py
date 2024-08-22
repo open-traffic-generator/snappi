@@ -50,8 +50,9 @@ from .snappi import DeviceDhcpv6ClientOptionsRequest
 from .snappi import Dhcpv6ClientOptionsOptionsRequest
 from .snappi import Dhcpv6ClientOptionsCustom
 from .snappi import Dhcpv6ClientOptionsOptionsRequestIter
-from .snappi import Dhcpv6ClientOptionsOptionsRequestIncludedMessages
+from .snappi import Dhcpv6ClientOptionsIncludedMessages
 from .snappi import Dhcpv6ClientOptionsMessageType
+from .snappi import Dhcpv6ClientOptionsMessageTypeIter
 from .snappi import DeviceDhcpv6ClientOptions
 from .snappi import Dhcpv6ClientOptionsServerIdentifier
 from .snappi import Dhcpv6ClientOptionsDuidLlt
@@ -62,8 +63,6 @@ from .snappi import Dhcpv6ClientOptionsDuidUuid
 from .snappi import Dhcpv6ClientOptionsDuidUuidVersion
 from .snappi import Dhcpv6ClientOptionsDuidUuidVariant
 from .snappi import Dhcpv6ClientOptionsVendorClass
-from .snappi import Dhcpv6ClientOptionsIncludedMessages
-from .snappi import Dhcpv6ClientOptionsMessageTypeIter
 from .snappi import Dhcpv6ClientOptionsVendorInfo
 from .snappi import Dhcpv6OptionsVendorSpecificOptions
 from .snappi import Dhcpv6OptionsVendorSpecificOptionsIter
@@ -1113,6 +1112,9 @@ from .snappi import LldpChassisMacSubType
 from .snappi import LldpPortId
 from .snappi import LldpPortInterfaceNameSubType
 from .snappi import LldpSystemName
+from .snappi import LldpOrgInfo
+from .snappi import LldpOrgInfoType
+from .snappi import LldpOrgInfoIter
 from .snappi import LldpIter
 from .snappi import Warning
 from .snappi import Error

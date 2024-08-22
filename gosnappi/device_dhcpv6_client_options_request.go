@@ -17,7 +17,7 @@ type deviceDhcpv6ClientOptionsRequest struct {
 	marshaller                   marshalDeviceDhcpv6ClientOptionsRequest
 	unMarshaller                 unMarshalDeviceDhcpv6ClientOptionsRequest
 	requestHolder                DeviceDhcpv6ClientOptionsRequestDhcpv6ClientOptionsOptionsRequestIter
-	associatedDhcpMessagesHolder Dhcpv6ClientOptionsOptionsRequestIncludedMessages
+	associatedDhcpMessagesHolder Dhcpv6ClientOptionsIncludedMessages
 }
 
 func NewDeviceDhcpv6ClientOptionsRequest() DeviceDhcpv6ClientOptionsRequest {
@@ -276,12 +276,12 @@ type DeviceDhcpv6ClientOptionsRequest interface {
 	setDefault()
 	// Request returns DeviceDhcpv6ClientOptionsRequestDhcpv6ClientOptionsOptionsRequestIterIter, set in DeviceDhcpv6ClientOptionsRequest
 	Request() DeviceDhcpv6ClientOptionsRequestDhcpv6ClientOptionsOptionsRequestIter
-	// AssociatedDhcpMessages returns Dhcpv6ClientOptionsOptionsRequestIncludedMessages, set in DeviceDhcpv6ClientOptionsRequest.
-	// Dhcpv6ClientOptionsOptionsRequestIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
-	AssociatedDhcpMessages() Dhcpv6ClientOptionsOptionsRequestIncludedMessages
-	// SetAssociatedDhcpMessages assigns Dhcpv6ClientOptionsOptionsRequestIncludedMessages provided by user to DeviceDhcpv6ClientOptionsRequest.
-	// Dhcpv6ClientOptionsOptionsRequestIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
-	SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsOptionsRequestIncludedMessages) DeviceDhcpv6ClientOptionsRequest
+	// AssociatedDhcpMessages returns Dhcpv6ClientOptionsIncludedMessages, set in DeviceDhcpv6ClientOptionsRequest.
+	// Dhcpv6ClientOptionsIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
+	AssociatedDhcpMessages() Dhcpv6ClientOptionsIncludedMessages
+	// SetAssociatedDhcpMessages assigns Dhcpv6ClientOptionsIncludedMessages provided by user to DeviceDhcpv6ClientOptionsRequest.
+	// Dhcpv6ClientOptionsIncludedMessages is the dhcpv6 client messages where the option will be included. If all is selected the selected option will be added in the all the Dhcpv6 client messages, else based on the selection in particular Dhcpv6 client messages the option will be included.
+	SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsIncludedMessages) DeviceDhcpv6ClientOptionsRequest
 	setNil()
 }
 
@@ -373,20 +373,20 @@ func (obj *deviceDhcpv6ClientOptionsRequestDhcpv6ClientOptionsOptionsRequestIter
 }
 
 // The list of dhcpv6 client messages where this option is included.
-// AssociatedDhcpMessages returns a Dhcpv6ClientOptionsOptionsRequestIncludedMessages
-func (obj *deviceDhcpv6ClientOptionsRequest) AssociatedDhcpMessages() Dhcpv6ClientOptionsOptionsRequestIncludedMessages {
+// AssociatedDhcpMessages returns a Dhcpv6ClientOptionsIncludedMessages
+func (obj *deviceDhcpv6ClientOptionsRequest) AssociatedDhcpMessages() Dhcpv6ClientOptionsIncludedMessages {
 	if obj.obj.AssociatedDhcpMessages == nil {
-		obj.obj.AssociatedDhcpMessages = NewDhcpv6ClientOptionsOptionsRequestIncludedMessages().msg()
+		obj.obj.AssociatedDhcpMessages = NewDhcpv6ClientOptionsIncludedMessages().msg()
 	}
 	if obj.associatedDhcpMessagesHolder == nil {
-		obj.associatedDhcpMessagesHolder = &dhcpv6ClientOptionsOptionsRequestIncludedMessages{obj: obj.obj.AssociatedDhcpMessages}
+		obj.associatedDhcpMessagesHolder = &dhcpv6ClientOptionsIncludedMessages{obj: obj.obj.AssociatedDhcpMessages}
 	}
 	return obj.associatedDhcpMessagesHolder
 }
 
 // The list of dhcpv6 client messages where this option is included.
-// SetAssociatedDhcpMessages sets the Dhcpv6ClientOptionsOptionsRequestIncludedMessages value in the DeviceDhcpv6ClientOptionsRequest object
-func (obj *deviceDhcpv6ClientOptionsRequest) SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsOptionsRequestIncludedMessages) DeviceDhcpv6ClientOptionsRequest {
+// SetAssociatedDhcpMessages sets the Dhcpv6ClientOptionsIncludedMessages value in the DeviceDhcpv6ClientOptionsRequest object
+func (obj *deviceDhcpv6ClientOptionsRequest) SetAssociatedDhcpMessages(value Dhcpv6ClientOptionsIncludedMessages) DeviceDhcpv6ClientOptionsRequest {
 
 	obj.associatedDhcpMessagesHolder = nil
 	obj.obj.AssociatedDhcpMessages = value.msg()

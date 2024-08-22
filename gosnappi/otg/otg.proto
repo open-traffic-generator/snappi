@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.8.0
+/* Open Traffic Generator API 1.9.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -617,7 +617,7 @@ message DeviceDhcpv6ClientOptionsRequest {
 
   // The list of dhcpv6 client messages where this option is included.
   // required = true
-  Dhcpv6ClientOptionsOptionsRequestIncludedMessages associated_dhcp_messages = 2;
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 2;
 }
 
 // DHCP client options, these configured options are sent in Dhcp client messages.
@@ -962,26 +962,6 @@ message Dhcpv6ClientOptionsVendorClass {
   // The dhcpv6 client messages where this option is included.
   // required = true
   Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
-}
-
-// The dhcpv6 client messages where the option will be included. If all is selected
-// the selected option will be added in the all the Dhcpv6 client messages, else based
-// on the selection in particular Dhcpv6 client messages the option will be included.
-message Dhcpv6ClientOptionsOptionsRequestIncludedMessages {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      all = 1;
-      msg_types = 2;
-    }
-  }
-  // The client message name where the option is included, by default it is all.
-  // default = Choice.Enum.all
-  optional Choice.Enum choice = 1;
-
-  // User must specify the Dhcpv6 message type.
-  Dhcpv6ClientOptionsMessageType msg_types = 2;
 }
 
 // The dhcpv6 client messages where the option will be included. If all is selected
@@ -10228,6 +10208,13 @@ message Lldp {
   // objects.
   // required = true
   optional string name = 7;
+
+  // The Organization Information is used to define the organization specific TLVs. The
+  // organization specific TLV is defined in IEEE 802.1AB-2016 specification. This category
+  // is provided to allow different organizations, such as  IEEE 802.1, IEEE 802.3, IETF,
+  // as well as individual software and equipment vendors, to define TLVs that advertise
+  // information to remote entities attached to the same media.
+  repeated LldpOrgInfo org_infos = 8;
 }
 
 // LLDP connection to a test port. In future if more connection options arise  LLDP
@@ -10375,6 +10362,56 @@ message LldpSystemName {
 
   // User must specify a value if mode is not auto.
   optional string value = 3;
+}
+
+// The organization specific information configured in the Organization Specific TLV.
+// 
+message LldpOrgInfo {
+
+  // The organizationally unique identifier field shall contain the organization's OUI
+  // as defined in Clause 9 of IEEE  Std 802. It is a 24 bit number that uniquely identifies
+  // a vendor, manufacturer, or other organizations.
+  // default = 0080C2
+  optional string oui = 1;
+
+  // The organizationally defined subtype field shall contain a unique subtype value assigned
+  // by the defining organization.
+  // default = 1
+  optional uint32 subtype = 2;
+
+  // Contains the organizationally defined information. The actual format of the organizationally
+  // defined information string  field is organizationally specific and can contain either
+  // binary or alpha-numeric information that is instance specific  for the particular
+  // TLV type and subtype. Alpha-numeric information are encoded in UTF-8 (as specified
+  // in IETF RFC 3629).  Or include one or more information fields with their associated
+  // field-type identifiers, designators similar to those in  the Management Address TLV.
+  LldpOrgInfoType information = 3;
+}
+
+// Contains either the Alpha-numeric information encoded in UTF-8 (as specified in IETF
+// RFC 3629) or include one or more information fields with  their associated field-type
+// identifiers designators, similar to those in the Management Address TLV. Currently
+// only one choice as info is given in future if required it can be extended to define
+// sub tlvs.
+message LldpOrgInfoType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      info = 1;
+    }
+  }
+  // In info mode the organizationally defined information contain either binary or alpha-numeric
+  // information encoded in UTF-8  (as specified in IETF RFC 3629).
+  // default = Choice.Enum.info
+  optional Choice.Enum choice = 1;
+
+  // The organizationally defined information encoded in UTF-8 (as specified in IETF RFC
+  // 3629). This byte stream can be of any  length from 1 to 507 bytes. In the info byte
+  // stream, one byte is represented as string of 2 characters, for example 2  character
+  // string (0x)AB represents value of a single byte. So the maximum length of this attribute
+  // is 1014 (507 * 2 hex  characters per byte).
+  optional string info = 2;
 }
 
 // Error response generated while serving API request.
