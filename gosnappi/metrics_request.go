@@ -29,6 +29,7 @@ type metricsRequest struct {
 	dhcpv4ServerHolder Dhcpv4ServerMetricsRequest
 	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
+	ospfv2Holder       Ospfv2MetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -269,6 +270,7 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv4ServerHolder = nil
 	obj.dhcpv6ClientHolder = nil
 	obj.dhcpv6ServerHolder = nil
+	obj.ospfv2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -406,6 +408,14 @@ type MetricsRequest interface {
 	SetDhcpv6Server(value Dhcpv6ServerMetricsRequest) MetricsRequest
 	// HasDhcpv6Server checks if Dhcpv6Server has been set in MetricsRequest
 	HasDhcpv6Server() bool
+	// Ospfv2 returns Ospfv2MetricsRequest, set in MetricsRequest.
+	// Ospfv2MetricsRequest is the request to retrieve OSPFv2 per Router metrics/statistics.
+	Ospfv2() Ospfv2MetricsRequest
+	// SetOspfv2 assigns Ospfv2MetricsRequest provided by user to MetricsRequest.
+	// Ospfv2MetricsRequest is the request to retrieve OSPFv2 per Router metrics/statistics.
+	SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest
+	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
+	HasOspfv2() bool
 	setNil()
 }
 
@@ -424,6 +434,7 @@ var MetricsRequestChoice = struct {
 	RSVP          MetricsRequestChoiceEnum
 	DHCPV4_CLIENT MetricsRequestChoiceEnum
 	DHCPV4_SERVER MetricsRequestChoiceEnum
+	OSPFV2        MetricsRequestChoiceEnum
 	DHCPV6_CLIENT MetricsRequestChoiceEnum
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 }{
@@ -438,6 +449,7 @@ var MetricsRequestChoice = struct {
 	RSVP:          MetricsRequestChoiceEnum("rsvp"),
 	DHCPV4_CLIENT: MetricsRequestChoiceEnum("dhcpv4_client"),
 	DHCPV4_SERVER: MetricsRequestChoiceEnum("dhcpv4_server"),
+	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
 	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 }
@@ -461,6 +473,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv2 = nil
+	obj.ospfv2Holder = nil
 	obj.obj.Dhcpv6Server = nil
 	obj.dhcpv6ServerHolder = nil
 	obj.obj.Dhcpv6Client = nil
@@ -538,6 +552,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.DHCPV6_SERVER {
 		obj.obj.Dhcpv6Server = NewDhcpv6ServerMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.OSPFV2 {
+		obj.obj.Ospfv2 = NewOspfv2MetricsRequest().msg()
 	}
 
 	return obj
@@ -907,6 +925,34 @@ func (obj *metricsRequest) SetDhcpv6Server(value Dhcpv6ServerMetricsRequest) Met
 	return obj
 }
 
+// description is TBD
+// Ospfv2 returns a Ospfv2MetricsRequest
+func (obj *metricsRequest) Ospfv2() Ospfv2MetricsRequest {
+	if obj.obj.Ospfv2 == nil {
+		obj.setChoice(MetricsRequestChoice.OSPFV2)
+	}
+	if obj.ospfv2Holder == nil {
+		obj.ospfv2Holder = &ospfv2MetricsRequest{obj: obj.obj.Ospfv2}
+	}
+	return obj.ospfv2Holder
+}
+
+// description is TBD
+// Ospfv2 returns a Ospfv2MetricsRequest
+func (obj *metricsRequest) HasOspfv2() bool {
+	return obj.obj.Ospfv2 != nil
+}
+
+// description is TBD
+// SetOspfv2 sets the Ospfv2MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.OSPFV2)
+	obj.ospfv2Holder = nil
+	obj.obj.Ospfv2 = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -977,6 +1023,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 		obj.Dhcpv6Server().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Ospfv2 != nil {
+
+		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *metricsRequest) setDefault() {
@@ -1036,6 +1087,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Dhcpv4Server != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.DHCPV4_SERVER
+	}
+
+	if obj.obj.Ospfv2 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.OSPFV2
 	}
 
 	if obj.obj.Dhcpv6Client != nil {

@@ -281,9 +281,6 @@ type ActionProtocolBgpInitiateGracefulRestart interface {
 // x-constraint:
 // - /components/schemas/Device.Bgp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
-//
 // PeerNames returns a []string
 func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -293,9 +290,6 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 }
 
 // The names of device BGP peers objects to control.
-//
-// x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Bgp/properties/name

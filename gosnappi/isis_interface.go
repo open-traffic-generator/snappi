@@ -366,9 +366,6 @@ type IsisInterface interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthName returns a string
 func (obj *isisInterface) EthName() string {
 
@@ -377,9 +374,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet.
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

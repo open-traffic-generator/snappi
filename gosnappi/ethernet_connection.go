@@ -333,9 +333,6 @@ func (obj *ethernetConnection) setChoice(value EthernetConnectionChoiceEnum) Eth
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *ethernetConnection) PortName() string {
 
@@ -352,18 +349,12 @@ func (obj *ethernetConnection) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *ethernetConnection) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // Name of the port that the Ethernet interface is configured on.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -376,9 +367,6 @@ func (obj *ethernetConnection) SetPortName(value string) EthernetConnection {
 }
 
 // Name of the LAG that the Ethernet interface is configured on.
-//
-// x-constraint:
-// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name
@@ -399,18 +387,12 @@ func (obj *ethernetConnection) LagName() string {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lag/properties/name
-//
 // LagName returns a string
 func (obj *ethernetConnection) HasLagName() bool {
 	return obj.obj.LagName != nil
 }
 
 // Name of the LAG that the Ethernet interface is configured on.
-//
-// x-constraint:
-// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name
@@ -423,10 +405,6 @@ func (obj *ethernetConnection) SetLagName(value string) EthernetConnection {
 }
 
 // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-//
-// x-constraint:
-// - #/components/schemas/Vxlan.V4Tunnel/properties/name
-// - #/components/schemas/Vxlan.V6Tunnel/properties/name
 //
 // x-constraint:
 // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -449,20 +427,12 @@ func (obj *ethernetConnection) VxlanName() string {
 // - #/components/schemas/Vxlan.V4Tunnel/properties/name
 // - #/components/schemas/Vxlan.V6Tunnel/properties/name
 //
-// x-constraint:
-// - #/components/schemas/Vxlan.V4Tunnel/properties/name
-// - #/components/schemas/Vxlan.V6Tunnel/properties/name
-//
 // VxlanName returns a string
 func (obj *ethernetConnection) HasVxlanName() bool {
 	return obj.obj.VxlanName != nil
 }
 
 // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-//
-// x-constraint:
-// - #/components/schemas/Vxlan.V4Tunnel/properties/name
-// - #/components/schemas/Vxlan.V6Tunnel/properties/name
 //
 // x-constraint:
 // - #/components/schemas/Vxlan.V4Tunnel/properties/name

@@ -29,6 +29,7 @@ type metricsResponse struct {
 	dhcpv4ServerMetricsHolder MetricsResponseDhcpv4ServerMetricIter
 	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
+	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -269,6 +270,7 @@ func (obj *metricsResponse) setNil() {
 	obj.dhcpv4ServerMetricsHolder = nil
 	obj.dhcpv6ClientMetricsHolder = nil
 	obj.dhcpv6ServerMetricsHolder = nil
+	obj.ospfv2MetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -302,14 +304,16 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
-	// getter for Dhcpv4Server to set choice.
-	Dhcpv4Server()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
+	// getter for Ospfv2 to set choice.
+	Ospfv2()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -336,6 +340,8 @@ type MetricsResponse interface {
 	Dhcpv6ClientMetrics() MetricsResponseDhcpv6ClientMetricIter
 	// Dhcpv6ServerMetrics returns MetricsResponseDhcpv6ServerMetricIterIter, set in MetricsResponse
 	Dhcpv6ServerMetrics() MetricsResponseDhcpv6ServerMetricIter
+	// Ospfv2Metrics returns MetricsResponseOspfv2MetricIterIter, set in MetricsResponse
+	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
 	setNil()
 }
 
@@ -356,6 +362,7 @@ var MetricsResponseChoice = struct {
 	DHCPV4_SERVER MetricsResponseChoiceEnum
 	DHCPV6_CLIENT MetricsResponseChoiceEnum
 	DHCPV6_SERVER MetricsResponseChoiceEnum
+	OSPFV2        MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:  MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:  MetricsResponseChoiceEnum("port_metrics"),
@@ -370,15 +377,16 @@ var MetricsResponseChoice = struct {
 	DHCPV4_SERVER: MetricsResponseChoiceEnum("dhcpv4_server"),
 	DHCPV6_CLIENT: MetricsResponseChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsResponseChoiceEnum("dhcpv6_server"),
+	OSPFV2:        MetricsResponseChoiceEnum("ospfv2"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+// getter for Dhcpv6Server to set choice
+func (obj *metricsResponse) Dhcpv6Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
 // getter for Dhcpv4Server to set choice
@@ -386,14 +394,19 @@ func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
+// getter for Ospfv2 to set choice
+func (obj *metricsResponse) Ospfv2() {
+	obj.setChoice(MetricsResponseChoice.OSPFV2)
+}
+
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+}
+
 // getter for Dhcpv6Client to set choice
 func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
-}
-
-// getter for Dhcpv6Server to set choice
-func (obj *metricsResponse) Dhcpv6Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
 // description is TBD
@@ -1600,6 +1613,93 @@ func (obj *metricsResponseDhcpv6ServerMetricIter) appendHolderSlice(item Dhcpv6S
 	return obj
 }
 
+// description is TBD
+// Ospfv2Metrics returns a []Ospfv2Metric
+func (obj *metricsResponse) Ospfv2Metrics() MetricsResponseOspfv2MetricIter {
+	if len(obj.obj.Ospfv2Metrics) == 0 {
+		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
+	}
+	if obj.ospfv2MetricsHolder == nil {
+		obj.ospfv2MetricsHolder = newMetricsResponseOspfv2MetricIter(&obj.obj.Ospfv2Metrics).setMsg(obj)
+	}
+	return obj.ospfv2MetricsHolder
+}
+
+type metricsResponseOspfv2MetricIter struct {
+	obj               *metricsResponse
+	ospfv2MetricSlice []Ospfv2Metric
+	fieldPtr          *[]*otg.Ospfv2Metric
+}
+
+func newMetricsResponseOspfv2MetricIter(ptr *[]*otg.Ospfv2Metric) MetricsResponseOspfv2MetricIter {
+	return &metricsResponseOspfv2MetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseOspfv2MetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseOspfv2MetricIter
+	Items() []Ospfv2Metric
+	Add() Ospfv2Metric
+	Append(items ...Ospfv2Metric) MetricsResponseOspfv2MetricIter
+	Set(index int, newObj Ospfv2Metric) MetricsResponseOspfv2MetricIter
+	Clear() MetricsResponseOspfv2MetricIter
+	clearHolderSlice() MetricsResponseOspfv2MetricIter
+	appendHolderSlice(item Ospfv2Metric) MetricsResponseOspfv2MetricIter
+}
+
+func (obj *metricsResponseOspfv2MetricIter) setMsg(msg *metricsResponse) MetricsResponseOspfv2MetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2Metric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseOspfv2MetricIter) Items() []Ospfv2Metric {
+	return obj.ospfv2MetricSlice
+}
+
+func (obj *metricsResponseOspfv2MetricIter) Add() Ospfv2Metric {
+	newObj := &otg.Ospfv2Metric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2Metric{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2MetricSlice = append(obj.ospfv2MetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseOspfv2MetricIter) Append(items ...Ospfv2Metric) MetricsResponseOspfv2MetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2MetricSlice = append(obj.ospfv2MetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseOspfv2MetricIter) Set(index int, newObj Ospfv2Metric) MetricsResponseOspfv2MetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2MetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseOspfv2MetricIter) Clear() MetricsResponseOspfv2MetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2Metric{}
+		obj.ospfv2MetricSlice = []Ospfv2Metric{}
+	}
+	return obj
+}
+func (obj *metricsResponseOspfv2MetricIter) clearHolderSlice() MetricsResponseOspfv2MetricIter {
+	if len(obj.ospfv2MetricSlice) > 0 {
+		obj.ospfv2MetricSlice = []Ospfv2Metric{}
+	}
+	return obj
+}
+func (obj *metricsResponseOspfv2MetricIter) appendHolderSlice(item Ospfv2Metric) MetricsResponseOspfv2MetricIter {
+	obj.ospfv2MetricSlice = append(obj.ospfv2MetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1782,6 +1882,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Dhcpv6ServerMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Ospfv2Metrics) != 0 {
+
+		if set_default {
+			obj.Ospfv2Metrics().clearHolderSlice()
+			for _, item := range obj.obj.Ospfv2Metrics {
+				obj.Ospfv2Metrics().appendHolderSlice(&ospfv2Metric{obj: item})
+			}
+		}
+		for _, item := range obj.Ospfv2Metrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

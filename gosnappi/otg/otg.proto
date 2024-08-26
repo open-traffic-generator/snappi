@@ -125,10 +125,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -295,17 +291,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -314,11 +302,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -387,10 +370,6 @@ message DeviceIpv4Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback  interface will
   // be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -465,10 +444,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1182,10 +1157,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1237,16 +1208,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1387,17 +1352,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1652,6 +1611,9 @@ message Device {
 
   // The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
   DeviceDhcpServer dhcp_server = 9;
+
+  // Configuration for OSPFv2 router.
+  DeviceOspfv2 ospfv2 = 10;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1718,10 +1680,6 @@ message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
   // cannot share the same Ethernet.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -2542,12 +2500,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -3307,8 +3259,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3768,8 +3718,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6125,12 +6073,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6392,11 +6334,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6420,11 +6357,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -6588,10 +6520,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -6653,11 +6581,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7087,10 +7010,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7163,10 +7082,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7334,6 +7249,438 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
+// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+message DeviceOspfv2 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      interface_ip = 1;
+      custom_router_id = 2;
+    }
+  }
+  // IP address of Router ID for this emulated OSPFv2 router.
+  // - interface_ip: When IPv4 interface address to be assigned as Router ID.
+  // - custom_router_id: When, Router ID needs to be configured different from Interface
+  // IPv4 address.
+  // default = Choice.Enum.interface_ip
+  optional Choice.Enum choice = 2;
+
+  // Router ID in IPv4 address format.
+  optional string custom_router_id = 3;
+
+  // The time in seconds for LSA retransmission.
+  // default = 5
+  optional uint32 lsa_retransmit_timer = 4;
+
+  // The time in seconds required for LSA refresh.
+  // default = 1800
+  optional uint32 lsa_refresh_time = 5;
+
+  // The gap in miliseconds between each Flood Link State Update Burst
+  // default = 33
+  optional uint32 inter_burst_lsu_interval = 6;
+
+  // The maximum number of Flood LSUpdates for each burst
+  // default = 1
+  optional uint32 max_flood_lsu_per_burst = 7;
+
+  // Description missing in models
+  Ospfv2GracefulRestart graceful_restart = 8;
+
+  // Configuration for controlling storage of OSPFv2 learned LSAs are received from the
+  // neighbors.
+  // default = False
+  optional bool learned_lsp_filter = 9;
+
+  // A router indicates the optional capabilities that it supports in its OSPF Hello packets,
+  // Database Description packets and in its LSAs.
+  Ospfv2Options capabilities = 10;
+
+  // List of OSPFv2 interfaces for this router.
+  repeated Ospfv2Interface interfaces = 11;
+
+  // Emulated OSPFv4 IPv4 routes.
+  repeated Ospfv2V4RouteRange v4_routes = 12;
+}
+
+// The OSPFv2 Options field is present Database Description packets and all LSAs.
+// This enables OSPF routers to support (or not support) optional capabilities,
+// and to communicate their capability level to other OSPF routers.
+// When capabilities are exchanged in Database Description packets a
+// router can choose not to forward certain LSAs to a neighbor because
+// of its reduced functionality.
+// Reference: A.2 The Options field: https://www.rfc-editor.org/rfc/rfc2328#page-46.
+message Ospfv2Options {
+
+  // Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+  // default = False
+  optional bool t_bit = 1;
+
+  // External Capability: 1st-bit: describes the way AS-external-LSAs are flooded.
+  // default = False
+  optional bool e_bit = 2;
+
+  // Multicast Capability: 2nd-bit: describes whether IP multicast datagrams are forwarded
+  // according to  the specifications in [Ref18], rfc2328.
+  // default = False
+  optional bool mc_bit = 3;
+
+  // NSSA Capability: 3rd-bit: describes the handling of Type-7 LSAs, as specified in
+  // [Ref19], rfc2328.
+  // default = False
+  optional bool np_bit = 4;
+
+  // External Attribute: 4th-bit: describes the router's willingness to receive and forward
+  // External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+  // default = False
+  optional bool ea_bit = 5;
+
+  // Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified
+  // in [Ref21], rfc2328.
+  // default = False
+  optional bool dc_bit = 6;
+
+  // Opaque LSA's Forwarded: 6th-bit: describes the router's willingness to receive and
+  // forward Opaque-LSAs, rfc2370.
+  // default = False
+  optional bool o_bit = 7;
+
+  // Opaque LSA's Forwarded: 7th-bit: unused bit.
+  // default = False
+  optional bool unused_bit = 8;
+
+  // Enable to indicate that the router acts as an Area Border Router.
+  // default = False
+  optional bool enable_router_lsa_b_bit = 9;
+
+  // Enable to indicate that the router acts as an AS Boundary Router.
+  // default = False
+  optional bool enable_router_lsa_e_bit = 10;
+}
+
+// Containter of properties of OSPFv2 Graceful Retstart.
+message Ospfv2GracefulRestart {
+
+  // Support of Graceful Restart in Helper Mode. OSPF Restart Signaling (draft-nguyen-ospf-restart-06.txt).
+  // default = False
+  optional bool enable_helper_only = 1;
+}
+
+// Configuration for single OSPFv2 interface.
+message Ospfv2Interface {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_name = 1;
+      dhcp_intf_name = 2;
+    }
+  }
+  // The name of the interface top of which OSPFv2 is configured.
+  // - ipv4_name: The globally unique name of the IPv4 interface connected to the DUT.
+  // This name must match the name field of the ipv4_addresses on top which this OSPFv2
+  // interface is configured.
+  // - dhcp_intf_name: The Area ID in IPv4 address format.
+  // default = Choice.Enum.ipv4_name
+  optional Choice.Enum choice = 2;
+
+  // The globally unique name of the IPv4 interface connected to the DUT.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  optional string ipv4_name = 3;
+
+  // The globally unique name of the DHCPv4 interface connected to the DUT.
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  optional string dhcp_intf_name = 4;
+
+  message AreaType {
+    enum Enum {
+      unspecified = 0;
+      area_id = 1;
+      area_id_as_ip = 2;
+    }
+  }
+  // The OSPF Area ID identifies the routing area to which the host belongs. Area ID type
+  // can be following format.
+  // - area_id: A 32-bit number identifying the area.
+  // - area_id_as_ip: The Area ID in IPv4 address format.
+  // default = AreaType.Enum.area_id
+  optional AreaType.Enum area_type = 5;
+
+  // The Area ID.
+  // default = 0
+  optional uint32 area_id = 6;
+
+  // The Area ID in IPv4 address format.
+  optional string area_id_as_ip = 7;
+
+  message NetworkType {
+    enum Enum {
+      unspecified = 0;
+      broadcast = 1;
+      point_to_point = 2;
+      point_to_multicast = 3;
+    }
+  }
+  // The OSPF network link type options.
+  // - Point to Point:
+  // - Broadcast:
+  // - Point to Multipoint: In this case, at least a neigbor to be configured.
+  // default = NetworkType.Enum.broadcast
+  optional NetworkType.Enum network_type = 8;
+
+  // Configuration of the list of neighbors.
+  repeated Ospfv2InterfaceNeighbor neighbors = 9;
+
+  // Contains a list of Traffic Engineering attributes.
+  repeated LinkStateTE traffic_engineering = 10;
+
+  // OSPFv2 authentication properties.
+  Ospfv2InterfaceAuthentication authentication = 11;
+
+  // Optional container for advanced interface properties.
+  IsisInterfaceAdvanced advanced = 12;
+
+  // Link protection on the OSPFv2 link between two interfaces.
+  Ospfv2InterfaceLinkProtection link_protection = 13;
+
+  // This contains list of SRLG values for the link between two interfaces.
+  repeated uint32 srlg_values = 14;
+}
+
+// Configuration of a neighbor.
+message Ospfv2InterfaceNeighbor {
+
+  // Description missing in models
+  optional string neighbor_ip = 1;
+}
+
+// Contains OSPFv2 advanced properties.
+message Ospfv2InterfaceAdvanced {
+
+  // When fast hello packets are configured on the interface;
+  // the hello interval advertised in the hello packets that are sent out this interface
+  // is set to 0
+  // and hello interval in the hello packets received over this interface is ignored.
+  // default = False
+  optional bool enable_fast_hello = 1;
+
+  // The Hello interval for Level 1 Hello messages, in seconds.
+  // default = 10
+  optional uint32 hello_interval = 2;
+
+  // The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+  // default = 40
+  optional uint32 dead_interval = 3;
+
+  // routing metric associated with the interface..
+  // default = 0
+  optional uint32 routing_metric = 4;
+
+  // The Priority for (Backup) Designated Router election.
+  // This value is used in Hello packets for the Designated Router (DR) election process.
+  // The default is 0, which indicates that the router will not participate in the DR
+  // election process.
+  // default = 0
+  optional uint32 priority = 5;
+
+  // This is for to verify the MTU during the Database (DB) exchange.
+  // Advertised MTU size is set to 0, and the received MTU size is ignored during the
+  // DB exchange.
+  // 
+  // default = False
+  optional bool enable_validate_received_mtu = 6;
+
+  // The value of the maximum transmit unit.
+  // default = 1500
+  optional uint32 max_mtu = 7;
+}
+
+// The OSPF Options field is present in OSPF Hello packets, Database Description packets
+// and all LSAs.
+// The Options field enables OSPF routers to support (or not support) optional capabilities,
+// and to
+// communicate their capability level to other OSPF routers https://datatracker.ietf.org/doc/html/rfc2328#page-46.
+// When used in Hello packets, the Options field allows a router to reject a neighbor
+// because of a capability mismatch.
+message Ospfv2InterfaceOptions {
+
+  // Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+  // default = False
+  optional bool t_bit = 1;
+
+  // External Capability: This bit describes the way AS-external-LSAs are flooded.
+  // default = False
+  optional bool e_bit = 2;
+
+  // Multicast Capability: This bit describes whether IP multicast datagrams are forwarded
+  // according to  the specifications in [Ref18], rfc2328.
+  // default = False
+  optional bool mc_bit = 3;
+
+  // NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in
+  // [Ref19], rfc2328.
+  // default = False
+  optional bool np_bit = 4;
+
+  // External Attribute: This bit describes the router's willingness to receive and forward
+  // External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+  // default = False
+  optional bool ea_bit = 5;
+
+  // Demand Circuit: This bit describes the router's handling of demand circuits, as specified
+  // in [Ref21], rfc2328.
+  // default = False
+  optional bool dc_bit = 6;
+
+  // Opaque LSA's Forwarded: This bit describes the router's willingness to receive and
+  // forward Opaque-LSAs, rfc2370.
+  // default = False
+  optional bool o_bit = 7;
+
+  // Opaque LSA's Forwarded: 7th-bit: unused bit.
+  // default = False
+  optional bool unused_bit = 8;
+}
+
+// This contains OSPFv2 authentication properties.
+// Reference: https://www.rfc-editor.org/rfc/rfc2328#appendix-D
+message Ospfv2InterfaceAuthentication {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      md5 = 1;
+      clear_text = 2;
+    }
+  }
+  // The authentication method.
+  // - md5 - Cryptographic authentication. If the authentication type is of 'md5' then
+  // 'md5_key_id' and 'md5_key'
+  // both are to be configured. A shared secret key is configured in all routers attached
+  // to a common network/subnet.
+  // For each OSPF protocol packet, the key is used to generate/verify a message digest
+  // that is appended to the end
+  // of the OSPF packet.
+  // - clear_text - Simple password authentication. A 64-bit field is configured on a
+  // per-network basis.
+  // All packets sent on a particular network must have this configured value (in clear
+  // text)
+  // in their OSPF header 64-bit authentication field.
+  optional Choice.Enum choice = 1;
+
+  // The unique MD5 Key Identifier per-interface.
+  optional string md5_key_id = 2;
+
+  // An alphanumeric secret used to generate the 16 byte MD5 hash value added
+  // to the OSPFv2 PDU in the Authentication TLV.
+  optional string md5_key = 3;
+
+  // The 8 Byte authentication field in the OSPF packet.
+  optional string clear_text = 4;
+}
+
+// Optional container for the link protection sub TLV (type 20).
+message Ospfv2InterfaceLinkProtection {
+
+  // Enable this to protect other link or links. LSPs on a link of this type are lost
+  // if any of the links fail.
+  // default = False
+  optional bool extra_traffic = 1;
+
+  // Enabling this signifies that there is no other link protecting this
+  // link. LSPs on a link of this type are lost if the link fails.
+  // default = False
+  optional bool unprotected = 2;
+
+  // Enable this to share the Extra Traffic links between one or more
+  // links of type Shared.There are one or more disjoint links of type
+  // Extra Traffic that are protecting this link.
+  // default = False
+  optional bool shared = 3;
+
+  // Enabling this signifies that there is one dedicated disjoint link
+  // of type Extra Traffic that is protecting this link.
+  // default = False
+  optional bool dedicated_1_to_1 = 4;
+
+  // Enabling this signifies that a dedicated disjoint link is protecting
+  // this link. However, the protecting link is not advertised in the
+  // link state database and is therefore not available for the routing
+  // of LSPs.
+  // default = False
+  optional bool dedicated_1_plus_1 = 5;
+
+  // Enabling this signifies that a protection scheme that is more
+  // reliable than Dedicated 1+1.
+  // default = False
+  optional bool enhanced = 6;
+
+  // This is a Protection Scheme with value 0x40.
+  // default = False
+  optional bool reserved_40 = 7;
+
+  // This is a Protection Scheme with value 0x80.
+  // default = False
+  optional bool reserved_80 = 8;
+}
+
+// Emulated OSPFv2 IPv4 routes.
+message Ospfv2V4RouteRange {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // A list of group of IPv4 route addresses.
+  repeated V4RouteAddress addresses = 2;
+
+  // The user-defined metric associated with this route range.
+  // default = 0
+  optional uint32 router_metric = 3;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      intra_area = 1;
+      inter_area = 2;
+      external_type_1 = 3;
+      external_type_2 = 4;
+      nssa_external = 5;
+    }
+  }
+  // The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs
+  // types as
+  // defined in the OSPFv2 Link State (LS) Type - <http://www.iana.org/assignments/ospfv2-parameters.
+  // Supported types are:
+  // - intra_area: for 1 Intra-Area.
+  // - inter_area: for 3 Inter Area.
+  // - external_type_1: for 5 - Autonomous System (AS) External with internal AS meteric.
+  // - external_type_2: for 5 - Autonomous System (AS) External with internal and external
+  // AS meteric.
+  // - nssa_external: for 7 - Not-So-Stubby Area (NSSA) External.
+  // default = Choice.Enum.inter_area
+  optional Choice.Enum choice = 4;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -7357,10 +7704,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -7427,16 +7770,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -7445,19 +7781,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -7533,20 +7859,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Ospfv2/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
@@ -7565,20 +7878,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Ospfv2/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
@@ -10149,12 +10449,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -10231,10 +10525,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10588,10 +10878,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -10617,10 +10903,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -10642,10 +10924,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -10707,13 +10985,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -10758,10 +11029,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -10783,10 +11050,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10832,11 +11095,6 @@ message StateProtocolBgpPeers {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message State {
@@ -10876,10 +11134,6 @@ message StateProtocolIsisRouters {
 
   // The names of ISIS routers for which the state has to be applied. An empty or null
   // list will control all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -11034,18 +11288,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11067,10 +11315,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11137,18 +11381,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11170,10 +11408,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11233,10 +11467,6 @@ message ActionProtocolBgpNotification {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -11292,10 +11522,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // x-constraint:
   // - /components/schemas/Device.Bgp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
-  // 
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate
@@ -11322,8 +11548,9 @@ message MetricsRequest {
       rsvp = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
-      dhcpv6_client = 12;
-      dhcpv6_server = 13;
+      ospfv2 = 12;
+      dhcpv6_client = 13;
+      dhcpv6_server = 14;
     }
   }
   // Description missing in models
@@ -11368,6 +11595,9 @@ message MetricsRequest {
 
   // Description missing in models
   Dhcpv6ServerMetricsRequest dhcpv6_server = 14;
+
+  // Description missing in models
+  Ospfv2MetricsRequest ospfv2 = 15;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -11389,6 +11619,7 @@ message MetricsResponse {
       dhcpv4_server = 11;
       dhcpv6_client = 12;
       dhcpv6_server = 13;
+      ospfv2 = 14;
     }
   }
   // Description missing in models
@@ -11433,6 +11664,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Dhcpv6ServerMetric dhcpv6server_metrics = 14;
+
+  // Description missing in models
+  repeated Ospfv2Metric ospfv2_metrics = 15;
 }
 
 // The port result request to the traffic generator
@@ -11440,10 +11674,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11476,10 +11706,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11551,10 +11777,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -11789,10 +12011,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -11919,10 +12137,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -12045,10 +12259,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -12186,10 +12396,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -12216,10 +12422,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -12274,18 +12476,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12406,10 +12600,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -12468,10 +12658,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -12632,10 +12818,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -12693,10 +12875,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -12750,10 +12928,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -12839,10 +13013,6 @@ message Dhcpv6ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -12923,6 +13093,165 @@ message Dhcpv6ServerMetric {
   optional uint64 reconfigures_sent = 16;
 }
 
+// The request to retrieve OSPFv2 per Router metrics/statistics.
+message Ospfv2MetricsRequest {
+
+  // The names of OSPFv2 Routers to return results for. An empty list will return results
+  // for all OSPFv2 router.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      sessions_up = 1;
+      sessions_flap = 2;
+      hellos_sent = 3;
+      hellos_received = 4;
+      dbd_sent = 5;
+      dbd_received = 6;
+      ls_request_sent = 7;
+      ls_request_received = 8;
+      ls_update_sent = 9;
+      ls_update_received = 10;
+      ls_ack_sent = 11;
+      ls_ack_received = 12;
+      lsa_sent = 13;
+      lsa_received = 14;
+      lsa_ack_sent = 15;
+      lsa_ack_received = 16;
+      router_lsa_sent = 17;
+      router_lsa_received = 18;
+      network_lsa_sent = 19;
+      network_lsa_received = 20;
+      summary_lsa_sent = 21;
+      summary_lsa_received = 22;
+      external_lsa_sent = 23;
+      external_lsa_received = 24;
+      nssa_lsa_sent = 25;
+      nssa_lsa_received = 26;
+      opaque_local_sent = 27;
+      opaque_local_received = 28;
+      opaque_area_sent = 29;
+      opaque_area_received = 30;
+      opaque_domain_sent = 31;
+      opaque_domain_received = 32;
+    }
+  }
+  // The list of column names that the returned result set will contain.
+  // If the list is empty then all columns will be returned except for
+  // any result_groups.
+  // The name of the OSPFv2 Router cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// OSPFv2 per router statistics information.
+message Ospfv2Metric {
+
+  // The name of a configured OSPFv2 router.
+  optional string name = 1;
+
+  // The number of OSPFv2 sessions that are up.
+  optional uint64 sessions_up = 2;
+
+  // The number of change of OSPFv2 sessions from up to down state.
+  optional uint64 sessions_flap = 3;
+
+  // The number of OSPFv2 Hello messages transmitted.
+  optional uint64 hellos_sent = 4;
+
+  // The number of OSPFv2 Hello messages received.
+  optional uint64 hellos_received = 5;
+
+  // The number of OSPFv2 Database Description (DBD) messages transmitted.
+  optional uint64 dbd_sent = 6;
+
+  // The number of OSPFv2 Database Description (DBD) messages received.
+  optional uint64 dbd_received = 7;
+
+  // The number of OSPFv2 LinkState (LS) Request messages transmitted.
+  optional uint64 ls_request_sent = 8;
+
+  // The number of OSPFv2 LinkState (LS) Request messages received.
+  optional uint64 ls_request_received = 9;
+
+  // The number of OSPFv2 LinkState (LS) Update messages transmitted.
+  optional uint64 ls_update_sent = 10;
+
+  // The number of OSPFv2 LinkState (LS) Update messages received.
+  optional uint64 ls_update_received = 11;
+
+  // The number of OSPFv2 LinkState (LS) Acknowledgement messages transmitted.
+  optional uint64 ls_ack_sent = 12;
+
+  // The number of OSPFv2 LinkState (LS) Acknowledgement messages received.
+  optional uint64 ls_ack_received = 13;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages transmitted.
+  optional uint64 lsa_sent = 14;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages received.
+  optional uint64 lsa_received = 15;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages acknowledged.
+  optional uint64 lsa_ack_sent = 16;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) acknowledge messages received
+  // .
+  optional uint64 lsa_ack_received = 17;
+
+  // The number of OSPFv2 Router (Type 1) LSAs transmitted.
+  optional uint64 router_lsa_sent = 18;
+
+  // The number of OSPFv2 Router (Type 1) LSAs received.
+  optional uint64 router_lsa_received = 19;
+
+  // The number of OSPFv2 Network (Type 2) LSAs transmitted.
+  optional uint64 network_lsa_sent = 20;
+
+  // The number of OSPFv2 Network (Type 2) LSAs transmitted.
+  optional uint64 network_lsa_received = 21;
+
+  // The number of OSPFv2 Summary IP (Type 3) LSAs transmitted.
+  optional uint64 summary_lsa_sent = 22;
+
+  // The number of OSPFv2 Summary IP (Type 3) LSA received.
+  optional uint64 summary_lsa_received = 23;
+
+  // The number of OSPFv2 External (Type 5) LSAs transmitted.
+  optional uint64 external_lsa_sent = 24;
+
+  // The number of OSPFv2 External (Type 5) LSAs received.
+  optional uint64 external_lsa_received = 25;
+
+  // The number of OSPFv2 NSSA (Type 7) LSAs transmitted.
+  optional uint64 nssa_lsa_sent = 26;
+
+  // The number of OSPFv2 NSSA (Type 7) LSAs received.
+  optional uint64 nssa_lsa_received = 27;
+
+  // The number of OSPFv2 Opaque Local (Type 9) LSAs transmitted.
+  optional uint64 opaque_local_sent = 28;
+
+  // The number of OSPFv2 Opaque Local (Type 9) LSAs received.
+  optional uint64 opaque_local_received = 29;
+
+  // The number of OSPF Opaque Area (Type 10) LSAs transmitted.
+  optional uint64 opaque_area_sent = 30;
+
+  // The number of OSPFv2 Opaque Area (Type 10) LSAs received.
+  optional uint64 opaque_area_received = 31;
+
+  // The number of OSPFv2 Opaque Domain (Type 11) LSAs transmitted.
+  optional uint64 opaque_domain_sent = 32;
+
+  // The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
+  optional uint64 opaque_domain_received = 33;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -12939,6 +13268,7 @@ message StatesRequest {
       dhcpv4_leases = 8;
       dhcpv6_interfaces = 9;
       dhcpv6_leases = 10;
+      ospfv2_lsas = 11;
     }
   }
   // Description missing in models
@@ -12974,6 +13304,9 @@ message StatesRequest {
 
   // Description missing in models
   Dhcpv6LeaseStateRequest dhcpv6_leases = 11;
+
+  // Description missing in models
+  Ospfv2LsasStateRequest ospfv2_lsas = 12;
 }
 
 // Response containing chosen traffic generator states
@@ -12992,6 +13325,7 @@ message StatesResponse {
       dhcpv4_leases = 8;
       dhcpv6_interfaces = 9;
       dhcpv6_leases = 10;
+      ospfv2_lsas = 11;
     }
   }
   // Description missing in models
@@ -13027,6 +13361,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated Dhcpv6LeasesState dhcpv6_leases = 11;
+
+  // Description missing in models
+  repeated Ospfv2LsaState ospfv2_lsas = 12;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -13035,10 +13372,6 @@ message Neighborsv4StatesRequest {
   // The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will
   // be retrieved. If no names are specified then the results will contain Neighbor state
   // (ARP cache entries) for all available Ethernet interfaces.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -13072,10 +13405,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -13101,11 +13430,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -13659,10 +13983,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -13976,10 +14296,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -14138,10 +14454,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -14276,10 +14588,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -14313,10 +14621,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -14371,10 +14675,6 @@ message Dhcpv6InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -14411,10 +14711,6 @@ message Dhcpv6LeaseStateRequest {
 
   // The names of DHCPv6 server to return results for. An empty list will return results
   // for all DHCPv6 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
@@ -14460,15 +14756,226 @@ message Dhcpv6ServerLeaseState {
   optional string interface_id = 8;
 }
 
+// The request to retrieve OSPFv2 Link State Advertisements (LSA) information learned
+// by the routers.
+message Ospfv2LsasStateRequest {
+
+  // The names of OSPFv2 routers for which learned information is requested. An empty
+  // list will return results for all OSPFv2 routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2Router/properties/name
+  // 
+  repeated string ospfv2_router_names = 1;
+}
+
+// The result of OSPFv2 LSA information that are retrieved.
+message Ospfv2LsaState {
+
+  // The name of the OSPFv2 Router that learned the LSA information.
+  optional string lsa_router_name = 1;
+
+  // The router ID (in the IPv4 format).
+  optional string router_id = 2;
+
+  // One or more OSPFv2 Router-LSA - Type 1.
+  repeated Ospfv2RouterLsa router_lsas = 3;
+
+  // One or more OSPFv2 Network-LSA - Type 2.
+  repeated Ospfv2NetworkLsa network_lsas = 4;
+
+  // One or more OSPFv2 Network summary LSA - Type 3.
+  repeated Ospfv2NetworkSummaryLsa network_summary_lsas = 5;
+
+  // One or more OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+  repeated Ospfv2SummaryAsLsa summary_as_lsas = 6;
+
+  // OSPFv2 AS-External-LSA - Type 5.
+  repeated Ospfv2ExternalAsLsa external_as_lsas = 7;
+
+  // One or more OSPFv2 NSSA-LSA - Type 7.
+  repeated Ospfv2NssaLsa nssa_lsas = 8;
+
+  // One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+  repeated Ospfv2OpaqueLsa opaque_lsas = 9;
+}
+
+// Contents of the router LSA
+message Ospfv2RouterLsa {
+
+  // Contents of the router LSA.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // Links that are described within the LSA.
+  repeated Ospfv2Link links = 2;
+}
+
+// Contents of the Network LSA
+message Ospfv2NetworkLsa {
+
+  // Contents of the router LSA.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // Neighbor's Router ID for the link.
+  optional string neighbor_router_id = 3;
+}
+
+// Contents of the Network Summary LSA - Type 3.
+message Ospfv2NetworkSummaryLsa {
+
+  // Common LSA attributes.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+}
+
+// Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+message Ospfv2SummaryAsLsa {
+
+  // Common LSA attributes.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+}
+
+// Contents of OSPFv2 AS-External-LSA - Type 5.
+message Ospfv2ExternalAsLsa {
+
+  // Common LSA attributes.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+
+  // The type of metric associated with the route range.
+  optional uint32 metric_type = 4;
+}
+
+// Contents of OSPFv2 NSSA-LSA - Type 7.
+message Ospfv2NssaLsa {
+
+  // Common LSA attributes.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+
+  // The type of metric associated with the route range.
+  optional uint32 metric_type = 4;
+
+  // IPv4 Forwarding address.
+  optional string forwarding_address = 5;
+}
+
+// Contents of OSPFv2 NSSA-LSA - Type 7.
+message Ospfv2OpaqueLsa {
+
+  // Common LSA attributes.
+  // required = true
+  Ospfv2CommonAttrs common_attrs = 1;
+
+  message OpaqueLsaType {
+    enum Enum {
+      unspecified = 0;
+      opaque_local = 1;
+      opaque_area = 2;
+      opaque_domain = 3;
+    }
+  }
+  // The type of Opaque TE LSAs. The LSA type.
+  optional OpaqueLsaType.Enum opaque_lsa_type = 2;
+}
+
+// TBD
+message Ospfv2CommonAttrs {
+
+  // LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+  // required = true
+  optional string lsa_id = 1;
+
+  // The router ID (in the IPv4 format) of the router that originated the LSA.
+  // required = true
+  optional string advertising_router = 2;
+
+  // Sequence number to detect old and duplicate LSAs. The greater the sequence number
+  // the more recent the LSA.
+  optional uint32 sequence_number = 3;
+
+  // The time since the LSA's generation in seconds.
+  optional uint32 age = 4;
+
+  // The optional bits.
+  optional uint32 option_bits = 5;
+}
+
+// Generic attributes used to identify links within OSPFv2.
+message Ospfv2Link {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      point_to_point = 1;
+      transit = 2;
+      stub = 3;
+      virtual = 4;
+    }
+  }
+  // The data associated with the link type. The value is dependent upon the subtype of
+  // the LSA. - point_to_point: The LSA represents a point-to-point connection to another
+  // router. - transit: The LSA represents a connection to a transit network. - stub:
+  // The LSA represents a connection to a stub network. - virtual: The LSA represents
+  // a virtual link connection.
+  optional Type.Enum type = 1;
+
+  // The identifier for the link specified. The value of the link
+  // identifier is dependent upon the type of the LSA.
+  optional string id = 2;
+
+  // The data associated with the link type. The value is
+  // dependent upon the subtype of the LSA. When the connection is
+  // to a stub network it represents the mask; for p2p connections
+  // that are unnumbered it represents the ifIndex value of the
+  // router's interface; for all other connections it represents
+  // the local system's IP address.
+  optional string data = 3;
+
+  // The data associated with the link type. The value is
+  // dependent upon the subtype of the LSA. When the connection is
+  // to a stub network it represents the mask; for p2p connections
+  // that are unnumbered it represents the ifIndex value of the
+  // router's interface; for all other connections it represents
+  // the local system's IP address.
+  optional uint32 metric = 4;
+}
+
 // The capture result request to the traffic generator. Stops the port capture on the
 // port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name

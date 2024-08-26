@@ -26,6 +26,7 @@ type statesRequest struct {
 	dhcpv4LeasesHolder     Dhcpv4LeaseStateRequest
 	dhcpv6InterfacesHolder Dhcpv6InterfaceStateRequest
 	dhcpv6LeasesHolder     Dhcpv6LeaseStateRequest
+	ospfv2LsasHolder       Ospfv2LsasStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -263,6 +264,7 @@ func (obj *statesRequest) setNil() {
 	obj.dhcpv4LeasesHolder = nil
 	obj.dhcpv6InterfacesHolder = nil
 	obj.dhcpv6LeasesHolder = nil
+	obj.ospfv2LsasHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -376,6 +378,14 @@ type StatesRequest interface {
 	SetDhcpv6Leases(value Dhcpv6LeaseStateRequest) StatesRequest
 	// HasDhcpv6Leases checks if Dhcpv6Leases has been set in StatesRequest
 	HasDhcpv6Leases() bool
+	// Ospfv2Lsas returns Ospfv2LsasStateRequest, set in StatesRequest.
+	// Ospfv2LsasStateRequest is the request to retrieve OSPFv2 Link State Advertisements (LSA) information learned by the routers.
+	Ospfv2Lsas() Ospfv2LsasStateRequest
+	// SetOspfv2Lsas assigns Ospfv2LsasStateRequest provided by user to StatesRequest.
+	// Ospfv2LsasStateRequest is the request to retrieve OSPFv2 Link State Advertisements (LSA) information learned by the routers.
+	SetOspfv2Lsas(value Ospfv2LsasStateRequest) StatesRequest
+	// HasOspfv2Lsas checks if Ospfv2Lsas has been set in StatesRequest
+	HasOspfv2Lsas() bool
 	setNil()
 }
 
@@ -393,6 +403,7 @@ var StatesRequestChoice = struct {
 	DHCPV4_LEASES     StatesRequestChoiceEnum
 	DHCPV6_INTERFACES StatesRequestChoiceEnum
 	DHCPV6_LEASES     StatesRequestChoiceEnum
+	OSPFV2_LSAS       StatesRequestChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
@@ -404,6 +415,7 @@ var StatesRequestChoice = struct {
 	DHCPV4_LEASES:     StatesRequestChoiceEnum("dhcpv4_leases"),
 	DHCPV6_INTERFACES: StatesRequestChoiceEnum("dhcpv6_interfaces"),
 	DHCPV6_LEASES:     StatesRequestChoiceEnum("dhcpv6_leases"),
+	OSPFV2_LSAS:       StatesRequestChoiceEnum("ospfv2_lsas"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -425,6 +437,8 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv2Lsas = nil
+	obj.ospfv2LsasHolder = nil
 	obj.obj.Dhcpv6Leases = nil
 	obj.dhcpv6LeasesHolder = nil
 	obj.obj.Dhcpv6Interfaces = nil
@@ -484,6 +498,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.DHCPV6_LEASES {
 		obj.obj.Dhcpv6Leases = NewDhcpv6LeaseStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.OSPFV2_LSAS {
+		obj.obj.Ospfv2Lsas = NewOspfv2LsasStateRequest().msg()
 	}
 
 	return obj
@@ -769,6 +787,34 @@ func (obj *statesRequest) SetDhcpv6Leases(value Dhcpv6LeaseStateRequest) StatesR
 	return obj
 }
 
+// description is TBD
+// Ospfv2Lsas returns a Ospfv2LsasStateRequest
+func (obj *statesRequest) Ospfv2Lsas() Ospfv2LsasStateRequest {
+	if obj.obj.Ospfv2Lsas == nil {
+		obj.setChoice(StatesRequestChoice.OSPFV2_LSAS)
+	}
+	if obj.ospfv2LsasHolder == nil {
+		obj.ospfv2LsasHolder = &ospfv2LsasStateRequest{obj: obj.obj.Ospfv2Lsas}
+	}
+	return obj.ospfv2LsasHolder
+}
+
+// description is TBD
+// Ospfv2Lsas returns a Ospfv2LsasStateRequest
+func (obj *statesRequest) HasOspfv2Lsas() bool {
+	return obj.obj.Ospfv2Lsas != nil
+}
+
+// description is TBD
+// SetOspfv2Lsas sets the Ospfv2LsasStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetOspfv2Lsas(value Ospfv2LsasStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.OSPFV2_LSAS)
+	obj.ospfv2LsasHolder = nil
+	obj.obj.Ospfv2Lsas = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -822,6 +868,11 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Dhcpv6Leases != nil {
 
 		obj.Dhcpv6Leases().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ospfv2Lsas != nil {
+
+		obj.Ospfv2Lsas().validateObj(vObj, set_default)
 	}
 
 }
@@ -878,6 +929,11 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.Dhcpv6Leases != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.DHCPV6_LEASES
+	}
+
+	if obj.obj.Ospfv2Lsas != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.OSPFV2_LSAS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

@@ -358,9 +358,6 @@ type ActionProtocolBgpNotification interface {
 // x-constraint:
 // - /components/schemas/Device.Bgp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
-//
 // Names returns a []string
 func (obj *actionProtocolBgpNotification) Names() []string {
 	if obj.obj.Names == nil {
@@ -370,9 +367,6 @@ func (obj *actionProtocolBgpNotification) Names() []string {
 }
 
 // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Bgp/properties/name
