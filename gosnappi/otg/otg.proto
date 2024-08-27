@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.9.0
+/* Open Traffic Generator API 1.10.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14384,26 +14384,40 @@ message Dhcpv6InterfaceState {
   // The name of a DHCPv6 Client.
   optional string dhcp_client_name = 1;
 
-  // The IPv6 IAPD address associated with this DHCP Client session.
-  optional string ipv6_iapd_address = 2;
+  // The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceIapd iapds = 2;
 
-  // The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-  optional uint32 iapd_prefix_length = 3;
-
-  // The IPv6 address associated with this DHCP Client session.
-  optional string ipv6_address = 4;
-
-  // The Gateway IPV6 address associated with this DHCP Client session.
-  optional string gateway_address = 5;
+  // The IPv6 addresses and gateways associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceAddressInfo addresses = 3;
 
   // The duration of the IPv6 address lease, in seconds.
-  optional uint32 lease_time = 6;
+  optional uint32 lease_time = 4;
 
   // Time in seconds until the DHCPv6 client starts renewing the lease.
-  optional uint32 renew_time = 7;
+  optional uint32 renew_time = 5;
 
   // Time in seconds until the DHCPv6 client starts rebinding.
-  optional uint32 rebind_time = 8;
+  optional uint32 rebind_time = 6;
+}
+
+// The IPv6 IAPD address and prefix length associated with this DHCP Client session.
+message Dhcpv6InterfaceIapd {
+
+  // The IAPD address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The prefix length of the IAPD address associated with this DHCPv6 Client session.
+  optional uint32 prefix_length = 2;
+}
+
+// The IPv6 address and gateway associated with this DHCP Client session.
+message Dhcpv6InterfaceAddressInfo {
+
+  // The address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The Gateway address associated with this DHCPv6 Client session.
+  optional uint32 gateway = 2;
 }
 
 // The request to retrieve DHCP Server host allocated status.
