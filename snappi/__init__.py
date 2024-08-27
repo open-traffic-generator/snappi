@@ -1083,9 +1083,12 @@ from .snappi import TrafficprofileSegment
 from .snappi import TrafficprofileSegmentIter
 from .snappi import TrafficprofileObjective
 from .snappi import ObjectiveSimulatedUser
-from .snappi import ObjectiveThroughput
+from .snappi import ObjectiveThroughputKbps
+from .snappi import ObjectiveThroughputMbps
 from .snappi import ObjectiveConnectionConncurrent
 from .snappi import ObjectiveConnectionPerSeconds
+from .snappi import ObjectiveTransactionsPerSeconds
+from .snappi import ObjectiveConnectionAttemptsPerSeconds
 from .snappi import TrafficprofileObjectiveIter
 from .snappi import TrafficprofileIter
 from .snappi import Warning
