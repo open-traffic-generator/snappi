@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.10.0
+  version: 1.11.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -19476,19 +19476,19 @@ components:
             The name of a DHCPv6 Client.
           type: string
           x-field-uid: 1
-        iapds:
+        iapd_addresses:
           description: |-
             The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
           type: array
           items:
             $ref: '#/components/schemas/Dhcpv6Interface.Iapd'
           x-field-uid: 2
-        addresses:
+        ia_addresses:
           description: |-
-            The IPv6 addresses and gateways associated with this DHCP Client session.
+            The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
           type: array
           items:
-            $ref: '#/components/schemas/Dhcpv6Interface.AddressInfo'
+            $ref: '#/components/schemas/Dhcpv6Interface.Ia'
           x-field-uid: 3
         lease_time:
           description: |-
@@ -19526,9 +19526,9 @@ components:
           format: uint32
           maximum: 128
           x-field-uid: 2
-    Dhcpv6Interface.AddressInfo:
+    Dhcpv6Interface.Ia:
       description: |-
-        The IPv6 address and gateway associated with this DHCP Client session.
+        The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
       type: object
       properties:
         address:
@@ -19540,9 +19540,8 @@ components:
         gateway:
           description: |-
             The Gateway address associated with this DHCPv6 Client session.
-          type: integer
-          format: uint32
-          maximum: 128
+          type: string
+          format: ipv6
           x-field-uid: 2
     Dhcpv6Lease.State.Request:
       description: |-

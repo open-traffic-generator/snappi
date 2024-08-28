@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.13
 
 require (
-	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.9.0

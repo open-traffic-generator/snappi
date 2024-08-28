@@ -1319,8 +1319,8 @@ from .snappi import Dhcpv4LeasesStateIter
 from .snappi import Dhcpv6InterfaceState
 from .snappi import Dhcpv6InterfaceIapd
 from .snappi import Dhcpv6InterfaceIapdIter
-from .snappi import Dhcpv6InterfaceAddressInfo
-from .snappi import Dhcpv6InterfaceAddressInfoIter
+from .snappi import Dhcpv6InterfaceIa
+from .snappi import Dhcpv6InterfaceIaIter
 from .snappi import Dhcpv6InterfaceStateIter
 from .snappi import Dhcpv6LeasesState
 from .snappi import Dhcpv6ServerLeaseState
