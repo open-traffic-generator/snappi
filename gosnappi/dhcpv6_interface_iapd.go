@@ -276,6 +276,12 @@ type Dhcpv6InterfaceIapd interface {
 	SetPrefixLength(value uint32) Dhcpv6InterfaceIapd
 	// HasPrefixLength checks if PrefixLength has been set in Dhcpv6InterfaceIapd
 	HasPrefixLength() bool
+	// LeaseTime returns uint32, set in Dhcpv6InterfaceIapd.
+	LeaseTime() uint32
+	// SetLeaseTime assigns uint32 provided by user to Dhcpv6InterfaceIapd
+	SetLeaseTime(value uint32) Dhcpv6InterfaceIapd
+	// HasLeaseTime checks if LeaseTime has been set in Dhcpv6InterfaceIapd
+	HasLeaseTime() bool
 }
 
 // The IAPD address associated with this DHCPv6 Client session.
@@ -319,6 +325,28 @@ func (obj *dhcpv6InterfaceIapd) HasPrefixLength() bool {
 func (obj *dhcpv6InterfaceIapd) SetPrefixLength(value uint32) Dhcpv6InterfaceIapd {
 
 	obj.obj.PrefixLength = &value
+	return obj
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// LeaseTime returns a uint32
+func (obj *dhcpv6InterfaceIapd) LeaseTime() uint32 {
+
+	return *obj.obj.LeaseTime
+
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// LeaseTime returns a uint32
+func (obj *dhcpv6InterfaceIapd) HasLeaseTime() bool {
+	return obj.obj.LeaseTime != nil
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// SetLeaseTime sets the uint32 value in the Dhcpv6InterfaceIapd object
+func (obj *dhcpv6InterfaceIapd) SetLeaseTime(value uint32) Dhcpv6InterfaceIapd {
+
+	obj.obj.LeaseTime = &value
 	return obj
 }
 

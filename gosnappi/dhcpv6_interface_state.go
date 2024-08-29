@@ -284,24 +284,6 @@ type Dhcpv6InterfaceState interface {
 	IapdAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
 	// IaAddresses returns Dhcpv6InterfaceStateDhcpv6InterfaceIaIterIter, set in Dhcpv6InterfaceState
 	IaAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
-	// LeaseTime returns uint32, set in Dhcpv6InterfaceState.
-	LeaseTime() uint32
-	// SetLeaseTime assigns uint32 provided by user to Dhcpv6InterfaceState
-	SetLeaseTime(value uint32) Dhcpv6InterfaceState
-	// HasLeaseTime checks if LeaseTime has been set in Dhcpv6InterfaceState
-	HasLeaseTime() bool
-	// RenewTime returns uint32, set in Dhcpv6InterfaceState.
-	RenewTime() uint32
-	// SetRenewTime assigns uint32 provided by user to Dhcpv6InterfaceState
-	SetRenewTime(value uint32) Dhcpv6InterfaceState
-	// HasRenewTime checks if RenewTime has been set in Dhcpv6InterfaceState
-	HasRenewTime() bool
-	// RebindTime returns uint32, set in Dhcpv6InterfaceState.
-	RebindTime() uint32
-	// SetRebindTime assigns uint32 provided by user to Dhcpv6InterfaceState
-	SetRebindTime(value uint32) Dhcpv6InterfaceState
-	// HasRebindTime checks if RebindTime has been set in Dhcpv6InterfaceState
-	HasRebindTime() bool
 	setNil()
 }
 
@@ -498,72 +480,6 @@ func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) clearHolderSlice() Dhcpv6I
 }
 func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) appendHolderSlice(item Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
 	obj.dhcpv6InterfaceIaSlice = append(obj.dhcpv6InterfaceIaSlice, item)
-	return obj
-}
-
-// The duration of the IPv6 address lease, in seconds.
-// LeaseTime returns a uint32
-func (obj *dhcpv6InterfaceState) LeaseTime() uint32 {
-
-	return *obj.obj.LeaseTime
-
-}
-
-// The duration of the IPv6 address lease, in seconds.
-// LeaseTime returns a uint32
-func (obj *dhcpv6InterfaceState) HasLeaseTime() bool {
-	return obj.obj.LeaseTime != nil
-}
-
-// The duration of the IPv6 address lease, in seconds.
-// SetLeaseTime sets the uint32 value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetLeaseTime(value uint32) Dhcpv6InterfaceState {
-
-	obj.obj.LeaseTime = &value
-	return obj
-}
-
-// Time in seconds until the DHCPv6 client starts renewing the lease.
-// RenewTime returns a uint32
-func (obj *dhcpv6InterfaceState) RenewTime() uint32 {
-
-	return *obj.obj.RenewTime
-
-}
-
-// Time in seconds until the DHCPv6 client starts renewing the lease.
-// RenewTime returns a uint32
-func (obj *dhcpv6InterfaceState) HasRenewTime() bool {
-	return obj.obj.RenewTime != nil
-}
-
-// Time in seconds until the DHCPv6 client starts renewing the lease.
-// SetRenewTime sets the uint32 value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetRenewTime(value uint32) Dhcpv6InterfaceState {
-
-	obj.obj.RenewTime = &value
-	return obj
-}
-
-// Time in seconds until the DHCPv6 client starts rebinding.
-// RebindTime returns a uint32
-func (obj *dhcpv6InterfaceState) RebindTime() uint32 {
-
-	return *obj.obj.RebindTime
-
-}
-
-// Time in seconds until the DHCPv6 client starts rebinding.
-// RebindTime returns a uint32
-func (obj *dhcpv6InterfaceState) HasRebindTime() bool {
-	return obj.obj.RebindTime != nil
-}
-
-// Time in seconds until the DHCPv6 client starts rebinding.
-// SetRebindTime sets the uint32 value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetRebindTime(value uint32) Dhcpv6InterfaceState {
-
-	obj.obj.RebindTime = &value
 	return obj
 }
 

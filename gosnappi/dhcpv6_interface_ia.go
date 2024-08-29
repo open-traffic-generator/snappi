@@ -276,6 +276,12 @@ type Dhcpv6InterfaceIa interface {
 	SetGateway(value string) Dhcpv6InterfaceIa
 	// HasGateway checks if Gateway has been set in Dhcpv6InterfaceIa
 	HasGateway() bool
+	// LeaseTime returns uint32, set in Dhcpv6InterfaceIa.
+	LeaseTime() uint32
+	// SetLeaseTime assigns uint32 provided by user to Dhcpv6InterfaceIa
+	SetLeaseTime(value uint32) Dhcpv6InterfaceIa
+	// HasLeaseTime checks if LeaseTime has been set in Dhcpv6InterfaceIa
+	HasLeaseTime() bool
 }
 
 // The address associated with this DHCPv6 Client session.
@@ -319,6 +325,28 @@ func (obj *dhcpv6InterfaceIa) HasGateway() bool {
 func (obj *dhcpv6InterfaceIa) SetGateway(value string) Dhcpv6InterfaceIa {
 
 	obj.obj.Gateway = &value
+	return obj
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// LeaseTime returns a uint32
+func (obj *dhcpv6InterfaceIa) LeaseTime() uint32 {
+
+	return *obj.obj.LeaseTime
+
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// LeaseTime returns a uint32
+func (obj *dhcpv6InterfaceIa) HasLeaseTime() bool {
+	return obj.obj.LeaseTime != nil
+}
+
+// The duration of the IPv6 address lease, in seconds.
+// SetLeaseTime sets the uint32 value in the Dhcpv6InterfaceIa object
+func (obj *dhcpv6InterfaceIa) SetLeaseTime(value uint32) Dhcpv6InterfaceIa {
+
+	obj.obj.LeaseTime = &value
 	return obj
 }
 
