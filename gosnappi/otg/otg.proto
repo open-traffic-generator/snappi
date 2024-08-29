@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.9.0
+/* Open Traffic Generator API 1.11.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -7456,7 +7456,7 @@ message Ospfv2Interface {
   Ospfv2InterfaceAuthentication authentication = 11;
 
   // Optional container for advanced interface properties.
-  IsisInterfaceAdvanced advanced = 12;
+  Ospfv2InterfaceAdvanced advanced = 12;
 
   // Link protection on the OSPFv2 link between two interfaces.
   Ospfv2InterfaceLinkProtection link_protection = 13;
@@ -7669,14 +7669,14 @@ message Ospfv2V4RouteRange {
   }
   // The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs
   // types as
-  // defined in the OSPFv2 Link State (LS) Type - <http://www.iana.org/assignments/ospfv2-parameters.
+  // defined in the OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
   // Supported types are:
-  // - intra_area: for 1 Intra-Area.
+  // - intra_area: for Intra-Area.
   // - inter_area: for 3 Inter Area.
-  // - external_type_1: for 5 - Autonomous System (AS) External with internal AS meteric.
-  // - external_type_2: for 5 - Autonomous System (AS) External with internal and external
+  // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
+  // - external_type_2: for Autonomous System (AS) External with internal and external
   // AS meteric.
-  // - nssa_external: for 7 - Not-So-Stubby Area (NSSA) External.
+  // - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
   // default = Choice.Enum.inter_area
   optional Choice.Enum choice = 4;
 }
@@ -14684,26 +14684,40 @@ message Dhcpv6InterfaceState {
   // The name of a DHCPv6 Client.
   optional string dhcp_client_name = 1;
 
-  // The IPv6 IAPD address associated with this DHCP Client session.
-  optional string ipv6_iapd_address = 2;
+  // The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceIapd iapd_addresses = 2;
 
-  // The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-  optional uint32 iapd_prefix_length = 3;
-
-  // The IPv6 address associated with this DHCP Client session.
-  optional string ipv6_address = 4;
-
-  // The Gateway IPV6 address associated with this DHCP Client session.
-  optional string gateway_address = 5;
+  // The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceIa ia_addresses = 3;
 
   // The duration of the IPv6 address lease, in seconds.
-  optional uint32 lease_time = 6;
+  optional uint32 lease_time = 4;
 
   // Time in seconds until the DHCPv6 client starts renewing the lease.
-  optional uint32 renew_time = 7;
+  optional uint32 renew_time = 5;
 
   // Time in seconds until the DHCPv6 client starts rebinding.
-  optional uint32 rebind_time = 8;
+  optional uint32 rebind_time = 6;
+}
+
+// The IPv6 IAPD address and prefix length associated with this DHCP Client session.
+message Dhcpv6InterfaceIapd {
+
+  // The IAPD address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The prefix length of the IAPD address associated with this DHCPv6 Client session.
+  optional uint32 prefix_length = 2;
+}
+
+// The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
+message Dhcpv6InterfaceIa {
+
+  // The address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The Gateway address associated with this DHCPv6 Client session.
+  optional string gateway = 2;
 }
 
 // The request to retrieve DHCP Server host allocated status.

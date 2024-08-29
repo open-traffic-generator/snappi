@@ -13,9 +13,11 @@ import (
 // ***** Dhcpv6InterfaceState *****
 type dhcpv6InterfaceState struct {
 	validation
-	obj          *otg.Dhcpv6InterfaceState
-	marshaller   marshalDhcpv6InterfaceState
-	unMarshaller unMarshalDhcpv6InterfaceState
+	obj                 *otg.Dhcpv6InterfaceState
+	marshaller          marshalDhcpv6InterfaceState
+	unMarshaller        unMarshalDhcpv6InterfaceState
+	iapdAddressesHolder Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	iaAddressesHolder   Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
 }
 
 func NewDhcpv6InterfaceState() Dhcpv6InterfaceState {
@@ -29,7 +31,7 @@ func (obj *dhcpv6InterfaceState) msg() *otg.Dhcpv6InterfaceState {
 }
 
 func (obj *dhcpv6InterfaceState) setMsg(msg *otg.Dhcpv6InterfaceState) Dhcpv6InterfaceState {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +114,7 @@ func (m *unMarshaldhcpv6InterfaceState) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +160,7 @@ func (m *unMarshaldhcpv6InterfaceState) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +199,7 @@ func (m *unMarshaldhcpv6InterfaceState) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +244,14 @@ func (obj *dhcpv6InterfaceState) Clone() (Dhcpv6InterfaceState, error) {
 	return newObj, nil
 }
 
+func (obj *dhcpv6InterfaceState) setNil() {
+	obj.iapdAddressesHolder = nil
+	obj.iaAddressesHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // Dhcpv6InterfaceState is the IPv6 address associated with this DHCP Client session.
 type Dhcpv6InterfaceState interface {
 	Validation
@@ -270,30 +280,10 @@ type Dhcpv6InterfaceState interface {
 	SetDhcpClientName(value string) Dhcpv6InterfaceState
 	// HasDhcpClientName checks if DhcpClientName has been set in Dhcpv6InterfaceState
 	HasDhcpClientName() bool
-	// Ipv6IapdAddress returns string, set in Dhcpv6InterfaceState.
-	Ipv6IapdAddress() string
-	// SetIpv6IapdAddress assigns string provided by user to Dhcpv6InterfaceState
-	SetIpv6IapdAddress(value string) Dhcpv6InterfaceState
-	// HasIpv6IapdAddress checks if Ipv6IapdAddress has been set in Dhcpv6InterfaceState
-	HasIpv6IapdAddress() bool
-	// IapdPrefixLength returns uint32, set in Dhcpv6InterfaceState.
-	IapdPrefixLength() uint32
-	// SetIapdPrefixLength assigns uint32 provided by user to Dhcpv6InterfaceState
-	SetIapdPrefixLength(value uint32) Dhcpv6InterfaceState
-	// HasIapdPrefixLength checks if IapdPrefixLength has been set in Dhcpv6InterfaceState
-	HasIapdPrefixLength() bool
-	// Ipv6Address returns string, set in Dhcpv6InterfaceState.
-	Ipv6Address() string
-	// SetIpv6Address assigns string provided by user to Dhcpv6InterfaceState
-	SetIpv6Address(value string) Dhcpv6InterfaceState
-	// HasIpv6Address checks if Ipv6Address has been set in Dhcpv6InterfaceState
-	HasIpv6Address() bool
-	// GatewayAddress returns string, set in Dhcpv6InterfaceState.
-	GatewayAddress() string
-	// SetGatewayAddress assigns string provided by user to Dhcpv6InterfaceState
-	SetGatewayAddress(value string) Dhcpv6InterfaceState
-	// HasGatewayAddress checks if GatewayAddress has been set in Dhcpv6InterfaceState
-	HasGatewayAddress() bool
+	// IapdAddresses returns Dhcpv6InterfaceStateDhcpv6InterfaceIapdIterIter, set in Dhcpv6InterfaceState
+	IapdAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	// IaAddresses returns Dhcpv6InterfaceStateDhcpv6InterfaceIaIterIter, set in Dhcpv6InterfaceState
+	IaAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
 	// LeaseTime returns uint32, set in Dhcpv6InterfaceState.
 	LeaseTime() uint32
 	// SetLeaseTime assigns uint32 provided by user to Dhcpv6InterfaceState
@@ -312,6 +302,7 @@ type Dhcpv6InterfaceState interface {
 	SetRebindTime(value uint32) Dhcpv6InterfaceState
 	// HasRebindTime checks if RebindTime has been set in Dhcpv6InterfaceState
 	HasRebindTime() bool
+	setNil()
 }
 
 // The name of a DHCPv6 Client.
@@ -336,91 +327,177 @@ func (obj *dhcpv6InterfaceState) SetDhcpClientName(value string) Dhcpv6Interface
 	return obj
 }
 
-// The IPv6 IAPD address associated with this DHCP Client session.
-// Ipv6IapdAddress returns a string
-func (obj *dhcpv6InterfaceState) Ipv6IapdAddress() string {
-
-	return *obj.obj.Ipv6IapdAddress
-
+// The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
+// IapdAddresses returns a []Dhcpv6InterfaceIapd
+func (obj *dhcpv6InterfaceState) IapdAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	if len(obj.obj.IapdAddresses) == 0 {
+		obj.obj.IapdAddresses = []*otg.Dhcpv6InterfaceIapd{}
+	}
+	if obj.iapdAddressesHolder == nil {
+		obj.iapdAddressesHolder = newDhcpv6InterfaceStateDhcpv6InterfaceIapdIter(&obj.obj.IapdAddresses).setMsg(obj)
+	}
+	return obj.iapdAddressesHolder
 }
 
-// The IPv6 IAPD address associated with this DHCP Client session.
-// Ipv6IapdAddress returns a string
-func (obj *dhcpv6InterfaceState) HasIpv6IapdAddress() bool {
-	return obj.obj.Ipv6IapdAddress != nil
+type dhcpv6InterfaceStateDhcpv6InterfaceIapdIter struct {
+	obj                      *dhcpv6InterfaceState
+	dhcpv6InterfaceIapdSlice []Dhcpv6InterfaceIapd
+	fieldPtr                 *[]*otg.Dhcpv6InterfaceIapd
 }
 
-// The IPv6 IAPD address associated with this DHCP Client session.
-// SetIpv6IapdAddress sets the string value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetIpv6IapdAddress(value string) Dhcpv6InterfaceState {
+func newDhcpv6InterfaceStateDhcpv6InterfaceIapdIter(ptr *[]*otg.Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	return &dhcpv6InterfaceStateDhcpv6InterfaceIapdIter{fieldPtr: ptr}
+}
 
-	obj.obj.Ipv6IapdAddress = &value
+type Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter interface {
+	setMsg(*dhcpv6InterfaceState) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	Items() []Dhcpv6InterfaceIapd
+	Add() Dhcpv6InterfaceIapd
+	Append(items ...Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	Set(index int, newObj Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	Clear() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	clearHolderSlice() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+	appendHolderSlice(item Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) setMsg(msg *dhcpv6InterfaceState) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv6InterfaceIapd{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-// IapdPrefixLength returns a uint32
-func (obj *dhcpv6InterfaceState) IapdPrefixLength() uint32 {
-
-	return *obj.obj.IapdPrefixLength
-
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) Items() []Dhcpv6InterfaceIapd {
+	return obj.dhcpv6InterfaceIapdSlice
 }
 
-// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-// IapdPrefixLength returns a uint32
-func (obj *dhcpv6InterfaceState) HasIapdPrefixLength() bool {
-	return obj.obj.IapdPrefixLength != nil
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) Add() Dhcpv6InterfaceIapd {
+	newObj := &otg.Dhcpv6InterfaceIapd{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv6InterfaceIapd{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv6InterfaceIapdSlice = append(obj.dhcpv6InterfaceIapdSlice, newLibObj)
+	return newLibObj
 }
 
-// The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-// SetIapdPrefixLength sets the uint32 value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetIapdPrefixLength(value uint32) Dhcpv6InterfaceState {
-
-	obj.obj.IapdPrefixLength = &value
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) Append(items ...Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv6InterfaceIapdSlice = append(obj.dhcpv6InterfaceIapdSlice, item)
+	}
 	return obj
 }
 
-// The IPv6 address associated with this DHCP Client session.
-// Ipv6Address returns a string
-func (obj *dhcpv6InterfaceState) Ipv6Address() string {
-
-	return *obj.obj.Ipv6Address
-
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) Set(index int, newObj Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv6InterfaceIapdSlice[index] = newObj
+	return obj
 }
-
-// The IPv6 address associated with this DHCP Client session.
-// Ipv6Address returns a string
-func (obj *dhcpv6InterfaceState) HasIpv6Address() bool {
-	return obj.obj.Ipv6Address != nil
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) Clear() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv6InterfaceIapd{}
+		obj.dhcpv6InterfaceIapdSlice = []Dhcpv6InterfaceIapd{}
+	}
+	return obj
 }
-
-// The IPv6 address associated with this DHCP Client session.
-// SetIpv6Address sets the string value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetIpv6Address(value string) Dhcpv6InterfaceState {
-
-	obj.obj.Ipv6Address = &value
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) clearHolderSlice() Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	if len(obj.dhcpv6InterfaceIapdSlice) > 0 {
+		obj.dhcpv6InterfaceIapdSlice = []Dhcpv6InterfaceIapd{}
+	}
+	return obj
+}
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIapdIter) appendHolderSlice(item Dhcpv6InterfaceIapd) Dhcpv6InterfaceStateDhcpv6InterfaceIapdIter {
+	obj.dhcpv6InterfaceIapdSlice = append(obj.dhcpv6InterfaceIapdSlice, item)
 	return obj
 }
 
-// The Gateway IPV6 address associated with this DHCP Client session.
-// GatewayAddress returns a string
-func (obj *dhcpv6InterfaceState) GatewayAddress() string {
-
-	return *obj.obj.GatewayAddress
-
+// The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
+// IaAddresses returns a []Dhcpv6InterfaceIa
+func (obj *dhcpv6InterfaceState) IaAddresses() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	if len(obj.obj.IaAddresses) == 0 {
+		obj.obj.IaAddresses = []*otg.Dhcpv6InterfaceIa{}
+	}
+	if obj.iaAddressesHolder == nil {
+		obj.iaAddressesHolder = newDhcpv6InterfaceStateDhcpv6InterfaceIaIter(&obj.obj.IaAddresses).setMsg(obj)
+	}
+	return obj.iaAddressesHolder
 }
 
-// The Gateway IPV6 address associated with this DHCP Client session.
-// GatewayAddress returns a string
-func (obj *dhcpv6InterfaceState) HasGatewayAddress() bool {
-	return obj.obj.GatewayAddress != nil
+type dhcpv6InterfaceStateDhcpv6InterfaceIaIter struct {
+	obj                    *dhcpv6InterfaceState
+	dhcpv6InterfaceIaSlice []Dhcpv6InterfaceIa
+	fieldPtr               *[]*otg.Dhcpv6InterfaceIa
 }
 
-// The Gateway IPV6 address associated with this DHCP Client session.
-// SetGatewayAddress sets the string value in the Dhcpv6InterfaceState object
-func (obj *dhcpv6InterfaceState) SetGatewayAddress(value string) Dhcpv6InterfaceState {
+func newDhcpv6InterfaceStateDhcpv6InterfaceIaIter(ptr *[]*otg.Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	return &dhcpv6InterfaceStateDhcpv6InterfaceIaIter{fieldPtr: ptr}
+}
 
-	obj.obj.GatewayAddress = &value
+type Dhcpv6InterfaceStateDhcpv6InterfaceIaIter interface {
+	setMsg(*dhcpv6InterfaceState) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+	Items() []Dhcpv6InterfaceIa
+	Add() Dhcpv6InterfaceIa
+	Append(items ...Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+	Set(index int, newObj Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+	Clear() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+	clearHolderSlice() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+	appendHolderSlice(item Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) setMsg(msg *dhcpv6InterfaceState) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&dhcpv6InterfaceIa{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) Items() []Dhcpv6InterfaceIa {
+	return obj.dhcpv6InterfaceIaSlice
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) Add() Dhcpv6InterfaceIa {
+	newObj := &otg.Dhcpv6InterfaceIa{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &dhcpv6InterfaceIa{obj: newObj}
+	newLibObj.setDefault()
+	obj.dhcpv6InterfaceIaSlice = append(obj.dhcpv6InterfaceIaSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) Append(items ...Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.dhcpv6InterfaceIaSlice = append(obj.dhcpv6InterfaceIaSlice, item)
+	}
+	return obj
+}
+
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) Set(index int, newObj Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.dhcpv6InterfaceIaSlice[index] = newObj
+	return obj
+}
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) Clear() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Dhcpv6InterfaceIa{}
+		obj.dhcpv6InterfaceIaSlice = []Dhcpv6InterfaceIa{}
+	}
+	return obj
+}
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) clearHolderSlice() Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	if len(obj.dhcpv6InterfaceIaSlice) > 0 {
+		obj.dhcpv6InterfaceIaSlice = []Dhcpv6InterfaceIa{}
+	}
+	return obj
+}
+func (obj *dhcpv6InterfaceStateDhcpv6InterfaceIaIter) appendHolderSlice(item Dhcpv6InterfaceIa) Dhcpv6InterfaceStateDhcpv6InterfaceIaIter {
+	obj.dhcpv6InterfaceIaSlice = append(obj.dhcpv6InterfaceIaSlice, item)
 	return obj
 }
 
@@ -495,12 +572,30 @@ func (obj *dhcpv6InterfaceState) validateObj(vObj *validation, set_default bool)
 		obj.setDefault()
 	}
 
-	if obj.obj.IapdPrefixLength != nil {
+	if len(obj.obj.IapdAddresses) != 0 {
 
-		if *obj.obj.IapdPrefixLength > 128 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Dhcpv6InterfaceState.IapdPrefixLength <= 128 but Got %d", *obj.obj.IapdPrefixLength))
+		if set_default {
+			obj.IapdAddresses().clearHolderSlice()
+			for _, item := range obj.obj.IapdAddresses {
+				obj.IapdAddresses().appendHolderSlice(&dhcpv6InterfaceIapd{obj: item})
+			}
+		}
+		for _, item := range obj.IapdAddresses().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.IaAddresses) != 0 {
+
+		if set_default {
+			obj.IaAddresses().clearHolderSlice()
+			for _, item := range obj.obj.IaAddresses {
+				obj.IaAddresses().appendHolderSlice(&dhcpv6InterfaceIa{obj: item})
+			}
+		}
+		for _, item := range obj.IaAddresses().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}

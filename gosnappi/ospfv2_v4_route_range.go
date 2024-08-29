@@ -290,16 +290,16 @@ type Ospfv2V4RouteRange interface {
 	setChoice(value Ospfv2V4RouteRangeChoiceEnum) Ospfv2V4RouteRange
 	// HasChoice checks if Choice has been set in Ospfv2V4RouteRange
 	HasChoice() bool
+	// getter for NssaExternal to set choice.
+	NssaExternal()
+	// getter for IntraArea to set choice.
+	IntraArea()
+	// getter for ExternalType_2 to set choice.
+	ExternalType_2()
 	// getter for ExternalType_1 to set choice.
 	ExternalType_1()
 	// getter for InterArea to set choice.
 	InterArea()
-	// getter for IntraArea to set choice.
-	IntraArea()
-	// getter for NssaExternal to set choice.
-	NssaExternal()
-	// getter for ExternalType_2 to set choice.
-	ExternalType_2()
 	setNil()
 }
 
@@ -449,6 +449,21 @@ func (obj *ospfv2V4RouteRange) Choice() Ospfv2V4RouteRangeChoiceEnum {
 	return Ospfv2V4RouteRangeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for NssaExternal to set choice
+func (obj *ospfv2V4RouteRange) NssaExternal() {
+	obj.setChoice(Ospfv2V4RouteRangeChoice.NSSA_EXTERNAL)
+}
+
+// getter for IntraArea to set choice
+func (obj *ospfv2V4RouteRange) IntraArea() {
+	obj.setChoice(Ospfv2V4RouteRangeChoice.INTRA_AREA)
+}
+
+// getter for ExternalType_2 to set choice
+func (obj *ospfv2V4RouteRange) ExternalType_2() {
+	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_2)
+}
+
 // getter for ExternalType_1 to set choice
 func (obj *ospfv2V4RouteRange) ExternalType_1() {
 	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_1)
@@ -459,29 +474,14 @@ func (obj *ospfv2V4RouteRange) InterArea() {
 	obj.setChoice(Ospfv2V4RouteRangeChoice.INTER_AREA)
 }
 
-// getter for IntraArea to set choice
-func (obj *ospfv2V4RouteRange) IntraArea() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.INTRA_AREA)
-}
-
-// getter for NssaExternal to set choice
-func (obj *ospfv2V4RouteRange) NssaExternal() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.NSSA_EXTERNAL)
-}
-
-// getter for ExternalType_2 to set choice
-func (obj *ospfv2V4RouteRange) ExternalType_2() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_2)
-}
-
 // The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs types as
-// defined in the "OSPFv2 Link State (LS) Type - <http://www.iana.org/assignments/ospfv2-parameters.
+// defined in the "OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
 // Supported types are:
-// - intra_area: for 1 Intra-Area.
+// - intra_area: for Intra-Area.
 // - inter_area: for 3 Inter Area.
-// - external_type_1: for 5 - Autonomous System (AS) External with internal AS meteric.
-// - external_type_2: for 5 - Autonomous System (AS) External with internal and external AS meteric.
-// - nssa_external: for 7 - Not-So-Stubby Area (NSSA) External.
+// - external_type_1: for Autonomous System (AS) External with internal AS meteric.
+// - external_type_2: for Autonomous System (AS) External with internal and external AS meteric.
+// - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
 // Choice returns a string
 func (obj *ospfv2V4RouteRange) HasChoice() bool {
 	return obj.obj.Choice != nil

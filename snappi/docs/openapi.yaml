@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.9.0
+  version: 1.11.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -10047,7 +10047,7 @@ components:
         advanced:
           description: |-
             Optional container for advanced interface properties.
-          $ref: '#/components/schemas/IsisInterface.Advanced'
+          $ref: '#/components/schemas/Ospfv2Interface.Advanced'
           x-field-uid: 12
         link_protection:
           description: |-
@@ -10321,13 +10321,13 @@ components:
         choice:
           description: |-
             The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs types as
-            defined in the "OSPFv2 Link State (LS) Type - <http://www.iana.org/assignments/ospfv2-parameters.
+            defined in the "OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
             Supported types are:
-            - intra_area: for 1 Intra-Area.
+            - intra_area: for Intra-Area.
             - inter_area: for 3 Inter Area.
-            - external_type_1: for 5 - Autonomous System (AS) External with internal AS meteric.
-            - external_type_2: for 5 - Autonomous System (AS) External with internal and external AS meteric.
-            - nssa_external: for 7 - Not-So-Stubby Area (NSSA) External.
+            - external_type_1: for Autonomous System (AS) External with internal AS meteric.
+            - external_type_2: for Autonomous System (AS) External with internal and external AS meteric.
+            - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
           type: string
           default: inter_area
           x-field-uid: 4
@@ -20142,46 +20142,73 @@ components:
             The name of a DHCPv6 Client.
           type: string
           x-field-uid: 1
-        ipv6_iapd_address:
+        iapd_addresses:
           description: |-
-            The IPv6 IAPD address associated with this DHCP Client session.
-          type: string
+            The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Interface.Iapd'
           x-field-uid: 2
-        iapd_prefix_length:
+        ia_addresses:
           description: |-
-            The prefix length of the IPv6 IAPD address associated with this DHCP Client session.
-          type: integer
-          format: uint32
-          maximum: 128
+            The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dhcpv6Interface.Ia'
           x-field-uid: 3
-        ipv6_address:
-          description: |-
-            The IPv6 address associated with this DHCP Client session.
-          type: string
-          x-field-uid: 4
-        gateway_address:
-          description: |-
-            The Gateway IPV6 address associated with this DHCP Client session.
-          type: string
-          x-field-uid: 5
         lease_time:
           description: |-
             The duration of the IPv6 address lease, in seconds.
           type: integer
           format: uint32
-          x-field-uid: 6
+          x-field-uid: 4
         renew_time:
           description: |-
             Time in seconds until the DHCPv6 client starts renewing the lease.
           type: integer
           format: uint32
-          x-field-uid: 7
+          x-field-uid: 5
         rebind_time:
           description: |-
             Time in seconds until the DHCPv6 client starts rebinding.
           type: integer
           format: uint32
-          x-field-uid: 8
+          x-field-uid: 6
+    Dhcpv6Interface.Iapd:
+      description: |-
+        The IPv6 IAPD address and prefix length associated with this DHCP Client session.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IAPD address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The prefix length of the IAPD address associated with this DHCPv6 Client session.
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 2
+    Dhcpv6Interface.Ia:
+      description: |-
+        The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
+      type: object
+      properties:
+        address:
+          description: |-
+            The address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        gateway:
+          description: |-
+            The Gateway address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 2
     Dhcpv6Lease.State.Request:
       description: |-
         The request to retrieve DHCP Server host allocated status.

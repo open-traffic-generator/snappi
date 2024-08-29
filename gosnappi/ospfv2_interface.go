@@ -19,7 +19,7 @@ type ospfv2Interface struct {
 	neighborsHolder          Ospfv2InterfaceOspfv2InterfaceNeighborIter
 	trafficEngineeringHolder Ospfv2InterfaceLinkStateTEIter
 	authenticationHolder     Ospfv2InterfaceAuthentication
-	advancedHolder           IsisInterfaceAdvanced
+	advancedHolder           Ospfv2InterfaceAdvanced
 	linkProtectionHolder     Ospfv2InterfaceLinkProtection
 }
 
@@ -340,12 +340,12 @@ type Ospfv2Interface interface {
 	SetAuthentication(value Ospfv2InterfaceAuthentication) Ospfv2Interface
 	// HasAuthentication checks if Authentication has been set in Ospfv2Interface
 	HasAuthentication() bool
-	// Advanced returns IsisInterfaceAdvanced, set in Ospfv2Interface.
-	// IsisInterfaceAdvanced is optional container for advanced interface properties.
-	Advanced() IsisInterfaceAdvanced
-	// SetAdvanced assigns IsisInterfaceAdvanced provided by user to Ospfv2Interface.
-	// IsisInterfaceAdvanced is optional container for advanced interface properties.
-	SetAdvanced(value IsisInterfaceAdvanced) Ospfv2Interface
+	// Advanced returns Ospfv2InterfaceAdvanced, set in Ospfv2Interface.
+	// Ospfv2InterfaceAdvanced is contains OSPFv2 advanced properties.
+	Advanced() Ospfv2InterfaceAdvanced
+	// SetAdvanced assigns Ospfv2InterfaceAdvanced provided by user to Ospfv2Interface.
+	// Ospfv2InterfaceAdvanced is contains OSPFv2 advanced properties.
+	SetAdvanced(value Ospfv2InterfaceAdvanced) Ospfv2Interface
 	// HasAdvanced checks if Advanced has been set in Ospfv2Interface
 	HasAdvanced() bool
 	// LinkProtection returns Ospfv2InterfaceLinkProtection, set in Ospfv2Interface.
@@ -815,26 +815,26 @@ func (obj *ospfv2Interface) SetAuthentication(value Ospfv2InterfaceAuthenticatio
 }
 
 // Optional container for advanced interface properties.
-// Advanced returns a IsisInterfaceAdvanced
-func (obj *ospfv2Interface) Advanced() IsisInterfaceAdvanced {
+// Advanced returns a Ospfv2InterfaceAdvanced
+func (obj *ospfv2Interface) Advanced() Ospfv2InterfaceAdvanced {
 	if obj.obj.Advanced == nil {
-		obj.obj.Advanced = NewIsisInterfaceAdvanced().msg()
+		obj.obj.Advanced = NewOspfv2InterfaceAdvanced().msg()
 	}
 	if obj.advancedHolder == nil {
-		obj.advancedHolder = &isisInterfaceAdvanced{obj: obj.obj.Advanced}
+		obj.advancedHolder = &ospfv2InterfaceAdvanced{obj: obj.obj.Advanced}
 	}
 	return obj.advancedHolder
 }
 
 // Optional container for advanced interface properties.
-// Advanced returns a IsisInterfaceAdvanced
+// Advanced returns a Ospfv2InterfaceAdvanced
 func (obj *ospfv2Interface) HasAdvanced() bool {
 	return obj.obj.Advanced != nil
 }
 
 // Optional container for advanced interface properties.
-// SetAdvanced sets the IsisInterfaceAdvanced value in the Ospfv2Interface object
-func (obj *ospfv2Interface) SetAdvanced(value IsisInterfaceAdvanced) Ospfv2Interface {
+// SetAdvanced sets the Ospfv2InterfaceAdvanced value in the Ospfv2Interface object
+func (obj *ospfv2Interface) SetAdvanced(value Ospfv2InterfaceAdvanced) Ospfv2Interface {
 
 	obj.advancedHolder = nil
 	obj.obj.Advanced = value.msg()

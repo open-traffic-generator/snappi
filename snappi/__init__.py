@@ -332,6 +332,7 @@ from .snappi import Ospfv2Interface
 from .snappi import Ospfv2InterfaceNeighbor
 from .snappi import Ospfv2InterfaceNeighborIter
 from .snappi import Ospfv2InterfaceAuthentication
+from .snappi import Ospfv2InterfaceAdvanced
 from .snappi import Ospfv2InterfaceLinkProtection
 from .snappi import Ospfv2InterfaceIter
 from .snappi import Ospfv2V4RouteRange
@@ -1332,6 +1333,10 @@ from .snappi import Dhcpv4LeaseState
 from .snappi import Dhcpv4LeaseStateIter
 from .snappi import Dhcpv4LeasesStateIter
 from .snappi import Dhcpv6InterfaceState
+from .snappi import Dhcpv6InterfaceIapd
+from .snappi import Dhcpv6InterfaceIapdIter
+from .snappi import Dhcpv6InterfaceIa
+from .snappi import Dhcpv6InterfaceIaIter
 from .snappi import Dhcpv6InterfaceStateIter
 from .snappi import Dhcpv6LeasesState
 from .snappi import Dhcpv6ServerLeaseState
