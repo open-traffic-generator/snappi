@@ -242,7 +242,7 @@ func (obj *deviceBgpCeaseError) Clone() (DeviceBgpCeaseError, error) {
 	return newObj, nil
 }
 
-// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease.
+// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease. The 'hard_reset_code6_subcode9' subcode for Cease Notification can be used to signal a hard reset that will indicate that  Graceful Restart cannot be performed, even when Notification extensions to Graceful Restart procedure is supported.
 type DeviceBgpCeaseError interface {
 	Validation
 	// msg marshals DeviceBgpCeaseError to protobuf object *otg.DeviceBgpCeaseError
@@ -284,7 +284,8 @@ var DeviceBgpCeaseErrorSubcode = struct {
 	OTHER_CONFIG_CHANGES_CODE6_SUBCODE6            DeviceBgpCeaseErrorSubcodeEnum
 	CONNECTION_COLLISION_RESOLUTION_CODE6_SUBCODE7 DeviceBgpCeaseErrorSubcodeEnum
 	OUT_OF_RESOURCES_CODE6_SUBCODE8                DeviceBgpCeaseErrorSubcodeEnum
-	BFD_SESSION_DOWN_CODE6_SUBCODE9                DeviceBgpCeaseErrorSubcodeEnum
+	BFD_SESSION_DOWN_CODE6_SUBCODE10               DeviceBgpCeaseErrorSubcodeEnum
+	HARD_RESET_CODE6_SUBCODE9                      DeviceBgpCeaseErrorSubcodeEnum
 }{
 	MAX_NUMBER_PREFIX_REACHED_CODE6_SUBCODE1:       DeviceBgpCeaseErrorSubcodeEnum("max_number_prefix_reached_code6_subcode1"),
 	ADMIN_SHUTDOWN_CODE6_SUBCODE2:                  DeviceBgpCeaseErrorSubcodeEnum("admin_shutdown_code6_subcode2"),
@@ -294,7 +295,8 @@ var DeviceBgpCeaseErrorSubcode = struct {
 	OTHER_CONFIG_CHANGES_CODE6_SUBCODE6:            DeviceBgpCeaseErrorSubcodeEnum("other_config_changes_code6_subcode6"),
 	CONNECTION_COLLISION_RESOLUTION_CODE6_SUBCODE7: DeviceBgpCeaseErrorSubcodeEnum("connection_collision_resolution_code6_subcode7"),
 	OUT_OF_RESOURCES_CODE6_SUBCODE8:                DeviceBgpCeaseErrorSubcodeEnum("out_of_resources_code6_subcode8"),
-	BFD_SESSION_DOWN_CODE6_SUBCODE9:                DeviceBgpCeaseErrorSubcodeEnum("bfd_session_down_code6_subcode9"),
+	BFD_SESSION_DOWN_CODE6_SUBCODE10:               DeviceBgpCeaseErrorSubcodeEnum("bfd_session_down_code6_subcode10"),
+	HARD_RESET_CODE6_SUBCODE9:                      DeviceBgpCeaseErrorSubcodeEnum("hard_reset_code6_subcode9"),
 }
 
 func (obj *deviceBgpCeaseError) Subcode() DeviceBgpCeaseErrorSubcodeEnum {

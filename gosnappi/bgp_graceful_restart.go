@@ -288,6 +288,12 @@ type BgpGracefulRestart interface {
 	SetStaleTime(value uint32) BgpGracefulRestart
 	// HasStaleTime checks if StaleTime has been set in BgpGracefulRestart
 	HasStaleTime() bool
+	// EnableNotification returns bool, set in BgpGracefulRestart.
+	EnableNotification() bool
+	// SetEnableNotification assigns bool provided by user to BgpGracefulRestart
+	SetEnableNotification(value bool) BgpGracefulRestart
+	// HasEnableNotification checks if EnableNotification has been set in BgpGracefulRestart
+	HasEnableNotification() bool
 }
 
 // If enabled, Graceful Restart capability is advertised in BGP OPEN messages.
@@ -393,6 +399,34 @@ func (obj *bgpGracefulRestart) SetStaleTime(value uint32) BgpGracefulRestart {
 	return obj
 }
 
+// If enabled, the N flag will be set in the Graceful Restart capability in the Open message.
+// If both peers in a BGP connection has this enabled, Graceful Restart procedures are performed
+// even if the peer goes down due to sending of a Notification Message as per RFC8538.
+// EnableNotification returns a bool
+func (obj *bgpGracefulRestart) EnableNotification() bool {
+
+	return *obj.obj.EnableNotification
+
+}
+
+// If enabled, the N flag will be set in the Graceful Restart capability in the Open message.
+// If both peers in a BGP connection has this enabled, Graceful Restart procedures are performed
+// even if the peer goes down due to sending of a Notification Message as per RFC8538.
+// EnableNotification returns a bool
+func (obj *bgpGracefulRestart) HasEnableNotification() bool {
+	return obj.obj.EnableNotification != nil
+}
+
+// If enabled, the N flag will be set in the Graceful Restart capability in the Open message.
+// If both peers in a BGP connection has this enabled, Graceful Restart procedures are performed
+// even if the peer goes down due to sending of a Notification Message as per RFC8538.
+// SetEnableNotification sets the bool value in the BgpGracefulRestart object
+func (obj *bgpGracefulRestart) SetEnableNotification(value bool) BgpGracefulRestart {
+
+	obj.obj.EnableNotification = &value
+	return obj
+}
+
 func (obj *bgpGracefulRestart) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -432,6 +466,9 @@ func (obj *bgpGracefulRestart) setDefault() {
 	}
 	if obj.obj.StaleTime == nil {
 		obj.SetStaleTime(10)
+	}
+	if obj.obj.EnableNotification == nil {
+		obj.SetEnableNotification(true)
 	}
 
 }
