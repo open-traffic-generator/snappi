@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.11.0
+  version: 1.12.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -19490,24 +19490,6 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv6Interface.Ia'
           x-field-uid: 3
-        lease_time:
-          description: |-
-            The duration of the IPv6 address lease, in seconds.
-          type: integer
-          format: uint32
-          x-field-uid: 4
-        renew_time:
-          description: |-
-            Time in seconds until the DHCPv6 client starts renewing the lease.
-          type: integer
-          format: uint32
-          x-field-uid: 5
-        rebind_time:
-          description: |-
-            Time in seconds until the DHCPv6 client starts rebinding.
-          type: integer
-          format: uint32
-          x-field-uid: 6
     Dhcpv6Interface.Iapd:
       description: |-
         The IPv6 IAPD address and prefix length associated with this DHCP Client session.
@@ -19526,6 +19508,12 @@ components:
           format: uint32
           maximum: 128
           x-field-uid: 2
+        lease_time:
+          description: |-
+            The duration of the IPv6 address lease, in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 3
     Dhcpv6Interface.Ia:
       description: |-
         The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
@@ -19543,6 +19531,12 @@ components:
           type: string
           format: ipv6
           x-field-uid: 2
+        lease_time:
+          description: |-
+            The duration of the IPv6 address lease, in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 3
     Dhcpv6Lease.State.Request:
       description: |-
         The request to retrieve DHCP Server host allocated status.
