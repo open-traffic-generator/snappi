@@ -7,7 +7,11 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
+<<<<<<< HEAD
   version: 1.11.0
+=======
+  version: 1.12.0
+>>>>>>> main
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -20156,17 +20160,61 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv6Interface.Ia'
           x-field-uid: 3
+<<<<<<< HEAD
+=======
+    Dhcpv6Interface.Iapd:
+      description: |-
+        The IPv6 IAPD address and prefix length associated with this DHCP Client session.
+      type: object
+      properties:
+        address:
+          description: |-
+            The IAPD address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The prefix length of the IAPD address associated with this DHCPv6 Client session.
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 2
+>>>>>>> main
         lease_time:
           description: |-
             The duration of the IPv6 address lease, in seconds.
           type: integer
           format: uint32
+<<<<<<< HEAD
           x-field-uid: 4
         renew_time:
+=======
+          x-field-uid: 3
+    Dhcpv6Interface.Ia:
+      description: |-
+        The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
+      type: object
+      properties:
+        address:
+>>>>>>> main
           description: |-
-            Time in seconds until the DHCPv6 client starts renewing the lease.
+            The address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        gateway:
+          description: |-
+            The Gateway address associated with this DHCPv6 Client session.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        lease_time:
+          description: |-
+            The duration of the IPv6 address lease, in seconds.
           type: integer
           format: uint32
+<<<<<<< HEAD
           x-field-uid: 5
         rebind_time:
           description: |-
@@ -20209,6 +20257,9 @@ components:
           type: string
           format: ipv6
           x-field-uid: 2
+=======
+          x-field-uid: 3
+>>>>>>> main
     Dhcpv6Lease.State.Request:
       description: |-
         The request to retrieve DHCP Server host allocated status.
