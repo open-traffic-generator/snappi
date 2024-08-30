@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-/* Open Traffic Generator API 1.11.0
-=======
 /* Open Traffic Generator API 1.12.0
->>>>>>> main
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14693,32 +14689,6 @@ message Dhcpv6InterfaceState {
 
   // The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
   repeated Dhcpv6InterfaceIa ia_addresses = 3;
-<<<<<<< HEAD
-
-  // The duration of the IPv6 address lease, in seconds.
-  optional uint32 lease_time = 4;
-
-  // Time in seconds until the DHCPv6 client starts renewing the lease.
-  optional uint32 renew_time = 5;
-
-  // Time in seconds until the DHCPv6 client starts rebinding.
-  optional uint32 rebind_time = 6;
-}
-
-// The IPv6 IAPD address and prefix length associated with this DHCP Client session.
-message Dhcpv6InterfaceIapd {
-
-  // The IAPD address associated with this DHCPv6 Client session.
-  optional string address = 1;
-
-  // The prefix length of the IAPD address associated with this DHCPv6 Client session.
-  optional uint32 prefix_length = 2;
-}
-
-// The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
-message Dhcpv6InterfaceIa {
-
-=======
 }
 
 // The IPv6 IAPD address and prefix length associated with this DHCP Client session.
@@ -14737,18 +14707,14 @@ message Dhcpv6InterfaceIapd {
 // The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
 message Dhcpv6InterfaceIa {
 
->>>>>>> main
   // The address associated with this DHCPv6 Client session.
   optional string address = 1;
 
   // The Gateway address associated with this DHCPv6 Client session.
   optional string gateway = 2;
-<<<<<<< HEAD
-=======
 
   // The duration of the IPv6 address lease, in seconds.
   optional uint32 lease_time = 3;
->>>>>>> main
 }
 
 // The request to retrieve DHCP Server host allocated status.

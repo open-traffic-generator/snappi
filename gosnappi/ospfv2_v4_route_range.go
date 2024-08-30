@@ -292,10 +292,10 @@ type Ospfv2V4RouteRange interface {
 	HasChoice() bool
 	// getter for NssaExternal to set choice.
 	NssaExternal()
-	// getter for IntraArea to set choice.
-	IntraArea()
 	// getter for ExternalType_2 to set choice.
 	ExternalType_2()
+	// getter for IntraArea to set choice.
+	IntraArea()
 	// getter for ExternalType_1 to set choice.
 	ExternalType_1()
 	// getter for InterArea to set choice.
@@ -454,14 +454,14 @@ func (obj *ospfv2V4RouteRange) NssaExternal() {
 	obj.setChoice(Ospfv2V4RouteRangeChoice.NSSA_EXTERNAL)
 }
 
-// getter for IntraArea to set choice
-func (obj *ospfv2V4RouteRange) IntraArea() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.INTRA_AREA)
-}
-
 // getter for ExternalType_2 to set choice
 func (obj *ospfv2V4RouteRange) ExternalType_2() {
 	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_2)
+}
+
+// getter for IntraArea to set choice
+func (obj *ospfv2V4RouteRange) IntraArea() {
+	obj.setChoice(Ospfv2V4RouteRangeChoice.INTRA_AREA)
 }
 
 // getter for ExternalType_1 to set choice
