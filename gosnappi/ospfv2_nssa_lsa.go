@@ -273,11 +273,13 @@ type Ospfv2NssaLsa interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2NssaLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	CommonAttrs() Ospfv2CommonAttrs
 	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2NssaLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NssaLsa
+	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2NssaLsa
+	HasCommonAttrs() bool
 	// NetworkMask returns string, set in Ospfv2NssaLsa.
 	NetworkMask() string
 	// SetNetworkMask assigns string provided by user to Ospfv2NssaLsa
@@ -315,6 +317,12 @@ func (obj *ospfv2NssaLsa) CommonAttrs() Ospfv2CommonAttrs {
 		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
 	}
 	return obj.commonAttrsHolder
+}
+
+// Common LSA attributes.
+// CommonAttrs returns a Ospfv2CommonAttrs
+func (obj *ospfv2NssaLsa) HasCommonAttrs() bool {
+	return obj.obj.CommonAttrs != nil
 }
 
 // Common LSA attributes.
@@ -418,11 +426,6 @@ func (obj *ospfv2NssaLsa) SetForwardingAddress(value string) Ospfv2NssaLsa {
 func (obj *ospfv2NssaLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	// CommonAttrs is required
-	if obj.obj.CommonAttrs == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CommonAttrs is required field on interface Ospfv2NssaLsa")
 	}
 
 	if obj.obj.CommonAttrs != nil {

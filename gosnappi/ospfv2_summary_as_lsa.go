@@ -273,11 +273,13 @@ type Ospfv2SummaryAsLsa interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2SummaryAsLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	CommonAttrs() Ospfv2CommonAttrs
 	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2SummaryAsLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2SummaryAsLsa
+	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2SummaryAsLsa
+	HasCommonAttrs() bool
 	// NetworkMask returns string, set in Ospfv2SummaryAsLsa.
 	NetworkMask() string
 	// SetNetworkMask assigns string provided by user to Ospfv2SummaryAsLsa
@@ -303,6 +305,12 @@ func (obj *ospfv2SummaryAsLsa) CommonAttrs() Ospfv2CommonAttrs {
 		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
 	}
 	return obj.commonAttrsHolder
+}
+
+// Common LSA attributes.
+// CommonAttrs returns a Ospfv2CommonAttrs
+func (obj *ospfv2SummaryAsLsa) HasCommonAttrs() bool {
+	return obj.obj.CommonAttrs != nil
 }
 
 // Common LSA attributes.
@@ -362,11 +370,6 @@ func (obj *ospfv2SummaryAsLsa) SetMetric(value uint32) Ospfv2SummaryAsLsa {
 func (obj *ospfv2SummaryAsLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	// CommonAttrs is required
-	if obj.obj.CommonAttrs == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CommonAttrs is required field on interface Ospfv2SummaryAsLsa")
 	}
 
 	if obj.obj.CommonAttrs != nil {

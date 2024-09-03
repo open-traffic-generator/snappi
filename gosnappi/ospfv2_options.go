@@ -318,18 +318,18 @@ type Ospfv2Options interface {
 	SetUnusedBit(value bool) Ospfv2Options
 	// HasUnusedBit checks if UnusedBit has been set in Ospfv2Options
 	HasUnusedBit() bool
-	// EnableRouterLsaBBit returns bool, set in Ospfv2Options.
-	EnableRouterLsaBBit() bool
-	// SetEnableRouterLsaBBit assigns bool provided by user to Ospfv2Options
-	SetEnableRouterLsaBBit(value bool) Ospfv2Options
-	// HasEnableRouterLsaBBit checks if EnableRouterLsaBBit has been set in Ospfv2Options
-	HasEnableRouterLsaBBit() bool
-	// EnableRouterLsaEBit returns bool, set in Ospfv2Options.
-	EnableRouterLsaEBit() bool
-	// SetEnableRouterLsaEBit assigns bool provided by user to Ospfv2Options
-	SetEnableRouterLsaEBit(value bool) Ospfv2Options
-	// HasEnableRouterLsaEBit checks if EnableRouterLsaEBit has been set in Ospfv2Options
-	HasEnableRouterLsaEBit() bool
+	// RouterLsaBBit returns bool, set in Ospfv2Options.
+	RouterLsaBBit() bool
+	// SetRouterLsaBBit assigns bool provided by user to Ospfv2Options
+	SetRouterLsaBBit(value bool) Ospfv2Options
+	// HasRouterLsaBBit checks if RouterLsaBBit has been set in Ospfv2Options
+	HasRouterLsaBBit() bool
+	// RouterLsaEBit returns bool, set in Ospfv2Options.
+	RouterLsaEBit() bool
+	// SetRouterLsaEBit assigns bool provided by user to Ospfv2Options
+	SetRouterLsaEBit(value bool) Ospfv2Options
+	// HasRouterLsaEBit checks if RouterLsaEBit has been set in Ospfv2Options
+	HasRouterLsaEBit() bool
 }
 
 // Type of Service: 0th-bit: describes OSPFv2's TOS capability.
@@ -509,46 +509,46 @@ func (obj *ospfv2Options) SetUnusedBit(value bool) Ospfv2Options {
 }
 
 // Enable to indicate that the router acts as an Area Border Router.
-// EnableRouterLsaBBit returns a bool
-func (obj *ospfv2Options) EnableRouterLsaBBit() bool {
+// RouterLsaBBit returns a bool
+func (obj *ospfv2Options) RouterLsaBBit() bool {
 
-	return *obj.obj.EnableRouterLsaBBit
+	return *obj.obj.RouterLsaBBit
 
 }
 
 // Enable to indicate that the router acts as an Area Border Router.
-// EnableRouterLsaBBit returns a bool
-func (obj *ospfv2Options) HasEnableRouterLsaBBit() bool {
-	return obj.obj.EnableRouterLsaBBit != nil
+// RouterLsaBBit returns a bool
+func (obj *ospfv2Options) HasRouterLsaBBit() bool {
+	return obj.obj.RouterLsaBBit != nil
 }
 
 // Enable to indicate that the router acts as an Area Border Router.
-// SetEnableRouterLsaBBit sets the bool value in the Ospfv2Options object
-func (obj *ospfv2Options) SetEnableRouterLsaBBit(value bool) Ospfv2Options {
+// SetRouterLsaBBit sets the bool value in the Ospfv2Options object
+func (obj *ospfv2Options) SetRouterLsaBBit(value bool) Ospfv2Options {
 
-	obj.obj.EnableRouterLsaBBit = &value
+	obj.obj.RouterLsaBBit = &value
 	return obj
 }
 
 // Enable to indicate that the router acts as an AS Boundary Router.
-// EnableRouterLsaEBit returns a bool
-func (obj *ospfv2Options) EnableRouterLsaEBit() bool {
+// RouterLsaEBit returns a bool
+func (obj *ospfv2Options) RouterLsaEBit() bool {
 
-	return *obj.obj.EnableRouterLsaEBit
+	return *obj.obj.RouterLsaEBit
 
 }
 
 // Enable to indicate that the router acts as an AS Boundary Router.
-// EnableRouterLsaEBit returns a bool
-func (obj *ospfv2Options) HasEnableRouterLsaEBit() bool {
-	return obj.obj.EnableRouterLsaEBit != nil
+// RouterLsaEBit returns a bool
+func (obj *ospfv2Options) HasRouterLsaEBit() bool {
+	return obj.obj.RouterLsaEBit != nil
 }
 
 // Enable to indicate that the router acts as an AS Boundary Router.
-// SetEnableRouterLsaEBit sets the bool value in the Ospfv2Options object
-func (obj *ospfv2Options) SetEnableRouterLsaEBit(value bool) Ospfv2Options {
+// SetRouterLsaEBit sets the bool value in the Ospfv2Options object
+func (obj *ospfv2Options) SetRouterLsaEBit(value bool) Ospfv2Options {
 
-	obj.obj.EnableRouterLsaEBit = &value
+	obj.obj.RouterLsaEBit = &value
 	return obj
 }
 
@@ -584,11 +584,11 @@ func (obj *ospfv2Options) setDefault() {
 	if obj.obj.UnusedBit == nil {
 		obj.SetUnusedBit(false)
 	}
-	if obj.obj.EnableRouterLsaBBit == nil {
-		obj.SetEnableRouterLsaBBit(false)
+	if obj.obj.RouterLsaBBit == nil {
+		obj.SetRouterLsaBBit(false)
 	}
-	if obj.obj.EnableRouterLsaEBit == nil {
-		obj.SetEnableRouterLsaEBit(false)
+	if obj.obj.RouterLsaEBit == nil {
+		obj.SetRouterLsaEBit(false)
 	}
 
 }

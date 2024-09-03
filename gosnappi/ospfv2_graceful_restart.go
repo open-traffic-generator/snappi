@@ -264,33 +264,33 @@ type Ospfv2GracefulRestart interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// EnableHelperOnly returns bool, set in Ospfv2GracefulRestart.
-	EnableHelperOnly() bool
-	// SetEnableHelperOnly assigns bool provided by user to Ospfv2GracefulRestart
-	SetEnableHelperOnly(value bool) Ospfv2GracefulRestart
-	// HasEnableHelperOnly checks if EnableHelperOnly has been set in Ospfv2GracefulRestart
-	HasEnableHelperOnly() bool
+	// HelperMode returns bool, set in Ospfv2GracefulRestart.
+	HelperMode() bool
+	// SetHelperMode assigns bool provided by user to Ospfv2GracefulRestart
+	SetHelperMode(value bool) Ospfv2GracefulRestart
+	// HasHelperMode checks if HelperMode has been set in Ospfv2GracefulRestart
+	HasHelperMode() bool
 }
 
-// Support of Graceful Restart in Helper Mode. OSPF Restart Signaling (draft-nguyen-ospf-restart-06.txt).
-// EnableHelperOnly returns a bool
-func (obj *ospfv2GracefulRestart) EnableHelperOnly() bool {
+// Support of Graceful Restart in Helper Mode.
+// HelperMode returns a bool
+func (obj *ospfv2GracefulRestart) HelperMode() bool {
 
-	return *obj.obj.EnableHelperOnly
+	return *obj.obj.HelperMode
 
 }
 
-// Support of Graceful Restart in Helper Mode. OSPF Restart Signaling (draft-nguyen-ospf-restart-06.txt).
-// EnableHelperOnly returns a bool
-func (obj *ospfv2GracefulRestart) HasEnableHelperOnly() bool {
-	return obj.obj.EnableHelperOnly != nil
+// Support of Graceful Restart in Helper Mode.
+// HelperMode returns a bool
+func (obj *ospfv2GracefulRestart) HasHelperMode() bool {
+	return obj.obj.HelperMode != nil
 }
 
-// Support of Graceful Restart in Helper Mode. OSPF Restart Signaling (draft-nguyen-ospf-restart-06.txt).
-// SetEnableHelperOnly sets the bool value in the Ospfv2GracefulRestart object
-func (obj *ospfv2GracefulRestart) SetEnableHelperOnly(value bool) Ospfv2GracefulRestart {
+// Support of Graceful Restart in Helper Mode.
+// SetHelperMode sets the bool value in the Ospfv2GracefulRestart object
+func (obj *ospfv2GracefulRestart) SetHelperMode(value bool) Ospfv2GracefulRestart {
 
-	obj.obj.EnableHelperOnly = &value
+	obj.obj.HelperMode = &value
 	return obj
 }
 
@@ -302,8 +302,8 @@ func (obj *ospfv2GracefulRestart) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *ospfv2GracefulRestart) setDefault() {
-	if obj.obj.EnableHelperOnly == nil {
-		obj.SetEnableHelperOnly(false)
+	if obj.obj.HelperMode == nil {
+		obj.SetHelperMode(false)
 	}
 
 }

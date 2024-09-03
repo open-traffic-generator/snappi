@@ -7296,7 +7296,7 @@ message DeviceOspfv2 {
   // Configuration for controlling storage of OSPFv2 learned LSAs are received from the
   // neighbors.
   // default = False
-  optional bool learned_lsp_filter = 9;
+  optional bool store_lsa = 9;
 
   // A router indicates the optional capabilities that it supports in its OSPF Hello packets,
   // Database Description packets and in its LSAs.
@@ -7357,19 +7357,19 @@ message Ospfv2Options {
 
   // Enable to indicate that the router acts as an Area Border Router.
   // default = False
-  optional bool enable_router_lsa_b_bit = 9;
+  optional bool router_lsa_b_bit = 9;
 
   // Enable to indicate that the router acts as an AS Boundary Router.
   // default = False
-  optional bool enable_router_lsa_e_bit = 10;
+  optional bool router_lsa_e_bit = 10;
 }
 
 // Containter of properties of OSPFv2 Graceful Retstart.
 message Ospfv2GracefulRestart {
 
-  // Support of Graceful Restart in Helper Mode. OSPF Restart Signaling (draft-nguyen-ospf-restart-06.txt).
+  // Support of Graceful Restart in Helper Mode.
   // default = False
-  optional bool enable_helper_only = 1;
+  optional bool helper_mode = 1;
 }
 
 // Configuration for single OSPFv2 interface.
@@ -7380,89 +7380,82 @@ message Ospfv2Interface {
   // required = true
   optional string name = 1;
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      ipv4_name = 1;
-      dhcp_intf_name = 2;
-    }
-  }
-  // The name of the interface top of which OSPFv2 is configured.
-  // - ipv4_name: The globally unique name of the IPv4 interface connected to the DUT.
-  // This name must match the name field of the ipv4_addresses on top which this OSPFv2
-  // interface is configured.
-  // - dhcp_intf_name: The Area ID in IPv4 address format.
-  // default = Choice.Enum.ipv4_name
-  optional Choice.Enum choice = 2;
-
   // The globally unique name of the IPv4 interface connected to the DUT.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  optional string ipv4_name = 3;
+  optional string ipv4_name = 2;
 
-  // The globally unique name of the DHCPv4 interface connected to the DUT.
+  // The OSPF Area ID identifies the routing area to which the host belongs.
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
-  optional string dhcp_intf_name = 4;
+  Ospfv2InterfaceArea area = 3;
 
-  message AreaType {
+  // The OSPF network link type options.
+  Ospfv2InterfaceNetworkType network_type = 4;
+
+  // Contains a list of Traffic Engineering attributes.
+  repeated LinkStateTE traffic_engineering = 5;
+
+  // OSPFv2 authentication properties.
+  Ospfv2InterfaceAuthentication authentication = 6;
+
+  // Optional container for advanced interface properties.
+  Ospfv2InterfaceAdvanced advanced = 7;
+
+  // Link protection on the OSPFv2 link between two interfaces.
+  Ospfv2InterfaceLinkProtection link_protection = 8;
+
+  // This contains list of SRLG values for the link between two interfaces.
+  repeated uint32 srlg_values = 9;
+}
+
+// Container for OSPF Area ID identifies the routing area to which the host belongs..
+// 
+message Ospfv2InterfaceArea {
+
+  message Choice {
     enum Enum {
       unspecified = 0;
-      area_id = 1;
-      area_id_as_ip = 2;
+      id = 1;
+      ip = 2;
     }
   }
   // The OSPF Area ID identifies the routing area to which the host belongs. Area ID type
   // can be following format.
-  // - area_id: A 32-bit number identifying the area.
-  // - area_id_as_ip: The Area ID in IPv4 address format.
-  // default = AreaType.Enum.area_id
-  optional AreaType.Enum area_type = 5;
+  // - id: A 32-bit number identifying the area.
+  // - ip:     The Area ID in IPv4 address format.
+  // default = Choice.Enum.id
+  optional Choice.Enum choice = 1;
 
   // The Area ID.
   // default = 0
-  optional uint32 area_id = 6;
+  optional uint32 id = 2;
 
   // The Area ID in IPv4 address format.
-  optional string area_id_as_ip = 7;
+  optional string ip = 3;
+}
 
-  message NetworkType {
+// The OSPF network link type options.
+// - Point to Point:
+// - Broadcast:
+// - Point to Multipoint: In this case, at least a neigbor to be configured.
+message Ospfv2InterfaceNetworkType {
+
+  message Choice {
     enum Enum {
       unspecified = 0;
       broadcast = 1;
       point_to_point = 2;
-      point_to_multicast = 3;
+      point_to_multipoint = 3;
     }
   }
-  // The OSPF network link type options.
-  // - Point to Point:
-  // - Broadcast:
-  // - Point to Multipoint: In this case, at least a neigbor to be configured.
-  // default = NetworkType.Enum.broadcast
-  optional NetworkType.Enum network_type = 8;
+  // Description missing in models
+  // default = Choice.Enum.broadcast
+  optional Choice.Enum choice = 1;
 
-  // Configuration of the list of neighbors.
-  repeated Ospfv2InterfaceNeighbor neighbors = 9;
-
-  // Contains a list of Traffic Engineering attributes.
-  repeated LinkStateTE traffic_engineering = 10;
-
-  // OSPFv2 authentication properties.
-  Ospfv2InterfaceAuthentication authentication = 11;
-
-  // Optional container for advanced interface properties.
-  Ospfv2InterfaceAdvanced advanced = 12;
-
-  // Link protection on the OSPFv2 link between two interfaces.
-  Ospfv2InterfaceLinkProtection link_protection = 13;
-
-  // This contains list of SRLG values for the link between two interfaces.
-  repeated uint32 srlg_values = 14;
+  // List of Neigbhors.
+  repeated Ospfv2InterfaceNeighbor point_to_multipoint = 2;
 }
 
 // Configuration of a neighbor.
@@ -7490,7 +7483,7 @@ message Ospfv2InterfaceAdvanced {
   // default = 40
   optional uint32 dead_interval = 3;
 
-  // routing metric associated with the interface..
+  // Routing metric associated with the interface..
   // default = 0
   optional uint32 routing_metric = 4;
 
@@ -7506,7 +7499,7 @@ message Ospfv2InterfaceAdvanced {
   // DB exchange.
   // 
   // default = False
-  optional bool enable_validate_received_mtu = 6;
+  optional bool validate_received_mtu = 6;
 
   // The value of the maximum transmit unit.
   // default = 1500
@@ -7567,34 +7560,43 @@ message Ospfv2InterfaceAuthentication {
   message Choice {
     enum Enum {
       unspecified = 0;
-      md5 = 1;
+      md5_list = 1;
       clear_text = 2;
     }
   }
   // The authentication method.
-  // - md5 - Cryptographic authentication. If the authentication type is of 'md5' then
-  // 'md5_key_id' and 'md5_key'
-  // both are to be configured. A shared secret key is configured in all routers attached
-  // to a common network/subnet.
-  // For each OSPF protocol packet, the key is used to generate/verify a message digest
-  // that is appended to the end
-  // of the OSPF packet.
+  // - md5 - Cryptographic authentication.
   // - clear_text - Simple password authentication. A 64-bit field is configured on a
   // per-network basis.
   // All packets sent on a particular network must have this configured value (in clear
   // text)
   // in their OSPF header 64-bit authentication field.
+  // default = Choice.Enum.clear_text
   optional Choice.Enum choice = 1;
 
+  // List of MD5 Key IDs and MD5 Keys.
+  repeated Ospfv2AuthenticationMd5 md5_list = 2;
+
+  // The 8 Byte authentication field in the OSPF packet.
+  // default = keysight
+  optional string clear_text = 4;
+}
+
+// Container of Cryptographic authentication.
+// If the authentication type is of 'md5' then 'md5_key_id' and 'md5_key'
+// both are to be configured. A shared secret key is configured in all routers attached
+// to a common network/subnet.
+// For each OSPF protocol packet, the key is used to generate/verify a message digest
+// that is appended to the end
+// of the OSPF packet.
+message Ospfv2AuthenticationMd5 {
+
   // The unique MD5 Key Identifier per-interface.
-  optional string md5_key_id = 2;
+  optional uint32 key_id = 1;
 
   // An alphanumeric secret used to generate the 16 byte MD5 hash value added
   // to the OSPFv2 PDU in the Authentication TLV.
-  optional string md5_key = 3;
-
-  // The 8 Byte authentication field in the OSPF packet.
-  optional string clear_text = 4;
+  optional string key = 2;
 }
 
 // Optional container for the link protection sub TLV (type 20).
@@ -7655,7 +7657,17 @@ message Ospfv2V4RouteRange {
 
   // The user-defined metric associated with this route range.
   // default = 0
-  optional uint32 router_metric = 3;
+  optional uint32 metric = 3;
+
+  // The type of the OSPFv2 routes.
+  Ospfv2V4RRRouteOrigin route_origin = 4;
+}
+
+// Container of type of the OSPFv2 types correspond directly to the OSPFv2 LSAs types
+// as
+// defined in the OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
+// 
+message Ospfv2V4RRRouteOrigin {
 
   message Choice {
     enum Enum {
@@ -7667,18 +7679,84 @@ message Ospfv2V4RouteRange {
       nssa_external = 5;
     }
   }
-  // The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs
-  // types as
-  // defined in the OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
-  // Supported types are:
-  // - intra_area: for Intra-Area.
-  // - inter_area: for 3 Inter Area.
+  // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
   // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
   // - external_type_2: for Autonomous System (AS) External with internal and external
-  // AS meteric.
-  // - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+  // AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
   // default = Choice.Enum.inter_area
-  optional Choice.Enum choice = 4;
+  optional Choice.Enum choice = 1;
+
+  // Configuration for the Intra-Area.
+  Ospfv2V4RRIntraArea intra_area = 2;
+
+  // Configuration for the Intra-Area.
+  Ospfv2V4RRInterArea inter_area = 3;
+
+  // Configuration for the External Type 1.
+  Ospfv2V4RRExternalType1 external_type_1 = 4;
+
+  // Configuration for the External Type 2.
+  Ospfv2V4RRExternalType2 external_type_2 = 5;
+
+  // Configuration for the External Type 2.
+  Ospfv2V4RRNssaExternal nssa_external = 6;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRIntraArea {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRInterArea {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRExternalType1 {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRExternalType2 {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRNssaExternal {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+
+  // The flag is set True if LSA will be propagated between Areas.
+  // default = False
+  optional bool propagation = 2;
+}
+
+// One-octet field contains flags applicable to the prefix. https://datatracker.ietf.org/doc/html/rfc7684.
+message Ospfv2V4RRExtdPrefixFlags {
+
+  // 0x80 - (Attach Flag): An Area Border Router (ABR)
+  // generating an OSPFv2 Extended Prefix TLV for an inter-area
+  // prefix that is locally connected or attached in another
+  // connected area SHOULD set this flag.
+  // default = False
+  optional bool a_flag = 1;
+
+  // N-Flag (Node Flag): Set when the prefix identifies the
+  // advertising router, i.e., the prefix is a host prefix
+  // advertising a globally reachable address typically associated
+  // with a loopback address.
+  // default = False
+  optional bool n_flag = 2;
 }
 
 // A high level data plane traffic flow.
@@ -10848,6 +10926,7 @@ message StateProtocol {
       lacp = 3;
       bgp = 4;
       isis = 5;
+      ospfv2 = 6;
     }
   }
   // Description missing in models
@@ -10868,6 +10947,9 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolIsis isis = 6;
+
+  // Description missing in models
+  StateProtocolOspfv2 ospfv2 = 7;
 }
 
 // Sets the link of configured ports.
@@ -10984,6 +11066,7 @@ message StateProtocolRoute {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
   repeated string names = 1;
 
@@ -11151,6 +11234,49 @@ message StateProtocolIsisRouters {
   // bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured.
   // If the desired state is 'down', would bring down ISIS session(s) with respective
   // peer(s).
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured OSPFv2 routers.
+message StateProtocolOspfv2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolOspfv2Routers routers = 2;
+}
+
+// Sets state of configured OSPFv2 routers.
+message StateProtocolOspfv2Routers {
+
+  // The names of OSPFv2 routers for which the state has to be applied. An empty or null
+  // list will control all OSPFv2 routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of OSPFv2 router. If the desired state is 'up', would attempt to
+  // bring up the OSPFv2 session(s) with respective peer(s) and advertise route(s), if
+  // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
+  // respective peer(s).
   // required = true
   optional State.Enum state = 2;
 }
@@ -14815,7 +14941,6 @@ message Ospfv2LsaState {
 message Ospfv2RouterLsa {
 
   // Contents of the router LSA.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // Links that are described within the LSA.
@@ -14826,7 +14951,6 @@ message Ospfv2RouterLsa {
 message Ospfv2NetworkLsa {
 
   // Contents of the router LSA.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // The IPv4 address mask for the network.
@@ -14840,7 +14964,6 @@ message Ospfv2NetworkLsa {
 message Ospfv2NetworkSummaryLsa {
 
   // Common LSA attributes.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // The IPv4 address mask for the network.
@@ -14854,7 +14977,6 @@ message Ospfv2NetworkSummaryLsa {
 message Ospfv2SummaryAsLsa {
 
   // Common LSA attributes.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // The IPv4 address mask for the network.
@@ -14868,7 +14990,6 @@ message Ospfv2SummaryAsLsa {
 message Ospfv2ExternalAsLsa {
 
   // Common LSA attributes.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // The IPv4 address mask for the network.
@@ -14885,7 +15006,6 @@ message Ospfv2ExternalAsLsa {
 message Ospfv2NssaLsa {
 
   // Common LSA attributes.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
   // The IPv4 address mask for the network.
@@ -14905,30 +15025,27 @@ message Ospfv2NssaLsa {
 message Ospfv2OpaqueLsa {
 
   // Common LSA attributes.
-  // required = true
   Ospfv2CommonAttrs common_attrs = 1;
 
-  message OpaqueLsaType {
+  message Type {
     enum Enum {
       unspecified = 0;
-      opaque_local = 1;
-      opaque_area = 2;
-      opaque_domain = 3;
+      local = 1;
+      area = 2;
+      domain = 3;
     }
   }
   // The type of Opaque TE LSAs. The LSA type.
-  optional OpaqueLsaType.Enum opaque_lsa_type = 2;
+  optional Type.Enum type = 2;
 }
 
-// TBD
+// Attributes in LSA Header.
 message Ospfv2CommonAttrs {
 
   // LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
-  // required = true
   optional string lsa_id = 1;
 
   // The router ID (in the IPv4 format) of the router that originated the LSA.
-  // required = true
   optional string advertising_router = 2;
 
   // Sequence number to detect old and duplicate LSAs. The greater the sequence number

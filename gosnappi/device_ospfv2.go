@@ -328,12 +328,12 @@ type DeviceOspfv2 interface {
 	SetGracefulRestart(value Ospfv2GracefulRestart) DeviceOspfv2
 	// HasGracefulRestart checks if GracefulRestart has been set in DeviceOspfv2
 	HasGracefulRestart() bool
-	// LearnedLspFilter returns bool, set in DeviceOspfv2.
-	LearnedLspFilter() bool
-	// SetLearnedLspFilter assigns bool provided by user to DeviceOspfv2
-	SetLearnedLspFilter(value bool) DeviceOspfv2
-	// HasLearnedLspFilter checks if LearnedLspFilter has been set in DeviceOspfv2
-	HasLearnedLspFilter() bool
+	// StoreLsa returns bool, set in DeviceOspfv2.
+	StoreLsa() bool
+	// SetStoreLsa assigns bool provided by user to DeviceOspfv2
+	SetStoreLsa(value bool) DeviceOspfv2
+	// HasStoreLsa checks if StoreLsa has been set in DeviceOspfv2
+	HasStoreLsa() bool
 	// Capabilities returns Ospfv2Options, set in DeviceOspfv2.
 	// Ospfv2Options is the OSPFv2 Options field is present Database Description packets and all LSAs.
 	// This enables OSPF routers to support (or not support) optional capabilities,
@@ -561,24 +561,24 @@ func (obj *deviceOspfv2) SetGracefulRestart(value Ospfv2GracefulRestart) DeviceO
 }
 
 // Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
-// LearnedLspFilter returns a bool
-func (obj *deviceOspfv2) LearnedLspFilter() bool {
+// StoreLsa returns a bool
+func (obj *deviceOspfv2) StoreLsa() bool {
 
-	return *obj.obj.LearnedLspFilter
+	return *obj.obj.StoreLsa
 
 }
 
 // Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
-// LearnedLspFilter returns a bool
-func (obj *deviceOspfv2) HasLearnedLspFilter() bool {
-	return obj.obj.LearnedLspFilter != nil
+// StoreLsa returns a bool
+func (obj *deviceOspfv2) HasStoreLsa() bool {
+	return obj.obj.StoreLsa != nil
 }
 
 // Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
-// SetLearnedLspFilter sets the bool value in the DeviceOspfv2 object
-func (obj *deviceOspfv2) SetLearnedLspFilter(value bool) DeviceOspfv2 {
+// SetStoreLsa sets the bool value in the DeviceOspfv2 object
+func (obj *deviceOspfv2) SetStoreLsa(value bool) DeviceOspfv2 {
 
-	obj.obj.LearnedLspFilter = &value
+	obj.obj.StoreLsa = &value
 	return obj
 }
 
@@ -911,8 +911,8 @@ func (obj *deviceOspfv2) setDefault() {
 	if obj.obj.MaxFloodLsuPerBurst == nil {
 		obj.SetMaxFloodLsuPerBurst(1)
 	}
-	if obj.obj.LearnedLspFilter == nil {
-		obj.SetLearnedLspFilter(false)
+	if obj.obj.StoreLsa == nil {
+		obj.SetStoreLsa(false)
 	}
 
 }

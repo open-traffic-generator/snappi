@@ -13,9 +13,10 @@ import (
 // ***** Ospfv2InterfaceAuthentication *****
 type ospfv2InterfaceAuthentication struct {
 	validation
-	obj          *otg.Ospfv2InterfaceAuthentication
-	marshaller   marshalOspfv2InterfaceAuthentication
-	unMarshaller unMarshalOspfv2InterfaceAuthentication
+	obj           *otg.Ospfv2InterfaceAuthentication
+	marshaller    marshalOspfv2InterfaceAuthentication
+	unMarshaller  unMarshalOspfv2InterfaceAuthentication
+	md5ListHolder Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
 }
 
 func NewOspfv2InterfaceAuthentication() Ospfv2InterfaceAuthentication {
@@ -29,7 +30,7 @@ func (obj *ospfv2InterfaceAuthentication) msg() *otg.Ospfv2InterfaceAuthenticati
 }
 
 func (obj *ospfv2InterfaceAuthentication) setMsg(msg *otg.Ospfv2InterfaceAuthentication) Ospfv2InterfaceAuthentication {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalospfv2InterfaceAuthentication) FromPbText(value string) error 
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalospfv2InterfaceAuthentication) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalospfv2InterfaceAuthentication) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *ospfv2InterfaceAuthentication) Clone() (Ospfv2InterfaceAuthentication
 	return newObj, nil
 }
 
+func (obj *ospfv2InterfaceAuthentication) setNil() {
+	obj.md5ListHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // Ospfv2InterfaceAuthentication is this contains OSPFv2 authentication properties.
 // Reference: https://www.rfc-editor.org/rfc/rfc2328#appendix-D
 type Ospfv2InterfaceAuthentication interface {
@@ -271,36 +279,25 @@ type Ospfv2InterfaceAuthentication interface {
 	setChoice(value Ospfv2InterfaceAuthenticationChoiceEnum) Ospfv2InterfaceAuthentication
 	// HasChoice checks if Choice has been set in Ospfv2InterfaceAuthentication
 	HasChoice() bool
-	// getter for Md5 to set choice.
-	Md5()
-	// Md5KeyId returns string, set in Ospfv2InterfaceAuthentication.
-	Md5KeyId() string
-	// SetMd5KeyId assigns string provided by user to Ospfv2InterfaceAuthentication
-	SetMd5KeyId(value string) Ospfv2InterfaceAuthentication
-	// HasMd5KeyId checks if Md5KeyId has been set in Ospfv2InterfaceAuthentication
-	HasMd5KeyId() bool
-	// Md5Key returns string, set in Ospfv2InterfaceAuthentication.
-	Md5Key() string
-	// SetMd5Key assigns string provided by user to Ospfv2InterfaceAuthentication
-	SetMd5Key(value string) Ospfv2InterfaceAuthentication
-	// HasMd5Key checks if Md5Key has been set in Ospfv2InterfaceAuthentication
-	HasMd5Key() bool
+	// Md5List returns Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5IterIter, set in Ospfv2InterfaceAuthentication
+	Md5List() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
 	// ClearText returns string, set in Ospfv2InterfaceAuthentication.
 	ClearText() string
 	// SetClearText assigns string provided by user to Ospfv2InterfaceAuthentication
 	SetClearText(value string) Ospfv2InterfaceAuthentication
 	// HasClearText checks if ClearText has been set in Ospfv2InterfaceAuthentication
 	HasClearText() bool
+	setNil()
 }
 
 type Ospfv2InterfaceAuthenticationChoiceEnum string
 
 // Enum of Choice on Ospfv2InterfaceAuthentication
 var Ospfv2InterfaceAuthenticationChoice = struct {
-	MD5        Ospfv2InterfaceAuthenticationChoiceEnum
+	MD5_LIST   Ospfv2InterfaceAuthenticationChoiceEnum
 	CLEAR_TEXT Ospfv2InterfaceAuthenticationChoiceEnum
 }{
-	MD5:        Ospfv2InterfaceAuthenticationChoiceEnum("md5"),
+	MD5_LIST:   Ospfv2InterfaceAuthenticationChoiceEnum("md5_list"),
 	CLEAR_TEXT: Ospfv2InterfaceAuthenticationChoiceEnum("clear_text"),
 }
 
@@ -308,16 +305,8 @@ func (obj *ospfv2InterfaceAuthentication) Choice() Ospfv2InterfaceAuthentication
 	return Ospfv2InterfaceAuthenticationChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Md5 to set choice
-func (obj *ospfv2InterfaceAuthentication) Md5() {
-	obj.setChoice(Ospfv2InterfaceAuthenticationChoice.MD5)
-}
-
 // The authentication method.
-// - md5 - Cryptographic authentication. If the authentication type is of 'md5' then 'md5_key_id' and 'md5_key'
-// both are to be configured. A shared secret key is configured in all routers attached to a common network/subnet.
-// For each OSPF protocol packet, the key is used to generate/verify a "message digest" that is appended to the end
-// of the OSPF packet.
+// - md5 - Cryptographic authentication.
 // - clear_text - Simple password authentication. A 64-bit field is configured on a per-network basis.
 // All packets sent on a particular network must have this configured value (in clear text)
 // in their OSPF header 64-bit authentication field.
@@ -336,53 +325,105 @@ func (obj *ospfv2InterfaceAuthentication) setChoice(value Ospfv2InterfaceAuthent
 	enumValue := otg.Ospfv2InterfaceAuthentication_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
 	obj.obj.ClearText = nil
+	obj.obj.Md5List = nil
+	obj.md5ListHolder = nil
+
+	if value == Ospfv2InterfaceAuthenticationChoice.MD5_LIST {
+		obj.obj.Md5List = []*otg.Ospfv2AuthenticationMd5{}
+	}
+
+	if value == Ospfv2InterfaceAuthenticationChoice.CLEAR_TEXT {
+		defaultValue := "keysight"
+		obj.obj.ClearText = &defaultValue
+	}
+
 	return obj
 }
 
-// The unique MD5 Key Identifier per-interface.
-// Md5KeyId returns a string
-func (obj *ospfv2InterfaceAuthentication) Md5KeyId() string {
-
-	return *obj.obj.Md5KeyId
-
+// List of MD5 Key IDs and MD5 Keys.
+// Md5List returns a []Ospfv2AuthenticationMd5
+func (obj *ospfv2InterfaceAuthentication) Md5List() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	if len(obj.obj.Md5List) == 0 {
+		obj.setChoice(Ospfv2InterfaceAuthenticationChoice.MD5_LIST)
+	}
+	if obj.md5ListHolder == nil {
+		obj.md5ListHolder = newOspfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter(&obj.obj.Md5List).setMsg(obj)
+	}
+	return obj.md5ListHolder
 }
 
-// The unique MD5 Key Identifier per-interface.
-// Md5KeyId returns a string
-func (obj *ospfv2InterfaceAuthentication) HasMd5KeyId() bool {
-	return obj.obj.Md5KeyId != nil
+type ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter struct {
+	obj                          *ospfv2InterfaceAuthentication
+	ospfv2AuthenticationMd5Slice []Ospfv2AuthenticationMd5
+	fieldPtr                     *[]*otg.Ospfv2AuthenticationMd5
 }
 
-// The unique MD5 Key Identifier per-interface.
-// SetMd5KeyId sets the string value in the Ospfv2InterfaceAuthentication object
-func (obj *ospfv2InterfaceAuthentication) SetMd5KeyId(value string) Ospfv2InterfaceAuthentication {
+func newOspfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter(ptr *[]*otg.Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	return &ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter{fieldPtr: ptr}
+}
 
-	obj.obj.Md5KeyId = &value
+type Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter interface {
+	setMsg(*ospfv2InterfaceAuthentication) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+	Items() []Ospfv2AuthenticationMd5
+	Add() Ospfv2AuthenticationMd5
+	Append(items ...Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+	Set(index int, newObj Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+	Clear() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+	clearHolderSlice() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+	appendHolderSlice(item Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter
+}
+
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) setMsg(msg *ospfv2InterfaceAuthentication) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2AuthenticationMd5{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// An alphanumeric secret used to generate the 16 byte MD5 hash value added
-// to the OSPFv2 PDU in the Authentication TLV.
-// Md5Key returns a string
-func (obj *ospfv2InterfaceAuthentication) Md5Key() string {
-
-	return *obj.obj.Md5Key
-
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) Items() []Ospfv2AuthenticationMd5 {
+	return obj.ospfv2AuthenticationMd5Slice
 }
 
-// An alphanumeric secret used to generate the 16 byte MD5 hash value added
-// to the OSPFv2 PDU in the Authentication TLV.
-// Md5Key returns a string
-func (obj *ospfv2InterfaceAuthentication) HasMd5Key() bool {
-	return obj.obj.Md5Key != nil
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) Add() Ospfv2AuthenticationMd5 {
+	newObj := &otg.Ospfv2AuthenticationMd5{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2AuthenticationMd5{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2AuthenticationMd5Slice = append(obj.ospfv2AuthenticationMd5Slice, newLibObj)
+	return newLibObj
 }
 
-// An alphanumeric secret used to generate the 16 byte MD5 hash value added
-// to the OSPFv2 PDU in the Authentication TLV.
-// SetMd5Key sets the string value in the Ospfv2InterfaceAuthentication object
-func (obj *ospfv2InterfaceAuthentication) SetMd5Key(value string) Ospfv2InterfaceAuthentication {
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) Append(items ...Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2AuthenticationMd5Slice = append(obj.ospfv2AuthenticationMd5Slice, item)
+	}
+	return obj
+}
 
-	obj.obj.Md5Key = &value
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) Set(index int, newObj Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2AuthenticationMd5Slice[index] = newObj
+	return obj
+}
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) Clear() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2AuthenticationMd5{}
+		obj.ospfv2AuthenticationMd5Slice = []Ospfv2AuthenticationMd5{}
+	}
+	return obj
+}
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) clearHolderSlice() Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	if len(obj.ospfv2AuthenticationMd5Slice) > 0 {
+		obj.ospfv2AuthenticationMd5Slice = []Ospfv2AuthenticationMd5{}
+	}
+	return obj
+}
+func (obj *ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter) appendHolderSlice(item Ospfv2AuthenticationMd5) Ospfv2InterfaceAuthenticationOspfv2AuthenticationMd5Iter {
+	obj.ospfv2AuthenticationMd5Slice = append(obj.ospfv2AuthenticationMd5Slice, item)
 	return obj
 }
 
@@ -417,26 +458,16 @@ func (obj *ospfv2InterfaceAuthentication) validateObj(vObj *validation, set_defa
 		obj.setDefault()
 	}
 
-	if obj.obj.Md5KeyId != nil {
+	if len(obj.obj.Md5List) != 0 {
 
-		if len(*obj.obj.Md5KeyId) < 1 || len(*obj.obj.Md5KeyId) > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf(
-					"1 <= length of Ospfv2InterfaceAuthentication.Md5KeyId <= 255 but Got %d",
-					len(*obj.obj.Md5KeyId)))
+		if set_default {
+			obj.Md5List().clearHolderSlice()
+			for _, item := range obj.obj.Md5List {
+				obj.Md5List().appendHolderSlice(&ospfv2AuthenticationMd5{obj: item})
+			}
 		}
-
-	}
-
-	if obj.obj.Md5Key != nil {
-
-		if len(*obj.obj.Md5Key) < 1 || len(*obj.obj.Md5Key) > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf(
-					"1 <= length of Ospfv2InterfaceAuthentication.Md5Key <= 255 but Got %d",
-					len(*obj.obj.Md5Key)))
+		for _, item := range obj.Md5List().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}
@@ -459,11 +490,22 @@ func (obj *ospfv2InterfaceAuthentication) setDefault() {
 	var choices_set int = 0
 	var choice Ospfv2InterfaceAuthenticationChoiceEnum
 
+	if len(obj.obj.Md5List) > 0 {
+		choices_set += 1
+		choice = Ospfv2InterfaceAuthenticationChoice.MD5_LIST
+	}
+
 	if obj.obj.ClearText != nil {
 		choices_set += 1
 		choice = Ospfv2InterfaceAuthenticationChoice.CLEAR_TEXT
 	}
-	if choices_set == 1 && choice != "" {
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(Ospfv2InterfaceAuthenticationChoice.CLEAR_TEXT)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
 			if obj.Choice() != choice {
 				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in Ospfv2InterfaceAuthentication")

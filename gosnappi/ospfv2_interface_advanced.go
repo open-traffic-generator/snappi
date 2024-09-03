@@ -294,12 +294,12 @@ type Ospfv2InterfaceAdvanced interface {
 	SetPriority(value uint32) Ospfv2InterfaceAdvanced
 	// HasPriority checks if Priority has been set in Ospfv2InterfaceAdvanced
 	HasPriority() bool
-	// EnableValidateReceivedMtu returns bool, set in Ospfv2InterfaceAdvanced.
-	EnableValidateReceivedMtu() bool
-	// SetEnableValidateReceivedMtu assigns bool provided by user to Ospfv2InterfaceAdvanced
-	SetEnableValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced
-	// HasEnableValidateReceivedMtu checks if EnableValidateReceivedMtu has been set in Ospfv2InterfaceAdvanced
-	HasEnableValidateReceivedMtu() bool
+	// ValidateReceivedMtu returns bool, set in Ospfv2InterfaceAdvanced.
+	ValidateReceivedMtu() bool
+	// SetValidateReceivedMtu assigns bool provided by user to Ospfv2InterfaceAdvanced
+	SetValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced
+	// HasValidateReceivedMtu checks if ValidateReceivedMtu has been set in Ospfv2InterfaceAdvanced
+	HasValidateReceivedMtu() bool
 	// MaxMtu returns uint32, set in Ospfv2InterfaceAdvanced.
 	MaxMtu() uint32
 	// SetMaxMtu assigns uint32 provided by user to Ospfv2InterfaceAdvanced
@@ -380,7 +380,7 @@ func (obj *ospfv2InterfaceAdvanced) SetDeadInterval(value uint32) Ospfv2Interfac
 	return obj
 }
 
-// routing metric associated with the interface..
+// Routing metric associated with the interface..
 // RoutingMetric returns a uint32
 func (obj *ospfv2InterfaceAdvanced) RoutingMetric() uint32 {
 
@@ -388,13 +388,13 @@ func (obj *ospfv2InterfaceAdvanced) RoutingMetric() uint32 {
 
 }
 
-// routing metric associated with the interface..
+// Routing metric associated with the interface..
 // RoutingMetric returns a uint32
 func (obj *ospfv2InterfaceAdvanced) HasRoutingMetric() bool {
 	return obj.obj.RoutingMetric != nil
 }
 
-// routing metric associated with the interface..
+// Routing metric associated with the interface..
 // SetRoutingMetric sets the uint32 value in the Ospfv2InterfaceAdvanced object
 func (obj *ospfv2InterfaceAdvanced) SetRoutingMetric(value uint32) Ospfv2InterfaceAdvanced {
 
@@ -433,28 +433,28 @@ func (obj *ospfv2InterfaceAdvanced) SetPriority(value uint32) Ospfv2InterfaceAdv
 // This is for to verify the MTU during the Database (DB) exchange.
 // Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
 //
-// EnableValidateReceivedMtu returns a bool
-func (obj *ospfv2InterfaceAdvanced) EnableValidateReceivedMtu() bool {
+// ValidateReceivedMtu returns a bool
+func (obj *ospfv2InterfaceAdvanced) ValidateReceivedMtu() bool {
 
-	return *obj.obj.EnableValidateReceivedMtu
+	return *obj.obj.ValidateReceivedMtu
 
 }
 
 // This is for to verify the MTU during the Database (DB) exchange.
 // Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
 //
-// EnableValidateReceivedMtu returns a bool
-func (obj *ospfv2InterfaceAdvanced) HasEnableValidateReceivedMtu() bool {
-	return obj.obj.EnableValidateReceivedMtu != nil
+// ValidateReceivedMtu returns a bool
+func (obj *ospfv2InterfaceAdvanced) HasValidateReceivedMtu() bool {
+	return obj.obj.ValidateReceivedMtu != nil
 }
 
 // This is for to verify the MTU during the Database (DB) exchange.
 // Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
 //
-// SetEnableValidateReceivedMtu sets the bool value in the Ospfv2InterfaceAdvanced object
-func (obj *ospfv2InterfaceAdvanced) SetEnableValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced {
+// SetValidateReceivedMtu sets the bool value in the Ospfv2InterfaceAdvanced object
+func (obj *ospfv2InterfaceAdvanced) SetValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced {
 
-	obj.obj.EnableValidateReceivedMtu = &value
+	obj.obj.ValidateReceivedMtu = &value
 	return obj
 }
 
@@ -513,8 +513,8 @@ func (obj *ospfv2InterfaceAdvanced) setDefault() {
 	if obj.obj.Priority == nil {
 		obj.SetPriority(0)
 	}
-	if obj.obj.EnableValidateReceivedMtu == nil {
-		obj.SetEnableValidateReceivedMtu(false)
+	if obj.obj.ValidateReceivedMtu == nil {
+		obj.SetValidateReceivedMtu(false)
 	}
 	if obj.obj.MaxMtu == nil {
 		obj.SetMaxMtu(1500)

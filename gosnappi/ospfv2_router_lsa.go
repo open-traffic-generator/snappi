@@ -275,11 +275,13 @@ type Ospfv2RouterLsa interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2RouterLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	CommonAttrs() Ospfv2CommonAttrs
 	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2RouterLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2RouterLsa
+	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2RouterLsa
+	HasCommonAttrs() bool
 	// Links returns Ospfv2RouterLsaOspfv2LinkIterIter, set in Ospfv2RouterLsa
 	Links() Ospfv2RouterLsaOspfv2LinkIter
 	setNil()
@@ -295,6 +297,12 @@ func (obj *ospfv2RouterLsa) CommonAttrs() Ospfv2CommonAttrs {
 		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
 	}
 	return obj.commonAttrsHolder
+}
+
+// Contents of the router LSA.
+// CommonAttrs returns a Ospfv2CommonAttrs
+func (obj *ospfv2RouterLsa) HasCommonAttrs() bool {
+	return obj.obj.CommonAttrs != nil
 }
 
 // Contents of the router LSA.
@@ -397,11 +405,6 @@ func (obj *ospfv2RouterLsaOspfv2LinkIter) appendHolderSlice(item Ospfv2Link) Osp
 func (obj *ospfv2RouterLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	// CommonAttrs is required
-	if obj.obj.CommonAttrs == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CommonAttrs is required field on interface Ospfv2RouterLsa")
 	}
 
 	if obj.obj.CommonAttrs != nil {

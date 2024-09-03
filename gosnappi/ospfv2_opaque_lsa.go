@@ -273,17 +273,19 @@ type Ospfv2OpaqueLsa interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2OpaqueLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	CommonAttrs() Ospfv2CommonAttrs
 	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2OpaqueLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2OpaqueLsa
-	// OpaqueLsaType returns Ospfv2OpaqueLsaOpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
-	OpaqueLsaType() Ospfv2OpaqueLsaOpaqueLsaTypeEnum
-	// SetOpaqueLsaType assigns Ospfv2OpaqueLsaOpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
-	SetOpaqueLsaType(value Ospfv2OpaqueLsaOpaqueLsaTypeEnum) Ospfv2OpaqueLsa
-	// HasOpaqueLsaType checks if OpaqueLsaType has been set in Ospfv2OpaqueLsa
-	HasOpaqueLsaType() bool
+	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2OpaqueLsa
+	HasCommonAttrs() bool
+	// Type returns Ospfv2OpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
+	Type() Ospfv2OpaqueLsaTypeEnum
+	// SetType assigns Ospfv2OpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
+	SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa
+	// HasType checks if Type has been set in Ospfv2OpaqueLsa
+	HasType() bool
 	setNil()
 }
 
@@ -300,6 +302,12 @@ func (obj *ospfv2OpaqueLsa) CommonAttrs() Ospfv2CommonAttrs {
 }
 
 // Common LSA attributes.
+// CommonAttrs returns a Ospfv2CommonAttrs
+func (obj *ospfv2OpaqueLsa) HasCommonAttrs() bool {
+	return obj.obj.CommonAttrs != nil
+}
+
+// Common LSA attributes.
 // SetCommonAttrs sets the Ospfv2CommonAttrs value in the Ospfv2OpaqueLsa object
 func (obj *ospfv2OpaqueLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2OpaqueLsa {
 
@@ -309,38 +317,38 @@ func (obj *ospfv2OpaqueLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2Opaque
 	return obj
 }
 
-type Ospfv2OpaqueLsaOpaqueLsaTypeEnum string
+type Ospfv2OpaqueLsaTypeEnum string
 
-// Enum of OpaqueLsaType on Ospfv2OpaqueLsa
-var Ospfv2OpaqueLsaOpaqueLsaType = struct {
-	OPAQUE_LOCAL  Ospfv2OpaqueLsaOpaqueLsaTypeEnum
-	OPAQUE_AREA   Ospfv2OpaqueLsaOpaqueLsaTypeEnum
-	OPAQUE_DOMAIN Ospfv2OpaqueLsaOpaqueLsaTypeEnum
+// Enum of Type on Ospfv2OpaqueLsa
+var Ospfv2OpaqueLsaType = struct {
+	LOCAL  Ospfv2OpaqueLsaTypeEnum
+	AREA   Ospfv2OpaqueLsaTypeEnum
+	DOMAIN Ospfv2OpaqueLsaTypeEnum
 }{
-	OPAQUE_LOCAL:  Ospfv2OpaqueLsaOpaqueLsaTypeEnum("opaque_local"),
-	OPAQUE_AREA:   Ospfv2OpaqueLsaOpaqueLsaTypeEnum("opaque_area"),
-	OPAQUE_DOMAIN: Ospfv2OpaqueLsaOpaqueLsaTypeEnum("opaque_domain"),
+	LOCAL:  Ospfv2OpaqueLsaTypeEnum("local"),
+	AREA:   Ospfv2OpaqueLsaTypeEnum("area"),
+	DOMAIN: Ospfv2OpaqueLsaTypeEnum("domain"),
 }
 
-func (obj *ospfv2OpaqueLsa) OpaqueLsaType() Ospfv2OpaqueLsaOpaqueLsaTypeEnum {
-	return Ospfv2OpaqueLsaOpaqueLsaTypeEnum(obj.obj.OpaqueLsaType.Enum().String())
+func (obj *ospfv2OpaqueLsa) Type() Ospfv2OpaqueLsaTypeEnum {
+	return Ospfv2OpaqueLsaTypeEnum(obj.obj.Type.Enum().String())
 }
 
 // The type of Opaque TE LSAs. The LSA type.
-// OpaqueLsaType returns a string
-func (obj *ospfv2OpaqueLsa) HasOpaqueLsaType() bool {
-	return obj.obj.OpaqueLsaType != nil
+// Type returns a string
+func (obj *ospfv2OpaqueLsa) HasType() bool {
+	return obj.obj.Type != nil
 }
 
-func (obj *ospfv2OpaqueLsa) SetOpaqueLsaType(value Ospfv2OpaqueLsaOpaqueLsaTypeEnum) Ospfv2OpaqueLsa {
-	intValue, ok := otg.Ospfv2OpaqueLsa_OpaqueLsaType_Enum_value[string(value)]
+func (obj *ospfv2OpaqueLsa) SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa {
+	intValue, ok := otg.Ospfv2OpaqueLsa_Type_Enum_value[string(value)]
 	if !ok {
 		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2OpaqueLsaOpaqueLsaTypeEnum", string(value)))
+			"%s is not a valid choice on Ospfv2OpaqueLsaTypeEnum", string(value)))
 		return obj
 	}
-	enumValue := otg.Ospfv2OpaqueLsa_OpaqueLsaType_Enum(intValue)
-	obj.obj.OpaqueLsaType = &enumValue
+	enumValue := otg.Ospfv2OpaqueLsa_Type_Enum(intValue)
+	obj.obj.Type = &enumValue
 
 	return obj
 }
@@ -348,11 +356,6 @@ func (obj *ospfv2OpaqueLsa) SetOpaqueLsaType(value Ospfv2OpaqueLsaOpaqueLsaTypeE
 func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	// CommonAttrs is required
-	if obj.obj.CommonAttrs == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CommonAttrs is required field on interface Ospfv2OpaqueLsa")
 	}
 
 	if obj.obj.CommonAttrs != nil {

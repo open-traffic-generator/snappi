@@ -21,6 +21,7 @@ type stateProtocol struct {
 	lacpHolder   StateProtocolLacp
 	bgpHolder    StateProtocolBgp
 	isisHolder   StateProtocolIsis
+	ospfv2Holder StateProtocolOspfv2
 }
 
 func NewStateProtocol() StateProtocol {
@@ -253,6 +254,7 @@ func (obj *stateProtocol) setNil() {
 	obj.lacpHolder = nil
 	obj.bgpHolder = nil
 	obj.isisHolder = nil
+	obj.ospfv2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -326,6 +328,14 @@ type StateProtocol interface {
 	SetIsis(value StateProtocolIsis) StateProtocol
 	// HasIsis checks if Isis has been set in StateProtocol
 	HasIsis() bool
+	// Ospfv2 returns StateProtocolOspfv2, set in StateProtocol.
+	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers.
+	Ospfv2() StateProtocolOspfv2
+	// SetOspfv2 assigns StateProtocolOspfv2 provided by user to StateProtocol.
+	// StateProtocolOspfv2 is sets state of configured OSPFv2 routers.
+	SetOspfv2(value StateProtocolOspfv2) StateProtocol
+	// HasOspfv2 checks if Ospfv2 has been set in StateProtocol
+	HasOspfv2() bool
 	setNil()
 }
 
@@ -333,17 +343,19 @@ type StateProtocolChoiceEnum string
 
 // Enum of Choice on StateProtocol
 var StateProtocolChoice = struct {
-	ALL   StateProtocolChoiceEnum
-	ROUTE StateProtocolChoiceEnum
-	LACP  StateProtocolChoiceEnum
-	BGP   StateProtocolChoiceEnum
-	ISIS  StateProtocolChoiceEnum
+	ALL    StateProtocolChoiceEnum
+	ROUTE  StateProtocolChoiceEnum
+	LACP   StateProtocolChoiceEnum
+	BGP    StateProtocolChoiceEnum
+	ISIS   StateProtocolChoiceEnum
+	OSPFV2 StateProtocolChoiceEnum
 }{
-	ALL:   StateProtocolChoiceEnum("all"),
-	ROUTE: StateProtocolChoiceEnum("route"),
-	LACP:  StateProtocolChoiceEnum("lacp"),
-	BGP:   StateProtocolChoiceEnum("bgp"),
-	ISIS:  StateProtocolChoiceEnum("isis"),
+	ALL:    StateProtocolChoiceEnum("all"),
+	ROUTE:  StateProtocolChoiceEnum("route"),
+	LACP:   StateProtocolChoiceEnum("lacp"),
+	BGP:    StateProtocolChoiceEnum("bgp"),
+	ISIS:   StateProtocolChoiceEnum("isis"),
+	OSPFV2: StateProtocolChoiceEnum("ospfv2"),
 }
 
 func (obj *stateProtocol) Choice() StateProtocolChoiceEnum {
@@ -359,6 +371,8 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 	}
 	enumValue := otg.StateProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv2 = nil
+	obj.ospfv2Holder = nil
 	obj.obj.Isis = nil
 	obj.isisHolder = nil
 	obj.obj.Bgp = nil
@@ -388,6 +402,10 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 
 	if value == StateProtocolChoice.ISIS {
 		obj.obj.Isis = NewStateProtocolIsis().msg()
+	}
+
+	if value == StateProtocolChoice.OSPFV2 {
+		obj.obj.Ospfv2 = NewStateProtocolOspfv2().msg()
 	}
 
 	return obj
@@ -533,6 +551,34 @@ func (obj *stateProtocol) SetIsis(value StateProtocolIsis) StateProtocol {
 	return obj
 }
 
+// description is TBD
+// Ospfv2 returns a StateProtocolOspfv2
+func (obj *stateProtocol) Ospfv2() StateProtocolOspfv2 {
+	if obj.obj.Ospfv2 == nil {
+		obj.setChoice(StateProtocolChoice.OSPFV2)
+	}
+	if obj.ospfv2Holder == nil {
+		obj.ospfv2Holder = &stateProtocolOspfv2{obj: obj.obj.Ospfv2}
+	}
+	return obj.ospfv2Holder
+}
+
+// description is TBD
+// Ospfv2 returns a StateProtocolOspfv2
+func (obj *stateProtocol) HasOspfv2() bool {
+	return obj.obj.Ospfv2 != nil
+}
+
+// description is TBD
+// SetOspfv2 sets the StateProtocolOspfv2 value in the StateProtocol object
+func (obj *stateProtocol) SetOspfv2(value StateProtocolOspfv2) StateProtocol {
+	obj.setChoice(StateProtocolChoice.OSPFV2)
+	obj.ospfv2Holder = nil
+	obj.obj.Ospfv2 = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -568,6 +614,11 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 		obj.Isis().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Ospfv2 != nil {
+
+		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *stateProtocol) setDefault() {
@@ -597,6 +648,11 @@ func (obj *stateProtocol) setDefault() {
 	if obj.obj.Isis != nil {
 		choices_set += 1
 		choice = StateProtocolChoice.ISIS
+	}
+
+	if obj.obj.Ospfv2 != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.OSPFV2
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

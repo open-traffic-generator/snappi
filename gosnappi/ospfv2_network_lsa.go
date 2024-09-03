@@ -273,11 +273,13 @@ type Ospfv2NetworkLsa interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2NetworkLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	CommonAttrs() Ospfv2CommonAttrs
 	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2NetworkLsa.
-	// Ospfv2CommonAttrs is tBD
+	// Ospfv2CommonAttrs is attributes in LSA Header.
 	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NetworkLsa
+	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2NetworkLsa
+	HasCommonAttrs() bool
 	// NetworkMask returns string, set in Ospfv2NetworkLsa.
 	NetworkMask() string
 	// SetNetworkMask assigns string provided by user to Ospfv2NetworkLsa
@@ -303,6 +305,12 @@ func (obj *ospfv2NetworkLsa) CommonAttrs() Ospfv2CommonAttrs {
 		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
 	}
 	return obj.commonAttrsHolder
+}
+
+// Contents of the router LSA.
+// CommonAttrs returns a Ospfv2CommonAttrs
+func (obj *ospfv2NetworkLsa) HasCommonAttrs() bool {
+	return obj.obj.CommonAttrs != nil
 }
 
 // Contents of the router LSA.
@@ -362,11 +370,6 @@ func (obj *ospfv2NetworkLsa) SetNeighborRouterId(value string) Ospfv2NetworkLsa 
 func (obj *ospfv2NetworkLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	// CommonAttrs is required
-	if obj.obj.CommonAttrs == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CommonAttrs is required field on interface Ospfv2NetworkLsa")
 	}
 
 	if obj.obj.CommonAttrs != nil {

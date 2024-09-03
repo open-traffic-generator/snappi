@@ -242,7 +242,7 @@ func (obj *ospfv2CommonAttrs) Clone() (Ospfv2CommonAttrs, error) {
 	return newObj, nil
 }
 
-// Ospfv2CommonAttrs is tBD
+// Ospfv2CommonAttrs is attributes in LSA Header.
 type Ospfv2CommonAttrs interface {
 	Validation
 	// msg marshals Ospfv2CommonAttrs to protobuf object *otg.Ospfv2CommonAttrs
@@ -268,10 +268,14 @@ type Ospfv2CommonAttrs interface {
 	LsaId() string
 	// SetLsaId assigns string provided by user to Ospfv2CommonAttrs
 	SetLsaId(value string) Ospfv2CommonAttrs
+	// HasLsaId checks if LsaId has been set in Ospfv2CommonAttrs
+	HasLsaId() bool
 	// AdvertisingRouter returns string, set in Ospfv2CommonAttrs.
 	AdvertisingRouter() string
 	// SetAdvertisingRouter assigns string provided by user to Ospfv2CommonAttrs
 	SetAdvertisingRouter(value string) Ospfv2CommonAttrs
+	// HasAdvertisingRouter checks if AdvertisingRouter has been set in Ospfv2CommonAttrs
+	HasAdvertisingRouter() bool
 	// SequenceNumber returns uint32, set in Ospfv2CommonAttrs.
 	SequenceNumber() uint32
 	// SetSequenceNumber assigns uint32 provided by user to Ospfv2CommonAttrs
@@ -301,6 +305,12 @@ func (obj *ospfv2CommonAttrs) LsaId() string {
 }
 
 // LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+// LsaId returns a string
+func (obj *ospfv2CommonAttrs) HasLsaId() bool {
+	return obj.obj.LsaId != nil
+}
+
+// LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
 // SetLsaId sets the string value in the Ospfv2CommonAttrs object
 func (obj *ospfv2CommonAttrs) SetLsaId(value string) Ospfv2CommonAttrs {
 
@@ -314,6 +324,12 @@ func (obj *ospfv2CommonAttrs) AdvertisingRouter() string {
 
 	return *obj.obj.AdvertisingRouter
 
+}
+
+// The router ID (in the IPv4 format) of the router that originated the LSA.
+// AdvertisingRouter returns a string
+func (obj *ospfv2CommonAttrs) HasAdvertisingRouter() bool {
+	return obj.obj.AdvertisingRouter != nil
 }
 
 // The router ID (in the IPv4 format) of the router that originated the LSA.
@@ -395,10 +411,6 @@ func (obj *ospfv2CommonAttrs) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	// LsaId is required
-	if obj.obj.LsaId == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "LsaId is required field on interface Ospfv2CommonAttrs")
-	}
 	if obj.obj.LsaId != nil {
 
 		err := obj.validateIpv4(obj.LsaId())
@@ -408,10 +420,6 @@ func (obj *ospfv2CommonAttrs) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	// AdvertisingRouter is required
-	if obj.obj.AdvertisingRouter == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "AdvertisingRouter is required field on interface Ospfv2CommonAttrs")
-	}
 	if obj.obj.AdvertisingRouter != nil {
 
 		err := obj.validateIpv4(obj.AdvertisingRouter())

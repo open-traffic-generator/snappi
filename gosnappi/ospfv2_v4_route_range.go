@@ -13,10 +13,11 @@ import (
 // ***** Ospfv2V4RouteRange *****
 type ospfv2V4RouteRange struct {
 	validation
-	obj             *otg.Ospfv2V4RouteRange
-	marshaller      marshalOspfv2V4RouteRange
-	unMarshaller    unMarshalOspfv2V4RouteRange
-	addressesHolder Ospfv2V4RouteRangeV4RouteAddressIter
+	obj               *otg.Ospfv2V4RouteRange
+	marshaller        marshalOspfv2V4RouteRange
+	unMarshaller      unMarshalOspfv2V4RouteRange
+	addressesHolder   Ospfv2V4RouteRangeV4RouteAddressIter
+	routeOriginHolder Ospfv2V4RRRouteOrigin
 }
 
 func NewOspfv2V4RouteRange() Ospfv2V4RouteRange {
@@ -245,6 +246,7 @@ func (obj *ospfv2V4RouteRange) Clone() (Ospfv2V4RouteRange, error) {
 
 func (obj *ospfv2V4RouteRange) setNil() {
 	obj.addressesHolder = nil
+	obj.routeOriginHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -278,28 +280,22 @@ type Ospfv2V4RouteRange interface {
 	SetName(value string) Ospfv2V4RouteRange
 	// Addresses returns Ospfv2V4RouteRangeV4RouteAddressIterIter, set in Ospfv2V4RouteRange
 	Addresses() Ospfv2V4RouteRangeV4RouteAddressIter
-	// RouterMetric returns uint32, set in Ospfv2V4RouteRange.
-	RouterMetric() uint32
-	// SetRouterMetric assigns uint32 provided by user to Ospfv2V4RouteRange
-	SetRouterMetric(value uint32) Ospfv2V4RouteRange
-	// HasRouterMetric checks if RouterMetric has been set in Ospfv2V4RouteRange
-	HasRouterMetric() bool
-	// Choice returns Ospfv2V4RouteRangeChoiceEnum, set in Ospfv2V4RouteRange
-	Choice() Ospfv2V4RouteRangeChoiceEnum
-	// setChoice assigns Ospfv2V4RouteRangeChoiceEnum provided by user to Ospfv2V4RouteRange
-	setChoice(value Ospfv2V4RouteRangeChoiceEnum) Ospfv2V4RouteRange
-	// HasChoice checks if Choice has been set in Ospfv2V4RouteRange
-	HasChoice() bool
-	// getter for NssaExternal to set choice.
-	NssaExternal()
-	// getter for ExternalType_2 to set choice.
-	ExternalType_2()
-	// getter for IntraArea to set choice.
-	IntraArea()
-	// getter for ExternalType_1 to set choice.
-	ExternalType_1()
-	// getter for InterArea to set choice.
-	InterArea()
+	// Metric returns uint32, set in Ospfv2V4RouteRange.
+	Metric() uint32
+	// SetMetric assigns uint32 provided by user to Ospfv2V4RouteRange
+	SetMetric(value uint32) Ospfv2V4RouteRange
+	// HasMetric checks if Metric has been set in Ospfv2V4RouteRange
+	HasMetric() bool
+	// RouteOrigin returns Ospfv2V4RRRouteOrigin, set in Ospfv2V4RouteRange.
+	// Ospfv2V4RRRouteOrigin is container of type of the OSPFv2 types correspond directly to the OSPFv2 LSAs types as
+	// defined in the "OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
+	RouteOrigin() Ospfv2V4RRRouteOrigin
+	// SetRouteOrigin assigns Ospfv2V4RRRouteOrigin provided by user to Ospfv2V4RouteRange.
+	// Ospfv2V4RRRouteOrigin is container of type of the OSPFv2 types correspond directly to the OSPFv2 LSAs types as
+	// defined in the "OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
+	SetRouteOrigin(value Ospfv2V4RRRouteOrigin) Ospfv2V4RouteRange
+	// HasRouteOrigin checks if RouteOrigin has been set in Ospfv2V4RouteRange
+	HasRouteOrigin() bool
 	setNil()
 }
 
@@ -407,95 +403,51 @@ func (obj *ospfv2V4RouteRangeV4RouteAddressIter) appendHolderSlice(item V4RouteA
 }
 
 // The user-defined metric associated with this route range.
-// RouterMetric returns a uint32
-func (obj *ospfv2V4RouteRange) RouterMetric() uint32 {
+// Metric returns a uint32
+func (obj *ospfv2V4RouteRange) Metric() uint32 {
 
-	return *obj.obj.RouterMetric
+	return *obj.obj.Metric
 
 }
 
 // The user-defined metric associated with this route range.
-// RouterMetric returns a uint32
-func (obj *ospfv2V4RouteRange) HasRouterMetric() bool {
-	return obj.obj.RouterMetric != nil
+// Metric returns a uint32
+func (obj *ospfv2V4RouteRange) HasMetric() bool {
+	return obj.obj.Metric != nil
 }
 
 // The user-defined metric associated with this route range.
-// SetRouterMetric sets the uint32 value in the Ospfv2V4RouteRange object
-func (obj *ospfv2V4RouteRange) SetRouterMetric(value uint32) Ospfv2V4RouteRange {
+// SetMetric sets the uint32 value in the Ospfv2V4RouteRange object
+func (obj *ospfv2V4RouteRange) SetMetric(value uint32) Ospfv2V4RouteRange {
 
-	obj.obj.RouterMetric = &value
+	obj.obj.Metric = &value
 	return obj
 }
 
-type Ospfv2V4RouteRangeChoiceEnum string
-
-// Enum of Choice on Ospfv2V4RouteRange
-var Ospfv2V4RouteRangeChoice = struct {
-	INTRA_AREA      Ospfv2V4RouteRangeChoiceEnum
-	INTER_AREA      Ospfv2V4RouteRangeChoiceEnum
-	EXTERNAL_TYPE_1 Ospfv2V4RouteRangeChoiceEnum
-	EXTERNAL_TYPE_2 Ospfv2V4RouteRangeChoiceEnum
-	NSSA_EXTERNAL   Ospfv2V4RouteRangeChoiceEnum
-}{
-	INTRA_AREA:      Ospfv2V4RouteRangeChoiceEnum("intra_area"),
-	INTER_AREA:      Ospfv2V4RouteRangeChoiceEnum("inter_area"),
-	EXTERNAL_TYPE_1: Ospfv2V4RouteRangeChoiceEnum("external_type_1"),
-	EXTERNAL_TYPE_2: Ospfv2V4RouteRangeChoiceEnum("external_type_2"),
-	NSSA_EXTERNAL:   Ospfv2V4RouteRangeChoiceEnum("nssa_external"),
-}
-
-func (obj *ospfv2V4RouteRange) Choice() Ospfv2V4RouteRangeChoiceEnum {
-	return Ospfv2V4RouteRangeChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for NssaExternal to set choice
-func (obj *ospfv2V4RouteRange) NssaExternal() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.NSSA_EXTERNAL)
-}
-
-// getter for ExternalType_2 to set choice
-func (obj *ospfv2V4RouteRange) ExternalType_2() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_2)
-}
-
-// getter for IntraArea to set choice
-func (obj *ospfv2V4RouteRange) IntraArea() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.INTRA_AREA)
-}
-
-// getter for ExternalType_1 to set choice
-func (obj *ospfv2V4RouteRange) ExternalType_1() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.EXTERNAL_TYPE_1)
-}
-
-// getter for InterArea to set choice
-func (obj *ospfv2V4RouteRange) InterArea() {
-	obj.setChoice(Ospfv2V4RouteRangeChoice.INTER_AREA)
-}
-
-// The type of the OSPFv2 routes. route types correspond directly to the OSPFv2 LSAs types as
-// defined in the "OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
-// Supported types are:
-// - intra_area: for Intra-Area.
-// - inter_area: for 3 Inter Area.
-// - external_type_1: for Autonomous System (AS) External with internal AS meteric.
-// - external_type_2: for Autonomous System (AS) External with internal and external AS meteric.
-// - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
-// Choice returns a string
-func (obj *ospfv2V4RouteRange) HasChoice() bool {
-	return obj.obj.Choice != nil
-}
-
-func (obj *ospfv2V4RouteRange) setChoice(value Ospfv2V4RouteRangeChoiceEnum) Ospfv2V4RouteRange {
-	intValue, ok := otg.Ospfv2V4RouteRange_Choice_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Ospfv2V4RouteRangeChoiceEnum", string(value)))
-		return obj
+// The type of the OSPFv2 routes.
+// RouteOrigin returns a Ospfv2V4RRRouteOrigin
+func (obj *ospfv2V4RouteRange) RouteOrigin() Ospfv2V4RRRouteOrigin {
+	if obj.obj.RouteOrigin == nil {
+		obj.obj.RouteOrigin = NewOspfv2V4RRRouteOrigin().msg()
 	}
-	enumValue := otg.Ospfv2V4RouteRange_Choice_Enum(intValue)
-	obj.obj.Choice = &enumValue
+	if obj.routeOriginHolder == nil {
+		obj.routeOriginHolder = &ospfv2V4RRRouteOrigin{obj: obj.obj.RouteOrigin}
+	}
+	return obj.routeOriginHolder
+}
+
+// The type of the OSPFv2 routes.
+// RouteOrigin returns a Ospfv2V4RRRouteOrigin
+func (obj *ospfv2V4RouteRange) HasRouteOrigin() bool {
+	return obj.obj.RouteOrigin != nil
+}
+
+// The type of the OSPFv2 routes.
+// SetRouteOrigin sets the Ospfv2V4RRRouteOrigin value in the Ospfv2V4RouteRange object
+func (obj *ospfv2V4RouteRange) SetRouteOrigin(value Ospfv2V4RRRouteOrigin) Ospfv2V4RouteRange {
+
+	obj.routeOriginHolder = nil
+	obj.obj.RouteOrigin = value.msg()
 
 	return obj
 }
@@ -524,41 +476,26 @@ func (obj *ospfv2V4RouteRange) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.RouterMetric != nil {
+	if obj.obj.Metric != nil {
 
-		if *obj.obj.RouterMetric > 16777215 {
+		if *obj.obj.Metric > 16777215 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Ospfv2V4RouteRange.RouterMetric <= 16777215 but Got %d", *obj.obj.RouterMetric))
+				fmt.Sprintf("0 <= Ospfv2V4RouteRange.Metric <= 16777215 but Got %d", *obj.obj.Metric))
 		}
 
+	}
+
+	if obj.obj.RouteOrigin != nil {
+
+		obj.RouteOrigin().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *ospfv2V4RouteRange) setDefault() {
-	var choices_set int = 0
-	var choice Ospfv2V4RouteRangeChoiceEnum
-	if choices_set == 0 {
-		if obj.obj.Choice == nil {
-			obj.setChoice(Ospfv2V4RouteRangeChoice.INTER_AREA)
-
-		}
-
-	} else if choices_set == 1 && choice != "" {
-		if obj.obj.Choice != nil {
-			if obj.Choice() != choice {
-				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in Ospfv2V4RouteRange")
-			}
-		} else {
-			intVal := otg.Ospfv2V4RouteRange_Choice_Enum_value[string(choice)]
-			enumValue := otg.Ospfv2V4RouteRange_Choice_Enum(intVal)
-			obj.obj.Choice = &enumValue
-		}
-	}
-
-	if obj.obj.RouterMetric == nil {
-		obj.SetRouterMetric(0)
+	if obj.obj.Metric == nil {
+		obj.SetMetric(0)
 	}
 
 }
