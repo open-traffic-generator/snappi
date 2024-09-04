@@ -7575,7 +7575,7 @@ message Ospfv2InterfaceAuthentication {
   optional Choice.Enum choice = 1;
 
   // List of MD5 Key IDs and MD5 Keys.
-  repeated Ospfv2AuthenticationMd5 md5_list = 2;
+  repeated Ospfv2AuthenticationMd5 md5s = 2;
 
   // The 8 Byte authentication field in the OSPF packet.
   // default = keysight

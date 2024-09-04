@@ -10205,7 +10205,7 @@ components:
           enum:
           - md5_list
           - clear_text
-        md5_list:
+        md5s:
           description: |-
             List of MD5 Key IDs and MD5 Keys.
           type: array
