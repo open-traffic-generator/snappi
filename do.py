@@ -330,7 +330,7 @@ def testgo():
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
-        run("go version", raise_exception=True, msg="could not fetch go version")
+        run(["go version"], raise_exception=True, msg="could not fetch go version")
         run(
             ["go test ./... -v -coverprofile coverage.txt | tee coverage.out"],
             raise_exception=True,
