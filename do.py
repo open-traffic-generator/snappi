@@ -10,7 +10,7 @@ import hashlib
 
 
 BLACK_VERSION = "22.1.0"
-GO_VERSION = "1.20"
+GO_VERSION = "1.21.0"
 PROTOC_VERSION = "3.20.3"
 
 # this is where go and protoc shall be installed (and expected to be present)
@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
+USE_OPENAPIART_BRANCH = "go_upgrade_1.23"
 USE_MODELS_BRANCH = None
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
@@ -330,6 +330,7 @@ def testgo():
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
+        run("go version", raise_exception=True, msg="could not fetch go version")
         run(
             ["go test ./... -v -coverprofile coverage.txt | tee coverage.out"],
             raise_exception=True,
