@@ -326,6 +326,7 @@ from .snappi import Dhcpv6ServerOptionsBootFileParams
 from .snappi import Dhcpv6ServerOptionsBootFileParamsIter
 from .snappi import DhcpServerV6Iter
 from .snappi import DeviceOspfv2
+from .snappi import Ospfv2RouterId
 from .snappi import Ospfv2GracefulRestart
 from .snappi import Ospfv2Options
 from .snappi import Ospfv2Interface

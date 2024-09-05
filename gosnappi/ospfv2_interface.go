@@ -399,7 +399,9 @@ func (obj *ospfv2Interface) SetIpv4Name(value string) Ospfv2Interface {
 	return obj
 }
 
-// The OSPF Area ID identifies the routing area to which the host belongs.
+// The Area ID of the area to which the attached network belongs.
+// All routing protocol packets originating from the interface are
+// labelled with this Area ID.
 // Area returns a Ospfv2InterfaceArea
 func (obj *ospfv2Interface) Area() Ospfv2InterfaceArea {
 	if obj.obj.Area == nil {
@@ -411,13 +413,17 @@ func (obj *ospfv2Interface) Area() Ospfv2InterfaceArea {
 	return obj.areaHolder
 }
 
-// The OSPF Area ID identifies the routing area to which the host belongs.
+// The Area ID of the area to which the attached network belongs.
+// All routing protocol packets originating from the interface are
+// labelled with this Area ID.
 // Area returns a Ospfv2InterfaceArea
 func (obj *ospfv2Interface) HasArea() bool {
 	return obj.obj.Area != nil
 }
 
-// The OSPF Area ID identifies the routing area to which the host belongs.
+// The Area ID of the area to which the attached network belongs.
+// All routing protocol packets originating from the interface are
+// labelled with this Area ID.
 // SetArea sets the Ospfv2InterfaceArea value in the Ospfv2Interface object
 func (obj *ospfv2Interface) SetArea(value Ospfv2InterfaceArea) Ospfv2Interface {
 
@@ -427,7 +433,7 @@ func (obj *ospfv2Interface) SetArea(value Ospfv2InterfaceArea) Ospfv2Interface {
 	return obj
 }
 
-// The OSPF network link type options.
+// The OSPF network link type.
 // NetworkType returns a Ospfv2InterfaceNetworkType
 func (obj *ospfv2Interface) NetworkType() Ospfv2InterfaceNetworkType {
 	if obj.obj.NetworkType == nil {
@@ -439,13 +445,13 @@ func (obj *ospfv2Interface) NetworkType() Ospfv2InterfaceNetworkType {
 	return obj.networkTypeHolder
 }
 
-// The OSPF network link type options.
+// The OSPF network link type.
 // NetworkType returns a Ospfv2InterfaceNetworkType
 func (obj *ospfv2Interface) HasNetworkType() bool {
 	return obj.obj.NetworkType != nil
 }
 
-// The OSPF network link type options.
+// The OSPF network link type.
 // SetNetworkType sets the Ospfv2InterfaceNetworkType value in the Ospfv2Interface object
 func (obj *ospfv2Interface) SetNetworkType(value Ospfv2InterfaceNetworkType) Ospfv2Interface {
 
@@ -543,6 +549,7 @@ func (obj *ospfv2InterfaceLinkStateTEIter) appendHolderSlice(item LinkStateTE) O
 }
 
 // OSPFv2 authentication properties.
+// If the authentication is not configured, none OSPF packet exchange is authenticated.
 // Authentication returns a Ospfv2InterfaceAuthentication
 func (obj *ospfv2Interface) Authentication() Ospfv2InterfaceAuthentication {
 	if obj.obj.Authentication == nil {
@@ -555,12 +562,14 @@ func (obj *ospfv2Interface) Authentication() Ospfv2InterfaceAuthentication {
 }
 
 // OSPFv2 authentication properties.
+// If the authentication is not configured, none OSPF packet exchange is authenticated.
 // Authentication returns a Ospfv2InterfaceAuthentication
 func (obj *ospfv2Interface) HasAuthentication() bool {
 	return obj.obj.Authentication != nil
 }
 
 // OSPFv2 authentication properties.
+// If the authentication is not configured, none OSPF packet exchange is authenticated.
 // SetAuthentication sets the Ospfv2InterfaceAuthentication value in the Ospfv2Interface object
 func (obj *ospfv2Interface) SetAuthentication(value Ospfv2InterfaceAuthentication) Ospfv2Interface {
 
@@ -626,7 +635,9 @@ func (obj *ospfv2Interface) SetLinkProtection(value Ospfv2InterfaceLinkProtectio
 	return obj
 }
 
-// This contains list of SRLG values for the link between two interfaces.
+// A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an IGP (OSPFv2 and IS-IS) domain.
+// An SRLG is a set of links sharing a common resource, which affects all links in the set if the common resource fails.
+// Links share the same risk of failure and are therefore considered to belong to the same SRLG.
 // SrlgValues returns a []uint32
 func (obj *ospfv2Interface) SrlgValues() []uint32 {
 	if obj.obj.SrlgValues == nil {
@@ -635,7 +646,9 @@ func (obj *ospfv2Interface) SrlgValues() []uint32 {
 	return obj.obj.SrlgValues
 }
 
-// This contains list of SRLG values for the link between two interfaces.
+// A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an IGP (OSPFv2 and IS-IS) domain.
+// An SRLG is a set of links sharing a common resource, which affects all links in the set if the common resource fails.
+// Links share the same risk of failure and are therefore considered to belong to the same SRLG.
 // SetSrlgValues sets the []uint32 value in the Ospfv2Interface object
 func (obj *ospfv2Interface) SetSrlgValues(value []uint32) Ospfv2Interface {
 
@@ -699,10 +712,10 @@ func (obj *ospfv2Interface) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SrlgValues != nil {
 
 		for _, item := range obj.obj.SrlgValues {
-			if item > 5 {
+			if item > 16777215 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("min(uint32) <= Ospfv2Interface.SrlgValues <= 5 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= Ospfv2Interface.SrlgValues <= 16777215 but Got %d", item))
 			}
 
 		}

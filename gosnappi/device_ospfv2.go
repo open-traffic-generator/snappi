@@ -16,6 +16,7 @@ type deviceOspfv2 struct {
 	obj                   *otg.DeviceOspfv2
 	marshaller            marshalDeviceOspfv2
 	unMarshaller          unMarshalDeviceOspfv2
+	routerIdHolder        Ospfv2RouterId
 	gracefulRestartHolder Ospfv2GracefulRestart
 	capabilitiesHolder    Ospfv2Options
 	interfacesHolder      DeviceOspfv2Ospfv2InterfaceIter
@@ -247,6 +248,7 @@ func (obj *deviceOspfv2) Clone() (DeviceOspfv2, error) {
 }
 
 func (obj *deviceOspfv2) setNil() {
+	obj.routerIdHolder = nil
 	obj.gracefulRestartHolder = nil
 	obj.capabilitiesHolder = nil
 	obj.interfacesHolder = nil
@@ -282,20 +284,14 @@ type DeviceOspfv2 interface {
 	Name() string
 	// SetName assigns string provided by user to DeviceOspfv2
 	SetName(value string) DeviceOspfv2
-	// Choice returns DeviceOspfv2ChoiceEnum, set in DeviceOspfv2
-	Choice() DeviceOspfv2ChoiceEnum
-	// setChoice assigns DeviceOspfv2ChoiceEnum provided by user to DeviceOspfv2
-	setChoice(value DeviceOspfv2ChoiceEnum) DeviceOspfv2
-	// HasChoice checks if Choice has been set in DeviceOspfv2
-	HasChoice() bool
-	// getter for InterfaceIp to set choice.
-	InterfaceIp()
-	// CustomRouterId returns string, set in DeviceOspfv2.
-	CustomRouterId() string
-	// SetCustomRouterId assigns string provided by user to DeviceOspfv2
-	SetCustomRouterId(value string) DeviceOspfv2
-	// HasCustomRouterId checks if CustomRouterId has been set in DeviceOspfv2
-	HasCustomRouterId() bool
+	// RouterId returns Ospfv2RouterId, set in DeviceOspfv2.
+	// Ospfv2RouterId is containter for OSPFv2 Router ID configuration.
+	RouterId() Ospfv2RouterId
+	// SetRouterId assigns Ospfv2RouterId provided by user to DeviceOspfv2.
+	// Ospfv2RouterId is containter for OSPFv2 Router ID configuration.
+	SetRouterId(value Ospfv2RouterId) DeviceOspfv2
+	// HasRouterId checks if RouterId has been set in DeviceOspfv2
+	HasRouterId() bool
 	// LsaRetransmitTimer returns uint32, set in DeviceOspfv2.
 	LsaRetransmitTimer() uint32
 	// SetLsaRetransmitTimer assigns uint32 provided by user to DeviceOspfv2
@@ -377,70 +373,31 @@ func (obj *deviceOspfv2) SetName(value string) DeviceOspfv2 {
 	return obj
 }
 
-type DeviceOspfv2ChoiceEnum string
-
-// Enum of Choice on DeviceOspfv2
-var DeviceOspfv2Choice = struct {
-	INTERFACE_IP     DeviceOspfv2ChoiceEnum
-	CUSTOM_ROUTER_ID DeviceOspfv2ChoiceEnum
-}{
-	INTERFACE_IP:     DeviceOspfv2ChoiceEnum("interface_ip"),
-	CUSTOM_ROUTER_ID: DeviceOspfv2ChoiceEnum("custom_router_id"),
-}
-
-func (obj *deviceOspfv2) Choice() DeviceOspfv2ChoiceEnum {
-	return DeviceOspfv2ChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for InterfaceIp to set choice
-func (obj *deviceOspfv2) InterfaceIp() {
-	obj.setChoice(DeviceOspfv2Choice.INTERFACE_IP)
-}
-
-// IP address of Router ID for this emulated OSPFv2 router.
-// - interface_ip: When IPv4 interface address to be assigned as Router ID.
-// - custom_router_id: When, Router ID needs to be configured different from Interface IPv4 address.
-// Choice returns a string
-func (obj *deviceOspfv2) HasChoice() bool {
-	return obj.obj.Choice != nil
-}
-
-func (obj *deviceOspfv2) setChoice(value DeviceOspfv2ChoiceEnum) DeviceOspfv2 {
-	intValue, ok := otg.DeviceOspfv2_Choice_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on DeviceOspfv2ChoiceEnum", string(value)))
-		return obj
+// OSPFv2 Router Id.
+// RouterId returns a Ospfv2RouterId
+func (obj *deviceOspfv2) RouterId() Ospfv2RouterId {
+	if obj.obj.RouterId == nil {
+		obj.obj.RouterId = NewOspfv2RouterId().msg()
 	}
-	enumValue := otg.DeviceOspfv2_Choice_Enum(intValue)
-	obj.obj.Choice = &enumValue
-	obj.obj.CustomRouterId = nil
-	return obj
-}
-
-// Router ID in IPv4 address format.
-// CustomRouterId returns a string
-func (obj *deviceOspfv2) CustomRouterId() string {
-
-	if obj.obj.CustomRouterId == nil {
-		obj.setChoice(DeviceOspfv2Choice.CUSTOM_ROUTER_ID)
+	if obj.routerIdHolder == nil {
+		obj.routerIdHolder = &ospfv2RouterId{obj: obj.obj.RouterId}
 	}
-
-	return *obj.obj.CustomRouterId
-
+	return obj.routerIdHolder
 }
 
-// Router ID in IPv4 address format.
-// CustomRouterId returns a string
-func (obj *deviceOspfv2) HasCustomRouterId() bool {
-	return obj.obj.CustomRouterId != nil
+// OSPFv2 Router Id.
+// RouterId returns a Ospfv2RouterId
+func (obj *deviceOspfv2) HasRouterId() bool {
+	return obj.obj.RouterId != nil
 }
 
-// Router ID in IPv4 address format.
-// SetCustomRouterId sets the string value in the DeviceOspfv2 object
-func (obj *deviceOspfv2) SetCustomRouterId(value string) DeviceOspfv2 {
-	obj.setChoice(DeviceOspfv2Choice.CUSTOM_ROUTER_ID)
-	obj.obj.CustomRouterId = &value
+// OSPFv2 Router Id.
+// SetRouterId sets the Ospfv2RouterId value in the DeviceOspfv2 object
+func (obj *deviceOspfv2) SetRouterId(value Ospfv2RouterId) DeviceOspfv2 {
+
+	obj.routerIdHolder = nil
+	obj.obj.RouterId = value.msg()
+
 	return obj
 }
 
@@ -794,13 +751,9 @@ func (obj *deviceOspfv2) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceOspfv2")
 	}
 
-	if obj.obj.CustomRouterId != nil {
+	if obj.obj.RouterId != nil {
 
-		err := obj.validateIpv4(obj.CustomRouterId())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on DeviceOspfv2.CustomRouterId"))
-		}
-
+		obj.RouterId().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.LsaRetransmitTimer != nil {
@@ -874,31 +827,6 @@ func (obj *deviceOspfv2) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *deviceOspfv2) setDefault() {
-	var choices_set int = 0
-	var choice DeviceOspfv2ChoiceEnum
-
-	if obj.obj.CustomRouterId != nil {
-		choices_set += 1
-		choice = DeviceOspfv2Choice.CUSTOM_ROUTER_ID
-	}
-	if choices_set == 0 {
-		if obj.obj.Choice == nil {
-			obj.setChoice(DeviceOspfv2Choice.INTERFACE_IP)
-
-		}
-
-	} else if choices_set == 1 && choice != "" {
-		if obj.obj.Choice != nil {
-			if obj.Choice() != choice {
-				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in DeviceOspfv2")
-			}
-		} else {
-			intVal := otg.DeviceOspfv2_Choice_Enum_value[string(choice)]
-			enumValue := otg.DeviceOspfv2_Choice_Enum(intVal)
-			obj.obj.Choice = &enumValue
-		}
-	}
-
 	if obj.obj.LsaRetransmitTimer == nil {
 		obj.SetLsaRetransmitTimer(5)
 	}

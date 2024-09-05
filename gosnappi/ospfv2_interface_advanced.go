@@ -264,12 +264,12 @@ type Ospfv2InterfaceAdvanced interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// EnableFastHello returns bool, set in Ospfv2InterfaceAdvanced.
-	EnableFastHello() bool
-	// SetEnableFastHello assigns bool provided by user to Ospfv2InterfaceAdvanced
-	SetEnableFastHello(value bool) Ospfv2InterfaceAdvanced
-	// HasEnableFastHello checks if EnableFastHello has been set in Ospfv2InterfaceAdvanced
-	HasEnableFastHello() bool
+	// FastHello returns bool, set in Ospfv2InterfaceAdvanced.
+	FastHello() bool
+	// SetFastHello assigns bool provided by user to Ospfv2InterfaceAdvanced
+	SetFastHello(value bool) Ospfv2InterfaceAdvanced
+	// HasFastHello checks if FastHello has been set in Ospfv2InterfaceAdvanced
+	HasFastHello() bool
 	// HelloInterval returns uint32, set in Ospfv2InterfaceAdvanced.
 	HelloInterval() uint32
 	// SetHelloInterval assigns uint32 provided by user to Ospfv2InterfaceAdvanced
@@ -311,32 +311,34 @@ type Ospfv2InterfaceAdvanced interface {
 // When fast hello packets are configured on the interface;
 // the hello interval advertised in the hello packets that are sent out this interface is set to 0
 // and hello interval in the hello packets received over this interface is ignored.
-// EnableFastHello returns a bool
-func (obj *ospfv2InterfaceAdvanced) EnableFastHello() bool {
+// FastHello returns a bool
+func (obj *ospfv2InterfaceAdvanced) FastHello() bool {
 
-	return *obj.obj.EnableFastHello
+	return *obj.obj.FastHello
 
 }
 
 // When fast hello packets are configured on the interface;
 // the hello interval advertised in the hello packets that are sent out this interface is set to 0
 // and hello interval in the hello packets received over this interface is ignored.
-// EnableFastHello returns a bool
-func (obj *ospfv2InterfaceAdvanced) HasEnableFastHello() bool {
-	return obj.obj.EnableFastHello != nil
+// FastHello returns a bool
+func (obj *ospfv2InterfaceAdvanced) HasFastHello() bool {
+	return obj.obj.FastHello != nil
 }
 
 // When fast hello packets are configured on the interface;
 // the hello interval advertised in the hello packets that are sent out this interface is set to 0
 // and hello interval in the hello packets received over this interface is ignored.
-// SetEnableFastHello sets the bool value in the Ospfv2InterfaceAdvanced object
-func (obj *ospfv2InterfaceAdvanced) SetEnableFastHello(value bool) Ospfv2InterfaceAdvanced {
+// SetFastHello sets the bool value in the Ospfv2InterfaceAdvanced object
+func (obj *ospfv2InterfaceAdvanced) SetFastHello(value bool) Ospfv2InterfaceAdvanced {
 
-	obj.obj.EnableFastHello = &value
+	obj.obj.FastHello = &value
 	return obj
 }
 
-// The Hello interval for Level 1 Hello messages, in seconds.
+// The time interval, in seconds, between the Hello packets that
+// the router sends on the interface. Advertised in Hello packets
+// sent out this interface.
 // HelloInterval returns a uint32
 func (obj *ospfv2InterfaceAdvanced) HelloInterval() uint32 {
 
@@ -344,13 +346,17 @@ func (obj *ospfv2InterfaceAdvanced) HelloInterval() uint32 {
 
 }
 
-// The Hello interval for Level 1 Hello messages, in seconds.
+// The time interval, in seconds, between the Hello packets that
+// the router sends on the interface. Advertised in Hello packets
+// sent out this interface.
 // HelloInterval returns a uint32
 func (obj *ospfv2InterfaceAdvanced) HasHelloInterval() bool {
 	return obj.obj.HelloInterval != nil
 }
 
-// The Hello interval for Level 1 Hello messages, in seconds.
+// The time interval, in seconds, between the Hello packets that
+// the router sends on the interface. Advertised in Hello packets
+// sent out this interface.
 // SetHelloInterval sets the uint32 value in the Ospfv2InterfaceAdvanced object
 func (obj *ospfv2InterfaceAdvanced) SetHelloInterval(value uint32) Ospfv2InterfaceAdvanced {
 
@@ -358,7 +364,9 @@ func (obj *ospfv2InterfaceAdvanced) SetHelloInterval(value uint32) Ospfv2Interfa
 	return obj
 }
 
-// The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+// The time interval in seconds before the router's neighbors will declare
+// it down, when they stop hearing the router's Hello Packets.
+// Advertised in Hello packets sent out this interface.
 // DeadInterval returns a uint32
 func (obj *ospfv2InterfaceAdvanced) DeadInterval() uint32 {
 
@@ -366,13 +374,17 @@ func (obj *ospfv2InterfaceAdvanced) DeadInterval() uint32 {
 
 }
 
-// The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+// The time interval in seconds before the router's neighbors will declare
+// it down, when they stop hearing the router's Hello Packets.
+// Advertised in Hello packets sent out this interface.
 // DeadInterval returns a uint32
 func (obj *ospfv2InterfaceAdvanced) HasDeadInterval() bool {
 	return obj.obj.DeadInterval != nil
 }
 
-// The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+// The time interval in seconds before the router's neighbors will declare
+// it down, when they stop hearing the router's Hello Packets.
+// Advertised in Hello packets sent out this interface.
 // SetDeadInterval sets the uint32 value in the Ospfv2InterfaceAdvanced object
 func (obj *ospfv2InterfaceAdvanced) SetDeadInterval(value uint32) Ospfv2InterfaceAdvanced {
 
@@ -498,8 +510,8 @@ func (obj *ospfv2InterfaceAdvanced) validateObj(vObj *validation, set_default bo
 }
 
 func (obj *ospfv2InterfaceAdvanced) setDefault() {
-	if obj.obj.EnableFastHello == nil {
-		obj.SetEnableFastHello(false)
+	if obj.obj.FastHello == nil {
+		obj.SetFastHello(false)
 	}
 	if obj.obj.HelloInterval == nil {
 		obj.SetHelloInterval(10)

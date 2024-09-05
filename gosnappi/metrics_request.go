@@ -434,9 +434,9 @@ var MetricsRequestChoice = struct {
 	RSVP          MetricsRequestChoiceEnum
 	DHCPV4_CLIENT MetricsRequestChoiceEnum
 	DHCPV4_SERVER MetricsRequestChoiceEnum
-	OSPFV2        MetricsRequestChoiceEnum
 	DHCPV6_CLIENT MetricsRequestChoiceEnum
 	DHCPV6_SERVER MetricsRequestChoiceEnum
+	OSPFV2        MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -449,9 +449,9 @@ var MetricsRequestChoice = struct {
 	RSVP:          MetricsRequestChoiceEnum("rsvp"),
 	DHCPV4_CLIENT: MetricsRequestChoiceEnum("dhcpv4_client"),
 	DHCPV4_SERVER: MetricsRequestChoiceEnum("dhcpv4_server"),
-	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
 	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
+	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -1089,11 +1089,6 @@ func (obj *metricsRequest) setDefault() {
 		choice = MetricsRequestChoice.DHCPV4_SERVER
 	}
 
-	if obj.obj.Ospfv2 != nil {
-		choices_set += 1
-		choice = MetricsRequestChoice.OSPFV2
-	}
-
 	if obj.obj.Dhcpv6Client != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.DHCPV6_CLIENT
@@ -1102,6 +1097,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Dhcpv6Server != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.DHCPV6_SERVER
+	}
+
+	if obj.obj.Ospfv2 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.OSPFV2
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

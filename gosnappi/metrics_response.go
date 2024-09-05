@@ -306,12 +306,10 @@ type MetricsResponse interface {
 	HasChoice() bool
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
-	// getter for Ospfv2 to set choice.
-	Ospfv2()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
@@ -349,35 +347,35 @@ type MetricsResponseChoiceEnum string
 
 // Enum of Choice on MetricsResponse
 var MetricsResponseChoice = struct {
-	FLOW_METRICS  MetricsResponseChoiceEnum
-	PORT_METRICS  MetricsResponseChoiceEnum
-	BGPV4_METRICS MetricsResponseChoiceEnum
-	BGPV6_METRICS MetricsResponseChoiceEnum
-	ISIS_METRICS  MetricsResponseChoiceEnum
-	LAG_METRICS   MetricsResponseChoiceEnum
-	LACP_METRICS  MetricsResponseChoiceEnum
-	LLDP_METRICS  MetricsResponseChoiceEnum
-	RSVP_METRICS  MetricsResponseChoiceEnum
-	DHCPV4_CLIENT MetricsResponseChoiceEnum
-	DHCPV4_SERVER MetricsResponseChoiceEnum
-	DHCPV6_CLIENT MetricsResponseChoiceEnum
-	DHCPV6_SERVER MetricsResponseChoiceEnum
-	OSPFV2        MetricsResponseChoiceEnum
+	FLOW_METRICS   MetricsResponseChoiceEnum
+	PORT_METRICS   MetricsResponseChoiceEnum
+	BGPV4_METRICS  MetricsResponseChoiceEnum
+	BGPV6_METRICS  MetricsResponseChoiceEnum
+	ISIS_METRICS   MetricsResponseChoiceEnum
+	LAG_METRICS    MetricsResponseChoiceEnum
+	LACP_METRICS   MetricsResponseChoiceEnum
+	LLDP_METRICS   MetricsResponseChoiceEnum
+	RSVP_METRICS   MetricsResponseChoiceEnum
+	DHCPV4_CLIENT  MetricsResponseChoiceEnum
+	DHCPV4_SERVER  MetricsResponseChoiceEnum
+	DHCPV6_CLIENT  MetricsResponseChoiceEnum
+	DHCPV6_SERVER  MetricsResponseChoiceEnum
+	OSPFV2_METRICS MetricsResponseChoiceEnum
 }{
-	FLOW_METRICS:  MetricsResponseChoiceEnum("flow_metrics"),
-	PORT_METRICS:  MetricsResponseChoiceEnum("port_metrics"),
-	BGPV4_METRICS: MetricsResponseChoiceEnum("bgpv4_metrics"),
-	BGPV6_METRICS: MetricsResponseChoiceEnum("bgpv6_metrics"),
-	ISIS_METRICS:  MetricsResponseChoiceEnum("isis_metrics"),
-	LAG_METRICS:   MetricsResponseChoiceEnum("lag_metrics"),
-	LACP_METRICS:  MetricsResponseChoiceEnum("lacp_metrics"),
-	LLDP_METRICS:  MetricsResponseChoiceEnum("lldp_metrics"),
-	RSVP_METRICS:  MetricsResponseChoiceEnum("rsvp_metrics"),
-	DHCPV4_CLIENT: MetricsResponseChoiceEnum("dhcpv4_client"),
-	DHCPV4_SERVER: MetricsResponseChoiceEnum("dhcpv4_server"),
-	DHCPV6_CLIENT: MetricsResponseChoiceEnum("dhcpv6_client"),
-	DHCPV6_SERVER: MetricsResponseChoiceEnum("dhcpv6_server"),
-	OSPFV2:        MetricsResponseChoiceEnum("ospfv2"),
+	FLOW_METRICS:   MetricsResponseChoiceEnum("flow_metrics"),
+	PORT_METRICS:   MetricsResponseChoiceEnum("port_metrics"),
+	BGPV4_METRICS:  MetricsResponseChoiceEnum("bgpv4_metrics"),
+	BGPV6_METRICS:  MetricsResponseChoiceEnum("bgpv6_metrics"),
+	ISIS_METRICS:   MetricsResponseChoiceEnum("isis_metrics"),
+	LAG_METRICS:    MetricsResponseChoiceEnum("lag_metrics"),
+	LACP_METRICS:   MetricsResponseChoiceEnum("lacp_metrics"),
+	LLDP_METRICS:   MetricsResponseChoiceEnum("lldp_metrics"),
+	RSVP_METRICS:   MetricsResponseChoiceEnum("rsvp_metrics"),
+	DHCPV4_CLIENT:  MetricsResponseChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER:  MetricsResponseChoiceEnum("dhcpv4_server"),
+	DHCPV6_CLIENT:  MetricsResponseChoiceEnum("dhcpv6_client"),
+	DHCPV6_SERVER:  MetricsResponseChoiceEnum("dhcpv6_server"),
+	OSPFV2_METRICS: MetricsResponseChoiceEnum("ospfv2_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
@@ -389,19 +387,14 @@ func (obj *metricsResponse) Dhcpv4Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
-// getter for Dhcpv6Client to set choice
-func (obj *metricsResponse) Dhcpv6Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
-}
-
-// getter for Ospfv2 to set choice
-func (obj *metricsResponse) Ospfv2() {
-	obj.setChoice(MetricsResponseChoice.OSPFV2)
-}
-
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
+}
+
+// getter for Dhcpv6Client to set choice
+func (obj *metricsResponse) Dhcpv6Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
 // getter for Dhcpv4Server to set choice
@@ -424,6 +417,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv2Metrics = nil
+	obj.ospfv2MetricsHolder = nil
 	obj.obj.RsvpMetrics = nil
 	obj.rsvpMetricsHolder = nil
 	obj.obj.LldpMetrics = nil
@@ -477,6 +472,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.RSVP_METRICS {
 		obj.obj.RsvpMetrics = []*otg.RsvpMetric{}
+	}
+
+	if value == MetricsResponseChoice.OSPFV2_METRICS {
+		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
 	}
 
 	return obj
@@ -1617,7 +1616,7 @@ func (obj *metricsResponseDhcpv6ServerMetricIter) appendHolderSlice(item Dhcpv6S
 // Ospfv2Metrics returns a []Ospfv2Metric
 func (obj *metricsResponse) Ospfv2Metrics() MetricsResponseOspfv2MetricIter {
 	if len(obj.obj.Ospfv2Metrics) == 0 {
-		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
+		obj.setChoice(MetricsResponseChoice.OSPFV2_METRICS)
 	}
 	if obj.ospfv2MetricsHolder == nil {
 		obj.ospfv2MetricsHolder = newMetricsResponseOspfv2MetricIter(&obj.obj.Ospfv2Metrics).setMsg(obj)
@@ -1950,6 +1949,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.RsvpMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.RSVP_METRICS
+	}
+
+	if len(obj.obj.Ospfv2Metrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.OSPFV2_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

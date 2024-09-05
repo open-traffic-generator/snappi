@@ -314,7 +314,7 @@ type Ospfv2InterfaceLinkProtection interface {
 	HasReserved80() bool
 }
 
-// Enable this to protect other link or links. LSPs on a link of this type are lost
+// Enable this to protect other link or links. LSAs on a link of this type are lost
 // if any of the links fail.
 // ExtraTraffic returns a bool
 func (obj *ospfv2InterfaceLinkProtection) ExtraTraffic() bool {
@@ -323,14 +323,14 @@ func (obj *ospfv2InterfaceLinkProtection) ExtraTraffic() bool {
 
 }
 
-// Enable this to protect other link or links. LSPs on a link of this type are lost
+// Enable this to protect other link or links. LSAs on a link of this type are lost
 // if any of the links fail.
 // ExtraTraffic returns a bool
 func (obj *ospfv2InterfaceLinkProtection) HasExtraTraffic() bool {
 	return obj.obj.ExtraTraffic != nil
 }
 
-// Enable this to protect other link or links. LSPs on a link of this type are lost
+// Enable this to protect other link or links. LSAs on a link of this type are lost
 // if any of the links fail.
 // SetExtraTraffic sets the bool value in the Ospfv2InterfaceLinkProtection object
 func (obj *ospfv2InterfaceLinkProtection) SetExtraTraffic(value bool) Ospfv2InterfaceLinkProtection {
@@ -340,7 +340,7 @@ func (obj *ospfv2InterfaceLinkProtection) SetExtraTraffic(value bool) Ospfv2Inte
 }
 
 // Enabling this signifies that there is no other link protecting this
-// link. LSPs on a link of this type are lost if the link fails.
+// link. LSAs on a link of this type are lost if the link fails.
 // Unprotected returns a bool
 func (obj *ospfv2InterfaceLinkProtection) Unprotected() bool {
 
@@ -349,14 +349,14 @@ func (obj *ospfv2InterfaceLinkProtection) Unprotected() bool {
 }
 
 // Enabling this signifies that there is no other link protecting this
-// link. LSPs on a link of this type are lost if the link fails.
+// link. LSAs on a link of this type are lost if the link fails.
 // Unprotected returns a bool
 func (obj *ospfv2InterfaceLinkProtection) HasUnprotected() bool {
 	return obj.obj.Unprotected != nil
 }
 
 // Enabling this signifies that there is no other link protecting this
-// link. LSPs on a link of this type are lost if the link fails.
+// link. LSAs on a link of this type are lost if the link fails.
 // SetUnprotected sets the bool value in the Ospfv2InterfaceLinkProtection object
 func (obj *ospfv2InterfaceLinkProtection) SetUnprotected(value bool) Ospfv2InterfaceLinkProtection {
 
@@ -420,7 +420,7 @@ func (obj *ospfv2InterfaceLinkProtection) SetDedicated1To1(value bool) Ospfv2Int
 // Enabling this signifies that a dedicated disjoint link is protecting
 // this link. However, the protecting link is not advertised in the
 // link state database and is therefore not available for the routing
-// of LSPs.
+// of LSAs.
 // Dedicated1Plus1 returns a bool
 func (obj *ospfv2InterfaceLinkProtection) Dedicated1Plus1() bool {
 
@@ -431,7 +431,7 @@ func (obj *ospfv2InterfaceLinkProtection) Dedicated1Plus1() bool {
 // Enabling this signifies that a dedicated disjoint link is protecting
 // this link. However, the protecting link is not advertised in the
 // link state database and is therefore not available for the routing
-// of LSPs.
+// of LSAs.
 // Dedicated1Plus1 returns a bool
 func (obj *ospfv2InterfaceLinkProtection) HasDedicated1Plus1() bool {
 	return obj.obj.Dedicated_1Plus_1 != nil
@@ -440,7 +440,7 @@ func (obj *ospfv2InterfaceLinkProtection) HasDedicated1Plus1() bool {
 // Enabling this signifies that a dedicated disjoint link is protecting
 // this link. However, the protecting link is not advertised in the
 // link state database and is therefore not available for the routing
-// of LSPs.
+// of LSAs.
 // SetDedicated1Plus1 sets the bool value in the Ospfv2InterfaceLinkProtection object
 func (obj *ospfv2InterfaceLinkProtection) SetDedicated1Plus1(value bool) Ospfv2InterfaceLinkProtection {
 

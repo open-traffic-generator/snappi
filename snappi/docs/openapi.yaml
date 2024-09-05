@@ -9773,6 +9773,74 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        router_id:
+          description: |-
+            OSPFv2 Router Id.
+          $ref: '#/components/schemas/Ospfv2.RouterId'
+          x-field-uid: 2
+        lsa_retransmit_timer:
+          description: |-
+            The time in seconds for LSA retransmission.
+          type: integer
+          format: uint32
+          default: 5
+          minimum: 1
+          x-field-uid: 3
+        lsa_refresh_time:
+          description: |-
+            The time in seconds required for LSA refresh.
+          type: integer
+          format: uint32
+          default: 1800
+          minimum: 5
+          x-field-uid: 4
+        inter_burst_lsu_interval:
+          description: "The gap in miliseconds between each Flood Link State Update\
+            \ Burst "
+          type: integer
+          format: uint32
+          default: 33
+          x-field-uid: 5
+        max_flood_lsu_per_burst:
+          description: "The maximum number of Flood LSUpdates for each burst "
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 6
+        graceful_restart:
+          $ref: '#/components/schemas/Ospfv2.GracefulRestart'
+          x-field-uid: 7
+        store_lsa:
+          description: |-
+            Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
+          type: boolean
+          default: false
+          x-field-uid: 8
+        capabilities:
+          description: |-
+            A router indicates the optional capabilities that it supports in its OSPF Hello packets, Database Description packets and in its LSAs.
+          $ref: '#/components/schemas/Ospfv2.Options'
+          x-field-uid: 9
+        interfaces:
+          description: |-
+            List of OSPFv2 interfaces for this router.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.Interface'
+          x-field-uid: 10
+        v4_routes:
+          description: |-
+            Emulated OSPFv4 IPv4 routes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.V4RouteRange'
+          x-field-uid: 11
+    Ospfv2.RouterId:
+      description: |-
+        Containter for OSPFv2 Router ID configuration.
+      type: object
+      properties:
         choice:
           description: |-
             IP address of Router ID for this emulated OSPFv2 router.
@@ -9780,7 +9848,7 @@ components:
             - custom_router_id: When, Router ID needs to be configured different from Interface IPv4 address.
           type: string
           default: interface_ip
-          x-field-uid: 2
+          x-field-uid: 1
           x-enum:
             interface_ip:
               x-field-uid: 1
@@ -9795,64 +9863,6 @@ components:
           type: string
           format: ipv4
           x-field-uid: 3
-        lsa_retransmit_timer:
-          description: |-
-            The time in seconds for LSA retransmission.
-          type: integer
-          format: uint32
-          default: 5
-          minimum: 1
-          x-field-uid: 4
-        lsa_refresh_time:
-          description: |-
-            The time in seconds required for LSA refresh.
-          type: integer
-          format: uint32
-          default: 1800
-          minimum: 5
-          x-field-uid: 5
-        inter_burst_lsu_interval:
-          description: "The gap in miliseconds between each Flood Link State Update\
-            \ Burst "
-          type: integer
-          format: uint32
-          default: 33
-          x-field-uid: 6
-        max_flood_lsu_per_burst:
-          description: "The maximum number of Flood LSUpdates for each burst "
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 1
-          x-field-uid: 7
-        graceful_restart:
-          $ref: '#/components/schemas/Ospfv2.GracefulRestart'
-          x-field-uid: 8
-        store_lsa:
-          description: |-
-            Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
-          type: boolean
-          default: false
-          x-field-uid: 9
-        capabilities:
-          description: |-
-            A router indicates the optional capabilities that it supports in its OSPF Hello packets, Database Description packets and in its LSAs.
-          $ref: '#/components/schemas/Ospfv2.Options'
-          x-field-uid: 10
-        interfaces:
-          description: |-
-            List of OSPFv2 interfaces for this router.
-          type: array
-          items:
-            $ref: '#/components/schemas/Ospfv2.Interface'
-          x-field-uid: 11
-        v4_routes:
-          description: |-
-            Emulated OSPFv4 IPv4 routes.
-          type: array
-          items:
-            $ref: '#/components/schemas/Ospfv2.V4RouteRange'
-          x-field-uid: 12
     Ospfv2.Options:
       description: "The OSPFv2 Options field is present Database Description packets\
         \ and all LSAs.  \nThis enables OSPF routers to support (or not support) optional\
@@ -9910,15 +9920,15 @@ components:
           type: boolean
           default: false
           x-field-uid: 8
-        router_lsa_b_bit:
+        lsa_b_bit:
           description: |-
-            Enable to indicate that the router acts as an Area Border Router.
+            Set to indicate that the router acts as an Area Border Router.
           type: boolean
           default: false
           x-field-uid: 9
-        router_lsa_e_bit:
+        lsa_e_bit:
           description: |-
-            Enable to indicate that the router acts as an AS Boundary Router.
+            Set to indicate that the router acts as an AS Boundary Router.
           type: boolean
           default: false
           x-field-uid: 10
@@ -9955,13 +9965,14 @@ components:
           - /components/schemas/Device.Ipv4/properties/name
           x-field-uid: 2
         area:
-          description: "The OSPF Area ID identifies the routing area to which the\
-            \ host belongs.           "
+          description: "The Area ID of the area to which the attached network belongs.\n\
+            All routing protocol packets originating from the interface are\nlabelled\
+            \ with this Area ID.           "
           $ref: '#/components/schemas/Ospfv2Interface.Area'
           x-field-uid: 3
         network_type:
           description: |-
-            The OSPF network link type options.
+            The OSPF network link type.
           $ref: '#/components/schemas/Ospfv2Interface.NetworkType'
           x-field-uid: 4
         traffic_engineering:
@@ -9974,6 +9985,7 @@ components:
         authentication:
           description: |-
             OSPFv2 authentication properties.
+            If the authentication is not configured, none OSPF packet exchange is authenticated.
           $ref: '#/components/schemas/Ospfv2Interface.Authentication'
           x-field-uid: 6
         advanced:
@@ -9988,12 +10000,14 @@ components:
           x-field-uid: 8
         srlg_values:
           description: |-
-            This contains list of SRLG values for the link between two interfaces.
+            A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an IGP (OSPFv2 and IS-IS) domain.
+            An SRLG is a set of links sharing a common resource, which affects all links in the set if the common resource fails.
+            Links share the same risk of failure and are therefore considered to belong to the same SRLG.
           type: array
           items:
             type: integer
             format: uint32
-            maximum: 5
+            maximum: 16777215
             default: 0
           x-field-uid: 9
     Ospfv2Interface.Area:
@@ -10072,7 +10086,7 @@ components:
         Contains OSPFv2 advanced properties.
       type: object
       properties:
-        enable_fast_hello:
+        fast_hello:
           description: "When fast hello packets are configured on the interface; \n\
             the hello interval advertised in the hello packets that are sent out this\
             \ interface is set to 0\nand hello interval in the hello packets received\
@@ -10082,14 +10096,18 @@ components:
           x-field-uid: 1
         hello_interval:
           description: |-
-            The Hello interval for Level 1 Hello messages, in seconds.
+            The time interval, in seconds, between the Hello packets that
+            the router sends on the interface. Advertised in Hello packets
+            sent out this interface.
           type: integer
           format: uint32
           default: 10
           x-field-uid: 2
         dead_interval:
           description: |-
-            The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+            The time interval in seconds before the router's neighbors will declare
+            it down, when they stop hearing the router's Hello Packets.
+            Advertised in Hello packets sent out this interface.
           type: integer
           format: uint32
           default: 40
@@ -10250,14 +10268,14 @@ components:
       properties:
         extra_traffic:
           description: |-
-            Enable this to protect other link or links. LSPs on a link of this type are lost
+            Enable this to protect other link or links. LSAs on a link of this type are lost
             if any of the links fail.
           type: boolean
           default: false
           x-field-uid: 1
         unprotected:
           description: "Enabling this signifies that there is no other link protecting\
-            \ this \nlink. LSPs on a link of this type are lost if the link fails."
+            \ this \nlink. LSAs on a link of this type are lost if the link fails."
           type: boolean
           default: false
           x-field-uid: 2
@@ -10278,7 +10296,7 @@ components:
           description: "Enabling this signifies that a dedicated disjoint link is\
             \ protecting \nthis link. However, the protecting link is not advertised\
             \ in the \nlink state database and is therefore not available for the\
-            \ routing \nof LSPs."
+            \ routing \nof LSAs."
           type: boolean
           default: false
           x-field-uid: 5
@@ -15298,11 +15316,11 @@ components:
               x-field-uid: 10
             dhcpv4_server:
               x-field-uid: 11
-            ospfv2:
-              x-field-uid: 12
             dhcpv6_client:
-              x-field-uid: 13
+              x-field-uid: 12
             dhcpv6_server:
+              x-field-uid: 13
+            ospfv2:
               x-field-uid: 14
           enum:
           - port
@@ -15316,9 +15334,9 @@ components:
           - rsvp
           - dhcpv4_client
           - dhcpv4_server
-          - ospfv2
           - dhcpv6_client
           - dhcpv6_server
+          - ospfv2
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -15397,7 +15415,7 @@ components:
               x-field-uid: 12
             dhcpv6_server:
               x-field-uid: 13
-            ospfv2:
+            ospfv2_metrics:
               x-field-uid: 14
           enum:
           - flow_metrics
@@ -15413,7 +15431,7 @@ components:
           - dhcpv4_server
           - dhcpv6_client
           - dhcpv6_server
-          - ospfv2
+          - ospfv2_metrics
         port_metrics:
           type: array
           items:

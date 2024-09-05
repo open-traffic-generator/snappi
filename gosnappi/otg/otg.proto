@@ -7257,6 +7257,47 @@ message DeviceOspfv2 {
   // required = true
   optional string name = 1;
 
+  // OSPFv2 Router Id.
+  Ospfv2RouterId router_id = 2;
+
+  // The time in seconds for LSA retransmission.
+  // default = 5
+  optional uint32 lsa_retransmit_timer = 3;
+
+  // The time in seconds required for LSA refresh.
+  // default = 1800
+  optional uint32 lsa_refresh_time = 4;
+
+  // The gap in miliseconds between each Flood Link State Update Burst
+  // default = 33
+  optional uint32 inter_burst_lsu_interval = 5;
+
+  // The maximum number of Flood LSUpdates for each burst
+  // default = 1
+  optional uint32 max_flood_lsu_per_burst = 6;
+
+  // Description missing in models
+  Ospfv2GracefulRestart graceful_restart = 7;
+
+  // Configuration for controlling storage of OSPFv2 learned LSAs are received from the
+  // neighbors.
+  // default = False
+  optional bool store_lsa = 8;
+
+  // A router indicates the optional capabilities that it supports in its OSPF Hello packets,
+  // Database Description packets and in its LSAs.
+  Ospfv2Options capabilities = 9;
+
+  // List of OSPFv2 interfaces for this router.
+  repeated Ospfv2Interface interfaces = 10;
+
+  // Emulated OSPFv4 IPv4 routes.
+  repeated Ospfv2V4RouteRange v4_routes = 11;
+}
+
+// Containter for OSPFv2 Router ID configuration.
+message Ospfv2RouterId {
+
   message Choice {
     enum Enum {
       unspecified = 0;
@@ -7269,44 +7310,10 @@ message DeviceOspfv2 {
   // - custom_router_id: When, Router ID needs to be configured different from Interface
   // IPv4 address.
   // default = Choice.Enum.interface_ip
-  optional Choice.Enum choice = 2;
+  optional Choice.Enum choice = 1;
 
   // Router ID in IPv4 address format.
   optional string custom_router_id = 3;
-
-  // The time in seconds for LSA retransmission.
-  // default = 5
-  optional uint32 lsa_retransmit_timer = 4;
-
-  // The time in seconds required for LSA refresh.
-  // default = 1800
-  optional uint32 lsa_refresh_time = 5;
-
-  // The gap in miliseconds between each Flood Link State Update Burst
-  // default = 33
-  optional uint32 inter_burst_lsu_interval = 6;
-
-  // The maximum number of Flood LSUpdates for each burst
-  // default = 1
-  optional uint32 max_flood_lsu_per_burst = 7;
-
-  // Description missing in models
-  Ospfv2GracefulRestart graceful_restart = 8;
-
-  // Configuration for controlling storage of OSPFv2 learned LSAs are received from the
-  // neighbors.
-  // default = False
-  optional bool store_lsa = 9;
-
-  // A router indicates the optional capabilities that it supports in its OSPF Hello packets,
-  // Database Description packets and in its LSAs.
-  Ospfv2Options capabilities = 10;
-
-  // List of OSPFv2 interfaces for this router.
-  repeated Ospfv2Interface interfaces = 11;
-
-  // Emulated OSPFv4 IPv4 routes.
-  repeated Ospfv2V4RouteRange v4_routes = 12;
 }
 
 // The OSPFv2 Options field is present Database Description packets and all LSAs.
@@ -7355,13 +7362,13 @@ message Ospfv2Options {
   // default = False
   optional bool unused_bit = 8;
 
-  // Enable to indicate that the router acts as an Area Border Router.
+  // Set to indicate that the router acts as an Area Border Router.
   // default = False
-  optional bool router_lsa_b_bit = 9;
+  optional bool lsa_b_bit = 9;
 
-  // Enable to indicate that the router acts as an AS Boundary Router.
+  // Set to indicate that the router acts as an AS Boundary Router.
   // default = False
-  optional bool router_lsa_e_bit = 10;
+  optional bool lsa_e_bit = 10;
 }
 
 // Containter of properties of OSPFv2 Graceful Retstart.
@@ -7387,17 +7394,19 @@ message Ospfv2Interface {
   // 
   optional string ipv4_name = 2;
 
-  // The OSPF Area ID identifies the routing area to which the host belongs.
-  // 
+  // The Area ID of the area to which the attached network belongs.
+  // All routing protocol packets originating from the interface are
+  // labelled with this Area ID.
   Ospfv2InterfaceArea area = 3;
 
-  // The OSPF network link type options.
+  // The OSPF network link type.
   Ospfv2InterfaceNetworkType network_type = 4;
 
   // Contains a list of Traffic Engineering attributes.
   repeated LinkStateTE traffic_engineering = 5;
 
   // OSPFv2 authentication properties.
+  // If the authentication is not configured, none OSPF packet exchange is authenticated.
   Ospfv2InterfaceAuthentication authentication = 6;
 
   // Optional container for advanced interface properties.
@@ -7406,7 +7415,12 @@ message Ospfv2Interface {
   // Link protection on the OSPFv2 link between two interfaces.
   Ospfv2InterfaceLinkProtection link_protection = 8;
 
-  // This contains list of SRLG values for the link between two interfaces.
+  // A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an
+  // IGP (OSPFv2 and IS-IS) domain.
+  // An SRLG is a set of links sharing a common resource, which affects all links in the
+  // set if the common resource fails.
+  // Links share the same risk of failure and are therefore considered to belong to the
+  // same SRLG.
   repeated uint32 srlg_values = 9;
 }
 
@@ -7473,13 +7487,17 @@ message Ospfv2InterfaceAdvanced {
   // is set to 0
   // and hello interval in the hello packets received over this interface is ignored.
   // default = False
-  optional bool enable_fast_hello = 1;
+  optional bool fast_hello = 1;
 
-  // The Hello interval for Level 1 Hello messages, in seconds.
+  // The time interval, in seconds, between the Hello packets that
+  // the router sends on the interface. Advertised in Hello packets
+  // sent out this interface.
   // default = 10
   optional uint32 hello_interval = 2;
 
-  // The Dead (Holding Time) interval for Level 1 Hello messages, in seconds.
+  // The time interval in seconds before the router's neighbors will declare
+  // it down, when they stop hearing the router's Hello Packets.
+  // Advertised in Hello packets sent out this interface.
   // default = 40
   optional uint32 dead_interval = 3;
 
@@ -7602,13 +7620,13 @@ message Ospfv2AuthenticationMd5 {
 // Optional container for the link protection sub TLV (type 20).
 message Ospfv2InterfaceLinkProtection {
 
-  // Enable this to protect other link or links. LSPs on a link of this type are lost
+  // Enable this to protect other link or links. LSAs on a link of this type are lost
   // if any of the links fail.
   // default = False
   optional bool extra_traffic = 1;
 
   // Enabling this signifies that there is no other link protecting this
-  // link. LSPs on a link of this type are lost if the link fails.
+  // link. LSAs on a link of this type are lost if the link fails.
   // default = False
   optional bool unprotected = 2;
 
@@ -7626,7 +7644,7 @@ message Ospfv2InterfaceLinkProtection {
   // Enabling this signifies that a dedicated disjoint link is protecting
   // this link. However, the protecting link is not advertised in the
   // link state database and is therefore not available for the routing
-  // of LSPs.
+  // of LSAs.
   // default = False
   optional bool dedicated_1_plus_1 = 5;
 
@@ -11674,9 +11692,9 @@ message MetricsRequest {
       rsvp = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
-      ospfv2 = 12;
-      dhcpv6_client = 13;
-      dhcpv6_server = 14;
+      dhcpv6_client = 12;
+      dhcpv6_server = 13;
+      ospfv2 = 14;
     }
   }
   // Description missing in models
@@ -11745,7 +11763,7 @@ message MetricsResponse {
       dhcpv4_server = 11;
       dhcpv6_client = 12;
       dhcpv6_server = 13;
-      ospfv2 = 14;
+      ospfv2_metrics = 14;
     }
   }
   // Description missing in models
