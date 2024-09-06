@@ -299,13 +299,6 @@ type ActionProtocolBgpInitiateGracefulRestart interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
->>>>>>> main
 // PeerNames returns a []string
 func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -320,13 +313,6 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
->>>>>>> main
 // SetPeerNames sets the []string value in the ActionProtocolBgpInitiateGracefulRestart object
 func (obj *actionProtocolBgpInitiateGracefulRestart) SetPeerNames(value []string) ActionProtocolBgpInitiateGracefulRestart {
 

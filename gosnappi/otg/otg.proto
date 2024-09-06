@@ -11624,14 +11624,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-<<<<<<< HEAD
-=======
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
->>>>>>> main
   repeated string names = 1;
 
   message Choice {
@@ -11692,14 +11684,6 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-<<<<<<< HEAD
-=======
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
->>>>>>> main
   repeated string peer_names = 1;
 
   // Duration (in seconds) after which selected BGP peers will initiate

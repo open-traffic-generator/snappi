@@ -359,13 +359,6 @@ type ActionProtocolBgpNotification interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
->>>>>>> main
 // Names returns a []string
 func (obj *actionProtocolBgpNotification) Names() []string {
 	if obj.obj.Names == nil {
@@ -380,13 +373,6 @@ func (obj *actionProtocolBgpNotification) Names() []string {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
->>>>>>> main
 // SetNames sets the []string value in the ActionProtocolBgpNotification object
 func (obj *actionProtocolBgpNotification) SetNames(value []string) ActionProtocolBgpNotification {
 
