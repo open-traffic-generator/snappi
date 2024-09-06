@@ -13,9 +13,10 @@ import (
 // ***** ActionProtocolBgpInitiateGracefulRestart *****
 type actionProtocolBgpInitiateGracefulRestart struct {
 	validation
-	obj          *otg.ActionProtocolBgpInitiateGracefulRestart
-	marshaller   marshalActionProtocolBgpInitiateGracefulRestart
-	unMarshaller unMarshalActionProtocolBgpInitiateGracefulRestart
+	obj                *otg.ActionProtocolBgpInitiateGracefulRestart
+	marshaller         marshalActionProtocolBgpInitiateGracefulRestart
+	unMarshaller       unMarshalActionProtocolBgpInitiateGracefulRestart
+	notificationHolder ActionProtocolBgpGracefulRestartNotification
 }
 
 func NewActionProtocolBgpInitiateGracefulRestart() ActionProtocolBgpInitiateGracefulRestart {
@@ -29,7 +30,7 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) msg() *otg.ActionProtocolBg
 }
 
 func (obj *actionProtocolBgpInitiateGracefulRestart) setMsg(msg *otg.ActionProtocolBgpInitiateGracefulRestart) ActionProtocolBgpInitiateGracefulRestart {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalactionProtocolBgpInitiateGracefulRestart) FromPbText(value str
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalactionProtocolBgpInitiateGracefulRestart) FromYaml(value strin
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalactionProtocolBgpInitiateGracefulRestart) FromJson(value strin
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,7 +243,14 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) Clone() (ActionProtocolBgpI
 	return newObj, nil
 }
 
-// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers.
+func (obj *actionProtocolBgpInitiateGracefulRestart) setNil() {
+	obj.notificationHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers. To emulate scenarios where a peer sends a Notification and stops the session, an optional Notification object is included. If the remote peer and the local peer are both configured to perform Graceful Restart for Notification triggered session , this will result in  Graceful Restart scenario to be triggered as per RFC8538.
 type ActionProtocolBgpInitiateGracefulRestart interface {
 	Validation
 	// msg marshals ActionProtocolBgpInitiateGracefulRestart to protobuf object *otg.ActionProtocolBgpInitiateGracefulRestart
@@ -274,15 +282,26 @@ type ActionProtocolBgpInitiateGracefulRestart interface {
 	SetRestartDelay(value uint32) ActionProtocolBgpInitiateGracefulRestart
 	// HasRestartDelay checks if RestartDelay has been set in ActionProtocolBgpInitiateGracefulRestart
 	HasRestartDelay() bool
+	// Notification returns ActionProtocolBgpGracefulRestartNotification, set in ActionProtocolBgpInitiateGracefulRestart.
+	// ActionProtocolBgpGracefulRestartNotification is defines the explicit contents of the NOTIFICATION message to be sent when executing InitiateGracefulRestart trigger.  This causes the BGP connection to close.If a user wants to send custom Error Code and Error Subcode the custom object should be configured. A user can send IANA defined BGP NOTIFICATIONs according to https://www.iana.org/assignments/bgp-parameters/bgp-parameters.xhtml.
+	Notification() ActionProtocolBgpGracefulRestartNotification
+	// SetNotification assigns ActionProtocolBgpGracefulRestartNotification provided by user to ActionProtocolBgpInitiateGracefulRestart.
+	// ActionProtocolBgpGracefulRestartNotification is defines the explicit contents of the NOTIFICATION message to be sent when executing InitiateGracefulRestart trigger.  This causes the BGP connection to close.If a user wants to send custom Error Code and Error Subcode the custom object should be configured. A user can send IANA defined BGP NOTIFICATIONs according to https://www.iana.org/assignments/bgp-parameters/bgp-parameters.xhtml.
+	SetNotification(value ActionProtocolBgpGracefulRestartNotification) ActionProtocolBgpInitiateGracefulRestart
+	// HasNotification checks if Notification has been set in ActionProtocolBgpInitiateGracefulRestart
+	HasNotification() bool
+	setNil()
 }
 
 // The names of device BGP peers objects to control.
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // PeerNames returns a []string
 func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
@@ -295,10 +314,12 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 // The names of device BGP peers objects to control.
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // SetPeerNames sets the []string value in the ActionProtocolBgpInitiateGracefulRestart object
 func (obj *actionProtocolBgpInitiateGracefulRestart) SetPeerNames(value []string) ActionProtocolBgpInitiateGracefulRestart {
@@ -336,6 +357,37 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) SetRestartDelay(value uint3
 	return obj
 }
 
+// Send a Notification to the peer as per configured parameters when initially bringing down a session as per
+// configured parameters.
+// Notification returns a ActionProtocolBgpGracefulRestartNotification
+func (obj *actionProtocolBgpInitiateGracefulRestart) Notification() ActionProtocolBgpGracefulRestartNotification {
+	if obj.obj.Notification == nil {
+		obj.obj.Notification = NewActionProtocolBgpGracefulRestartNotification().msg()
+	}
+	if obj.notificationHolder == nil {
+		obj.notificationHolder = &actionProtocolBgpGracefulRestartNotification{obj: obj.obj.Notification}
+	}
+	return obj.notificationHolder
+}
+
+// Send a Notification to the peer as per configured parameters when initially bringing down a session as per
+// configured parameters.
+// Notification returns a ActionProtocolBgpGracefulRestartNotification
+func (obj *actionProtocolBgpInitiateGracefulRestart) HasNotification() bool {
+	return obj.obj.Notification != nil
+}
+
+// Send a Notification to the peer as per configured parameters when initially bringing down a session as per
+// configured parameters.
+// SetNotification sets the ActionProtocolBgpGracefulRestartNotification value in the ActionProtocolBgpInitiateGracefulRestart object
+func (obj *actionProtocolBgpInitiateGracefulRestart) SetNotification(value ActionProtocolBgpGracefulRestartNotification) ActionProtocolBgpInitiateGracefulRestart {
+
+	obj.notificationHolder = nil
+	obj.obj.Notification = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocolBgpInitiateGracefulRestart) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -349,6 +401,11 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) validateObj(vObj *validatio
 				fmt.Sprintf("0 <= ActionProtocolBgpInitiateGracefulRestart.RestartDelay <= 3600 but Got %d", *obj.obj.RestartDelay))
 		}
 
+	}
+
+	if obj.obj.Notification != nil {
+
+		obj.Notification().validateObj(vObj, set_default)
 	}
 
 }

@@ -295,10 +295,10 @@ type ActionProtocolBgpNotification interface {
 	// HasChoice checks if Choice has been set in ActionProtocolBgpNotification
 	HasChoice() bool
 	// Cease returns DeviceBgpCeaseError, set in ActionProtocolBgpNotification.
-	// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease.
+	// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease. The 'hard_reset_code6_subcode9' subcode for Cease Notification can be used to signal a hard reset that will indicate that  Graceful Restart cannot be performed, even when Notification extensions to Graceful Restart procedure is supported.
 	Cease() DeviceBgpCeaseError
 	// SetCease assigns DeviceBgpCeaseError provided by user to ActionProtocolBgpNotification.
-	// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease.
+	// DeviceBgpCeaseError is in the absence of any fatal errors, a BGP peer can close its BGP connection by sending the NOTIFICATION message with the  Error Code Cease. The 'hard_reset_code6_subcode9' subcode for Cease Notification can be used to signal a hard reset that will indicate that  Graceful Restart cannot be performed, even when Notification extensions to Graceful Restart procedure is supported.
 	SetCease(value DeviceBgpCeaseError) ActionProtocolBgpNotification
 	// HasCease checks if Cease has been set in ActionProtocolBgpNotification
 	HasCease() bool
@@ -356,10 +356,12 @@ type ActionProtocolBgpNotification interface {
 // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // Names returns a []string
 func (obj *actionProtocolBgpNotification) Names() []string {
@@ -372,10 +374,12 @@ func (obj *actionProtocolBgpNotification) Names() []string {
 // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
-// - /components/schemas/Device.Bgp/properties/name
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // SetNames sets the []string value in the ActionProtocolBgpNotification object
 func (obj *actionProtocolBgpNotification) SetNames(value []string) ActionProtocolBgpNotification {
