@@ -1613,7 +1613,7 @@ message Device {
   DeviceDhcpServer dhcp_server = 9;
 
   // Configuration for OSPFv2 router.
-  DeviceOspfv2 ospfv2 = 10;
+  DeviceOspfv2Router ospfv2 = 10;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -7250,7 +7250,7 @@ message DhcpV6ServerSecondaryDns {
 }
 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
-message DeviceOspfv2 {
+message DeviceOspfv2Router {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.

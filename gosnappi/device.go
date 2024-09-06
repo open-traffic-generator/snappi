@@ -24,7 +24,7 @@ type device struct {
 	vxlanHolder         DeviceVxlan
 	rsvpHolder          DeviceRsvp
 	dhcpServerHolder    DeviceDhcpServer
-	ospfv2Holder        DeviceOspfv2
+	ospfv2Holder        DeviceOspfv2Router
 }
 
 func NewDevice() Device {
@@ -338,12 +338,12 @@ type Device interface {
 	SetDhcpServer(value DeviceDhcpServer) Device
 	// HasDhcpServer checks if DhcpServer has been set in Device
 	HasDhcpServer() bool
-	// Ospfv2 returns DeviceOspfv2, set in Device.
-	// DeviceOspfv2 is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
-	Ospfv2() DeviceOspfv2
-	// SetOspfv2 assigns DeviceOspfv2 provided by user to Device.
-	// DeviceOspfv2 is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
-	SetOspfv2(value DeviceOspfv2) Device
+	// Ospfv2 returns DeviceOspfv2Router, set in Device.
+	// DeviceOspfv2Router is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+	Ospfv2() DeviceOspfv2Router
+	// SetOspfv2 assigns DeviceOspfv2Router provided by user to Device.
+	// DeviceOspfv2Router is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
 	setNil()
@@ -767,26 +767,26 @@ func (obj *device) SetDhcpServer(value DeviceDhcpServer) Device {
 }
 
 // Configuration for OSPFv2 router.
-// Ospfv2 returns a DeviceOspfv2
-func (obj *device) Ospfv2() DeviceOspfv2 {
+// Ospfv2 returns a DeviceOspfv2Router
+func (obj *device) Ospfv2() DeviceOspfv2Router {
 	if obj.obj.Ospfv2 == nil {
-		obj.obj.Ospfv2 = NewDeviceOspfv2().msg()
+		obj.obj.Ospfv2 = NewDeviceOspfv2Router().msg()
 	}
 	if obj.ospfv2Holder == nil {
-		obj.ospfv2Holder = &deviceOspfv2{obj: obj.obj.Ospfv2}
+		obj.ospfv2Holder = &deviceOspfv2Router{obj: obj.obj.Ospfv2}
 	}
 	return obj.ospfv2Holder
 }
 
 // Configuration for OSPFv2 router.
-// Ospfv2 returns a DeviceOspfv2
+// Ospfv2 returns a DeviceOspfv2Router
 func (obj *device) HasOspfv2() bool {
 	return obj.obj.Ospfv2 != nil
 }
 
 // Configuration for OSPFv2 router.
-// SetOspfv2 sets the DeviceOspfv2 value in the Device object
-func (obj *device) SetOspfv2(value DeviceOspfv2) Device {
+// SetOspfv2 sets the DeviceOspfv2Router value in the Device object
+func (obj *device) SetOspfv2(value DeviceOspfv2Router) Device {
 
 	obj.ospfv2Holder = nil
 	obj.obj.Ospfv2 = value.msg()

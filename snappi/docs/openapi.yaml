@@ -2410,7 +2410,7 @@ components:
         ospfv2:
           description: |-
             Configuration for OSPFv2 router.
-          $ref: '#/components/schemas/Device.Ospfv2'
+          $ref: '#/components/schemas/Device.Ospfv2Router'
           x-field-uid: 10
       required:
       - name
@@ -9758,7 +9758,7 @@ components:
           type: string
           format: ipv6
           x-field-uid: 1
-    Device.Ospfv2:
+    Device.Ospfv2Router:
       description: |-
         A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
       type: object
