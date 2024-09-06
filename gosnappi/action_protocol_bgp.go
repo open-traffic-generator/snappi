@@ -287,10 +287,10 @@ type ActionProtocolBgp interface {
 	// HasNotification checks if Notification has been set in ActionProtocolBgp
 	HasNotification() bool
 	// InitiateGracefulRestart returns ActionProtocolBgpInitiateGracefulRestart, set in ActionProtocolBgp.
-	// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers.
+	// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers. To emulate scenarios where a peer sends a Notification and stops the session, an optional Notification object is included. If the remote peer and the local peer are both configured to perform Graceful Restart for Notification triggered session , this will result in  Graceful Restart scenario to be triggered as per RFC8538.
 	InitiateGracefulRestart() ActionProtocolBgpInitiateGracefulRestart
 	// SetInitiateGracefulRestart assigns ActionProtocolBgpInitiateGracefulRestart provided by user to ActionProtocolBgp.
-	// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers.
+	// ActionProtocolBgpInitiateGracefulRestart is initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers. To emulate scenarios where a peer sends a Notification and stops the session, an optional Notification object is included. If the remote peer and the local peer are both configured to perform Graceful Restart for Notification triggered session , this will result in  Graceful Restart scenario to be triggered as per RFC8538.
 	SetInitiateGracefulRestart(value ActionProtocolBgpInitiateGracefulRestart) ActionProtocolBgp
 	// HasInitiateGracefulRestart checks if InitiateGracefulRestart has been set in ActionProtocolBgp
 	HasInitiateGracefulRestart() bool

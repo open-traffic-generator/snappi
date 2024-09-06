@@ -270,8 +270,12 @@ type Dhcpv6ClientOptionsMessageType interface {
 	setChoice(value Dhcpv6ClientOptionsMessageTypeChoiceEnum) Dhcpv6ClientOptionsMessageType
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsMessageType
 	HasChoice() bool
+	// getter for Request to set choice.
+	Request()
 	// getter for Rebind to set choice.
 	Rebind()
+	// getter for InformRequest to set choice.
+	InformRequest()
 	// getter for Solicit to set choice.
 	Solicit()
 	// getter for Request to set choice.
@@ -280,8 +284,13 @@ type Dhcpv6ClientOptionsMessageType interface {
 	Renew()
 	// getter for Release to set choice.
 	Release()
+<<<<<<< HEAD
 	// getter for InformRequest to set choice.
 	InformRequest()
+=======
+	// getter for Renew to set choice.
+	Renew()
+>>>>>>> main
 }
 
 type Dhcpv6ClientOptionsMessageTypeChoiceEnum string
@@ -307,9 +316,19 @@ func (obj *dhcpv6ClientOptionsMessageType) Choice() Dhcpv6ClientOptionsMessageTy
 	return Dhcpv6ClientOptionsMessageTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for Request to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Request() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REQUEST)
+}
+
 // getter for Rebind to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
+}
+
+// getter for InformRequest to set choice
+func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
 }
 
 // getter for Solicit to set choice
@@ -332,9 +351,15 @@ func (obj *dhcpv6ClientOptionsMessageType) Release() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
 }
 
+<<<<<<< HEAD
 // getter for InformRequest to set choice
 func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
+=======
+// getter for Renew to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Renew() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RENEW)
+>>>>>>> main
 }
 
 // The client message name where the option is included, by default it is all.

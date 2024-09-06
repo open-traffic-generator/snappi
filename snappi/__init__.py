@@ -1182,6 +1182,7 @@ from .snappi import DeviceBgpHoldTimerExpired
 from .snappi import DeviceBgpFiniteStateMachineError
 from .snappi import DeviceBgpCustomError
 from .snappi import ActionProtocolBgpInitiateGracefulRestart
+from .snappi import ActionProtocolBgpGracefulRestartNotification
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol

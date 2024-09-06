@@ -270,10 +270,17 @@ type Dhcpv6ServerOptionsMessageType interface {
 	setChoice(value Dhcpv6ServerOptionsMessageTypeChoiceEnum) Dhcpv6ServerOptionsMessageType
 	// HasChoice checks if Choice has been set in Dhcpv6ServerOptionsMessageType
 	HasChoice() bool
+<<<<<<< HEAD
 	// getter for ReConfigure to set choice.
 	ReConfigure()
 	// getter for Advertise to set choice.
 	Advertise()
+=======
+	// getter for Advertise to set choice.
+	Advertise()
+	// getter for ReConfigure to set choice.
+	ReConfigure()
+>>>>>>> main
 	// getter for Reply to set choice.
 	Reply()
 }
@@ -295,14 +302,22 @@ func (obj *dhcpv6ServerOptionsMessageType) Choice() Dhcpv6ServerOptionsMessageTy
 	return Dhcpv6ServerOptionsMessageTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+<<<<<<< HEAD
 // getter for ReConfigure to set choice
 func (obj *dhcpv6ServerOptionsMessageType) ReConfigure() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.RE_CONFIGURE)
 }
 
+=======
+>>>>>>> main
 // getter for Advertise to set choice
 func (obj *dhcpv6ServerOptionsMessageType) Advertise() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.ADVERTISE)
+}
+
+// getter for Reply to set choice
+func (obj *dhcpv6ServerOptionsMessageType) Reply() {
+	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
 }
 
 // getter for Reply to set choice
