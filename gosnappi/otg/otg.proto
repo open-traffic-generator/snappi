@@ -7274,7 +7274,7 @@ message DeviceOspfv2Router {
 
   // The time in seconds for LSA retransmission.
   // default = 5
-  optional uint32 lsa_retransmit_timer = 3;
+  optional uint32 lsa_retransmit_time = 3;
 
   // The time in seconds required for LSA refresh.
   // default = 1800
@@ -7291,8 +7291,7 @@ message DeviceOspfv2Router {
   // Description missing in models
   Ospfv2GracefulRestart graceful_restart = 7;
 
-  // Configuration for controlling storage of OSPFv2 learned LSAs are received from the
-  // neighbors.
+  // Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
   // default = False
   optional bool store_lsa = 8;
 
@@ -7360,7 +7359,7 @@ message Ospfv2Options {
   // default = False
   optional bool ea_bit = 5;
 
-  // Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified
+  // Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified
   // in [Ref21], rfc2328.
   // default = False
   optional bool dc_bit = 6;
@@ -7590,7 +7589,7 @@ message Ospfv2InterfaceAuthentication {
   message Choice {
     enum Enum {
       unspecified = 0;
-      md5_list = 1;
+      md5s = 1;
       clear_text = 2;
     }
   }
@@ -15134,7 +15133,7 @@ message Ospfv2OpaqueLsa {
 // Attributes in LSA Header.
 message Ospfv2CommonAttrs {
 
-  // LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+  // LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
   optional string lsa_id = 1;
 
   // The router ID (in the IPv4 format) of the router that originated the LSA.

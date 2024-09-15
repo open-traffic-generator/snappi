@@ -442,7 +442,7 @@ func (obj *ospfv2Options) SetEaBit(value bool) Ospfv2Options {
 	return obj
 }
 
-// Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+// Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
 // DcBit returns a bool
 func (obj *ospfv2Options) DcBit() bool {
 
@@ -450,13 +450,13 @@ func (obj *ospfv2Options) DcBit() bool {
 
 }
 
-// Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+// Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
 // DcBit returns a bool
 func (obj *ospfv2Options) HasDcBit() bool {
 	return obj.obj.DcBit != nil
 }
 
-// Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+// Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
 // SetDcBit sets the bool value in the Ospfv2Options object
 func (obj *ospfv2Options) SetDcBit(value bool) Ospfv2Options {
 
