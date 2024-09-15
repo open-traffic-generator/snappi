@@ -296,7 +296,7 @@ type Ospfv2CommonAttrs interface {
 	HasOptionBits() bool
 }
 
-// LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+// LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
 // LsaId returns a string
 func (obj *ospfv2CommonAttrs) LsaId() string {
 
@@ -304,13 +304,13 @@ func (obj *ospfv2CommonAttrs) LsaId() string {
 
 }
 
-// LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+// LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
 // LsaId returns a string
 func (obj *ospfv2CommonAttrs) HasLsaId() bool {
 	return obj.obj.LsaId != nil
 }
 
-// LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+// LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
 // SetLsaId sets the string value in the Ospfv2CommonAttrs object
 func (obj *ospfv2CommonAttrs) SetLsaId(value string) Ospfv2CommonAttrs {
 

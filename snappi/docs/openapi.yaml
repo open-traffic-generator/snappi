@@ -9789,7 +9789,7 @@ components:
             OSPFv2 Router Id.
           $ref: '#/components/schemas/Ospfv2.RouterId'
           x-field-uid: 2
-        lsa_retransmit_timer:
+        lsa_retransmit_time:
           description: |-
             The time in seconds for LSA retransmission.
           type: integer
@@ -9824,7 +9824,7 @@ components:
           x-field-uid: 7
         store_lsa:
           description: |-
-            Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
+            Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
           type: boolean
           default: false
           x-field-uid: 8
@@ -9915,7 +9915,7 @@ components:
           x-field-uid: 5
         dc_bit:
           description: |-
-            Demand Circuit: 4th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+            Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
           type: boolean
           default: false
           x-field-uid: 6
@@ -10227,12 +10227,12 @@ components:
           default: clear_text
           x-field-uid: 1
           x-enum:
-            md5_list:
+            md5s:
               x-field-uid: 1
             clear_text:
               x-field-uid: 2
           enum:
-          - md5_list
+          - md5s
           - clear_text
         md5s:
           description: |-
@@ -20816,7 +20816,7 @@ components:
       properties:
         lsa_id:
           description: |-
-            LSA ID in t he IPv4 format. The Link State ID for the specified LSA type.
+            LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
           type: string
           format: ipv4
           x-field-uid: 1

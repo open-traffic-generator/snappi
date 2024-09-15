@@ -292,12 +292,12 @@ type DeviceOspfv2Router interface {
 	SetRouterId(value Ospfv2RouterId) DeviceOspfv2Router
 	// HasRouterId checks if RouterId has been set in DeviceOspfv2Router
 	HasRouterId() bool
-	// LsaRetransmitTimer returns uint32, set in DeviceOspfv2Router.
-	LsaRetransmitTimer() uint32
-	// SetLsaRetransmitTimer assigns uint32 provided by user to DeviceOspfv2Router
-	SetLsaRetransmitTimer(value uint32) DeviceOspfv2Router
-	// HasLsaRetransmitTimer checks if LsaRetransmitTimer has been set in DeviceOspfv2Router
-	HasLsaRetransmitTimer() bool
+	// LsaRetransmitTime returns uint32, set in DeviceOspfv2Router.
+	LsaRetransmitTime() uint32
+	// SetLsaRetransmitTime assigns uint32 provided by user to DeviceOspfv2Router
+	SetLsaRetransmitTime(value uint32) DeviceOspfv2Router
+	// HasLsaRetransmitTime checks if LsaRetransmitTime has been set in DeviceOspfv2Router
+	HasLsaRetransmitTime() bool
 	// LsaRefreshTime returns uint32, set in DeviceOspfv2Router.
 	LsaRefreshTime() uint32
 	// SetLsaRefreshTime assigns uint32 provided by user to DeviceOspfv2Router
@@ -402,24 +402,24 @@ func (obj *deviceOspfv2Router) SetRouterId(value Ospfv2RouterId) DeviceOspfv2Rou
 }
 
 // The time in seconds for LSA retransmission.
-// LsaRetransmitTimer returns a uint32
-func (obj *deviceOspfv2Router) LsaRetransmitTimer() uint32 {
+// LsaRetransmitTime returns a uint32
+func (obj *deviceOspfv2Router) LsaRetransmitTime() uint32 {
 
-	return *obj.obj.LsaRetransmitTimer
+	return *obj.obj.LsaRetransmitTime
 
 }
 
 // The time in seconds for LSA retransmission.
-// LsaRetransmitTimer returns a uint32
-func (obj *deviceOspfv2Router) HasLsaRetransmitTimer() bool {
-	return obj.obj.LsaRetransmitTimer != nil
+// LsaRetransmitTime returns a uint32
+func (obj *deviceOspfv2Router) HasLsaRetransmitTime() bool {
+	return obj.obj.LsaRetransmitTime != nil
 }
 
 // The time in seconds for LSA retransmission.
-// SetLsaRetransmitTimer sets the uint32 value in the DeviceOspfv2Router object
-func (obj *deviceOspfv2Router) SetLsaRetransmitTimer(value uint32) DeviceOspfv2Router {
+// SetLsaRetransmitTime sets the uint32 value in the DeviceOspfv2Router object
+func (obj *deviceOspfv2Router) SetLsaRetransmitTime(value uint32) DeviceOspfv2Router {
 
-	obj.obj.LsaRetransmitTimer = &value
+	obj.obj.LsaRetransmitTime = &value
 	return obj
 }
 
@@ -517,7 +517,7 @@ func (obj *deviceOspfv2Router) SetGracefulRestart(value Ospfv2GracefulRestart) D
 	return obj
 }
 
-// Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
+// Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
 // StoreLsa returns a bool
 func (obj *deviceOspfv2Router) StoreLsa() bool {
 
@@ -525,13 +525,13 @@ func (obj *deviceOspfv2Router) StoreLsa() bool {
 
 }
 
-// Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
+// Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
 // StoreLsa returns a bool
 func (obj *deviceOspfv2Router) HasStoreLsa() bool {
 	return obj.obj.StoreLsa != nil
 }
 
-// Configuration for controlling storage of OSPFv2 learned LSAs are received from the neighbors.
+// Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
 // SetStoreLsa sets the bool value in the DeviceOspfv2Router object
 func (obj *deviceOspfv2Router) SetStoreLsa(value bool) DeviceOspfv2Router {
 
@@ -756,12 +756,12 @@ func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 		obj.RouterId().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.LsaRetransmitTimer != nil {
+	if obj.obj.LsaRetransmitTime != nil {
 
-		if *obj.obj.LsaRetransmitTimer < 1 || *obj.obj.LsaRetransmitTimer > 4294967295 {
+		if *obj.obj.LsaRetransmitTime < 1 || *obj.obj.LsaRetransmitTime > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= DeviceOspfv2Router.LsaRetransmitTimer <= 4294967295 but Got %d", *obj.obj.LsaRetransmitTimer))
+				fmt.Sprintf("1 <= DeviceOspfv2Router.LsaRetransmitTime <= 4294967295 but Got %d", *obj.obj.LsaRetransmitTime))
 		}
 
 	}
@@ -827,8 +827,8 @@ func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *deviceOspfv2Router) setDefault() {
-	if obj.obj.LsaRetransmitTimer == nil {
-		obj.SetLsaRetransmitTimer(5)
+	if obj.obj.LsaRetransmitTime == nil {
+		obj.SetLsaRetransmitTime(5)
 	}
 	if obj.obj.LsaRefreshTime == nil {
 		obj.SetLsaRefreshTime(1800)
