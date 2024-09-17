@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "${{ steps.get_sha.outputs.sha }}" > store_sha_file
       - name: Archive generated artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: generated-artifacts
           path: |
