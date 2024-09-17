@@ -6734,85 +6734,77 @@ message DeviceTcp {
   optional int32 window_scale = 45;
 
   // Reserved
-  // default = 262144
-  optional int32 wmem_default = 46;
-
-  // Reserved
   // default = 4096
-  optional int32 minimum_wmem = 47;
+  optional int32 minimum_wmem = 46;
 
   // Reserved
   // default = False
-  optional bool stdurg = 48;
+  optional bool stdurg = 47;
 
   // Reserved
   // default = 1024
-  optional int32 maximum_syn_backlog = 49;
+  optional int32 maximum_syn_backlog = 48;
 
   // Reserved
   // default = True
-  optional bool dsack = 50;
+  optional bool dsack = 49;
 
   // Reserved
   // default = False
-  optional bool abort_on_overflow = 51;
+  optional bool abort_on_overflow = 50;
 
   // Fragment Reassembly Timer. ReThe number of seconds the TCP should keep IP fragments
   // before discarding them
   // default = 0
-  optional int32 fragment_reassembly_timer = 52;
+  optional int32 fragment_reassembly_timer = 51;
 
   // Reserved
   // default = 6
-  optional int32 vegas_beta = 53;
+  optional int32 vegas_beta = 52;
 
   // Reserved
   // default = 8192
-  optional int32 maximum_orphans = 54;
+  optional int32 maximum_orphans = 53;
 
   // Reserved
   // default = 32768
-  optional int32 mem_pressure = 55;
+  optional int32 mem_pressure = 54;
 
   // Reserved
   // default = 0
-  optional int32 moderate_receive_buffer = 56;
+  optional int32 moderate_receive_buffer = 55;
 
   // Reserved
   // default = False
-  optional bool no_metrics_save = 57;
+  optional bool no_metrics_save = 56;
 
   // Reserved
   // default = True
-  optional bool retrans_collapse = 58;
-
-  // Reserved
-  // default = 262144
-  optional int32 rmem_default = 59;
+  optional bool retrans_collapse = 57;
 
   // Reserved
   // default = 49152
-  optional int32 mem_high = 60;
+  optional int32 mem_high = 58;
 
   // Reserved
   // default = 2
-  optional int32 vegas_gamma = 61;
+  optional int32 vegas_gamma = 59;
 
   // Reserved
   // default = True
-  optional bool fack = 62;
+  optional bool fack = 60;
 
   // Reserved
   // default = 14
-  optional int32 bic_low_window = 63;
+  optional int32 bic_low_window = 61;
 
   // Reserved
   // default = 31
-  optional int32 app_win = 64;
+  optional int32 app_win = 62;
 
   // Number of keep-alive probes sent out before determining that a link is down.
   // default = 9
-  optional float keep_alive_probes = 65;
+  optional float keep_alive_probes = 63;
 }
 
 // HTTP configs.
@@ -10348,20 +10340,33 @@ message TrafficprofileSegment {
 message TrafficprofileObjective {
 
   // Description missing in models
-  ObjectiveSimulatedUser simulated_user = 2;
+  ObjectiveSimulatedUser simulated_user = 1;
 
   // Description missing in models
-  ObjectiveThroughput throughput = 3;
+  ObjectiveThroughputKbps throughput_kbps = 2;
+
+  // Description missing in models
+  ObjectiveThroughputMbps throughput_mbps = 3;
 
   // Description missing in models
   ObjectiveConnectionConncurrent concurrent_connections = 4;
 
   // Description missing in models
   ObjectiveConnectionPerSeconds connection_per_sec = 5;
+
+  // Description missing in models
+  ObjectiveTransactionsPerSeconds transactions_per_sec = 6;
+
+  // Description missing in models
+  ObjectiveConnectionAttemptsPerSeconds connection_attempts_per_sec = 7;
 }
 
 // simulated user traffic
 message ObjectiveSimulatedUser {
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 1;
 
   message RampUpType {
     enum Enum {
@@ -10374,22 +10379,22 @@ message ObjectiveSimulatedUser {
   // Ramp up type to defines the type of user execution profiles during the ramp_up_time,
   // .
   // default = RampUpType.Enum.users_intervals
-  optional RampUpType.Enum ramp_up_type = 1;
+  optional RampUpType.Enum ramp_up_type = 2;
 
   // Value applied to ramp_up_type to either bring up users at a certain rate.
-  optional int32 ramp_up_value = 2;
+  optional int32 ramp_up_value = 3;
 
   // Amount of time when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
-  optional int32 sustain_time = 3;
+  optional int32 sustain_time = 4;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
-  optional int32 ramp_down_time = 4;
+  optional int32 ramp_down_time = 5;
 }
 
-// Throughput traffic
-message ObjectiveThroughput {
+// Throughput traffic in Kbps
+message ObjectiveThroughputKbps {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
@@ -10398,6 +10403,26 @@ message ObjectiveThroughput {
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
   optional float ramp_down_time = 2;
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 3;
+}
+
+// Throughput traffic in Mbps
+message ObjectiveThroughputMbps {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_time = 2;
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 3;
 }
 
 // Conncurrent connections objectives
@@ -10414,6 +10439,10 @@ message ObjectiveConnectionConncurrent {
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
   optional float ramp_down_value = 3;
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 4;
 }
 
 // Conncurrent connections objectives
@@ -10427,9 +10456,41 @@ message ObjectiveConnectionPerSeconds {
   // transactions are complete.
   optional float ramp_down_time = 2;
 
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 3;
+}
+
+// Transaction per second objectives
+message ObjectiveTransactionsPerSeconds {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
-  optional float ramp_down_value = 3;
+  optional float ramp_down_time = 2;
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 3;
+}
+
+// Connection attempts per second objectives
+message ObjectiveConnectionAttemptsPerSeconds {
+
+  // Amount of seconds when all users are up and performing the central test objectives,
+  // such as retrieving or serving pages.
+  optional float sustain_time = 1;
+
+  // Amount of seconds used for closing any connections that are still open after all
+  // transactions are complete.
+  optional float ramp_down_time = 2;
+
+  // Enable/disable controller for user adjustment
+  // default = False
+  optional bool enable_controlled_user_adjustment = 3;
 }
 
 // Error response generated while serving API request.

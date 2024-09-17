@@ -9098,126 +9098,114 @@ components:
           type: integer
           default: 2
           x-field-uid: 45
-        wmem_default:
-          description: |-
-            Reserved
-          type: integer
-          default: 262144
-          x-field-uid: 46
         minimum_wmem:
           description: |-
             Reserved
           type: integer
           default: 4096
-          x-field-uid: 47
+          x-field-uid: 46
         stdurg:
           description: |-
             Reserved
           type: boolean
           default: false
-          x-field-uid: 48
+          x-field-uid: 47
         maximum_syn_backlog:
           description: |-
             Reserved
           type: integer
           default: 1024
-          x-field-uid: 49
+          x-field-uid: 48
         dsack:
           description: |-
             Reserved
           type: boolean
           default: true
-          x-field-uid: 50
+          x-field-uid: 49
         abort_on_overflow:
           description: |-
             Reserved
           type: boolean
           default: false
-          x-field-uid: 51
+          x-field-uid: 50
         fragment_reassembly_timer:
           description: |-
             Fragment Reassembly Timer. ReThe number of seconds the TCP should keep IP fragments before discarding them
           type: integer
           default: 0
-          x-field-uid: 52
+          x-field-uid: 51
         vegas_beta:
           description: |-
             Reserved
           type: integer
           default: 6
-          x-field-uid: 53
+          x-field-uid: 52
         maximum_orphans:
           description: |-
             Reserved
           type: integer
           default: 8192
-          x-field-uid: 54
+          x-field-uid: 53
         mem_pressure:
           description: |-
             Reserved
           type: integer
           default: 32768
-          x-field-uid: 55
+          x-field-uid: 54
         moderate_receive_buffer:
           description: |-
             Reserved
           type: integer
           default: 0
-          x-field-uid: 56
+          x-field-uid: 55
         no_metrics_save:
           description: |-
             Reserved
           type: boolean
           default: false
-          x-field-uid: 57
+          x-field-uid: 56
         retrans_collapse:
           description: |-
             Reserved
           type: boolean
           default: true
-          x-field-uid: 58
-        rmem_default:
-          description: |-
-            Reserved
-          type: integer
-          default: 262144
-          x-field-uid: 59
+          x-field-uid: 57
         mem_high:
           description: |-
             Reserved
           type: integer
           default: 49152
-          x-field-uid: 60
+          x-field-uid: 58
         vegas_gamma:
           description: |-
             Reserved
           type: integer
           default: 2
-          x-field-uid: 61
+          x-field-uid: 59
         fack:
           description: |-
             Reserved
           type: boolean
           default: true
-          x-field-uid: 62
+          x-field-uid: 60
         bic_low_window:
           description: |-
             Reserved
           type: integer
           default: 14
-          x-field-uid: 63
+          x-field-uid: 61
         app_win:
           description: |-
             Reserved
           type: integer
           default: 31
-          x-field-uid: 64
+          x-field-uid: 62
         keep_alive_probes:
           description: |-
             Number of keep-alive probes sent out before determining that a link is down.
           type: number
           default: 9
-          x-field-uid: 65
+          x-field-uid: 63
     Device.Http:
       description: |-
         HTTP configs.
@@ -13662,27 +13650,42 @@ components:
       type: object
       properties:
         simulated_user:
-          x-field-uid: 2
+          x-field-uid: 1
           $ref: '#/components/schemas/Objective.Simulated.User'
-        throughput:
+        throughput_kbps:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Objective.Throughput.Kbps'
+        throughput_mbps:
           x-field-uid: 3
-          $ref: '#/components/schemas/Objective.Throughput'
+          $ref: '#/components/schemas/Objective.Throughput.Mbps'
         concurrent_connections:
           x-field-uid: 4
           $ref: '#/components/schemas/Objective.Connection.Conncurrent'
         connection_per_sec:
           x-field-uid: 5
           $ref: '#/components/schemas/Objective.Connection.Per.Seconds'
+        transactions_per_sec:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Objective.Transactions.Per.Seconds'
+        connection_attempts_per_sec:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Objective.Connection.Attempts.Per.Seconds'
     Objective.Simulated.User:
       description: |-
         simulated user traffic
       type: object
       properties:
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 1
+          default: false
         ramp_up_type:
           description: |-
             Ramp up type to defines the type of user execution profiles during the ramp_up_time, .
           type: string
-          x-field-uid: 1
+          x-field-uid: 2
           x-enum:
             users_intervals:
               x-field-uid: 1
@@ -13699,19 +13702,20 @@ components:
           description: |-
             Value applied to ramp_up_type to either bring up users at a certain rate.
           type: integer
-          x-field-uid: 2
+          x-field-uid: 3
         sustain_time:
           description: |-
             Amount of time when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: integer
-          x-field-uid: 3
+          x-field-uid: 4
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: integer
-          x-field-uid: 4
-    Objective.Throughput:
-      description: "Throughput traffic "
+          x-field-uid: 5
+    Objective.Throughput.Kbps:
+      description: |-
+        Throughput traffic in Kbps
       type: object
       properties:
         sustain_time:
@@ -13724,6 +13728,33 @@ components:
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 3
+          default: false
+    Objective.Throughput.Mbps:
+      description: |-
+        Throughput traffic in Mbps
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 2
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 3
+          default: false
     Objective.Connection.Conncurrent:
       description: |-
         Conncurrent connections objectives
@@ -13744,6 +13775,12 @@ components:
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 3
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 4
+          default: false
     Objective.Connection.Per.Seconds:
       description: |-
         Conncurrent connections objectives
@@ -13759,11 +13796,54 @@ components:
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
-        ramp_down_value:
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 3
+          default: false
+    Objective.Transactions.Per.Seconds:
+      description: |-
+        Transaction per second objectives
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
+          x-field-uid: 2
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
           x-field-uid: 3
+          default: false
+    Objective.Connection.Attempts.Per.Seconds:
+      description: |-
+        Connection attempts per second objectives
+      type: object
+      properties:
+        sustain_time:
+          description: |-
+            Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
+          type: number
+          x-field-uid: 1
+        ramp_down_time:
+          description: |-
+            Amount of seconds used for closing any connections that are still open after all transactions are complete.
+          type: number
+          x-field-uid: 2
+        enable_controlled_user_adjustment:
+          description: |-
+            Enable/disable controller for user adjustment
+          type: boolean
+          x-field-uid: 3
+          default: false
     Error:
       description: |-
         Error response generated while serving API request.
