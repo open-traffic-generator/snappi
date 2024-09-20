@@ -7403,6 +7403,7 @@ message Ospfv2Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
+  // required = true
   optional string ipv4_name = 2;
 
   // The Area ID of the area to which the attached network belongs.
@@ -13324,38 +13325,39 @@ message Ospfv2MetricsRequest {
   message ColumnNames {
     enum Enum {
       unspecified = 0;
-      sessions_up = 1;
-      sessions_flap = 2;
-      hellos_sent = 3;
-      hellos_received = 4;
-      dbd_sent = 5;
-      dbd_received = 6;
-      ls_request_sent = 7;
-      ls_request_received = 8;
-      ls_update_sent = 9;
-      ls_update_received = 10;
-      ls_ack_sent = 11;
-      ls_ack_received = 12;
-      lsa_sent = 13;
-      lsa_received = 14;
-      lsa_ack_sent = 15;
-      lsa_ack_received = 16;
-      router_lsa_sent = 17;
-      router_lsa_received = 18;
-      network_lsa_sent = 19;
-      network_lsa_received = 20;
-      summary_lsa_sent = 21;
-      summary_lsa_received = 22;
-      external_lsa_sent = 23;
-      external_lsa_received = 24;
-      nssa_lsa_sent = 25;
-      nssa_lsa_received = 26;
-      opaque_local_sent = 27;
-      opaque_local_received = 28;
-      opaque_area_sent = 29;
-      opaque_area_received = 30;
-      opaque_domain_sent = 31;
-      opaque_domain_received = 32;
+      full_state_count = 1;
+      down_state_count = 2;
+      sessions_flap = 3;
+      hellos_sent = 4;
+      hellos_received = 5;
+      dbd_sent = 6;
+      dbd_received = 7;
+      ls_request_sent = 8;
+      ls_request_received = 9;
+      ls_update_sent = 10;
+      ls_update_received = 11;
+      ls_ack_sent = 12;
+      ls_ack_received = 13;
+      lsa_sent = 14;
+      lsa_received = 15;
+      lsa_ack_sent = 16;
+      lsa_ack_received = 17;
+      router_lsa_sent = 18;
+      router_lsa_received = 19;
+      network_lsa_sent = 20;
+      network_lsa_received = 21;
+      summary_lsa_sent = 22;
+      summary_lsa_received = 23;
+      external_lsa_sent = 24;
+      external_lsa_received = 25;
+      nssa_lsa_sent = 26;
+      nssa_lsa_received = 27;
+      opaque_local_sent = 28;
+      opaque_local_received = 29;
+      opaque_area_sent = 30;
+      opaque_area_received = 31;
+      opaque_domain_sent = 32;
+      opaque_domain_received = 33;
     }
   }
   // The list of column names that the returned result set will contain.
@@ -13371,102 +13373,105 @@ message Ospfv2Metric {
   // The name of a configured OSPFv2 router.
   optional string name = 1;
 
-  // The number of OSPFv2 sessions that are up.
-  optional uint64 sessions_up = 2;
+  // The number of OSPFv2 sessions in up state.
+  optional uint64 full_state_count = 2;
+
+  // The number of OSPFv2 sessions in down state.
+  optional uint64 down_state_count = 3;
 
   // The number of change of OSPFv2 sessions from up to down state.
-  optional uint64 sessions_flap = 3;
+  optional uint64 sessions_flap = 4;
 
   // The number of OSPFv2 Hello messages transmitted.
-  optional uint64 hellos_sent = 4;
+  optional uint64 hellos_sent = 5;
 
   // The number of OSPFv2 Hello messages received.
-  optional uint64 hellos_received = 5;
+  optional uint64 hellos_received = 6;
 
   // The number of OSPFv2 Database Description (DBD) messages transmitted.
-  optional uint64 dbd_sent = 6;
+  optional uint64 dbd_sent = 7;
 
   // The number of OSPFv2 Database Description (DBD) messages received.
-  optional uint64 dbd_received = 7;
+  optional uint64 dbd_received = 8;
 
   // The number of OSPFv2 LinkState (LS) Request messages transmitted.
-  optional uint64 ls_request_sent = 8;
+  optional uint64 ls_request_sent = 9;
 
   // The number of OSPFv2 LinkState (LS) Request messages received.
-  optional uint64 ls_request_received = 9;
+  optional uint64 ls_request_received = 10;
 
   // The number of OSPFv2 LinkState (LS) Update messages transmitted.
-  optional uint64 ls_update_sent = 10;
+  optional uint64 ls_update_sent = 11;
 
   // The number of OSPFv2 LinkState (LS) Update messages received.
-  optional uint64 ls_update_received = 11;
+  optional uint64 ls_update_received = 12;
 
   // The number of OSPFv2 LinkState (LS) Acknowledgement messages transmitted.
-  optional uint64 ls_ack_sent = 12;
+  optional uint64 ls_ack_sent = 13;
 
   // The number of OSPFv2 LinkState (LS) Acknowledgement messages received.
-  optional uint64 ls_ack_received = 13;
+  optional uint64 ls_ack_received = 14;
 
   // The total number of OSPFv2 LinkState Advertisement (LSA) messages transmitted.
-  optional uint64 lsa_sent = 14;
+  optional uint64 lsa_sent = 15;
 
   // The total number of OSPFv2 LinkState Advertisement (LSA) messages received.
-  optional uint64 lsa_received = 15;
+  optional uint64 lsa_received = 16;
 
   // The total number of OSPFv2 LinkState Advertisement (LSA) messages acknowledged.
-  optional uint64 lsa_ack_sent = 16;
+  optional uint64 lsa_ack_sent = 17;
 
   // The total number of OSPFv2 LinkState Advertisement (LSA) acknowledge messages received
   // .
-  optional uint64 lsa_ack_received = 17;
+  optional uint64 lsa_ack_received = 18;
 
   // The number of OSPFv2 Router (Type 1) LSAs transmitted.
-  optional uint64 router_lsa_sent = 18;
+  optional uint64 router_lsa_sent = 19;
 
   // The number of OSPFv2 Router (Type 1) LSAs received.
-  optional uint64 router_lsa_received = 19;
+  optional uint64 router_lsa_received = 20;
 
   // The number of OSPFv2 Network (Type 2) LSAs transmitted.
-  optional uint64 network_lsa_sent = 20;
+  optional uint64 network_lsa_sent = 21;
 
   // The number of OSPFv2 Network (Type 2) LSAs transmitted.
-  optional uint64 network_lsa_received = 21;
+  optional uint64 network_lsa_received = 22;
 
   // The number of OSPFv2 Summary IP (Type 3) LSAs transmitted.
-  optional uint64 summary_lsa_sent = 22;
+  optional uint64 summary_lsa_sent = 23;
 
   // The number of OSPFv2 Summary IP (Type 3) LSA received.
-  optional uint64 summary_lsa_received = 23;
+  optional uint64 summary_lsa_received = 24;
 
   // The number of OSPFv2 External (Type 5) LSAs transmitted.
-  optional uint64 external_lsa_sent = 24;
+  optional uint64 external_lsa_sent = 25;
 
   // The number of OSPFv2 External (Type 5) LSAs received.
-  optional uint64 external_lsa_received = 25;
+  optional uint64 external_lsa_received = 26;
 
   // The number of OSPFv2 NSSA (Type 7) LSAs transmitted.
-  optional uint64 nssa_lsa_sent = 26;
+  optional uint64 nssa_lsa_sent = 27;
 
   // The number of OSPFv2 NSSA (Type 7) LSAs received.
-  optional uint64 nssa_lsa_received = 27;
+  optional uint64 nssa_lsa_received = 28;
 
   // The number of OSPFv2 Opaque Local (Type 9) LSAs transmitted.
-  optional uint64 opaque_local_sent = 28;
+  optional uint64 opaque_local_sent = 29;
 
   // The number of OSPFv2 Opaque Local (Type 9) LSAs received.
-  optional uint64 opaque_local_received = 29;
+  optional uint64 opaque_local_received = 30;
 
   // The number of OSPF Opaque Area (Type 10) LSAs transmitted.
-  optional uint64 opaque_area_sent = 30;
+  optional uint64 opaque_area_sent = 31;
 
   // The number of OSPFv2 Opaque Area (Type 10) LSAs received.
-  optional uint64 opaque_area_received = 31;
+  optional uint64 opaque_area_received = 32;
 
   // The number of OSPFv2 Opaque Domain (Type 11) LSAs transmitted.
-  optional uint64 opaque_domain_sent = 32;
+  optional uint64 opaque_domain_sent = 33;
 
   // The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
-  optional uint64 opaque_domain_received = 33;
+  optional uint64 opaque_domain_received = 34;
 }
 
 // Request to traffic generator for states of choice

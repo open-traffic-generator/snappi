@@ -270,12 +270,18 @@ type Ospfv2Metric interface {
 	SetName(value string) Ospfv2Metric
 	// HasName checks if Name has been set in Ospfv2Metric
 	HasName() bool
-	// SessionsUp returns uint64, set in Ospfv2Metric.
-	SessionsUp() uint64
-	// SetSessionsUp assigns uint64 provided by user to Ospfv2Metric
-	SetSessionsUp(value uint64) Ospfv2Metric
-	// HasSessionsUp checks if SessionsUp has been set in Ospfv2Metric
-	HasSessionsUp() bool
+	// FullStateCount returns uint64, set in Ospfv2Metric.
+	FullStateCount() uint64
+	// SetFullStateCount assigns uint64 provided by user to Ospfv2Metric
+	SetFullStateCount(value uint64) Ospfv2Metric
+	// HasFullStateCount checks if FullStateCount has been set in Ospfv2Metric
+	HasFullStateCount() bool
+	// DownStateCount returns uint64, set in Ospfv2Metric.
+	DownStateCount() uint64
+	// SetDownStateCount assigns uint64 provided by user to Ospfv2Metric
+	SetDownStateCount(value uint64) Ospfv2Metric
+	// HasDownStateCount checks if DownStateCount has been set in Ospfv2Metric
+	HasDownStateCount() bool
 	// SessionsFlap returns uint64, set in Ospfv2Metric.
 	SessionsFlap() uint64
 	// SetSessionsFlap assigns uint64 provided by user to Ospfv2Metric
@@ -486,25 +492,47 @@ func (obj *ospfv2Metric) SetName(value string) Ospfv2Metric {
 	return obj
 }
 
-// The number of OSPFv2 sessions that are up.
-// SessionsUp returns a uint64
-func (obj *ospfv2Metric) SessionsUp() uint64 {
+// The number of OSPFv2 sessions in up state.
+// FullStateCount returns a uint64
+func (obj *ospfv2Metric) FullStateCount() uint64 {
 
-	return *obj.obj.SessionsUp
+	return *obj.obj.FullStateCount
 
 }
 
-// The number of OSPFv2 sessions that are up.
-// SessionsUp returns a uint64
-func (obj *ospfv2Metric) HasSessionsUp() bool {
-	return obj.obj.SessionsUp != nil
+// The number of OSPFv2 sessions in up state.
+// FullStateCount returns a uint64
+func (obj *ospfv2Metric) HasFullStateCount() bool {
+	return obj.obj.FullStateCount != nil
 }
 
-// The number of OSPFv2 sessions that are up.
-// SetSessionsUp sets the uint64 value in the Ospfv2Metric object
-func (obj *ospfv2Metric) SetSessionsUp(value uint64) Ospfv2Metric {
+// The number of OSPFv2 sessions in up state.
+// SetFullStateCount sets the uint64 value in the Ospfv2Metric object
+func (obj *ospfv2Metric) SetFullStateCount(value uint64) Ospfv2Metric {
 
-	obj.obj.SessionsUp = &value
+	obj.obj.FullStateCount = &value
+	return obj
+}
+
+// The number of OSPFv2 sessions in down state.
+// DownStateCount returns a uint64
+func (obj *ospfv2Metric) DownStateCount() uint64 {
+
+	return *obj.obj.DownStateCount
+
+}
+
+// The number of OSPFv2 sessions in down state.
+// DownStateCount returns a uint64
+func (obj *ospfv2Metric) HasDownStateCount() bool {
+	return obj.obj.DownStateCount != nil
+}
+
+// The number of OSPFv2 sessions in down state.
+// SetDownStateCount sets the uint64 value in the Ospfv2Metric object
+func (obj *ospfv2Metric) SetDownStateCount(value uint64) Ospfv2Metric {
+
+	obj.obj.DownStateCount = &value
 	return obj
 }
 

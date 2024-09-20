@@ -290,8 +290,6 @@ type Ospfv2Interface interface {
 	Ipv4Name() string
 	// SetIpv4Name assigns string provided by user to Ospfv2Interface
 	SetIpv4Name(value string) Ospfv2Interface
-	// HasIpv4Name checks if Ipv4Name has been set in Ospfv2Interface
-	HasIpv4Name() bool
 	// Area returns Ospfv2InterfaceArea, set in Ospfv2Interface.
 	// Ospfv2InterfaceArea is container for OSPF Area ID identifies the routing area to which the host belongs..
 	Area() Ospfv2InterfaceArea
@@ -375,16 +373,6 @@ func (obj *ospfv2Interface) Ipv4Name() string {
 
 	return *obj.obj.Ipv4Name
 
-}
-
-// The globally unique name of the IPv4 interface connected to the DUT.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
-// Ipv4Name returns a string
-func (obj *ospfv2Interface) HasIpv4Name() bool {
-	return obj.obj.Ipv4Name != nil
 }
 
 // The globally unique name of the IPv4 interface connected to the DUT.
@@ -668,6 +656,11 @@ func (obj *ospfv2Interface) validateObj(vObj *validation, set_default bool) {
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Ospfv2Interface")
+	}
+
+	// Ipv4Name is required
+	if obj.obj.Ipv4Name == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "Ipv4Name is required field on interface Ospfv2Interface")
 	}
 
 	if obj.obj.Area != nil {

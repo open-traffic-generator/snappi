@@ -307,7 +307,8 @@ type Ospfv2MetricsRequestColumnNamesEnum string
 
 // Enum of ColumnNames on Ospfv2MetricsRequest
 var Ospfv2MetricsRequestColumnNames = struct {
-	SESSIONS_UP            Ospfv2MetricsRequestColumnNamesEnum
+	FULL_STATE_COUNT       Ospfv2MetricsRequestColumnNamesEnum
+	DOWN_STATE_COUNT       Ospfv2MetricsRequestColumnNamesEnum
 	SESSIONS_FLAP          Ospfv2MetricsRequestColumnNamesEnum
 	HELLOS_SENT            Ospfv2MetricsRequestColumnNamesEnum
 	HELLOS_RECEIVED        Ospfv2MetricsRequestColumnNamesEnum
@@ -340,7 +341,8 @@ var Ospfv2MetricsRequestColumnNames = struct {
 	OPAQUE_DOMAIN_SENT     Ospfv2MetricsRequestColumnNamesEnum
 	OPAQUE_DOMAIN_RECEIVED Ospfv2MetricsRequestColumnNamesEnum
 }{
-	SESSIONS_UP:            Ospfv2MetricsRequestColumnNamesEnum("sessions_up"),
+	FULL_STATE_COUNT:       Ospfv2MetricsRequestColumnNamesEnum("full_state_count"),
+	DOWN_STATE_COUNT:       Ospfv2MetricsRequestColumnNamesEnum("down_state_count"),
 	SESSIONS_FLAP:          Ospfv2MetricsRequestColumnNamesEnum("sessions_flap"),
 	HELLOS_SENT:            Ospfv2MetricsRequestColumnNamesEnum("hellos_sent"),
 	HELLOS_RECEIVED:        Ospfv2MetricsRequestColumnNamesEnum("hellos_received"),

@@ -9960,6 +9960,7 @@ components:
       type: object
       required:
       - name
+      - ipv4_name
       properties:
         name:
           x-field-uid: 1
@@ -18059,72 +18060,75 @@ components:
           items:
             type: string
             x-enum:
-              sessions_up:
+              full_state_count:
                 x-field-uid: 1
-              sessions_flap:
+              down_state_count:
                 x-field-uid: 2
-              hellos_sent:
+              sessions_flap:
                 x-field-uid: 3
-              hellos_received:
+              hellos_sent:
                 x-field-uid: 4
-              dbd_sent:
+              hellos_received:
                 x-field-uid: 5
-              dbd_received:
+              dbd_sent:
                 x-field-uid: 6
-              ls_request_sent:
+              dbd_received:
                 x-field-uid: 7
-              ls_request_received:
+              ls_request_sent:
                 x-field-uid: 8
-              ls_update_sent:
+              ls_request_received:
                 x-field-uid: 9
-              ls_update_received:
+              ls_update_sent:
                 x-field-uid: 10
-              ls_ack_sent:
+              ls_update_received:
                 x-field-uid: 11
-              ls_ack_received:
+              ls_ack_sent:
                 x-field-uid: 12
-              lsa_sent:
+              ls_ack_received:
                 x-field-uid: 13
-              lsa_received:
+              lsa_sent:
                 x-field-uid: 14
-              lsa_ack_sent:
+              lsa_received:
                 x-field-uid: 15
-              lsa_ack_received:
+              lsa_ack_sent:
                 x-field-uid: 16
-              router_lsa_sent:
+              lsa_ack_received:
                 x-field-uid: 17
-              router_lsa_received:
+              router_lsa_sent:
                 x-field-uid: 18
-              network_lsa_sent:
+              router_lsa_received:
                 x-field-uid: 19
-              network_lsa_received:
+              network_lsa_sent:
                 x-field-uid: 20
-              summary_lsa_sent:
+              network_lsa_received:
                 x-field-uid: 21
-              summary_lsa_received:
+              summary_lsa_sent:
                 x-field-uid: 22
-              external_lsa_sent:
+              summary_lsa_received:
                 x-field-uid: 23
-              external_lsa_received:
+              external_lsa_sent:
                 x-field-uid: 24
-              nssa_lsa_sent:
+              external_lsa_received:
                 x-field-uid: 25
-              nssa_lsa_received:
+              nssa_lsa_sent:
                 x-field-uid: 26
-              opaque_local_sent:
+              nssa_lsa_received:
                 x-field-uid: 27
-              opaque_local_received:
+              opaque_local_sent:
                 x-field-uid: 28
-              opaque_area_sent:
+              opaque_local_received:
                 x-field-uid: 29
-              opaque_area_received:
+              opaque_area_sent:
                 x-field-uid: 30
-              opaque_domain_sent:
+              opaque_area_received:
                 x-field-uid: 31
-              opaque_domain_received:
+              opaque_domain_sent:
                 x-field-uid: 32
+              opaque_domain_received:
+                x-field-uid: 33
             enum:
-            - sessions_up
+            - full_state_count
+            - down_state_count
             - sessions_flap
             - hellos_sent
             - hellos_received
@@ -18167,197 +18171,203 @@ components:
             The name of a configured OSPFv2 router.
           type: string
           x-field-uid: 1
-        sessions_up:
+        full_state_count:
           description: |-
-            The number of OSPFv2 sessions that are up.
+            The number of OSPFv2 sessions in up state.
           type: integer
           format: uint64
           x-field-uid: 2
+        down_state_count:
+          description: |-
+            The number of OSPFv2 sessions in down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
         sessions_flap:
           description: |-
             The number of change of OSPFv2 sessions from up to down state.
           type: integer
           format: uint64
-          x-field-uid: 3
+          x-field-uid: 4
         hellos_sent:
           description: |-
             The number of OSPFv2 Hello messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 4
+          x-field-uid: 5
         hellos_received:
           description: |-
             The number of OSPFv2 Hello messages received.
           type: integer
           format: uint64
-          x-field-uid: 5
+          x-field-uid: 6
         dbd_sent:
           description: |-
             The number of OSPFv2 Database Description (DBD) messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 6
+          x-field-uid: 7
         dbd_received:
           description: |-
             The number of OSPFv2 Database Description (DBD) messages received.
           type: integer
           format: uint64
-          x-field-uid: 7
+          x-field-uid: 8
         ls_request_sent:
           description: |-
             The number of OSPFv2 LinkState (LS) Request messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 8
+          x-field-uid: 9
         ls_request_received:
           description: |-
             The number of OSPFv2 LinkState (LS) Request messages received.
           type: integer
           format: uint64
-          x-field-uid: 9
+          x-field-uid: 10
         ls_update_sent:
           description: |-
             The number of OSPFv2 LinkState (LS) Update messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 10
+          x-field-uid: 11
         ls_update_received:
           description: |-
             The number of OSPFv2 LinkState (LS) Update messages received.
           type: integer
           format: uint64
-          x-field-uid: 11
+          x-field-uid: 12
         ls_ack_sent:
           description: |-
             The number of OSPFv2 LinkState (LS) Acknowledgement messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 12
+          x-field-uid: 13
         ls_ack_received:
           description: |-
             The number of OSPFv2 LinkState (LS) Acknowledgement messages received.
           type: integer
           format: uint64
-          x-field-uid: 13
+          x-field-uid: 14
         lsa_sent:
           description: |-
             The total number of OSPFv2 LinkState Advertisement (LSA) messages transmitted.
           type: integer
           format: uint64
-          x-field-uid: 14
+          x-field-uid: 15
         lsa_received:
           description: |-
             The total number of OSPFv2 LinkState Advertisement (LSA) messages received.
           type: integer
           format: uint64
-          x-field-uid: 15
+          x-field-uid: 16
         lsa_ack_sent:
           description: |-
             The total number of OSPFv2 LinkState Advertisement (LSA) messages acknowledged.
           type: integer
           format: uint64
-          x-field-uid: 16
+          x-field-uid: 17
         lsa_ack_received:
           description: |-
             The total number of OSPFv2 LinkState Advertisement (LSA) acknowledge messages received .
           type: integer
           format: uint64
-          x-field-uid: 17
+          x-field-uid: 18
         router_lsa_sent:
           description: |-
             The number of OSPFv2 Router (Type 1) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 18
+          x-field-uid: 19
         router_lsa_received:
           description: |-
             The number of OSPFv2 Router (Type 1) LSAs received.
           type: integer
           format: uint64
-          x-field-uid: 19
+          x-field-uid: 20
         network_lsa_sent:
           description: |-
             The number of OSPFv2 Network (Type 2) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 20
+          x-field-uid: 21
         network_lsa_received:
           description: |-
             The number of OSPFv2 Network (Type 2) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 21
+          x-field-uid: 22
         summary_lsa_sent:
           description: "The number of OSPFv2 Summary IP (Type 3) LSAs transmitted.\
             \  "
           type: integer
           format: uint64
-          x-field-uid: 22
+          x-field-uid: 23
         summary_lsa_received:
           description: |-
             The number of OSPFv2 Summary IP (Type 3) LSA received.
           type: integer
           format: uint64
-          x-field-uid: 23
+          x-field-uid: 24
         external_lsa_sent:
           description: |-
             The number of OSPFv2 External (Type 5) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 24
+          x-field-uid: 25
         external_lsa_received:
           description: |-
             The number of OSPFv2 External (Type 5) LSAs received.
           type: integer
           format: uint64
-          x-field-uid: 25
+          x-field-uid: 26
         nssa_lsa_sent:
           description: |-
             The number of OSPFv2 NSSA (Type 7) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 26
+          x-field-uid: 27
         nssa_lsa_received:
           description: |-
             The number of OSPFv2 NSSA (Type 7) LSAs received.
           type: integer
           format: uint64
-          x-field-uid: 27
+          x-field-uid: 28
         opaque_local_sent:
           description: |-
             The number of OSPFv2 Opaque Local (Type 9) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 28
+          x-field-uid: 29
         opaque_local_received:
           description: "The number of OSPFv2 Opaque Local (Type 9) LSAs received. "
           type: integer
           format: uint64
-          x-field-uid: 29
+          x-field-uid: 30
         opaque_area_sent:
           description: |-
             The number of OSPF Opaque Area (Type 10) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 30
+          x-field-uid: 31
         opaque_area_received:
           description: |-
             The number of OSPFv2 Opaque Area (Type 10) LSAs received.
           type: integer
           format: uint64
-          x-field-uid: 31
+          x-field-uid: 32
         opaque_domain_sent:
           description: |-
             The number of OSPFv2 Opaque Domain (Type 11) LSAs transmitted.
           type: integer
           format: uint64
-          x-field-uid: 32
+          x-field-uid: 33
         opaque_domain_received:
           description: |-
             The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
           type: integer
           format: uint64
-          x-field-uid: 33
+          x-field-uid: 34
     States.Request:
       description: |-
         Request to traffic generator for states of choice
