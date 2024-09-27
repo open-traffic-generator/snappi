@@ -48,7 +48,6 @@ setuptools.setup(
     extras_require={
         "ixnetwork": ["snappi_ixnetwork==0.9.1"],
         "trex": ["snappi_trex"],
-        "convergence": ["snappi_convergence==0.4.1"],
         "testing": ["pytest", "flask"],
     },
 )
