@@ -274,10 +274,12 @@ type Dhcpv6ClientOptionsDuidUuidVariant interface {
 	Dce()
 	// getter for VarReserved to set choice.
 	VarReserved()
-	// getter for Ncs to set choice.
-	Ncs()
 	// getter for Guid to set choice.
 	Guid()
+	// getter for Ncs to set choice.
+	Ncs()
+	// getter for Dce to set choice.
+	Dce()
 }
 
 type Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum string
@@ -309,14 +311,19 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
 }
 
+// getter for Guid to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) Guid() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.GUID)
+}
+
 // getter for Ncs to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVariant) Ncs() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.NCS)
 }
 
-// getter for Guid to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) Guid() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.GUID)
+// getter for Dce to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) Dce() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.DCE)
 }
 
 // The current variants are ncs, dce,microsoft guid and reserved.
