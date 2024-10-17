@@ -264,10 +264,10 @@ type Ospfv2LsasStateRequest interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Ospfv2RouterNames returns []string, set in Ospfv2LsasStateRequest.
-	Ospfv2RouterNames() []string
-	// SetOspfv2RouterNames assigns []string provided by user to Ospfv2LsasStateRequest
-	SetOspfv2RouterNames(value []string) Ospfv2LsasStateRequest
+	// RouterNames returns []string, set in Ospfv2LsasStateRequest.
+	RouterNames() []string
+	// SetRouterNames assigns []string provided by user to Ospfv2LsasStateRequest
+	SetRouterNames(value []string) Ospfv2LsasStateRequest
 }
 
 // The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
@@ -275,12 +275,12 @@ type Ospfv2LsasStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ospfv2Router/properties/name
 //
-// Ospfv2RouterNames returns a []string
-func (obj *ospfv2LsasStateRequest) Ospfv2RouterNames() []string {
-	if obj.obj.Ospfv2RouterNames == nil {
-		obj.obj.Ospfv2RouterNames = make([]string, 0)
+// RouterNames returns a []string
+func (obj *ospfv2LsasStateRequest) RouterNames() []string {
+	if obj.obj.RouterNames == nil {
+		obj.obj.RouterNames = make([]string, 0)
 	}
-	return obj.obj.Ospfv2RouterNames
+	return obj.obj.RouterNames
 }
 
 // The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
@@ -288,13 +288,13 @@ func (obj *ospfv2LsasStateRequest) Ospfv2RouterNames() []string {
 // x-constraint:
 // - /components/schemas/Device.Ospfv2Router/properties/name
 //
-// SetOspfv2RouterNames sets the []string value in the Ospfv2LsasStateRequest object
-func (obj *ospfv2LsasStateRequest) SetOspfv2RouterNames(value []string) Ospfv2LsasStateRequest {
+// SetRouterNames sets the []string value in the Ospfv2LsasStateRequest object
+func (obj *ospfv2LsasStateRequest) SetRouterNames(value []string) Ospfv2LsasStateRequest {
 
-	if obj.obj.Ospfv2RouterNames == nil {
-		obj.obj.Ospfv2RouterNames = make([]string, 0)
+	if obj.obj.RouterNames == nil {
+		obj.obj.RouterNames = make([]string, 0)
 	}
-	obj.obj.Ospfv2RouterNames = value
+	obj.obj.RouterNames = value
 
 	return obj
 }

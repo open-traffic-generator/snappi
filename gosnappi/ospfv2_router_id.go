@@ -272,23 +272,23 @@ type Ospfv2RouterId interface {
 	HasChoice() bool
 	// getter for InterfaceIp to set choice.
 	InterfaceIp()
-	// CustomRouterId returns string, set in Ospfv2RouterId.
-	CustomRouterId() string
-	// SetCustomRouterId assigns string provided by user to Ospfv2RouterId
-	SetCustomRouterId(value string) Ospfv2RouterId
-	// HasCustomRouterId checks if CustomRouterId has been set in Ospfv2RouterId
-	HasCustomRouterId() bool
+	// Custom returns string, set in Ospfv2RouterId.
+	Custom() string
+	// SetCustom assigns string provided by user to Ospfv2RouterId
+	SetCustom(value string) Ospfv2RouterId
+	// HasCustom checks if Custom has been set in Ospfv2RouterId
+	HasCustom() bool
 }
 
 type Ospfv2RouterIdChoiceEnum string
 
 // Enum of Choice on Ospfv2RouterId
 var Ospfv2RouterIdChoice = struct {
-	INTERFACE_IP     Ospfv2RouterIdChoiceEnum
-	CUSTOM_ROUTER_ID Ospfv2RouterIdChoiceEnum
+	INTERFACE_IP Ospfv2RouterIdChoiceEnum
+	CUSTOM       Ospfv2RouterIdChoiceEnum
 }{
-	INTERFACE_IP:     Ospfv2RouterIdChoiceEnum("interface_ip"),
-	CUSTOM_ROUTER_ID: Ospfv2RouterIdChoiceEnum("custom_router_id"),
+	INTERFACE_IP: Ospfv2RouterIdChoiceEnum("interface_ip"),
+	CUSTOM:       Ospfv2RouterIdChoiceEnum("custom"),
 }
 
 func (obj *ospfv2RouterId) Choice() Ospfv2RouterIdChoiceEnum {
@@ -302,7 +302,7 @@ func (obj *ospfv2RouterId) InterfaceIp() {
 
 // IP address of Router ID for this emulated OSPFv2 router.
 // - interface_ip: When IPv4 interface address to be assigned as Router ID.
-// - custom_router_id: When, Router ID needs to be configured different from Interface IPv4 address.
+// - custom: When, Router ID needs to be configured different from Interface IPv4 address.
 // Choice returns a string
 func (obj *ospfv2RouterId) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -317,33 +317,33 @@ func (obj *ospfv2RouterId) setChoice(value Ospfv2RouterIdChoiceEnum) Ospfv2Route
 	}
 	enumValue := otg.Ospfv2RouterId_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.CustomRouterId = nil
+	obj.obj.Custom = nil
 	return obj
 }
 
 // Router ID in IPv4 address format.
-// CustomRouterId returns a string
-func (obj *ospfv2RouterId) CustomRouterId() string {
+// Custom returns a string
+func (obj *ospfv2RouterId) Custom() string {
 
-	if obj.obj.CustomRouterId == nil {
-		obj.setChoice(Ospfv2RouterIdChoice.CUSTOM_ROUTER_ID)
+	if obj.obj.Custom == nil {
+		obj.setChoice(Ospfv2RouterIdChoice.CUSTOM)
 	}
 
-	return *obj.obj.CustomRouterId
+	return *obj.obj.Custom
 
 }
 
 // Router ID in IPv4 address format.
-// CustomRouterId returns a string
-func (obj *ospfv2RouterId) HasCustomRouterId() bool {
-	return obj.obj.CustomRouterId != nil
+// Custom returns a string
+func (obj *ospfv2RouterId) HasCustom() bool {
+	return obj.obj.Custom != nil
 }
 
 // Router ID in IPv4 address format.
-// SetCustomRouterId sets the string value in the Ospfv2RouterId object
-func (obj *ospfv2RouterId) SetCustomRouterId(value string) Ospfv2RouterId {
-	obj.setChoice(Ospfv2RouterIdChoice.CUSTOM_ROUTER_ID)
-	obj.obj.CustomRouterId = &value
+// SetCustom sets the string value in the Ospfv2RouterId object
+func (obj *ospfv2RouterId) SetCustom(value string) Ospfv2RouterId {
+	obj.setChoice(Ospfv2RouterIdChoice.CUSTOM)
+	obj.obj.Custom = &value
 	return obj
 }
 
@@ -352,11 +352,11 @@ func (obj *ospfv2RouterId) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.CustomRouterId != nil {
+	if obj.obj.Custom != nil {
 
-		err := obj.validateIpv4(obj.CustomRouterId())
+		err := obj.validateIpv4(obj.Custom())
 		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2RouterId.CustomRouterId"))
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2RouterId.Custom"))
 		}
 
 	}
@@ -367,9 +367,9 @@ func (obj *ospfv2RouterId) setDefault() {
 	var choices_set int = 0
 	var choice Ospfv2RouterIdChoiceEnum
 
-	if obj.obj.CustomRouterId != nil {
+	if obj.obj.Custom != nil {
 		choices_set += 1
-		choice = Ospfv2RouterIdChoice.CUSTOM_ROUTER_ID
+		choice = Ospfv2RouterIdChoice.CUSTOM
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

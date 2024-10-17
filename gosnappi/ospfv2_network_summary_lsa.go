@@ -13,10 +13,10 @@ import (
 // ***** Ospfv2NetworkSummaryLsa *****
 type ospfv2NetworkSummaryLsa struct {
 	validation
-	obj               *otg.Ospfv2NetworkSummaryLsa
-	marshaller        marshalOspfv2NetworkSummaryLsa
-	unMarshaller      unMarshalOspfv2NetworkSummaryLsa
-	commonAttrsHolder Ospfv2CommonAttrs
+	obj          *otg.Ospfv2NetworkSummaryLsa
+	marshaller   marshalOspfv2NetworkSummaryLsa
+	unMarshaller unMarshalOspfv2NetworkSummaryLsa
+	headerHolder Ospfv2LsaHeader
 }
 
 func NewOspfv2NetworkSummaryLsa() Ospfv2NetworkSummaryLsa {
@@ -244,13 +244,14 @@ func (obj *ospfv2NetworkSummaryLsa) Clone() (Ospfv2NetworkSummaryLsa, error) {
 }
 
 func (obj *ospfv2NetworkSummaryLsa) setNil() {
-	obj.commonAttrsHolder = nil
+	obj.headerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // Ospfv2NetworkSummaryLsa is contents of the Network Summary LSA - Type 3.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
 type Ospfv2NetworkSummaryLsa interface {
 	Validation
 	// msg marshals Ospfv2NetworkSummaryLsa to protobuf object *otg.Ospfv2NetworkSummaryLsa
@@ -272,14 +273,14 @@ type Ospfv2NetworkSummaryLsa interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2NetworkSummaryLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	CommonAttrs() Ospfv2CommonAttrs
-	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2NetworkSummaryLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NetworkSummaryLsa
-	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2NetworkSummaryLsa
-	HasCommonAttrs() bool
+	// Header returns Ospfv2LsaHeader, set in Ospfv2NetworkSummaryLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	Header() Ospfv2LsaHeader
+	// SetHeader assigns Ospfv2LsaHeader provided by user to Ospfv2NetworkSummaryLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkSummaryLsa
+	// HasHeader checks if Header has been set in Ospfv2NetworkSummaryLsa
+	HasHeader() bool
 	// NetworkMask returns string, set in Ospfv2NetworkSummaryLsa.
 	NetworkMask() string
 	// SetNetworkMask assigns string provided by user to Ospfv2NetworkSummaryLsa
@@ -295,30 +296,30 @@ type Ospfv2NetworkSummaryLsa interface {
 	setNil()
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2NetworkSummaryLsa) CommonAttrs() Ospfv2CommonAttrs {
-	if obj.obj.CommonAttrs == nil {
-		obj.obj.CommonAttrs = NewOspfv2CommonAttrs().msg()
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2NetworkSummaryLsa) Header() Ospfv2LsaHeader {
+	if obj.obj.Header == nil {
+		obj.obj.Header = NewOspfv2LsaHeader().msg()
 	}
-	if obj.commonAttrsHolder == nil {
-		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
+	if obj.headerHolder == nil {
+		obj.headerHolder = &ospfv2LsaHeader{obj: obj.obj.Header}
 	}
-	return obj.commonAttrsHolder
+	return obj.headerHolder
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2NetworkSummaryLsa) HasCommonAttrs() bool {
-	return obj.obj.CommonAttrs != nil
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2NetworkSummaryLsa) HasHeader() bool {
+	return obj.obj.Header != nil
 }
 
-// Common LSA attributes.
-// SetCommonAttrs sets the Ospfv2CommonAttrs value in the Ospfv2NetworkSummaryLsa object
-func (obj *ospfv2NetworkSummaryLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NetworkSummaryLsa {
+// Contents of the LSA header.
+// SetHeader sets the Ospfv2LsaHeader value in the Ospfv2NetworkSummaryLsa object
+func (obj *ospfv2NetworkSummaryLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkSummaryLsa {
 
-	obj.commonAttrsHolder = nil
-	obj.obj.CommonAttrs = value.msg()
+	obj.headerHolder = nil
+	obj.obj.Header = value.msg()
 
 	return obj
 }
@@ -372,9 +373,9 @@ func (obj *ospfv2NetworkSummaryLsa) validateObj(vObj *validation, set_default bo
 		obj.setDefault()
 	}
 
-	if obj.obj.CommonAttrs != nil {
+	if obj.obj.Header != nil {
 
-		obj.CommonAttrs().validateObj(vObj, set_default)
+		obj.Header().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.NetworkMask != nil {

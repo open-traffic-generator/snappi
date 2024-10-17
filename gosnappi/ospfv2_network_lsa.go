@@ -13,10 +13,11 @@ import (
 // ***** Ospfv2NetworkLsa *****
 type ospfv2NetworkLsa struct {
 	validation
-	obj               *otg.Ospfv2NetworkLsa
-	marshaller        marshalOspfv2NetworkLsa
-	unMarshaller      unMarshalOspfv2NetworkLsa
-	commonAttrsHolder Ospfv2CommonAttrs
+	obj             *otg.Ospfv2NetworkLsa
+	marshaller      marshalOspfv2NetworkLsa
+	unMarshaller    unMarshalOspfv2NetworkLsa
+	headerHolder    Ospfv2LsaHeader
+	neighborsHolder Ospfv2NetworkLsaOspfv2LsaNeighborIter
 }
 
 func NewOspfv2NetworkLsa() Ospfv2NetworkLsa {
@@ -244,13 +245,14 @@ func (obj *ospfv2NetworkLsa) Clone() (Ospfv2NetworkLsa, error) {
 }
 
 func (obj *ospfv2NetworkLsa) setNil() {
-	obj.commonAttrsHolder = nil
+	obj.headerHolder = nil
+	obj.neighborsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2NetworkLsa is contents of the Network LSA
+// Ospfv2NetworkLsa is contents of the Network LSA.
 type Ospfv2NetworkLsa interface {
 	Validation
 	// msg marshals Ospfv2NetworkLsa to protobuf object *otg.Ospfv2NetworkLsa
@@ -272,98 +274,131 @@ type Ospfv2NetworkLsa interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2NetworkLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	CommonAttrs() Ospfv2CommonAttrs
-	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2NetworkLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NetworkLsa
-	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2NetworkLsa
-	HasCommonAttrs() bool
-	// NetworkMask returns string, set in Ospfv2NetworkLsa.
-	NetworkMask() string
-	// SetNetworkMask assigns string provided by user to Ospfv2NetworkLsa
-	SetNetworkMask(value string) Ospfv2NetworkLsa
-	// HasNetworkMask checks if NetworkMask has been set in Ospfv2NetworkLsa
-	HasNetworkMask() bool
-	// NeighborRouterId returns string, set in Ospfv2NetworkLsa.
-	NeighborRouterId() string
-	// SetNeighborRouterId assigns string provided by user to Ospfv2NetworkLsa
-	SetNeighborRouterId(value string) Ospfv2NetworkLsa
-	// HasNeighborRouterId checks if NeighborRouterId has been set in Ospfv2NetworkLsa
-	HasNeighborRouterId() bool
+	// Header returns Ospfv2LsaHeader, set in Ospfv2NetworkLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	Header() Ospfv2LsaHeader
+	// SetHeader assigns Ospfv2LsaHeader provided by user to Ospfv2NetworkLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkLsa
+	// HasHeader checks if Header has been set in Ospfv2NetworkLsa
+	HasHeader() bool
+	// Neighbors returns Ospfv2NetworkLsaOspfv2LsaNeighborIterIter, set in Ospfv2NetworkLsa
+	Neighbors() Ospfv2NetworkLsaOspfv2LsaNeighborIter
 	setNil()
 }
 
-// Contents of the router LSA.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2NetworkLsa) CommonAttrs() Ospfv2CommonAttrs {
-	if obj.obj.CommonAttrs == nil {
-		obj.obj.CommonAttrs = NewOspfv2CommonAttrs().msg()
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2NetworkLsa) Header() Ospfv2LsaHeader {
+	if obj.obj.Header == nil {
+		obj.obj.Header = NewOspfv2LsaHeader().msg()
 	}
-	if obj.commonAttrsHolder == nil {
-		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
+	if obj.headerHolder == nil {
+		obj.headerHolder = &ospfv2LsaHeader{obj: obj.obj.Header}
 	}
-	return obj.commonAttrsHolder
+	return obj.headerHolder
 }
 
-// Contents of the router LSA.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2NetworkLsa) HasCommonAttrs() bool {
-	return obj.obj.CommonAttrs != nil
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2NetworkLsa) HasHeader() bool {
+	return obj.obj.Header != nil
 }
 
-// Contents of the router LSA.
-// SetCommonAttrs sets the Ospfv2CommonAttrs value in the Ospfv2NetworkLsa object
-func (obj *ospfv2NetworkLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2NetworkLsa {
+// Contents of the LSA header.
+// SetHeader sets the Ospfv2LsaHeader value in the Ospfv2NetworkLsa object
+func (obj *ospfv2NetworkLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkLsa {
 
-	obj.commonAttrsHolder = nil
-	obj.obj.CommonAttrs = value.msg()
+	obj.headerHolder = nil
+	obj.obj.Header = value.msg()
 
 	return obj
 }
 
-// The IPv4 address mask for the network.
-// NetworkMask returns a string
-func (obj *ospfv2NetworkLsa) NetworkMask() string {
-
-	return *obj.obj.NetworkMask
-
+// Neighbors that are described within the LSA.
+// Neighbors returns a []Ospfv2LsaNeighbor
+func (obj *ospfv2NetworkLsa) Neighbors() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	if len(obj.obj.Neighbors) == 0 {
+		obj.obj.Neighbors = []*otg.Ospfv2LsaNeighbor{}
+	}
+	if obj.neighborsHolder == nil {
+		obj.neighborsHolder = newOspfv2NetworkLsaOspfv2LsaNeighborIter(&obj.obj.Neighbors).setMsg(obj)
+	}
+	return obj.neighborsHolder
 }
 
-// The IPv4 address mask for the network.
-// NetworkMask returns a string
-func (obj *ospfv2NetworkLsa) HasNetworkMask() bool {
-	return obj.obj.NetworkMask != nil
+type ospfv2NetworkLsaOspfv2LsaNeighborIter struct {
+	obj                    *ospfv2NetworkLsa
+	ospfv2LsaNeighborSlice []Ospfv2LsaNeighbor
+	fieldPtr               *[]*otg.Ospfv2LsaNeighbor
 }
 
-// The IPv4 address mask for the network.
-// SetNetworkMask sets the string value in the Ospfv2NetworkLsa object
-func (obj *ospfv2NetworkLsa) SetNetworkMask(value string) Ospfv2NetworkLsa {
+func newOspfv2NetworkLsaOspfv2LsaNeighborIter(ptr *[]*otg.Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	return &ospfv2NetworkLsaOspfv2LsaNeighborIter{fieldPtr: ptr}
+}
 
-	obj.obj.NetworkMask = &value
+type Ospfv2NetworkLsaOspfv2LsaNeighborIter interface {
+	setMsg(*ospfv2NetworkLsa) Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	Items() []Ospfv2LsaNeighbor
+	Add() Ospfv2LsaNeighbor
+	Append(items ...Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	Set(index int, newObj Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	Clear() Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	clearHolderSlice() Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	appendHolderSlice(item Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
+}
+
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) setMsg(msg *ospfv2NetworkLsa) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2LsaNeighbor{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// Neighbor's Router ID for the link.
-// NeighborRouterId returns a string
-func (obj *ospfv2NetworkLsa) NeighborRouterId() string {
-
-	return *obj.obj.NeighborRouterId
-
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Items() []Ospfv2LsaNeighbor {
+	return obj.ospfv2LsaNeighborSlice
 }
 
-// Neighbor's Router ID for the link.
-// NeighborRouterId returns a string
-func (obj *ospfv2NetworkLsa) HasNeighborRouterId() bool {
-	return obj.obj.NeighborRouterId != nil
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Add() Ospfv2LsaNeighbor {
+	newObj := &otg.Ospfv2LsaNeighbor{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2LsaNeighbor{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, newLibObj)
+	return newLibObj
 }
 
-// Neighbor's Router ID for the link.
-// SetNeighborRouterId sets the string value in the Ospfv2NetworkLsa object
-func (obj *ospfv2NetworkLsa) SetNeighborRouterId(value string) Ospfv2NetworkLsa {
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Append(items ...Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, item)
+	}
+	return obj
+}
 
-	obj.obj.NeighborRouterId = &value
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Set(index int, newObj Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2LsaNeighborSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Clear() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2LsaNeighbor{}
+		obj.ospfv2LsaNeighborSlice = []Ospfv2LsaNeighbor{}
+	}
+	return obj
+}
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) clearHolderSlice() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	if len(obj.ospfv2LsaNeighborSlice) > 0 {
+		obj.ospfv2LsaNeighborSlice = []Ospfv2LsaNeighbor{}
+	}
+	return obj
+}
+func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) appendHolderSlice(item Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
+	obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, item)
 	return obj
 }
 
@@ -372,25 +407,21 @@ func (obj *ospfv2NetworkLsa) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.CommonAttrs != nil {
+	if obj.obj.Header != nil {
 
-		obj.CommonAttrs().validateObj(vObj, set_default)
+		obj.Header().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.NetworkMask != nil {
+	if len(obj.obj.Neighbors) != 0 {
 
-		err := obj.validateIpv4(obj.NetworkMask())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NetworkLsa.NetworkMask"))
+		if set_default {
+			obj.Neighbors().clearHolderSlice()
+			for _, item := range obj.obj.Neighbors {
+				obj.Neighbors().appendHolderSlice(&ospfv2LsaNeighbor{obj: item})
+			}
 		}
-
-	}
-
-	if obj.obj.NeighborRouterId != nil {
-
-		err := obj.validateIpv4(obj.NeighborRouterId())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NetworkLsa.NeighborRouterId"))
+		for _, item := range obj.Neighbors().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}

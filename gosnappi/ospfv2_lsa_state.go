@@ -284,18 +284,12 @@ type Ospfv2LsaState interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// LsaRouterName returns string, set in Ospfv2LsaState.
-	LsaRouterName() string
-	// SetLsaRouterName assigns string provided by user to Ospfv2LsaState
-	SetLsaRouterName(value string) Ospfv2LsaState
-	// HasLsaRouterName checks if LsaRouterName has been set in Ospfv2LsaState
-	HasLsaRouterName() bool
-	// RouterId returns string, set in Ospfv2LsaState.
-	RouterId() string
-	// SetRouterId assigns string provided by user to Ospfv2LsaState
-	SetRouterId(value string) Ospfv2LsaState
-	// HasRouterId checks if RouterId has been set in Ospfv2LsaState
-	HasRouterId() bool
+	// RouterName returns string, set in Ospfv2LsaState.
+	RouterName() string
+	// SetRouterName assigns string provided by user to Ospfv2LsaState
+	SetRouterName(value string) Ospfv2LsaState
+	// HasRouterName checks if RouterName has been set in Ospfv2LsaState
+	HasRouterName() bool
 	// RouterLsas returns Ospfv2LsaStateOspfv2RouterLsaIterIter, set in Ospfv2LsaState
 	RouterLsas() Ospfv2LsaStateOspfv2RouterLsaIter
 	// NetworkLsas returns Ospfv2LsaStateOspfv2NetworkLsaIterIter, set in Ospfv2LsaState
@@ -314,46 +308,24 @@ type Ospfv2LsaState interface {
 }
 
 // The name of the OSPFv2 Router that learned the LSA information.
-// LsaRouterName returns a string
-func (obj *ospfv2LsaState) LsaRouterName() string {
+// RouterName returns a string
+func (obj *ospfv2LsaState) RouterName() string {
 
-	return *obj.obj.LsaRouterName
+	return *obj.obj.RouterName
 
 }
 
 // The name of the OSPFv2 Router that learned the LSA information.
-// LsaRouterName returns a string
-func (obj *ospfv2LsaState) HasLsaRouterName() bool {
-	return obj.obj.LsaRouterName != nil
+// RouterName returns a string
+func (obj *ospfv2LsaState) HasRouterName() bool {
+	return obj.obj.RouterName != nil
 }
 
 // The name of the OSPFv2 Router that learned the LSA information.
-// SetLsaRouterName sets the string value in the Ospfv2LsaState object
-func (obj *ospfv2LsaState) SetLsaRouterName(value string) Ospfv2LsaState {
+// SetRouterName sets the string value in the Ospfv2LsaState object
+func (obj *ospfv2LsaState) SetRouterName(value string) Ospfv2LsaState {
 
-	obj.obj.LsaRouterName = &value
-	return obj
-}
-
-// The router ID (in the IPv4 format).
-// RouterId returns a string
-func (obj *ospfv2LsaState) RouterId() string {
-
-	return *obj.obj.RouterId
-
-}
-
-// The router ID (in the IPv4 format).
-// RouterId returns a string
-func (obj *ospfv2LsaState) HasRouterId() bool {
-	return obj.obj.RouterId != nil
-}
-
-// The router ID (in the IPv4 format).
-// SetRouterId sets the string value in the Ospfv2LsaState object
-func (obj *ospfv2LsaState) SetRouterId(value string) Ospfv2LsaState {
-
-	obj.obj.RouterId = &value
+	obj.obj.RouterName = &value
 	return obj
 }
 
@@ -969,15 +941,6 @@ func (obj *ospfv2LsaStateOspfv2OpaqueLsaIter) appendHolderSlice(item Ospfv2Opaqu
 func (obj *ospfv2LsaState) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	if obj.obj.RouterId != nil {
-
-		err := obj.validateIpv4(obj.RouterId())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2LsaState.RouterId"))
-		}
-
 	}
 
 	if len(obj.obj.RouterLsas) != 0 {

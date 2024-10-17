@@ -13,10 +13,10 @@ import (
 // ***** Ospfv2OpaqueLsa *****
 type ospfv2OpaqueLsa struct {
 	validation
-	obj               *otg.Ospfv2OpaqueLsa
-	marshaller        marshalOspfv2OpaqueLsa
-	unMarshaller      unMarshalOspfv2OpaqueLsa
-	commonAttrsHolder Ospfv2CommonAttrs
+	obj          *otg.Ospfv2OpaqueLsa
+	marshaller   marshalOspfv2OpaqueLsa
+	unMarshaller unMarshalOspfv2OpaqueLsa
+	headerHolder Ospfv2LsaHeader
 }
 
 func NewOspfv2OpaqueLsa() Ospfv2OpaqueLsa {
@@ -244,13 +244,13 @@ func (obj *ospfv2OpaqueLsa) Clone() (Ospfv2OpaqueLsa, error) {
 }
 
 func (obj *ospfv2OpaqueLsa) setNil() {
-	obj.commonAttrsHolder = nil
+	obj.headerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2OpaqueLsa is contents of OSPFv2 NSSA-LSA - Type 7.
+// Ospfv2OpaqueLsa is contents of OSPFv2 Opaque LSA - Type 7.
 type Ospfv2OpaqueLsa interface {
 	Validation
 	// msg marshals Ospfv2OpaqueLsa to protobuf object *otg.Ospfv2OpaqueLsa
@@ -272,14 +272,14 @@ type Ospfv2OpaqueLsa interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2OpaqueLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	CommonAttrs() Ospfv2CommonAttrs
-	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2OpaqueLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2OpaqueLsa
-	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2OpaqueLsa
-	HasCommonAttrs() bool
+	// Header returns Ospfv2LsaHeader, set in Ospfv2OpaqueLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	Header() Ospfv2LsaHeader
+	// SetHeader assigns Ospfv2LsaHeader provided by user to Ospfv2OpaqueLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa
+	// HasHeader checks if Header has been set in Ospfv2OpaqueLsa
+	HasHeader() bool
 	// Type returns Ospfv2OpaqueLsaTypeEnum, set in Ospfv2OpaqueLsa
 	Type() Ospfv2OpaqueLsaTypeEnum
 	// SetType assigns Ospfv2OpaqueLsaTypeEnum provided by user to Ospfv2OpaqueLsa
@@ -289,30 +289,30 @@ type Ospfv2OpaqueLsa interface {
 	setNil()
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2OpaqueLsa) CommonAttrs() Ospfv2CommonAttrs {
-	if obj.obj.CommonAttrs == nil {
-		obj.obj.CommonAttrs = NewOspfv2CommonAttrs().msg()
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2OpaqueLsa) Header() Ospfv2LsaHeader {
+	if obj.obj.Header == nil {
+		obj.obj.Header = NewOspfv2LsaHeader().msg()
 	}
-	if obj.commonAttrsHolder == nil {
-		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
+	if obj.headerHolder == nil {
+		obj.headerHolder = &ospfv2LsaHeader{obj: obj.obj.Header}
 	}
-	return obj.commonAttrsHolder
+	return obj.headerHolder
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2OpaqueLsa) HasCommonAttrs() bool {
-	return obj.obj.CommonAttrs != nil
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2OpaqueLsa) HasHeader() bool {
+	return obj.obj.Header != nil
 }
 
-// Common LSA attributes.
-// SetCommonAttrs sets the Ospfv2CommonAttrs value in the Ospfv2OpaqueLsa object
-func (obj *ospfv2OpaqueLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2OpaqueLsa {
+// Contents of the LSA header.
+// SetHeader sets the Ospfv2LsaHeader value in the Ospfv2OpaqueLsa object
+func (obj *ospfv2OpaqueLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2OpaqueLsa {
 
-	obj.commonAttrsHolder = nil
-	obj.obj.CommonAttrs = value.msg()
+	obj.headerHolder = nil
+	obj.obj.Header = value.msg()
 
 	return obj
 }
@@ -358,9 +358,9 @@ func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.CommonAttrs != nil {
+	if obj.obj.Header != nil {
 
-		obj.CommonAttrs().validateObj(vObj, set_default)
+		obj.Header().validateObj(vObj, set_default)
 	}
 
 }
