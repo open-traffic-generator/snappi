@@ -1167,6 +1167,8 @@ from .snappi import LldpMetricsRequest
 from .snappi import RsvpMetricsRequest
 from .snappi import Dhcpv4ClientMetricsRequest
 from .snappi import Dhcpv4ServerMetricsRequest
+from .snappi import Httpclient_statMetricsRequest
+from .snappi import Httpserver_statMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1197,6 +1199,14 @@ from .snappi import Dhcpv4ClientMetric
 from .snappi import Dhcpv4ClientMetricIter
 from .snappi import Dhcpv4ServerMetric
 from .snappi import Dhcpv4ServerMetricIter
+from .snappi import Httpclient_statMetric
+from .snappi import MetricStat_Value
+from .snappi import Stat_ValueTimestamp
+from .snappi import Stat_ValueTimestampIter
+from .snappi import MetricStat_ValueIter
+from .snappi import Httpclient_statMetricIter
+from .snappi import Httpserver_statMetric
+from .snappi import Httpserver_statMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest

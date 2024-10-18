@@ -15225,6 +15225,10 @@ components:
               x-field-uid: 10
             dhcpv4_server:
               x-field-uid: 11
+            httpclient:
+              x-field-uid: 12
+            httpserver:
+              x-field-uid: 13
           enum:
           - port
           - flow
@@ -15237,6 +15241,8 @@ components:
           - rsvp
           - dhcpv4_client
           - dhcpv4_server
+          - httpclient
+          - httpserver
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -15270,6 +15276,12 @@ components:
         dhcpv4_server:
           $ref: '#/components/schemas/Dhcpv4Server.Metrics.Request'
           x-field-uid: 12
+        httpclient:
+          $ref: '#/components/schemas/Httpclient_stat.Metrics.Request'
+          x-field-uid: 13
+        httpserver:
+          $ref: '#/components/schemas/Httpserver_stat.Metrics.Request'
+          x-field-uid: 14
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -15302,6 +15314,10 @@ components:
               x-field-uid: 10
             dhcpv4_server:
               x-field-uid: 11
+            httpclient_metrics:
+              x-field-uid: 12
+            httpserver_metrics:
+              x-field-uid: 13
           enum:
           - flow_metrics
           - port_metrics
@@ -15314,6 +15330,8 @@ components:
           - rsvp_metrics
           - dhcpv4_client
           - dhcpv4_server
+          - httpclient_metrics
+          - httpserver_metrics
         port_metrics:
           type: array
           items:
@@ -15369,6 +15387,16 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv4Server.Metric'
           x-field-uid: 12
+        httpclient_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Httpclient_stat.Metric'
+          x-field-uid: 13
+        httpserver_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Httpserver_stat.Metric'
+          x-field-uid: 14
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -17496,6 +17524,102 @@ components:
           type: integer
           format: uint64
           x-field-uid: 8
+    Httpclient_stat.Metrics.Request:
+      description: |-
+        The client Stat
+      type: object
+      properties:
+        stat_name:
+          description: |-
+            The client stats
+          x-field-uid: 1
+          type: array
+          items:
+            type: string
+        all_stats:
+          description: |-
+            Details of all client stats
+          x-field-uid: 2
+          type: boolean
+          default: false
+    Httpclient_stat.Metric:
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured stat
+          type: string
+          x-field-uid: 1
+        stat_value:
+          description: |-
+            stat value at the current timestamp
+          type: array
+          x-field-uid: 2
+          items:
+            $ref: '#/components/schemas/Metric.Stat_Value'
+    Metric.Stat_Value:
+      type: object
+      properties:
+        timestamp:
+          description: |-
+            Timestamp pair for each stat
+          x-field-uid: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/Stat_Value.Timestamp'
+        values:
+          x-field-uid: 2
+          type: array
+          items:
+            type: string
+    Stat_Value.Timestamp:
+      description: |-
+        For Statistics value - Timestamp details
+      type: object
+      properties:
+        timestamp_id:
+          description: |-
+            Timestamp id
+          type: string
+          x-field-uid: 1
+        value:
+          description: |-
+            Stat Value for each timestamp
+          type: string
+          x-field-uid: 2
+    Httpserver_stat.Metrics.Request:
+      description: |-
+        The Server Stat
+      type: object
+      properties:
+        stat_name:
+          description: |-
+            The Server stats
+          x-field-uid: 1
+          type: array
+          items:
+            type: string
+        all_stats:
+          description: |-
+            Details of all server stats
+          x-field-uid: 2
+          type: boolean
+          default: false
+    Httpserver_stat.Metric:
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured stat
+          type: string
+          x-field-uid: 1
+        stat_value:
+          description: |-
+            stat value at the current timestamp
+          type: array
+          x-field-uid: 2
+          items:
+            $ref: '#/components/schemas/Metric.Stat_Value'
     States.Request:
       description: |-
         Request to traffic generator for states of choice
