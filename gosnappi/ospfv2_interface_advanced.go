@@ -264,12 +264,6 @@ type Ospfv2InterfaceAdvanced interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// FastHello returns bool, set in Ospfv2InterfaceAdvanced.
-	FastHello() bool
-	// SetFastHello assigns bool provided by user to Ospfv2InterfaceAdvanced
-	SetFastHello(value bool) Ospfv2InterfaceAdvanced
-	// HasFastHello checks if FastHello has been set in Ospfv2InterfaceAdvanced
-	HasFastHello() bool
 	// HelloInterval returns uint32, set in Ospfv2InterfaceAdvanced.
 	HelloInterval() uint32
 	// SetHelloInterval assigns uint32 provided by user to Ospfv2InterfaceAdvanced
@@ -300,40 +294,6 @@ type Ospfv2InterfaceAdvanced interface {
 	SetValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced
 	// HasValidateReceivedMtu checks if ValidateReceivedMtu has been set in Ospfv2InterfaceAdvanced
 	HasValidateReceivedMtu() bool
-	// MaxMtu returns uint32, set in Ospfv2InterfaceAdvanced.
-	MaxMtu() uint32
-	// SetMaxMtu assigns uint32 provided by user to Ospfv2InterfaceAdvanced
-	SetMaxMtu(value uint32) Ospfv2InterfaceAdvanced
-	// HasMaxMtu checks if MaxMtu has been set in Ospfv2InterfaceAdvanced
-	HasMaxMtu() bool
-}
-
-// When fast hello packets are configured on the interface;
-// the hello interval advertised in the hello packets that are sent out this interface is set to 0
-// and hello interval in the hello packets received over this interface is ignored.
-// FastHello returns a bool
-func (obj *ospfv2InterfaceAdvanced) FastHello() bool {
-
-	return *obj.obj.FastHello
-
-}
-
-// When fast hello packets are configured on the interface;
-// the hello interval advertised in the hello packets that are sent out this interface is set to 0
-// and hello interval in the hello packets received over this interface is ignored.
-// FastHello returns a bool
-func (obj *ospfv2InterfaceAdvanced) HasFastHello() bool {
-	return obj.obj.FastHello != nil
-}
-
-// When fast hello packets are configured on the interface;
-// the hello interval advertised in the hello packets that are sent out this interface is set to 0
-// and hello interval in the hello packets received over this interface is ignored.
-// SetFastHello sets the bool value in the Ospfv2InterfaceAdvanced object
-func (obj *ospfv2InterfaceAdvanced) SetFastHello(value bool) Ospfv2InterfaceAdvanced {
-
-	obj.obj.FastHello = &value
-	return obj
 }
 
 // The time interval, in seconds, between the Hello packets that
@@ -443,7 +403,8 @@ func (obj *ospfv2InterfaceAdvanced) SetPriority(value uint32) Ospfv2InterfaceAdv
 }
 
 // This is for to verify the MTU during the Database (DB) exchange.
-// Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
+// If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
+// will be validated, otherwise it will be ignored.
 //
 // ValidateReceivedMtu returns a bool
 func (obj *ospfv2InterfaceAdvanced) ValidateReceivedMtu() bool {
@@ -453,7 +414,8 @@ func (obj *ospfv2InterfaceAdvanced) ValidateReceivedMtu() bool {
 }
 
 // This is for to verify the MTU during the Database (DB) exchange.
-// Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
+// If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
+// will be validated, otherwise it will be ignored.
 //
 // ValidateReceivedMtu returns a bool
 func (obj *ospfv2InterfaceAdvanced) HasValidateReceivedMtu() bool {
@@ -461,7 +423,8 @@ func (obj *ospfv2InterfaceAdvanced) HasValidateReceivedMtu() bool {
 }
 
 // This is for to verify the MTU during the Database (DB) exchange.
-// Advertised MTU size is set to 0, and the received MTU size is ignored during the DB exchange.
+// If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
+// will be validated, otherwise it will be ignored.
 //
 // SetValidateReceivedMtu sets the bool value in the Ospfv2InterfaceAdvanced object
 func (obj *ospfv2InterfaceAdvanced) SetValidateReceivedMtu(value bool) Ospfv2InterfaceAdvanced {
@@ -470,49 +433,14 @@ func (obj *ospfv2InterfaceAdvanced) SetValidateReceivedMtu(value bool) Ospfv2Int
 	return obj
 }
 
-// The value of the maximum transmit unit.
-// MaxMtu returns a uint32
-func (obj *ospfv2InterfaceAdvanced) MaxMtu() uint32 {
-
-	return *obj.obj.MaxMtu
-
-}
-
-// The value of the maximum transmit unit.
-// MaxMtu returns a uint32
-func (obj *ospfv2InterfaceAdvanced) HasMaxMtu() bool {
-	return obj.obj.MaxMtu != nil
-}
-
-// The value of the maximum transmit unit.
-// SetMaxMtu sets the uint32 value in the Ospfv2InterfaceAdvanced object
-func (obj *ospfv2InterfaceAdvanced) SetMaxMtu(value uint32) Ospfv2InterfaceAdvanced {
-
-	obj.obj.MaxMtu = &value
-	return obj
-}
-
 func (obj *ospfv2InterfaceAdvanced) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
 
-	if obj.obj.MaxMtu != nil {
-
-		if *obj.obj.MaxMtu < 68 || *obj.obj.MaxMtu > 14000 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("68 <= Ospfv2InterfaceAdvanced.MaxMtu <= 14000 but Got %d", *obj.obj.MaxMtu))
-		}
-
-	}
-
 }
 
 func (obj *ospfv2InterfaceAdvanced) setDefault() {
-	if obj.obj.FastHello == nil {
-		obj.SetFastHello(false)
-	}
 	if obj.obj.HelloInterval == nil {
 		obj.SetHelloInterval(10)
 	}
@@ -526,10 +454,7 @@ func (obj *ospfv2InterfaceAdvanced) setDefault() {
 		obj.SetPriority(0)
 	}
 	if obj.obj.ValidateReceivedMtu == nil {
-		obj.SetValidateReceivedMtu(false)
-	}
-	if obj.obj.MaxMtu == nil {
-		obj.SetMaxMtu(1500)
+		obj.SetValidateReceivedMtu(true)
 	}
 
 }

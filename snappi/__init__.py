@@ -1359,11 +1359,13 @@ from .snappi import Dhcpv6ServerLeaseStateIter
 from .snappi import Dhcpv6LeasesStateIter
 from .snappi import Ospfv2LsaState
 from .snappi import Ospfv2RouterLsa
-from .snappi import Ospfv2CommonAttrs
+from .snappi import Ospfv2LsaHeader
 from .snappi import Ospfv2Link
 from .snappi import Ospfv2LinkIter
 from .snappi import Ospfv2RouterLsaIter
 from .snappi import Ospfv2NetworkLsa
+from .snappi import Ospfv2LsaNeighbor
+from .snappi import Ospfv2LsaNeighborIter
 from .snappi import Ospfv2NetworkLsaIter
 from .snappi import Ospfv2NetworkSummaryLsa
 from .snappi import Ospfv2NetworkSummaryLsaIter

@@ -7313,18 +7313,17 @@ message Ospfv2RouterId {
     enum Enum {
       unspecified = 0;
       interface_ip = 1;
-      custom_router_id = 2;
+      custom = 2;
     }
   }
   // IP address of Router ID for this emulated OSPFv2 router.
   // - interface_ip: When IPv4 interface address to be assigned as Router ID.
-  // - custom_router_id: When, Router ID needs to be configured different from Interface
-  // IPv4 address.
+  // - custom: When, Router ID needs to be configured different from Interface IPv4 address.
   // default = Choice.Enum.interface_ip
   optional Choice.Enum choice = 1;
 
   // Router ID in IPv4 address format.
-  optional string custom_router_id = 3;
+  optional string custom = 3;
 }
 
 // The OSPFv2 Options field is present Database Description packets and all LSAs.
@@ -7494,46 +7493,36 @@ message Ospfv2InterfaceNeighbor {
 // Contains OSPFv2 advanced properties.
 message Ospfv2InterfaceAdvanced {
 
-  // When fast hello packets are configured on the interface;
-  // the hello interval advertised in the hello packets that are sent out this interface
-  // is set to 0
-  // and hello interval in the hello packets received over this interface is ignored.
-  // default = False
-  optional bool fast_hello = 1;
-
   // The time interval, in seconds, between the Hello packets that
   // the router sends on the interface. Advertised in Hello packets
   // sent out this interface.
   // default = 10
-  optional uint32 hello_interval = 2;
+  optional uint32 hello_interval = 1;
 
   // The time interval in seconds before the router's neighbors will declare
   // it down, when they stop hearing the router's Hello Packets.
   // Advertised in Hello packets sent out this interface.
   // default = 40
-  optional uint32 dead_interval = 3;
+  optional uint32 dead_interval = 2;
 
   // Routing metric associated with the interface..
   // default = 0
-  optional uint32 routing_metric = 4;
+  optional uint32 routing_metric = 3;
 
   // The Priority for (Backup) Designated Router election.
   // This value is used in Hello packets for the Designated Router (DR) election process.
   // The default is 0, which indicates that the router will not participate in the DR
   // election process.
   // default = 0
-  optional uint32 priority = 5;
+  optional uint32 priority = 4;
 
   // This is for to verify the MTU during the Database (DB) exchange.
-  // Advertised MTU size is set to 0, and the received MTU size is ignored during the
-  // DB exchange.
+  // If this is set to true, then the MTU received from the neighbor during Database (DB)
+  // Exchange
+  // will be validated, otherwise it will be ignored.
   // 
-  // default = False
-  optional bool validate_received_mtu = 6;
-
-  // The value of the maximum transmit unit.
-  // default = 1500
-  optional uint32 max_mtu = 7;
+  // default = True
+  optional bool validate_received_mtu = 5;
 }
 
 // The OSPF Options field is present in OSPF Hello packets, Database Description packets
@@ -7608,7 +7597,7 @@ message Ospfv2InterfaceAuthentication {
   repeated Ospfv2AuthenticationMd5 md5s = 2;
 
   // The 8 Byte authentication field in the OSPF packet.
-  // default = keysight
+  // default = otg
   optional string clear_text = 4;
 }
 
@@ -7967,7 +7956,7 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Ospfv2/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
@@ -7986,7 +7975,7 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Ospfv2/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
@@ -14999,68 +14988,63 @@ message Ospfv2LsasStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
   // 
-  repeated string ospfv2_router_names = 1;
+  repeated string router_names = 1;
 }
 
 // The result of OSPFv2 LSA information that are retrieved.
 message Ospfv2LsaState {
 
   // The name of the OSPFv2 Router that learned the LSA information.
-  optional string lsa_router_name = 1;
-
-  // The router ID (in the IPv4 format).
-  optional string router_id = 2;
+  optional string router_name = 1;
 
   // One or more OSPFv2 Router-LSA - Type 1.
-  repeated Ospfv2RouterLsa router_lsas = 3;
+  repeated Ospfv2RouterLsa router_lsas = 2;
 
   // One or more OSPFv2 Network-LSA - Type 2.
-  repeated Ospfv2NetworkLsa network_lsas = 4;
+  repeated Ospfv2NetworkLsa network_lsas = 3;
 
   // One or more OSPFv2 Network summary LSA - Type 3.
-  repeated Ospfv2NetworkSummaryLsa network_summary_lsas = 5;
+  repeated Ospfv2NetworkSummaryLsa network_summary_lsas = 4;
 
   // One or more OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
-  repeated Ospfv2SummaryAsLsa summary_as_lsas = 6;
+  repeated Ospfv2SummaryAsLsa summary_as_lsas = 5;
 
   // OSPFv2 AS-External-LSA - Type 5.
-  repeated Ospfv2ExternalAsLsa external_as_lsas = 7;
+  repeated Ospfv2ExternalAsLsa external_as_lsas = 6;
 
   // One or more OSPFv2 NSSA-LSA - Type 7.
-  repeated Ospfv2NssaLsa nssa_lsas = 8;
+  repeated Ospfv2NssaLsa nssa_lsas = 7;
 
   // One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
-  repeated Ospfv2OpaqueLsa opaque_lsas = 9;
+  repeated Ospfv2OpaqueLsa opaque_lsas = 8;
 }
 
-// Contents of the router LSA
+// Contents of the router LSA.
 message Ospfv2RouterLsa {
 
-  // Contents of the router LSA.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   // Links that are described within the LSA.
   repeated Ospfv2Link links = 2;
 }
 
-// Contents of the Network LSA
+// Contents of the Network LSA.
 message Ospfv2NetworkLsa {
 
-  // Contents of the router LSA.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
-  // The IPv4 address mask for the network.
-  optional string network_mask = 2;
-
-  // Neighbor's Router ID for the link.
-  optional string neighbor_router_id = 3;
+  // Neighbors that are described within the LSA.
+  repeated Ospfv2LsaNeighbor neighbors = 2;
 }
 
 // Contents of the Network Summary LSA - Type 3.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
 message Ospfv2NetworkSummaryLsa {
 
-  // Common LSA attributes.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   // The IPv4 address mask for the network.
   optional string network_mask = 2;
@@ -15072,8 +15056,8 @@ message Ospfv2NetworkSummaryLsa {
 // Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
 message Ospfv2SummaryAsLsa {
 
-  // Common LSA attributes.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   // The IPv4 address mask for the network.
   optional string network_mask = 2;
@@ -15083,10 +15067,11 @@ message Ospfv2SummaryAsLsa {
 }
 
 // Contents of OSPFv2 AS-External-LSA - Type 5.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
 message Ospfv2ExternalAsLsa {
 
-  // Common LSA attributes.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   // The IPv4 address mask for the network.
   optional string network_mask = 2;
@@ -15098,11 +15083,12 @@ message Ospfv2ExternalAsLsa {
   optional uint32 metric_type = 4;
 }
 
-// Contents of OSPFv2 NSSA-LSA - Type 7.
+// Contents of OSPFv2 NSSA LSA - Type 7.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
 message Ospfv2NssaLsa {
 
-  // Common LSA attributes.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   // The IPv4 address mask for the network.
   optional string network_mask = 2;
@@ -15117,11 +15103,11 @@ message Ospfv2NssaLsa {
   optional string forwarding_address = 5;
 }
 
-// Contents of OSPFv2 NSSA-LSA - Type 7.
+// Contents of OSPFv2 Opaque LSA - Type 7.
 message Ospfv2OpaqueLsa {
 
-  // Common LSA attributes.
-  Ospfv2CommonAttrs common_attrs = 1;
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
 
   message Type {
     enum Enum {
@@ -15136,13 +15122,13 @@ message Ospfv2OpaqueLsa {
 }
 
 // Attributes in LSA Header.
-message Ospfv2CommonAttrs {
+message Ospfv2LsaHeader {
 
   // LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
   optional string lsa_id = 1;
 
   // The router ID (in the IPv4 format) of the router that originated the LSA.
-  optional string advertising_router = 2;
+  optional string advertising_router_id = 2;
 
   // Sequence number to detect old and duplicate LSAs. The greater the sequence number
   // the more recent the LSA.
@@ -15193,6 +15179,16 @@ message Ospfv2Link {
   // router's interface; for all other connections it represents
   // the local system's IP address.
   optional uint32 metric = 4;
+}
+
+// Generic attributes used to identify OSPFv2 Network LSA neighbor(s).
+message Ospfv2LsaNeighbor {
+
+  // Neighbor's Router ID for the link.
+  optional string neighbor_router_id = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the

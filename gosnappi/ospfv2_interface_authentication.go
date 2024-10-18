@@ -333,7 +333,7 @@ func (obj *ospfv2InterfaceAuthentication) setChoice(value Ospfv2InterfaceAuthent
 	}
 
 	if value == Ospfv2InterfaceAuthenticationChoice.CLEAR_TEXT {
-		defaultValue := "keysight"
+		defaultValue := "otg"
 		obj.obj.ClearText = &defaultValue
 	}
 

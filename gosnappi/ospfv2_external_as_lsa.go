@@ -13,10 +13,10 @@ import (
 // ***** Ospfv2ExternalAsLsa *****
 type ospfv2ExternalAsLsa struct {
 	validation
-	obj               *otg.Ospfv2ExternalAsLsa
-	marshaller        marshalOspfv2ExternalAsLsa
-	unMarshaller      unMarshalOspfv2ExternalAsLsa
-	commonAttrsHolder Ospfv2CommonAttrs
+	obj          *otg.Ospfv2ExternalAsLsa
+	marshaller   marshalOspfv2ExternalAsLsa
+	unMarshaller unMarshalOspfv2ExternalAsLsa
+	headerHolder Ospfv2LsaHeader
 }
 
 func NewOspfv2ExternalAsLsa() Ospfv2ExternalAsLsa {
@@ -244,13 +244,14 @@ func (obj *ospfv2ExternalAsLsa) Clone() (Ospfv2ExternalAsLsa, error) {
 }
 
 func (obj *ospfv2ExternalAsLsa) setNil() {
-	obj.commonAttrsHolder = nil
+	obj.headerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // Ospfv2ExternalAsLsa is contents of OSPFv2 AS-External-LSA - Type 5.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
 type Ospfv2ExternalAsLsa interface {
 	Validation
 	// msg marshals Ospfv2ExternalAsLsa to protobuf object *otg.Ospfv2ExternalAsLsa
@@ -272,14 +273,14 @@ type Ospfv2ExternalAsLsa interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// CommonAttrs returns Ospfv2CommonAttrs, set in Ospfv2ExternalAsLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	CommonAttrs() Ospfv2CommonAttrs
-	// SetCommonAttrs assigns Ospfv2CommonAttrs provided by user to Ospfv2ExternalAsLsa.
-	// Ospfv2CommonAttrs is attributes in LSA Header.
-	SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2ExternalAsLsa
-	// HasCommonAttrs checks if CommonAttrs has been set in Ospfv2ExternalAsLsa
-	HasCommonAttrs() bool
+	// Header returns Ospfv2LsaHeader, set in Ospfv2ExternalAsLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	Header() Ospfv2LsaHeader
+	// SetHeader assigns Ospfv2LsaHeader provided by user to Ospfv2ExternalAsLsa.
+	// Ospfv2LsaHeader is attributes in LSA Header.
+	SetHeader(value Ospfv2LsaHeader) Ospfv2ExternalAsLsa
+	// HasHeader checks if Header has been set in Ospfv2ExternalAsLsa
+	HasHeader() bool
 	// NetworkMask returns string, set in Ospfv2ExternalAsLsa.
 	NetworkMask() string
 	// SetNetworkMask assigns string provided by user to Ospfv2ExternalAsLsa
@@ -301,30 +302,30 @@ type Ospfv2ExternalAsLsa interface {
 	setNil()
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2ExternalAsLsa) CommonAttrs() Ospfv2CommonAttrs {
-	if obj.obj.CommonAttrs == nil {
-		obj.obj.CommonAttrs = NewOspfv2CommonAttrs().msg()
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2ExternalAsLsa) Header() Ospfv2LsaHeader {
+	if obj.obj.Header == nil {
+		obj.obj.Header = NewOspfv2LsaHeader().msg()
 	}
-	if obj.commonAttrsHolder == nil {
-		obj.commonAttrsHolder = &ospfv2CommonAttrs{obj: obj.obj.CommonAttrs}
+	if obj.headerHolder == nil {
+		obj.headerHolder = &ospfv2LsaHeader{obj: obj.obj.Header}
 	}
-	return obj.commonAttrsHolder
+	return obj.headerHolder
 }
 
-// Common LSA attributes.
-// CommonAttrs returns a Ospfv2CommonAttrs
-func (obj *ospfv2ExternalAsLsa) HasCommonAttrs() bool {
-	return obj.obj.CommonAttrs != nil
+// Contents of the LSA header.
+// Header returns a Ospfv2LsaHeader
+func (obj *ospfv2ExternalAsLsa) HasHeader() bool {
+	return obj.obj.Header != nil
 }
 
-// Common LSA attributes.
-// SetCommonAttrs sets the Ospfv2CommonAttrs value in the Ospfv2ExternalAsLsa object
-func (obj *ospfv2ExternalAsLsa) SetCommonAttrs(value Ospfv2CommonAttrs) Ospfv2ExternalAsLsa {
+// Contents of the LSA header.
+// SetHeader sets the Ospfv2LsaHeader value in the Ospfv2ExternalAsLsa object
+func (obj *ospfv2ExternalAsLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2ExternalAsLsa {
 
-	obj.commonAttrsHolder = nil
-	obj.obj.CommonAttrs = value.msg()
+	obj.headerHolder = nil
+	obj.obj.Header = value.msg()
 
 	return obj
 }
@@ -400,9 +401,9 @@ func (obj *ospfv2ExternalAsLsa) validateObj(vObj *validation, set_default bool) 
 		obj.setDefault()
 	}
 
-	if obj.obj.CommonAttrs != nil {
+	if obj.obj.Header != nil {
 
-		obj.CommonAttrs().validateObj(vObj, set_default)
+		obj.Header().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.NetworkMask != nil {
