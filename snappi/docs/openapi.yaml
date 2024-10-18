@@ -9707,7 +9707,7 @@ components:
             \ order. "
           type: string
           x-field-uid: 5
-          default: None
+          default: ''
         enable_direct_server_return:
           description: |-
             It enables the Direct Server Run,the responses are sent directly from the servers to the clients
@@ -9958,6 +9958,13 @@ components:
           type: boolean
           default: false
           x-field-uid: 11
+        name:
+          x-field-uid: 12
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -13584,6 +13591,29 @@ components:
           type: array
           items:
             type: string
+            x-enum:
+              simulated_user:
+                x-field-uid: 1
+              throughput_kbps:
+                x-field-uid: 2
+              throughput_mbps:
+                x-field-uid: 3
+              concurrent_connections:
+                x-field-uid: 4
+              connection_per_sec:
+                x-field-uid: 5
+              transactions_per_sec:
+                x-field-uid: 6
+              connection_attempts_per_sec:
+                x-field-uid: 7
+            enum:
+            - simulated_user
+            - throughput_kbps
+            - throughput_mbps
+            - concurrent_connections
+            - connection_per_sec
+            - transactions_per_sec
+            - connection_attempts_per_sec
           x-field-uid: 2
         objective_value:
           description: |-
@@ -13613,6 +13643,13 @@ components:
           items:
             $ref: '#/components/schemas/Trafficprofile.Objective'
           x-field-uid: 6
+        trafficmap:
+          description: |-
+            A container for L47 traffic map configurations.
+          type: array
+          items:
+            $ref: '#/components/schemas/Trafficprofile.Trafficmap'
+          x-field-uid: 7
     Trafficprofile.Segment:
       description: "One or more HTTP Client configurations and its HTTP methods configs. "
       type: object
@@ -13646,7 +13683,7 @@ components:
           x-field-uid: 5
     Trafficprofile.Objective:
       description: |-
-        objective config such simulated user, thoughput, conncurrent connections, connection per sec.
+        objective config such simulated user, thoughput, conncurrent connections,throughput_kbps, connection per sec.
       type: object
       properties:
         simulated_user:
@@ -13703,16 +13740,48 @@ components:
             Value applied to ramp_up_type to either bring up users at a certain rate.
           type: integer
           x-field-uid: 3
+          default: 5
         sustain_time:
           description: |-
             Amount of time when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: integer
           x-field-uid: 4
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: integer
           x-field-uid: 5
+          default: 20
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 6
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 7
+          default: 1
+        ramp_up_interval:
+          description: |-
+            Amount of seconds for interval for rampup
+          type: number
+          x-field-uid: 8
+          default: 1
+        ramp_down_value:
+          description: "Amount of seconds for ramp down "
+          type: number
+          x-field-uid: 9
+          default: 0
+        iteration_time:
+          description: |-
+            Amount of seconds for interval for iteration time
+          type: number
+          x-field-uid: 10
+          default: 20
     Objective.Throughput.Kbps:
       description: |-
         Throughput traffic in Kbps
@@ -13723,17 +13792,31 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 3
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 4
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 5
+          default: 1
     Objective.Throughput.Mbps:
       description: |-
         Throughput traffic in Mbps
@@ -13744,17 +13827,31 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 3
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 4
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 5
+          default: 1
     Objective.Connection.Conncurrent:
       description: |-
         Conncurrent connections objectives
@@ -13765,25 +13862,40 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         ramp_down_value:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 3
+          default: 0
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 4
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 5
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 6
+          default: 1
     Objective.Connection.Per.Seconds:
       description: |-
-        Conncurrent connections objectives
+        CConnection Per second objectives
       type: object
       properties:
         sustain_time:
@@ -13791,17 +13903,31 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 3
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 4
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 5
+          default: 1
     Objective.Transactions.Per.Seconds:
       description: |-
         Transaction per second objectives
@@ -13812,17 +13938,31 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 3
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 4
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 5
+          default: 1
     Objective.Connection.Attempts.Per.Seconds:
       description: |-
         Connection attempts per second objectives
@@ -13833,17 +13973,143 @@ components:
             Amount of seconds when all users are up and performing the central test objectives, such as retrieving or serving pages.
           type: number
           x-field-uid: 1
+          default: 20
         ramp_down_time:
           description: |-
             Amount of seconds used for closing any connections that are still open after all transactions are complete.
           type: number
           x-field-uid: 2
+          default: 20
         enable_controlled_user_adjustment:
           description: |-
             Enable/disable controller for user adjustment
           type: boolean
           x-field-uid: 3
           default: false
+        time_to_first_iter:
+          description: |-
+            Amount of seconds for first time to take place.
+          type: number
+          x-field-uid: 4
+          default: 0
+        iteration:
+          description: |-
+            No of iterations to take place.
+          type: number
+          x-field-uid: 5
+          default: 1
+    Trafficprofile.Trafficmap:
+      description: |-
+        A container for L47 traffic map configurations.
+      type: object
+      properties:
+        port_map_policy_name:
+          description: |-
+            Each simulated user on the client side will connect with server in port pairs/ full mesh/custom type
+          type: string
+          x-field-uid: 1
+          x-enum:
+            port_pairs:
+              x-field-uid: 1
+            full_mesh:
+              x-field-uid: 2
+            custom:
+              x-field-uid: 3
+          default: port_pairs
+          enum:
+          - port_pairs
+          - full_mesh
+          - custom
+        custom:
+          description: |-
+            In a Custom traffic map, user can select the client and server IP address ranges that will send traffic to each other
+          type: array
+          items:
+            $ref: '#/components/schemas/Trafficprofile.Trafficmap.Custom'
+          x-field-uid: 2
+    Trafficprofile.Trafficmap.Custom:
+      description: |-
+        custom config for IPV4 Traffic Map and IPV6 Traffic Map
+      type: object
+      properties:
+        name:
+          description: |-
+            Name of the submap
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-field-uid: 1
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        mapping_type:
+          description: |-
+            Mapping types either IP or VLAN - Pairs/mesh
+          type: string
+          x-field-uid: 2
+          items:
+            $ref: '#/components/schemas/Custom.MappingType'
+    Custom.MappingType:
+      description: |-
+        Types of custom for mapping
+      type: object
+      properties:
+        ip_range_pairs:
+          x-field-uid: 2
+          $ref: '#/components/schemas/MappingType.IpRangePairs'
+        ip_range_mesh:
+          x-field-uid: 3
+          $ref: '#/components/schemas/MappingType.IpRangeMesh'
+        vlan_range_mesh:
+          x-field-uid: 4
+          $ref: '#/components/schemas/MappingType.VlanRangeMesh'
+        vlan_range_pairs:
+          x-field-uid: 5
+          $ref: '#/components/schemas/MappingType.VlanRangePairs'
+    MappingType.IpRangePairs:
+      description: "For Ip Range Pairs mapping type "
+      type: object
+      properties:
+        enable:
+          description: "Enable/disable source ip "
+          type: boolean
+          x-field-uid: 1
+          default: true
+        destination_id:
+          description: "Destination id for mapping  "
+          type: integer
+          x-field-uid: 3
+          default: 1
+    MappingType.IpRangeMesh:
+      description: "For Ip Range Mesh mapping type "
+      type: object
+      properties:
+        enable:
+          description: "Enable/disable source ip "
+          type: boolean
+          x-field-uid: 1
+          default: true
+    MappingType.VlanRangeMesh:
+      description: "For Vlan Range Mesh mapping type "
+      type: object
+      properties:
+        enable:
+          description: "Enable/disable source ip "
+          type: boolean
+          x-field-uid: 1
+          default: true
+    MappingType.VlanRangePairs:
+      description: "For Vlan Range Pairs mapping type "
+      type: object
+      properties:
+        enable:
+          description: "Enable/disable source ip "
+          type: boolean
+          x-field-uid: 1
+          default: true
+        destination_id:
+          description: "Destination id for mapping  "
+          type: integer
+          x-field-uid: 3
+          default: 1
     Error:
       description: |-
         Error response generated while serving API request.

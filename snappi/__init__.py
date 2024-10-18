@@ -1090,6 +1090,15 @@ from .snappi import ObjectiveConnectionPerSeconds
 from .snappi import ObjectiveTransactionsPerSeconds
 from .snappi import ObjectiveConnectionAttemptsPerSeconds
 from .snappi import TrafficprofileObjectiveIter
+from .snappi import TrafficprofileTrafficmap
+from .snappi import TrafficprofileTrafficmapCustom
+from .snappi import CustomMappingType
+from .snappi import MappingTypeIpRangePairs
+from .snappi import MappingTypeIpRangeMesh
+from .snappi import MappingTypeVlanRangeMesh
+from .snappi import MappingTypeVlanRangePairs
+from .snappi import TrafficprofileTrafficmapCustomIter
+from .snappi import TrafficprofileTrafficmapIter
 from .snappi import TrafficprofileIter
 from .snappi import Warning
 from .snappi import Error

@@ -7156,7 +7156,7 @@ message MethodGet {
   optional float profile = 4;
 
   // It specify parameter names and values,they can occur in any order.
-  // default = None
+  // default =
   optional string name_value_args = 5;
 
   // It enables the Direct Server Run,the responses are sent directly from the servers
@@ -7344,6 +7344,10 @@ message HttpServer {
   // It true, the server calculates checksums for the pages it sends to the client.
   // default = False
   optional bool enable_md5_checksum = 11;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 12;
 }
 
 // A high level data plane traffic flow.
@@ -10297,9 +10301,21 @@ message Trafficprofile {
   // application protocol config name on which traffic be applied.
   repeated string app = 1;
 
+  message ObjectiveType {
+    enum Enum {
+      unspecified = 0;
+      simulated_user = 1;
+      throughput_kbps = 2;
+      throughput_mbps = 3;
+      concurrent_connections = 4;
+      connection_per_sec = 5;
+      transactions_per_sec = 6;
+      connection_attempts_per_sec = 7;
+    }
+  }
   // Objective types such as simulated user, connection per seconds, concurrent connection
   // etc, 1st item of a list is primary objective and remaining items are secondary objective.
-  repeated string objective_type = 2;
+  repeated ObjectiveType.Enum objective_type = 2;
 
   // Objective value such as for objective_type, 1st item of a list is primary objective
   // value and remaining items are secondary objective values.
@@ -10313,6 +10329,9 @@ message Trafficprofile {
 
   // primary objective
   repeated TrafficprofileObjective objectives = 6;
+
+  // A container for L47 traffic map configurations.
+  repeated TrafficprofileTrafficmap trafficmap = 7;
 }
 
 // One or more HTTP Client configurations and its HTTP methods configs.
@@ -10335,8 +10354,8 @@ message TrafficprofileSegment {
   optional int32 target = 5;
 }
 
-// objective config such simulated user, thoughput, conncurrent connections, connection
-// per sec.
+// objective config such simulated user, thoughput, conncurrent connections,throughput_kbps,
+// connection per sec.
 message TrafficprofileObjective {
 
   // Description missing in models
@@ -10382,15 +10401,38 @@ message ObjectiveSimulatedUser {
   optional RampUpType.Enum ramp_up_type = 2;
 
   // Value applied to ramp_up_type to either bring up users at a certain rate.
+  // default = 5
   optional int32 ramp_up_value = 3;
 
   // Amount of time when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional int32 sustain_time = 4;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional int32 ramp_down_time = 5;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 6;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 7;
+
+  // Amount of seconds for interval for rampup
+  // default = 1
+  optional float ramp_up_interval = 8;
+
+  // Amount of seconds for ramp down
+  // default = 0
+  optional float ramp_down_value = 9;
+
+  // Amount of seconds for interval for iteration time
+  // default = 20
+  optional float iteration_time = 10;
 }
 
 // Throughput traffic in Kbps
@@ -10398,15 +10440,25 @@ message ObjectiveThroughputKbps {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 3;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 4;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 5;
 }
 
 // Throughput traffic in Mbps
@@ -10414,15 +10466,25 @@ message ObjectiveThroughputMbps {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 3;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 4;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 5;
 }
 
 // Conncurrent connections objectives
@@ -10430,35 +10492,56 @@ message ObjectiveConnectionConncurrent {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 0
   optional float ramp_down_value = 3;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 4;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 5;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 6;
 }
 
-// Conncurrent connections objectives
+// CConnection Per second objectives
 message ObjectiveConnectionPerSeconds {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 3;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 4;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 5;
 }
 
 // Transaction per second objectives
@@ -10466,15 +10549,25 @@ message ObjectiveTransactionsPerSeconds {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 3;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 4;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 5;
 }
 
 // Connection attempts per second objectives
@@ -10482,15 +10575,114 @@ message ObjectiveConnectionAttemptsPerSeconds {
 
   // Amount of seconds when all users are up and performing the central test objectives,
   // such as retrieving or serving pages.
+  // default = 20
   optional float sustain_time = 1;
 
   // Amount of seconds used for closing any connections that are still open after all
   // transactions are complete.
+  // default = 20
   optional float ramp_down_time = 2;
 
   // Enable/disable controller for user adjustment
   // default = False
   optional bool enable_controlled_user_adjustment = 3;
+
+  // Amount of seconds for first time to take place.
+  // default = 0
+  optional float time_to_first_iter = 4;
+
+  // No of iterations to take place.
+  // default = 1
+  optional float iteration = 5;
+}
+
+// A container for L47 traffic map configurations.
+message TrafficprofileTrafficmap {
+
+  message PortMapPolicyName {
+    enum Enum {
+      unspecified = 0;
+      port_pairs = 1;
+      full_mesh = 2;
+      custom = 3;
+    }
+  }
+  // Each simulated user on the client side will connect with server in port pairs/ full
+  // mesh/custom type
+  // default = PortMapPolicyName.Enum.port_pairs
+  optional PortMapPolicyName.Enum port_map_policy_name = 1;
+
+  // In a Custom traffic map, user can select the client and server IP address ranges
+  // that will send traffic to each other
+  repeated TrafficprofileTrafficmapCustom custom = 2;
+}
+
+// custom config for IPV4 Traffic Map and IPV6 Traffic Map
+message TrafficprofileTrafficmapCustom {
+
+  // Name of the submap
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 1;
+
+  // Mapping types either IP or VLAN - Pairs/mesh
+  optional string mapping_type = 2;
+}
+
+// Types of custom for mapping
+message CustomMappingType {
+
+  // Description missing in models
+  MappingTypeIpRangePairs ip_range_pairs = 2;
+
+  // Description missing in models
+  MappingTypeIpRangeMesh ip_range_mesh = 3;
+
+  // Description missing in models
+  MappingTypeVlanRangeMesh vlan_range_mesh = 4;
+
+  // Description missing in models
+  MappingTypeVlanRangePairs vlan_range_pairs = 5;
+}
+
+// For Ip Range Pairs mapping type
+message MappingTypeIpRangePairs {
+
+  // Enable/disable source ip
+  // default = True
+  optional bool enable = 1;
+
+  // Destination id for mapping
+  // default = 1
+  optional int32 destination_id = 3;
+}
+
+// For Ip Range Mesh mapping type
+message MappingTypeIpRangeMesh {
+
+  // Enable/disable source ip
+  // default = True
+  optional bool enable = 1;
+}
+
+// For Vlan Range Mesh mapping type
+message MappingTypeVlanRangeMesh {
+
+  // Enable/disable source ip
+  // default = True
+  optional bool enable = 1;
+}
+
+// For Vlan Range Pairs mapping type
+message MappingTypeVlanRangePairs {
+
+  // Enable/disable source ip
+  // default = True
+  optional bool enable = 1;
+
+  // Destination id for mapping
+  // default = 1
+  optional int32 destination_id = 3;
 }
 
 // Error response generated while serving API request.
