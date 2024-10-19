@@ -274,7 +274,7 @@ type Ospfv2MetricsRequest interface {
 	SetColumnNames(value []Ospfv2MetricsRequestColumnNamesEnum) Ospfv2MetricsRequest
 }
 
-// The names of OSPFv2 Routers to return results for. An empty list will return results for all OSPFv2 router.
+// The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
 //
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name
@@ -287,7 +287,7 @@ func (obj *ospfv2MetricsRequest) RouterNames() []string {
 	return obj.obj.RouterNames
 }
 
-// The names of OSPFv2 Routers to return results for. An empty list will return results for all OSPFv2 router.
+// The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
 //
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name

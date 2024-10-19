@@ -242,7 +242,7 @@ func (obj *ospfv2RouterId) Clone() (Ospfv2RouterId, error) {
 	return newObj, nil
 }
 
-// Ospfv2RouterId is containter for OSPFv2 Router ID configuration.
+// Ospfv2RouterId is container for OSPFv2 Router ID configuration.
 type Ospfv2RouterId interface {
 	Validation
 	// msg marshals Ospfv2RouterId to protobuf object *otg.Ospfv2RouterId

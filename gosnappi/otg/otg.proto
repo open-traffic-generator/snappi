@@ -7306,7 +7306,7 @@ message DeviceOspfv2Router {
   repeated Ospfv2V4RouteRange v4_routes = 11;
 }
 
-// Containter for OSPFv2 Router ID configuration.
+// Container for OSPFv2 Router ID configuration.
 message Ospfv2RouterId {
 
   message Choice {
@@ -7381,7 +7381,7 @@ message Ospfv2Options {
   optional bool lsa_e_bit = 10;
 }
 
-// Containter of properties of OSPFv2 Graceful Retstart.
+// Container of properties of OSPFv2 Graceful Retstart.
 message Ospfv2GracefulRestart {
 
   // Support of Graceful Restart in Helper Mode.
@@ -7516,7 +7516,6 @@ message Ospfv2InterfaceAdvanced {
   // default = 0
   optional uint32 priority = 4;
 
-  // This is for to verify the MTU during the Database (DB) exchange.
   // If this is set to true, then the MTU received from the neighbor during Database (DB)
   // Exchange
   // will be validated, otherwise it will be ignored.
@@ -13303,7 +13302,7 @@ message Dhcpv6ServerMetric {
 // The request to retrieve OSPFv2 per Router metrics/statistics.
 message Ospfv2MetricsRequest {
 
-  // The names of OSPFv2 Routers to return results for. An empty list will return results
+  // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
   // 
   // x-constraint:
@@ -15035,8 +15034,11 @@ message Ospfv2NetworkLsa {
   // Contents of the LSA header.
   Ospfv2LsaHeader header = 1;
 
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
   // Neighbors that are described within the LSA.
-  repeated Ospfv2LsaNeighbor neighbors = 2;
+  repeated Ospfv2LsaNeighbor neighbors = 3;
 }
 
 // Contents of the Network Summary LSA - Type 3.
@@ -15185,10 +15187,7 @@ message Ospfv2Link {
 message Ospfv2LsaNeighbor {
 
   // Neighbor's Router ID for the link.
-  optional string neighbor_router_id = 1;
-
-  // The IPv4 address mask for the network.
-  optional string network_mask = 2;
+  optional string router_id = 1;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the

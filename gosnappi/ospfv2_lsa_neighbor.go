@@ -264,61 +264,33 @@ type Ospfv2LsaNeighbor interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// NeighborRouterId returns string, set in Ospfv2LsaNeighbor.
-	NeighborRouterId() string
-	// SetNeighborRouterId assigns string provided by user to Ospfv2LsaNeighbor
-	SetNeighborRouterId(value string) Ospfv2LsaNeighbor
-	// HasNeighborRouterId checks if NeighborRouterId has been set in Ospfv2LsaNeighbor
-	HasNeighborRouterId() bool
-	// NetworkMask returns string, set in Ospfv2LsaNeighbor.
-	NetworkMask() string
-	// SetNetworkMask assigns string provided by user to Ospfv2LsaNeighbor
-	SetNetworkMask(value string) Ospfv2LsaNeighbor
-	// HasNetworkMask checks if NetworkMask has been set in Ospfv2LsaNeighbor
-	HasNetworkMask() bool
+	// RouterId returns string, set in Ospfv2LsaNeighbor.
+	RouterId() string
+	// SetRouterId assigns string provided by user to Ospfv2LsaNeighbor
+	SetRouterId(value string) Ospfv2LsaNeighbor
+	// HasRouterId checks if RouterId has been set in Ospfv2LsaNeighbor
+	HasRouterId() bool
 }
 
 // Neighbor's Router ID for the link.
-// NeighborRouterId returns a string
-func (obj *ospfv2LsaNeighbor) NeighborRouterId() string {
+// RouterId returns a string
+func (obj *ospfv2LsaNeighbor) RouterId() string {
 
-	return *obj.obj.NeighborRouterId
+	return *obj.obj.RouterId
 
 }
 
 // Neighbor's Router ID for the link.
-// NeighborRouterId returns a string
-func (obj *ospfv2LsaNeighbor) HasNeighborRouterId() bool {
-	return obj.obj.NeighborRouterId != nil
+// RouterId returns a string
+func (obj *ospfv2LsaNeighbor) HasRouterId() bool {
+	return obj.obj.RouterId != nil
 }
 
 // Neighbor's Router ID for the link.
-// SetNeighborRouterId sets the string value in the Ospfv2LsaNeighbor object
-func (obj *ospfv2LsaNeighbor) SetNeighborRouterId(value string) Ospfv2LsaNeighbor {
+// SetRouterId sets the string value in the Ospfv2LsaNeighbor object
+func (obj *ospfv2LsaNeighbor) SetRouterId(value string) Ospfv2LsaNeighbor {
 
-	obj.obj.NeighborRouterId = &value
-	return obj
-}
-
-// The IPv4 address mask for the network.
-// NetworkMask returns a string
-func (obj *ospfv2LsaNeighbor) NetworkMask() string {
-
-	return *obj.obj.NetworkMask
-
-}
-
-// The IPv4 address mask for the network.
-// NetworkMask returns a string
-func (obj *ospfv2LsaNeighbor) HasNetworkMask() bool {
-	return obj.obj.NetworkMask != nil
-}
-
-// The IPv4 address mask for the network.
-// SetNetworkMask sets the string value in the Ospfv2LsaNeighbor object
-func (obj *ospfv2LsaNeighbor) SetNetworkMask(value string) Ospfv2LsaNeighbor {
-
-	obj.obj.NetworkMask = &value
+	obj.obj.RouterId = &value
 	return obj
 }
 
@@ -327,20 +299,11 @@ func (obj *ospfv2LsaNeighbor) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.NeighborRouterId != nil {
+	if obj.obj.RouterId != nil {
 
-		err := obj.validateIpv4(obj.NeighborRouterId())
+		err := obj.validateIpv4(obj.RouterId())
 		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2LsaNeighbor.NeighborRouterId"))
-		}
-
-	}
-
-	if obj.obj.NetworkMask != nil {
-
-		err := obj.validateIpv4(obj.NetworkMask())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2LsaNeighbor.NetworkMask"))
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2LsaNeighbor.RouterId"))
 		}
 
 	}

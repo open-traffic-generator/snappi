@@ -9849,7 +9849,7 @@ components:
           x-field-uid: 11
     Ospfv2.RouterId:
       description: |-
-        Containter for OSPFv2 Router ID configuration.
+        Container for OSPFv2 Router ID configuration.
       type: object
       properties:
         choice:
@@ -9945,7 +9945,7 @@ components:
           x-field-uid: 10
     Ospfv2.GracefulRestart:
       description: |-
-        Containter of properties of OSPFv2 Graceful Retstart.
+        Container of properties of OSPFv2 Graceful Retstart.
       type: object
       properties:
         helper_mode:
@@ -10133,9 +10133,9 @@ components:
           default: 0
           x-field-uid: 4
         validate_received_mtu:
-          description: "This is for to verify the MTU during the Database (DB) exchange.\n\
-            If this is set to true, then the MTU received from the neighbor during\
-            \ Database (DB) Exchange \nwill be validated, otherwise it will be ignored.\n"
+          description: "If this is set to true, then the MTU received from the neighbor\
+            \ during Database (DB) Exchange \nwill be validated, otherwise it will\
+            \ be ignored.\n"
           type: boolean
           default: true
           x-field-uid: 5
@@ -18023,7 +18023,7 @@ components:
       properties:
         router_names:
           description: |
-            The names of OSPFv2 Routers to return results for. An empty list will return results for all OSPFv2 router.
+            The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -20652,13 +20652,19 @@ components:
             Contents of the LSA header.
           $ref: '#/components/schemas/Ospfv2.LsaHeader'
           x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
         neighbors:
           description: |-
             Neighbors that are described within the LSA.
           type: array
           items:
             $ref: '#/components/schemas/Ospfv2.LsaNeighbor'
-          x-field-uid: 2
+          x-field-uid: 3
     Ospfv2.NetworkSummaryLsa:
       description: |-
         Contents of the Network Summary LSA - Type 3.
@@ -20887,18 +20893,12 @@ components:
         Generic attributes used to identify OSPFv2 Network LSA neighbor(s).
       type: object
       properties:
-        neighbor_router_id:
+        router_id:
           description: |-
             Neighbor's Router ID for the link.
           type: string
           format: ipv4
           x-field-uid: 1
-        network_mask:
-          description: |-
-            The IPv4 address mask for the network.
-          type: string
-          format: ipv4
-          x-field-uid: 2
     Capture.Request:
       description: |-
         The capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.

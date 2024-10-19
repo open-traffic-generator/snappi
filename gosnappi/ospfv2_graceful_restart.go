@@ -242,7 +242,7 @@ func (obj *ospfv2GracefulRestart) Clone() (Ospfv2GracefulRestart, error) {
 	return newObj, nil
 }
 
-// Ospfv2GracefulRestart is containter of properties of OSPFv2 Graceful Retstart.
+// Ospfv2GracefulRestart is container of properties of OSPFv2 Graceful Retstart.
 type Ospfv2GracefulRestart interface {
 	Validation
 	// msg marshals Ospfv2GracefulRestart to protobuf object *otg.Ospfv2GracefulRestart

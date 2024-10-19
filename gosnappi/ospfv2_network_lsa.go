@@ -282,6 +282,12 @@ type Ospfv2NetworkLsa interface {
 	SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkLsa
 	// HasHeader checks if Header has been set in Ospfv2NetworkLsa
 	HasHeader() bool
+	// NetworkMask returns string, set in Ospfv2NetworkLsa.
+	NetworkMask() string
+	// SetNetworkMask assigns string provided by user to Ospfv2NetworkLsa
+	SetNetworkMask(value string) Ospfv2NetworkLsa
+	// HasNetworkMask checks if NetworkMask has been set in Ospfv2NetworkLsa
+	HasNetworkMask() bool
 	// Neighbors returns Ospfv2NetworkLsaOspfv2LsaNeighborIterIter, set in Ospfv2NetworkLsa
 	Neighbors() Ospfv2NetworkLsaOspfv2LsaNeighborIter
 	setNil()
@@ -312,6 +318,28 @@ func (obj *ospfv2NetworkLsa) SetHeader(value Ospfv2LsaHeader) Ospfv2NetworkLsa {
 	obj.headerHolder = nil
 	obj.obj.Header = value.msg()
 
+	return obj
+}
+
+// The IPv4 address mask for the network.
+// NetworkMask returns a string
+func (obj *ospfv2NetworkLsa) NetworkMask() string {
+
+	return *obj.obj.NetworkMask
+
+}
+
+// The IPv4 address mask for the network.
+// NetworkMask returns a string
+func (obj *ospfv2NetworkLsa) HasNetworkMask() bool {
+	return obj.obj.NetworkMask != nil
+}
+
+// The IPv4 address mask for the network.
+// SetNetworkMask sets the string value in the Ospfv2NetworkLsa object
+func (obj *ospfv2NetworkLsa) SetNetworkMask(value string) Ospfv2NetworkLsa {
+
+	obj.obj.NetworkMask = &value
 	return obj
 }
 
@@ -410,6 +438,15 @@ func (obj *ospfv2NetworkLsa) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Header != nil {
 
 		obj.Header().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.NetworkMask != nil {
+
+		err := obj.validateIpv4(obj.NetworkMask())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NetworkLsa.NetworkMask"))
+		}
+
 	}
 
 	if len(obj.obj.Neighbors) != 0 {

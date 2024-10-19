@@ -402,7 +402,6 @@ func (obj *ospfv2InterfaceAdvanced) SetPriority(value uint32) Ospfv2InterfaceAdv
 	return obj
 }
 
-// This is for to verify the MTU during the Database (DB) exchange.
 // If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
 // will be validated, otherwise it will be ignored.
 //
@@ -413,7 +412,6 @@ func (obj *ospfv2InterfaceAdvanced) ValidateReceivedMtu() bool {
 
 }
 
-// This is for to verify the MTU during the Database (DB) exchange.
 // If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
 // will be validated, otherwise it will be ignored.
 //
@@ -422,7 +420,6 @@ func (obj *ospfv2InterfaceAdvanced) HasValidateReceivedMtu() bool {
 	return obj.obj.ValidateReceivedMtu != nil
 }
 
-// This is for to verify the MTU during the Database (DB) exchange.
 // If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
 // will be validated, otherwise it will be ignored.
 //

@@ -285,10 +285,10 @@ type DeviceOspfv2Router interface {
 	// SetName assigns string provided by user to DeviceOspfv2Router
 	SetName(value string) DeviceOspfv2Router
 	// RouterId returns Ospfv2RouterId, set in DeviceOspfv2Router.
-	// Ospfv2RouterId is containter for OSPFv2 Router ID configuration.
+	// Ospfv2RouterId is container for OSPFv2 Router ID configuration.
 	RouterId() Ospfv2RouterId
 	// SetRouterId assigns Ospfv2RouterId provided by user to DeviceOspfv2Router.
-	// Ospfv2RouterId is containter for OSPFv2 Router ID configuration.
+	// Ospfv2RouterId is container for OSPFv2 Router ID configuration.
 	SetRouterId(value Ospfv2RouterId) DeviceOspfv2Router
 	// HasRouterId checks if RouterId has been set in DeviceOspfv2Router
 	HasRouterId() bool
@@ -317,10 +317,10 @@ type DeviceOspfv2Router interface {
 	// HasMaxFloodLsuPerBurst checks if MaxFloodLsuPerBurst has been set in DeviceOspfv2Router
 	HasMaxFloodLsuPerBurst() bool
 	// GracefulRestart returns Ospfv2GracefulRestart, set in DeviceOspfv2Router.
-	// Ospfv2GracefulRestart is containter of properties of OSPFv2 Graceful Retstart.
+	// Ospfv2GracefulRestart is container of properties of OSPFv2 Graceful Retstart.
 	GracefulRestart() Ospfv2GracefulRestart
 	// SetGracefulRestart assigns Ospfv2GracefulRestart provided by user to DeviceOspfv2Router.
-	// Ospfv2GracefulRestart is containter of properties of OSPFv2 Graceful Retstart.
+	// Ospfv2GracefulRestart is container of properties of OSPFv2 Graceful Retstart.
 	SetGracefulRestart(value Ospfv2GracefulRestart) DeviceOspfv2Router
 	// HasGracefulRestart checks if GracefulRestart has been set in DeviceOspfv2Router
 	HasGracefulRestart() bool
