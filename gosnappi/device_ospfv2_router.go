@@ -258,7 +258,9 @@ func (obj *deviceOspfv2Router) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// DeviceOspfv2Router is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
+//
+// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 type DeviceOspfv2Router interface {
 	Validation
 	// msg marshals DeviceOspfv2Router to protobuf object *otg.DeviceOspfv2Router
@@ -745,6 +747,8 @@ func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
+
+	obj.addWarnings("DeviceOspfv2Router is under review, OSPFv2 is currently under review for pending exploration on use cases.")
 
 	// Name is required
 	if obj.obj.Name == nil {

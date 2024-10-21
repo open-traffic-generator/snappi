@@ -7261,6 +7261,8 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
+// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
+// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
