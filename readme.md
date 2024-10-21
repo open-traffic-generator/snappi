@@ -14,7 +14,7 @@ Test scripts written in `snappi`, an auto-generated python SDK, can be executed 
 
 > The repository is under active development and is subject to updates. All efforts will be made to keep the updates backwards compatible.
 
-## Setup Client 
+## Setup Client
  
 ```sh
 python -m pip install --upgrade snappi 
@@ -27,7 +27,6 @@ import datetime
 import time
 import snappi
 import pytest
-
 
 @pytest.mark.example
 def test_quickstart():
