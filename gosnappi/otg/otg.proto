@@ -15037,8 +15037,8 @@ message Ospfv2NetworkLsa {
   // The IPv4 address mask for the network.
   optional string network_mask = 2;
 
-  // Neighbors that are described within the LSA.
-  repeated Ospfv2LsaNeighbor neighbors = 3;
+  // Neighbor router ids that are described within the LSA.
+  repeated string neighbor_router_ids = 3;
 }
 
 // Contents of the Network Summary LSA - Type 3.
@@ -15181,13 +15181,6 @@ message Ospfv2Link {
   // router's interface; for all other connections it represents
   // the local system's IP address.
   optional uint32 metric = 4;
-}
-
-// Generic attributes used to identify OSPFv2 Network LSA neighbor(s).
-message Ospfv2LsaNeighbor {
-
-  // Neighbor's Router ID for the link.
-  optional string router_id = 1;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the

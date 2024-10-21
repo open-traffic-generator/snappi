@@ -1364,8 +1364,6 @@ from .snappi import Ospfv2Link
 from .snappi import Ospfv2LinkIter
 from .snappi import Ospfv2RouterLsaIter
 from .snappi import Ospfv2NetworkLsa
-from .snappi import Ospfv2LsaNeighbor
-from .snappi import Ospfv2LsaNeighborIter
 from .snappi import Ospfv2NetworkLsaIter
 from .snappi import Ospfv2NetworkSummaryLsa
 from .snappi import Ospfv2NetworkSummaryLsaIter

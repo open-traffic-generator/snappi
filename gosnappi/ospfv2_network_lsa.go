@@ -13,11 +13,10 @@ import (
 // ***** Ospfv2NetworkLsa *****
 type ospfv2NetworkLsa struct {
 	validation
-	obj             *otg.Ospfv2NetworkLsa
-	marshaller      marshalOspfv2NetworkLsa
-	unMarshaller    unMarshalOspfv2NetworkLsa
-	headerHolder    Ospfv2LsaHeader
-	neighborsHolder Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	obj          *otg.Ospfv2NetworkLsa
+	marshaller   marshalOspfv2NetworkLsa
+	unMarshaller unMarshalOspfv2NetworkLsa
+	headerHolder Ospfv2LsaHeader
 }
 
 func NewOspfv2NetworkLsa() Ospfv2NetworkLsa {
@@ -246,7 +245,6 @@ func (obj *ospfv2NetworkLsa) Clone() (Ospfv2NetworkLsa, error) {
 
 func (obj *ospfv2NetworkLsa) setNil() {
 	obj.headerHolder = nil
-	obj.neighborsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -288,8 +286,10 @@ type Ospfv2NetworkLsa interface {
 	SetNetworkMask(value string) Ospfv2NetworkLsa
 	// HasNetworkMask checks if NetworkMask has been set in Ospfv2NetworkLsa
 	HasNetworkMask() bool
-	// Neighbors returns Ospfv2NetworkLsaOspfv2LsaNeighborIterIter, set in Ospfv2NetworkLsa
-	Neighbors() Ospfv2NetworkLsaOspfv2LsaNeighborIter
+	// NeighborRouterIds returns []string, set in Ospfv2NetworkLsa.
+	NeighborRouterIds() []string
+	// SetNeighborRouterIds assigns []string provided by user to Ospfv2NetworkLsa
+	SetNeighborRouterIds(value []string) Ospfv2NetworkLsa
 	setNil()
 }
 
@@ -343,90 +343,24 @@ func (obj *ospfv2NetworkLsa) SetNetworkMask(value string) Ospfv2NetworkLsa {
 	return obj
 }
 
-// Neighbors that are described within the LSA.
-// Neighbors returns a []Ospfv2LsaNeighbor
-func (obj *ospfv2NetworkLsa) Neighbors() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	if len(obj.obj.Neighbors) == 0 {
-		obj.obj.Neighbors = []*otg.Ospfv2LsaNeighbor{}
+// Neighbor router ids that are described within the LSA.
+// NeighborRouterIds returns a []string
+func (obj *ospfv2NetworkLsa) NeighborRouterIds() []string {
+	if obj.obj.NeighborRouterIds == nil {
+		obj.obj.NeighborRouterIds = make([]string, 0)
 	}
-	if obj.neighborsHolder == nil {
-		obj.neighborsHolder = newOspfv2NetworkLsaOspfv2LsaNeighborIter(&obj.obj.Neighbors).setMsg(obj)
+	return obj.obj.NeighborRouterIds
+}
+
+// Neighbor router ids that are described within the LSA.
+// SetNeighborRouterIds sets the []string value in the Ospfv2NetworkLsa object
+func (obj *ospfv2NetworkLsa) SetNeighborRouterIds(value []string) Ospfv2NetworkLsa {
+
+	if obj.obj.NeighborRouterIds == nil {
+		obj.obj.NeighborRouterIds = make([]string, 0)
 	}
-	return obj.neighborsHolder
-}
+	obj.obj.NeighborRouterIds = value
 
-type ospfv2NetworkLsaOspfv2LsaNeighborIter struct {
-	obj                    *ospfv2NetworkLsa
-	ospfv2LsaNeighborSlice []Ospfv2LsaNeighbor
-	fieldPtr               *[]*otg.Ospfv2LsaNeighbor
-}
-
-func newOspfv2NetworkLsaOspfv2LsaNeighborIter(ptr *[]*otg.Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	return &ospfv2NetworkLsaOspfv2LsaNeighborIter{fieldPtr: ptr}
-}
-
-type Ospfv2NetworkLsaOspfv2LsaNeighborIter interface {
-	setMsg(*ospfv2NetworkLsa) Ospfv2NetworkLsaOspfv2LsaNeighborIter
-	Items() []Ospfv2LsaNeighbor
-	Add() Ospfv2LsaNeighbor
-	Append(items ...Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
-	Set(index int, newObj Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
-	Clear() Ospfv2NetworkLsaOspfv2LsaNeighborIter
-	clearHolderSlice() Ospfv2NetworkLsaOspfv2LsaNeighborIter
-	appendHolderSlice(item Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter
-}
-
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) setMsg(msg *ospfv2NetworkLsa) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&ospfv2LsaNeighbor{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Items() []Ospfv2LsaNeighbor {
-	return obj.ospfv2LsaNeighborSlice
-}
-
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Add() Ospfv2LsaNeighbor {
-	newObj := &otg.Ospfv2LsaNeighbor{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &ospfv2LsaNeighbor{obj: newObj}
-	newLibObj.setDefault()
-	obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Append(items ...Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, item)
-	}
-	return obj
-}
-
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Set(index int, newObj Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.ospfv2LsaNeighborSlice[index] = newObj
-	return obj
-}
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) Clear() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Ospfv2LsaNeighbor{}
-		obj.ospfv2LsaNeighborSlice = []Ospfv2LsaNeighbor{}
-	}
-	return obj
-}
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) clearHolderSlice() Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	if len(obj.ospfv2LsaNeighborSlice) > 0 {
-		obj.ospfv2LsaNeighborSlice = []Ospfv2LsaNeighbor{}
-	}
-	return obj
-}
-func (obj *ospfv2NetworkLsaOspfv2LsaNeighborIter) appendHolderSlice(item Ospfv2LsaNeighbor) Ospfv2NetworkLsaOspfv2LsaNeighborIter {
-	obj.ospfv2LsaNeighborSlice = append(obj.ospfv2LsaNeighborSlice, item)
 	return obj
 }
 
@@ -449,16 +383,11 @@ func (obj *ospfv2NetworkLsa) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.Neighbors) != 0 {
+	if obj.obj.NeighborRouterIds != nil {
 
-		if set_default {
-			obj.Neighbors().clearHolderSlice()
-			for _, item := range obj.obj.Neighbors {
-				obj.Neighbors().appendHolderSlice(&ospfv2LsaNeighbor{obj: item})
-			}
-		}
-		for _, item := range obj.Neighbors().Items() {
-			item.validateObj(vObj, set_default)
+		err := obj.validateIpv4Slice(obj.NeighborRouterIds())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NetworkLsa.NeighborRouterIds"))
 		}
 
 	}
