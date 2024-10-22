@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.13.0
+  version: 1.14.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -2437,6 +2437,11 @@ components:
             The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
           $ref: '#/components/schemas/Device.DhcpServer'
           x-field-uid: 9
+        ospfv2:
+          description: |-
+            Configuration for OSPFv2 router.
+          $ref: '#/components/schemas/Device.Ospfv2Router'
+          x-field-uid: 10
       required:
       - name
     Protocol.Options:
@@ -9835,6 +9840,725 @@ components:
           type: string
           format: ipv6
           x-field-uid: 1
+    Device.Ospfv2Router:
+      description: |-
+        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
+
+        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
+
+        A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+      x-status:
+        status: under_review
+        information: OSPFv2 is currently under review for pending exploration on use
+          cases.
+      type: object
+      required:
+      - interfaces
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        router_id:
+          description: |-
+            OSPFv2 Router Id.
+          $ref: '#/components/schemas/Ospfv2.RouterId'
+          x-field-uid: 2
+        lsa_retransmit_time:
+          description: |-
+            The time in seconds for LSA retransmission.
+          type: integer
+          format: uint32
+          default: 5
+          minimum: 1
+          x-field-uid: 3
+        lsa_refresh_time:
+          description: |-
+            The time in seconds required for LSA refresh.
+          type: integer
+          format: uint32
+          default: 1800
+          minimum: 5
+          x-field-uid: 4
+        inter_burst_lsu_interval:
+          description: "The gap in miliseconds between each Flood Link State Update\
+            \ Burst "
+          type: integer
+          format: uint32
+          default: 33
+          x-field-uid: 5
+        max_flood_lsu_per_burst:
+          description: "The maximum number of Flood LSUpdates for each burst "
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 6
+        graceful_restart:
+          $ref: '#/components/schemas/Ospfv2.GracefulRestart'
+          x-field-uid: 7
+        store_lsa:
+          description: |-
+            Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
+          type: boolean
+          default: false
+          x-field-uid: 8
+        capabilities:
+          description: |-
+            A router indicates the optional capabilities that it supports in its OSPF Hello packets, Database Description packets and in its LSAs.
+          $ref: '#/components/schemas/Ospfv2.Options'
+          x-field-uid: 9
+        interfaces:
+          description: |-
+            List of OSPFv2 interfaces for this router.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.Interface'
+          x-field-uid: 10
+        v4_routes:
+          description: |-
+            Emulated OSPFv4 IPv4 routes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.V4RouteRange'
+          x-field-uid: 11
+    Ospfv2.RouterId:
+      description: |-
+        Container for OSPFv2 Router ID configuration.
+      type: object
+      properties:
+        choice:
+          description: |-
+            IP address of Router ID for this emulated OSPFv2 router.
+            - interface_ip: When IPv4 interface address to be assigned as Router ID.
+            - custom: When, Router ID needs to be configured different from Interface IPv4 address.
+          type: string
+          default: interface_ip
+          x-field-uid: 1
+          x-enum:
+            interface_ip:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - interface_ip
+          - custom
+        custom:
+          description: |-
+            Router ID in IPv4 address format.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+    Ospfv2.Options:
+      description: "The OSPFv2 Options field is present Database Description packets\
+        \ and all LSAs.  \nThis enables OSPF routers to support (or not support) optional\
+        \ capabilities, \nand to communicate their capability level to other OSPF\
+        \ routers.\nWhen capabilities are exchanged in Database Description packets\
+        \ a\nrouter can choose not to forward certain LSAs to a neighbor because\n\
+        of its reduced functionality.\nReference: A.2 The Options field: https://www.rfc-editor.org/rfc/rfc2328#page-46."
+      type: object
+      properties:
+        t_bit:
+          description: |-
+            Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        e_bit:
+          description: |-
+            External Capability: 1st-bit: describes the way AS-external-LSAs are flooded.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        mc_bit:
+          description: |-
+            Multicast Capability: 2nd-bit: describes whether IP multicast datagrams are forwarded according to  the specifications in [Ref18], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        np_bit:
+          description: |-
+            NSSA Capability: 3rd-bit: describes the handling of Type-7 LSAs, as specified in [Ref19], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 4
+        ea_bit:
+          description: |-
+            External Attribute: 4th-bit: describes the router's willingness to receive and forward External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        dc_bit:
+          description: |-
+            Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        o_bit:
+          description: |-
+            Opaque LSA's Forwarded: 6th-bit: describes the router's willingness to receive and forward Opaque-LSAs, rfc2370.
+          type: boolean
+          default: false
+          x-field-uid: 7
+        unused_bit:
+          description: |-
+            Opaque LSA's Forwarded: 7th-bit: unused bit.
+          type: boolean
+          default: false
+          x-field-uid: 8
+        lsa_b_bit:
+          description: |-
+            Set to indicate that the router acts as an Area Border Router.
+          type: boolean
+          default: false
+          x-field-uid: 9
+        lsa_e_bit:
+          description: |-
+            Set to indicate that the router acts as an AS Boundary Router.
+          type: boolean
+          default: false
+          x-field-uid: 10
+    Ospfv2.GracefulRestart:
+      description: |-
+        Container of properties of OSPFv2 Graceful Retstart.
+      type: object
+      properties:
+        helper_mode:
+          description: |-
+            Support of Graceful Restart in Helper Mode.
+          type: boolean
+          default: false
+          x-field-uid: 1
+    Ospfv2.Interface:
+      description: |-
+        Configuration for single OSPFv2 interface.
+      type: object
+      required:
+      - name
+      - ipv4_name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        ipv4_name:
+          description: "The globally unique name of the IPv4 interface connected to\
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n\
+            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4/properties/name
+          x-field-uid: 2
+        area:
+          description: "The Area ID of the area to which the attached network belongs.\n\
+            All routing protocol packets originating from the interface are\nlabelled\
+            \ with this Area ID.           "
+          $ref: '#/components/schemas/Ospfv2Interface.Area'
+          x-field-uid: 3
+        network_type:
+          description: |-
+            The OSPF network link type.
+          $ref: '#/components/schemas/Ospfv2Interface.NetworkType'
+          x-field-uid: 4
+        traffic_engineering:
+          description: |-
+            Contains a list of Traffic Engineering attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkState.TE'
+          x-field-uid: 5
+        authentication:
+          description: |-
+            OSPFv2 authentication properties.
+            If the authentication is not configured, none OSPF packet exchange is authenticated.
+          $ref: '#/components/schemas/Ospfv2Interface.Authentication'
+          x-field-uid: 6
+        advanced:
+          description: |-
+            Optional container for advanced interface properties.
+          $ref: '#/components/schemas/Ospfv2Interface.Advanced'
+          x-field-uid: 7
+        link_protection:
+          description: |-
+            Link protection on the OSPFv2 link between two interfaces.
+          $ref: '#/components/schemas/Ospfv2Interface.LinkProtection'
+          x-field-uid: 8
+        srlg_values:
+          description: |-
+            A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an IGP (OSPFv2 and IS-IS) domain.
+            An SRLG is a set of links sharing a common resource, which affects all links in the set if the common resource fails.
+            Links share the same risk of failure and are therefore considered to belong to the same SRLG.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+            default: 0
+          x-field-uid: 9
+    Ospfv2Interface.Area:
+      description: "Container for OSPF Area ID identifies the routing area to which\
+        \ the host belongs..      "
+      type: object
+      properties:
+        choice:
+          description: |-
+            The OSPF Area ID identifies the routing area to which the host belongs. Area ID type can be following format.
+            - id: A 32-bit number identifying the area.
+            - ip:     The Area ID in IPv4 address format.
+          type: string
+          default: id
+          x-field-uid: 1
+          x-enum:
+            id:
+              x-field-uid: 1
+            ip:
+              x-field-uid: 2
+          enum:
+          - id
+          - ip
+        id:
+          description: |-
+            The Area ID.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        ip:
+          description: |-
+            The Area ID in IPv4 address format.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+    Ospfv2Interface.NetworkType:
+      description: "The OSPF network link type options.\n  - Point to Point: \n  -\
+        \ Broadcast: \n  - Point to Multipoint: In this case, at least a neigbor to\
+        \ be configured. "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: broadcast
+          x-field-uid: 1
+          x-enum:
+            broadcast:
+              x-field-uid: 1
+            point_to_point:
+              x-field-uid: 2
+            point_to_multipoint:
+              x-field-uid: 3
+          enum:
+          - broadcast
+          - point_to_point
+          - point_to_multipoint
+        point_to_multipoint:
+          description: |-
+            List of Neigbhors.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Interface.Neighbor'
+          x-field-uid: 2
+    Ospfv2Interface.Neighbor:
+      description: |-
+        Configuration of a neighbor.
+      type: object
+      properties:
+        neighbor_ip:
+          type: string
+          format: ipv4
+          x-field-uid: 1
+    Ospfv2Interface.Advanced:
+      description: |-
+        Contains OSPFv2 advanced properties.
+      type: object
+      properties:
+        hello_interval:
+          description: |-
+            The time interval, in seconds, between the Hello packets that
+            the router sends on the interface. Advertised in Hello packets
+            sent out this interface.
+          type: integer
+          format: uint32
+          default: 10
+          x-field-uid: 1
+        dead_interval:
+          description: |-
+            The time interval in seconds before the router's neighbors will declare
+            it down, when they stop hearing the router's Hello Packets.
+            Advertised in Hello packets sent out this interface.
+          type: integer
+          format: uint32
+          default: 40
+          x-field-uid: 2
+        routing_metric:
+          description: |-
+            Routing metric associated with the interface..
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 3
+        priority:
+          description: "The Priority for (Backup) Designated Router election.    \
+            \      \t\nThis value is used in Hello packets for the Designated Router\
+            \ (DR) election process.\nThe default is 0, which indicates that the router\
+            \ will not participate in the DR election process."
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 4
+        validate_received_mtu:
+          description: "If this is set to true, then the MTU received from the neighbor\
+            \ during Database (DB) Exchange \nwill be validated, otherwise it will\
+            \ be ignored.\n"
+          type: boolean
+          default: true
+          x-field-uid: 5
+    Ospfv2Interface.Options:
+      description: |-
+        The OSPF Options field is present in OSPF Hello packets, Database Description packets and all LSAs.
+        The Options field enables OSPF routers to support (or not support) optional capabilities, and to
+        communicate their capability level to other OSPF routers https://datatracker.ietf.org/doc/html/rfc2328#page-46.
+        When used in Hello packets, the Options field allows a router to reject a neighbor because of a capability mismatch.
+      type: object
+      properties:
+        t_bit:
+          description: |-
+            Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        e_bit:
+          description: |-
+            External Capability: This bit describes the way AS-external-LSAs are flooded.
+          type: boolean
+          default: false
+          x-field-uid: 2
+        mc_bit:
+          description: |-
+            Multicast Capability: This bit describes whether IP multicast datagrams are forwarded according to  the specifications in [Ref18], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        np_bit:
+          description: |-
+            NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in [Ref19], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 4
+        ea_bit:
+          description: |-
+            External Attribute: This bit describes the router's willingness to receive and forward External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        dc_bit:
+          description: |-
+            Demand Circuit: This bit describes the router's handling of demand circuits, as specified in [Ref21], rfc2328.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        o_bit:
+          description: |-
+            Opaque LSA's Forwarded: This bit describes the router's willingness to receive and forward Opaque-LSAs, rfc2370.
+          type: boolean
+          default: false
+          x-field-uid: 7
+        unused_bit:
+          description: |-
+            Opaque LSA's Forwarded: 7th-bit: unused bit.
+          type: boolean
+          default: false
+          x-field-uid: 8
+    Ospfv2Interface.Authentication:
+      description: |-
+        This contains OSPFv2 authentication properties.
+        Reference: https://www.rfc-editor.org/rfc/rfc2328#appendix-D
+      type: object
+      properties:
+        choice:
+          description: "The authentication method.\n- md5 - Cryptographic authentication.\n\
+            - clear_text - Simple password authentication. A 64-bit field is configured\
+            \ on a per-network basis. \n  All packets sent on a particular network\
+            \ must have this configured value (in clear text) \n  in their OSPF header\
+            \ 64-bit authentication field."
+          type: string
+          default: clear_text
+          x-field-uid: 1
+          x-enum:
+            md5s:
+              x-field-uid: 1
+            clear_text:
+              x-field-uid: 2
+          enum:
+          - md5s
+          - clear_text
+        md5s:
+          description: |-
+            List of MD5 Key IDs and MD5 Keys.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Authentication.Md5'
+          x-field-uid: 2
+        clear_text:
+          description: |-
+            The 8 Byte authentication field in the OSPF packet.
+          type: string
+          minLength: 1
+          maxLength: 8
+          default: otg
+          x-field-uid: 4
+    Ospfv2Authentication.Md5:
+      description: "Container of Cryptographic authentication. \nIf the authentication\
+        \ type is of 'md5' then 'md5_key_id' and 'md5_key' \nboth are to be configured.\
+        \ A shared secret key is configured in all routers attached to a common network/subnet.\n\
+        For each OSPF protocol packet, the key is used to generate/verify a \"message\
+        \ digest\" that is appended to the end\nof the OSPF packet."
+      type: object
+      properties:
+        key_id:
+          description: |-
+            The unique MD5 Key Identifier per-interface.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 255
+          x-field-uid: 1
+        key:
+          description: "An alphanumeric secret used to generate the 16 byte MD5 hash\
+            \ value added \nto the OSPFv2 PDU in the Authentication TLV."
+          type: string
+          minLength: 1
+          maxLength: 16
+          x-field-uid: 2
+    Ospfv2Interface.LinkProtection:
+      description: |-
+        Optional container for the link protection sub TLV (type 20).
+      type: object
+      properties:
+        extra_traffic:
+          description: |-
+            Enable this to protect other link or links. LSAs on a link of this type are lost
+            if any of the links fail.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        unprotected:
+          description: "Enabling this signifies that there is no other link protecting\
+            \ this \nlink. LSAs on a link of this type are lost if the link fails."
+          type: boolean
+          default: false
+          x-field-uid: 2
+        shared:
+          description: "Enable this to share the Extra Traffic links between one or\
+            \ more \nlinks of type Shared.There are one or more disjoint links of\
+            \ type \nExtra Traffic that are protecting this link."
+          type: boolean
+          default: false
+          x-field-uid: 3
+        dedicated_1_to_1:
+          description: "Enabling this signifies that there is one dedicated disjoint\
+            \ link \nof type Extra Traffic that is protecting this link."
+          type: boolean
+          default: false
+          x-field-uid: 4
+        dedicated_1_plus_1:
+          description: "Enabling this signifies that a dedicated disjoint link is\
+            \ protecting \nthis link. However, the protecting link is not advertised\
+            \ in the \nlink state database and is therefore not available for the\
+            \ routing \nof LSAs."
+          type: boolean
+          default: false
+          x-field-uid: 5
+        enhanced:
+          description: "Enabling this signifies that a protection scheme that is more\
+            \ \nreliable than Dedicated 1+1."
+          type: boolean
+          default: false
+          x-field-uid: 6
+        reserved_40:
+          description: "This is a Protection Scheme with value 0x40. "
+          type: boolean
+          default: false
+          x-field-uid: 7
+        reserved_80:
+          description: "This is a Protection Scheme with value 0x80. "
+          type: boolean
+          default: false
+          x-field-uid: 8
+    Ospfv2.V4RouteRange:
+      description: |-
+        Emulated OSPFv2 IPv4 routes.
+      type: object
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        addresses:
+          description: |-
+            A list of group of IPv4 route addresses.
+          type: array
+          items:
+            $ref: '#/components/schemas/V4RouteAddress'
+          x-field-uid: 2
+        metric:
+          description: |-
+            The user-defined metric associated with this route range.
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 16777215
+          x-field-uid: 3
+        route_origin:
+          description: |-
+            The type of the OSPFv2 routes.
+          $ref: '#/components/schemas/Ospfv2V4RR.RouteOrigin'
+          x-field-uid: 4
+      required:
+      - name
+    Ospfv2V4RR.RouteOrigin:
+      description: "Container of type of the OSPFv2 types correspond directly to the\
+        \ OSPFv2 LSAs types as\ndefined in the \"OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.\
+        \  "
+      type: object
+      properties:
+        choice:
+          description: |-
+            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS meteric. - external_type_2: for Autonomous System (AS) External with internal and external AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+          type: string
+          default: inter_area
+          x-field-uid: 1
+          x-enum:
+            intra_area:
+              x-field-uid: 1
+            inter_area:
+              x-field-uid: 2
+            external_type_1:
+              x-field-uid: 3
+            external_type_2:
+              x-field-uid: 4
+            nssa_external:
+              x-field-uid: 5
+          enum:
+          - intra_area
+          - inter_area
+          - external_type_1
+          - external_type_2
+          - nssa_external
+        intra_area:
+          description: |-
+            Configuration for the Intra-Area.
+          $ref: '#/components/schemas/Ospfv2V4RR.IntraArea'
+          x-field-uid: 2
+        inter_area:
+          description: |-
+            Configuration for the Intra-Area.
+          $ref: '#/components/schemas/Ospfv2V4RR.InterArea'
+          x-field-uid: 3
+        external_type_1:
+          description: |-
+            Configuration for the External Type 1.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExternalType1'
+          x-field-uid: 4
+        external_type_2:
+          description: |-
+            Configuration for the External Type 2.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExternalType2'
+          x-field-uid: 5
+        nssa_external:
+          description: |-
+            Configuration for the External Type 2.
+          $ref: '#/components/schemas/Ospfv2V4RR.NssaExternal'
+          x-field-uid: 6
+    Ospfv2V4RR.IntraArea:
+      description: |-
+        Container for Intra-Area.
+      type: object
+      properties:
+        flags:
+          description: |-
+            One-octet field contains flags applicable to the prefix.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExtdPrefixFlags'
+          x-field-uid: 1
+    Ospfv2V4RR.InterArea:
+      description: |-
+        Container for Intra-Area.
+      type: object
+      properties:
+        flags:
+          description: |-
+            One-octet field contains flags applicable to the prefix.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExtdPrefixFlags'
+          x-field-uid: 1
+    Ospfv2V4RR.ExternalType1:
+      description: |-
+        Container for Intra-Area.
+      type: object
+      properties:
+        flags:
+          description: |-
+            One-octet field contains flags applicable to the prefix.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExtdPrefixFlags'
+          x-field-uid: 1
+    Ospfv2V4RR.ExternalType2:
+      description: |-
+        Container for Intra-Area.
+      type: object
+      properties:
+        flags:
+          description: |-
+            One-octet field contains flags applicable to the prefix.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExtdPrefixFlags'
+          x-field-uid: 1
+    Ospfv2V4RR.NssaExternal:
+      description: |-
+        Container for Intra-Area.
+      type: object
+      properties:
+        flags:
+          description: |-
+            One-octet field contains flags applicable to the prefix.
+          $ref: '#/components/schemas/Ospfv2V4RR.ExtdPrefixFlags'
+          x-field-uid: 1
+        propagation:
+          description: |-
+            The flag is set True if LSA will be propagated between Areas.
+          type: boolean
+          default: false
+          x-field-uid: 2
+    Ospfv2V4RR.ExtdPrefixFlags:
+      description: |-
+        One-octet field contains flags applicable to the prefix. https://datatracker.ietf.org/doc/html/rfc7684.
+      type: object
+      properties:
+        a_flag:
+          description: |-
+            0x80 - (Attach Flag): An Area Border Router (ABR)
+            generating an OSPFv2 Extended Prefix TLV for an inter-area
+            prefix that is locally connected or attached in another
+            connected area SHOULD set this flag.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        n_flag:
+          description: |-
+            N-Flag (Node Flag): Set when the prefix identifies the
+            advertising router, i.e., the prefix is a host prefix
+            advertising a globally reachable address typically associated
+            with a loopback address.
+          type: boolean
+          default: false
+          x-field-uid: 2
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -10074,6 +10798,7 @@ components:
           - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
@@ -10098,6 +10823,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
 
@@ -10112,6 +10838,7 @@ components:
             - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
@@ -10131,6 +10858,7 @@ components:
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
+          - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
           - Eth 1
@@ -10155,6 +10883,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
 
 
@@ -10169,6 +10898,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
     Flow.Header:
       description: |-
@@ -13768,6 +14498,8 @@ components:
               x-field-uid: 4
             isis:
               x-field-uid: 5
+            ospfv2:
+              x-field-uid: 6
           x-field-uid: 1
           enum:
           - all
@@ -13775,6 +14507,7 @@ components:
           - lacp
           - bgp
           - isis
+          - ospfv2
         all:
           $ref: '#/components/schemas/State.Protocol.All'
           x-field-uid: 2
@@ -13790,6 +14523,9 @@ components:
         isis:
           $ref: '#/components/schemas/State.Protocol.Isis'
           x-field-uid: 6
+        ospfv2:
+          $ref: '#/components/schemas/State.Protocol.Ospfv2'
+          x-field-uid: 7
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -13947,6 +14683,7 @@ components:
             - /components/schemas/Bgp.V6RouteRange/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
 
 
             x-constraint:
@@ -13954,6 +14691,7 @@ components:
             - /components/schemas/Bgp.V6RouteRange/properties/name
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
+            - /components/schemas/Ospfv2.V4RouteRange/properties/name
           type: array
           items:
             type: string
@@ -13962,6 +14700,7 @@ components:
           - /components/schemas/Bgp.V6RouteRange/properties/name
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
+          - /components/schemas/Ospfv2.V4RouteRange/properties/name
           x-field-uid: 1
         state:
           description: |-
@@ -14174,6 +14913,61 @@ components:
             \ 'up', would attempt to bring up the ISIS session(s) with respective\
             \ peer(s) and advertise route(s), if configured. If the desired state\
             \ is 'down', would bring down ISIS session(s) with respective peer(s). "
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Ospfv2:
+      description: |-
+        Sets state of configured OSPFv2 routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          $ref: '#/components/schemas/State.Protocol.Ospfv2.Routers'
+          x-field-uid: 2
+    State.Protocol.Ospfv2.Routers:
+      description: |-
+        Sets state of configured OSPFv2 routers.
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv2/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of OSPFv2 router. If the desired state is\
+            \ 'up', would attempt to bring up the OSPFv2 session(s) with respective\
+            \ peer(s) and advertise route(s), if configured. If the desired state\
+            \ is 'down', would bring down OSPFv2 session(s) with respective peer(s). "
           type: string
           x-field-uid: 2
           x-enum:
@@ -14795,6 +15589,8 @@ components:
               x-field-uid: 12
             dhcpv6_server:
               x-field-uid: 13
+            ospfv2:
+              x-field-uid: 14
           enum:
           - port
           - flow
@@ -14809,6 +15605,7 @@ components:
           - dhcpv4_server
           - dhcpv6_client
           - dhcpv6_server
+          - ospfv2
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -14848,6 +15645,9 @@ components:
         dhcpv6_server:
           $ref: '#/components/schemas/Dhcpv6Server.Metrics.Request'
           x-field-uid: 14
+        ospfv2:
+          $ref: '#/components/schemas/Ospfv2.Metrics.Request'
+          x-field-uid: 15
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -14884,6 +15684,8 @@ components:
               x-field-uid: 12
             dhcpv6_server:
               x-field-uid: 13
+            ospfv2_metrics:
+              x-field-uid: 14
           enum:
           - flow_metrics
           - port_metrics
@@ -14898,6 +15700,7 @@ components:
           - dhcpv4_server
           - dhcpv6_client
           - dhcpv6_server
+          - ospfv2_metrics
         port_metrics:
           type: array
           items:
@@ -14963,6 +15766,11 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv6Server.Metric'
           x-field-uid: 14
+        ospfv2_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.Metric'
+          x-field-uid: 15
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -17478,6 +18286,345 @@ components:
           type: integer
           format: uint64
           x-field-uid: 16
+    Ospfv2.Metrics.Request:
+      description: |-
+        The request to retrieve OSPFv2 per Router metrics/statistics.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv2/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain.
+            If the list is empty then all columns will be returned except for
+            any result_groups.
+            The name of the OSPFv2 Router cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              full_state_count:
+                x-field-uid: 1
+              down_state_count:
+                x-field-uid: 2
+              sessions_flap:
+                x-field-uid: 3
+              hellos_sent:
+                x-field-uid: 4
+              hellos_received:
+                x-field-uid: 5
+              dbd_sent:
+                x-field-uid: 6
+              dbd_received:
+                x-field-uid: 7
+              ls_request_sent:
+                x-field-uid: 8
+              ls_request_received:
+                x-field-uid: 9
+              ls_update_sent:
+                x-field-uid: 10
+              ls_update_received:
+                x-field-uid: 11
+              ls_ack_sent:
+                x-field-uid: 12
+              ls_ack_received:
+                x-field-uid: 13
+              lsa_sent:
+                x-field-uid: 14
+              lsa_received:
+                x-field-uid: 15
+              lsa_ack_sent:
+                x-field-uid: 16
+              lsa_ack_received:
+                x-field-uid: 17
+              router_lsa_sent:
+                x-field-uid: 18
+              router_lsa_received:
+                x-field-uid: 19
+              network_lsa_sent:
+                x-field-uid: 20
+              network_lsa_received:
+                x-field-uid: 21
+              summary_lsa_sent:
+                x-field-uid: 22
+              summary_lsa_received:
+                x-field-uid: 23
+              external_lsa_sent:
+                x-field-uid: 24
+              external_lsa_received:
+                x-field-uid: 25
+              nssa_lsa_sent:
+                x-field-uid: 26
+              nssa_lsa_received:
+                x-field-uid: 27
+              opaque_local_sent:
+                x-field-uid: 28
+              opaque_local_received:
+                x-field-uid: 29
+              opaque_area_sent:
+                x-field-uid: 30
+              opaque_area_received:
+                x-field-uid: 31
+              opaque_domain_sent:
+                x-field-uid: 32
+              opaque_domain_received:
+                x-field-uid: 33
+            enum:
+            - full_state_count
+            - down_state_count
+            - sessions_flap
+            - hellos_sent
+            - hellos_received
+            - dbd_sent
+            - dbd_received
+            - ls_request_sent
+            - ls_request_received
+            - ls_update_sent
+            - ls_update_received
+            - ls_ack_sent
+            - ls_ack_received
+            - lsa_sent
+            - lsa_received
+            - lsa_ack_sent
+            - lsa_ack_received
+            - router_lsa_sent
+            - router_lsa_received
+            - network_lsa_sent
+            - network_lsa_received
+            - summary_lsa_sent
+            - summary_lsa_received
+            - external_lsa_sent
+            - external_lsa_received
+            - nssa_lsa_sent
+            - nssa_lsa_received
+            - opaque_local_sent
+            - opaque_local_received
+            - opaque_area_sent
+            - opaque_area_received
+            - opaque_domain_sent
+            - opaque_domain_received
+          x-field-uid: 2
+    Ospfv2.Metric:
+      description: |-
+        OSPFv2 per router statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured OSPFv2 router.
+          type: string
+          x-field-uid: 1
+        full_state_count:
+          description: |-
+            The number of OSPFv2 sessions in up state.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        down_state_count:
+          description: |-
+            The number of OSPFv2 sessions in down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        sessions_flap:
+          description: |-
+            The number of change of OSPFv2 sessions from up to down state.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        hellos_sent:
+          description: |-
+            The number of OSPFv2 Hello messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        hellos_received:
+          description: |-
+            The number of OSPFv2 Hello messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        dbd_sent:
+          description: |-
+            The number of OSPFv2 Database Description (DBD) messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        dbd_received:
+          description: |-
+            The number of OSPFv2 Database Description (DBD) messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        ls_request_sent:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Request messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        ls_request_received:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Request messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        ls_update_sent:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Update messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        ls_update_received:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Update messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        ls_ack_sent:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Acknowledgement messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        ls_ack_received:
+          description: |-
+            The number of OSPFv2 LinkState (LS) Acknowledgement messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        lsa_sent:
+          description: |-
+            The total number of OSPFv2 LinkState Advertisement (LSA) messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        lsa_received:
+          description: |-
+            The total number of OSPFv2 LinkState Advertisement (LSA) messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 16
+        lsa_ack_sent:
+          description: |-
+            The total number of OSPFv2 LinkState Advertisement (LSA) messages acknowledged.
+          type: integer
+          format: uint64
+          x-field-uid: 17
+        lsa_ack_received:
+          description: |-
+            The total number of OSPFv2 LinkState Advertisement (LSA) acknowledge messages received .
+          type: integer
+          format: uint64
+          x-field-uid: 18
+        router_lsa_sent:
+          description: |-
+            The number of OSPFv2 Router (Type 1) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 19
+        router_lsa_received:
+          description: |-
+            The number of OSPFv2 Router (Type 1) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 20
+        network_lsa_sent:
+          description: |-
+            The number of OSPFv2 Network (Type 2) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 21
+        network_lsa_received:
+          description: |-
+            The number of OSPFv2 Network (Type 2) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 22
+        summary_lsa_sent:
+          description: "The number of OSPFv2 Summary IP (Type 3) LSAs transmitted.\
+            \  "
+          type: integer
+          format: uint64
+          x-field-uid: 23
+        summary_lsa_received:
+          description: |-
+            The number of OSPFv2 Summary IP (Type 3) LSA received.
+          type: integer
+          format: uint64
+          x-field-uid: 24
+        external_lsa_sent:
+          description: |-
+            The number of OSPFv2 External (Type 5) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 25
+        external_lsa_received:
+          description: |-
+            The number of OSPFv2 External (Type 5) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 26
+        nssa_lsa_sent:
+          description: |-
+            The number of OSPFv2 NSSA (Type 7) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 27
+        nssa_lsa_received:
+          description: |-
+            The number of OSPFv2 NSSA (Type 7) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 28
+        opaque_local_sent:
+          description: |-
+            The number of OSPFv2 Opaque Local (Type 9) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 29
+        opaque_local_received:
+          description: "The number of OSPFv2 Opaque Local (Type 9) LSAs received. "
+          type: integer
+          format: uint64
+          x-field-uid: 30
+        opaque_area_sent:
+          description: |-
+            The number of OSPF Opaque Area (Type 10) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 31
+        opaque_area_received:
+          description: |-
+            The number of OSPFv2 Opaque Area (Type 10) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 32
+        opaque_domain_sent:
+          description: |-
+            The number of OSPFv2 Opaque Domain (Type 11) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 33
+        opaque_domain_received:
+          description: |-
+            The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 34
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -17508,6 +18655,8 @@ components:
               x-field-uid: 9
             dhcpv6_leases:
               x-field-uid: 10
+            ospfv2_lsas:
+              x-field-uid: 11
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -17519,6 +18668,7 @@ components:
           - dhcpv4_leases
           - dhcpv6_interfaces
           - dhcpv6_leases
+          - ospfv2_lsas
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -17549,6 +18699,9 @@ components:
         dhcpv6_leases:
           $ref: '#/components/schemas/Dhcpv6Lease.State.Request'
           x-field-uid: 11
+        ospfv2_lsas:
+          $ref: '#/components/schemas/Ospfv2Lsas.State.Request'
+          x-field-uid: 12
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -17579,6 +18732,8 @@ components:
               x-field-uid: 9
             dhcpv6_leases:
               x-field-uid: 10
+            ospfv2_lsas:
+              x-field-uid: 11
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -17590,6 +18745,7 @@ components:
           - dhcpv4_leases
           - dhcpv6_interfaces
           - dhcpv6_leases
+          - ospfv2_lsas
         ipv4_neighbors:
           type: array
           items:
@@ -17640,6 +18796,11 @@ components:
           items:
             $ref: '#/components/schemas/Dhcpv6Leases.State'
           x-field-uid: 11
+        ospfv2_lsas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Lsa.State'
+          x-field-uid: 12
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -19703,6 +20864,350 @@ components:
             The Interface ID option found in the last request message.
           type: string
           x-field-uid: 8
+    Ospfv2Lsas.State.Request:
+      description: |-
+        The request to retrieve OSPFv2 Link State Advertisements (LSA) information learned by the routers.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2Router/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv2Router/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv2Router/properties/name
+          x-field-uid: 1
+    Ospfv2Lsa.State:
+      description: |-
+        The result of OSPFv2 LSA information that are retrieved.
+      type: object
+      properties:
+        router_name:
+          description: |-
+            The name of the OSPFv2 Router that learned the LSA information.
+          type: string
+          x-field-uid: 1
+        router_lsas:
+          description: |-
+            One or more OSPFv2 Router-LSA - Type 1.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.RouterLsa'
+          x-field-uid: 2
+        network_lsas:
+          description: |-
+            One or more OSPFv2 Network-LSA - Type 2.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.NetworkLsa'
+          x-field-uid: 3
+        network_summary_lsas:
+          description: |-
+            One or more OSPFv2 Network summary LSA - Type 3.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.NetworkSummaryLsa'
+          x-field-uid: 4
+        summary_as_lsas:
+          description: |-
+            One or more OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.SummaryAsLsa'
+          x-field-uid: 5
+        external_as_lsas:
+          description: |-
+            OSPFv2 AS-External-LSA - Type 5.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.ExternalAsLsa'
+          x-field-uid: 6
+        nssa_lsas:
+          description: |-
+            One or more OSPFv2 NSSA-LSA - Type 7.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.NssaLsa'
+          x-field-uid: 7
+        opaque_lsas:
+          description: |-
+            One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.OpaqueLsa'
+          x-field-uid: 8
+    Ospfv2.RouterLsa:
+      description: |-
+        Contents of the router LSA.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        links:
+          description: |-
+            Links that are described within the LSA.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.Link'
+          x-field-uid: 2
+    Ospfv2.NetworkLsa:
+      description: |-
+        Contents of the Network LSA.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        neighbor_router_ids:
+          description: |-
+            Neighbor router ids that are described within the LSA.
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+    Ospfv2.NetworkSummaryLsa:
+      description: |-
+        Contents of the Network Summary LSA - Type 3.
+        The value of the IPv4 prefix that was received is present in header.lsa_id.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+    Ospfv2.SummaryAsLsa:
+      description: |-
+        Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+    Ospfv2.ExternalAsLsa:
+      description: |-
+        Contents of OSPFv2 AS-External-LSA - Type 5.
+        The value of the IPv4 prefix that was received is present in header.lsa_id.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric_type:
+          description: |-
+            The type of metric associated with the route range.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+    Ospfv2.NssaLsa:
+      description: |-
+        Contents of OSPFv2 NSSA LSA - Type 7.
+        The value of the IPv4 prefix that was received is present in header.lsa_id.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        network_mask:
+          description: |-
+            The IPv4 address mask for the network.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric_type:
+          description: |-
+            The type of metric associated with the route range.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        forwarding_address:
+          description: |-
+            IPv4 Forwarding address.
+          type: string
+          format: ipv4
+          x-field-uid: 5
+    Ospfv2.OpaqueLsa:
+      description: |-
+        Contents of OSPFv2 Opaque LSA - Type 7.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv2.LsaHeader'
+          x-field-uid: 1
+        type:
+          description: |-
+            The type of Opaque TE LSAs. The LSA type.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            local:
+              x-field-uid: 1
+            area:
+              x-field-uid: 2
+            domain:
+              x-field-uid: 3
+          enum:
+          - local
+          - area
+          - domain
+    Ospfv2.LsaHeader:
+      description: |-
+        Attributes in LSA Header.
+      type: object
+      properties:
+        lsa_id:
+          description: |-
+            LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        advertising_router_id:
+          description: |-
+            The router ID (in the IPv4 format) of the router that originated the LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        sequence_number:
+          description: |-
+            Sequence number to detect old and duplicate LSAs. The greater the sequence number the more recent the LSA.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        age:
+          description: |-
+            The time since the LSA's generation in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        option_bits:
+          description: |-
+            The optional bits.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+    Ospfv2.Link:
+      description: |-
+        Generic attributes used to identify links within OSPFv2.
+      type: object
+      properties:
+        type:
+          description: |-
+            The data associated with the link type. The value is dependent upon the subtype of the LSA. - point_to_point: The LSA represents a point-to-point connection to another router. - transit: The LSA represents a connection to a transit network. - stub: The LSA represents a connection to a stub network. - virtual: The LSA represents a virtual link connection.
+          type: string
+          x-enum:
+            point_to_point:
+              x-field-uid: 1
+            transit:
+              x-field-uid: 2
+            stub:
+              x-field-uid: 3
+            virtual:
+              x-field-uid: 4
+          x-field-uid: 1
+          enum:
+          - point_to_point
+          - transit
+          - stub
+          - virtual
+        id:
+          description: |-
+            The identifier for the link specified. The value of the link
+            identifier is dependent upon the type of the LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        data:
+          description: |-
+            The data associated with the link type. The value is
+            dependent upon the subtype of the LSA. When the connection is
+            to a stub network it represents the mask; for p2p connections
+            that are unnumbered it represents the ifIndex value of the
+            router's interface; for all other connections it represents
+            the local system's IP address.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+        metric:
+          description: |-
+            The data associated with the link type. The value is
+            dependent upon the subtype of the LSA. When the connection is
+            to a stub network it represents the mask; for p2p connections
+            that are unnumbered it represents the ifIndex value of the
+            router's interface; for all other connections it represents
+            the local system's IP address.
+          type: integer
+          format: uint32
+          x-field-uid: 4
     Capture.Request:
       description: |-
         The capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
