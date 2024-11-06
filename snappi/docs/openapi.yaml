@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.14.0
+  version: 1.15.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -20276,8 +20276,14 @@ components:
         oui_subtype:
           description: |-
             The organizationally defined subtype field shall contain a unique subtype value assigned by the defining organization.
-          type: string
+          type: integer
+          format: uint32
           x-field-uid: 3
+        information:
+          description: |-
+            Contains information on the remaining bytes of the received Organization-Specific TLV after the sub-type field. The value must be returned in lowercase hexadecimal format.
+          type: string
+          x-field-uid: 4
     LldpCapability.State:
       description: |-
         LLDP system capability advertised by the neighbor

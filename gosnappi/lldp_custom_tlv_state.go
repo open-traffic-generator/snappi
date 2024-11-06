@@ -276,12 +276,18 @@ type LldpCustomTLVState interface {
 	SetOui(value string) LldpCustomTLVState
 	// HasOui checks if Oui has been set in LldpCustomTLVState
 	HasOui() bool
-	// OuiSubtype returns string, set in LldpCustomTLVState.
-	OuiSubtype() string
-	// SetOuiSubtype assigns string provided by user to LldpCustomTLVState
-	SetOuiSubtype(value string) LldpCustomTLVState
+	// OuiSubtype returns uint32, set in LldpCustomTLVState.
+	OuiSubtype() uint32
+	// SetOuiSubtype assigns uint32 provided by user to LldpCustomTLVState
+	SetOuiSubtype(value uint32) LldpCustomTLVState
 	// HasOuiSubtype checks if OuiSubtype has been set in LldpCustomTLVState
 	HasOuiSubtype() bool
+	// Information returns string, set in LldpCustomTLVState.
+	Information() string
+	// SetInformation assigns string provided by user to LldpCustomTLVState
+	SetInformation(value string) LldpCustomTLVState
+	// HasInformation checks if Information has been set in LldpCustomTLVState
+	HasInformation() bool
 }
 
 // The integer value identifying the type of information contained in the value field.
@@ -329,24 +335,46 @@ func (obj *lldpCustomTLVState) SetOui(value string) LldpCustomTLVState {
 }
 
 // The organizationally defined subtype field shall contain a unique subtype value assigned by the defining organization.
-// OuiSubtype returns a string
-func (obj *lldpCustomTLVState) OuiSubtype() string {
+// OuiSubtype returns a uint32
+func (obj *lldpCustomTLVState) OuiSubtype() uint32 {
 
 	return *obj.obj.OuiSubtype
 
 }
 
 // The organizationally defined subtype field shall contain a unique subtype value assigned by the defining organization.
-// OuiSubtype returns a string
+// OuiSubtype returns a uint32
 func (obj *lldpCustomTLVState) HasOuiSubtype() bool {
 	return obj.obj.OuiSubtype != nil
 }
 
 // The organizationally defined subtype field shall contain a unique subtype value assigned by the defining organization.
-// SetOuiSubtype sets the string value in the LldpCustomTLVState object
-func (obj *lldpCustomTLVState) SetOuiSubtype(value string) LldpCustomTLVState {
+// SetOuiSubtype sets the uint32 value in the LldpCustomTLVState object
+func (obj *lldpCustomTLVState) SetOuiSubtype(value uint32) LldpCustomTLVState {
 
 	obj.obj.OuiSubtype = &value
+	return obj
+}
+
+// Contains information on the remaining bytes of the received Organization-Specific TLV after the sub-type field. The value must be returned in lowercase hexadecimal format.
+// Information returns a string
+func (obj *lldpCustomTLVState) Information() string {
+
+	return *obj.obj.Information
+
+}
+
+// Contains information on the remaining bytes of the received Organization-Specific TLV after the sub-type field. The value must be returned in lowercase hexadecimal format.
+// Information returns a string
+func (obj *lldpCustomTLVState) HasInformation() bool {
+	return obj.obj.Information != nil
+}
+
+// Contains information on the remaining bytes of the received Organization-Specific TLV after the sub-type field. The value must be returned in lowercase hexadecimal format.
+// SetInformation sets the string value in the LldpCustomTLVState object
+func (obj *lldpCustomTLVState) SetInformation(value string) LldpCustomTLVState {
+
+	obj.obj.Information = &value
 	return obj
 }
 
