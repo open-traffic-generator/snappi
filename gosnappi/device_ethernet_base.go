@@ -276,6 +276,8 @@ type DeviceEthernetBase interface {
 	Mac() string
 	// SetMac assigns string provided by user to DeviceEthernetBase
 	SetMac(value string) DeviceEthernetBase
+	// HasMac checks if Mac has been set in DeviceEthernetBase
+	HasMac() bool
 	// Mtu returns uint32, set in DeviceEthernetBase.
 	Mtu() uint32
 	// SetMtu assigns uint32 provided by user to DeviceEthernetBase
@@ -291,7 +293,7 @@ type DeviceEthernetBase interface {
 	setNil()
 }
 
-// Media Access Control address.
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
 // Mac returns a string
 func (obj *deviceEthernetBase) Mac() string {
 
@@ -299,7 +301,13 @@ func (obj *deviceEthernetBase) Mac() string {
 
 }
 
-// Media Access Control address.
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
+// Mac returns a string
+func (obj *deviceEthernetBase) HasMac() bool {
+	return obj.obj.Mac != nil
+}
+
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
 // SetMac sets the string value in the DeviceEthernetBase object
 func (obj *deviceEthernetBase) SetMac(value string) DeviceEthernetBase {
 
@@ -437,10 +445,6 @@ func (obj *deviceEthernetBase) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	// Mac is required
-	if obj.obj.Mac == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Mac is required field on interface DeviceEthernetBase")
-	}
 	if obj.obj.Mac != nil {
 
 		err := obj.validateMac(obj.Mac())

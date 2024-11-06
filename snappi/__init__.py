@@ -31,6 +31,7 @@ from .snappi import CaptureIter
 from .snappi import Device
 from .snappi import DeviceEthernet
 from .snappi import EthernetConnection
+from .snappi import EthernetSimulatedLink
 from .snappi import DeviceIpv4
 from .snappi import DeviceIpv4GatewayMAC
 from .snappi import DeviceIpv4Iter

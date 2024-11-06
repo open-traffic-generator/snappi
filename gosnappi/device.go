@@ -266,7 +266,7 @@ func (obj *device) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Device is a container for emulated interfaces, loopback interfaces and protocol configurations.
+// Device is a container for emulated or simulated interfaces, loopback interfaces and protocol configurations.
 type Device interface {
 	Validation
 	// msg marshals Device to protobuf object *otg.Device
@@ -357,7 +357,7 @@ type Device interface {
 	setNil()
 }
 
-// Ethernet configuration for one or more emulated network interfaces.
+// Ethernet configuration for one or more emulated or simulated network interfaces.
 // Ethernets returns a []DeviceEthernet
 func (obj *device) Ethernets() DeviceDeviceEthernetIter {
 	if len(obj.obj.Ethernets) == 0 {

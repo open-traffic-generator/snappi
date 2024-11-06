@@ -260,7 +260,7 @@ func (obj *deviceEthernet) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// DeviceEthernet is an Ethernet interface with IPv4 and IPv6 addresses.
+// DeviceEthernet is an Ethernet interface with IPv4 and IPv6 addresses. The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where MAC is not mandatory.
 type DeviceEthernet interface {
 	Validation
 	// msg marshals DeviceEthernet to protobuf object *otg.DeviceEthernet
@@ -283,10 +283,10 @@ type DeviceEthernet interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Connection returns EthernetConnection, set in DeviceEthernet.
-	// EthernetConnection is ethernet interface connection to a port, LAG or VXLAN tunnel.
+	// EthernetConnection is ethernet interface connection to a port, LAG, VXLAN tunnel or a Simulated Internal Link used to create simulated topologies behind an emulated router.
 	Connection() EthernetConnection
 	// SetConnection assigns EthernetConnection provided by user to DeviceEthernet.
-	// EthernetConnection is ethernet interface connection to a port, LAG or VXLAN tunnel.
+	// EthernetConnection is ethernet interface connection to a port, LAG, VXLAN tunnel or a Simulated Internal Link used to create simulated topologies behind an emulated router.
 	SetConnection(value EthernetConnection) DeviceEthernet
 	// HasConnection checks if Connection has been set in DeviceEthernet
 	HasConnection() bool
@@ -298,6 +298,8 @@ type DeviceEthernet interface {
 	Mac() string
 	// SetMac assigns string provided by user to DeviceEthernet
 	SetMac(value string) DeviceEthernet
+	// HasMac checks if Mac has been set in DeviceEthernet
+	HasMac() bool
 	// Mtu returns uint32, set in DeviceEthernet.
 	Mtu() uint32
 	// SetMtu assigns uint32 provided by user to DeviceEthernet
@@ -520,7 +522,7 @@ func (obj *deviceEthernetDeviceIpv6Iter) appendHolderSlice(item DeviceIpv6) Devi
 	return obj
 }
 
-// Media Access Control address.
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
 // Mac returns a string
 func (obj *deviceEthernet) Mac() string {
 
@@ -528,7 +530,13 @@ func (obj *deviceEthernet) Mac() string {
 
 }
 
-// Media Access Control address.
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
+// Mac returns a string
+func (obj *deviceEthernet) HasMac() bool {
+	return obj.obj.Mac != nil
+}
+
+// Media Access Control address.The implementation should ensure that the 'mac' field is explicitly configured by the user for  all types of interfaces as denoted by 'connection' attribute except 'simulated_link' where 'mac' is not mandatory.
 // SetMac sets the string value in the DeviceEthernet object
 func (obj *deviceEthernet) SetMac(value string) DeviceEthernet {
 
@@ -873,10 +881,6 @@ func (obj *deviceEthernet) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	// Mac is required
-	if obj.obj.Mac == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Mac is required field on interface DeviceEthernet")
-	}
 	if obj.obj.Mac != nil {
 
 		err := obj.validateMac(obj.Mac())

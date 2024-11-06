@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.15.0
+/* Open Traffic Generator API 1.16.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -223,8 +223,9 @@ message LagPortLacp {
 // Base Ethernet interface.
 message DeviceEthernetBase {
 
-  // Media Access Control address.
-  // required = true
+  // Media Access Control address.The implementation should ensure that the 'mac' field
+  // is explicitly configured by the user for  all types of interfaces as denoted by 'connection'
+  // attribute except 'simulated_link' where 'mac' is not mandatory.
   optional string mac = 1;
 
   // Maximum Transmission Unit.
@@ -240,7 +241,9 @@ message DeviceEthernetBase {
   optional string name = 4;
 }
 
-// An Ethernet interface with IPv4 and IPv6 addresses.
+// An Ethernet interface with IPv4 and IPv6 addresses. The implementation should ensure
+// that the 'mac' field is explicitly configured by the user for  all types of interfaces
+// as denoted by 'connection' attribute except 'simulated_link' where MAC is not mandatory.
 message DeviceEthernet {
 
   // Device connection to physical, LAG or another device.
@@ -253,8 +256,9 @@ message DeviceEthernet {
   // The Link Local IPv6 address will be automatically generated.
   repeated DeviceIpv6 ipv6_addresses = 4;
 
-  // Media Access Control address.
-  // required = true
+  // Media Access Control address.The implementation should ensure that the 'mac' field
+  // is explicitly configured by the user for  all types of interfaces as denoted by 'connection'
+  // attribute except 'simulated_link' where 'mac' is not mandatory.
   optional string mac = 5;
 
   // Maximum Transmission Unit.
@@ -276,7 +280,8 @@ message DeviceEthernet {
   repeated DeviceDhcpv6client dhcpv6_interfaces = 10;
 }
 
-// Ethernet interface connection to a port, LAG or VXLAN tunnel.
+// Ethernet interface connection to a port, LAG, VXLAN tunnel or a Simulated Internal
+// Link used to create simulated topologies behind an emulated router.
 message EthernetConnection {
 
   message Choice {
@@ -285,9 +290,10 @@ message EthernetConnection {
       port_name = 1;
       lag_name = 2;
       vxlan_name = 3;
+      simulated_link = 4;
     }
   }
-  // port_name, lag_name or vxlan_name
+  // port_name, lag_name, vxlan_name or simulated_link
   optional Choice.Enum choice = 1;
 
   // Name of the port that the Ethernet interface is configured on.
@@ -325,6 +331,67 @@ message EthernetConnection {
   // - #/components/schemas/Vxlan.V6Tunnel/properties/name
   // 
   optional string vxlan_name = 4;
+
+  // Description missing in models
+  EthernetSimulatedLink simulated_link = 5;
+}
+
+// Details of the internal link which can be used to create simulated device topologies
+// behind an emulated router. MAC, VLAN and MTU information for the internal links are
+// not used for purposes of emulating Simulated Topologies ( e.g. by ISIS Emulated Router
+// behind which this is configured )
+message EthernetSimulatedLink {
+
+  // Name of the remote end of the simulated interface which also must be a simulated_link
+  // on a device which might be acting either as an unconnected device in a simulated
+  // topology
+  // ( all ethernet links of type simulated_link ) or an emulated device connected to
+  // the Device Under Test (has at atleast one ethernet interface with connection to the
+  // port or
+  // lag connected to the DUT)
+  // 
+  // x-constraint:
+  // - #/components/schemas/Device.Ethernet/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - #/components/schemas/Device.Ethernet/properties/name
+  // 
+  optional string remote_simulated_link = 1;
+
+  message LinkType {
+    enum Enum {
+      unspecified = 0;
+      primary = 1;
+      secondary = 2;
+    }
+  }
+  // By default, simulated links are treated as Primary links , which means that the intention
+  // is for connected device to advertise this and full topology of devices connected
+  // to it.
+  // e.g. when advertised as ISIS Simulated Topology.
+  // 
+  // All simulated links inside one topology subset would normally can point to only other
+  // unconnected devices in the same topology or to the 'root' emulated device.
+  // If a link is designated as secondary , only that link information will be advertised
+  // by the IGP e.g. ISIS , and not the entire topology behind it.
+  // The optional secondary option allows emulation of external link scenarios where a
+  // simulated device (e.g. part of a ISIS simulated topology ) is advertised as reachable
+  // part of the topology
+  // by the emulated router behind which this is configured , as well as the other end
+  // of the secondary link which could be
+  // - 1) either a simulated device behind a different emulated router.
+  // - 2) or an emulated router on same or different port.
+  // This allows emulation of scenarios where one device/router is emulated to be reachable
+  // from different Emulated Routers connected to the Device Under Test. (e.g. for FRR
+  // scenarios)
+  // 
+  // If an implementation does not support multiple primary links from same simulated
+  // topology i.e. full topology advertised via multiple emulated routers, it should return
+  // an error
+  // during set_config operation with such a topology.
+  // default = LinkType.Enum.primary
+  optional LinkType.Enum link_type = 2;
 }
 
 // Emulated VLAN protocol.
@@ -1617,10 +1684,11 @@ message CaptureIpv6 {
   CaptureField dst = 8;
 }
 
-// A container for emulated interfaces, loopback interfaces and protocol configurations.
+// A container for emulated or simulated interfaces, loopback interfaces and protocol
+// configurations.
 message Device {
 
-  // Ethernet configuration for one or more emulated network interfaces.
+  // Ethernet configuration for one or more emulated or simulated network interfaces.
   repeated DeviceEthernet ethernets = 1;
 
   // IPv4 Loopback interface that can be attached to an Ethernet in the same device  or
@@ -1720,7 +1788,10 @@ message DeviceIsisMultiInstance {
 message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
-  // cannot share the same Ethernet.
+  // cannot share the same Ethernet. The underlying Ethernet Interface can an emulated
+  // or simulated interface. A simulated ethernet interface can be assumed to be connected
+  // by  a primary (internal to a simulated topology)  or a secondary link (connected
+  // to a device behind a different simulated topology).
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name

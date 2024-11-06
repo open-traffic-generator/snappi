@@ -13,9 +13,10 @@ import (
 // ***** EthernetConnection *****
 type ethernetConnection struct {
 	validation
-	obj          *otg.EthernetConnection
-	marshaller   marshalEthernetConnection
-	unMarshaller unMarshalEthernetConnection
+	obj                 *otg.EthernetConnection
+	marshaller          marshalEthernetConnection
+	unMarshaller        unMarshalEthernetConnection
+	simulatedLinkHolder EthernetSimulatedLink
 }
 
 func NewEthernetConnection() EthernetConnection {
@@ -29,7 +30,7 @@ func (obj *ethernetConnection) msg() *otg.EthernetConnection {
 }
 
 func (obj *ethernetConnection) setMsg(msg *otg.EthernetConnection) EthernetConnection {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalethernetConnection) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalethernetConnection) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalethernetConnection) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,7 +243,14 @@ func (obj *ethernetConnection) Clone() (EthernetConnection, error) {
 	return newObj, nil
 }
 
-// EthernetConnection is ethernet interface connection to a port, LAG or VXLAN tunnel.
+func (obj *ethernetConnection) setNil() {
+	obj.simulatedLinkHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// EthernetConnection is ethernet interface connection to a port, LAG, VXLAN tunnel or a Simulated Internal Link used to create simulated topologies behind an emulated router.
 type EthernetConnection interface {
 	Validation
 	// msg marshals EthernetConnection to protobuf object *otg.EthernetConnection
@@ -288,26 +296,37 @@ type EthernetConnection interface {
 	SetVxlanName(value string) EthernetConnection
 	// HasVxlanName checks if VxlanName has been set in EthernetConnection
 	HasVxlanName() bool
+	// SimulatedLink returns EthernetSimulatedLink, set in EthernetConnection.
+	// EthernetSimulatedLink is details of the internal link which can be used to create simulated device topologies behind an emulated router. MAC, VLAN and MTU information for the internal links are not used for purposes of emulating Simulated Topologies ( e.g. by ISIS Emulated Router behind which this is configured )
+	SimulatedLink() EthernetSimulatedLink
+	// SetSimulatedLink assigns EthernetSimulatedLink provided by user to EthernetConnection.
+	// EthernetSimulatedLink is details of the internal link which can be used to create simulated device topologies behind an emulated router. MAC, VLAN and MTU information for the internal links are not used for purposes of emulating Simulated Topologies ( e.g. by ISIS Emulated Router behind which this is configured )
+	SetSimulatedLink(value EthernetSimulatedLink) EthernetConnection
+	// HasSimulatedLink checks if SimulatedLink has been set in EthernetConnection
+	HasSimulatedLink() bool
+	setNil()
 }
 
 type EthernetConnectionChoiceEnum string
 
 // Enum of Choice on EthernetConnection
 var EthernetConnectionChoice = struct {
-	PORT_NAME  EthernetConnectionChoiceEnum
-	LAG_NAME   EthernetConnectionChoiceEnum
-	VXLAN_NAME EthernetConnectionChoiceEnum
+	PORT_NAME      EthernetConnectionChoiceEnum
+	LAG_NAME       EthernetConnectionChoiceEnum
+	VXLAN_NAME     EthernetConnectionChoiceEnum
+	SIMULATED_LINK EthernetConnectionChoiceEnum
 }{
-	PORT_NAME:  EthernetConnectionChoiceEnum("port_name"),
-	LAG_NAME:   EthernetConnectionChoiceEnum("lag_name"),
-	VXLAN_NAME: EthernetConnectionChoiceEnum("vxlan_name"),
+	PORT_NAME:      EthernetConnectionChoiceEnum("port_name"),
+	LAG_NAME:       EthernetConnectionChoiceEnum("lag_name"),
+	VXLAN_NAME:     EthernetConnectionChoiceEnum("vxlan_name"),
+	SIMULATED_LINK: EthernetConnectionChoiceEnum("simulated_link"),
 }
 
 func (obj *ethernetConnection) Choice() EthernetConnectionChoiceEnum {
 	return EthernetConnectionChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// port_name, lag_name or vxlan_name
+// port_name, lag_name, vxlan_name or simulated_link
 // Choice returns a string
 func (obj *ethernetConnection) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -322,9 +341,16 @@ func (obj *ethernetConnection) setChoice(value EthernetConnectionChoiceEnum) Eth
 	}
 	enumValue := otg.EthernetConnection_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SimulatedLink = nil
+	obj.simulatedLinkHolder = nil
 	obj.obj.VxlanName = nil
 	obj.obj.LagName = nil
 	obj.obj.PortName = nil
+
+	if value == EthernetConnectionChoice.SIMULATED_LINK {
+		obj.obj.SimulatedLink = NewEthernetSimulatedLink().msg()
+	}
+
 	return obj
 }
 
@@ -475,9 +501,42 @@ func (obj *ethernetConnection) SetVxlanName(value string) EthernetConnection {
 	return obj
 }
 
+// description is TBD
+// SimulatedLink returns a EthernetSimulatedLink
+func (obj *ethernetConnection) SimulatedLink() EthernetSimulatedLink {
+	if obj.obj.SimulatedLink == nil {
+		obj.setChoice(EthernetConnectionChoice.SIMULATED_LINK)
+	}
+	if obj.simulatedLinkHolder == nil {
+		obj.simulatedLinkHolder = &ethernetSimulatedLink{obj: obj.obj.SimulatedLink}
+	}
+	return obj.simulatedLinkHolder
+}
+
+// description is TBD
+// SimulatedLink returns a EthernetSimulatedLink
+func (obj *ethernetConnection) HasSimulatedLink() bool {
+	return obj.obj.SimulatedLink != nil
+}
+
+// description is TBD
+// SetSimulatedLink sets the EthernetSimulatedLink value in the EthernetConnection object
+func (obj *ethernetConnection) SetSimulatedLink(value EthernetSimulatedLink) EthernetConnection {
+	obj.setChoice(EthernetConnectionChoice.SIMULATED_LINK)
+	obj.simulatedLinkHolder = nil
+	obj.obj.SimulatedLink = value.msg()
+
+	return obj
+}
+
 func (obj *ethernetConnection) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.SimulatedLink != nil {
+
+		obj.SimulatedLink().validateObj(vObj, set_default)
 	}
 
 }
@@ -499,6 +558,11 @@ func (obj *ethernetConnection) setDefault() {
 	if obj.obj.VxlanName != nil {
 		choices_set += 1
 		choice = EthernetConnectionChoice.VXLAN_NAME
+	}
+
+	if obj.obj.SimulatedLink != nil {
+		choices_set += 1
+		choice = EthernetConnectionChoice.SIMULATED_LINK
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
