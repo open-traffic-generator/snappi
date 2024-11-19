@@ -1010,57 +1010,6 @@ func TestFlowMetricsIncorrectFormat(t *testing.T) {
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
 }
-func TestEventLinkIncorrectFormat(t *testing.T) {
-	incorrect_format := `{
-		"a":"asdf",
-		"b" : 65,
-		"c" : 33,
-		"h": true,
-		"response" : "status_200",
-		"required_object" :
-			"e_a" : 1,
-			"e_b" : 2
-	    }`
-
-	object := gosnappi.NewEventLink()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
-}
-func TestEventRxRateThresholdIncorrectFormat(t *testing.T) {
-	incorrect_format := `{
-		"a":"asdf",
-		"b" : 65,
-		"c" : 33,
-		"h": true,
-		"response" : "status_200",
-		"required_object" :
-			"e_a" : 1,
-			"e_b" : 2
-	    }`
-
-	object := gosnappi.NewEventRxRateThreshold()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
-}
-func TestEventRouteAdvertiseWithdrawIncorrectFormat(t *testing.T) {
-	incorrect_format := `{
-		"a":"asdf",
-		"b" : 65,
-		"c" : 33,
-		"h": true,
-		"response" : "status_200",
-		"required_object" :
-			"e_a" : 1,
-			"e_b" : 2
-	    }`
-
-	object := gosnappi.NewEventRouteAdvertiseWithdraw()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
-}
 func TestPortOptionsIncorrectFormat(t *testing.T) {
 	incorrect_format := `{
 		"a":"asdf",

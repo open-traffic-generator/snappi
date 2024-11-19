@@ -1069,60 +1069,6 @@ func TestFlowMetricsIncorrectKey(t *testing.T) {
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
 }
-func TestEventLinkIncorrectKey(t *testing.T) {
-	incorrect_key := `{
-            "a":"asdf",
-            "zxnvh" : 65,
-            "c" : 33,
-            "h": true,
-            "response" : "status_200",
-            "required_object" : {
-                "e_a" : 1,
-                "e_b" : 2
-            }
-        }`
-
-	object := gosnappi.NewEventLink()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
-}
-func TestEventRxRateThresholdIncorrectKey(t *testing.T) {
-	incorrect_key := `{
-            "a":"asdf",
-            "zxnvh" : 65,
-            "c" : 33,
-            "h": true,
-            "response" : "status_200",
-            "required_object" : {
-                "e_a" : 1,
-                "e_b" : 2
-            }
-        }`
-
-	object := gosnappi.NewEventRxRateThreshold()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
-}
-func TestEventRouteAdvertiseWithdrawIncorrectKey(t *testing.T) {
-	incorrect_key := `{
-            "a":"asdf",
-            "zxnvh" : 65,
-            "c" : 33,
-            "h": true,
-            "response" : "status_200",
-            "required_object" : {
-                "e_a" : 1,
-                "e_b" : 2
-            }
-        }`
-
-	object := gosnappi.NewEventRouteAdvertiseWithdraw()
-	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
-	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
-}
 func TestPortOptionsIncorrectKey(t *testing.T) {
 	incorrect_key := `{
             "a":"asdf",
