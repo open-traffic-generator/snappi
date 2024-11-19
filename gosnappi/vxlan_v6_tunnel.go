@@ -301,10 +301,6 @@ type VxlanV6Tunnel interface {
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
-//
 // SourceInterface returns a string
 func (obj *vxlanV6Tunnel) SourceInterface() string {
 
@@ -313,10 +309,6 @@ func (obj *vxlanV6Tunnel) SourceInterface() string {
 }
 
 // Determines the source interface.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
