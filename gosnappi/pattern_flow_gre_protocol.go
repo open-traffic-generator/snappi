@@ -310,6 +310,10 @@ type PatternFlowGreProtocol interface {
 	HasDecrement() bool
 	// MetricTags returns PatternFlowGreProtocolPatternFlowGreProtocolMetricTagIterIter, set in PatternFlowGreProtocol
 	MetricTags() PatternFlowGreProtocolPatternFlowGreProtocolMetricTagIter
+	// Auto returns uint32, set in PatternFlowGreProtocol.
+	Auto() uint32
+	// HasAuto checks if Auto has been set in PatternFlowGreProtocol
+	HasAuto() bool
 	setNil()
 }
 
@@ -321,11 +325,13 @@ var PatternFlowGreProtocolChoice = struct {
 	VALUES    PatternFlowGreProtocolChoiceEnum
 	INCREMENT PatternFlowGreProtocolChoiceEnum
 	DECREMENT PatternFlowGreProtocolChoiceEnum
+	AUTO      PatternFlowGreProtocolChoiceEnum
 }{
 	VALUE:     PatternFlowGreProtocolChoiceEnum("value"),
 	VALUES:    PatternFlowGreProtocolChoiceEnum("values"),
 	INCREMENT: PatternFlowGreProtocolChoiceEnum("increment"),
 	DECREMENT: PatternFlowGreProtocolChoiceEnum("decrement"),
+	AUTO:      PatternFlowGreProtocolChoiceEnum("auto"),
 }
 
 func (obj *patternFlowGreProtocol) Choice() PatternFlowGreProtocolChoiceEnum {
@@ -347,6 +353,7 @@ func (obj *patternFlowGreProtocol) setChoice(value PatternFlowGreProtocolChoiceE
 	}
 	enumValue := otg.PatternFlowGreProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Auto = nil
 	obj.obj.Decrement = nil
 	obj.decrementHolder = nil
 	obj.obj.Increment = nil
@@ -370,6 +377,11 @@ func (obj *patternFlowGreProtocol) setChoice(value PatternFlowGreProtocolChoiceE
 
 	if value == PatternFlowGreProtocolChoice.DECREMENT {
 		obj.obj.Decrement = NewPatternFlowGreProtocolCounter().msg()
+	}
+
+	if value == PatternFlowGreProtocolChoice.AUTO {
+		defaultValue := uint32(2048)
+		obj.obj.Auto = &defaultValue
 	}
 
 	return obj
@@ -565,6 +577,28 @@ func (obj *patternFlowGreProtocolPatternFlowGreProtocolMetricTagIter) appendHold
 	return obj
 }
 
+// The OTG implementation can provide a system generated
+// value for this property. If the OTG is unable to generate a value
+// the default value must be used.
+// Auto returns a uint32
+func (obj *patternFlowGreProtocol) Auto() uint32 {
+
+	if obj.obj.Auto == nil {
+		obj.setChoice(PatternFlowGreProtocolChoice.AUTO)
+	}
+
+	return *obj.obj.Auto
+
+}
+
+// The OTG implementation can provide a system generated
+// value for this property. If the OTG is unable to generate a value
+// the default value must be used.
+// Auto returns a uint32
+func (obj *patternFlowGreProtocol) HasAuto() bool {
+	return obj.obj.Auto != nil
+}
+
 func (obj *patternFlowGreProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -617,6 +651,16 @@ func (obj *patternFlowGreProtocol) validateObj(vObj *validation, set_default boo
 
 	}
 
+	if obj.obj.Auto != nil {
+
+		if *obj.obj.Auto > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= PatternFlowGreProtocol.Auto <= 65535 but Got %d", *obj.obj.Auto))
+		}
+
+	}
+
 }
 
 func (obj *patternFlowGreProtocol) setDefault() {
@@ -642,9 +686,14 @@ func (obj *patternFlowGreProtocol) setDefault() {
 		choices_set += 1
 		choice = PatternFlowGreProtocolChoice.DECREMENT
 	}
+
+	if obj.obj.Auto != nil {
+		choices_set += 1
+		choice = PatternFlowGreProtocolChoice.AUTO
+	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(PatternFlowGreProtocolChoice.VALUE)
+			obj.setChoice(PatternFlowGreProtocolChoice.AUTO)
 
 		}
 

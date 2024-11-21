@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.16.0
+  version: 1.17.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -30518,13 +30518,16 @@ components:
               x-field-uid: 4
             decrement:
               x-field-uid: 5
-          default: value
+            auto:
+              x-field-uid: 1
+          default: auto
           x-field-uid: 1
           enum:
           - value
           - values
           - increment
           - decrement
+          - auto
         value:
           type: integer
           x-field-uid: 2
@@ -30553,6 +30556,16 @@ components:
           items:
             $ref: '#/components/schemas/Pattern.Flow.Gre.Protocol.MetricTag'
           x-field-uid: 7
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 8
+          default: 2048
+          format: uint32
+          maximum: 65535
       x-constants:
         ipv4: 2048
         ipv6: 34525
