@@ -49,6 +49,8 @@ type marshalLagPort interface {
 	ToYaml() (string, error)
 	// ToJson marshals LagPort to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals LagPort to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallagPort struct {
@@ -166,6 +168,23 @@ func (m *unMarshallagPort) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallagPort) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallagPort) ToJson() (string, error) {

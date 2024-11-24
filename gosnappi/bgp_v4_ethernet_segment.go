@@ -53,6 +53,8 @@ type marshalBgpV4EthernetSegment interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpV4EthernetSegment to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpV4EthernetSegment to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpV4EthernetSegment struct {
@@ -170,6 +172,23 @@ func (m *unMarshalbgpV4EthernetSegment) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpV4EthernetSegment) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpV4EthernetSegment) ToJson() (string, error) {

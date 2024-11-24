@@ -47,6 +47,8 @@ type marshalOspfv2MetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2MetricsRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv2MetricsRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2MetricsRequest struct {
@@ -164,6 +166,23 @@ func (m *unMarshalospfv2MetricsRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv2MetricsRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv2MetricsRequest) ToJson() (string, error) {

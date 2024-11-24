@@ -47,6 +47,8 @@ type marshalBgpAttributesMultiExitDiscriminator interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesMultiExitDiscriminator to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpAttributesMultiExitDiscriminator to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesMultiExitDiscriminator struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpAttributesMultiExitDiscriminator) FromYaml(value string) er
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpAttributesMultiExitDiscriminator) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpAttributesMultiExitDiscriminator) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalPatternFlowTcpSrcPortCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowTcpSrcPortCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowTcpSrcPortCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowTcpSrcPortCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowTcpSrcPortCounter) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowTcpSrcPortCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowTcpSrcPortCounter) ToJson() (string, error) {

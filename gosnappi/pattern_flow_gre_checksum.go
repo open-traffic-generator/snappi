@@ -47,6 +47,8 @@ type marshalPatternFlowGreChecksum interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGreChecksum to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowGreChecksum to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGreChecksum struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowGreChecksum) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowGreChecksum) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowGreChecksum) ToJson() (string, error) {

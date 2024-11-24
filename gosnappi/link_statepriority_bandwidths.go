@@ -47,6 +47,8 @@ type marshalLinkStatepriorityBandwidths interface {
 	ToYaml() (string, error)
 	// ToJson marshals LinkStatepriorityBandwidths to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals LinkStatepriorityBandwidths to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallinkStatepriorityBandwidths struct {
@@ -164,6 +166,23 @@ func (m *unMarshallinkStatepriorityBandwidths) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallinkStatepriorityBandwidths) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallinkStatepriorityBandwidths) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalDhcpv6ClientOptionsDuidUuidVersion interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6ClientOptionsDuidUuidVersion to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Dhcpv6ClientOptionsDuidUuidVersion to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6ClientOptionsDuidUuidVersion struct {
@@ -166,6 +168,23 @@ func (m *unMarshaldhcpv6ClientOptionsDuidUuidVersion) FromYaml(value string) err
 	return nil
 }
 
+func (m *marshaldhcpv6ClientOptionsDuidUuidVersion) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshaldhcpv6ClientOptionsDuidUuidVersion) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -270,16 +289,16 @@ type Dhcpv6ClientOptionsDuidUuidVersion interface {
 	setChoice(value Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum) Dhcpv6ClientOptionsDuidUuidVersion
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsDuidUuidVersion
 	HasChoice() bool
+	// getter for V_1 to set choice.
+	V_1()
 	// getter for V_3 to set choice.
 	V_3()
+	// getter for V_5 to set choice.
+	V_5()
 	// getter for V_4 to set choice.
 	V_4()
 	// getter for V_2 to set choice.
 	V_2()
-	// getter for V_5 to set choice.
-	V_5()
-	// getter for V_1 to set choice.
-	V_1()
 }
 
 type Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum string
@@ -303,9 +322,19 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) Choice() Dhcpv6ClientOptionsDuidU
 	return Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for V_1 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)
+}
+
 // getter for V_3 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_3() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_3)
+}
+
+// getter for V_5 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
 }
 
 // getter for V_4 to set choice
@@ -316,16 +345,6 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_4() {
 // getter for V_2 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_2() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_2)
-}
-
-// getter for V_5 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
-}
-
-// getter for V_1 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)
 }
 
 // The version values are from 1 to 5 in the most significant 4 bits of the timestamp (bits 4 through 7 of the  time_hi_and_version field).

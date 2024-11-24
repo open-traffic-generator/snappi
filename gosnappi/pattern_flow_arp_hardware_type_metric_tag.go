@@ -47,6 +47,8 @@ type marshalPatternFlowArpHardwareTypeMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowArpHardwareTypeMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowArpHardwareTypeMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowArpHardwareTypeMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowArpHardwareTypeMetricTag) FromYaml(value string) er
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowArpHardwareTypeMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowArpHardwareTypeMetricTag) ToJson() (string, error) {

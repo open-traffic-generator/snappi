@@ -47,6 +47,8 @@ type marshalPatternFlowGtpExtensionExtensionLengthCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpExtensionExtensionLengthCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowGtpExtensionExtensionLengthCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpExtensionExtensionLengthCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowGtpExtensionExtensionLengthCounter) FromYaml(value 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowGtpExtensionExtensionLengthCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpExtensionExtensionLengthCounter) ToJson() (string, error) {

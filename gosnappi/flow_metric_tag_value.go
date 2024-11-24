@@ -47,6 +47,8 @@ type marshalFlowMetricTagValue interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowMetricTagValue to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowMetricTagValue to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowMetricTagValue struct {
@@ -164,6 +166,23 @@ func (m *unMarshalflowMetricTagValue) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowMetricTagValue) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowMetricTagValue) ToJson() (string, error) {

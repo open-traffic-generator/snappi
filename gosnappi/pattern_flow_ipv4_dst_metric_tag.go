@@ -47,6 +47,8 @@ type marshalPatternFlowIpv4DstMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4DstMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIpv4DstMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4DstMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIpv4DstMetricTag) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIpv4DstMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4DstMetricTag) ToJson() (string, error) {

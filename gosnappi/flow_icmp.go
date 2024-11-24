@@ -48,6 +48,8 @@ type marshalFlowIcmp interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowIcmp to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowIcmp to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowIcmp struct {
@@ -165,6 +167,23 @@ func (m *unMarshalflowIcmp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowIcmp) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowIcmp) ToJson() (string, error) {

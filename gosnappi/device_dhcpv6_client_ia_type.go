@@ -50,6 +50,8 @@ type marshalDeviceDhcpv6ClientIaType interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceDhcpv6ClientIaType to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals DeviceDhcpv6ClientIaType to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceDhcpv6ClientIaType struct {
@@ -167,6 +169,23 @@ func (m *unMarshaldeviceDhcpv6ClientIaType) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldeviceDhcpv6ClientIaType) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldeviceDhcpv6ClientIaType) ToJson() (string, error) {

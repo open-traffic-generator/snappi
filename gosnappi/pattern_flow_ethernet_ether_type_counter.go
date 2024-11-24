@@ -47,6 +47,8 @@ type marshalPatternFlowEthernetEtherTypeCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowEthernetEtherTypeCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowEthernetEtherTypeCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowEthernetEtherTypeCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowEthernetEtherTypeCounter) FromYaml(value string) er
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowEthernetEtherTypeCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowEthernetEtherTypeCounter) ToJson() (string, error) {

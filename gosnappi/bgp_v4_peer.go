@@ -57,6 +57,8 @@ type marshalBgpV4Peer interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpV4Peer to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpV4Peer to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpV4Peer struct {
@@ -174,6 +176,23 @@ func (m *unMarshalbgpV4Peer) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpV4Peer) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpV4Peer) ToJson() (string, error) {

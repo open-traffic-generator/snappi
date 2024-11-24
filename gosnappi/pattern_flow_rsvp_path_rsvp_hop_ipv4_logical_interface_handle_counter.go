@@ -47,6 +47,8 @@ type marshalPatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter interfac
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter) F
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandleCounter) ToJson() (string, error) {

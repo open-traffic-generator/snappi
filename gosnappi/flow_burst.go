@@ -48,6 +48,8 @@ type marshalFlowBurst interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowBurst to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowBurst to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowBurst struct {
@@ -165,6 +167,23 @@ func (m *unMarshalflowBurst) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowBurst) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowBurst) ToJson() (string, error) {

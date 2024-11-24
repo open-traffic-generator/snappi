@@ -47,6 +47,8 @@ type marshalPatternFlowIpv4MoreFragmentsCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4MoreFragmentsCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIpv4MoreFragmentsCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4MoreFragmentsCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIpv4MoreFragmentsCounter) FromYaml(value string) er
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIpv4MoreFragmentsCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4MoreFragmentsCounter) ToJson() (string, error) {

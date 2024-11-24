@@ -47,6 +47,8 @@ type marshalLayer1Ieee8021Qbb interface {
 	ToYaml() (string, error)
 	// ToJson marshals Layer1Ieee8021Qbb to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Layer1Ieee8021Qbb to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallayer1Ieee8021Qbb struct {
@@ -164,6 +166,23 @@ func (m *unMarshallayer1Ieee8021Qbb) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallayer1Ieee8021Qbb) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallayer1Ieee8021Qbb) ToJson() (string, error) {

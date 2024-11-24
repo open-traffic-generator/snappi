@@ -47,6 +47,8 @@ type marshalPatternFlowGtpv2PiggybackingFlagMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpv2PiggybackingFlagMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowGtpv2PiggybackingFlagMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpv2PiggybackingFlagMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowGtpv2PiggybackingFlagMetricTag) FromYaml(value stri
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowGtpv2PiggybackingFlagMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpv2PiggybackingFlagMetricTag) ToJson() (string, error) {

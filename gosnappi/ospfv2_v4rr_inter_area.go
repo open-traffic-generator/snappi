@@ -48,6 +48,8 @@ type marshalOspfv2V4RRInterArea interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2V4RRInterArea to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv2V4RRInterArea to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2V4RRInterArea struct {
@@ -165,6 +167,23 @@ func (m *unMarshalospfv2V4RRInterArea) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv2V4RRInterArea) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv2V4RRInterArea) ToJson() (string, error) {

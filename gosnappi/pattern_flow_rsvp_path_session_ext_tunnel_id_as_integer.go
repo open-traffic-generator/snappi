@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathSessionExtTunnelIdAsInteger interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSessionExtTunnelIdAsInteger to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathSessionExtTunnelIdAsInteger to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSessionExtTunnelIdAsInteger struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathSessionExtTunnelIdAsInteger) FromYaml(value
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathSessionExtTunnelIdAsInteger) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSessionExtTunnelIdAsInteger) ToJson() (string, error) {

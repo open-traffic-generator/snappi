@@ -48,6 +48,8 @@ type marshalFlowRSVPPathRecordRouteType1 interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathRecordRouteType1 to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPPathRecordRouteType1 to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathRecordRouteType1 struct {
@@ -165,6 +167,23 @@ func (m *unMarshalflowRSVPPathRecordRouteType1) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowRSVPPathRecordRouteType1) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathRecordRouteType1) ToJson() (string, error) {

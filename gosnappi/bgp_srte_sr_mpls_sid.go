@@ -47,6 +47,8 @@ type marshalBgpSrteSrMplsSid interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrteSrMplsSid to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpSrteSrMplsSid to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrteSrMplsSid struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpSrteSrMplsSid) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpSrteSrMplsSid) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpSrteSrMplsSid) ToJson() (string, error) {

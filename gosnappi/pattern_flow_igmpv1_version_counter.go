@@ -47,6 +47,8 @@ type marshalPatternFlowIgmpv1VersionCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIgmpv1VersionCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIgmpv1VersionCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIgmpv1VersionCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIgmpv1VersionCounter) FromYaml(value string) error 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIgmpv1VersionCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIgmpv1VersionCounter) ToJson() (string, error) {

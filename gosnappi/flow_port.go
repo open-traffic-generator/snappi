@@ -47,6 +47,8 @@ type marshalFlowPort interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowPort to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowPort to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowPort struct {
@@ -164,6 +166,23 @@ func (m *unMarshalflowPort) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowPort) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowPort) ToJson() (string, error) {

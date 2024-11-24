@@ -47,6 +47,8 @@ type marshalPatternFlowIpv6PayloadLengthCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv6PayloadLengthCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIpv6PayloadLengthCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv6PayloadLengthCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIpv6PayloadLengthCounter) FromYaml(value string) er
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIpv6PayloadLengthCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv6PayloadLengthCounter) ToJson() (string, error) {

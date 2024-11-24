@@ -47,6 +47,8 @@ type marshalPatternFlowRSVPPathRecordRouteType1LabelFlags interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathRecordRouteType1LabelFlags to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathRecordRouteType1LabelFlags to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathRecordRouteType1LabelFlags struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowRSVPPathRecordRouteType1LabelFlags) FromYaml(value 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathRecordRouteType1LabelFlags) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathRecordRouteType1LabelFlags) ToJson() (string, error) {

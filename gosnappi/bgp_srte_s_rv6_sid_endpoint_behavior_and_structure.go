@@ -47,6 +47,8 @@ type marshalBgpSrteSRv6SIDEndpointBehaviorAndStructure interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrteSRv6SIDEndpointBehaviorAndStructure to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpSrteSRv6SIDEndpointBehaviorAndStructure to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrteSRv6SIDEndpointBehaviorAndStructure struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpSrteSRv6SIDEndpointBehaviorAndStructure) FromYaml(value str
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpSrteSRv6SIDEndpointBehaviorAndStructure) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpSrteSRv6SIDEndpointBehaviorAndStructure) ToJson() (string, error) {

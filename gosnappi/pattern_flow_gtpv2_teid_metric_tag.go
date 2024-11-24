@@ -47,6 +47,8 @@ type marshalPatternFlowGtpv2TeidMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpv2TeidMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowGtpv2TeidMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpv2TeidMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowGtpv2TeidMetricTag) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowGtpv2TeidMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpv2TeidMetricTag) ToJson() (string, error) {

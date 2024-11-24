@@ -48,6 +48,8 @@ type marshalDeviceEthernetBase interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceEthernetBase to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals DeviceEthernetBase to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceEthernetBase struct {
@@ -165,6 +167,23 @@ func (m *unMarshaldeviceEthernetBase) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldeviceEthernetBase) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldeviceEthernetBase) ToJson() (string, error) {

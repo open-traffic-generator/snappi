@@ -47,6 +47,8 @@ type marshalFlowRSVPLspTunnelFlag interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPLspTunnelFlag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPLspTunnelFlag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPLspTunnelFlag struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowRSVPLspTunnelFlag) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalflowRSVPLspTunnelFlag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalflowRSVPLspTunnelFlag) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -272,10 +291,10 @@ type FlowRSVPLspTunnelFlag interface {
 	HasChoice() bool
 	// getter for SeStyleDesired to set choice.
 	SeStyleDesired()
-	// getter for LocalProtectionDesired to set choice.
-	LocalProtectionDesired()
 	// getter for LabelRecordingDesired to set choice.
 	LabelRecordingDesired()
+	// getter for LocalProtectionDesired to set choice.
+	LocalProtectionDesired()
 }
 
 type FlowRSVPLspTunnelFlagChoiceEnum string
@@ -300,14 +319,14 @@ func (obj *flowRSVPLspTunnelFlag) SeStyleDesired() {
 	obj.setChoice(FlowRSVPLspTunnelFlagChoice.SE_STYLE_DESIRED)
 }
 
-// getter for LocalProtectionDesired to set choice
-func (obj *flowRSVPLspTunnelFlag) LocalProtectionDesired() {
-	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
-}
-
 // getter for LabelRecordingDesired to set choice
 func (obj *flowRSVPLspTunnelFlag) LabelRecordingDesired() {
 	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LABEL_RECORDING_DESIRED)
+}
+
+// getter for LocalProtectionDesired to set choice
+func (obj *flowRSVPLspTunnelFlag) LocalProtectionDesired() {
+	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
 }
 
 // description is TBD

@@ -48,6 +48,8 @@ type marshalConfigUpdate interface {
 	ToYaml() (string, error)
 	// ToJson marshals ConfigUpdate to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals ConfigUpdate to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalconfigUpdate struct {
@@ -165,6 +167,23 @@ func (m *unMarshalconfigUpdate) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalconfigUpdate) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalconfigUpdate) ToJson() (string, error) {

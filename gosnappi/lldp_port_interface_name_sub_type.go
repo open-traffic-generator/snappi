@@ -47,6 +47,8 @@ type marshalLldpPortInterfaceNameSubType interface {
 	ToYaml() (string, error)
 	// ToJson marshals LldpPortInterfaceNameSubType to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals LldpPortInterfaceNameSubType to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallldpPortInterfaceNameSubType struct {
@@ -164,6 +166,23 @@ func (m *unMarshallldpPortInterfaceNameSubType) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallldpPortInterfaceNameSubType) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallldpPortInterfaceNameSubType) ToJson() (string, error) {

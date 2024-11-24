@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec int
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTsp
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameterIdTokenBucketTspec) ToJson() (string, error) {

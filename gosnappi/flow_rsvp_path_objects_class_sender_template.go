@@ -49,6 +49,8 @@ type marshalFlowRSVPPathObjectsClassSenderTemplate interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathObjectsClassSenderTemplate to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPPathObjectsClassSenderTemplate to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathObjectsClassSenderTemplate struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowRSVPPathObjectsClassSenderTemplate) FromYaml(value string)
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowRSVPPathObjectsClassSenderTemplate) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathObjectsClassSenderTemplate) ToJson() (string, error) {

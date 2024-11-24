@@ -47,6 +47,8 @@ type marshalPortMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals PortMetricsRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PortMetricsRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalportMetricsRequest struct {
@@ -164,6 +166,23 @@ func (m *unMarshalportMetricsRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalportMetricsRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalportMetricsRequest) ToJson() (string, error) {

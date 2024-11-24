@@ -48,6 +48,8 @@ type marshalStateTraffic interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateTraffic to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals StateTraffic to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateTraffic struct {
@@ -165,6 +167,23 @@ func (m *unMarshalstateTraffic) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalstateTraffic) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalstateTraffic) ToJson() (string, error) {
