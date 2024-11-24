@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.1.0
+/* Open Traffic Generator API 1.17.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -223,8 +223,9 @@ message LagPortLacp {
 // Base Ethernet interface.
 message DeviceEthernetBase {
 
-  // Media Access Control address.
-  // required = true
+  // Media Access Control address.The implementation should ensure that the 'mac' field
+  // is explicitly configured by the user for  all types of interfaces as denoted by 'connection'
+  // attribute except 'simulated_link' where 'mac' is not mandatory.
   optional string mac = 1;
 
   // Maximum Transmission Unit.
@@ -240,7 +241,9 @@ message DeviceEthernetBase {
   optional string name = 4;
 }
 
-// An Ethernet interface with IPv4 and IPv6 addresses.
+// An Ethernet interface with IPv4 and IPv6 addresses. The implementation should ensure
+// that the 'mac' field is explicitly configured by the user for  all types of interfaces
+// as denoted by 'connection' attribute except 'simulated_link' where MAC is not mandatory.
 message DeviceEthernet {
 
   // Device connection to physical, LAG or another device.
@@ -253,8 +256,9 @@ message DeviceEthernet {
   // The Link Local IPv6 address will be automatically generated.
   repeated DeviceIpv6 ipv6_addresses = 4;
 
-  // Media Access Control address.
-  // required = true
+  // Media Access Control address.The implementation should ensure that the 'mac' field
+  // is explicitly configured by the user for  all types of interfaces as denoted by 'connection'
+  // attribute except 'simulated_link' where 'mac' is not mandatory.
   optional string mac = 5;
 
   // Maximum Transmission Unit.
@@ -268,9 +272,16 @@ message DeviceEthernet {
   // objects.
   // required = true
   optional string name = 8;
+
+  // List of DHCPv4 Clients Configuration.
+  repeated DeviceDhcpv4client dhcpv4_interfaces = 9;
+
+  // List of DHCPv6 Clients Configuration.
+  repeated DeviceDhcpv6client dhcpv6_interfaces = 10;
 }
 
-// Ethernet interface connection to a port, LAG or VXLAN tunnel.
+// Ethernet interface connection to a port, LAG, VXLAN tunnel or a Simulated Internal
+// Link used to create simulated topologies behind an emulated router.
 message EthernetConnection {
 
   message Choice {
@@ -279,9 +290,10 @@ message EthernetConnection {
       port_name = 1;
       lag_name = 2;
       vxlan_name = 3;
+      simulated_link = 4;
     }
   }
-  // port_name, lag_name or vxlan_name
+  // port_name, lag_name, vxlan_name or simulated_link
   optional Choice.Enum choice = 1;
 
   // Name of the port that the Ethernet interface is configured on.
@@ -319,6 +331,67 @@ message EthernetConnection {
   // - #/components/schemas/Vxlan.V6Tunnel/properties/name
   // 
   optional string vxlan_name = 4;
+
+  // Description missing in models
+  EthernetSimulatedLink simulated_link = 5;
+}
+
+// Details of the internal link which can be used to create simulated device topologies
+// behind an emulated router. MAC, VLAN and MTU information for the internal links are
+// not used for purposes of emulating Simulated Topologies ( e.g. by ISIS Emulated Router
+// behind which this is configured )
+message EthernetSimulatedLink {
+
+  // Name of the remote end of the simulated interface which also must be a simulated_link
+  // on a device which might be acting either as an unconnected device in a simulated
+  // topology
+  // ( all ethernet links of type simulated_link ) or an emulated device connected to
+  // the Device Under Test (has at atleast one ethernet interface with connection to the
+  // port or
+  // lag connected to the DUT)
+  // 
+  // x-constraint:
+  // - #/components/schemas/Device.Ethernet/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - #/components/schemas/Device.Ethernet/properties/name
+  // 
+  optional string remote_simulated_link = 1;
+
+  message LinkType {
+    enum Enum {
+      unspecified = 0;
+      primary = 1;
+      secondary = 2;
+    }
+  }
+  // By default, simulated links are treated as Primary links , which means that the intention
+  // is for connected device to advertise this and full topology of devices connected
+  // to it.
+  // e.g. when advertised as ISIS Simulated Topology.
+  // 
+  // All simulated links inside one topology subset would normally can point to only other
+  // unconnected devices in the same topology or to the 'root' emulated device.
+  // If a link is designated as secondary , only that link information will be advertised
+  // by the IGP e.g. ISIS , and not the entire topology behind it.
+  // The optional secondary option allows emulation of external link scenarios where a
+  // simulated device (e.g. part of a ISIS simulated topology ) is advertised as reachable
+  // part of the topology
+  // by the emulated router behind which this is configured , as well as the other end
+  // of the secondary link which could be
+  // - 1) either a simulated device behind a different emulated router.
+  // - 2) or an emulated router on same or different port.
+  // This allows emulation of scenarios where one device/router is emulated to be reachable
+  // from different Emulated Routers connected to the Device Under Test. (e.g. for FRR
+  // scenarios)
+  // 
+  // If an implementation does not support multiple primary links from same simulated
+  // topology i.e. full topology advertised via multiple emulated routers, it should return
+  // an error
+  // during set_config operation with such a topology.
+  // default = LinkType.Enum.primary
+  optional LinkType.Enum link_type = 2;
 }
 
 // Emulated VLAN protocol.
@@ -506,6 +579,665 @@ message DeviceIpv6GatewayMAC {
   // Description missing in models
   // default = 00:00:00:00:00:00
   optional string value = 3;
+}
+
+// Configuration for emulated DHCPv4 Client on a single Interface. https://www.rfc-editor.org/rfc/rfc2131.html
+message DeviceDhcpv4client {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      first_server = 1;
+      server_address = 2;
+    }
+  }
+  // The client receives one or more DHCPOFFER messages from one or more servers and client
+  // may choose to wait for multiple responses.
+  // The client chooses one server from which to request configuration
+  // parameters, based on the configuration parameters offered in the DHCPOFFER messages.
+  // - first_server: if selected, the subnet accepts the IP addresses offered by the first
+  // server to respond with an offer of IP addresses.
+  // - server_address: The address of the DHCP server from which the subnet will accept
+  // IP addresses.
+  // default = Choice.Enum.first_server
+  optional Choice.Enum choice = 2;
+
+  // The address of the DHCP server.
+  optional string server_address = 4;
+
+  // If the broadcast bit is set, then the server and relay agent broadcast DHCPOFFER
+  // and DHCPACK messages.
+  // default = False
+  optional bool broadcast = 5;
+
+  // Optional parameters field request list of DHCPv4 Client.
+  Dhcpv4ClientParams parameters_request_list = 6;
+}
+
+// Configuration Parameter request list by emulated DHCPv4 Client.
+message Dhcpv4ClientParams {
+
+  // Request for the subnet mask option specifies the client's subnet mask as per RFC950.
+  // 
+  // default = True
+  optional bool subnet_mask = 1;
+
+  // Request for the router option that specifies a list of IP addresses for routers on
+  // the client's subnet.
+  // default = True
+  optional bool router = 2;
+
+  // Request for the renewal timer, T1. When the timer expires, the client transitions
+  // from the BOUND state to the RENEWING state.
+  // default = False
+  optional bool renewal_timer = 3;
+
+  // Request for the rebinding timer (T2). When expires, the client transitions to the
+  // REBINDING state.
+  // default = False
+  optional bool rebinding_timer = 4;
+}
+
+// Configuration for emulated DHCPv6 Client on a single Interface. If the DHCPv6 Client
+// receives one or more  DHCPv6 ADVERTISE messages from one or more servers then the
+// client chooses one server from which to request  configuration parameters, based
+// on the configuration parameters offered by the server in the DHCPv6 ADVERTISE  messages.
+// If all configuration parameters match then the first server will be chosen. https://www.rfc-editor.org/rfc/rfc8415.html
+message DeviceDhcpv6client {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // If Rapid Commit is set, client initiates Rapid Commit two-message exchange by including
+  // Rapid Commit option  in Solicit message.
+  // default = False
+  optional bool rapid_commit = 2;
+
+  // Each IA has an associated IAID. Differnet IA options represent different types of
+  // IPv6 addresses and parameters
+  // accepted by DHCPv6 clients each used in different context by an IPv6 node.
+  DeviceDhcpv6clientIaType ia_type = 3;
+
+  // Each DHCP client and server has a DUID. DHCP clients and servers use DUIDs to identify
+  // each other.
+  DeviceDhcpv6clientDuidType duid_type = 4;
+
+  // The options requested by a client from a server in the options request option.
+  DeviceDhcpv6ClientOptionsRequest options_request = 5;
+
+  // Optional DHCPv4 Client options that are sent in Dhcp client messages.
+  DeviceDhcpv6ClientOptions options = 6;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptionsRequest {
+
+  // List of options requested by a client from a server.
+  repeated Dhcpv6ClientOptionsOptionsRequest request = 1;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 2;
+}
+
+// DHCP client options, these configured options are sent in Dhcp client messages.
+message DeviceDhcpv6ClientOptions {
+
+  // A client uses multicast to reach all servers or an individual server. An individual
+  // server is indicated by
+  // specifying that server's DUID in a Server Identifier option in the client's message
+  // (all servers will receive
+  // this message but only the indicated server will respond). All servers are indicated
+  // by not supplying this option.
+  Dhcpv6ClientOptionsServerIdentifier server_identifier = 1;
+
+  // The vendor class option is used by a client to identify the vendor that manufactured
+  // the hardware on which
+  // the client is running. The information contained in the data area of this option
+  // is contained in one or more
+  // opaque fields that identify details of the hardware configuration.
+  Dhcpv6ClientOptionsVendorClass vendor_class = 2;
+
+  // This option is used by clients to exchange vendor-specific information with servers.
+  Dhcpv6ClientOptionsVendorInfo vendor_info = 3;
+
+  // DHCPv6 server needs to know the FQDN of the client for the addresses for the client's
+  // IA_NA bindings in order to
+  // update the IPv6-address-to-FQDN mapping. This option allows the client to convey
+  // its FQDN to the server. The Client
+  // FQDN option also contains Flags that DHCPv6 clients and servers use to negotiate
+  // who does which update.
+  Dhcpv6ClientOptionsFqdn fqdn = 4;
+}
+
+// Description missing in models
+message DeviceDhcpv6clientIaType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      iana = 1;
+      iata = 2;
+      iapd = 3;
+      ianapd = 4;
+    }
+  }
+  // Identity Association: Each IA has an associated IAID. IA_NA and IA_TA options represent
+  // different types of  IPv6 addresses and parameters accepted by DHCPv6 clients each
+  // used in different context by an IPv6 node. IA_NA  is the Identity Association for
+  // Non-temporary Addresses option. IA_TA is the Identity Association for Temporary
+  // Addresses option. IA_PD and IA_NAPD options represent one or more IPv6 prefix and
+  // parameters. IA_PD is the Identity  Association for Prefix Delegation and IA_NAPD
+  // s the Identity Association for Temporary Prefix Delegation.
+  // default = Choice.Enum.iana
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue iana = 2;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue iapd = 3;
+
+  // Description missing in models
+  DeviceDhcpv6clientIaTimeValue ianapd = 4;
+}
+
+// The container for the suggested times at which the client contacts the server or
+// any available server.
+message DeviceDhcpv6clientIaTimeValue {
+
+  // The suggested time at which the client contacts the server from which the addresses
+  // were obtained to  extend the lifetimes of the addresses assigned. T1 is a time duration
+  // relative to the current time expressed  in units of seconds. If set to 0 server will
+  // ignore it. If the maximum value is specified it means infinite time.
+  // default = 302400
+  optional uint32 t1 = 1;
+
+  // The suggested time at which the client contacts any available server to extend the
+  // lifetimes of the addresses assigned.  T2 is a time duration relative to the current
+  // time expressed in units of seconds. If set to 0 server will ignore it. If  the maximum
+  // value is specified it means infinite time
+  // default = 483840
+  optional uint32 t2 = 2;
+}
+
+// Description missing in models
+message DeviceDhcpv6clientDuidType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      llt = 1;
+      en = 2;
+      ll = 3;
+    }
+  }
+  // Each DHCP client and server has a DUID. DHCP clients use DUIDs to identify a server
+  // in messages where a server needs  to be identified.
+  // default = Choice.Enum.llt
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceDhcpv6clientNoDuid llt = 2;
+
+  // Description missing in models
+  DeviceDhcpv6clientDuidValue en = 3;
+
+  // Description missing in models
+  DeviceDhcpv6clientNoDuid ll = 4;
+}
+
+// The container for the DUID-EN. This consists of the 4-octet vendor's registered Private
+// Enterprise Number  as maintained by IANA [IANA-PEN] followed by a unique identifier
+// assigned by the vendor.
+message DeviceDhcpv6clientDuidValue {
+
+  // 4-octet vendor's registered Private Enterprise Number as maintained by IANA [IANA-PEN].
+  // default = 10
+  optional uint32 enterprise_id = 1;
+
+  // Unique identifier assigned by the vendor.
+  // default = 10
+  optional uint32 vendor_id = 2;
+}
+
+// The container for DUID-LL and DUID-LLT.
+message DeviceDhcpv6clientNoDuid {
+}
+
+// Description missing in models
+message Dhcpv6ClientOptionsServerIdentifier {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      duid_llt = 1;
+      duid_en = 2;
+      duid_ll = 3;
+      duid_uuid = 4;
+    }
+  }
+  // The Identifier option is used to carry a DUID. The option code is 2. The server identifier
+  // identifies  a server. This option is used when client wants to contact a particular
+  // server.
+  // default = Choice.Enum.duid_ll
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidLlt duid_llt = 2;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidEn duid_en = 3;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidLl duid_ll = 4;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsDuidUuid duid_uuid = 5;
+}
+
+// DUID based on Link Layer address plus time. Hardware Type will be auto assigned to
+// ethernet type.
+message Dhcpv6ClientOptionsDuidLlt {
+
+  // The time value is the time that the DUID is generated represented in seconds since
+  // midnight (UTC), January 1,
+  // 2000, modulo 2^32. The DUID generatation time will the current time when dhcpv6 client
+  // contacts the server.
+  // required = true
+  optional uint32 time = 1;
+
+  // The link-layer address is stored in canonical form, as described in RFC 2464.
+  // 
+  // required = true
+  Dhcpv6ClientOptionsLinkLayerAddress link_layer_address = 2;
+}
+
+// DUID assigned by vendor based on enterprise number.
+message Dhcpv6ClientOptionsDuidEn {
+
+  // Vendor's registered private enterprise number as maintained by IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // The unique identifier assigned by the vendor.
+  // required = true
+  optional string identifier = 2;
+}
+
+// DUID based on Link Layer address. Hardware Type will be auto assigned to ethernet
+// type.
+message Dhcpv6ClientOptionsDuidLl {
+
+  // The link-layer address is stored in canonical form, as described in RFC 2464.
+  // 
+  // required = true
+  Dhcpv6ClientOptionsLinkLayerAddress link_layer_address = 1;
+}
+
+// DUID embedded a Universally Unique IDentifier (UUID). A UUID is an identifier that
+// is unique across both  space and time, with respect to the space of all UUIDs.
+message Dhcpv6ClientOptionsDuidUuid {
+
+  // The version number is in the most significant 4 bits of the timestamp (bits 4 through
+  // 7 of the time_hi_and_version field).
+  Dhcpv6ClientOptionsDuidUuidVersion version = 1;
+
+  // The variant field determines the layout of the UUID. It is multiplexed with clock_seq_hi_and_reserved.
+  // 
+  Dhcpv6ClientOptionsDuidUuidVariant variant = 2;
+
+  // The low field of the timestamp.
+  // default = 0
+  optional uint32 time_low = 3;
+
+  // The middle field of the timestamp.
+  // default = 0
+  optional uint32 time_mid = 4;
+
+  // The high field of the timestamp multiplexed with the version number.
+  // default = 0
+  optional uint32 time_hi_and_version = 5;
+
+  // The high field of the clock sequence multiplexed with the variant.
+  // default = 0
+  optional uint32 clock_seq_hi_and_reserved = 6;
+
+  // The low field of the clock sequence.
+  // default = 0
+  optional uint32 clock_seq_low = 7;
+
+  // The spatially unique node identifier.
+  // default = 00:00:00:00:00:00
+  optional string node = 8;
+}
+
+// The version number is in the most significant 4 bits of the timestamp (bits 4 through
+// 7 of the time_hi_and_version field).
+message Dhcpv6ClientOptionsDuidUuidVersion {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      v_1 = 1;
+      v_2 = 2;
+      v_3 = 3;
+      v_4 = 4;
+      v_5 = 5;
+    }
+  }
+  // The version values are from 1 to 5 in the most significant 4 bits of the timestamp
+  // (bits 4 through 7 of the  time_hi_and_version field).
+  // default = Choice.Enum.v_1
+  optional Choice.Enum choice = 1;
+}
+
+// The variant field determines the layout of the UUID.  That is, the interpretation
+// of all other bits in the  UUID depends on the setting of the bits in the variant
+// field).
+message Dhcpv6ClientOptionsDuidUuidVariant {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ncs = 1;
+      dce = 2;
+      guid = 3;
+      var_reserved = 4;
+    }
+  }
+  // The current variants are ncs, dce,microsoft guid and reserved.
+  // default = Choice.Enum.ncs
+  optional Choice.Enum choice = 1;
+}
+
+// The link-layer address configured in DUID llt or DUID ll.
+message Dhcpv6ClientOptionsLinkLayerAddress {
+
+  // The MAC address that becomes part of DUID llt or DUID ll.
+  // required = true
+  optional string value = 3;
+}
+
+// Description missing in models
+message Dhcpv6ClientOptionsOptionsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      vendor_information = 1;
+      name_servers = 2;
+      fqdn = 3;
+      bootfile_url = 4;
+      sztp = 5;
+      custom = 6;
+    }
+  }
+  // The Option Request option is used to identify a list of options in a message between
+  // a client and a server. The  option code is 6. - Vendor_specific information option,
+  // requested by clients for vendor-specific informations from servers. - DNS Recursive
+  // Name Server Option, requested by clients to get the list ofIPv6 addresses of DNS
+  // recursive name
+  // servers to which DNS queries may be sent by the client resolver in order of preference.
+  // - Client FQDN option - indicates whether the client or the DHCP server should update
+  // DNS with the AAAA record
+  // corresponding to the assigned IPv6 address and the FQDN provided in this option.
+  // The DHCP server always updates
+  // the PTR record.
+  // - bootfile_url, if client is configured for network booting then the client must
+  // use this option to obtain the boot
+  // file url from the server.
+  // - sztp. Securely provision a networking device when it is booting in a factory-default
+  // state.
+  // default = Choice.Enum.vendor_information
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ClientOptionsCustom custom = 2;
+}
+
+// The Custom option is used to provide a not so well known option in the message between
+// a client and a server.
+message Dhcpv6ClientOptionsCustom {
+
+  // The type of the Custom option TLV.
+  // required = true
+  optional uint32 type = 1;
+}
+
+// This option is used by a client to identify the vendor that manufactured the hardware
+// on which the client is running. The option code is 16.
+message Dhcpv6ClientOptionsVendorClass {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // The opaque data representing the hardware configuration of the host on which the
+  // client is running. Examples of  class data instances might include the version of
+  // the operating system the client is running or the amount of memory  installed on
+  // the client.
+  repeated string class_data = 2;
+
+  // The dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The dhcpv6 client messages where the option will be included. If all is selected
+// the selected option will be added in the all the Dhcpv6 client messages, else based
+// on the selection in particular Dhcpv6 client messages the option will be included.
+message Dhcpv6ClientOptionsIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  repeated Dhcpv6ClientOptionsMessageType msg_types = 2;
+}
+
+// The dhcpv6 client messages where the option will be included.
+message Dhcpv6ClientOptionsMessageType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      solicit = 1;
+      request = 2;
+      inform_request = 3;
+      release = 4;
+      renew = 5;
+      rebind = 6;
+    }
+  }
+  // The client message name where the option is included, by default it is all.
+  // default = Choice.Enum.solicit
+  optional Choice.Enum choice = 1;
+}
+
+// This option is used by clients to exchange vendor-specific information. The option
+// code is 17.
+message Dhcpv6ClientOptionsVendorInfo {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // An opaque object of octets,interpreted by vendor-specific code on the clients and
+  // servers.
+  repeated Dhcpv6OptionsVendorSpecificOptions option_data = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// This option is used by servers to exchange vendor-specific information. The option
+// code is 17.
+message Dhcpv6ServerOptionsVendorInfo {
+
+  // The vendor's registered Enterprise Number as registered with IANA.
+  // required = true
+  optional uint32 enterprise_number = 1;
+
+  // An opaque object of octets,interpreted by vendor-specific code on the clients and
+  // servers.
+  repeated Dhcpv6OptionsVendorSpecificOptions option_data = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  // required = true
+  Dhcpv6ServerOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The dhcpv6 server messages where the option will be included. If all is selected
+// the selected option will be added  in the all the Dhcpv6 server messages, else based
+// on the selection in particular Dhcpv6 server messages the option  will be included.
+message Dhcpv6ServerOptionsIncludedMessages {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      msg_types = 2;
+    }
+  }
+  // The server message name where the option is included, by default it is all.
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // User must specify the Dhcpv6 message type.
+  repeated Dhcpv6ServerOptionsMessageType msg_types = 2;
+}
+
+// The dhcpv6 server messages where the option will be included.
+message Dhcpv6ServerOptionsMessageType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      advertise = 1;
+      reply = 2;
+      re_configure = 3;
+    }
+  }
+  // The server message name where the option is included, by default it is all.
+  // default = Choice.Enum.advertise
+  optional Choice.Enum choice = 1;
+}
+
+// The encapsulated vendor-specific options field is encoded as a sequence of code/length/value
+// fields of  identical format to the DHCP options field. The option codes are defined
+// by the vendor identified in the  enterprise-number field and are not managed by IANA.
+message Dhcpv6OptionsVendorSpecificOptions {
+
+  // The code for the encapsulated option.
+  // required = true
+  optional uint32 code = 1;
+
+  // The data for the encapsulated option.
+  // required = true
+  optional string data = 2;
+}
+
+// DHCPv6 server needs to know the FQDN of the client for the addresses for the client's
+// IA_NA bindings in order to update the IPv6-address-to-FQDN mapping. This option allows
+// the client to convey its FQDN to the server. The Client  FQDN option also contains
+// Flags that DHCPv6 clients and servers use to negotiate who does which updates. The
+// option code is 39.
+message Dhcpv6ClientOptionsFqdn {
+
+  // The S bit indicates whether the server should or should not perform the AAAA RR (FQDN-to-address)
+  // DNS updates.  A client sets the bit to 0 to indicate that the server should not perform
+  // the updates and 1 to indicate that the  server should perform the updates. The state
+  // of the bit in the reply from the server indicates the action to be  taken by the
+  // server. If it is 1, the server has taken responsibility for AAAA RR updates for the
+  // FQDN.
+  // default = True
+  optional bool flag_s = 1;
+
+  // The O bit indicates whether the server has overridden the client's preference for
+  // the S bit. A client must set this  bit to 0. A server must set this bit to 1 if the
+  // S bit in its reply to the client does not match the S bit received  from the client.
+  // default = False
+  optional bool flag_o = 2;
+
+  // The N bit indicates whether the server should not perform any DNS updates. A client
+  // sets this bit to 0 to request that  the server should perform updates (the PTR RR
+  // and possibly the AAAA RR based on the S bit) or to 1 to request that the  server
+  // should not perform any DNS updates. A server sets the N bit to indicate whether the
+  // server shall (0) or shall not (1)  perform DNS updates. If the N bit is 1, the S
+  // bit MUST be 0.
+  // default = False
+  optional bool flag_n = 3;
+
+  // The Domain Name part of the option carries all or part of the FQDN of a DHCPv6 client.
+  // A client MAY also leave the  Domain Name field empty if it desires the server to
+  // provide a name. A fully qualified domain name (FQDN) is the complete  address of
+  // an internet host or computer. It provides its exact location within the domain name
+  // system (DNS) by specifying  the hostname, domain name and top-level domain (TLD).
+  // An FQDN isn't the same as a URL but rather is a part of it that fully  identifies
+  // the server to which the request is addressed. An FQDN doesn't carry the TCP/IP protocol
+  // information, such as Hypertext  Transfer Protocol (HTTP) or Hypertext Transfer Protocol
+  // Secure (HTTPS), which is always used at the beginning of a URL. Therefore,  adding
+  // the prefix http:// or https:// to the FQDN turns it into a full URL. One example
+  // can be microsoft.com.
+  // required = true
+  optional string domain_name = 4;
+
+  // The list of dhcpv6 client messages where this option is included.
+  Dhcpv6ClientOptionsIncludedMessages associated_dhcp_messages = 5;
+}
+
+// The server sends this option to inform the client about a URL to a boot file. This
+// information is required for booting  over the network includes the details about
+// the server on which the boot files can be found, the protocol to be used for  the
+// download (for example,HTTP or TFTP, and the path and name of the boot file on the
+// server. The option code is 59. The URL will contain the network communication protocol,
+// a subdomain, a domain name, and its extension. If the host in the URL  is expressed
+// using an IPv6 address rather than a domain name, the address in the URL then must
+// be enclosed in [ and ]  characters, conforming to [RFC3986]. Eg of a boot file url
+// can be tftp://[xxxx:xxxx:xxxx:xxxx::xxxx]/mboot.efi.
+message Dhcpv6ServerOptionsBootfileUrl {
+
+  // The URL for the boot file. It must comply with STD 66 format.
+  // required = true
+  optional string url = 1;
+
+  // They are used to specify parameters for the boot file (similar to the command line
+  // arguments in most modern operating  systems). For example, these parameters could
+  // be used to specify the root file system of the OS kernel, or the location  from which
+  // a second-stage boot-loader program can download its configuration file.
+  repeated Dhcpv6ServerOptionsBootFileParams bootfile_params = 2;
+
+  // The list of dhcpv6 client messages where this option is included.
+  Dhcpv6ServerOptionsIncludedMessages associated_dhcp_messages = 3;
+}
+
+// The option code is 60. They are used to specify parameters for the boot file (similar
+// to the command line arguments in most  modern operating systems).  For example, these
+// parameters could be used to specify the root file system of the OS kernel, or  the
+// location from which a second-stage boot-loader program can download its configuration
+// file.
+message Dhcpv6ServerOptionsBootFileParams {
+
+  // UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
+  // required = true
+  optional string parameter = 1;
 }
 
 // A container for layer1 settings.
@@ -952,10 +1684,11 @@ message CaptureIpv6 {
   CaptureField dst = 8;
 }
 
-// A container for emulated interfaces, loopback interfaces and protocol configurations.
+// A container for emulated or simulated interfaces, loopback interfaces and protocol
+// configurations.
 message Device {
 
-  // Ethernet configuration for one or more emulated network interfaces.
+  // Ethernet configuration for one or more emulated or simulated network interfaces.
   repeated DeviceEthernet ethernets = 1;
 
   // IPv4 Loopback interface that can be attached to an Ethernet in the same device  or
@@ -984,6 +1717,12 @@ message Device {
 
   // The properties of an RSVP router and its children.
   DeviceRsvp rsvp = 8;
+
+  // The properties of DHCP Server and its children, such as DHCPv4, DHCPv6 servers.
+  DeviceDhcpServer dhcp_server = 9;
+
+  // Configuration for OSPFv2 router.
+  DeviceOspfv2Router ospfv2 = 10;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1049,7 +1788,10 @@ message DeviceIsisMultiInstance {
 message IsisInterface {
 
   // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces
-  // cannot share the same Ethernet.
+  // cannot share the same Ethernet. The underlying Ethernet Interface can an emulated
+  // or simulated interface. A simulated ethernet interface can be assumed to be connected
+  // by  a primary (internal to a simulated topology)  or a secondary link (connected
+  // to a device behind a different simulated topology).
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1731,7 +2473,10 @@ message DeviceBgpFiniteStateMachineError {
 }
 
 // In the absence of any fatal errors, a BGP peer can close its BGP connection by sending
-// the NOTIFICATION message with the  Error Code Cease.
+// the NOTIFICATION message with the  Error Code Cease. The 'hard_reset_code6_subcode9'
+// subcode for Cease Notification can be used to signal a hard reset that will indicate
+// that  Graceful Restart cannot be performed, even when Notification extensions to
+// Graceful Restart procedure is supported.
 message DeviceBgpCeaseError {
 
   message Subcode {
@@ -1745,7 +2490,8 @@ message DeviceBgpCeaseError {
       other_config_changes_code6_subcode6 = 6;
       connection_collision_resolution_code6_subcode7 = 7;
       out_of_resources_code6_subcode8 = 8;
-      bfd_session_down_code6_subcode9 = 9;
+      bfd_session_down_code6_subcode10 = 9;
+      hard_reset_code6_subcode9 = 10;
     }
   }
   // The Error Subcode to be sent to the peer in the Cease NOTIFICATION.
@@ -1866,17 +2612,19 @@ message BgpV4Peer {
 // Configuration for emulated BGPv4 peers and routes on a single IPv4 interface.
 message BgpV4Interface {
 
-  // The unique name of the IPv4 or Loopback IPv4 interface used as the source IP for
-  // this list of BGP peers.
+  // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the
+  // source IP for this list of BGP peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
   // required = true
   optional string ipv4_name = 1;
@@ -3975,6 +4723,14 @@ message BgpGracefulRestart {
   // only if 'enable_llgr' is set to 'true'.
   // default = 10
   optional uint32 stale_time = 4;
+
+  // If enabled, the N flag will be set in the Graceful Restart capability in the Open
+  // message.
+  // If both peers in a BGP connection has this enabled, Graceful Restart procedures are
+  // performed
+  // even if the peer goes down due to sending of a Notification Message as per RFC8538.
+  // default = True
+  optional bool enable_notification = 5;
 }
 
 // Ordered BGP Updates ( including both Advertise and Withdraws ) to be sent in the
@@ -4118,6 +4874,57 @@ message BgpNLRIPrefixPathId {
   optional uint32 value = 1;
 }
 
+// IPv4 Segment Routing Policy NLRI Prefix.
+message BgpIpv4SrPolicyNLRIPrefix {
+
+  // The 4-octet value uniquely identifying the policy in the context of <color, endpoint>
+  // tuple.  The distinguisher has no semantic value and is solely used by the SR Policy
+  // originator to make unique (from an NLRI perspective)  both for multiple candidate
+  // paths of the same SR Policy as well as candidate paths of different SR Policies
+  // (i.e. with different segment lists) with the same Color and Endpoint but meant for
+  // different headends.
+  // default = 1
+  optional uint32 distinguisher = 1;
+
+  // 4-octet value identifying (with the endpoint) the policy. The color is used to match
+  // the color of the destination  prefixes to steer traffic into the SR Policy as specified
+  // in section 8 of RFC9256.
+  // default = 1
+  optional uint32 color = 2;
+
+  // Identifies the endpoint of a policy.  The Endpoint is an IPv4 address and can be
+  // either a unicast or an unspecified address (0.0.0.0) as specified in section 2.1
+  // of RFC9256.
+  // default = 0.0.0.0
+  optional string endpoint = 3;
+}
+
+// One IPv6 Segment Routing Policy NLRI Prefix.
+message BgpIpv6SrPolicyNLRIPrefix {
+
+  // The 4-octet value uniquely identifying the policy in the context of <color, endpoint>
+  // tuple.  The distinguisher has no semantic value and is solely used by the SR Policy
+  // originator to make unique (from an NLRI perspective)  both for multiple candidate
+  // paths of the same SR Policy as well as candidate paths of different SR Policies
+  // (i.e. with different segment lists) with the same Color and Endpoint but meant for
+  // different headends.
+  // default = 1
+  optional uint32 distinguisher = 1;
+
+  // 4-octet value identifying (with the endpoint) the policy. The color is used to match
+  // the color of the destination  prefixes to steer traffic into the SR Policy as specified
+  // in section 8 of RFC9256.
+  // default = 1
+  optional uint32 color = 2;
+
+  // Identifies the endpoint of a policy.  The Endpoint may represent a single node or
+  // a set of nodes (e.g., an anycast address). The Endpoint is an IPv6 address and can
+  // be either a unicast or an unspecified address (0::0) as specified in section 2.1
+  // of RFC9256.
+  // default = 0::0
+  optional string endpoint = 3;
+}
+
 // Attributes carried in the Update packet alongwith the reach/unreach prefixes.
 message BgpAttributes {
 
@@ -4191,6 +4998,9 @@ message BgpAttributes {
   // of data in a format defined by the type and sub-type field. Extended communities
   // provide a larger range for grouping or categorizing communities.
   repeated BgpExtendedCommunity extended_communities = 14;
+
+  // Description missing in models
+  BgpAttributesTunnelEncapsulation tunnel_encapsulation = 15;
 
   // Description missing in models
   BgpAttributesMpReachNlri mp_reach = 16;
@@ -4505,6 +5315,9 @@ message BgpAttributesNextHopIpv6TwoAddresses {
 // The following AFI / SAFI combinations are supported:
 // - IPv4 Unicast with AFI as 1 and SAFI as 1
 // - IPv6 Unicast with AFI as 2 and SAFI as 1
+// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 ( draft-ietf-idr-sr-policy-safi-02
+// Section 2.1 )
+// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 message BgpAttributesMpReachNlri {
 
   // Description missing in models
@@ -4515,6 +5328,8 @@ message BgpAttributesMpReachNlri {
       unspecified = 0;
       ipv4_unicast = 1;
       ipv6_unicast = 2;
+      ipv4_srpolicy = 3;
+      ipv6_srpolicy = 4;
     }
   }
   // The AFI and SAFI to be sent in the MPREACH_NLRI in the Update.
@@ -4524,10 +5339,15 @@ message BgpAttributesMpReachNlri {
   // List of IPv4 prefixes being sent in the IPv4 Unicast MPREACH_NLRI .
   repeated BgpOneIpv4NLRIPrefix ipv4_unicast = 3;
 
-  // SAFI of the NLRI being sent in the Update.
-  // description: >-
   // List of IPv6 prefixes being sent in the IPv6 Unicast MPREACH_NLRI .
   repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 4;
+
+  // IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPREACH_NLRI .
+  BgpIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 5;
+
+  // IPv6 endpoint with Segment Routing Policy being sent in the IPv6 MPREACH_NLRI .
+  // 
+  BgpIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 6;
 }
 
 // The MP_UNREACH attribute is an optional attribute which can be included in the attributes
@@ -4535,6 +5355,9 @@ message BgpAttributesMpReachNlri {
 // The following AFI / SAFI combinations are supported:
 // - IPv4 Unicast with AFI as 1 and SAFI as 1
 // - IPv6 Unicast with AFI as 2 and SAFI as 1
+// - Segment Routing Policy for IPv4 Unicast with AFI as 1 and SAFI as 73 (draft-ietf-idr-sr-policy-safi-02
+// Section 2.1)
+// - Segment Routing Policy for IPv6 Unicast with AFI as 2 and SAFI as 73
 message BgpAttributesMpUnreachNlri {
 
   message Choice {
@@ -4542,6 +5365,8 @@ message BgpAttributesMpUnreachNlri {
       unspecified = 0;
       ipv4_unicast = 1;
       ipv6_unicast = 2;
+      ipv4_srpolicy = 3;
+      ipv6_srpolicy = 4;
     }
   }
   // The AFI and SAFI to be sent in the MPUNREACH_NLRI in the Update.
@@ -4550,10 +5375,15 @@ message BgpAttributesMpUnreachNlri {
   // List of IPv4 prefixes being sent in the IPv4 Unicast MPUNREACH_NLRI .
   repeated BgpOneIpv4NLRIPrefix ipv4_unicast = 2;
 
-  // SAFI of the NLRI being sent in the Update.
-  // description: >-
   // List of IPv6 prefixes being sent in the IPv6 Unicast MPUNREACH_NLRI .
   repeated BgpOneIpv6NLRIPrefix ipv6_unicast = 3;
+
+  // IPv4 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+  BgpIpv4SrPolicyNLRIPrefix ipv4_srpolicy = 4;
+
+  // IPv6 endpoint with Segment Routing Policy being sent in the IPv4 MPUNREACH_NLRI .
+  // 
+  BgpIpv6SrPolicyNLRIPrefix ipv6_srpolicy = 5;
 }
 
 // Optional MULTI_EXIT_DISCRIMINATOR attribute sent to the peer to help in the route
@@ -4588,6 +5418,683 @@ message BgpAttributesOriginatorId {
   // The value of the originator's Router Id.
   // default = 0.0.0.0
   optional string value = 1;
+}
+
+// The TUNNEL_ENCAPSULATION  attribute is used by a BGP speaker to inform other BGP
+// speakers how to encapsulate packets that need to be sent to it.
+// It is defined in RFC9012 and is assigned a Type code of 23.
+message BgpAttributesTunnelEncapsulation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      sr_policy = 1;
+    }
+  }
+  // Identifies a type of tunnel. The field contains values from the IANA registry BGP
+  // Tunnel Encapsulation Attribute Tunnel Types.
+  // default = Choice.Enum.sr_policy
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicy sr_policy = 2;
+}
+
+// Optional Segment Routing Policy information as defined in draft-ietf-idr-sr-policy-safi-02.
+// This information is carried in TUNNEL_ENCAPSULATION attribute with type set to  SR
+// Policy (15).
+message BgpAttributesSegmentRoutingPolicy {
+
+  // Description missing in models
+  BgpAttributesBsid binding_segment_identifier = 1;
+
+  // The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal
+  // the SRv6 Binding SID
+  // related information of an SR Policy candidate path.
+  // - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy
+  // encoding to indicate one
+  // or more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to
+  // be instantiated.
+  // - The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section
+  // 2.4.3 .
+  repeated BgpAttributesSrv6Bsid srv6_binding_segment_identifier = 2;
+
+  // Description missing in models
+  BgpAttributesSrPolicyPreference preference = 3;
+
+  // Description missing in models
+  BgpAttributesSrPolicyPriority priority = 4;
+
+  // Description missing in models
+  BgpAttributesSrPolicyPolicyName policy_name = 5;
+
+  // Description missing in models
+  BgpAttributesSrPolicyPolicyCandidateName policy_candidate_name = 6;
+
+  // Description missing in models
+  BgpAttributesSrPolicyExplicitNullPolicy explicit_null_label_policy = 7;
+
+  // Description missing in models
+  repeated BgpAttributesSrPolicySegmentList segment_list = 8;
+}
+
+// The Binding Segment Identifier is an optional sub-tlv of type 13 that can be sent
+// with a SR Policy
+// Tunnel Encapsulation attribute.
+// When the active candidate path has a specified Binding Segment Identifier, the SR
+// Policy uses that
+// BSID if this value (label in MPLS, IPv6 address in SRv6) is available.
+// - The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section
+// 2.4.2 .
+// - It is recommended that if SRv6 Binding SID is desired to be signalled, the SRv6
+// Binding SID sub-TLV that enables
+// the specification of the SRv6 Endpoint Behavior should be used.
+message BgpAttributesBsid {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      mpls = 1;
+      srv6 = 2;
+    }
+  }
+  // The type of Segment Identifier.
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpAttributesBsidMpls mpls = 2;
+
+  // Description missing in models
+  BgpAttributesBsidSrv6 srv6 = 3;
+}
+
+// When the active candidate path has a specified Binding Segment Identifier, the SR
+// Policy uses that BSID defined
+// as a MPLS label.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02
+// Section 2.4.2 .
+message BgpAttributesBsidMpls {
+
+  // S-Flag: This flag encodes the Specified-BSID-only behavior. It's usage is
+  // described in section 6.2.3 in [RFC9256].
+  // default = False
+  optional bool flag_specified_bsid_only = 1;
+
+  // I-Flag: This flag encodes the Drop Upon Invalid behavior.
+  // It's usage is described in section 8.2 in [RFC9256].
+  // default = False
+  optional bool flag_drop_upon_invalid = 2;
+
+  // Description missing in models
+  BgpAttributesSidMpls mpls_sid = 3;
+}
+
+// When the active candidate path has a specified Binding Segment Identifier, the SR
+// Policy uses that BSID defined
+// as an IPv6 Address.The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02
+// Section 2.4.2 .
+message BgpAttributesBsidSrv6 {
+
+  // S-Flag: This flag encodes the Specified-BSID-only behavior. It's usage is
+  // described in section 6.2.3 in [RFC9256].
+  // default = False
+  optional bool flag_specified_bsid_only = 1;
+
+  // I-Flag: This flag encodes the Drop Upon Invalid behavior.
+  // It's usage is described in section 8.2 in [RFC9256].
+  // default = False
+  optional bool flag_drop_upon_invalid = 2;
+
+  // IPv6 address denoting the SRv6 SID.
+  // default = 0::0
+  optional string ipv6_addr = 3;
+}
+
+// The SRv6 Binding SID sub-TLV is an optional sub-TLV of type 20 that is used to signal
+// the SRv6 Binding SID
+// related information of an SR Policy candidate path.
+// - More than one SRv6 Binding SID sub-TLVs MAY be signaled in the same SR Policy
+// encoding to indicate one or
+// more SRv6 SIDs, each with potentially different SRv6 Endpoint Behaviors to be
+// instantiated.
+// - The format of the sub-TLV is defined in draft-ietf-idr-sr-policy-safi-02 Section
+// 2.4.3 .
+message BgpAttributesSrv6Bsid {
+
+  // S-Flag: This flag encodes the Specified-BSID-only behavior. It's usage is
+  // described in section 6.2.3 in [RFC9256].
+  // default = False
+  optional bool flag_specified_bsid_only = 1;
+
+  // I-Flag: This flag encodes the Drop Upon Invalid behavior.
+  // It's usage is described in section 8.2 in [RFC9256].
+  // default = False
+  optional bool flag_drop_upon_invalid = 2;
+
+  // B-Flag: This flag, when set, indicates the presence of the SRv6 Endpoint Behavior
+  // 
+  // and SID Structure encoding specified in Section 2.4.4.2.4 of draft-ietf-idr-sr-policy-safi-02.
+  // default = False
+  optional bool flag_srv6_endpoint_behavior = 3;
+
+  // IPv6 address denoting the SRv6 SID.
+  // default = 0::0
+  optional string ipv6_addr = 4;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure srv6_endpoint_behavior = 5;
+}
+
+// This carries a 20 bit Multi Protocol Label Switching alongwith 3 bits traffic class,
+// 1 bit indicating presence
+// or absence of Bottom-Of-Stack and 8 bits carrying the Time to Live value.
+message BgpAttributesSidMpls {
+
+  // 20 bit MPLS Label value.
+  // default = 16
+  optional uint32 label = 1;
+
+  // 3 bits of Traffic Class.
+  // default = 0
+  optional uint32 traffic_class = 2;
+
+  // Bottom of Stack
+  // default = True
+  optional bool flag_bos = 3;
+
+  // 8 bits Time to Live
+  // default = 63
+  optional uint32 ttl = 4;
+}
+
+// An IPv6 address denoting a SRv6 SID.
+message BgpAttributesSidSrv6 {
+
+  // Description missing in models
+  // default = 0::0
+  optional string ip = 1;
+}
+
+// Optional Preference sub-tlv (Type 12) is used to select the best candidate path for
+// an SR Policy.
+// It is defined in Section 2.4.1 of draft-ietf-idr-sr-policy-safi-02 .
+// 
+message BgpAttributesSrPolicyPreference {
+
+  // Value to be carried in the Preference sub-tlv.
+  // default = 0
+  optional uint32 value = 1;
+}
+
+// Optional Priority sub-tlv (Type 15) used to select the order in which policies should
+// be re-computed.
+// - It is defined in Section 2.4.6 of draft-ietf-idr-sr-policy-safi-02 .
+message BgpAttributesSrPolicyPriority {
+
+  // Value to be carried in the Priority sub-tlv.
+  // default = 0
+  optional uint32 value = 1;
+}
+
+// Optional Policy Candidate Path Name sub-tlv (Type 129) which carries the symbolic
+// name for the SR Policy candidate path
+// for debugging.
+// - It is defined in Section 2.4.7 of draft-ietf-idr-sr-policy-safi-02 .
+message BgpAttributesSrPolicyPolicyCandidateName {
+
+  // Value of the symbolic Policy Candidate Path Name carried in the Policy Candidate
+  // Path Name sub-tlv.
+  // It is recommended that the size of the name is limited to 255 bytes.
+  // required = true
+  optional string value = 1;
+}
+
+// Optional Policy Name sub-tlv (Type 130) which carries the symbolic name for the SR
+// Policy for which the
+// candidate path is being advertised for debugging.
+// - It is defined in Section 2.4.8 of draft-ietf-idr-sr-policy-safi-02 .
+message BgpAttributesSrPolicyPolicyName {
+
+  // Value of the symbolic policy name carried in the Policy Name sub-tlv.
+  // It is recommended that the size of the name is limited to 255 bytes.
+  // required = true
+  optional string value = 1;
+}
+
+// This is an optional sub-tlv (Type 14) which indicates whether an Explicit NULL Label
+// must be pushed on an unlabeled IP
+// packet before other labels for IPv4 or IPv6 flows.
+// - It is defined in Section 2.4.5 of draft-ietf-idr-sr-policy-safi-02.
+message BgpAttributesSrPolicyExplicitNullPolicy {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      unknown = 1;
+      push_ipv4 = 2;
+      push_ipv6 = 3;
+      push_ipv4_and_ipv6 = 4;
+      donot_push = 5;
+    }
+  }
+  // The Explicit NULL Label policy.
+  // default = Choice.Enum.push_ipv4_and_ipv6
+  optional Choice.Enum choice = 1;
+}
+
+// One optional SEGMENT_LIST sub-tlv encoded with type of 128.
+// One sub-tlv (Type 128) encodes a single explicit path towards the endpoint as described
+// in
+// section 5.1 of [RFC9256].
+// The Segment List sub-TLV includes the elements of the paths (i.e., segments) as well
+// 
+// as an optional Weight sub-TLV.
+message BgpAttributesSrPolicySegmentList {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySegmentListWeight weight = 1;
+
+  // Description missing in models
+  repeated BgpAttributesSegmentRoutingPolicySegmentListSegment segments = 2;
+}
+
+// The optional Weight sub-TLV (Type 9) specifies the weight associated with a given
+// segment list. The weight is used for weighted multipath.
+message BgpAttributesSegmentRoutingPolicySegmentListWeight {
+
+  // Value of the weight.
+  // default = 0
+  optional uint32 value = 1;
+}
+
+// A Segment sub-TLV describes a single segment in a segment list  i.e., a single
+// element of the explicit path. The Segment sub-TLVs are optional.
+// Segment Types A and B are defined as described in 2.4.4.2.
+// Segment Types C upto K are defined as described in in draft-ietf-idr-bgp-sr-segtypes-ext-03
+// .
+message BgpAttributesSegmentRoutingPolicySegmentListSegment {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      type_a = 1;
+      type_b = 2;
+      type_c = 3;
+      type_d = 4;
+      type_e = 5;
+      type_f = 6;
+      type_g = 7;
+      type_h = 8;
+      type_i = 9;
+      type_j = 10;
+      type_k = 11;
+    }
+  }
+  // Specify one of the segment types as defined in ietf-idr-segment-routing-te-policy
+  // - Type  A: SID only, in the form of MPLS Label.
+  // - Type  B: SID only, in the form of IPv6 Address.
+  // - Type  C: IPv4 Prefix with optional SR Algorithm.
+  // - Type  D: IPv6 Global Prefix with optional SR Algorithm for SR-MPLS.
+  // - Type  E: IPv4 Prefix with Local Interface ID.
+  // - Type  F: IPv4 Addresses for link endpoints as Local, Remote pair.
+  // - Type  G: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair
+  // for SR-MPLS.
+  // - Type  H: IPv6 Addresses for link endpoints as Local, Remote pair for SR-MPLS.
+  // - Type  I: IPv6 Global Prefix with optional SR Algorithm for SRv6.
+  // - Type  J: IPv6 Prefix and Interface ID for link endpoints as Local, Remote pair
+  // for SRv6.
+  // - Type  K: IPv6 Addresses for link endpoints as Local, Remote pair for SRv6.
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeA type_a = 2;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeB type_b = 3;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeC type_c = 4;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeD type_d = 5;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeE type_e = 6;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeF type_f = 7;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeG type_g = 8;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeH type_h = 9;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeI type_i = 10;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeJ type_j = 11;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeK type_k = 12;
+}
+
+// Type A: SID only, in the form of MPLS Label.
+// It is encoded as a Segment of Type 1 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeA {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // Description missing in models
+  BgpAttributesSidMpls mpls_sid = 2;
+}
+
+// Type B: SID only, in the form of IPv6 address.
+// It is encoded as a Segment of Type 13 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeB {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SRv6 SID.
+  // default = 0::0
+  optional string srv6_sid = 2;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure srv6_endpoint_behavior = 3;
+}
+
+// Type C: IPv4 Node Address with optional SID.
+// It is encoded as a Segment of Type 3 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeC {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be
+  // set to 0 on transmission and ignored on receipt.
+  // default = 0
+  optional uint32 sr_algorithm = 2;
+
+  // IPv4 address representing a node.
+  // default = 0.0.0.0
+  optional string ipv4_node_address = 3;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 4;
+}
+
+// Type D: IPv6 Node Address with optional SID for SR MPLS.
+// It is encoded as a Segment of Type 4 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeD {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be
+  // set to 0 on transmission and ignored on receipt.
+  // default = 0
+  optional uint32 sr_algorithm = 2;
+
+  // IPv6 address representing a node.
+  // default = 0::0
+  optional string ipv6_node_address = 3;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 4;
+}
+
+// Type E: IPv4 Address and Local Interface ID with optional SID
+// It is encoded as a Segment of Type 5 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeE {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // The Interface Index as defined in [RFC8664].
+  // default = 0
+  optional uint32 local_interface_id = 2;
+
+  // IPv4 address representing a node.
+  // default = 0.0.0.0
+  optional string ipv4_node_address = 3;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 4;
+}
+
+// Type F: IPv4 Local and Remote addresses with optional SR-MPLS SID.
+// It is encoded as a Segment of Type 6 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeF {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // Local IPv4 Address.
+  // default = 0.0.0.0
+  optional string local_ipv4_address = 2;
+
+  // Remote IPv4 Address.
+  // default = 0.0.0.0
+  optional string remote_ipv4_address = 3;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 4;
+}
+
+// Type G: IPv6 Address, Interface ID for local and remote pair with optional SID for
+// SR MPLS.
+// It is encoded as a Segment of Type 7 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeG {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // The local Interface Index as defined in [RFC8664].
+  // default = 0
+  optional uint32 local_interface_id = 2;
+
+  // The IPv6 address representing the local node.
+  // default = 0::0
+  optional string local_ipv6_node_address = 3;
+
+  // The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero
+  // when the local node address and interface identifiers are sufficient to describe
+  // the link.
+  // default = 0
+  optional uint32 remote_interface_id = 4;
+
+  // IPv6 address representing the remote node. The value MAY be set to zero when the
+  // local node address and interface identifiers are sufficient to describe the link.
+  // default = 0::0
+  optional string remote_ipv6_node_address = 5;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 6;
+}
+
+// Type H: IPv6 Local and Remote addresses with optional SID for SR MPLS.
+// It is encoded as a Segment of Type 8 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeH {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // Local IPv6 Address.
+  // default = 0::0
+  optional string local_ipv6_address = 2;
+
+  // Remote IPv6 Address.
+  // default = 0::0
+  optional string remote_ipv6_address = 3;
+
+  // Optional SR-MPLS SID.
+  BgpAttributesSidMpls sr_mpls_sid = 6;
+}
+
+// Type I: IPv6 Node Address with optional SR Algorithm and optional SRv6 SID.
+// It is encoded as a Segment of Type 14 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeI {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be
+  // set to 0 on transmission and ignored on receipt.
+  // default = 0
+  optional uint32 sr_algorithm = 2;
+
+  // IPv6 address representing a node.
+  // default = 0::0
+  optional string ipv6_node_address = 3;
+
+  // Description missing in models
+  BgpAttributesSidSrv6 srv6_sid = 4;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure srv6_endpoint_behavior = 5;
+}
+
+// Type J: IPv6 Address, Interface ID for local and remote pair for SRv6 with optional
+// SID.
+// It is encoded as a Segment of Type 15 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeJ {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be
+  // set to 0 on transmission and ignored on receipt.
+  // default = 0
+  optional uint32 sr_algorithm = 2;
+
+  // The local Interface Index as defined in [RFC8664].
+  // default = 0
+  optional uint32 local_interface_id = 3;
+
+  // The IPv6 address representing the local node.
+  // default = 0::0
+  optional string local_ipv6_node_address = 4;
+
+  // The remote Interface Index as defined in [RFC8664]. The value MAY be set to zero
+  // when the local node address and interface identifiers are sufficient to describe
+  // the link.
+  // default = 0
+  optional uint32 remote_interface_id = 5;
+
+  // IPv6 address representing the remote node. The value MAY be set to zero when the
+  // local node address and interface identifiers are sufficient to describe the link.
+  // default = 0::0
+  optional string remote_ipv6_node_address = 6;
+
+  // Description missing in models
+  BgpAttributesSidSrv6 srv6_sid = 7;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure srv6_endpoint_behavior = 8;
+}
+
+// Type K: IPv6 Local and Remote addresses for SRv6 with optional SID.
+// It is encoded as a Segment of Type 16 in the SEGMENT_LIST sub-tlv.
+message BgpAttributesSegmentRoutingPolicyTypeK {
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicyTypeFlags flags = 1;
+
+  // SR Algorithm identifier when A-Flag in on. If A-flag is not enabled, it should be
+  // set to 0 on transmission and ignored on receipt.
+  // default = 0
+  optional uint32 sr_algorithm = 2;
+
+  // Local IPv6 Address.
+  // default = 0::0
+  optional string local_ipv6_address = 3;
+
+  // Remote IPv6 Address.
+  // default = 0::0
+  optional string remote_ipv6_address = 4;
+
+  // Description missing in models
+  BgpAttributesSidSrv6 srv6_sid = 5;
+
+  // Description missing in models
+  BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure srv6_endpoint_behavior = 6;
+}
+
+// Flags for each Segment in SEGMENT_LIST sub-tlv.
+// - V-flag. Indicates verification is enabled. See section 5, of https://datatracker.ietf.org/doc/html/rfc9256
+// - A-flag. Indicates presence of SR Algorithm field applicable to Segment Types C,
+// D , I , J and K .
+// - B-Flag. Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding
+// applicable to Segment Types B , I , J and K .
+// - S-Flag: This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID
+// depending on the segment type. (draft-ietf-idr-bgp-sr-segtypes-ext-03 Section 2.10).
+// This flag is applicable for Segment Types C, D, E, F, G, H, I, J, and K.
+message BgpAttributesSegmentRoutingPolicyTypeFlags {
+
+  // Indicates verification of segment data in is enabled.
+  // default = False
+  optional bool v_flag = 1;
+
+  // Indicates presence of SR Algorithm field applicable to Segment Types 3, 4, and 9.
+  // 
+  // default = False
+  optional bool a_flag = 2;
+
+  // This flag, when set, indicates the presence of the SR-MPLS or SRv6 SID depending
+  // on the segment type.
+  // default = False
+  optional bool s_flag = 3;
+
+  // Indicates presence of SRv6 Endpoint Behavior and SID Structure encoding specified
+  // in Section 2.4.4.2.4
+  // of draft-ietf-idr-sr-policy-safi-02.
+  // default = False
+  optional bool b_flag = 4;
+}
+
+// Configuration for optional SRv6 Endpoint Behavior and SID Structure. Summation of
+// lengths for Locator Block, Locator Node,  Function, and Argument MUST be less than
+// or equal to 128. - This is specified in draft-ietf-idr-sr-policy-safi-02 Section
+// 2.4.4.2.4
+message BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure {
+
+  // This is a 2-octet field that is used to specify the SRv6 Endpoint Behavior code point
+  // for the SRv6 SID as defined
+  // in section 9.2 of [RFC8986]. When set with the value 0xFFFF (i.e., Opaque), the choice
+  // of SRv6 Endpoint Behavior is
+  // left to the headend. Well known 16-bit values for this field are available at
+  // https://www.iana.org/assignments/segment-routing/segment-routing.xhtml .
+  // default = ffff
+  optional string endpoint_behaviour = 1;
+
+  // SRv6 SID Locator Block length in bits.
+  // default = 0
+  optional uint32 lb_length = 2;
+
+  // SRv6 SID Locator Node length in bits.
+  // default = 0
+  optional uint32 ln_length = 3;
+
+  // SRv6 SID Function length in bits.
+  // default = 0
+  optional uint32 func_length = 4;
+
+  // SRv6 SID Arguments length in bits.
+  // default = 0
+  optional uint32 arg_length = 5;
+}
+
+// Optional field in the NLRI carrying the distinguisher for Segment Routing Policy
+// NLRI with SAFI 73.
+message BgpNLRIPrefixSegmentRoutingDistinguisher {
+
+  // The value of the optional Segment Routing distinguisher of the prefix.
+  // default = 1
+  optional uint32 value = 1;
 }
 
 // Configuration for BGPv6 peer settings and routes.
@@ -4696,17 +6203,19 @@ message BgpV6Peer {
 // Configuration for emulated BGPv6 peers and routes on a single IPv6 interface.
 message BgpV6Interface {
 
-  // The unique name of IPv6 or Loopback IPv6 interface used as the source IP for this
-  // list of BGP peers.
+  // The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source
+  // IP for this list of BGP peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // required = true
   optional string ipv6_name = 1;
@@ -5639,6 +7148,802 @@ message RsvpEroSubobject {
   optional HopType.Enum hop_type = 5;
 }
 
+// Configuration for one or more IPv4 or IPv6 DHCP servers.
+message DeviceDhcpServer {
+
+  // This contains an array of references to IPv4 interfaces, each of which will contain
+  // one DHCPv4 server.
+  repeated DhcpServerV4 ipv4_interfaces = 2;
+
+  // This contains an array of references to IPv6 interfaces, each of which will contain
+  // one DHCPv6 server.
+  repeated DhcpServerV6 ipv6_interfaces = 3;
+}
+
+// Configuration for emulated DHCPv4 Server.
+message DhcpServerV4 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv4 on which DHCPv4 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 2;
+
+  // List of DHCPv4 Server Lease parameters
+  repeated DhcpServerV4Pool address_pools = 3;
+}
+
+// Configuration for DHCPv4 address pool for a lease.
+message DhcpServerV4Pool {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  optional string name = 1;
+
+  // The duration of time in seconds that is assigned to a lease.
+  // default = 86400
+  optional uint32 lease_time = 2;
+
+  // The IPv4 address of the first lease pool.
+  // required = true
+  optional string start_address = 3;
+
+  // The IPv4 network prefix length to be applied to the address.
+  // default = 24
+  optional uint32 prefix_length = 4;
+
+  // The total number of addresses in the pool.
+  // default = 1
+  optional uint32 count = 5;
+
+  // The increment value for the lease address within the lease pool. The value is incremented
+  // according to the prefix_length and step.
+  // default = 1
+  optional uint32 step = 6;
+
+  // Optional configuration for DHCPv4 address pool for the lease.
+  DhcpServerV4PoolOption options = 7;
+}
+
+// Optional configuration for DHCPv4 address pool for the lease.
+message DhcpServerV4PoolOption {
+
+  // The Router address advertised by the DHCPv4 server in Offer and Ack messages.
+  // default = 0.0.0.0
+  optional string router_address = 1;
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  // default = 0.0.0.0
+  optional string primary_dns_server = 2;
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  // default = 0.0.0.0
+  optional string secondary_dns_server = 3;
+
+  // If selected, the DHCP server includes in its replies the TLV information for the
+  // DHCPv4 Relay Agent Option 82 and the corresponding sub-TLVs that it receives from
+  // a DHCP relay agent, otherwise it replies without including this TLV.
+  // default = True
+  optional bool echo_relay_with_tlv_82 = 4;
+}
+
+// Configuration for emulated DHCPv6 Server.
+message DhcpServerV6 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The unique name of the IPv6 on which DHCPv6 server will run.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 2;
+
+  // If Rapid Commit is set, server responds to client initiated Rapid Commit two-message
+  // exchanges.
+  // default = False
+  optional bool rapid_commit = 3;
+
+  // If the server does not have an address to which it can send the Reconfigure message
+  // directly to the client, the  server uses a Relay-reply message to send the Reconfigure
+  // message to a relay agent that will relay the message to the client.
+  // default = False
+  optional bool reconfigure_via_relay_agent = 4;
+
+  // Array of DHCP pools configured on a server.
+  repeated DhcpV6ServerLease leases = 5;
+
+  // Optional DHCPv4 Server options that are sent in Dhcp server messages.
+  Dhcpv6ServerOptions options = 6;
+}
+
+// DHCP server options, these configured options are sent in Dhcp server messages.
+message Dhcpv6ServerOptions {
+
+  // Additional DHCP server primary dns and other configuration options.
+  DhcpV6ServerDns dns = 1;
+
+  // This option is used by servers to exchange vendor-specific information with clients.
+  Dhcpv6ServerOptionsVendorInfo vendor_info = 2;
+
+  // The server sends this option to inform the client about a URL to a boot file which
+  // client will use for
+  // network boots.
+  Dhcpv6ServerOptionsBootfileUrl bootfile_url = 3;
+}
+
+// One DHCP pool configuration on a server.
+message DhcpV6ServerLease {
+
+  // The Life Time length in seconds that is assigned to a lease if the requesting DHCP
+  // client does not specify a specific expiration time.
+  // default = 86400
+  optional uint32 lease_time = 1;
+
+  // Description missing in models
+  // required = true
+  Dhcpv6ServerIaType ia_type = 5;
+}
+
+// Description missing in models
+message Dhcpv6ServerIaType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      iana = 1;
+      iata = 2;
+      iapd = 3;
+      ianapd = 4;
+    }
+  }
+  // Identity Association: a collection of leases assigned to a client. Each IA has an
+  // associated IAID.  Each IA holds one type of lease, like an identity association for
+  // temporary addresses (IA_TA) holds  temporary addresses, and an identity association
+  // for prefix delegation (IA_PD).
+  // default = Choice.Enum.iana
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Dhcpv6ServerPoolInfo iana = 2;
+
+  // Description missing in models
+  Dhcpv6ServerPoolInfo iata = 3;
+
+  // Description missing in models
+  Dhcpv6ServerIapdPoolInfo iapd = 4;
+
+  // Description missing in models
+  Dhcpv6ServerIanapdPoolInfo ianapd = 5;
+}
+
+// The container for pool configurations for IA types iana and iata.
+message Dhcpv6ServerPoolInfo {
+
+  // The first IP address of the lease pool.
+  optional string start_address = 1;
+
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
+  // default = 64
+  optional uint32 prefix_len = 2;
+
+  // The total number of addresses in the pool.
+  // default = 1
+  optional uint32 size = 3;
+
+  // The increment value for the lease address within the lease pool where multiple addresses
+  // are present. The value is incremented according to the configured Prefix Length and
+  // Step.
+  // default = 1
+  optional uint32 step = 4;
+}
+
+// The container for prefix pool configurations for IA type iapd.
+message Dhcpv6ServerIapdPoolInfo {
+
+  // The first IP address of the prefix pool.
+  optional string start_prefix_address = 1;
+
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
+  // default = 64
+  optional uint32 configured_prefix_len = 2;
+
+  // The total number of addresses in the pool.
+  // default = 10
+  optional uint32 prefix_size = 3;
+
+  // The increment value for the lease address within the lease pool where multiple addresses
+  // are present. The value is incremented according to the Prefix Length and Step.
+  // default = 1
+  optional uint32 prefix_step = 4;
+
+  // The prefix length of the IPv6 prefix that the Dhcpv6 server offers to the Dhcpv6
+  // client.
+  // default = 64
+  optional uint32 advertised_prefix_len = 5;
+}
+
+// The container for pool configurations for IA type ianapd.
+message Dhcpv6ServerIanapdPoolInfo {
+
+  // The pool configurations for IA types iana in ianapd.
+  Dhcpv6ServerPoolInfo iana = 1;
+
+  // The pool configurations for IA types iapd in ianapd.
+  Dhcpv6ServerIapdPoolInfo iapd = 2;
+}
+
+// Optional Dns configuration for DHCPv6 server.
+message DhcpV6ServerDns {
+
+  // The primary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  // required = true
+  optional string primary = 1;
+
+  // DHCP server secondary dns configuration options. If included secondary DNS server
+  // address will be offered to
+  // DHCP clients that request this information through a TLV option.
+  repeated DhcpV6ServerSecondaryDns secondary_dns = 2;
+}
+
+// Advanced Dns configuration for DHCPv6 server.
+message DhcpV6ServerSecondaryDns {
+
+  // The secondary DNS server address that is offered to DHCP clients that request this
+  // information through a TLV option.
+  optional string ip = 1;
+}
+
+// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
+// 
+// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
+// 
+// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+message DeviceOspfv2Router {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // OSPFv2 Router Id.
+  Ospfv2RouterId router_id = 2;
+
+  // The time in seconds for LSA retransmission.
+  // default = 5
+  optional uint32 lsa_retransmit_time = 3;
+
+  // The time in seconds required for LSA refresh.
+  // default = 1800
+  optional uint32 lsa_refresh_time = 4;
+
+  // The gap in miliseconds between each Flood Link State Update Burst
+  // default = 33
+  optional uint32 inter_burst_lsu_interval = 5;
+
+  // The maximum number of Flood LSUpdates for each burst
+  // default = 1
+  optional uint32 max_flood_lsu_per_burst = 6;
+
+  // Description missing in models
+  Ospfv2GracefulRestart graceful_restart = 7;
+
+  // Configuration for controlling storage of OSPFv2 learned LSAs received from the neighbors.
+  // default = False
+  optional bool store_lsa = 8;
+
+  // A router indicates the optional capabilities that it supports in its OSPF Hello packets,
+  // Database Description packets and in its LSAs.
+  Ospfv2Options capabilities = 9;
+
+  // List of OSPFv2 interfaces for this router.
+  repeated Ospfv2Interface interfaces = 10;
+
+  // Emulated OSPFv4 IPv4 routes.
+  repeated Ospfv2V4RouteRange v4_routes = 11;
+}
+
+// Container for OSPFv2 Router ID configuration.
+message Ospfv2RouterId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      interface_ip = 1;
+      custom = 2;
+    }
+  }
+  // IP address of Router ID for this emulated OSPFv2 router.
+  // - interface_ip: When IPv4 interface address to be assigned as Router ID.
+  // - custom: When, Router ID needs to be configured different from Interface IPv4 address.
+  // default = Choice.Enum.interface_ip
+  optional Choice.Enum choice = 1;
+
+  // Router ID in IPv4 address format.
+  optional string custom = 3;
+}
+
+// The OSPFv2 Options field is present Database Description packets and all LSAs.
+// This enables OSPF routers to support (or not support) optional capabilities,
+// and to communicate their capability level to other OSPF routers.
+// When capabilities are exchanged in Database Description packets a
+// router can choose not to forward certain LSAs to a neighbor because
+// of its reduced functionality.
+// Reference: A.2 The Options field: https://www.rfc-editor.org/rfc/rfc2328#page-46.
+message Ospfv2Options {
+
+  // Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+  // default = False
+  optional bool t_bit = 1;
+
+  // External Capability: 1st-bit: describes the way AS-external-LSAs are flooded.
+  // default = False
+  optional bool e_bit = 2;
+
+  // Multicast Capability: 2nd-bit: describes whether IP multicast datagrams are forwarded
+  // according to  the specifications in [Ref18], rfc2328.
+  // default = False
+  optional bool mc_bit = 3;
+
+  // NSSA Capability: 3rd-bit: describes the handling of Type-7 LSAs, as specified in
+  // [Ref19], rfc2328.
+  // default = False
+  optional bool np_bit = 4;
+
+  // External Attribute: 4th-bit: describes the router's willingness to receive and forward
+  // External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+  // default = False
+  optional bool ea_bit = 5;
+
+  // Demand Circuit: 5th-bit: describes the router's handling of demand circuits, as specified
+  // in [Ref21], rfc2328.
+  // default = False
+  optional bool dc_bit = 6;
+
+  // Opaque LSA's Forwarded: 6th-bit: describes the router's willingness to receive and
+  // forward Opaque-LSAs, rfc2370.
+  // default = False
+  optional bool o_bit = 7;
+
+  // Opaque LSA's Forwarded: 7th-bit: unused bit.
+  // default = False
+  optional bool unused_bit = 8;
+
+  // Set to indicate that the router acts as an Area Border Router.
+  // default = False
+  optional bool lsa_b_bit = 9;
+
+  // Set to indicate that the router acts as an AS Boundary Router.
+  // default = False
+  optional bool lsa_e_bit = 10;
+}
+
+// Container of properties of OSPFv2 Graceful Retstart.
+message Ospfv2GracefulRestart {
+
+  // Support of Graceful Restart in Helper Mode.
+  // default = False
+  optional bool helper_mode = 1;
+}
+
+// Configuration for single OSPFv2 interface.
+message Ospfv2Interface {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The globally unique name of the IPv4 interface connected to the DUT.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 2;
+
+  // The Area ID of the area to which the attached network belongs.
+  // All routing protocol packets originating from the interface are
+  // labelled with this Area ID.
+  Ospfv2InterfaceArea area = 3;
+
+  // The OSPF network link type.
+  Ospfv2InterfaceNetworkType network_type = 4;
+
+  // Contains a list of Traffic Engineering attributes.
+  repeated LinkStateTE traffic_engineering = 5;
+
+  // OSPFv2 authentication properties.
+  // If the authentication is not configured, none OSPF packet exchange is authenticated.
+  Ospfv2InterfaceAuthentication authentication = 6;
+
+  // Optional container for advanced interface properties.
+  Ospfv2InterfaceAdvanced advanced = 7;
+
+  // Link protection on the OSPFv2 link between two interfaces.
+  Ospfv2InterfaceLinkProtection link_protection = 8;
+
+  // A Shared Risk Link Group (SRLG) is represented by a 32-bit number unique within an
+  // IGP (OSPFv2 and IS-IS) domain.
+  // An SRLG is a set of links sharing a common resource, which affects all links in the
+  // set if the common resource fails.
+  // Links share the same risk of failure and are therefore considered to belong to the
+  // same SRLG.
+  repeated uint32 srlg_values = 9;
+}
+
+// Container for OSPF Area ID identifies the routing area to which the host belongs..
+// 
+message Ospfv2InterfaceArea {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      id = 1;
+      ip = 2;
+    }
+  }
+  // The OSPF Area ID identifies the routing area to which the host belongs. Area ID type
+  // can be following format.
+  // - id: A 32-bit number identifying the area.
+  // - ip:     The Area ID in IPv4 address format.
+  // default = Choice.Enum.id
+  optional Choice.Enum choice = 1;
+
+  // The Area ID.
+  // default = 0
+  optional uint32 id = 2;
+
+  // The Area ID in IPv4 address format.
+  optional string ip = 3;
+}
+
+// The OSPF network link type options.
+// - Point to Point:
+// - Broadcast:
+// - Point to Multipoint: In this case, at least a neigbor to be configured.
+message Ospfv2InterfaceNetworkType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      broadcast = 1;
+      point_to_point = 2;
+      point_to_multipoint = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.broadcast
+  optional Choice.Enum choice = 1;
+
+  // List of Neigbhors.
+  repeated Ospfv2InterfaceNeighbor point_to_multipoint = 2;
+}
+
+// Configuration of a neighbor.
+message Ospfv2InterfaceNeighbor {
+
+  // Description missing in models
+  optional string neighbor_ip = 1;
+}
+
+// Contains OSPFv2 advanced properties.
+message Ospfv2InterfaceAdvanced {
+
+  // The time interval, in seconds, between the Hello packets that
+  // the router sends on the interface. Advertised in Hello packets
+  // sent out this interface.
+  // default = 10
+  optional uint32 hello_interval = 1;
+
+  // The time interval in seconds before the router's neighbors will declare
+  // it down, when they stop hearing the router's Hello Packets.
+  // Advertised in Hello packets sent out this interface.
+  // default = 40
+  optional uint32 dead_interval = 2;
+
+  // Routing metric associated with the interface..
+  // default = 0
+  optional uint32 routing_metric = 3;
+
+  // The Priority for (Backup) Designated Router election.
+  // This value is used in Hello packets for the Designated Router (DR) election process.
+  // The default is 0, which indicates that the router will not participate in the DR
+  // election process.
+  // default = 0
+  optional uint32 priority = 4;
+
+  // If this is set to true, then the MTU received from the neighbor during Database (DB)
+  // Exchange
+  // will be validated, otherwise it will be ignored.
+  // 
+  // default = True
+  optional bool validate_received_mtu = 5;
+}
+
+// The OSPF Options field is present in OSPF Hello packets, Database Description packets
+// and all LSAs.
+// The Options field enables OSPF routers to support (or not support) optional capabilities,
+// and to
+// communicate their capability level to other OSPF routers https://datatracker.ietf.org/doc/html/rfc2328#page-46.
+// When used in Hello packets, the Options field allows a router to reject a neighbor
+// because of a capability mismatch.
+message Ospfv2InterfaceOptions {
+
+  // Type of Service: 0th-bit: describes OSPFv2's TOS capability.
+  // default = False
+  optional bool t_bit = 1;
+
+  // External Capability: This bit describes the way AS-external-LSAs are flooded.
+  // default = False
+  optional bool e_bit = 2;
+
+  // Multicast Capability: This bit describes whether IP multicast datagrams are forwarded
+  // according to  the specifications in [Ref18], rfc2328.
+  // default = False
+  optional bool mc_bit = 3;
+
+  // NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in
+  // [Ref19], rfc2328.
+  // default = False
+  optional bool np_bit = 4;
+
+  // External Attribute: This bit describes the router's willingness to receive and forward
+  // External-Attributes-LSAs,  as specified in [Ref20], rfc2328.
+  // default = False
+  optional bool ea_bit = 5;
+
+  // Demand Circuit: This bit describes the router's handling of demand circuits, as specified
+  // in [Ref21], rfc2328.
+  // default = False
+  optional bool dc_bit = 6;
+
+  // Opaque LSA's Forwarded: This bit describes the router's willingness to receive and
+  // forward Opaque-LSAs, rfc2370.
+  // default = False
+  optional bool o_bit = 7;
+
+  // Opaque LSA's Forwarded: 7th-bit: unused bit.
+  // default = False
+  optional bool unused_bit = 8;
+}
+
+// This contains OSPFv2 authentication properties.
+// Reference: https://www.rfc-editor.org/rfc/rfc2328#appendix-D
+message Ospfv2InterfaceAuthentication {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      md5s = 1;
+      clear_text = 2;
+    }
+  }
+  // The authentication method.
+  // - md5 - Cryptographic authentication.
+  // - clear_text - Simple password authentication. A 64-bit field is configured on a
+  // per-network basis.
+  // All packets sent on a particular network must have this configured value (in clear
+  // text)
+  // in their OSPF header 64-bit authentication field.
+  // default = Choice.Enum.clear_text
+  optional Choice.Enum choice = 1;
+
+  // List of MD5 Key IDs and MD5 Keys.
+  repeated Ospfv2AuthenticationMd5 md5s = 2;
+
+  // The 8 Byte authentication field in the OSPF packet.
+  // default = otg
+  optional string clear_text = 4;
+}
+
+// Container of Cryptographic authentication.
+// If the authentication type is of 'md5' then 'md5_key_id' and 'md5_key'
+// both are to be configured. A shared secret key is configured in all routers attached
+// to a common network/subnet.
+// For each OSPF protocol packet, the key is used to generate/verify a message digest
+// that is appended to the end
+// of the OSPF packet.
+message Ospfv2AuthenticationMd5 {
+
+  // The unique MD5 Key Identifier per-interface.
+  optional uint32 key_id = 1;
+
+  // An alphanumeric secret used to generate the 16 byte MD5 hash value added
+  // to the OSPFv2 PDU in the Authentication TLV.
+  optional string key = 2;
+}
+
+// Optional container for the link protection sub TLV (type 20).
+message Ospfv2InterfaceLinkProtection {
+
+  // Enable this to protect other link or links. LSAs on a link of this type are lost
+  // if any of the links fail.
+  // default = False
+  optional bool extra_traffic = 1;
+
+  // Enabling this signifies that there is no other link protecting this
+  // link. LSAs on a link of this type are lost if the link fails.
+  // default = False
+  optional bool unprotected = 2;
+
+  // Enable this to share the Extra Traffic links between one or more
+  // links of type Shared.There are one or more disjoint links of type
+  // Extra Traffic that are protecting this link.
+  // default = False
+  optional bool shared = 3;
+
+  // Enabling this signifies that there is one dedicated disjoint link
+  // of type Extra Traffic that is protecting this link.
+  // default = False
+  optional bool dedicated_1_to_1 = 4;
+
+  // Enabling this signifies that a dedicated disjoint link is protecting
+  // this link. However, the protecting link is not advertised in the
+  // link state database and is therefore not available for the routing
+  // of LSAs.
+  // default = False
+  optional bool dedicated_1_plus_1 = 5;
+
+  // Enabling this signifies that a protection scheme that is more
+  // reliable than Dedicated 1+1.
+  // default = False
+  optional bool enhanced = 6;
+
+  // This is a Protection Scheme with value 0x40.
+  // default = False
+  optional bool reserved_40 = 7;
+
+  // This is a Protection Scheme with value 0x80.
+  // default = False
+  optional bool reserved_80 = 8;
+}
+
+// Emulated OSPFv2 IPv4 routes.
+message Ospfv2V4RouteRange {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // A list of group of IPv4 route addresses.
+  repeated V4RouteAddress addresses = 2;
+
+  // The user-defined metric associated with this route range.
+  // default = 0
+  optional uint32 metric = 3;
+
+  // The type of the OSPFv2 routes.
+  Ospfv2V4RRRouteOrigin route_origin = 4;
+}
+
+// Container of type of the OSPFv2 types correspond directly to the OSPFv2 LSAs types
+// as
+// defined in the OSPFv2 Link State (LS) Type - http://www.iana.org/assignments/ospfv2-parameters.
+// 
+message Ospfv2V4RRRouteOrigin {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      intra_area = 1;
+      inter_area = 2;
+      external_type_1 = 3;
+      external_type_2 = 4;
+      nssa_external = 5;
+    }
+  }
+  // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
+  // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
+  // - external_type_2: for Autonomous System (AS) External with internal and external
+  // AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+  // default = Choice.Enum.inter_area
+  optional Choice.Enum choice = 1;
+
+  // Configuration for the Intra-Area.
+  Ospfv2V4RRIntraArea intra_area = 2;
+
+  // Configuration for the Intra-Area.
+  Ospfv2V4RRInterArea inter_area = 3;
+
+  // Configuration for the External Type 1.
+  Ospfv2V4RRExternalType1 external_type_1 = 4;
+
+  // Configuration for the External Type 2.
+  Ospfv2V4RRExternalType2 external_type_2 = 5;
+
+  // Configuration for the External Type 2.
+  Ospfv2V4RRNssaExternal nssa_external = 6;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRIntraArea {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRInterArea {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRExternalType1 {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRExternalType2 {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+}
+
+// Container for Intra-Area.
+message Ospfv2V4RRNssaExternal {
+
+  // One-octet field contains flags applicable to the prefix.
+  Ospfv2V4RRExtdPrefixFlags flags = 1;
+
+  // The flag is set True if LSA will be propagated between Areas.
+  // default = False
+  optional bool propagation = 2;
+}
+
+// One-octet field contains flags applicable to the prefix. https://datatracker.ietf.org/doc/html/rfc7684.
+message Ospfv2V4RRExtdPrefixFlags {
+
+  // 0x80 - (Attach Flag): An Area Border Router (ABR)
+  // generating an OSPFv2 Extended Prefix TLV for an inter-area
+  // prefix that is locally connected or attached in another
+  // connected area SHOULD set this flag.
+  // default = False
+  optional bool a_flag = 1;
+
+  // N-Flag (Node Flag): Set when the prefix identifies the
+  // advertising router, i.e., the prefix is a host prefix
+  // advertising a globally reachable address typically associated
+  // with a loopback address.
+  // default = False
+  optional bool n_flag = 2;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -5838,6 +8143,9 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
@@ -5850,6 +8158,9 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -5865,6 +8176,9 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   // 
   // x-constraint:
@@ -5877,6 +8191,9 @@ message FlowRouter {
   // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+  // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
 }
@@ -6250,6 +8567,23 @@ message FlowIpv4Tos {
   PatternFlowIpv4TosUnused unused = 6;
 }
 
+// The OTG implementation can provide a system generated, value for this property.
+message FlowIpv4Auto {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dhcp = 1;
+    }
+  }
+  // The method to be used to provide the system generated value.
+  // 
+  // The dhcp option populates the field based on the dynamic IPv4 address that has been
+  // assigned to the DHCPv4 client by a DHCPv4 server.
+  // required = true
+  optional Choice.Enum choice = 1;
+}
+
 // IPv6 packet header
 message FlowIpv6 {
 
@@ -6276,6 +8610,23 @@ message FlowIpv6 {
 
   // Description missing in models
   PatternFlowIpv6Dst dst = 8;
+}
+
+// The OTG implementation can provide a system generated, value for this property.
+message FlowIpv6Auto {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dhcp = 1;
+    }
+  }
+  // The method to be used to provide the system generated value.
+  // The dhcp option populates the field based on the dynamic IPv6 address that has been
+  // assigned to the DHCPv6 client
+  // by a DHCPv6 server.
+  // required = true
+  optional Choice.Enum choice = 1;
 }
 
 // IEEE 802.1Qbb PFC Pause packet header.
@@ -6387,6 +8738,9 @@ message FlowTcp {
 
   // Description missing in models
   PatternFlowTcpWindow window = 15;
+
+  // Description missing in models
+  PatternFlowTcpChecksum checksum = 16;
 }
 
 // UDP packet header
@@ -8468,6 +10822,13 @@ message Lldp {
   // objects.
   // required = true
   optional string name = 7;
+
+  // The Organization Information is used to define the organization specific TLVs. The
+  // organization specific TLV is defined in IEEE 802.1AB-2016 specification. This category
+  // is provided to allow different organizations, such as  IEEE 802.1, IEEE 802.3, IETF,
+  // as well as individual software and equipment vendors, to define TLVs that advertise
+  // information to remote entities attached to the same media.
+  repeated LldpOrgInfo org_infos = 8;
 }
 
 // LLDP connection to a test port. In future if more connection options arise  LLDP
@@ -8617,6 +10978,56 @@ message LldpSystemName {
   optional string value = 3;
 }
 
+// The organization specific information configured in the Organization Specific TLV.
+// 
+message LldpOrgInfo {
+
+  // The organizationally unique identifier field shall contain the organization's OUI
+  // as defined in Clause 9 of IEEE  Std 802. It is a 24 bit number that uniquely identifies
+  // a vendor, manufacturer, or other organizations.
+  // default = 0080C2
+  optional string oui = 1;
+
+  // The organizationally defined subtype field shall contain a unique subtype value assigned
+  // by the defining organization.
+  // default = 1
+  optional uint32 subtype = 2;
+
+  // Contains the organizationally defined information. The actual format of the organizationally
+  // defined information string  field is organizationally specific and can contain either
+  // binary or alpha-numeric information that is instance specific  for the particular
+  // TLV type and subtype. Alpha-numeric information are encoded in UTF-8 (as specified
+  // in IETF RFC 3629).  Or include one or more information fields with their associated
+  // field-type identifiers, designators similar to those in  the Management Address TLV.
+  LldpOrgInfoType information = 3;
+}
+
+// Contains either the Alpha-numeric information encoded in UTF-8 (as specified in IETF
+// RFC 3629) or include one or more information fields with  their associated field-type
+// identifiers designators, similar to those in the Management Address TLV. Currently
+// only one choice as info is given in future if required it can be extended to define
+// sub tlvs.
+message LldpOrgInfoType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      info = 1;
+    }
+  }
+  // In info mode the organizationally defined information contain either binary or alpha-numeric
+  // information encoded in UTF-8  (as specified in IETF RFC 3629).
+  // default = Choice.Enum.info
+  optional Choice.Enum choice = 1;
+
+  // The organizationally defined information encoded in UTF-8 (as specified in IETF RFC
+  // 3629). This byte stream can be of any  length from 1 to 507 bytes. In the info byte
+  // stream, one byte is represented as string of 2 characters, for example 2  character
+  // string (0x)AB represents value of a single byte. So the maximum length of this attribute
+  // is 1014 (507 * 2 hex  characters per byte).
+  optional string info = 2;
+}
+
 // Error response generated while serving API request.
 message Error {
 
@@ -8761,6 +11172,7 @@ message StateProtocol {
       lacp = 3;
       bgp = 4;
       isis = 5;
+      ospfv2 = 6;
     }
   }
   // Description missing in models
@@ -8781,6 +11193,9 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolIsis isis = 6;
+
+  // Description missing in models
+  StateProtocolOspfv2 ospfv2 = 7;
 }
 
 // Sets the link of configured ports.
@@ -8909,6 +11324,7 @@ message StateProtocolRoute {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
   // 
   // x-constraint:
@@ -8916,6 +11332,7 @@ message StateProtocolRoute {
   // - /components/schemas/Bgp.V6RouteRange/properties/name
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
+  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
   repeated string names = 1;
 
@@ -9100,6 +11517,53 @@ message StateProtocolIsisRouters {
   // bring up the ISIS session(s) with respective peer(s) and advertise route(s), if configured.
   // If the desired state is 'down', would bring down ISIS session(s) with respective
   // peer(s).
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured OSPFv2 routers.
+message StateProtocolOspfv2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolOspfv2Routers routers = 2;
+}
+
+// Sets state of configured OSPFv2 routers.
+message StateProtocolOspfv2Routers {
+
+  // The names of OSPFv2 routers for which the state has to be applied. An empty or null
+  // list will control all OSPFv2 routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of OSPFv2 router. If the desired state is 'up', would attempt to
+  // bring up the OSPFv2 session(s) with respective peer(s) and advertise route(s), if
+  // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
+  // respective peer(s).
   // required = true
   optional State.Enum state = 2;
 }
@@ -9434,11 +11898,13 @@ message ActionProtocolBgpNotification {
   // will be sent to all configured BGP peers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   repeated string names = 1;
 
@@ -9487,17 +11953,23 @@ message ActionProtocolBgpNotification {
 }
 
 // Initiates BGP Graceful Restart process for the selected BGP peers. If no name is
-// specified then Graceful Restart will be sent to all configured BGP peers.
+// specified then Graceful Restart will be sent to all configured BGP peers. To emulate
+// scenarios where a peer sends a Notification and stops the session, an optional Notification
+// object is included. If the remote peer and the local peer are both configured to
+// perform Graceful Restart for Notification triggered session , this will result in
+// Graceful Restart scenario to be triggered as per RFC8538.
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   // 
   // x-constraint:
-  // - /components/schemas/Device.Bgp/properties/name
+  // - /components/schemas/Bgp.V4Peer/properties/name
+  // - /components/schemas/Bgp.V6Peer/properties/name
   // 
   repeated string peer_names = 1;
 
@@ -9506,6 +11978,62 @@ message ActionProtocolBgpInitiateGracefulRestart {
   // Restart capability.
   // default = 30
   optional uint32 restart_delay = 2;
+
+  // Send a Notification to the peer as per configured parameters when initially bringing
+  // down a session as per
+  // configured parameters.
+  ActionProtocolBgpGracefulRestartNotification notification = 3;
+}
+
+// Defines the explicit contents of the NOTIFICATION message to be sent when executing
+// InitiateGracefulRestart trigger.  This causes the BGP connection to close.If a user
+// wants to send custom Error Code and Error Subcode the custom object should be configured.
+// A user can send IANA defined BGP NOTIFICATIONs according to https://www.iana.org/assignments/bgp-parameters/bgp-parameters.xhtml.
+// 
+message ActionProtocolBgpGracefulRestartNotification {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      cease = 1;
+      message_header_error = 2;
+      open_message_error = 3;
+      update_message_error = 4;
+      hold_timer_expired = 5;
+      finite_state_machine_error = 6;
+      custom = 7;
+    }
+  }
+  // Each BGP NOTIFICATION message includes an Error Code field indicating what type of
+  // problem occurred. For certain Error Codes, an Error  Subcode field provides additional
+  // details about the specific nature of the problem.  The choice value will provide
+  // the Error Code used in NOTIFICATION message.  The Subcode can be set for each of
+  // the corresponding errors except for Hold Timer Expired error and BGP Finite State
+  // Machine error.  In both of these cases Subcode 0 will be sent. If a user wants to
+  // use non zero Sub Code then custom choice can be used.
+  // default = Choice.Enum.cease
+  optional Choice.Enum choice = 2;
+
+  // Description missing in models
+  DeviceBgpCeaseError cease = 3;
+
+  // Description missing in models
+  DeviceBgpMessageHeaderError message_header_error = 4;
+
+  // Description missing in models
+  DeviceBgpOpenMessageError open_message_error = 5;
+
+  // Description missing in models
+  DeviceBgpUpdateMessageError update_message_error = 6;
+
+  // Description missing in models
+  DeviceBgpHoldTimerExpired hold_timer_expired = 7;
+
+  // Description missing in models
+  DeviceBgpFiniteStateMachineError finite_state_machine_error = 8;
+
+  // Description missing in models
+  DeviceBgpCustomError custom = 9;
 }
 
 // Request to traffic generator for metrics of choice.
@@ -9523,6 +12051,11 @@ message MetricsRequest {
       lacp = 7;
       lldp = 8;
       rsvp = 9;
+      dhcpv4_client = 10;
+      dhcpv4_server = 11;
+      dhcpv6_client = 12;
+      dhcpv6_server = 13;
+      ospfv2 = 14;
     }
   }
   // Description missing in models
@@ -9555,6 +12088,21 @@ message MetricsRequest {
 
   // Description missing in models
   RsvpMetricsRequest rsvp = 10;
+
+  // Description missing in models
+  Dhcpv4ClientMetricsRequest dhcpv4_client = 11;
+
+  // Description missing in models
+  Dhcpv4ServerMetricsRequest dhcpv4_server = 12;
+
+  // Description missing in models
+  Dhcpv6ClientMetricsRequest dhcpv6_client = 13;
+
+  // Description missing in models
+  Dhcpv6ServerMetricsRequest dhcpv6_server = 14;
+
+  // Description missing in models
+  Ospfv2MetricsRequest ospfv2 = 15;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -9572,6 +12120,11 @@ message MetricsResponse {
       lacp_metrics = 7;
       lldp_metrics = 8;
       rsvp_metrics = 9;
+      dhcpv4_client = 10;
+      dhcpv4_server = 11;
+      dhcpv6_client = 12;
+      dhcpv6_server = 13;
+      ospfv2_metrics = 14;
     }
   }
   // Description missing in models
@@ -9604,6 +12157,21 @@ message MetricsResponse {
 
   // Description missing in models
   repeated RsvpMetric rsvp_metrics = 10;
+
+  // Description missing in models
+  repeated Dhcpv4ClientMetric dhcpv4client_metrics = 11;
+
+  // Description missing in models
+  repeated Dhcpv4ServerMetric dhcpv4server_metrics = 12;
+
+  // Description missing in models
+  repeated Dhcpv6ClientMetric dhcpv6client_metrics = 13;
+
+  // Description missing in models
+  repeated Dhcpv6ServerMetric dhcpv6server_metrics = 14;
+
+  // Description missing in models
+  repeated Ospfv2Metric ospfv2_metrics = 15;
 }
 
 // The port result request to the traffic generator
@@ -10794,6 +13362,473 @@ message RsvpMetric {
   optional uint64 path_reoptimizations = 31;
 }
 
+// The request to retrieve DHCPv4 per client metrics/statistics.
+message Dhcpv4ClientMetricsRequest {
+
+  // The names of DHCPv4 clients to return results for. An empty list will return results
+  // for all DHCPv4 client.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  repeated string client_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      discovers_sent = 1;
+      offers_received = 2;
+      requests_sent = 3;
+      acks_received = 4;
+      nacks_received = 5;
+      releases_sent = 6;
+      declines_sent = 7;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned.  The name of the DHCPv4 client cannot be
+  // excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv4 per peer statistics information.
+message Dhcpv4ClientMetric {
+
+  // The name of a configured DHCPv4 client.
+  optional string name = 1;
+
+  // Number of DHCPDISCOVER messages sent.
+  optional uint64 discovers_sent = 2;
+
+  // Number of DHCPOFFER messages received.
+  optional uint64 offers_received = 3;
+
+  // Number of DHCPREQUEST messages sent.
+  optional uint64 requests_sent = 4;
+
+  // Number of lease DHCPACK messages received.
+  optional uint64 acks_received = 5;
+
+  // Number of negative lease DHCPNACK messages received.
+  optional uint64 nacks_received = 6;
+
+  // Number of DHCPRELEASE messages sent.
+  optional uint64 releases_sent = 7;
+
+  // Number of DHCPDECLINE messages sent.
+  optional uint64 declines_sent = 8;
+}
+
+// The request to retrieve DHCPv4 per Server metrics/statistics.
+message Dhcpv4ServerMetricsRequest {
+
+  // The names of DHCPv4 Servers to return results for. An empty list will return results
+  // for all DHCPv4 Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4Server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4Server/properties/name
+  // 
+  repeated string server_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      discovers_received = 1;
+      offers_sent = 2;
+      requests_received = 3;
+      acks_sent = 4;
+      nacks_sent = 5;
+      releases_received = 6;
+      declines_received = 7;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned.  The name of the DHCPv4 server cannot be
+  // excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv4 per peer statistics information.
+message Dhcpv4ServerMetric {
+
+  // The name of a configured DHCPv4 Server.
+  optional string name = 1;
+
+  // Number of DHCPDISCOVER messages received.
+  optional uint64 discovers_received = 2;
+
+  // Number of DHCPOFFER messages sent.
+  optional uint64 offers_sent = 3;
+
+  // Number of DHCPOFFER messages received.
+  optional uint64 requests_received = 4;
+
+  // Number of lease DHCPACK messages sent.
+  optional uint64 acks_sent = 5;
+
+  // Number of negative lease DHCPNACK messages sent.
+  optional uint64 nacks_sent = 6;
+
+  // Number of DHCPRELEASE messages received.
+  optional uint64 releases_received = 7;
+
+  // Number of DHCPDECLINE messages received.
+  optional uint64 declines_received = 8;
+}
+
+// The request to retrieve DHCPv6 per client metrics/statistics.
+message Dhcpv6ClientMetricsRequest {
+
+  // The names of DHCPv6 clients to return results for. An empty list will return results
+  // for all DHCPv6 client.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  repeated string client_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      solicits_sent = 1;
+      advertisements_received = 2;
+      advertisements_ignored = 3;
+      requests_sent = 4;
+      nacks_received = 5;
+      replies_received = 6;
+      information_requests_sent = 7;
+      renews_sent = 8;
+      rebinds_sent = 9;
+      releases_sent = 10;
+      reconfigures_received = 11;
+      rapid_commit_solicits_sent = 12;
+      rapid_commit_replies_received = 13;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv6 client cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv6 per peer statistics information.
+message Dhcpv6ClientMetric {
+
+  // The name of a configured DHCPv6 client.
+  optional string name = 1;
+
+  // Number of DHCPSOLICIT messages sent.
+  optional uint64 solicits_sent = 2;
+
+  // Number of DHCPADVERTISE messages received.
+  optional uint64 advertisements_received = 3;
+
+  // Number of DHCPADVERTISE messages ignored.
+  optional uint64 advertisements_ignored = 4;
+
+  // Number of DHCPREQUEST messages sent.
+  optional uint64 requests_sent = 5;
+
+  // Number of negative lease DHCPNACK messages received.
+  optional uint64 nacks_received = 6;
+
+  // Number of DHCPOFFER messages received.
+  optional uint64 replies_received = 7;
+
+  // Number of DHCP Inform requests sent.
+  optional uint64 information_requests_sent = 8;
+
+  // Number of DHCP renew messages sent.
+  optional uint64 renews_sent = 9;
+
+  // Number of DHCP rebind messages sent.
+  optional uint64 rebinds_sent = 10;
+
+  // Number of DHCP Release messages sent.
+  optional uint64 releases_sent = 11;
+
+  // Number of DHCP Reconfigure messages received.
+  optional uint64 reconfigures_received = 12;
+
+  // Number of rapid commit DHCPSOLICIT messages sent.
+  optional uint64 rapid_commit_solicits_sent = 13;
+
+  // Number of rapid commit DHCP Reply messages received.
+  optional uint64 rapid_commit_replies_received = 14;
+}
+
+// The request to retrieve DHCPv6 per Server metrics/statistics.
+message Dhcpv6ServerMetricsRequest {
+
+  // The names of DHCPv6 Servers to return results for. An empty list will return results
+  // for all DHCPv6 Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6Server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6Server/properties/name
+  // 
+  repeated string server_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      solicits_received = 1;
+      solicits_ignored = 2;
+      advertisements_sent = 3;
+      requests_received = 4;
+      nacks_sent = 5;
+      confirms_received = 6;
+      renewals_received = 7;
+      rebinds_received = 8;
+      replies_sent = 9;
+      releases_received = 10;
+      declines_received = 11;
+      information_requests_received = 12;
+      relay_forwards_received = 13;
+      relay_replies_sent = 14;
+      reconfigures_sent = 15;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the DHCPv6 server cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// DHCPv6 per server statistics information.
+message Dhcpv6ServerMetric {
+
+  // The name of a configured DHCPv6 Server.
+  optional string name = 1;
+
+  // Number of DHCPSOLICIT messages received.
+  optional uint64 solicits_received = 2;
+
+  // Number of DHCPSOLICIT messages ignored.
+  optional uint64 solicits_ignored = 3;
+
+  // Number of DHCP Advertise messages sent.
+  optional uint64 advertisements_sent = 4;
+
+  // Number of DHCPREQUEST messages received.
+  optional uint64 requests_received = 5;
+
+  // Number of naks sent for DHCPREQUEST messages.
+  optional uint64 nacks_sent = 6;
+
+  // Number of DHCP Confirm messages received.
+  optional uint64 confirms_received = 7;
+
+  // Number of DHCP Renewal messages received.
+  optional uint64 renewals_received = 8;
+
+  // Number of DHCP Rebind messages received.
+  optional uint64 rebinds_received = 9;
+
+  // Number of DHCP Reply messages sent.
+  optional uint64 replies_sent = 10;
+
+  // Number of DHCP Release messages received.
+  optional uint64 releases_received = 11;
+
+  // Number of DHCP Decline messages received.
+  optional uint64 declines_received = 12;
+
+  // Number of DHCP Information Request messages received.
+  optional uint64 information_requests_received = 13;
+
+  // Number of DHCP Relay agent forward messages received.
+  optional uint64 relay_forwards_received = 14;
+
+  // Number of DHCP reply messages sent to Relay agent.
+  optional uint64 relay_replies_sent = 15;
+
+  // Number of DHCP Reconfigure messages sent.
+  optional uint64 reconfigures_sent = 16;
+}
+
+// The request to retrieve OSPFv2 per Router metrics/statistics.
+message Ospfv2MetricsRequest {
+
+  // The names of OSPFv2 routers to return results for. An empty list will return results
+  // for all OSPFv2 router.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      full_state_count = 1;
+      down_state_count = 2;
+      sessions_flap = 3;
+      hellos_sent = 4;
+      hellos_received = 5;
+      dbd_sent = 6;
+      dbd_received = 7;
+      ls_request_sent = 8;
+      ls_request_received = 9;
+      ls_update_sent = 10;
+      ls_update_received = 11;
+      ls_ack_sent = 12;
+      ls_ack_received = 13;
+      lsa_sent = 14;
+      lsa_received = 15;
+      lsa_ack_sent = 16;
+      lsa_ack_received = 17;
+      router_lsa_sent = 18;
+      router_lsa_received = 19;
+      network_lsa_sent = 20;
+      network_lsa_received = 21;
+      summary_lsa_sent = 22;
+      summary_lsa_received = 23;
+      external_lsa_sent = 24;
+      external_lsa_received = 25;
+      nssa_lsa_sent = 26;
+      nssa_lsa_received = 27;
+      opaque_local_sent = 28;
+      opaque_local_received = 29;
+      opaque_area_sent = 30;
+      opaque_area_received = 31;
+      opaque_domain_sent = 32;
+      opaque_domain_received = 33;
+    }
+  }
+  // The list of column names that the returned result set will contain.
+  // If the list is empty then all columns will be returned except for
+  // any result_groups.
+  // The name of the OSPFv2 Router cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// OSPFv2 per router statistics information.
+message Ospfv2Metric {
+
+  // The name of a configured OSPFv2 router.
+  optional string name = 1;
+
+  // The number of OSPFv2 sessions in up state.
+  optional uint64 full_state_count = 2;
+
+  // The number of OSPFv2 sessions in down state.
+  optional uint64 down_state_count = 3;
+
+  // The number of change of OSPFv2 sessions from up to down state.
+  optional uint64 sessions_flap = 4;
+
+  // The number of OSPFv2 Hello messages transmitted.
+  optional uint64 hellos_sent = 5;
+
+  // The number of OSPFv2 Hello messages received.
+  optional uint64 hellos_received = 6;
+
+  // The number of OSPFv2 Database Description (DBD) messages transmitted.
+  optional uint64 dbd_sent = 7;
+
+  // The number of OSPFv2 Database Description (DBD) messages received.
+  optional uint64 dbd_received = 8;
+
+  // The number of OSPFv2 LinkState (LS) Request messages transmitted.
+  optional uint64 ls_request_sent = 9;
+
+  // The number of OSPFv2 LinkState (LS) Request messages received.
+  optional uint64 ls_request_received = 10;
+
+  // The number of OSPFv2 LinkState (LS) Update messages transmitted.
+  optional uint64 ls_update_sent = 11;
+
+  // The number of OSPFv2 LinkState (LS) Update messages received.
+  optional uint64 ls_update_received = 12;
+
+  // The number of OSPFv2 LinkState (LS) Acknowledgement messages transmitted.
+  optional uint64 ls_ack_sent = 13;
+
+  // The number of OSPFv2 LinkState (LS) Acknowledgement messages received.
+  optional uint64 ls_ack_received = 14;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages transmitted.
+  optional uint64 lsa_sent = 15;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages received.
+  optional uint64 lsa_received = 16;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) messages acknowledged.
+  optional uint64 lsa_ack_sent = 17;
+
+  // The total number of OSPFv2 LinkState Advertisement (LSA) acknowledge messages received
+  // .
+  optional uint64 lsa_ack_received = 18;
+
+  // The number of OSPFv2 Router (Type 1) LSAs transmitted.
+  optional uint64 router_lsa_sent = 19;
+
+  // The number of OSPFv2 Router (Type 1) LSAs received.
+  optional uint64 router_lsa_received = 20;
+
+  // The number of OSPFv2 Network (Type 2) LSAs transmitted.
+  optional uint64 network_lsa_sent = 21;
+
+  // The number of OSPFv2 Network (Type 2) LSAs transmitted.
+  optional uint64 network_lsa_received = 22;
+
+  // The number of OSPFv2 Summary IP (Type 3) LSAs transmitted.
+  optional uint64 summary_lsa_sent = 23;
+
+  // The number of OSPFv2 Summary IP (Type 3) LSA received.
+  optional uint64 summary_lsa_received = 24;
+
+  // The number of OSPFv2 External (Type 5) LSAs transmitted.
+  optional uint64 external_lsa_sent = 25;
+
+  // The number of OSPFv2 External (Type 5) LSAs received.
+  optional uint64 external_lsa_received = 26;
+
+  // The number of OSPFv2 NSSA (Type 7) LSAs transmitted.
+  optional uint64 nssa_lsa_sent = 27;
+
+  // The number of OSPFv2 NSSA (Type 7) LSAs received.
+  optional uint64 nssa_lsa_received = 28;
+
+  // The number of OSPFv2 Opaque Local (Type 9) LSAs transmitted.
+  optional uint64 opaque_local_sent = 29;
+
+  // The number of OSPFv2 Opaque Local (Type 9) LSAs received.
+  optional uint64 opaque_local_received = 30;
+
+  // The number of OSPF Opaque Area (Type 10) LSAs transmitted.
+  optional uint64 opaque_area_sent = 31;
+
+  // The number of OSPFv2 Opaque Area (Type 10) LSAs received.
+  optional uint64 opaque_area_received = 32;
+
+  // The number of OSPFv2 Opaque Domain (Type 11) LSAs transmitted.
+  optional uint64 opaque_domain_sent = 33;
+
+  // The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
+  optional uint64 opaque_domain_received = 34;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -10806,6 +13841,11 @@ message StatesRequest {
       isis_lsps = 4;
       lldp_neighbors = 5;
       rsvp_lsps = 6;
+      dhcpv4_interfaces = 7;
+      dhcpv4_leases = 8;
+      dhcpv6_interfaces = 9;
+      dhcpv6_leases = 10;
+      ospfv2_lsas = 11;
     }
   }
   // Description missing in models
@@ -10829,6 +13869,21 @@ message StatesRequest {
 
   // Description missing in models
   RsvpLspsStateRequest rsvp_lsps = 7;
+
+  // Description missing in models
+  Dhcpv4InterfaceStateRequest dhcpv4_interfaces = 8;
+
+  // Description missing in models
+  Dhcpv4LeaseStateRequest dhcpv4_leases = 9;
+
+  // Description missing in models
+  Dhcpv6InterfaceStateRequest dhcpv6_interfaces = 10;
+
+  // Description missing in models
+  Dhcpv6LeaseStateRequest dhcpv6_leases = 11;
+
+  // Description missing in models
+  Ospfv2LsasStateRequest ospfv2_lsas = 12;
 }
 
 // Response containing chosen traffic generator states
@@ -10843,6 +13898,11 @@ message StatesResponse {
       isis_lsps = 4;
       lldp_neighbors = 5;
       rsvp_lsps = 6;
+      dhcpv4_interfaces = 7;
+      dhcpv4_leases = 8;
+      dhcpv6_interfaces = 9;
+      dhcpv6_leases = 10;
+      ospfv2_lsas = 11;
     }
   }
   // Description missing in models
@@ -10866,6 +13926,21 @@ message StatesResponse {
 
   // Description missing in models
   repeated RsvpLspsState rsvp_lsps = 7;
+
+  // Description missing in models
+  repeated Dhcpv4InterfaceState dhcpv4_interfaces = 8;
+
+  // Description missing in models
+  repeated Dhcpv4LeasesState dhcpv4_leases = 9;
+
+  // Description missing in models
+  repeated Dhcpv6InterfaceState dhcpv6_interfaces = 10;
+
+  // Description missing in models
+  repeated Dhcpv6LeasesState dhcpv6_leases = 11;
+
+  // Description missing in models
+  repeated Ospfv2LsaState ospfv2_lsas = 12;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -11071,6 +14146,13 @@ message BgpPrefixIpv4UnicastState {
   // Optional community attributes.
   repeated ResultBgpCommunity communities = 7;
 
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 11;
+
   // Description missing in models
   ResultBgpAsPath as_path = 8;
 
@@ -11115,6 +14197,13 @@ message BgpPrefixIpv6UnicastState {
   // Optional community attributes.
   repeated ResultBgpCommunity communities = 7;
 
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 11;
+
   // Description missing in models
   ResultBgpAsPath as_path = 8;
 
@@ -11125,6 +14214,293 @@ message BgpPrefixIpv6UnicastState {
   // The multi exit discriminator (MED) is an optional non-transitive attribute and the
   // value is used for route selection. The route with the lowest MED value is preferred.
   optional uint32 multi_exit_discriminator = 10;
+}
+
+// Each received Extended Community attribute is available for retrieval in two forms.
+// Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present
+// and available for use. In addition, if supported by the implementation, the Extended
+// Community attribute may also be retrieved in the 'structured' format which is an
+// optional field.
+message ResultExtendedCommunity {
+
+  // The raw byte contents of the 8 bytes received in the Extended Community as 16 hex
+  // characters.
+  optional string raw = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityStructured structured = 2;
+}
+
+// The Extended Communities Attribute is a optional BGP attribute,defined in RFC4360
+// with the Type Code 16.
+// Community and Extended Communities  attributes are utilized to trigger routing decisions,
+// such as acceptance, rejection,  preference, or redistribution.
+// An extended community is an 8-bytes value. It is divided into two main parts. The
+// first 2 bytes of the community  encode a type and optonal sub-type field.
+// The last 6 bytes (or 7 bytes for types without a sub-type) carry a unique set of
+// data in a format defined by the type and optional sub-type field.
+// Extended communities provide a larger  range for grouping or categorizing communities.
+message ResultExtendedCommunityStructured {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      transitive_2octet_as_type = 1;
+      transitive_ipv4_address_type = 2;
+      transitive_4octet_as_type = 3;
+      transitive_opaque_type = 4;
+      non_transitive_2octet_as_type = 5;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive2OctetAsType transitive_2octet_as_type = 2;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveIpv4AddressType transitive_ipv4_address_type = 3;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive4OctetAsType transitive_4octet_as_type = 4;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveOpaqueType transitive_opaque_type = 5;
+
+  // Description missing in models
+  ResultExtendedCommunityNonTransitive2OctetAsType non_transitive_2octet_as_type = 6;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP Update message.  It is sent
+// with sub-type as 0x02.
+message ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget {
+
+  // The two octet IANA assigned AS value assigned to the Autonomous System.
+  optional uint32 global_2byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  optional uint32 local_4byte_admin = 2;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP. It is sent with sub-type as 0x03 .
+message ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
+
+  // The two octet IANA assigned AS value assigned to the Autonomous System.
+  optional uint32 global_2byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  optional uint32 local_4byte_admin = 2;
+}
+
+// The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
+// 
+message ResultExtendedCommunityTransitive2OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP It is sent with sub-type as 0x03.
+message ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin {
+
+  // An IPv4 unicast address assigned by one of the Internet registries.
+  optional string global_ipv4_admin = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which  the IP address carried in the Global Administrator
+  // sub-field has been assigned by an appropriate authority.
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP.  It is sent with sub-type as
+// 0x02.
+message ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget {
+
+  // An IPv4 unicast address assigned by one of the Internet registries.
+  optional string global_ipv4_admin = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which  the IP address carried in the Global Administrator
+  // sub-field has been assigned by an appropriate authority.
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Transitive IPv4 Address Specific Extended Community is sent as type 0x01.
+message ResultExtendedCommunityTransitiveIpv4AddressType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Route Target Community identifies one or more routers that may receive a set
+// of routes (that carry this Community) carried by BGP.  It is sent with sub-type as
+// 0x02
+message ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget {
+
+  // The four octet IANA assigned AS value assigned to the Autonomous System.
+  optional uint32 global_4byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Route Origin Community identifies one or more routers that inject a set of routes
+// (that carry this Community) into BGP. It is sent with sub-type as 0x03.
+message ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin {
+
+  // The four octet IANA assigned AS value assigned to the Autonomous System.
+  optional uint32 global_4byte_as = 1;
+
+  // The Local Administrator sub-field contains a number from a numbering space that is
+  // administered by the organization to which the Autonomous System number carried in
+  // the Global Administrator sub-field has been assigned by an appropriate authority.
+  optional uint32 local_2byte_admin = 2;
+}
+
+// The Transitive Four-Octet AS-Specific Extended Community is sent as type 0x02. It
+// is defined in RFC 5668.
+message ResultExtendedCommunityTransitive4OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      route_target_subtype = 1;
+      route_origin_subtype = 2;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget route_target_subtype = 2;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive4OctetAsTypeRouteOrigin route_origin_subtype = 3;
+}
+
+// The Color Community contains locally administrator defined 'color' value which is
+// used in conjunction with Encapsulation  attribute to decide whether a data packet
+// can be transmitted on a certain tunnel or not. It is defined in RFC9012 and sent
+// with sub-type as 0x0b.
+message ResultExtendedCommunityTransitiveOpaqueTypeColor {
+
+  // Two octet flag values.
+  optional uint32 flags = 1;
+
+  // The color value is user defined and configured locally and used to determine whether
+  // a data packet can be transmitted on a certain tunnel or not
+  // in conjunction with the Encapsulation attribute. It is defined in RFC9012.
+  // 
+  optional uint32 color = 2;
+}
+
+// This identifies the type of tunneling technology being signalled. It is defined in
+// RFC9012 and sent with sub-type as 0x0c.
+message ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation {
+
+  // Four bytes of reserved values. Normally set to 0 on transmit and ignored on receive.
+  // 
+  optional uint32 reserved = 1;
+
+  // Identifies the type of tunneling technology being signalled. Initially defined in
+  // RFC5512 and extended in RFC9012.
+  // Some of the important tunnel types include
+  // - 1 L2TPv3 over IP	[RFC9012],
+  // - 2	GRE	[RFC9012],
+  // - 7	IP in IP	[RFC9012],
+  // - 8	VXLAN Encapsulation	[RFC8365],
+  // - 9	NVGRE Encapsulation	[RFC8365],
+  // - 10	MPLS Encapsulation	[RFC8365],
+  // - 15	SR TE Policy Type	[draft-ietf-idr-segment-routing-te-policy],
+  // - 19	Geneve Encapsulation	[RFC8926]
+  optional uint32 tunnel_type = 2;
+}
+
+// The Transitive Opaque Extended Community is sent as type 0x03.
+message ResultExtendedCommunityTransitiveOpaqueType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      color_subtype = 1;
+      encapsulation_subtype = 2;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveOpaqueTypeColor color_subtype = 2;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitiveOpaqueTypeEncapsulation encapsulation_subtype = 3;
+}
+
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// It is sent with sub-type as 0x04.
+message ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  optional float bandwidth = 2;
+}
+
+// The Non-Transitive Two-Octet AS-Specific Extended Community is sent as type 0x40.
+// 
+message ResultExtendedCommunityNonTransitive2OctetAsType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      link_bandwidth_subtype = 1;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -11635,7 +15011,12 @@ message LldpCustomTLVState {
 
   // The organizationally defined subtype field shall contain a unique subtype value assigned
   // by the defining organization.
-  optional string oui_subtype = 3;
+  optional uint32 oui_subtype = 3;
+
+  // Contains information on the remaining bytes of the received Organization-Specific
+  // TLV after the sub-type field. The value must be returned in lowercase hexadecimal
+  // format.
+  optional string information = 4;
 }
 
 // LLDP system capability advertised by the neighbor
@@ -11803,6 +15184,420 @@ message RsvpLspIpv4Ero {
   }
   // The type indicated by the ERO.
   optional Type.Enum type = 3;
+}
+
+// The request for assigned IPv4 address information associated with DHCP Client sessions.
+message Dhcpv4InterfaceStateRequest {
+
+  // The names of DHCPv4 client to return results for. An empty list will return results
+  // for all DHCPv4 Client address information.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4client/properties/name
+  // 
+  repeated string dhcp_client_names = 1;
+}
+
+// The IPv4 address associated with this DHCP Client session.
+message Dhcpv4InterfaceState {
+
+  // The name of a DHCPv4 Client.
+  optional string dhcp_client_name = 1;
+
+  // The IPv4 address associated with this DHCP Client session.
+  optional string ipv4_address = 2;
+
+  // The length of the prefix.
+  optional uint32 prefix_length = 3;
+
+  // The Gateway Ipv4 address associated with this DHCP Client session.
+  optional string gateway_address = 4;
+
+  // The duration of the IPv4 address lease, in seconds.
+  optional uint32 lease_time = 5;
+
+  // Time in seconds until the DHCPv4 client starts renewing the lease.
+  optional uint32 renew_time = 6;
+
+  // Time in seconds until the DHCPv4 client starts rebinding.
+  optional uint32 rebind_time = 7;
+}
+
+// The request to retrieve DHCP Server host allocated status.
+message Dhcpv4LeaseStateRequest {
+
+  // The names of DHCPv4 server to return results for. An empty list will return results
+  // for all DHCPv4 servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv4server/properties/name
+  // 
+  repeated string dhcp_server_names = 1;
+}
+
+// Lease information of DHCP Server.
+message Dhcpv4LeasesState {
+
+  // The name of a DHCP Server.
+  optional string dhcp_server_name = 1;
+
+  // Description missing in models
+  repeated Dhcpv4LeaseState leases = 2;
+}
+
+// IPv4 address lease state.
+message Dhcpv4LeaseState {
+
+  // The IPv4 address associated with this lease.
+  optional string address = 1;
+
+  // The time in seconds after which the IPv4 address lease will expire.
+  optional uint32 valid_time = 2;
+
+  // The elapsed time in seconds since the address has been renewed.
+  optional uint32 preferred_time = 3;
+
+  // Time in seconds until the DHCPv4 client starts renewing the lease.
+  optional uint32 renew_time = 4;
+
+  // Time in seconds until the DHCPv4 client starts rebinding.
+  optional uint32 rebind_time = 5;
+
+  // The ID of the DHCPv4 client holding this lease.
+  optional string client_id = 6;
+
+  // The Circuit ID option found in the last request message.
+  optional string circuit_id = 7;
+
+  // The Remote ID option found in the last request message.
+  optional string remote_id = 8;
+}
+
+// The request for assigned IPv6 address information associated with DHCP Client sessions.
+message Dhcpv6InterfaceStateRequest {
+
+  // The names of DHCPv6 client to return results for. An empty list will return results
+  // for all DHCPv6 Client address information.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6client/properties/name
+  // 
+  repeated string dhcp_client_names = 1;
+}
+
+// The IPv6 address associated with this DHCP Client session.
+message Dhcpv6InterfaceState {
+
+  // The name of a DHCPv6 Client.
+  optional string dhcp_client_name = 1;
+
+  // The IPv6 IAPD addresses and prefixes associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceIapd iapd_addresses = 2;
+
+  // The IPv6 IATA/IANA addresses and gateways associated with this DHCP Client session.
+  repeated Dhcpv6InterfaceIa ia_addresses = 3;
+}
+
+// The IPv6 IAPD address and prefix length associated with this DHCP Client session.
+message Dhcpv6InterfaceIapd {
+
+  // The IAPD address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The prefix length of the IAPD address associated with this DHCPv6 Client session.
+  optional uint32 prefix_length = 2;
+
+  // The duration of the IPv6 address lease, in seconds.
+  optional uint32 lease_time = 3;
+}
+
+// The IPv6 IATA/IANA address and gateway associated with this DHCP Client session.
+message Dhcpv6InterfaceIa {
+
+  // The address associated with this DHCPv6 Client session.
+  optional string address = 1;
+
+  // The Gateway address associated with this DHCPv6 Client session.
+  optional string gateway = 2;
+
+  // The duration of the IPv6 address lease, in seconds.
+  optional uint32 lease_time = 3;
+}
+
+// The request to retrieve DHCP Server host allocated status.
+message Dhcpv6LeaseStateRequest {
+
+  // The names of DHCPv6 server to return results for. An empty list will return results
+  // for all DHCPv6 servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6server/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Dhcpv6server/properties/name
+  // 
+  repeated string dhcp_server_names = 1;
+}
+
+// Lease information of DHCP Server.
+message Dhcpv6LeasesState {
+
+  // The name of a DHCP Server.
+  optional string dhcp_server_name = 1;
+
+  // Description missing in models
+  repeated Dhcpv6ServerLeaseState leases = 2;
+}
+
+// IPv6 unicast prefix.
+message Dhcpv6ServerLeaseState {
+
+  // The IPv6 address associated with this lease.
+  optional string address = 1;
+
+  // The time in seconds, IP address lease will expire.
+  optional uint32 valid_time = 2;
+
+  // The time in seconds, elapsed time since address has been renewed.
+  optional uint32 preferred_time = 3;
+
+  // Time in seconds until the DHCPv6 client starts renewing the lease.
+  optional uint32 renew_time = 4;
+
+  // Time in seconds until the DHCPv6 client starts rebinding.
+  optional uint32 rebind_time = 5;
+
+  // The ID of the DHCPv6 client holding this lease.
+  optional string client_id = 6;
+
+  // The Remote ID option found in the last request message.
+  optional string remote_id = 7;
+
+  // The Interface ID option found in the last request message.
+  optional string interface_id = 8;
+}
+
+// The request to retrieve OSPFv2 Link State Advertisements (LSA) information learned
+// by the routers.
+message Ospfv2LsasStateRequest {
+
+  // The names of OSPFv2 routers for which learned information is requested. An empty
+  // list will return results for all OSPFv2 routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2Router/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ospfv2Router/properties/name
+  // 
+  repeated string router_names = 1;
+}
+
+// The result of OSPFv2 LSA information that are retrieved.
+message Ospfv2LsaState {
+
+  // The name of the OSPFv2 Router that learned the LSA information.
+  optional string router_name = 1;
+
+  // One or more OSPFv2 Router-LSA - Type 1.
+  repeated Ospfv2RouterLsa router_lsas = 2;
+
+  // One or more OSPFv2 Network-LSA - Type 2.
+  repeated Ospfv2NetworkLsa network_lsas = 3;
+
+  // One or more OSPFv2 Network summary LSA - Type 3.
+  repeated Ospfv2NetworkSummaryLsa network_summary_lsas = 4;
+
+  // One or more OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+  repeated Ospfv2SummaryAsLsa summary_as_lsas = 5;
+
+  // OSPFv2 AS-External-LSA - Type 5.
+  repeated Ospfv2ExternalAsLsa external_as_lsas = 6;
+
+  // One or more OSPFv2 NSSA-LSA - Type 7.
+  repeated Ospfv2NssaLsa nssa_lsas = 7;
+
+  // One or more OSPFv2 Link-Scope Opaque-LSA - Type 9.
+  repeated Ospfv2OpaqueLsa opaque_lsas = 8;
+}
+
+// Contents of the router LSA.
+message Ospfv2RouterLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // Links that are described within the LSA.
+  repeated Ospfv2Link links = 2;
+}
+
+// Contents of the Network LSA.
+message Ospfv2NetworkLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // Neighbor router ids that are described within the LSA.
+  repeated string neighbor_router_ids = 3;
+}
+
+// Contents of the Network Summary LSA - Type 3.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
+message Ospfv2NetworkSummaryLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+}
+
+// Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
+message Ospfv2SummaryAsLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+}
+
+// Contents of OSPFv2 AS-External-LSA - Type 5.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
+message Ospfv2ExternalAsLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+
+  // The type of metric associated with the route range.
+  optional uint32 metric_type = 4;
+}
+
+// Contents of OSPFv2 NSSA LSA - Type 7.
+// The value of the IPv4 prefix that was received is present in header.lsa_id.
+message Ospfv2NssaLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  // The IPv4 address mask for the network.
+  optional string network_mask = 2;
+
+  // The cost of the summary route TOS level 0 and all unspecified levels.
+  optional uint32 metric = 3;
+
+  // The type of metric associated with the route range.
+  optional uint32 metric_type = 4;
+
+  // IPv4 Forwarding address.
+  optional string forwarding_address = 5;
+}
+
+// Contents of OSPFv2 Opaque LSA - Type 7.
+message Ospfv2OpaqueLsa {
+
+  // Contents of the LSA header.
+  Ospfv2LsaHeader header = 1;
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      local = 1;
+      area = 2;
+      domain = 3;
+    }
+  }
+  // The type of Opaque TE LSAs. The LSA type.
+  optional Type.Enum type = 2;
+}
+
+// Attributes in LSA Header.
+message Ospfv2LsaHeader {
+
+  // LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
+  optional string lsa_id = 1;
+
+  // The router ID (in the IPv4 format) of the router that originated the LSA.
+  optional string advertising_router_id = 2;
+
+  // Sequence number to detect old and duplicate LSAs. The greater the sequence number
+  // the more recent the LSA.
+  optional uint32 sequence_number = 3;
+
+  // The time since the LSA's generation in seconds.
+  optional uint32 age = 4;
+
+  // The optional bits.
+  optional uint32 option_bits = 5;
+}
+
+// Generic attributes used to identify links within OSPFv2.
+message Ospfv2Link {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      point_to_point = 1;
+      transit = 2;
+      stub = 3;
+      virtual = 4;
+    }
+  }
+  // The data associated with the link type. The value is dependent upon the subtype of
+  // the LSA. - point_to_point: The LSA represents a point-to-point connection to another
+  // router. - transit: The LSA represents a connection to a transit network. - stub:
+  // The LSA represents a connection to a stub network. - virtual: The LSA represents
+  // a virtual link connection.
+  optional Type.Enum type = 1;
+
+  // The identifier for the link specified. The value of the link
+  // identifier is dependent upon the type of the LSA.
+  optional string id = 2;
+
+  // The data associated with the link type. The value is
+  // dependent upon the subtype of the LSA. When the connection is
+  // to a stub network it represents the mask; for p2p connections
+  // that are unnumbered it represents the ifIndex value of the
+  // router's interface; for all other connections it represents
+  // the local system's IP address.
+  optional string data = 3;
+
+  // The data associated with the link type. The value is
+  // dependent upon the subtype of the LSA. When the connection is
+  // to a stub network it represents the mask; for p2p connections
+  // that are unnumbered it represents the ifIndex value of the
+  // router's interface; for all other connections it represents
+  // the local system's IP address.
+  optional uint32 metric = 4;
 }
 
 // The capture result request to the traffic generator. Stops the port capture on the
@@ -13516,6 +17311,29 @@ message PatternFlowIpv4SrcMetricTag {
   optional uint32 length = 3;
 }
 
+// ipv4 random pattern
+message PatternFlowIpv4SrcRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0.0.0.0
+  optional string min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 255.255.255.255
+  optional string max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Source address
 message PatternFlowIpv4Src {
 
@@ -13526,6 +17344,8 @@ message PatternFlowIpv4Src {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
+      random = 6;
     }
   }
   // Description missing in models
@@ -13550,6 +17370,12 @@ message PatternFlowIpv4Src {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv4SrcMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
+
+  // Description missing in models
+  PatternFlowIpv4SrcRandom random = 9;
 }
 
 // ipv4 counter pattern
@@ -13588,6 +17414,29 @@ message PatternFlowIpv4DstMetricTag {
   optional uint32 length = 3;
 }
 
+// ipv4 random pattern
+message PatternFlowIpv4DstRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0.0.0.0
+  optional string min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 255.255.255.255
+  optional string max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Destination address
 message PatternFlowIpv4Dst {
 
@@ -13598,6 +17447,8 @@ message PatternFlowIpv4Dst {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
+      random = 6;
     }
   }
   // Description missing in models
@@ -13622,6 +17473,12 @@ message PatternFlowIpv4Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv4DstMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv4Auto auto = 8;
+
+  // Description missing in models
+  PatternFlowIpv4DstRandom random = 9;
 }
 
 // integer counter pattern
@@ -14593,6 +18450,29 @@ message PatternFlowIpv6FlowLabelMetricTag {
   optional uint32 length = 3;
 }
 
+// integer random pattern
+message PatternFlowIpv6FlowLabelRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0
+  optional uint32 min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 1048575
+  optional uint32 max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Flow label
 message PatternFlowIpv6FlowLabel {
 
@@ -14603,6 +18483,7 @@ message PatternFlowIpv6FlowLabel {
       values = 3;
       increment = 4;
       decrement = 5;
+      random = 6;
     }
   }
   // Description missing in models
@@ -14627,6 +18508,9 @@ message PatternFlowIpv6FlowLabel {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6FlowLabelMetricTag metric_tags = 7;
+
+  // Description missing in models
+  PatternFlowIpv6FlowLabelRandom random = 8;
 }
 
 // integer counter pattern
@@ -14905,6 +18789,7 @@ message PatternFlowIpv6Src {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
     }
   }
   // Description missing in models
@@ -14929,6 +18814,9 @@ message PatternFlowIpv6Src {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6SrcMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv6Auto auto = 8;
 }
 
 // ipv6 counter pattern
@@ -14977,6 +18865,7 @@ message PatternFlowIpv6Dst {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
     }
   }
   // Description missing in models
@@ -15001,6 +18890,9 @@ message PatternFlowIpv6Dst {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowIpv6DstMetricTag metric_tags = 7;
+
+  // Description missing in models
+  FlowIpv6Auto auto = 8;
 }
 
 // mac counter pattern
@@ -16335,6 +20227,29 @@ message PatternFlowTcpSrcPortMetricTag {
   optional uint32 length = 3;
 }
 
+// integer random pattern
+message PatternFlowTcpSrcPortRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0
+  optional uint32 min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 65535
+  optional uint32 max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Source port
 message PatternFlowTcpSrcPort {
 
@@ -16345,6 +20260,7 @@ message PatternFlowTcpSrcPort {
       values = 3;
       increment = 4;
       decrement = 5;
+      random = 6;
     }
   }
   // Description missing in models
@@ -16369,6 +20285,9 @@ message PatternFlowTcpSrcPort {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowTcpSrcPortMetricTag metric_tags = 7;
+
+  // Description missing in models
+  PatternFlowTcpSrcPortRandom random = 8;
 }
 
 // integer counter pattern
@@ -16407,6 +20326,29 @@ message PatternFlowTcpDstPortMetricTag {
   optional uint32 length = 3;
 }
 
+// integer random pattern
+message PatternFlowTcpDstPortRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0
+  optional uint32 min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 65535
+  optional uint32 max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Destination port
 message PatternFlowTcpDstPort {
 
@@ -16417,6 +20359,7 @@ message PatternFlowTcpDstPort {
       values = 3;
       increment = 4;
       decrement = 5;
+      random = 6;
     }
   }
   // Description missing in models
@@ -16441,6 +20384,9 @@ message PatternFlowTcpDstPort {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowTcpDstPortMetricTag metric_tags = 7;
+
+  // Description missing in models
+  PatternFlowTcpDstPortRandom random = 8;
 }
 
 // integer counter pattern
@@ -17380,6 +21326,37 @@ message PatternFlowTcpWindow {
   repeated PatternFlowTcpWindowMetricTag metric_tags = 7;
 }
 
+// The one's complement of the one's complement sum of all 16 bit words in header and
+// text.  An all-zero value means that no checksum will be transmitted.   While computing
+// the checksum, the checksum field itself is replaced with zeros.
+message PatternFlowTcpChecksum {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      generated = 1;
+      custom = 2;
+    }
+  }
+  // The type of checksum
+  // default = Choice.Enum.generated
+  optional Choice.Enum choice = 1;
+
+  message Generated {
+    enum Enum {
+      unspecified = 0;
+      good = 1;
+      bad = 2;
+    }
+  }
+  // A system generated checksum value
+  // default = Generated.Enum.good
+  optional Generated.Enum generated = 2;
+
+  // A custom checksum value
+  optional uint32 custom = 3;
+}
+
 // integer counter pattern
 message PatternFlowUdpSrcPortCounter {
 
@@ -17416,6 +21393,29 @@ message PatternFlowUdpSrcPortMetricTag {
   optional uint32 length = 3;
 }
 
+// integer random pattern
+message PatternFlowUdpSrcPortRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0
+  optional uint32 min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 65535
+  optional uint32 max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Source port
 message PatternFlowUdpSrcPort {
 
@@ -17426,6 +21426,7 @@ message PatternFlowUdpSrcPort {
       values = 3;
       increment = 4;
       decrement = 5;
+      random = 6;
     }
   }
   // Description missing in models
@@ -17450,6 +21451,9 @@ message PatternFlowUdpSrcPort {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowUdpSrcPortMetricTag metric_tags = 7;
+
+  // Description missing in models
+  PatternFlowUdpSrcPortRandom random = 8;
 }
 
 // integer counter pattern
@@ -17488,6 +21492,29 @@ message PatternFlowUdpDstPortMetricTag {
   optional uint32 length = 3;
 }
 
+// integer random pattern
+message PatternFlowUdpDstPortRandom {
+
+  // The minimum possible value generated by the random value generator.
+  // default = 0
+  optional uint32 min = 1;
+
+  // The maximum possible value generated by the random value generator.
+  // default = 65535
+  optional uint32 max = 2;
+
+  // The seed value is used to initialize the random number generator to a deterministic
+  // state. If the user provides a seed value of 0, the implementation will generate a
+  // sequence of non-deterministic random values. For any other seed value, the sequence
+  // of random numbers will be generated in a deterministic manner (specific to the implementation).
+  // default = 1
+  optional uint32 seed = 3;
+
+  // The total number of values to be generated by the random value generator.
+  // default = 1
+  optional uint32 count = 4;
+}
+
 // Destination port
 message PatternFlowUdpDstPort {
 
@@ -17498,6 +21525,7 @@ message PatternFlowUdpDstPort {
       values = 3;
       increment = 4;
       decrement = 5;
+      random = 6;
     }
   }
   // Description missing in models
@@ -17522,6 +21550,9 @@ message PatternFlowUdpDstPort {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowUdpDstPortMetricTag metric_tags = 7;
+
+  // Description missing in models
+  PatternFlowUdpDstPortRandom random = 8;
 }
 
 // integer counter pattern
@@ -17887,10 +21918,11 @@ message PatternFlowGreProtocol {
       values = 3;
       increment = 4;
       decrement = 5;
+      auto = 1;
     }
   }
   // Description missing in models
-  // default = Choice.Enum.value
+  // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -17911,6 +21943,12 @@ message PatternFlowGreProtocol {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowGreProtocolMetricTag metric_tags = 7;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 2048
+  optional uint32 auto = 8;
 }
 
 // Optional checksum of GRE header and payload. Only present if the checksum_present
