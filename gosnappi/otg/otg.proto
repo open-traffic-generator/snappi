@@ -2469,6 +2469,13 @@ message IsisSRRouterNodePrefix {
   // The node prefix taken in IPv4 format.
   IsisSRIP custom_node_prefix = 2;
 
+  message Redistribution {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
   // Defines the Up/Down (Redistribution) bit defined for TLVs 128 and 130 by RFC 2966.
   // It is used for domain-wide advertisement of prefix information.
   // If up - used when a prefix is initially advertised within the ISIS L3 hierarchy,
@@ -2476,8 +2483,8 @@ message IsisSRRouterNodePrefix {
   // When down - used when an L1/L2 router advertises L2 prefixes in L1 LSPs.
   // The prefixes are being advertised from a higher level (L2) down to a lower level
   // (L1).
-  // default = up
-  optional string redistribution = 3;
+  // default = Redistribution.Enum.up
+  optional Redistribution.Enum redistribution = 3;
 
   // Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
   // will be advertised or not.
@@ -2500,7 +2507,7 @@ message IsisSRRouterNodePrefix {
   IsisSRPrefixSID prefix_sid_params = 8;
 }
 
-// TBD
+// The IPv4 address and its prefix.
 message IsisSRIP {
 
   // The starting address of the network.

@@ -242,7 +242,7 @@ func (obj *isisSRIP) Clone() (IsisSRIP, error) {
 	return newObj, nil
 }
 
-// IsisSRIP is tBD
+// IsisSRIP is the IPv4 address and its prefix.
 type IsisSRIP interface {
 	Validation
 	// msg marshals IsisSRIP to protobuf object *otg.IsisSRIP

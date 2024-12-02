@@ -280,15 +280,15 @@ type IsisSRRouterNodePrefix interface {
 	setChoice(value IsisSRRouterNodePrefixChoiceEnum) IsisSRRouterNodePrefix
 	// HasChoice checks if Choice has been set in IsisSRRouterNodePrefix
 	HasChoice() bool
-	// getter for Ipv4TeRouterId to set choice.
-	Ipv4TeRouterId()
 	// getter for InterfaceIp to set choice.
 	InterfaceIp()
+	// getter for Ipv4TeRouterId to set choice.
+	Ipv4TeRouterId()
 	// CustomNodePrefix returns IsisSRIP, set in IsisSRRouterNodePrefix.
-	// IsisSRIP is tBD
+	// IsisSRIP is the IPv4 address and its prefix.
 	CustomNodePrefix() IsisSRIP
 	// SetCustomNodePrefix assigns IsisSRIP provided by user to IsisSRRouterNodePrefix.
-	// IsisSRIP is tBD
+	// IsisSRIP is the IPv4 address and its prefix.
 	SetCustomNodePrefix(value IsisSRIP) IsisSRRouterNodePrefix
 	// HasCustomNodePrefix checks if CustomNodePrefix has been set in IsisSRRouterNodePrefix
 	HasCustomNodePrefix() bool
@@ -350,14 +350,14 @@ func (obj *isisSRRouterNodePrefix) Choice() IsisSRRouterNodePrefixChoiceEnum {
 	return IsisSRRouterNodePrefixChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Ipv4TeRouterId to set choice
-func (obj *isisSRRouterNodePrefix) Ipv4TeRouterId() {
-	obj.setChoice(IsisSRRouterNodePrefixChoice.IPV4_TE_ROUTER_ID)
-}
-
 // getter for InterfaceIp to set choice
 func (obj *isisSRRouterNodePrefix) InterfaceIp() {
 	obj.setChoice(IsisSRRouterNodePrefixChoice.INTERFACE_IP)
+}
+
+// getter for Ipv4TeRouterId to set choice
+func (obj *isisSRRouterNodePrefix) Ipv4TeRouterId() {
+	obj.setChoice(IsisSRRouterNodePrefixChoice.IPV4_TE_ROUTER_ID)
 }
 
 // Node Prefix Segment Identifier (Prefix-SID).

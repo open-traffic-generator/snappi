@@ -3624,11 +3624,16 @@ components:
             \ prefixes in L1 LSPs. \nThe prefixes are being advertised from a higher\
             \ level (L2) down to a lower level (L1)."
           type: string
+          default: up
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          x-field-uid: 3
           enum:
           - up
           - down
-          default: up
-          x-field-uid: 3
         prefix_attr_enabled:
           x-field-uid: 4
           description: "Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability\
@@ -3658,7 +3663,7 @@ components:
           x-field-uid: 8
     IsisSR.IP:
       description: |-
-        TBD
+        The IPv4 address and its prefix.
       type: object
       properties:
         address:
