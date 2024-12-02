@@ -13,10 +13,11 @@ import (
 // ***** IsisV4RouteRange *****
 type isisV4RouteRange struct {
 	validation
-	obj             *otg.IsisV4RouteRange
-	marshaller      marshalIsisV4RouteRange
-	unMarshaller    unMarshalIsisV4RouteRange
-	addressesHolder IsisV4RouteRangeV4RouteAddressIter
+	obj                   *otg.IsisV4RouteRange
+	marshaller            marshalIsisV4RouteRange
+	unMarshaller          unMarshalIsisV4RouteRange
+	addressesHolder       IsisV4RouteRangeV4RouteAddressIter
+	prefixSidParamsHolder IsisV4RouteRangeIsisSRPrefixSIDIter
 }
 
 func NewIsisV4RouteRange() IsisV4RouteRange {
@@ -245,6 +246,7 @@ func (obj *isisV4RouteRange) Clone() (IsisV4RouteRange, error) {
 
 func (obj *isisV4RouteRange) setNil() {
 	obj.addressesHolder = nil
+	obj.prefixSidParamsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -320,6 +322,8 @@ type IsisV4RouteRange interface {
 	SetNFlag(value bool) IsisV4RouteRange
 	// HasNFlag checks if NFlag has been set in IsisV4RouteRange
 	HasNFlag() bool
+	// PrefixSidParams returns IsisV4RouteRangeIsisSRPrefixSIDIterIter, set in IsisV4RouteRange
+	PrefixSidParams() IsisV4RouteRangeIsisSRPrefixSIDIter
 	setNil()
 }
 
@@ -617,6 +621,93 @@ func (obj *isisV4RouteRange) SetNFlag(value bool) IsisV4RouteRange {
 	return obj
 }
 
+// A list of SID paramters for a group of IPv4 route addresses.
+// PrefixSidParams returns a []IsisSRPrefixSID
+func (obj *isisV4RouteRange) PrefixSidParams() IsisV4RouteRangeIsisSRPrefixSIDIter {
+	if len(obj.obj.PrefixSidParams) == 0 {
+		obj.obj.PrefixSidParams = []*otg.IsisSRPrefixSID{}
+	}
+	if obj.prefixSidParamsHolder == nil {
+		obj.prefixSidParamsHolder = newIsisV4RouteRangeIsisSRPrefixSIDIter(&obj.obj.PrefixSidParams).setMsg(obj)
+	}
+	return obj.prefixSidParamsHolder
+}
+
+type isisV4RouteRangeIsisSRPrefixSIDIter struct {
+	obj                  *isisV4RouteRange
+	isisSRPrefixSIDSlice []IsisSRPrefixSID
+	fieldPtr             *[]*otg.IsisSRPrefixSID
+}
+
+func newIsisV4RouteRangeIsisSRPrefixSIDIter(ptr *[]*otg.IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter {
+	return &isisV4RouteRangeIsisSRPrefixSIDIter{fieldPtr: ptr}
+}
+
+type IsisV4RouteRangeIsisSRPrefixSIDIter interface {
+	setMsg(*isisV4RouteRange) IsisV4RouteRangeIsisSRPrefixSIDIter
+	Items() []IsisSRPrefixSID
+	Add() IsisSRPrefixSID
+	Append(items ...IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter
+	Set(index int, newObj IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter
+	Clear() IsisV4RouteRangeIsisSRPrefixSIDIter
+	clearHolderSlice() IsisV4RouteRangeIsisSRPrefixSIDIter
+	appendHolderSlice(item IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter
+}
+
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) setMsg(msg *isisV4RouteRange) IsisV4RouteRangeIsisSRPrefixSIDIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisSRPrefixSID{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) Items() []IsisSRPrefixSID {
+	return obj.isisSRPrefixSIDSlice
+}
+
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) Add() IsisSRPrefixSID {
+	newObj := &otg.IsisSRPrefixSID{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisSRPrefixSID{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisSRPrefixSIDSlice = append(obj.isisSRPrefixSIDSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) Append(items ...IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisSRPrefixSIDSlice = append(obj.isisSRPrefixSIDSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) Set(index int, newObj IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisSRPrefixSIDSlice[index] = newObj
+	return obj
+}
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) Clear() IsisV4RouteRangeIsisSRPrefixSIDIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisSRPrefixSID{}
+		obj.isisSRPrefixSIDSlice = []IsisSRPrefixSID{}
+	}
+	return obj
+}
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) clearHolderSlice() IsisV4RouteRangeIsisSRPrefixSIDIter {
+	if len(obj.isisSRPrefixSIDSlice) > 0 {
+		obj.isisSRPrefixSIDSlice = []IsisSRPrefixSID{}
+	}
+	return obj
+}
+func (obj *isisV4RouteRangeIsisSRPrefixSIDIter) appendHolderSlice(item IsisSRPrefixSID) IsisV4RouteRangeIsisSRPrefixSIDIter {
+	obj.isisSRPrefixSIDSlice = append(obj.isisSRPrefixSIDSlice, item)
+	return obj
+}
+
 func (obj *isisV4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -650,6 +741,21 @@ func (obj *isisV4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisV4RouteRange")
 	}
+
+	if len(obj.obj.PrefixSidParams) != 0 {
+
+		if set_default {
+			obj.PrefixSidParams().clearHolderSlice()
+			for _, item := range obj.obj.PrefixSidParams {
+				obj.PrefixSidParams().appendHolderSlice(&isisSRPrefixSID{obj: item})
+			}
+		}
+		for _, item := range obj.PrefixSidParams().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *isisV4RouteRange) setDefault() {

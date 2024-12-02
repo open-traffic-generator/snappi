@@ -17,6 +17,7 @@ type isisLspExtendedV4Prefix struct {
 	marshaller             marshalIsisLspExtendedV4Prefix
 	unMarshaller           unMarshalIsisLspExtendedV4Prefix
 	prefixAttributesHolder IsisLspPrefixAttributes
+	prefixSidsHolder       IsisLspPrefixSids
 }
 
 func NewIsisLspExtendedV4Prefix() IsisLspExtendedV4Prefix {
@@ -245,6 +246,7 @@ func (obj *isisLspExtendedV4Prefix) Clone() (IsisLspExtendedV4Prefix, error) {
 
 func (obj *isisLspExtendedV4Prefix) setNil() {
 	obj.prefixAttributesHolder = nil
+	obj.prefixSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -304,6 +306,14 @@ type IsisLspExtendedV4Prefix interface {
 	SetPrefixAttributes(value IsisLspPrefixAttributes) IsisLspExtendedV4Prefix
 	// HasPrefixAttributes checks if PrefixAttributes has been set in IsisLspExtendedV4Prefix
 	HasPrefixAttributes() bool
+	// PrefixSids returns IsisLspPrefixSids, set in IsisLspExtendedV4Prefix.
+	// IsisLspPrefixSids is this contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+	PrefixSids() IsisLspPrefixSids
+	// SetPrefixSids assigns IsisLspPrefixSids provided by user to IsisLspExtendedV4Prefix.
+	// IsisLspPrefixSids is this contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+	SetPrefixSids(value IsisLspPrefixSids) IsisLspExtendedV4Prefix
+	// HasPrefixSids checks if PrefixSids has been set in IsisLspExtendedV4Prefix
+	HasPrefixSids() bool
 	setNil()
 }
 
@@ -438,6 +448,34 @@ func (obj *isisLspExtendedV4Prefix) SetPrefixAttributes(value IsisLspPrefixAttri
 	return obj
 }
 
+// description is TBD
+// PrefixSids returns a IsisLspPrefixSids
+func (obj *isisLspExtendedV4Prefix) PrefixSids() IsisLspPrefixSids {
+	if obj.obj.PrefixSids == nil {
+		obj.obj.PrefixSids = NewIsisLspPrefixSids().msg()
+	}
+	if obj.prefixSidsHolder == nil {
+		obj.prefixSidsHolder = &isisLspPrefixSids{obj: obj.obj.PrefixSids}
+	}
+	return obj.prefixSidsHolder
+}
+
+// description is TBD
+// PrefixSids returns a IsisLspPrefixSids
+func (obj *isisLspExtendedV4Prefix) HasPrefixSids() bool {
+	return obj.obj.PrefixSids != nil
+}
+
+// description is TBD
+// SetPrefixSids sets the IsisLspPrefixSids value in the IsisLspExtendedV4Prefix object
+func (obj *isisLspExtendedV4Prefix) SetPrefixSids(value IsisLspPrefixSids) IsisLspExtendedV4Prefix {
+
+	obj.prefixSidsHolder = nil
+	obj.obj.PrefixSids = value.msg()
+
+	return obj
+}
+
 func (obj *isisLspExtendedV4Prefix) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -465,6 +503,11 @@ func (obj *isisLspExtendedV4Prefix) validateObj(vObj *validation, set_default bo
 	if obj.obj.PrefixAttributes != nil {
 
 		obj.PrefixAttributes().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PrefixSids != nil {
+
+		obj.PrefixSids().validateObj(vObj, set_default)
 	}
 
 }

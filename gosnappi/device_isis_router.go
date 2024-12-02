@@ -13,16 +13,17 @@ import (
 // ***** DeviceIsisRouter *****
 type deviceIsisRouter struct {
 	validation
-	obj              *otg.DeviceIsisRouter
-	marshaller       marshalDeviceIsisRouter
-	unMarshaller     unMarshalDeviceIsisRouter
-	instanceHolder   DeviceIsisMultiInstance
-	interfacesHolder DeviceIsisRouterIsisInterfaceIter
-	basicHolder      IsisBasic
-	advancedHolder   IsisAdvanced
-	routerAuthHolder IsisAuthentication
-	v4RoutesHolder   DeviceIsisRouterIsisV4RouteRangeIter
-	v6RoutesHolder   DeviceIsisRouterIsisV6RouteRangeIter
+	obj                  *otg.DeviceIsisRouter
+	marshaller           marshalDeviceIsisRouter
+	unMarshaller         unMarshalDeviceIsisRouter
+	instanceHolder       DeviceIsisMultiInstance
+	interfacesHolder     DeviceIsisRouterIsisInterfaceIter
+	basicHolder          IsisBasic
+	advancedHolder       IsisAdvanced
+	routerAuthHolder     IsisAuthentication
+	v4RoutesHolder       DeviceIsisRouterIsisV4RouteRangeIter
+	v6RoutesHolder       DeviceIsisRouterIsisV6RouteRangeIter
+	segmentRoutingHolder IsisSegmentRouting
 }
 
 func NewDeviceIsisRouter() DeviceIsisRouter {
@@ -257,6 +258,7 @@ func (obj *deviceIsisRouter) setNil() {
 	obj.routerAuthHolder = nil
 	obj.v4RoutesHolder = nil
 	obj.v6RoutesHolder = nil
+	obj.segmentRoutingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -330,6 +332,24 @@ type DeviceIsisRouter interface {
 	Name() string
 	// SetName assigns string provided by user to DeviceIsisRouter
 	SetName(value string) DeviceIsisRouter
+	// SegmentRouting returns IsisSegmentRouting, set in DeviceIsisRouter.
+	// IsisSegmentRouting is segment Routing (SR) turns on any node to select any path (explicit or derived from IGPs SPT computations)
+	// for each of its traffic classes. The path does not depend on a hop-by-hop
+	// signaling technique (unlike LDP or RSVP).
+	// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+	// These segments act as topological sub-paths that can be combined together to form the required path.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+	SegmentRouting() IsisSegmentRouting
+	// SetSegmentRouting assigns IsisSegmentRouting provided by user to DeviceIsisRouter.
+	// IsisSegmentRouting is segment Routing (SR) turns on any node to select any path (explicit or derived from IGPs SPT computations)
+	// for each of its traffic classes. The path does not depend on a hop-by-hop
+	// signaling technique (unlike LDP or RSVP).
+	// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+	// These segments act as topological sub-paths that can be combined together to form the required path.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+	SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter
+	// HasSegmentRouting checks if SegmentRouting has been set in DeviceIsisRouter
+	HasSegmentRouting() bool
 	setNil()
 }
 
@@ -738,6 +758,34 @@ func (obj *deviceIsisRouter) SetName(value string) DeviceIsisRouter {
 	return obj
 }
 
+// Segment Routing (SR).
+// SegmentRouting returns a IsisSegmentRouting
+func (obj *deviceIsisRouter) SegmentRouting() IsisSegmentRouting {
+	if obj.obj.SegmentRouting == nil {
+		obj.obj.SegmentRouting = NewIsisSegmentRouting().msg()
+	}
+	if obj.segmentRoutingHolder == nil {
+		obj.segmentRoutingHolder = &isisSegmentRouting{obj: obj.obj.SegmentRouting}
+	}
+	return obj.segmentRoutingHolder
+}
+
+// Segment Routing (SR).
+// SegmentRouting returns a IsisSegmentRouting
+func (obj *deviceIsisRouter) HasSegmentRouting() bool {
+	return obj.obj.SegmentRouting != nil
+}
+
+// Segment Routing (SR).
+// SetSegmentRouting sets the IsisSegmentRouting value in the DeviceIsisRouter object
+func (obj *deviceIsisRouter) SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter {
+
+	obj.segmentRoutingHolder = nil
+	obj.obj.SegmentRouting = value.msg()
+
+	return obj
+}
+
 func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -822,6 +870,12 @@ func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceIsisRouter")
 	}
+
+	if obj.obj.SegmentRouting != nil {
+
+		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *deviceIsisRouter) setDefault() {

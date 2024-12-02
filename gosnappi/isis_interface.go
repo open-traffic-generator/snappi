@@ -23,6 +23,7 @@ type isisInterface struct {
 	authenticationHolder     IsisInterfaceAuthentication
 	advancedHolder           IsisInterfaceAdvanced
 	linkProtectionHolder     IsisInterfaceLinkProtection
+	segmentRoutingHolder     IsisInterfaceAdjacencySID
 }
 
 func NewIsisInterface() IsisInterface {
@@ -257,6 +258,7 @@ func (obj *isisInterface) setNil() {
 	obj.authenticationHolder = nil
 	obj.advancedHolder = nil
 	obj.linkProtectionHolder = nil
+	obj.segmentRoutingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -358,13 +360,24 @@ type IsisInterface interface {
 	Name() string
 	// SetName assigns string provided by user to IsisInterface
 	SetName(value string) IsisInterface
+	// SegmentRouting returns IsisInterfaceAdjacencySID, set in IsisInterface.
+	// IsisInterfaceAdjacencySID is optional container for segment routing MPLS settings.
+	// If the container exists then the adjacency SID (segment identifier)
+	// sub TLV will be part of the packet.
+	// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
+	SegmentRouting() IsisInterfaceAdjacencySID
+	// SetSegmentRouting assigns IsisInterfaceAdjacencySID provided by user to IsisInterface.
+	// IsisInterfaceAdjacencySID is optional container for segment routing MPLS settings.
+	// If the container exists then the adjacency SID (segment identifier)
+	// sub TLV will be part of the packet.
+	// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
+	SetSegmentRouting(value IsisInterfaceAdjacencySID) IsisInterface
+	// HasSegmentRouting checks if SegmentRouting has been set in IsisInterface
+	HasSegmentRouting() bool
 	setNil()
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -377,9 +390,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -835,6 +845,34 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
+// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
+// SegmentRouting returns a IsisInterfaceAdjacencySID
+func (obj *isisInterface) SegmentRouting() IsisInterfaceAdjacencySID {
+	if obj.obj.SegmentRouting == nil {
+		obj.obj.SegmentRouting = NewIsisInterfaceAdjacencySID().msg()
+	}
+	if obj.segmentRoutingHolder == nil {
+		obj.segmentRoutingHolder = &isisInterfaceAdjacencySID{obj: obj.obj.SegmentRouting}
+	}
+	return obj.segmentRoutingHolder
+}
+
+// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
+// SegmentRouting returns a IsisInterfaceAdjacencySID
+func (obj *isisInterface) HasSegmentRouting() bool {
+	return obj.obj.SegmentRouting != nil
+}
+
+// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
+// SetSegmentRouting sets the IsisInterfaceAdjacencySID value in the IsisInterface object
+func (obj *isisInterface) SetSegmentRouting(value IsisInterfaceAdjacencySID) IsisInterface {
+
+	obj.segmentRoutingHolder = nil
+	obj.obj.SegmentRouting = value.msg()
+
+	return obj
+}
+
 func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -925,6 +963,12 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisInterface")
 	}
+
+	if obj.obj.SegmentRouting != nil {
+
+		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *isisInterface) setDefault() {

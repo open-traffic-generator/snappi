@@ -125,10 +125,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -301,17 +297,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -320,11 +308,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -349,10 +332,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -458,10 +437,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -532,10 +507,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1249,10 +1220,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1304,16 +1271,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1454,17 +1415,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1769,6 +1724,9 @@ message DeviceIsisRouter {
   // objects.
   // required = true
   optional string name = 9;
+
+  // Segment Routing (SR).
+  IsisSegmentRouting segment_routing = 10;
 }
 
 // This container properties of an Multi-Instance-capable router (MI-RTR).
@@ -1792,10 +1750,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1860,6 +1814,9 @@ message IsisInterface {
   // objects.
   // required = true
   optional string name = 13;
+
+  // List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
+  IsisInterfaceAdjacencySID segment_routing = 14;
 }
 
 // Configuration for the properties of Level 1 Hello.
@@ -2061,6 +2018,54 @@ message IsisInterfaceLinkProtection {
   optional bool reserved_80 = 8;
 }
 
+// Optional container for segment routing MPLS settings.
+// If the container exists then the adjacency SID (segment identifier)
+// sub TLV will be part of the packet.
+// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
+message IsisInterfaceAdjacencySID {
+
+  // The corresponding adjacency SID for a link.
+  // default = 9001
+  optional uint32 adjacency_sid = 1;
+
+  // The address family flag. If unset, then the Adj-SID refers
+  // to an adjacency with outgoing IPv4 encapsulation.  If set then
+  // the Adj-SID refers to an adjacency with outgoing IPv6
+  // encapsulation.
+  // default = False
+  optional bool f_flag = 2;
+
+  // The backup flag. If set, the Adj-SID is eligible for protection.
+  // default = False
+  optional bool b_flag = 3;
+
+  // The value flag. If set, then the Adj-SID carries a value.
+  // default = True
+  optional bool v_flag = 4;
+
+  // The local flag.  If set, then the value/index carried by
+  // the Adj-SID has local significance.
+  // default = True
+  optional bool l_flag = 5;
+
+  // The set flag. When set, the S-Flag indicates that the
+  // Adj-SID refers to a set of adjacencies (and therefore MAY be
+  // assigned to other adjacencies as well).
+  // default = False
+  optional bool s_flag = 6;
+
+  // The persistent flag. When set, the P-Flag indicates that
+  // the Adj-SID is persistently allocated, i.e., the Adj-SID value
+  // remains consistent across router restart and/or interface flap.
+  // default = False
+  optional bool p_flag = 7;
+
+  // The value represents the weight of the Adj-SID for the purpose of
+  // load balancing.
+  // default = 0
+  optional uint32 weight = 8;
+}
+
 // This contains ISIS router basic properties.
 message IsisBasic {
 
@@ -2239,6 +2244,9 @@ message IsisV4RouteRange {
   // Node Flag (Bit 2)
   // default = False
   optional bool n_flag = 9;
+
+  // A list of SID paramters for a group of IPv4 route addresses.
+  repeated IsisSRPrefixSID prefix_sid_params = 10;
 }
 
 // A container for IPv4 route addresses.
@@ -2302,6 +2310,48 @@ message MACRouteAddress {
   // present.  The value is incremented according to the mac prefix Length and Step.
   // default = 1
   optional uint32 step = 4;
+}
+
+// This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
+// Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+message IsisSRPrefixSID {
+
+  // SID/Index is the SID/Label value associated  with the IGP Prefix segment attached
+  // to the specific IPv4 or IPv6 prefix.
+  // default = 0
+  optional uint32 sid = 1;
+
+  // R-Flag:Re-advertisement flag
+  // default = False
+  optional bool r_flag = 2;
+
+  // N-Flag: Node-SID flag.  If set, then the Prefix-SID refers to
+  // the router identified by the prefix
+  // default = False
+  optional bool n_flag = 3;
+
+  // P-Flag: no-PHP flag.
+  // default = False
+  optional bool p_flag = 4;
+
+  // E-Flag: Explicit-Null Flag.
+  // default = False
+  optional bool e_flag = 5;
+
+  // The value flag. If set, then the Prefix-SID carries a value instead of an index.
+  // default = False
+  optional bool v_flag = 6;
+
+  // The local flag.  If set, then the value/index carried by
+  // the Prefix-SID has local significance.
+  // default = False
+  optional bool l_flag = 7;
+
+  // The Isis may use various algorithms when calculating
+  // reachability to other nodes or to prefixes attached to these
+  // nodes.
+  // default = 0
+  optional uint32 algorithm = 8;
 }
 
 // Emulated ISIS IPv6 routes.
@@ -2370,6 +2420,226 @@ message IsisV6RouteRange {
   // Node Flag (Bit 2)
   // default = False
   optional bool n_flag = 9;
+
+  // A list of SID paramters for a group of IPv6 route addresses.
+  repeated IsisSRPrefixSID prefix_sid_params = 10;
+}
+
+// Segment Routing (SR) turns on any node to select any path (explicit or derived from
+// IGPs SPT computations)
+// for each of its traffic classes. The path does not depend on a hop-by-hop
+// signaling technique (unlike LDP or RSVP).
+// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+// 
+// These segments act as topological sub-paths that can be combined together to form
+// the required path.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+message IsisSegmentRouting {
+
+  // Optional IS-IS TLV named CAPABILITY, formed of multiple sub-TLVs, which allows a
+  // router to announce its
+  // capabilities within an IS-IS level or the entire routing domain.
+  IsisRouterCapability router_capability = 1;
+
+  // ISIS Router Node prefix.
+  IsisSRRouterNodePrefix node_prefix = 2;
+}
+
+// SID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
+message IsisSRRouterNodePrefix {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_te_router_id = 1;
+      interface_ip = 2;
+      custom_node_prefix = 3;
+    }
+  }
+  // Node Prefix Segment Identifier (Prefix-SID).
+  // - ipv4_te_router_id: IPv4 Traffic Engineering(TE) router id to be used as Router
+  // Capability ID.
+  // - interface_ip: When underlined IPv4 interface address of the ISIS interface to be
+  // assigned as Router Capability ID.
+  // - custom: When, Router Capability ID needs to be configured different from above
+  // two.
+  // default = Choice.Enum.ipv4_te_router_id
+  optional Choice.Enum choice = 1;
+
+  // The node prefix taken in IPv4 format.
+  IsisSRIP custom_node_prefix = 2;
+
+  // Defines the Up/Down (Redistribution) bit defined for TLVs 128 and 130 by RFC 2966.
+  // It is used for domain-wide advertisement of prefix information.
+  // If up - used when a prefix is initially advertised within the ISIS L3 hierarchy,
+  // and for all other prefixes in L1 and L2 LSPs. (default)
+  // When down - used when an L1/L2 router advertises L2 prefixes in L1 LSPs.
+  // The prefixes are being advertised from a higher level (L2) down to a lower level
+  // (L1).
+  // default = up
+  optional string redistribution = 3;
+
+  // Specifies whether the sub-TLV for IPv4/IPv6 Extended Reachability Attribute Flags
+  // will be advertised or not.
+  // default = False
+  optional bool prefix_attr_enabled = 4;
+
+  // External Prefix Flag (Bit 0)
+  // default = False
+  optional bool x_flag = 5;
+
+  // Re-advertisement Flag (Bit 1)
+  // default = False
+  optional bool r_flag = 6;
+
+  // Node Flag (Bit 2)
+  // default = False
+  optional bool n_flag = 7;
+
+  // Description missing in models
+  IsisSRPrefixSID prefix_sid_params = 8;
+}
+
+// TBD
+message IsisSRIP {
+
+  // The starting address of the network.
+  optional string address = 1;
+
+  // The IPv4 network prefix length to be applied to the address.
+  // default = 24
+  optional uint32 prefix = 2;
+}
+
+// Container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+message IsisRouterCapability {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4_te_router_id = 1;
+      interface_ip = 2;
+      custom_router_cap_id = 3;
+    }
+  }
+  // The Router Capability ID SHOULD be identical to the value advertised in the Traffic
+  // Engineering Router ID TLV [RFC5305].
+  // If no Traffic Engineering Router ID is assigned, the Router ID SHOULD be identical
+  // to an IP Interface Address [RFC1195]
+  // advertised by the originating IS.
+  // If the originating node does not support IPv4, then the reserved value 0.0.0.0 MUST
+  // be used in the Router ID field,
+  // and the IPv6 TE Router ID sub-TLV [RFC5316] MUST be present in the TLV.
+  // - ipv4_te_router_id: IPv4 Traffic Engineering(TE) router id to be used as Router
+  // Capability ID.
+  // - interface_ip: When underlined IPv4 interface address of the ISIS interface to be
+  // assigned as Router Capability ID.
+  // - custom: When, Router Capability ID needs to be configured different from above
+  // two.
+  // default = Choice.Enum.ipv4_te_router_id
+  optional Choice.Enum choice = 1;
+
+  // Router CapabilityID in IPv4 address format.
+  optional string custom_router_cap_id = 2;
+
+  // S bit (0x01): If the S bit is set(1), the IS-IS Router CAPABILITY TLV
+  // MUST be flooded across the entire routing domain.  If the S bit is
+  // not set(0), the TLV MUST NOT be leaked between levels.  This bit MUST
+  // NOT be altered during the TLV leaking.
+  // default = False
+  optional bool s_bit = 3;
+
+  // D bit (0x02): When the IS-IS Router CAPABILITY TLV is leaked from
+  // Level 2 (L2) to Level 1 (L1), the D bit MUST be set.  Otherwise, this
+  // bit MUST be clear.  IS-IS Router CAPABILITY TLVs with the D bit set
+  // MUST NOT be leaked from Level 1 to Level 2.  This is to prevent TLV looping.
+  // default = False
+  optional bool d_bit = 4;
+
+  // SR-Capabilities.
+  IsisSRCapability sr_capability = 5;
+
+  // This contains one or more SR-Algorithm.
+  repeated IsisSRAlgorithm algorithms = 6;
+
+  // This contains the list of SR Local Block (SRLB)
+  repeated IsisSRSrlb srlbs = 7;
+}
+
+// Container for the configuration of IS-IS SR-CAPABILITY TLV that Segment Routing requires
+// 
+// each router to advertise its SR data plane capability and the range of MPLS label
+// values
+// it uses for Segment Routing in the case where global SIDs are allocated (i.e., global
+// indexes).
+// 
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.
+// The Router Capability TLV specifies flags that control its advertisement.
+// The SR-Capabilities sub-TLV MUST be propagated throughout the level and MUST NOT
+// be advertised across level boundaries.
+// Therefore, Router Capability TLV distribution flags are set accordingly, i.e.,
+// the S-Flag in the Router Capability TLV [RFC7981] MUST be unset.
+message IsisSRCapability {
+
+  // MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv4 packets on all interfaces.
+  // default = True
+  optional bool i_flag = 1;
+
+  // MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv6 packets on all interfaces.
+  // default = True
+  optional bool v_flag = 2;
+
+  // This contains the list of SRGB.
+  repeated IsisSRSrgb srgb_ranges = 3;
+}
+
+// This contains the propeties of SRGB range. Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-7.1.1
+message IsisSRSrgb {
+
+  // This represents the number of SID in a SRGB range.
+  // default = 8000
+  optional uint32 range = 1;
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  // default = 16000
+  optional uint32 starting_sid = 2;
+}
+
+// This contains the propeties of SRLB. The SR Local Block (SRLB) sub-TLV contains the
+// range of labels the node has reserved  for Local SIDs. Local SIDs are used, e.g.,
+// for Adj-SIDs, and may also be allocated by components other than the IS-IS protocol
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-local-block-sub-tlv.
+message IsisSRSrlb {
+
+  // This represents the number of SID in a SRGB range.
+  // default = 8000
+  optional uint32 range = 1;
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  // default = 16000
+  optional uint32 starting_sid = 2;
+}
+
+// Container for SR-Algorithms. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-algorithm-sub-tlv.
+message IsisSRAlgorithm {
+
+  // The Isis may use various algorithms when calculating reachability to other nodes
+  // or to prefixes attached to these nodes.
+  // default = 0
+  optional uint32 algorithm = 1;
+}
+
+// SID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
+message IsisSRSID {
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  // default = 16000
+  optional uint32 sid = 1;
 }
 
 // Configuration for one or more IPv4 or IPv6 BGP peers.
@@ -2614,12 +2884,6 @@ message BgpV4Interface {
 
   // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the
   // source IP for this list of BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -3385,8 +3649,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3846,8 +4108,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6211,12 +6471,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6478,11 +6732,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6506,11 +6755,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -6674,10 +6918,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -6739,11 +6979,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7173,10 +7408,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7249,10 +7480,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7422,8 +7649,6 @@ message DhcpV6ServerSecondaryDns {
 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -7561,10 +7786,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7971,10 +8192,6 @@ message Flow {
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
   // 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // The list of protocol headers defining the shape of all
   // intended packets in corresponding flow as it is received
   // by traffic-generator port.
@@ -8037,16 +8254,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -8055,19 +8265,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8147,39 +8347,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -10763,12 +10933,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -10845,10 +11009,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11206,10 +11366,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -11235,10 +11391,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -11260,10 +11412,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -11326,14 +11474,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -11378,10 +11518,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -11403,10 +11539,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11447,11 +11579,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -11500,10 +11627,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -11543,10 +11666,6 @@ message StateProtocolOspfv2Routers {
 
   // The names of OSPFv2 routers for which the state has to be applied. An empty or null
   // list will control all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -11701,18 +11820,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11734,10 +11847,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11804,18 +11913,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11837,10 +11940,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11901,11 +12000,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -11961,11 +12055,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -12183,10 +12272,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -12215,10 +12300,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12290,10 +12371,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -12528,10 +12605,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -12658,10 +12731,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -12784,10 +12853,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -12925,10 +12990,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -12955,10 +13016,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -13013,18 +13070,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13145,10 +13194,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -13207,10 +13252,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -13371,10 +13412,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -13432,10 +13469,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -13489,10 +13522,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -13574,10 +13603,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -13667,10 +13692,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -13953,10 +13974,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -13986,10 +14003,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -14015,11 +14028,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14573,10 +14581,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -14633,6 +14637,9 @@ message IsisLspState {
 
   // It refers to Link State PDU State TLVs container.
   IsisLspTlvs tlvs = 8;
+
+  // IS-IS Router CAPABILITY: Tlv 242.
+  IsisLspRouterCapability router_capability = 9;
 }
 
 // This contains the list of TLVs present in one LSP.
@@ -14714,6 +14721,9 @@ message IsisLspneighbor {
 
   // The System ID for this emulated ISIS router, e.g. 640100010000.
   optional string system_id = 1;
+
+  // List of segment routing adjacency SIDs.
+  repeated IsisLspAdjacencySID adjacency_sids = 2;
 }
 
 // This container defines list of IPv4 internal reachability information in one IPv4
@@ -14812,6 +14822,9 @@ message IsisLspExtendedV4Prefix {
 
   // Description missing in models
   IsisLspPrefixAttributes prefix_attributes = 5;
+
+  // Description missing in models
+  IsisLspPrefixSids prefix_sids = 6;
 }
 
 // It defines list of IPv6 extended reachability information in one IPv6 Reachability
@@ -14864,6 +14877,9 @@ message IsisLspV6Prefix {
 
   // Description missing in models
   IsisLspPrefixAttributes prefix_attributes = 6;
+
+  // Description missing in models
+  IsisLspPrefixSids prefix_sids = 7;
 }
 
 // This contains the properties of ISIS Prefix attributes for  the extended IPv4 and
@@ -14880,16 +14896,171 @@ message IsisLspPrefixAttributes {
   optional bool n_flag = 3;
 }
 
+// This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
+// Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+message IsisLspPrefixSids {
+
+  // SID/Index is the SID/Label value associated  with the IGP Prefix segment attached
+  // to the specific IPv4 or IPv6 prefix.
+  optional uint32 sid = 1;
+
+  // R-Flag:Re-advertisement flag
+  optional bool r_flag = 2;
+
+  // N-Flag: Node-SID flag.  If set, then the Prefix-SID refers to
+  // the router identified by the prefix
+  optional bool n_flag = 3;
+
+  // P-Flag: no-PHP flag.
+  optional bool p_flag = 4;
+
+  // E-Flag: Explicit-Null Flag.
+  optional bool e_flag = 5;
+
+  // The value flag. If set, then the Prefix-SID carries a value instead of an index.
+  optional bool v_flag = 6;
+
+  // The local flag.  If set, then the value/index carried by
+  // the Prefix-SID has local significance.
+  optional bool l_flag = 7;
+
+  // The Isis may use various algorithms when calculating
+  // reachability to other nodes or to prefixes attached to these
+  // nodes.
+  optional uint32 algorithm = 8;
+}
+
+// Container of IS-IS Router CAPABILITY TLV.
+message IsisLspRouterCapability {
+
+  // Router CapabilityID in IPv4 address format.
+  optional string router_cap_id = 1;
+
+  // S bit (0x01): If the S bit is set(1), the IS-IS Router CAPABILITY TLV
+  // MUST be flooded across the entire routing domain.  If the S bit is
+  // not set(0), the TLV MUST NOT be leaked between levels.  This bit MUST
+  // NOT be altered during the TLV leaking.
+  optional bool s_bit = 2;
+
+  // D bit (0x02): When the IS-IS Router CAPABILITY TLV is leaked from
+  // Level 2 (L2) to Level 1 (L1), the D bit MUST be set.  Otherwise, this
+  // bit MUST be clear.  IS-IS Router CAPABILITY TLVs with the D bit set
+  // MUST NOT be leaked from Level 1 to Level 2.  This is to prevent TLV looping.
+  optional bool d_bit = 3;
+
+  // SR-Capabilities.
+  IsisLspSRCapability sr_capability = 4;
+
+  // This contains one or more SR-Algorithm.
+  repeated IsisLspAlgorithm algorithms = 5;
+
+  // This contains the list of SR Local Block (SRLB)
+  repeated IsisLspSrlb srlbs = 6;
+}
+
+// Container of IS-IS SR-CAPABILITY Sub-Tlv.
+message IsisLspSRCapability {
+
+  // MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv4 packets on all interfaces.
+  optional bool i_flag = 1;
+
+  // MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv6 packets on all interfaces.
+  optional bool v_flag = 2;
+
+  // This contains the list of SRGB.
+  repeated IsisLspSrgb srgb_ranges = 3;
+}
+
+// This contains the propeties of SRGB range. Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-7.1.1
+message IsisLspSrgb {
+
+  // This represents the number of SID in a SRGB range.
+  optional uint32 range = 1;
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  optional uint32 starting_sid = 2;
+}
+
+// This contains the propeties of SRLB. The SR Local Block (SRLB) sub-TLV contains the
+// range of labels the node has reserved  for Local SIDs. Local SIDs are used, e.g.,
+// for Adj-SIDs, and may also be allocated by components other than the IS-IS protocol
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-local-block-sub-tlv.
+message IsisLspSrlb {
+
+  // This represents the number of SID in a SRGB range.
+  optional uint32 range = 1;
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  optional uint32 starting_sid = 2;
+}
+
+// Container for SR-Algorithms. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-algorithm-sub-tlv.
+message IsisLspAlgorithm {
+
+  // The Isis may use various algorithms when calculating reachability to other nodes
+  // or to prefixes attached to these nodes.
+  optional uint32 algorithm = 1;
+}
+
+// SID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
+message IsisLspSID {
+
+  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
+  // the number of SRGB elements.
+  optional uint32 sid = 1;
+}
+
+// This container defines segment routing adjacency SIDs.
+message IsisLspAdjacencySID {
+
+  // The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID
+  // (Tlv - 31).
+  optional uint32 tlv_type = 1;
+
+  // The corresponding adjacency SID for a link.
+  optional uint32 sid = 2;
+
+  // The address family flag. If unset, then the Adj-SID refers
+  // to an adjacency with outgoing IPv4 encapsulation.  If set then
+  // the Adj-SID refers to an adjacency with outgoing IPv6
+  // encapsulation.
+  optional bool f_flag = 3;
+
+  // The backup flag. If set, the Adj-SID is eligible for protection.
+  optional bool b_flag = 4;
+
+  // The value flag. If set, then the Adj-SID carries a value.
+  optional bool v_flag = 5;
+
+  // The local flag.  If set, then the value/index carried by
+  // the Adj-SID has local significance.
+  optional bool l_flag = 6;
+
+  // The set flag. When set, the S-Flag indicates that the
+  // Adj-SID refers to a set of adjacencies (and therefore MAY be
+  // assigned to other adjacencies as well).
+  optional bool s_flag = 7;
+
+  // The persistent flag. When set, the P-Flag indicates that
+  // the Adj-SID is persistently allocated, i.e., the Adj-SID value
+  // remains consistent across router restart and/or interface flap.
+  optional bool p_flag = 8;
+
+  // The value represents the weight of the Adj-SID for the purpose of
+  // load balancing.
+  optional uint32 weight = 9;
+}
+
 // The request to retrieve LLDP neighbor information for a given instance.
 message LldpNeighborsStateRequest {
 
   // The names of LLDP instances for which neighbor information will be retrieved. If
   // no names are specified then the results will contain neighbor information for all
   // configured LLDP instances.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
@@ -15057,10 +15228,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -15195,10 +15362,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -15232,10 +15395,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -15286,10 +15445,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -15345,10 +15500,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -15396,10 +15547,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -15605,10 +15752,6 @@ message Ospfv2Link {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
