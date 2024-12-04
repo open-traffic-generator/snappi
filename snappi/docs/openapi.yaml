@@ -13817,14 +13817,15 @@ components:
         This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
-      description: "Under Review: Event is currently under review for pending exploration\
-        \ on use cases.\n\nThe optional container for event configuration.\nBoth cp_events.enable\
-        \ and dp_events.enable must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
-        \ metric values for convergence metrics."
+      description: "Under Review: Event configuration is currently under review for\
+        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
+        Both cp_events.enable and dp_events.enable must be explicitly set to true\
+        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
+        \ metrics."
       x-status:
         status: under_review
-        information: Event is currently under review for pending exploration on use
-          cases.
+        information: Event configuration is currently under review for pending exploration
+          on use cases.
       type: object
       properties:
         cp_events:
@@ -18419,12 +18420,12 @@ components:
           x-field-uid: 34
     Convergence.Request:
       description: |-
-        Under Review: Convergence is currently under review for pending exploration on use cases.
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
         Container for requesting control-plane and data-plane convergence time metrics for flows.
       x-status:
         status: under_review
-        information: Convergence is currently under review for pending exploration
+        information: Convergence metrics is currently under review for pending exploration
           on use cases.
       type: object
       properties:
@@ -18443,12 +18444,12 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence is currently under review for pending exploration on use cases.
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
         The container for convergence metrics.
       x-status:
         status: under_review
-        information: Convergence is currently under review for pending exploration
+        information: Convergence metrics is currently under review for pending exploration
           on use cases.
       type: object
       properties:

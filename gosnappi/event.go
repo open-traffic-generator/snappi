@@ -252,7 +252,7 @@ func (obj *event) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Event is under Review: Event is currently under review for pending exploration on use cases.
+// Event is under Review: Event configuration is currently under review for pending exploration on use cases.
 //
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
@@ -364,7 +364,7 @@ func (obj *event) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	obj.addWarnings("Event is under review, Event is currently under review for pending exploration on use cases.")
+	obj.addWarnings("Event is under review, Event configuration is currently under review for pending exploration on use cases.")
 
 	if obj.obj.CpEvents != nil {
 
