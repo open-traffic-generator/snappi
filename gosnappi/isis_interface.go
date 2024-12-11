@@ -366,9 +366,6 @@ type IsisInterface interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthName returns a string
 func (obj *isisInterface) EthName() string {
 
@@ -377,9 +374,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

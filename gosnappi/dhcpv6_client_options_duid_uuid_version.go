@@ -270,14 +270,14 @@ type Dhcpv6ClientOptionsDuidUuidVersion interface {
 	setChoice(value Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum) Dhcpv6ClientOptionsDuidUuidVersion
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsDuidUuidVersion
 	HasChoice() bool
-	// getter for V_3 to set choice.
-	V_3()
-	// getter for V_1 to set choice.
-	V_1()
 	// getter for V_5 to set choice.
 	V_5()
+	// getter for V_3 to set choice.
+	V_3()
 	// getter for V_4 to set choice.
 	V_4()
+	// getter for V_1 to set choice.
+	V_1()
 	// getter for V_2 to set choice.
 	V_2()
 }
@@ -303,24 +303,24 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) Choice() Dhcpv6ClientOptionsDuidU
 	return Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for V_3 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_3() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_3)
-}
-
-// getter for V_1 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)
-}
-
 // getter for V_5 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
 }
 
+// getter for V_3 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_3() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_3)
+}
+
 // getter for V_4 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_4() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_4)
+}
+
+// getter for V_1 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)
 }
 
 // getter for V_2 to set choice

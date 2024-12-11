@@ -342,12 +342,15 @@ type PortMetric interface {
 	SetTransmit(value PortMetricTransmitEnum) PortMetric
 	// HasTransmit checks if Transmit has been set in PortMetric
 	HasTransmit() bool
+	// LastLinkStateChangeTime returns string, set in PortMetric.
+	LastLinkStateChangeTime() string
+	// SetLastLinkStateChangeTime assigns string provided by user to PortMetric
+	SetLastLinkStateChangeTime(value string) PortMetric
+	// HasLastLinkStateChangeTime checks if LastLinkStateChangeTime has been set in PortMetric
+	HasLastLinkStateChangeTime() bool
 }
 
 // The name of a configured port
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -364,18 +367,12 @@ func (obj *portMetric) Name() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // Name returns a string
 func (obj *portMetric) HasName() bool {
 	return obj.obj.Name != nil
 }
 
 // The name of a configured port
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -684,6 +681,28 @@ func (obj *portMetric) SetTransmit(value PortMetricTransmitEnum) PortMetric {
 	enumValue := otg.PortMetric_Transmit_Enum(intValue)
 	obj.obj.Transmit = &enumValue
 
+	return obj
+}
+
+// The timestamp of the last link-state change event
+// LastLinkStateChangeTime returns a string
+func (obj *portMetric) LastLinkStateChangeTime() string {
+
+	return *obj.obj.LastLinkStateChangeTime
+
+}
+
+// The timestamp of the last link-state change event
+// LastLinkStateChangeTime returns a string
+func (obj *portMetric) HasLastLinkStateChangeTime() bool {
+	return obj.obj.LastLinkStateChangeTime != nil
+}
+
+// The timestamp of the last link-state change event
+// SetLastLinkStateChangeTime sets the string value in the PortMetric object
+func (obj *portMetric) SetLastLinkStateChangeTime(value string) PortMetric {
+
+	obj.obj.LastLinkStateChangeTime = &value
 	return obj
 }
 
