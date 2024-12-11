@@ -1816,7 +1816,7 @@ message IsisInterface {
   optional string name = 13;
 
   // List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
-  repeated IsisInterfaceAdjacencySID segment_routing = 14;
+  repeated IsisInterfaceAdjacencySID segment_routings = 14;
 }
 
 // Configuration for the properties of Level 1 Hello.
@@ -2040,41 +2040,45 @@ message IsisInterfaceAdjacencySID {
 
   // The corresponding Adjacency SID for a link.
   // default = 9001
-  optional uint32 sid = 2;
+  optional uint32 sid_value = 2;
+
+  // The corresponding Adjacency SID for a link.
+  // default = 9001
+  optional uint32 sid_index = 3;
 
   // The address family flag. If unset, then the Adj-SID refers
   // to an adjacency with outgoing IPv4 encapsulation.  If set then
   // the Adj-SID refers to an adjacency with outgoing IPv6
   // encapsulation.
   // default = False
-  optional bool f_flag = 3;
+  optional bool f_flag = 4;
 
   // The backup flag. If set, the Adj-SID is eligible for protection.
   // default = False
-  optional bool b_flag = 4;
+  optional bool b_flag = 5;
 
   // The local flag.  If set, then the value/index carried by
   // the Adj-SID has local significance. In this case, Adjacency_sid is from srlg_values
   // under Isis.Interface.
   // default = True
-  optional bool l_flag = 5;
+  optional bool l_flag = 6;
 
   // The set flag. When set, the S-Flag indicates that the
   // Adj-SID refers to a set of adjacencies (and therefore MAY be
   // assigned to other adjacencies as well).
   // default = False
-  optional bool s_flag = 6;
+  optional bool s_flag = 7;
 
   // The persistent flag. When set, the P-Flag indicates that
   // the Adj-SID is persistently allocated, i.e., the Adj-SID value
   // remains consistent across router restart and/or interface flap.
   // default = False
-  optional bool p_flag = 7;
+  optional bool p_flag = 8;
 
   // The value represents the weight of the Adj-SID for the purpose of load balancing.
   // 
   // default = 0
-  optional uint32 weight = 8;
+  optional uint32 weight = 9;
 }
 
 // This contains ISIS router basic properties.
@@ -2594,8 +2598,8 @@ message IsisSRSrlb {
   // default = 8000
   optional uint32 range = 1;
 
-  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
-  // the number of SRGB elements.
+  // The SID/Label sub-TLV contains the first value of the SRLB while the range contains
+  // the number of SRLB elements.
   // default = 16000
   optional uint32 starting_sid = 2;
 }

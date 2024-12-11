@@ -305,7 +305,7 @@ func (obj *isisSRSrlb) SetRange(value uint32) IsisSRSrlb {
 	return obj
 }
 
-// The SID/Label sub-TLV contains the first value of the SRGB while the range contains the number of SRGB elements.
+// The SID/Label sub-TLV contains the first value of the SRLB while the range contains the number of SRLB elements.
 // StartingSid returns a uint32
 func (obj *isisSRSrlb) StartingSid() uint32 {
 
@@ -313,13 +313,13 @@ func (obj *isisSRSrlb) StartingSid() uint32 {
 
 }
 
-// The SID/Label sub-TLV contains the first value of the SRGB while the range contains the number of SRGB elements.
+// The SID/Label sub-TLV contains the first value of the SRLB while the range contains the number of SRLB elements.
 // StartingSid returns a uint32
 func (obj *isisSRSrlb) HasStartingSid() bool {
 	return obj.obj.StartingSid != nil
 }
 
-// The SID/Label sub-TLV contains the first value of the SRGB while the range contains the number of SRGB elements.
+// The SID/Label sub-TLV contains the first value of the SRLB while the range contains the number of SRLB elements.
 // SetStartingSid sets the uint32 value in the IsisSRSrlb object
 func (obj *isisSRSrlb) SetStartingSid(value uint32) IsisSRSrlb {
 

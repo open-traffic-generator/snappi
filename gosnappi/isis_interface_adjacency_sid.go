@@ -273,16 +273,18 @@ type IsisInterfaceAdjacencySID interface {
 	setChoice(value IsisInterfaceAdjacencySIDChoiceEnum) IsisInterfaceAdjacencySID
 	// HasChoice checks if Choice has been set in IsisInterfaceAdjacencySID
 	HasChoice() bool
-	// getter for SidIndex to set choice.
-	SidIndex()
-	// getter for SidValue to set choice.
-	SidValue()
-	// Sid returns uint32, set in IsisInterfaceAdjacencySID.
-	Sid() uint32
-	// SetSid assigns uint32 provided by user to IsisInterfaceAdjacencySID
-	SetSid(value uint32) IsisInterfaceAdjacencySID
-	// HasSid checks if Sid has been set in IsisInterfaceAdjacencySID
-	HasSid() bool
+	// SidValue returns uint32, set in IsisInterfaceAdjacencySID.
+	SidValue() uint32
+	// SetSidValue assigns uint32 provided by user to IsisInterfaceAdjacencySID
+	SetSidValue(value uint32) IsisInterfaceAdjacencySID
+	// HasSidValue checks if SidValue has been set in IsisInterfaceAdjacencySID
+	HasSidValue() bool
+	// SidIndex returns uint32, set in IsisInterfaceAdjacencySID.
+	SidIndex() uint32
+	// SetSidIndex assigns uint32 provided by user to IsisInterfaceAdjacencySID
+	SetSidIndex(value uint32) IsisInterfaceAdjacencySID
+	// HasSidIndex checks if SidIndex has been set in IsisInterfaceAdjacencySID
+	HasSidIndex() bool
 	// FFlag returns bool, set in IsisInterfaceAdjacencySID.
 	FFlag() bool
 	// SetFFlag assigns bool provided by user to IsisInterfaceAdjacencySID
@@ -336,16 +338,6 @@ func (obj *isisInterfaceAdjacencySID) Choice() IsisInterfaceAdjacencySIDChoiceEn
 	return IsisInterfaceAdjacencySIDChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for SidIndex to set choice
-func (obj *isisInterfaceAdjacencySID) SidIndex() {
-	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_INDEX)
-}
-
-// getter for SidValue to set choice
-func (obj *isisInterfaceAdjacencySID) SidValue() {
-	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
-}
-
 // The choice of Adjacency-SID carries a value instead of an index.
 // Refer to "srlg_values" under Isis.Interface and IsisSR.Srgb under Isis.SRCapability.
 // - sid_value: Adjacency-SID carries a value.
@@ -364,29 +356,71 @@ func (obj *isisInterfaceAdjacencySID) setChoice(value IsisInterfaceAdjacencySIDC
 	}
 	enumValue := otg.IsisInterfaceAdjacencySID_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SidIndex = nil
+	obj.obj.SidValue = nil
+
+	if value == IsisInterfaceAdjacencySIDChoice.SID_VALUE {
+		defaultValue := uint32(9001)
+		obj.obj.SidValue = &defaultValue
+	}
+
+	if value == IsisInterfaceAdjacencySIDChoice.SID_INDEX {
+		defaultValue := uint32(9001)
+		obj.obj.SidIndex = &defaultValue
+	}
 
 	return obj
 }
 
 // The corresponding Adjacency SID for a link.
-// Sid returns a uint32
-func (obj *isisInterfaceAdjacencySID) Sid() uint32 {
+// SidValue returns a uint32
+func (obj *isisInterfaceAdjacencySID) SidValue() uint32 {
 
-	return *obj.obj.Sid
+	if obj.obj.SidValue == nil {
+		obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
+	}
+
+	return *obj.obj.SidValue
 
 }
 
 // The corresponding Adjacency SID for a link.
-// Sid returns a uint32
-func (obj *isisInterfaceAdjacencySID) HasSid() bool {
-	return obj.obj.Sid != nil
+// SidValue returns a uint32
+func (obj *isisInterfaceAdjacencySID) HasSidValue() bool {
+	return obj.obj.SidValue != nil
 }
 
 // The corresponding Adjacency SID for a link.
-// SetSid sets the uint32 value in the IsisInterfaceAdjacencySID object
-func (obj *isisInterfaceAdjacencySID) SetSid(value uint32) IsisInterfaceAdjacencySID {
+// SetSidValue sets the uint32 value in the IsisInterfaceAdjacencySID object
+func (obj *isisInterfaceAdjacencySID) SetSidValue(value uint32) IsisInterfaceAdjacencySID {
+	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
+	obj.obj.SidValue = &value
+	return obj
+}
 
-	obj.obj.Sid = &value
+// The corresponding Adjacency SID for a link.
+// SidIndex returns a uint32
+func (obj *isisInterfaceAdjacencySID) SidIndex() uint32 {
+
+	if obj.obj.SidIndex == nil {
+		obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_INDEX)
+	}
+
+	return *obj.obj.SidIndex
+
+}
+
+// The corresponding Adjacency SID for a link.
+// SidIndex returns a uint32
+func (obj *isisInterfaceAdjacencySID) HasSidIndex() bool {
+	return obj.obj.SidIndex != nil
+}
+
+// The corresponding Adjacency SID for a link.
+// SetSidIndex sets the uint32 value in the IsisInterfaceAdjacencySID object
+func (obj *isisInterfaceAdjacencySID) SetSidIndex(value uint32) IsisInterfaceAdjacencySID {
+	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_INDEX)
+	obj.obj.SidIndex = &value
 	return obj
 }
 
@@ -551,12 +585,22 @@ func (obj *isisInterfaceAdjacencySID) validateObj(vObj *validation, set_default 
 		obj.setDefault()
 	}
 
-	if obj.obj.Sid != nil {
+	if obj.obj.SidValue != nil {
 
-		if *obj.obj.Sid < 1 || *obj.obj.Sid > 1048575 {
+		if *obj.obj.SidValue < 1 || *obj.obj.SidValue > 1048575 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.Sid <= 1048575 but Got %d", *obj.obj.Sid))
+				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.SidValue <= 1048575 but Got %d", *obj.obj.SidValue))
+		}
+
+	}
+
+	if obj.obj.SidIndex != nil {
+
+		if *obj.obj.SidIndex < 1 || *obj.obj.SidIndex > 1048575 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.SidIndex <= 1048575 but Got %d", *obj.obj.SidIndex))
 		}
 
 	}
@@ -576,6 +620,16 @@ func (obj *isisInterfaceAdjacencySID) validateObj(vObj *validation, set_default 
 func (obj *isisInterfaceAdjacencySID) setDefault() {
 	var choices_set int = 0
 	var choice IsisInterfaceAdjacencySIDChoiceEnum
+
+	if obj.obj.SidValue != nil {
+		choices_set += 1
+		choice = IsisInterfaceAdjacencySIDChoice.SID_VALUE
+	}
+
+	if obj.obj.SidIndex != nil {
+		choices_set += 1
+		choice = IsisInterfaceAdjacencySIDChoice.SID_INDEX
+	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
 			obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
@@ -594,9 +648,6 @@ func (obj *isisInterfaceAdjacencySID) setDefault() {
 		}
 	}
 
-	if obj.obj.Sid == nil {
-		obj.SetSid(9001)
-	}
 	if obj.obj.FFlag == nil {
 		obj.SetFFlag(false)
 	}

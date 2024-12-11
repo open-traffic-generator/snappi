@@ -2678,7 +2678,7 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
-        segment_routing:
+        segment_routings:
           description: |-
             List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
           type: array
@@ -2991,7 +2991,7 @@ components:
           enum:
           - sid_value
           - sid_index
-        sid:
+        sid_value:
           description: |-
             The corresponding Adjacency SID for a link.
           type: integer
@@ -3000,6 +3000,15 @@ components:
           minimum: 1
           maximum: 1048575
           x-field-uid: 2
+        sid_index:
+          description: |-
+            The corresponding Adjacency SID for a link.
+          type: integer
+          format: uint32
+          default: 9001
+          minimum: 1
+          maximum: 1048575
+          x-field-uid: 3
         f_flag:
           description: |-
             The address family flag. If unset, then the Adj-SID refers
@@ -3008,20 +3017,20 @@ components:
             encapsulation.
           type: boolean
           default: false
-          x-field-uid: 3
+          x-field-uid: 4
         b_flag:
           description: |-
             The backup flag. If set, the Adj-SID is eligible for protection.
           type: boolean
           default: false
-          x-field-uid: 4
+          x-field-uid: 5
         l_flag:
           description: |-
             The local flag.  If set, then the value/index carried by
             the Adj-SID has local significance. In this case, Adjacency_sid is from "srlg_values" under Isis.Interface.
           type: boolean
           default: true
-          x-field-uid: 5
+          x-field-uid: 6
         s_flag:
           description: |-
             The set flag. When set, the S-Flag indicates that the
@@ -3029,7 +3038,7 @@ components:
             assigned to other adjacencies as well).
           type: boolean
           default: false
-          x-field-uid: 6
+          x-field-uid: 7
         p_flag:
           description: |-
             The persistent flag. When set, the P-Flag indicates that
@@ -3037,7 +3046,7 @@ components:
             remains consistent across router restart and/or interface flap.
           type: boolean
           default: false
-          x-field-uid: 7
+          x-field-uid: 8
         weight:
           description: "The value represents the weight of the Adj-SID for the purpose\
             \ of load balancing. "
@@ -3046,7 +3055,7 @@ components:
           default: 0
           minimum: 0
           maximum: 255
-          x-field-uid: 8
+          x-field-uid: 9
     Isis.Basic:
       description: |-
         This contains ISIS router basic properties.
@@ -3760,7 +3769,7 @@ components:
           x-field-uid: 1
         starting_sid:
           description: |-
-            The SID/Label sub-TLV contains the first value of the SRGB while the range contains the number of SRGB elements.
+            The SID/Label sub-TLV contains the first value of the SRLB while the range contains the number of SRLB elements.
           type: integer
           format: uint32
           minimum: 1
