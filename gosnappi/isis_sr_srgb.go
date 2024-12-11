@@ -242,7 +242,7 @@ func (obj *isisSRSrgb) Clone() (IsisSRSrgb, error) {
 	return newObj, nil
 }
 
-// IsisSRSrgb is this contains the propeties of SRGB range. Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-7.1.1
+// IsisSRSrgb is this contains the propeties of Segment Routing Global Block (SRGB) Descriptor. Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-7.1.1
 type IsisSRSrgb interface {
 	Validation
 	// msg marshals IsisSRSrgb to protobuf object *otg.IsisSRSrgb

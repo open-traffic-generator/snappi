@@ -23,7 +23,7 @@ type isisInterface struct {
 	authenticationHolder     IsisInterfaceAuthentication
 	advancedHolder           IsisInterfaceAdvanced
 	linkProtectionHolder     IsisInterfaceLinkProtection
-	segmentRoutingHolder     IsisInterfaceAdjacencySID
+	segmentRoutingHolder     IsisInterfaceIsisInterfaceAdjacencySIDIter
 }
 
 func NewIsisInterface() IsisInterface {
@@ -360,20 +360,8 @@ type IsisInterface interface {
 	Name() string
 	// SetName assigns string provided by user to IsisInterface
 	SetName(value string) IsisInterface
-	// SegmentRouting returns IsisInterfaceAdjacencySID, set in IsisInterface.
-	// IsisInterfaceAdjacencySID is optional container for segment routing MPLS settings.
-	// If the container exists then the adjacency SID (segment identifier)
-	// sub TLV will be part of the packet.
-	// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
-	SegmentRouting() IsisInterfaceAdjacencySID
-	// SetSegmentRouting assigns IsisInterfaceAdjacencySID provided by user to IsisInterface.
-	// IsisInterfaceAdjacencySID is optional container for segment routing MPLS settings.
-	// If the container exists then the adjacency SID (segment identifier)
-	// sub TLV will be part of the packet.
-	// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
-	SetSegmentRouting(value IsisInterfaceAdjacencySID) IsisInterface
-	// HasSegmentRouting checks if SegmentRouting has been set in IsisInterface
-	HasSegmentRouting() bool
+	// SegmentRouting returns IsisInterfaceIsisInterfaceAdjacencySIDIterIter, set in IsisInterface
+	SegmentRouting() IsisInterfaceIsisInterfaceAdjacencySIDIter
 	setNil()
 }
 
@@ -845,31 +833,90 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
-// SegmentRouting returns a IsisInterfaceAdjacencySID
-func (obj *isisInterface) SegmentRouting() IsisInterfaceAdjacencySID {
-	if obj.obj.SegmentRouting == nil {
-		obj.obj.SegmentRouting = NewIsisInterfaceAdjacencySID().msg()
+// List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+// SegmentRouting returns a []IsisInterfaceAdjacencySID
+func (obj *isisInterface) SegmentRouting() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(obj.obj.SegmentRouting) == 0 {
+		obj.obj.SegmentRouting = []*otg.IsisInterfaceAdjacencySID{}
 	}
 	if obj.segmentRoutingHolder == nil {
-		obj.segmentRoutingHolder = &isisInterfaceAdjacencySID{obj: obj.obj.SegmentRouting}
+		obj.segmentRoutingHolder = newIsisInterfaceIsisInterfaceAdjacencySIDIter(&obj.obj.SegmentRouting).setMsg(obj)
 	}
 	return obj.segmentRoutingHolder
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
-// SegmentRouting returns a IsisInterfaceAdjacencySID
-func (obj *isisInterface) HasSegmentRouting() bool {
-	return obj.obj.SegmentRouting != nil
+type isisInterfaceIsisInterfaceAdjacencySIDIter struct {
+	obj                            *isisInterface
+	isisInterfaceAdjacencySIDSlice []IsisInterfaceAdjacencySID
+	fieldPtr                       *[]*otg.IsisInterfaceAdjacencySID
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLV.
-// SetSegmentRouting sets the IsisInterfaceAdjacencySID value in the IsisInterface object
-func (obj *isisInterface) SetSegmentRouting(value IsisInterfaceAdjacencySID) IsisInterface {
+func newIsisInterfaceIsisInterfaceAdjacencySIDIter(ptr *[]*otg.IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	return &isisInterfaceIsisInterfaceAdjacencySIDIter{fieldPtr: ptr}
+}
 
-	obj.segmentRoutingHolder = nil
-	obj.obj.SegmentRouting = value.msg()
+type IsisInterfaceIsisInterfaceAdjacencySIDIter interface {
+	setMsg(*isisInterface) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Items() []IsisInterfaceAdjacencySID
+	Add() IsisInterfaceAdjacencySID
+	Append(items ...IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Set(index int, newObj IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Clear() IsisInterfaceIsisInterfaceAdjacencySIDIter
+	clearHolderSlice() IsisInterfaceIsisInterfaceAdjacencySIDIter
+	appendHolderSlice(item IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+}
 
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) setMsg(msg *isisInterface) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisInterfaceAdjacencySID{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Items() []IsisInterfaceAdjacencySID {
+	return obj.isisInterfaceAdjacencySIDSlice
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Add() IsisInterfaceAdjacencySID {
+	newObj := &otg.IsisInterfaceAdjacencySID{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisInterfaceAdjacencySID{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Append(items ...IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Set(index int, newObj IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisInterfaceAdjacencySIDSlice[index] = newObj
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Clear() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisInterfaceAdjacencySID{}
+		obj.isisInterfaceAdjacencySIDSlice = []IsisInterfaceAdjacencySID{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) clearHolderSlice() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(obj.isisInterfaceAdjacencySIDSlice) > 0 {
+		obj.isisInterfaceAdjacencySIDSlice = []IsisInterfaceAdjacencySID{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) appendHolderSlice(item IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, item)
 	return obj
 }
 
@@ -964,9 +1011,18 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisInterface")
 	}
 
-	if obj.obj.SegmentRouting != nil {
+	if len(obj.obj.SegmentRouting) != 0 {
 
-		obj.SegmentRouting().validateObj(vObj, set_default)
+		if set_default {
+			obj.SegmentRouting().clearHolderSlice()
+			for _, item := range obj.obj.SegmentRouting {
+				obj.SegmentRouting().appendHolderSlice(&isisInterfaceAdjacencySID{obj: item})
+			}
+		}
+		for _, item := range obj.SegmentRouting().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

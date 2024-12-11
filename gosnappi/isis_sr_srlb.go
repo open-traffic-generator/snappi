@@ -242,7 +242,12 @@ func (obj *isisSRSrlb) Clone() (IsisSRSrlb, error) {
 	return newObj, nil
 }
 
-// IsisSRSrlb is this contains the propeties of SRLB. The SR Local Block (SRLB) sub-TLV contains the range of labels the node has reserved  for Local SIDs. Local SIDs are used, e.g., for Adj-SIDs, and may also be allocated by components other than the IS-IS protocol Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-local-block-sub-tlv.
+// IsisSRSrlb is the SR Local Block (SRLB) sub-TLV contains the range of labels the node has reserved for Local SIDs.
+// Local SIDs are used, e.g., for Adj-SIDs, and may also be allocated by components other than the IS-IS protocol.
+// As an example, an application or a controller may instruct the router to allocate a specific Local SID. Therefore,
+// in order for such applications or controllers to know what Local SIDs are available in the router,
+// it is required that the router advertises its SRLB.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-local-block-sub-tlv.
 type IsisSRSrlb interface {
 	Validation
 	// msg marshals IsisSRSrlb to protobuf object *otg.IsisSRSrlb

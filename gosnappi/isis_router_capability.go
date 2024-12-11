@@ -367,7 +367,7 @@ func (obj *isisRouterCapability) Ipv4TeRouterId() {
 // advertised by the originating IS.
 // If the originating node does not support IPv4, then the reserved value 0.0.0.0 MUST be used in the Router ID field,
 // and the IPv6 TE Router ID sub-TLV [RFC5316] MUST be present in the TLV.
-// - ipv4_te_router_id: IPv4 Traffic Engineering(TE) router id to be used as Router Capability ID.
+// - ipv4_te_router_id: IPv4 Traffic Engineering(TE) router id (defined in Isis.Basic class) to be used as Router Capability ID.
 // - interface_ip: When underlined IPv4 interface address of the ISIS interface to be assigned as Router Capability ID.
 // - custom: When, Router Capability ID needs to be configured different from above two.
 // Choice returns a string

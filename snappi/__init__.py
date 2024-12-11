@@ -87,6 +87,7 @@ from .snappi import IsisInterfaceAuthentication
 from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
 from .snappi import IsisInterfaceAdjacencySID
+from .snappi import IsisInterfaceAdjacencySIDIter
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -111,8 +112,6 @@ from .snappi import IsisSRAlgorithm
 from .snappi import IsisSRAlgorithmIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
-from .snappi import IsisSRRouterNodePrefix
-from .snappi import IsisSRIP
 from .snappi import DeviceBgpRouter
 from .snappi import BgpV4Interface
 from .snappi import BgpV4Peer

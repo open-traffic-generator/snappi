@@ -17,7 +17,6 @@ type isisSegmentRouting struct {
 	marshaller             marshalIsisSegmentRouting
 	unMarshaller           unMarshalIsisSegmentRouting
 	routerCapabilityHolder IsisRouterCapability
-	nodePrefixHolder       IsisSRRouterNodePrefix
 }
 
 func NewIsisSegmentRouting() IsisSegmentRouting {
@@ -246,7 +245,6 @@ func (obj *isisSegmentRouting) Clone() (IsisSegmentRouting, error) {
 
 func (obj *isisSegmentRouting) setNil() {
 	obj.routerCapabilityHolder = nil
-	obj.nodePrefixHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -287,14 +285,6 @@ type IsisSegmentRouting interface {
 	SetRouterCapability(value IsisRouterCapability) IsisSegmentRouting
 	// HasRouterCapability checks if RouterCapability has been set in IsisSegmentRouting
 	HasRouterCapability() bool
-	// NodePrefix returns IsisSRRouterNodePrefix, set in IsisSegmentRouting.
-	// IsisSRRouterNodePrefix is sID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
-	NodePrefix() IsisSRRouterNodePrefix
-	// SetNodePrefix assigns IsisSRRouterNodePrefix provided by user to IsisSegmentRouting.
-	// IsisSRRouterNodePrefix is sID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
-	SetNodePrefix(value IsisSRRouterNodePrefix) IsisSegmentRouting
-	// HasNodePrefix checks if NodePrefix has been set in IsisSegmentRouting
-	HasNodePrefix() bool
 	setNil()
 }
 
@@ -329,34 +319,6 @@ func (obj *isisSegmentRouting) SetRouterCapability(value IsisRouterCapability) I
 	return obj
 }
 
-// ISIS Router Node prefix.
-// NodePrefix returns a IsisSRRouterNodePrefix
-func (obj *isisSegmentRouting) NodePrefix() IsisSRRouterNodePrefix {
-	if obj.obj.NodePrefix == nil {
-		obj.obj.NodePrefix = NewIsisSRRouterNodePrefix().msg()
-	}
-	if obj.nodePrefixHolder == nil {
-		obj.nodePrefixHolder = &isisSRRouterNodePrefix{obj: obj.obj.NodePrefix}
-	}
-	return obj.nodePrefixHolder
-}
-
-// ISIS Router Node prefix.
-// NodePrefix returns a IsisSRRouterNodePrefix
-func (obj *isisSegmentRouting) HasNodePrefix() bool {
-	return obj.obj.NodePrefix != nil
-}
-
-// ISIS Router Node prefix.
-// SetNodePrefix sets the IsisSRRouterNodePrefix value in the IsisSegmentRouting object
-func (obj *isisSegmentRouting) SetNodePrefix(value IsisSRRouterNodePrefix) IsisSegmentRouting {
-
-	obj.nodePrefixHolder = nil
-	obj.obj.NodePrefix = value.msg()
-
-	return obj
-}
-
 func (obj *isisSegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -365,11 +327,6 @@ func (obj *isisSegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.RouterCapability != nil {
 
 		obj.RouterCapability().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.NodePrefix != nil {
-
-		obj.NodePrefix().validateObj(vObj, set_default)
 	}
 
 }

@@ -23,6 +23,7 @@ type isisLspTlvs struct {
 	ipv4ExternalReachabilityTlvsHolder IsisLspTlvsIsisLspIpv4ExternalReachabilityTlvIter
 	extendedIpv4ReachabilityTlvsHolder IsisLspTlvsIsisLspExtendedIpv4ReachabilityTlvIter
 	ipv6ReachabilityTlvsHolder         IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
+	routerCapabilityHolder             IsisLspRouterCapability
 }
 
 func NewIsisLspTlvs() IsisLspTlvs {
@@ -257,6 +258,7 @@ func (obj *isisLspTlvs) setNil() {
 	obj.ipv4ExternalReachabilityTlvsHolder = nil
 	obj.extendedIpv4ReachabilityTlvsHolder = nil
 	obj.ipv6ReachabilityTlvsHolder = nil
+	obj.routerCapabilityHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -298,6 +300,14 @@ type IsisLspTlvs interface {
 	ExtendedIpv4ReachabilityTlvs() IsisLspTlvsIsisLspExtendedIpv4ReachabilityTlvIter
 	// Ipv6ReachabilityTlvs returns IsisLspTlvsIsisLspIpv6ReachabilityTlvIterIter, set in IsisLspTlvs
 	Ipv6ReachabilityTlvs() IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
+	// RouterCapability returns IsisLspRouterCapability, set in IsisLspTlvs.
+	// IsisLspRouterCapability is container of IS-IS Router CAPABILITY TLV.
+	RouterCapability() IsisLspRouterCapability
+	// SetRouterCapability assigns IsisLspRouterCapability provided by user to IsisLspTlvs.
+	// IsisLspRouterCapability is container of IS-IS Router CAPABILITY TLV.
+	SetRouterCapability(value IsisLspRouterCapability) IsisLspTlvs
+	// HasRouterCapability checks if RouterCapability has been set in IsisLspTlvs
+	HasRouterCapability() bool
 	setNil()
 }
 
@@ -910,6 +920,34 @@ func (obj *isisLspTlvsIsisLspIpv6ReachabilityTlvIter) appendHolderSlice(item Isi
 	return obj
 }
 
+// IS-IS Router CAPABILITY: Tlv 242.
+// RouterCapability returns a IsisLspRouterCapability
+func (obj *isisLspTlvs) RouterCapability() IsisLspRouterCapability {
+	if obj.obj.RouterCapability == nil {
+		obj.obj.RouterCapability = NewIsisLspRouterCapability().msg()
+	}
+	if obj.routerCapabilityHolder == nil {
+		obj.routerCapabilityHolder = &isisLspRouterCapability{obj: obj.obj.RouterCapability}
+	}
+	return obj.routerCapabilityHolder
+}
+
+// IS-IS Router CAPABILITY: Tlv 242.
+// RouterCapability returns a IsisLspRouterCapability
+func (obj *isisLspTlvs) HasRouterCapability() bool {
+	return obj.obj.RouterCapability != nil
+}
+
+// IS-IS Router CAPABILITY: Tlv 242.
+// SetRouterCapability sets the IsisLspRouterCapability value in the IsisLspTlvs object
+func (obj *isisLspTlvs) SetRouterCapability(value IsisLspRouterCapability) IsisLspTlvs {
+
+	obj.routerCapabilityHolder = nil
+	obj.obj.RouterCapability = value.msg()
+
+	return obj
+}
+
 func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1011,6 +1049,11 @@ func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.RouterCapability != nil {
+
+		obj.RouterCapability().validateObj(vObj, set_default)
 	}
 
 }

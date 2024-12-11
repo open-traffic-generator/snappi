@@ -245,7 +245,7 @@ func (obj *isisInterfaceAdjacencySID) Clone() (IsisInterfaceAdjacencySID, error)
 // IsisInterfaceAdjacencySID is optional container for segment routing MPLS settings.
 // If the container exists then the adjacency SID (segment identifier)
 // sub TLV will be part of the packet.
-// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
 type IsisInterfaceAdjacencySID interface {
 	Validation
 	// msg marshals IsisInterfaceAdjacencySID to protobuf object *otg.IsisInterfaceAdjacencySID
@@ -267,12 +267,22 @@ type IsisInterfaceAdjacencySID interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// AdjacencySid returns uint32, set in IsisInterfaceAdjacencySID.
-	AdjacencySid() uint32
-	// SetAdjacencySid assigns uint32 provided by user to IsisInterfaceAdjacencySID
-	SetAdjacencySid(value uint32) IsisInterfaceAdjacencySID
-	// HasAdjacencySid checks if AdjacencySid has been set in IsisInterfaceAdjacencySID
-	HasAdjacencySid() bool
+	// Choice returns IsisInterfaceAdjacencySIDChoiceEnum, set in IsisInterfaceAdjacencySID
+	Choice() IsisInterfaceAdjacencySIDChoiceEnum
+	// setChoice assigns IsisInterfaceAdjacencySIDChoiceEnum provided by user to IsisInterfaceAdjacencySID
+	setChoice(value IsisInterfaceAdjacencySIDChoiceEnum) IsisInterfaceAdjacencySID
+	// HasChoice checks if Choice has been set in IsisInterfaceAdjacencySID
+	HasChoice() bool
+	// getter for SidIndex to set choice.
+	SidIndex()
+	// getter for SidValue to set choice.
+	SidValue()
+	// Sid returns uint32, set in IsisInterfaceAdjacencySID.
+	Sid() uint32
+	// SetSid assigns uint32 provided by user to IsisInterfaceAdjacencySID
+	SetSid(value uint32) IsisInterfaceAdjacencySID
+	// HasSid checks if Sid has been set in IsisInterfaceAdjacencySID
+	HasSid() bool
 	// FFlag returns bool, set in IsisInterfaceAdjacencySID.
 	FFlag() bool
 	// SetFFlag assigns bool provided by user to IsisInterfaceAdjacencySID
@@ -285,12 +295,6 @@ type IsisInterfaceAdjacencySID interface {
 	SetBFlag(value bool) IsisInterfaceAdjacencySID
 	// HasBFlag checks if BFlag has been set in IsisInterfaceAdjacencySID
 	HasBFlag() bool
-	// VFlag returns bool, set in IsisInterfaceAdjacencySID.
-	VFlag() bool
-	// SetVFlag assigns bool provided by user to IsisInterfaceAdjacencySID
-	SetVFlag(value bool) IsisInterfaceAdjacencySID
-	// HasVFlag checks if VFlag has been set in IsisInterfaceAdjacencySID
-	HasVFlag() bool
 	// LFlag returns bool, set in IsisInterfaceAdjacencySID.
 	LFlag() bool
 	// SetLFlag assigns bool provided by user to IsisInterfaceAdjacencySID
@@ -317,25 +321,72 @@ type IsisInterfaceAdjacencySID interface {
 	HasWeight() bool
 }
 
-// The corresponding adjacency SID for a link.
-// AdjacencySid returns a uint32
-func (obj *isisInterfaceAdjacencySID) AdjacencySid() uint32 {
+type IsisInterfaceAdjacencySIDChoiceEnum string
 
-	return *obj.obj.AdjacencySid
+// Enum of Choice on IsisInterfaceAdjacencySID
+var IsisInterfaceAdjacencySIDChoice = struct {
+	SID_VALUE IsisInterfaceAdjacencySIDChoiceEnum
+	SID_INDEX IsisInterfaceAdjacencySIDChoiceEnum
+}{
+	SID_VALUE: IsisInterfaceAdjacencySIDChoiceEnum("sid_value"),
+	SID_INDEX: IsisInterfaceAdjacencySIDChoiceEnum("sid_index"),
+}
+
+func (obj *isisInterfaceAdjacencySID) Choice() IsisInterfaceAdjacencySIDChoiceEnum {
+	return IsisInterfaceAdjacencySIDChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for SidIndex to set choice
+func (obj *isisInterfaceAdjacencySID) SidIndex() {
+	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_INDEX)
+}
+
+// getter for SidValue to set choice
+func (obj *isisInterfaceAdjacencySID) SidValue() {
+	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
+}
+
+// The choice of Adjacency-SID carries a value instead of an index.
+// Refer to "srlg_values" under Isis.Interface and IsisSR.Srgb under Isis.SRCapability.
+// - sid_value: Adjacency-SID carries a value.
+// - sid_index: Adjacency-SID carries an index.
+// Choice returns a string
+func (obj *isisInterfaceAdjacencySID) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
+
+func (obj *isisInterfaceAdjacencySID) setChoice(value IsisInterfaceAdjacencySIDChoiceEnum) IsisInterfaceAdjacencySID {
+	intValue, ok := otg.IsisInterfaceAdjacencySID_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on IsisInterfaceAdjacencySIDChoiceEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.IsisInterfaceAdjacencySID_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+
+	return obj
+}
+
+// The corresponding Adjacency SID for a link.
+// Sid returns a uint32
+func (obj *isisInterfaceAdjacencySID) Sid() uint32 {
+
+	return *obj.obj.Sid
 
 }
 
-// The corresponding adjacency SID for a link.
-// AdjacencySid returns a uint32
-func (obj *isisInterfaceAdjacencySID) HasAdjacencySid() bool {
-	return obj.obj.AdjacencySid != nil
+// The corresponding Adjacency SID for a link.
+// Sid returns a uint32
+func (obj *isisInterfaceAdjacencySID) HasSid() bool {
+	return obj.obj.Sid != nil
 }
 
-// The corresponding adjacency SID for a link.
-// SetAdjacencySid sets the uint32 value in the IsisInterfaceAdjacencySID object
-func (obj *isisInterfaceAdjacencySID) SetAdjacencySid(value uint32) IsisInterfaceAdjacencySID {
+// The corresponding Adjacency SID for a link.
+// SetSid sets the uint32 value in the IsisInterfaceAdjacencySID object
+func (obj *isisInterfaceAdjacencySID) SetSid(value uint32) IsisInterfaceAdjacencySID {
 
-	obj.obj.AdjacencySid = &value
+	obj.obj.Sid = &value
 	return obj
 }
 
@@ -392,30 +443,8 @@ func (obj *isisInterfaceAdjacencySID) SetBFlag(value bool) IsisInterfaceAdjacenc
 	return obj
 }
 
-// The value flag. If set, then the Adj-SID carries a value.
-// VFlag returns a bool
-func (obj *isisInterfaceAdjacencySID) VFlag() bool {
-
-	return *obj.obj.VFlag
-
-}
-
-// The value flag. If set, then the Adj-SID carries a value.
-// VFlag returns a bool
-func (obj *isisInterfaceAdjacencySID) HasVFlag() bool {
-	return obj.obj.VFlag != nil
-}
-
-// The value flag. If set, then the Adj-SID carries a value.
-// SetVFlag sets the bool value in the IsisInterfaceAdjacencySID object
-func (obj *isisInterfaceAdjacencySID) SetVFlag(value bool) IsisInterfaceAdjacencySID {
-
-	obj.obj.VFlag = &value
-	return obj
-}
-
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
+// the Adj-SID has local significance. In this case, Adjacency_sid is from "srlg_values" under Isis.Interface.
 // LFlag returns a bool
 func (obj *isisInterfaceAdjacencySID) LFlag() bool {
 
@@ -424,14 +453,14 @@ func (obj *isisInterfaceAdjacencySID) LFlag() bool {
 }
 
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
+// the Adj-SID has local significance. In this case, Adjacency_sid is from "srlg_values" under Isis.Interface.
 // LFlag returns a bool
 func (obj *isisInterfaceAdjacencySID) HasLFlag() bool {
 	return obj.obj.LFlag != nil
 }
 
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
+// the Adj-SID has local significance. In this case, Adjacency_sid is from "srlg_values" under Isis.Interface.
 // SetLFlag sets the bool value in the IsisInterfaceAdjacencySID object
 func (obj *isisInterfaceAdjacencySID) SetLFlag(value bool) IsisInterfaceAdjacencySID {
 
@@ -495,8 +524,7 @@ func (obj *isisInterfaceAdjacencySID) SetPFlag(value bool) IsisInterfaceAdjacenc
 	return obj
 }
 
-// The value represents the weight of the Adj-SID for the purpose of
-// load balancing.
+// The value represents the weight of the Adj-SID for the purpose of load balancing.
 // Weight returns a uint32
 func (obj *isisInterfaceAdjacencySID) Weight() uint32 {
 
@@ -504,15 +532,13 @@ func (obj *isisInterfaceAdjacencySID) Weight() uint32 {
 
 }
 
-// The value represents the weight of the Adj-SID for the purpose of
-// load balancing.
+// The value represents the weight of the Adj-SID for the purpose of load balancing.
 // Weight returns a uint32
 func (obj *isisInterfaceAdjacencySID) HasWeight() bool {
 	return obj.obj.Weight != nil
 }
 
-// The value represents the weight of the Adj-SID for the purpose of
-// load balancing.
+// The value represents the weight of the Adj-SID for the purpose of load balancing.
 // SetWeight sets the uint32 value in the IsisInterfaceAdjacencySID object
 func (obj *isisInterfaceAdjacencySID) SetWeight(value uint32) IsisInterfaceAdjacencySID {
 
@@ -525,12 +551,12 @@ func (obj *isisInterfaceAdjacencySID) validateObj(vObj *validation, set_default 
 		obj.setDefault()
 	}
 
-	if obj.obj.AdjacencySid != nil {
+	if obj.obj.Sid != nil {
 
-		if *obj.obj.AdjacencySid < 1 || *obj.obj.AdjacencySid > 1048575 {
+		if *obj.obj.Sid < 1 || *obj.obj.Sid > 1048575 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.AdjacencySid <= 1048575 but Got %d", *obj.obj.AdjacencySid))
+				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.Sid <= 1048575 but Got %d", *obj.obj.Sid))
 		}
 
 	}
@@ -548,17 +574,34 @@ func (obj *isisInterfaceAdjacencySID) validateObj(vObj *validation, set_default 
 }
 
 func (obj *isisInterfaceAdjacencySID) setDefault() {
-	if obj.obj.AdjacencySid == nil {
-		obj.SetAdjacencySid(9001)
+	var choices_set int = 0
+	var choice IsisInterfaceAdjacencySIDChoiceEnum
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in IsisInterfaceAdjacencySID")
+			}
+		} else {
+			intVal := otg.IsisInterfaceAdjacencySID_Choice_Enum_value[string(choice)]
+			enumValue := otg.IsisInterfaceAdjacencySID_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
+
+	if obj.obj.Sid == nil {
+		obj.SetSid(9001)
 	}
 	if obj.obj.FFlag == nil {
 		obj.SetFFlag(false)
 	}
 	if obj.obj.BFlag == nil {
 		obj.SetBFlag(false)
-	}
-	if obj.obj.VFlag == nil {
-		obj.SetVFlag(true)
 	}
 	if obj.obj.LFlag == nil {
 		obj.SetLFlag(true)
