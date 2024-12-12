@@ -2032,18 +2032,19 @@ message IsisInterfaceAdjacencySID {
     }
   }
   // The choice of Adjacency-SID carries a value instead of an index.
-  // Refer to srlg_values under Isis.Interface and IsisSR.Srgb under Isis.SRCapability.
+  // Refer to srlg_values under Isis.Interface for SR Local Block (SRLB) and
+  // IsisSR.Srgb under Isis.SRCapability for Segment Routing Global Block (SRGB) Descriptor.
   // - sid_value: Adjacency-SID carries a value.
   // - sid_index: Adjacency-SID carries an index.
   // default = Choice.Enum.sid_value
   optional Choice.Enum choice = 1;
 
   // The corresponding Adjacency SID for a link.
-  // default = 9001
+  // default = 0
   optional uint32 sid_value = 2;
 
   // The corresponding Adjacency SID for a link.
-  // default = 9001
+  // default = 0
   optional uint32 sid_index = 3;
 
   // The address family flag. If unset, then the Adj-SID refers
@@ -2339,17 +2340,24 @@ message IsisSRPrefixSID {
     }
   }
   // The choice of Prefix-SID carries a value instead of an index.
-  // Refer to srgb_ranges under IsisSR.Srlb under Isis.RouterCapability and IsisSR.Srgb
-  // under Isis.SRCapability.
+  // Refer to srgb_ranges under IsisSR.Srlb under Isis.RouterCapability  or the SR Local
+  // Block (SRLB)
+  // and IsisSR.Srgb under Isis.SRCapability for the Segment Routing Global Block (SRGB)
+  // Descriptor.
   // - sid_value: Prefix-SID carries a value
   // - sid_index: Prefix-SID carries an index.
   // default = Choice.Enum.sid_value
   optional Choice.Enum choice = 1;
 
-  // SID/Index is the SID/Label value associated  with the IGP Prefix segment attached
-  // to the specific IPv4 or IPv6 prefix. Refer to IsisSR.Srlb and IsisSR.Srgb
+  // SID/Label value that is associated  with the IGP Prefix segment attached to the specific
+  // IPv4 or IPv6 prefix.
+  // default = 16000
+  optional uint32 sid_value = 2;
+
+  // SID/Label Index that is associated  with the IGP Prefix segment attached to the specific
+  // IPv4 or IPv6 prefix.
   // default = 0
-  optional uint32 sid = 2;
+  optional uint32 sid_index = 3;
 
   // R-Flag: Re-advertisement Flag.
   // If set, then the prefix to which this Prefix-SID is attached has been propagated
@@ -2357,7 +2365,7 @@ message IsisSRPrefixSID {
   // from either another level (i.e., from Level-1 to Level-2 or the opposite) or redistribution
   // (e.g., from another protocol).
   // default = False
-  optional bool r_flag = 3;
+  optional bool r_flag = 4;
 
   // N-Flag: Node-SID flag.
   // If set, then the Prefix-SID refers to the router identified by the prefix.
@@ -2365,7 +2373,7 @@ message IsisSRPrefixSID {
   // address.
   // The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
   // default = False
-  optional bool n_flag = 4;
+  optional bool n_flag = 5;
 
   // P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
   // If set, then the Prefix-SID refers to the router identified by the prefix.
@@ -2373,7 +2381,7 @@ message IsisSRPrefixSID {
   // address.
   // The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
   // default = False
-  optional bool p_flag = 5;
+  optional bool p_flag = 6;
 
   // E-Flag: Explicit-Null Flag.
   // If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
@@ -2381,19 +2389,19 @@ message IsisSRPrefixSID {
   // that has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before forwarding the
   // packet.
   // default = False
-  optional bool e_flag = 6;
+  optional bool e_flag = 7;
 
   // The local flag.  If set, then the value/index carried by
   // the Prefix-SID has local significance and the Prefix SID is from srgb_ranges under
   // IsisSR.Srlb under Isis.RouterCapability.
   // default = False
-  optional bool l_flag = 7;
+  optional bool l_flag = 8;
 
   // The Isis may use various algorithms when calculating
   // reachability to other nodes or to prefixes attached to these
   // nodes.
   // default = 0
-  optional uint32 algorithm = 8;
+  optional uint32 algorithm = 9;
 }
 
 // Emulated ISIS IPv6 routes.

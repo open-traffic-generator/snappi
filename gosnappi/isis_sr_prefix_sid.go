@@ -270,16 +270,18 @@ type IsisSRPrefixSID interface {
 	setChoice(value IsisSRPrefixSIDChoiceEnum) IsisSRPrefixSID
 	// HasChoice checks if Choice has been set in IsisSRPrefixSID
 	HasChoice() bool
-	// getter for SidIndex to set choice.
-	SidIndex()
-	// getter for SidValue to set choice.
-	SidValue()
-	// Sid returns uint32, set in IsisSRPrefixSID.
-	Sid() uint32
-	// SetSid assigns uint32 provided by user to IsisSRPrefixSID
-	SetSid(value uint32) IsisSRPrefixSID
-	// HasSid checks if Sid has been set in IsisSRPrefixSID
-	HasSid() bool
+	// SidValue returns uint32, set in IsisSRPrefixSID.
+	SidValue() uint32
+	// SetSidValue assigns uint32 provided by user to IsisSRPrefixSID
+	SetSidValue(value uint32) IsisSRPrefixSID
+	// HasSidValue checks if SidValue has been set in IsisSRPrefixSID
+	HasSidValue() bool
+	// SidIndex returns uint32, set in IsisSRPrefixSID.
+	SidIndex() uint32
+	// SetSidIndex assigns uint32 provided by user to IsisSRPrefixSID
+	SetSidIndex(value uint32) IsisSRPrefixSID
+	// HasSidIndex checks if SidIndex has been set in IsisSRPrefixSID
+	HasSidIndex() bool
 	// RFlag returns bool, set in IsisSRPrefixSID.
 	RFlag() bool
 	// SetRFlag assigns bool provided by user to IsisSRPrefixSID
@@ -333,18 +335,9 @@ func (obj *isisSRPrefixSID) Choice() IsisSRPrefixSIDChoiceEnum {
 	return IsisSRPrefixSIDChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for SidIndex to set choice
-func (obj *isisSRPrefixSID) SidIndex() {
-	obj.setChoice(IsisSRPrefixSIDChoice.SID_INDEX)
-}
-
-// getter for SidValue to set choice
-func (obj *isisSRPrefixSID) SidValue() {
-	obj.setChoice(IsisSRPrefixSIDChoice.SID_VALUE)
-}
-
 // The choice of Prefix-SID carries a value instead of an index.
-// Refer to "srgb_ranges" under IsisSR.Srlb under Isis.RouterCapability and IsisSR.Srgb under Isis.SRCapability.
+// Refer to "srgb_ranges" under IsisSR.Srlb under Isis.RouterCapability  or the SR Local Block (SRLB)
+// and IsisSR.Srgb under Isis.SRCapability for the Segment Routing Global Block (SRGB) Descriptor.
 // - sid_value: Prefix-SID carries a value
 // - sid_index: Prefix-SID carries an index.
 // Choice returns a string
@@ -361,29 +354,71 @@ func (obj *isisSRPrefixSID) setChoice(value IsisSRPrefixSIDChoiceEnum) IsisSRPre
 	}
 	enumValue := otg.IsisSRPrefixSID_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SidIndex = nil
+	obj.obj.SidValue = nil
+
+	if value == IsisSRPrefixSIDChoice.SID_VALUE {
+		defaultValue := uint32(16000)
+		obj.obj.SidValue = &defaultValue
+	}
+
+	if value == IsisSRPrefixSIDChoice.SID_INDEX {
+		defaultValue := uint32(0)
+		obj.obj.SidIndex = &defaultValue
+	}
 
 	return obj
 }
 
-// SID/Index is the SID/Label value associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix. Refer to IsisSR.Srlb and IsisSR.Srgb
-// Sid returns a uint32
-func (obj *isisSRPrefixSID) Sid() uint32 {
+// SID/Label value that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SidValue returns a uint32
+func (obj *isisSRPrefixSID) SidValue() uint32 {
 
-	return *obj.obj.Sid
+	if obj.obj.SidValue == nil {
+		obj.setChoice(IsisSRPrefixSIDChoice.SID_VALUE)
+	}
+
+	return *obj.obj.SidValue
 
 }
 
-// SID/Index is the SID/Label value associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix. Refer to IsisSR.Srlb and IsisSR.Srgb
-// Sid returns a uint32
-func (obj *isisSRPrefixSID) HasSid() bool {
-	return obj.obj.Sid != nil
+// SID/Label value that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SidValue returns a uint32
+func (obj *isisSRPrefixSID) HasSidValue() bool {
+	return obj.obj.SidValue != nil
 }
 
-// SID/Index is the SID/Label value associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix. Refer to IsisSR.Srlb and IsisSR.Srgb
-// SetSid sets the uint32 value in the IsisSRPrefixSID object
-func (obj *isisSRPrefixSID) SetSid(value uint32) IsisSRPrefixSID {
+// SID/Label value that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SetSidValue sets the uint32 value in the IsisSRPrefixSID object
+func (obj *isisSRPrefixSID) SetSidValue(value uint32) IsisSRPrefixSID {
+	obj.setChoice(IsisSRPrefixSIDChoice.SID_VALUE)
+	obj.obj.SidValue = &value
+	return obj
+}
 
-	obj.obj.Sid = &value
+// SID/Label Index that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SidIndex returns a uint32
+func (obj *isisSRPrefixSID) SidIndex() uint32 {
+
+	if obj.obj.SidIndex == nil {
+		obj.setChoice(IsisSRPrefixSIDChoice.SID_INDEX)
+	}
+
+	return *obj.obj.SidIndex
+
+}
+
+// SID/Label Index that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SidIndex returns a uint32
+func (obj *isisSRPrefixSID) HasSidIndex() bool {
+	return obj.obj.SidIndex != nil
+}
+
+// SID/Label Index that is associated  with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SetSidIndex sets the uint32 value in the IsisSRPrefixSID object
+func (obj *isisSRPrefixSID) SetSidIndex(value uint32) IsisSRPrefixSID {
+	obj.setChoice(IsisSRPrefixSIDChoice.SID_INDEX)
+	obj.obj.SidIndex = &value
 	return obj
 }
 
@@ -578,6 +613,16 @@ func (obj *isisSRPrefixSID) validateObj(vObj *validation, set_default bool) {
 func (obj *isisSRPrefixSID) setDefault() {
 	var choices_set int = 0
 	var choice IsisSRPrefixSIDChoiceEnum
+
+	if obj.obj.SidValue != nil {
+		choices_set += 1
+		choice = IsisSRPrefixSIDChoice.SID_VALUE
+	}
+
+	if obj.obj.SidIndex != nil {
+		choices_set += 1
+		choice = IsisSRPrefixSIDChoice.SID_INDEX
+	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
 			obj.setChoice(IsisSRPrefixSIDChoice.SID_VALUE)
@@ -596,9 +641,6 @@ func (obj *isisSRPrefixSID) setDefault() {
 		}
 	}
 
-	if obj.obj.Sid == nil {
-		obj.SetSid(0)
-	}
 	if obj.obj.RFlag == nil {
 		obj.SetRFlag(false)
 	}

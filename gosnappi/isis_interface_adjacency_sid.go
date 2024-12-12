@@ -339,7 +339,8 @@ func (obj *isisInterfaceAdjacencySID) Choice() IsisInterfaceAdjacencySIDChoiceEn
 }
 
 // The choice of Adjacency-SID carries a value instead of an index.
-// Refer to "srlg_values" under Isis.Interface and IsisSR.Srgb under Isis.SRCapability.
+// Refer to "srlg_values" under Isis.Interface for SR Local Block (SRLB) and
+// IsisSR.Srgb under Isis.SRCapability for Segment Routing Global Block (SRGB) Descriptor.
 // - sid_value: Adjacency-SID carries a value.
 // - sid_index: Adjacency-SID carries an index.
 // Choice returns a string
@@ -360,12 +361,12 @@ func (obj *isisInterfaceAdjacencySID) setChoice(value IsisInterfaceAdjacencySIDC
 	obj.obj.SidValue = nil
 
 	if value == IsisInterfaceAdjacencySIDChoice.SID_VALUE {
-		defaultValue := uint32(9001)
+		defaultValue := uint32(0)
 		obj.obj.SidValue = &defaultValue
 	}
 
 	if value == IsisInterfaceAdjacencySIDChoice.SID_INDEX {
-		defaultValue := uint32(9001)
+		defaultValue := uint32(0)
 		obj.obj.SidIndex = &defaultValue
 	}
 
