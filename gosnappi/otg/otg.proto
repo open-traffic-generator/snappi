@@ -11970,7 +11970,7 @@ message PortMetricsRequest {
       frames_rx_rate = 10;
       bytes_tx_rate = 11;
       bytes_rx_rate = 12;
-      last_link_state_change_time = 13;
+      last_change = 13;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -12047,8 +12047,12 @@ message PortMetric {
   // The transmit state of the flow.
   optional Transmit.Enum transmit = 13;
 
-  // The timestamp of the last link-state change event
-  optional string last_link_state_change_time = 14;
+  // The timestamp indicates the absolute time of the last
+  // link state change of the test port (e.g., up-to-down transition).
+  // 
+  // The value is the timestamp in nanoseconds relative to
+  // the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+  optional uint64 last_change = 14;
 }
 
 // The container for a flow metric request.

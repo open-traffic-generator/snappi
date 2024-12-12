@@ -342,12 +342,12 @@ type PortMetric interface {
 	SetTransmit(value PortMetricTransmitEnum) PortMetric
 	// HasTransmit checks if Transmit has been set in PortMetric
 	HasTransmit() bool
-	// LastLinkStateChangeTime returns string, set in PortMetric.
-	LastLinkStateChangeTime() string
-	// SetLastLinkStateChangeTime assigns string provided by user to PortMetric
-	SetLastLinkStateChangeTime(value string) PortMetric
-	// HasLastLinkStateChangeTime checks if LastLinkStateChangeTime has been set in PortMetric
-	HasLastLinkStateChangeTime() bool
+	// LastChange returns uint64, set in PortMetric.
+	LastChange() uint64
+	// SetLastChange assigns uint64 provided by user to PortMetric
+	SetLastChange(value uint64) PortMetric
+	// HasLastChange checks if LastChange has been set in PortMetric
+	HasLastChange() bool
 }
 
 // The name of a configured port
@@ -684,25 +684,37 @@ func (obj *portMetric) SetTransmit(value PortMetricTransmitEnum) PortMetric {
 	return obj
 }
 
-// The timestamp of the last link-state change event
-// LastLinkStateChangeTime returns a string
-func (obj *portMetric) LastLinkStateChangeTime() string {
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// LastChange returns a uint64
+func (obj *portMetric) LastChange() uint64 {
 
-	return *obj.obj.LastLinkStateChangeTime
+	return *obj.obj.LastChange
 
 }
 
-// The timestamp of the last link-state change event
-// LastLinkStateChangeTime returns a string
-func (obj *portMetric) HasLastLinkStateChangeTime() bool {
-	return obj.obj.LastLinkStateChangeTime != nil
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// LastChange returns a uint64
+func (obj *portMetric) HasLastChange() bool {
+	return obj.obj.LastChange != nil
 }
 
-// The timestamp of the last link-state change event
-// SetLastLinkStateChangeTime sets the string value in the PortMetric object
-func (obj *portMetric) SetLastLinkStateChangeTime(value string) PortMetric {
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// SetLastChange sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetLastChange(value uint64) PortMetric {
 
-	obj.obj.LastLinkStateChangeTime = &value
+	obj.obj.LastChange = &value
 	return obj
 }
 
