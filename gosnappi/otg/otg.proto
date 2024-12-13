@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.17.0
+/* Open Traffic Generator API 1.18.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -7344,9 +7344,10 @@ message Dhcpv6ServerPoolInfo {
   // The first IP address of the lease pool.
   optional string start_address = 1;
 
-  // The IPv6 network prefix length is used for incrementing the lease address within
-  // the lease pool where multiple addresses are configured by using the size field. The
-  // address is incremented using the configured Prefix Length and Step.
+  // The prefix_len ( in conjunction with the step) can be used to increment the IPv6
+  // lease addresses  to be assigned to the requested clients when multiple addresses
+  // are configured by using the size field  in the pool. The address is incremented using
+  // the prefix_len and step.
   // default = 64
   optional uint32 prefix_len = 2;
 
@@ -7355,8 +7356,8 @@ message Dhcpv6ServerPoolInfo {
   optional uint32 size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
-  // are present. The value is incremented according to the configured Prefix Length and
-  // Step.
+  // are present.  The value of the advertised IPv6 prefixes are incremented according
+  // to the prefix_len and step.
   // default = 1
   optional uint32 step = 4;
 }
@@ -7367,10 +7368,12 @@ message Dhcpv6ServerIapdPoolInfo {
   // The first IP address of the prefix pool.
   optional string start_prefix_address = 1;
 
-  // The IPv6 network prefix length is used for incrementing the lease address within
-  // the lease pool where multiple addresses are configured by using the size field. The
-  // address is incremented using the configured Prefix Length and Step.
-  // default = 64
+  // The configured_prefix_len ( in conjunction with the prefix_step) can be used to increment
+  // the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses
+  // are configured by using the size field in the pool.  e.g. This can be used to assign
+  // multiple IPv6 host addresses within the same IPv6 subnet ( defined by advertised_prefix_len
+  // )  to multiple requesting clients.
+  // default = 128
   optional uint32 configured_prefix_len = 2;
 
   // The total number of addresses in the pool.
@@ -7378,7 +7381,8 @@ message Dhcpv6ServerIapdPoolInfo {
   optional uint32 prefix_size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
-  // are present. The value is incremented according to the Prefix Length and Step.
+  // are present.  The value of the advertised IPv6 prefixes are incremented according
+  // to the configured_prefix_len and prefix_step.
   // default = 1
   optional uint32 prefix_step = 4;
 

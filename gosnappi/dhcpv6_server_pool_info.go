@@ -312,7 +312,7 @@ func (obj *dhcpv6ServerPoolInfo) SetStartAddress(value string) Dhcpv6ServerPoolI
 	return obj
 }
 
-// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// The prefix_len ( in conjunction with the step) can be used to increment the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses are configured by using the size field  in the pool. The address is incremented using the prefix_len and step.
 // PrefixLen returns a uint32
 func (obj *dhcpv6ServerPoolInfo) PrefixLen() uint32 {
 
@@ -320,13 +320,13 @@ func (obj *dhcpv6ServerPoolInfo) PrefixLen() uint32 {
 
 }
 
-// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// The prefix_len ( in conjunction with the step) can be used to increment the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses are configured by using the size field  in the pool. The address is incremented using the prefix_len and step.
 // PrefixLen returns a uint32
 func (obj *dhcpv6ServerPoolInfo) HasPrefixLen() bool {
 	return obj.obj.PrefixLen != nil
 }
 
-// The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+// The prefix_len ( in conjunction with the step) can be used to increment the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses are configured by using the size field  in the pool. The address is incremented using the prefix_len and step.
 // SetPrefixLen sets the uint32 value in the Dhcpv6ServerPoolInfo object
 func (obj *dhcpv6ServerPoolInfo) SetPrefixLen(value uint32) Dhcpv6ServerPoolInfo {
 
@@ -356,7 +356,7 @@ func (obj *dhcpv6ServerPoolInfo) SetSize(value uint32) Dhcpv6ServerPoolInfo {
 	return obj
 }
 
-// The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the configured Prefix Length and Step.
+// The increment value for the lease address within the lease pool where multiple addresses are present.  The value of the advertised IPv6 prefixes are incremented according to the prefix_len and step.
 // Step returns a uint32
 func (obj *dhcpv6ServerPoolInfo) Step() uint32 {
 
@@ -364,13 +364,13 @@ func (obj *dhcpv6ServerPoolInfo) Step() uint32 {
 
 }
 
-// The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the configured Prefix Length and Step.
+// The increment value for the lease address within the lease pool where multiple addresses are present.  The value of the advertised IPv6 prefixes are incremented according to the prefix_len and step.
 // Step returns a uint32
 func (obj *dhcpv6ServerPoolInfo) HasStep() bool {
 	return obj.obj.Step != nil
 }
 
-// The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the configured Prefix Length and Step.
+// The increment value for the lease address within the lease pool where multiple addresses are present.  The value of the advertised IPv6 prefixes are incremented according to the prefix_len and step.
 // SetStep sets the uint32 value in the Dhcpv6ServerPoolInfo object
 func (obj *dhcpv6ServerPoolInfo) SetStep(value uint32) Dhcpv6ServerPoolInfo {
 
