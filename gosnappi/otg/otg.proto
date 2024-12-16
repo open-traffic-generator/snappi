@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.18.0
+/* Open Traffic Generator API 1.19.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -12208,6 +12208,7 @@ message PortMetricsRequest {
       frames_rx_rate = 10;
       bytes_tx_rate = 11;
       bytes_rx_rate = 12;
+      last_change = 13;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -12287,6 +12288,13 @@ message PortMetric {
   }
   // The transmit state of the flow.
   optional Transmit.Enum transmit = 13;
+
+  // The timestamp indicates the absolute time of the last
+  // link state change of the test port (e.g., up-to-down transition).
+  // 
+  // The value is the timestamp in nanoseconds relative to
+  // the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+  optional uint64 last_change = 14;
 }
 
 // The container for a flow metric request.
