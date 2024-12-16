@@ -23,6 +23,7 @@ type isisInterface struct {
 	authenticationHolder     IsisInterfaceAuthentication
 	advancedHolder           IsisInterfaceAdvanced
 	linkProtectionHolder     IsisInterfaceLinkProtection
+	adjacencySidsHolder      IsisInterfaceIsisInterfaceAdjacencySIDIter
 }
 
 func NewIsisInterface() IsisInterface {
@@ -257,6 +258,7 @@ func (obj *isisInterface) setNil() {
 	obj.authenticationHolder = nil
 	obj.advancedHolder = nil
 	obj.linkProtectionHolder = nil
+	obj.adjacencySidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -358,13 +360,12 @@ type IsisInterface interface {
 	Name() string
 	// SetName assigns string provided by user to IsisInterface
 	SetName(value string) IsisInterface
+	// AdjacencySids returns IsisInterfaceIsisInterfaceAdjacencySIDIterIter, set in IsisInterface
+	AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySIDIter
 	setNil()
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -377,9 +378,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -835,6 +833,93 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
+// List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+// AdjacencySids returns a []IsisInterfaceAdjacencySID
+func (obj *isisInterface) AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(obj.obj.AdjacencySids) == 0 {
+		obj.obj.AdjacencySids = []*otg.IsisInterfaceAdjacencySID{}
+	}
+	if obj.adjacencySidsHolder == nil {
+		obj.adjacencySidsHolder = newIsisInterfaceIsisInterfaceAdjacencySIDIter(&obj.obj.AdjacencySids).setMsg(obj)
+	}
+	return obj.adjacencySidsHolder
+}
+
+type isisInterfaceIsisInterfaceAdjacencySIDIter struct {
+	obj                            *isisInterface
+	isisInterfaceAdjacencySIDSlice []IsisInterfaceAdjacencySID
+	fieldPtr                       *[]*otg.IsisInterfaceAdjacencySID
+}
+
+func newIsisInterfaceIsisInterfaceAdjacencySIDIter(ptr *[]*otg.IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	return &isisInterfaceIsisInterfaceAdjacencySIDIter{fieldPtr: ptr}
+}
+
+type IsisInterfaceIsisInterfaceAdjacencySIDIter interface {
+	setMsg(*isisInterface) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Items() []IsisInterfaceAdjacencySID
+	Add() IsisInterfaceAdjacencySID
+	Append(items ...IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Set(index int, newObj IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+	Clear() IsisInterfaceIsisInterfaceAdjacencySIDIter
+	clearHolderSlice() IsisInterfaceIsisInterfaceAdjacencySIDIter
+	appendHolderSlice(item IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) setMsg(msg *isisInterface) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisInterfaceAdjacencySID{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Items() []IsisInterfaceAdjacencySID {
+	return obj.isisInterfaceAdjacencySIDSlice
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Add() IsisInterfaceAdjacencySID {
+	newObj := &otg.IsisInterfaceAdjacencySID{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisInterfaceAdjacencySID{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Append(items ...IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Set(index int, newObj IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisInterfaceAdjacencySIDSlice[index] = newObj
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) Clear() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisInterfaceAdjacencySID{}
+		obj.isisInterfaceAdjacencySIDSlice = []IsisInterfaceAdjacencySID{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) clearHolderSlice() IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	if len(obj.isisInterfaceAdjacencySIDSlice) > 0 {
+		obj.isisInterfaceAdjacencySIDSlice = []IsisInterfaceAdjacencySID{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisInterfaceAdjacencySIDIter) appendHolderSlice(item IsisInterfaceAdjacencySID) IsisInterfaceIsisInterfaceAdjacencySIDIter {
+	obj.isisInterfaceAdjacencySIDSlice = append(obj.isisInterfaceAdjacencySIDSlice, item)
+	return obj
+}
+
 func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -925,6 +1010,21 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisInterface")
 	}
+
+	if len(obj.obj.AdjacencySids) != 0 {
+
+		if set_default {
+			obj.AdjacencySids().clearHolderSlice()
+			for _, item := range obj.obj.AdjacencySids {
+				obj.AdjacencySids().appendHolderSlice(&isisInterfaceAdjacencySID{obj: item})
+			}
+		}
+		for _, item := range obj.AdjacencySids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *isisInterface) setDefault() {
