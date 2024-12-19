@@ -284,6 +284,12 @@ type Layer1 interface {
 	SetSpeed(value Layer1SpeedEnum) Layer1
 	// HasSpeed checks if Speed has been set in Layer1
 	HasSpeed() bool
+	// CustomSpeed returns string, set in Layer1.
+	CustomSpeed() string
+	// SetCustomSpeed assigns string provided by user to Layer1
+	SetCustomSpeed(value string) Layer1
+	// HasCustomSpeed checks if CustomSpeed has been set in Layer1
+	HasCustomSpeed() bool
 	// Media returns Layer1MediaEnum, set in Layer1
 	Media() Layer1MediaEnum
 	// SetMedia assigns Layer1MediaEnum provided by user to Layer1
@@ -347,9 +353,6 @@ type Layer1 interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *layer1) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -360,9 +363,6 @@ func (obj *layer1) PortNames() []string {
 
 // A list of unique names of port objects that will share the
 // choice settings.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -395,6 +395,7 @@ var Layer1Speed = struct {
 	SPEED_200_GBPS    Layer1SpeedEnum
 	SPEED_400_GBPS    Layer1SpeedEnum
 	SPEED_800_GBPS    Layer1SpeedEnum
+	CUSTOM_SPEED      Layer1SpeedEnum
 }{
 	SPEED_10_FD_MBPS:  Layer1SpeedEnum("speed_10_fd_mbps"),
 	SPEED_10_HD_MBPS:  Layer1SpeedEnum("speed_10_hd_mbps"),
@@ -409,6 +410,7 @@ var Layer1Speed = struct {
 	SPEED_200_GBPS:    Layer1SpeedEnum("speed_200_gbps"),
 	SPEED_400_GBPS:    Layer1SpeedEnum("speed_400_gbps"),
 	SPEED_800_GBPS:    Layer1SpeedEnum("speed_800_gbps"),
+	CUSTOM_SPEED:      Layer1SpeedEnum("custom_speed"),
 }
 
 func (obj *layer1) Speed() Layer1SpeedEnum {
@@ -432,6 +434,28 @@ func (obj *layer1) SetSpeed(value Layer1SpeedEnum) Layer1 {
 	enumValue := otg.Layer1_Speed_Enum(intValue)
 	obj.obj.Speed = &enumValue
 
+	return obj
+}
+
+// Vendor specific custom speed.
+// CustomSpeed returns a string
+func (obj *layer1) CustomSpeed() string {
+
+	return *obj.obj.CustomSpeed
+
+}
+
+// Vendor specific custom speed.
+// CustomSpeed returns a string
+func (obj *layer1) HasCustomSpeed() bool {
+	return obj.obj.CustomSpeed != nil
+}
+
+// Vendor specific custom speed.
+// SetCustomSpeed sets the string value in the Layer1 object
+func (obj *layer1) SetCustomSpeed(value string) Layer1 {
+
+	obj.obj.CustomSpeed = &value
 	return obj
 }
 
@@ -528,8 +552,6 @@ func (obj *layer1) SetMtu(value uint32) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -541,8 +563,6 @@ func (obj *layer1) IeeeMediaDefaults() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -550,8 +570,6 @@ func (obj *layer1) HasIeeeMediaDefaults() bool {
 	return obj.obj.IeeeMediaDefaults != nil
 }
 
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Under Review: This field is currently under review for pending exploration on use cases
 //
 // Set to true to override the auto_negotiate, link_training
@@ -565,8 +583,6 @@ func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) AutoNegotiate() bool {
@@ -577,16 +593,12 @@ func (obj *layer1) AutoNegotiate() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) HasAutoNegotiate() bool {
 	return obj.obj.AutoNegotiate != nil
 }
 
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
 // Enable/disable auto negotiation.

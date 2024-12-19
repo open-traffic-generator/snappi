@@ -1130,6 +1130,8 @@ from .snappi import EventRouteAdvertiseWithdraw
 from .snappi import ConfigOptions
 from .snappi import PortOptions
 from .snappi import ProtocolOptions
+from .snappi import VendorOptions
+from .snappi import VendorOptionsIter
 from .snappi import Lldp
 from .snappi import LldpConnection
 from .snappi import LldpChassisId

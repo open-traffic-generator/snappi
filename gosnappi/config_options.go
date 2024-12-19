@@ -18,6 +18,7 @@ type configOptions struct {
 	unMarshaller          unMarshalConfigOptions
 	portOptionsHolder     PortOptions
 	protocolOptionsHolder ProtocolOptions
+	vendorOptionsHolder   ConfigOptionsVendorOptionsIter
 }
 
 func NewConfigOptions() ConfigOptions {
@@ -247,6 +248,7 @@ func (obj *configOptions) Clone() (ConfigOptions, error) {
 func (obj *configOptions) setNil() {
 	obj.portOptionsHolder = nil
 	obj.protocolOptionsHolder = nil
+	obj.vendorOptionsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -290,6 +292,8 @@ type ConfigOptions interface {
 	SetProtocolOptions(value ProtocolOptions) ConfigOptions
 	// HasProtocolOptions checks if ProtocolOptions has been set in ConfigOptions
 	HasProtocolOptions() bool
+	// VendorOptions returns ConfigOptionsVendorOptionsIterIter, set in ConfigOptions
+	VendorOptions() ConfigOptionsVendorOptionsIter
 	setNil()
 }
 
@@ -349,6 +353,93 @@ func (obj *configOptions) SetProtocolOptions(value ProtocolOptions) ConfigOption
 	return obj
 }
 
+// This is a backdoor access to underlying OTG application.
+// VendorOptions returns a []VendorOptions
+func (obj *configOptions) VendorOptions() ConfigOptionsVendorOptionsIter {
+	if len(obj.obj.VendorOptions) == 0 {
+		obj.obj.VendorOptions = []*otg.VendorOptions{}
+	}
+	if obj.vendorOptionsHolder == nil {
+		obj.vendorOptionsHolder = newConfigOptionsVendorOptionsIter(&obj.obj.VendorOptions).setMsg(obj)
+	}
+	return obj.vendorOptionsHolder
+}
+
+type configOptionsVendorOptionsIter struct {
+	obj                *configOptions
+	vendorOptionsSlice []VendorOptions
+	fieldPtr           *[]*otg.VendorOptions
+}
+
+func newConfigOptionsVendorOptionsIter(ptr *[]*otg.VendorOptions) ConfigOptionsVendorOptionsIter {
+	return &configOptionsVendorOptionsIter{fieldPtr: ptr}
+}
+
+type ConfigOptionsVendorOptionsIter interface {
+	setMsg(*configOptions) ConfigOptionsVendorOptionsIter
+	Items() []VendorOptions
+	Add() VendorOptions
+	Append(items ...VendorOptions) ConfigOptionsVendorOptionsIter
+	Set(index int, newObj VendorOptions) ConfigOptionsVendorOptionsIter
+	Clear() ConfigOptionsVendorOptionsIter
+	clearHolderSlice() ConfigOptionsVendorOptionsIter
+	appendHolderSlice(item VendorOptions) ConfigOptionsVendorOptionsIter
+}
+
+func (obj *configOptionsVendorOptionsIter) setMsg(msg *configOptions) ConfigOptionsVendorOptionsIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&vendorOptions{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configOptionsVendorOptionsIter) Items() []VendorOptions {
+	return obj.vendorOptionsSlice
+}
+
+func (obj *configOptionsVendorOptionsIter) Add() VendorOptions {
+	newObj := &otg.VendorOptions{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &vendorOptions{obj: newObj}
+	newLibObj.setDefault()
+	obj.vendorOptionsSlice = append(obj.vendorOptionsSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configOptionsVendorOptionsIter) Append(items ...VendorOptions) ConfigOptionsVendorOptionsIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.vendorOptionsSlice = append(obj.vendorOptionsSlice, item)
+	}
+	return obj
+}
+
+func (obj *configOptionsVendorOptionsIter) Set(index int, newObj VendorOptions) ConfigOptionsVendorOptionsIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.vendorOptionsSlice[index] = newObj
+	return obj
+}
+func (obj *configOptionsVendorOptionsIter) Clear() ConfigOptionsVendorOptionsIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.VendorOptions{}
+		obj.vendorOptionsSlice = []VendorOptions{}
+	}
+	return obj
+}
+func (obj *configOptionsVendorOptionsIter) clearHolderSlice() ConfigOptionsVendorOptionsIter {
+	if len(obj.vendorOptionsSlice) > 0 {
+		obj.vendorOptionsSlice = []VendorOptions{}
+	}
+	return obj
+}
+func (obj *configOptionsVendorOptionsIter) appendHolderSlice(item VendorOptions) ConfigOptionsVendorOptionsIter {
+	obj.vendorOptionsSlice = append(obj.vendorOptionsSlice, item)
+	return obj
+}
+
 func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -362,6 +453,20 @@ func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.ProtocolOptions != nil {
 
 		obj.ProtocolOptions().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.VendorOptions) != 0 {
+
+		if set_default {
+			obj.VendorOptions().clearHolderSlice()
+			for _, item := range obj.obj.VendorOptions {
+				obj.VendorOptions().appendHolderSlice(&vendorOptions{obj: item})
+			}
+		}
+		for _, item := range obj.VendorOptions().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }
