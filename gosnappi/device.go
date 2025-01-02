@@ -341,14 +341,10 @@ type Device interface {
 	// Ospfv2 returns DeviceOspfv2Router, set in Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	Ospfv2() DeviceOspfv2Router
 	// SetOspfv2 assigns DeviceOspfv2Router provided by user to Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	SetOspfv2(value DeviceOspfv2Router) Device

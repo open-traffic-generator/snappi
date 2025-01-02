@@ -1124,9 +1124,8 @@ from .snappi import FlowLatencyMetrics
 from .snappi import FlowPredefinedTags
 from .snappi import FlowIter
 from .snappi import Event
-from .snappi import EventLink
-from .snappi import EventRxRateThreshold
-from .snappi import EventRouteAdvertiseWithdraw
+from .snappi import EventCPEvents
+from .snappi import EventDPEvents
 from .snappi import ConfigOptions
 from .snappi import PortOptions
 from .snappi import ProtocolOptions
@@ -1213,6 +1212,7 @@ from .snappi import Dhcpv4ServerMetricsRequest
 from .snappi import Dhcpv6ClientMetricsRequest
 from .snappi import Dhcpv6ServerMetricsRequest
 from .snappi import Ospfv2MetricsRequest
+from .snappi import ConvergenceRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1249,6 +1249,10 @@ from .snappi import Dhcpv6ServerMetric
 from .snappi import Dhcpv6ServerMetricIter
 from .snappi import Ospfv2Metric
 from .snappi import Ospfv2MetricIter
+from .snappi import ConvergenceMetric
+from .snappi import ConvergenceEvent
+from .snappi import ConvergenceEventIter
+from .snappi import ConvergenceMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest

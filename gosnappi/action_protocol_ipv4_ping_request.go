@@ -244,8 +244,6 @@ func (obj *actionProtocolIpv4PingRequest) Clone() (ActionProtocolIpv4PingRequest
 
 // ActionProtocolIpv4PingRequest is under Review: Most ping request parameters are still TBD.
 //
-// Under Review: Most ping request parameters are still TBD.
-//
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 type ActionProtocolIpv4PingRequest interface {
@@ -288,9 +286,6 @@ type ActionProtocolIpv4PingRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 
@@ -303,18 +298,12 @@ func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) HasSrcName() bool {
 	return obj.obj.SrcName != nil
 }
 
 // Name of source IPv4 interface to be used.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
