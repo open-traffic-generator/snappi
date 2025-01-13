@@ -13,9 +13,11 @@ import (
 // ***** MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn *****
 type macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn struct {
 	validation
-	obj          *otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
-	marshaller   marshalMacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
-	unMarshaller unMarshalMacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	obj                *otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	marshaller         marshalMacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	unMarshaller       unMarshalMacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	fixedHolder        MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	incrementingHolder MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 }
 
 func NewMacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
@@ -29,7 +31,7 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) msg() *otg.MacsecC
 }
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) setMsg(msg *otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +114,7 @@ func (m *unMarshalmacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FromPbText(
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +160,7 @@ func (m *unMarshalmacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FromYaml(va
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +199,7 @@ func (m *unMarshalmacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FromJson(va
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,24 +244,15 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) Clone() (MacsecCry
 	return newObj, nil
 }
 
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) setNil() {
+	obj.fixedHolder = nil
+	obj.incrementingHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn is tx PN settings.
-// choice:
-// description: >-
-// Types of Tx PN series.
-// type: string
-// default: fixed_pn
-// x-field-uid: 1
-// x-enum:
-// fixed_pn:
-// x-field-uid: 1
-// incrementing_pn:
-// x-field-uid: 2
-// fixed:
-// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
-// x-field-uid: 2
-// incrementing:
-// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
-// x-field-uid: 3
 type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn interface {
 	Validation
 	// msg marshals MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn to protobuf object *otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
@@ -281,6 +274,133 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// Choice returns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	Choice() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum
+	// setChoice assigns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	setChoice(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	// HasChoice checks if Choice has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	HasChoice() bool
+	// getter for IncrementingPn to set choice.
+	IncrementingPn()
+	// getter for FixedPn to set choice.
+	FixedPn()
+	// Fixed returns MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn.
+	// MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn is fixed PN settings.
+	Fixed() MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	// SetFixed assigns MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn.
+	// MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn is fixed PN settings.
+	SetFixed(value MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	// HasFixed checks if Fixed has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	HasFixed() bool
+	// Incrementing returns MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn.
+	// MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn is incrementing PN settings.
+	Incrementing() MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+	// SetIncrementing assigns MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn.
+	// MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn is incrementing PN settings.
+	SetIncrementing(value MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	// HasIncrementing checks if Incrementing has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+	HasIncrementing() bool
+	setNil()
+}
+
+type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum string
+
+// Enum of Choice on MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+var MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice = struct {
+	FIXED_PN        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum
+	INCREMENTING_PN MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum
+}{
+	FIXED_PN:        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum("fixed_pn"),
+	INCREMENTING_PN: MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum("incrementing_pn"),
+}
+
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) Choice() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum {
+	return MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for IncrementingPn to set choice
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) IncrementingPn() {
+	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.INCREMENTING_PN)
+}
+
+// getter for FixedPn to set choice
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FixedPn() {
+	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.FIXED_PN)
+}
+
+// Types of Tx PN series.
+// Choice returns a string
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
+
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) setChoice(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
+	intValue, ok := otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+
+	return obj
+}
+
+// description is TBD
+// Fixed returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) Fixed() MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
+	if obj.obj.Fixed == nil {
+		obj.obj.Fixed = NewMacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn().msg()
+	}
+	if obj.fixedHolder == nil {
+		obj.fixedHolder = &macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn{obj: obj.obj.Fixed}
+	}
+	return obj.fixedHolder
+}
+
+// description is TBD
+// Fixed returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) HasFixed() bool {
+	return obj.obj.Fixed != nil
+}
+
+// description is TBD
+// SetFixed sets the MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn object
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) SetFixed(value MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
+
+	obj.fixedHolder = nil
+	obj.obj.Fixed = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Incrementing returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) Incrementing() MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
+	if obj.obj.Incrementing == nil {
+		obj.obj.Incrementing = NewMacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn().msg()
+	}
+	if obj.incrementingHolder == nil {
+		obj.incrementingHolder = &macsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn{obj: obj.obj.Incrementing}
+	}
+	return obj.incrementingHolder
+}
+
+// description is TBD
+// Incrementing returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) HasIncrementing() bool {
+	return obj.obj.Incrementing != nil
+}
+
+// description is TBD
+// SetIncrementing sets the MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn object
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) SetIncrementing(value MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
+
+	obj.incrementingHolder = nil
+	obj.obj.Incrementing = value.msg()
+
+	return obj
 }
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) validateObj(vObj *validation, set_default bool) {
@@ -288,8 +408,37 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) validateObj(vObj *
 		obj.setDefault()
 	}
 
+	if obj.obj.Fixed != nil {
+
+		obj.Fixed().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Incrementing != nil {
+
+		obj.Incrementing().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) setDefault() {
+	var choices_set int = 0
+	var choice MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.FIXED_PN)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn")
+			}
+		} else {
+			intVal := otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn_Choice_Enum_value[string(choice)]
+			enumValue := otg.MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

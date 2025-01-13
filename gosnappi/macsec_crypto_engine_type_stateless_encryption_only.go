@@ -276,43 +276,9 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnly interface {
 	setDefault()
 	// TxPn returns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn, set in MacsecCryptoEngineTypeStatelessEncryptionOnly.
 	// MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn is tx PN settings.
-	// choice:
-	// description: >-
-	// Types of Tx PN series.
-	// type: string
-	// default: fixed_pn
-	// x-field-uid: 1
-	// x-enum:
-	// fixed_pn:
-	// x-field-uid: 1
-	// incrementing_pn:
-	// x-field-uid: 2
-	// fixed:
-	// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
-	// x-field-uid: 2
-	// incrementing:
-	// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
-	// x-field-uid: 3
 	TxPn() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
 	// SetTxPn assigns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnly.
 	// MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn is tx PN settings.
-	// choice:
-	// description: >-
-	// Types of Tx PN series.
-	// type: string
-	// default: fixed_pn
-	// x-field-uid: 1
-	// x-enum:
-	// fixed_pn:
-	// x-field-uid: 1
-	// incrementing_pn:
-	// x-field-uid: 2
-	// fixed:
-	// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
-	// x-field-uid: 2
-	// incrementing:
-	// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
-	// x-field-uid: 3
 	SetTxPn(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) MacsecCryptoEngineTypeStatelessEncryptionOnly
 	// HasTxPn checks if TxPn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnly
 	HasTxPn() bool

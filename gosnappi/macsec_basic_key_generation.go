@@ -16,7 +16,6 @@ type macsecBasicKeyGeneration struct {
 	obj          *otg.MacsecBasicKeyGeneration
 	marshaller   marshalMacsecBasicKeyGeneration
 	unMarshaller unMarshalMacsecBasicKeyGeneration
-	mkaHolder    MacsecBasicKeyGenerationMka
 	staticHolder MacsecBasicKeyGenerationStatic
 }
 
@@ -245,7 +244,6 @@ func (obj *macsecBasicKeyGeneration) Clone() (MacsecBasicKeyGeneration, error) {
 }
 
 func (obj *macsecBasicKeyGeneration) setNil() {
-	obj.mkaHolder = nil
 	obj.staticHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -280,14 +278,8 @@ type MacsecBasicKeyGeneration interface {
 	setChoice(value MacsecBasicKeyGenerationChoiceEnum) MacsecBasicKeyGeneration
 	// HasChoice checks if Choice has been set in MacsecBasicKeyGeneration
 	HasChoice() bool
-	// Mka returns MacsecBasicKeyGenerationMka, set in MacsecBasicKeyGeneration.
-	// MacsecBasicKeyGenerationMka is the container for MKA settings.
-	Mka() MacsecBasicKeyGenerationMka
-	// SetMka assigns MacsecBasicKeyGenerationMka provided by user to MacsecBasicKeyGeneration.
-	// MacsecBasicKeyGenerationMka is the container for MKA settings.
-	SetMka(value MacsecBasicKeyGenerationMka) MacsecBasicKeyGeneration
-	// HasMka checks if Mka has been set in MacsecBasicKeyGeneration
-	HasMka() bool
+	// getter for Mka to set choice.
+	Mka()
 	// Static returns MacsecBasicKeyGenerationStatic, set in MacsecBasicKeyGeneration.
 	// MacsecBasicKeyGenerationStatic is the container for static key settings.
 	Static() MacsecBasicKeyGenerationStatic
@@ -314,6 +306,11 @@ func (obj *macsecBasicKeyGeneration) Choice() MacsecBasicKeyGenerationChoiceEnum
 	return MacsecBasicKeyGenerationChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for Mka to set choice
+func (obj *macsecBasicKeyGeneration) Mka() {
+	obj.setChoice(MacsecBasicKeyGenerationChoice.MKA)
+}
+
 // The type of control protocol of MACsec.
 // Choice returns a string
 func (obj *macsecBasicKeyGeneration) HasChoice() bool {
@@ -331,44 +328,10 @@ func (obj *macsecBasicKeyGeneration) setChoice(value MacsecBasicKeyGenerationCho
 	obj.obj.Choice = &enumValue
 	obj.obj.Static = nil
 	obj.staticHolder = nil
-	obj.obj.Mka = nil
-	obj.mkaHolder = nil
-
-	if value == MacsecBasicKeyGenerationChoice.MKA {
-		obj.obj.Mka = NewMacsecBasicKeyGenerationMka().msg()
-	}
 
 	if value == MacsecBasicKeyGenerationChoice.STATIC {
 		obj.obj.Static = NewMacsecBasicKeyGenerationStatic().msg()
 	}
-
-	return obj
-}
-
-// description is TBD
-// Mka returns a MacsecBasicKeyGenerationMka
-func (obj *macsecBasicKeyGeneration) Mka() MacsecBasicKeyGenerationMka {
-	if obj.obj.Mka == nil {
-		obj.setChoice(MacsecBasicKeyGenerationChoice.MKA)
-	}
-	if obj.mkaHolder == nil {
-		obj.mkaHolder = &macsecBasicKeyGenerationMka{obj: obj.obj.Mka}
-	}
-	return obj.mkaHolder
-}
-
-// description is TBD
-// Mka returns a MacsecBasicKeyGenerationMka
-func (obj *macsecBasicKeyGeneration) HasMka() bool {
-	return obj.obj.Mka != nil
-}
-
-// description is TBD
-// SetMka sets the MacsecBasicKeyGenerationMka value in the MacsecBasicKeyGeneration object
-func (obj *macsecBasicKeyGeneration) SetMka(value MacsecBasicKeyGenerationMka) MacsecBasicKeyGeneration {
-	obj.setChoice(MacsecBasicKeyGenerationChoice.MKA)
-	obj.mkaHolder = nil
-	obj.obj.Mka = value.msg()
 
 	return obj
 }
@@ -406,11 +369,6 @@ func (obj *macsecBasicKeyGeneration) validateObj(vObj *validation, set_default b
 		obj.setDefault()
 	}
 
-	if obj.obj.Mka != nil {
-
-		obj.Mka().validateObj(vObj, set_default)
-	}
-
 	if obj.obj.Static != nil {
 
 		obj.Static().validateObj(vObj, set_default)
@@ -421,11 +379,6 @@ func (obj *macsecBasicKeyGeneration) validateObj(vObj *validation, set_default b
 func (obj *macsecBasicKeyGeneration) setDefault() {
 	var choices_set int = 0
 	var choice MacsecBasicKeyGenerationChoiceEnum
-
-	if obj.obj.Mka != nil {
-		choices_set += 1
-		choice = MacsecBasicKeyGenerationChoice.MKA
-	}
 
 	if obj.obj.Static != nil {
 		choices_set += 1
