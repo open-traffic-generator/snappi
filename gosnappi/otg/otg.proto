@@ -8189,16 +8189,31 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationIn
 // A container of advance properties for a MACsec interface.
 message MacsecAdvance {
 
-  message RekeyMode {
+  // Description missing in models
+  MacsecAdvanceStaticKey static_key = 1;
+}
+
+// Static key advance settings.
+message MacsecAdvanceStaticKey {
+
+  // Description missing in models
+  MacsecAdvanceStaticKeyRekeyMode rekey_mode = 1;
+}
+
+// Rekey mode.
+message MacsecAdvanceStaticKeyRekeyMode {
+
+  message Choice {
     enum Enum {
       unspecified = 0;
-      timer_based = 1;
-      pn_based = 2;
+      dont_rekey = 1;
+      timer_based = 2;
+      pn_based = 3;
     }
   }
-  // Rekey mode.
-  // default = RekeyMode.Enum.timer_based
-  optional RekeyMode.Enum rekey_mode = 1;
+  // Rekey mode choices.
+  // default = Choice.Enum.dont_rekey
+  optional Choice.Enum choice = 1;
 }
 
 // A high level data plane traffic flow.

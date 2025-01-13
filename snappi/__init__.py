@@ -373,6 +373,8 @@ from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 from .snappi import MacsecAdvance
+from .snappi import MacsecAdvanceStaticKey
+from .snappi import MacsecAdvanceStaticKeyRekeyMode
 from .snappi import MacsecEthernetInterfaceIter
 from .snappi import DeviceIter
 from .snappi import Flow

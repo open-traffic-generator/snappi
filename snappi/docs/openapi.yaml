@@ -10997,18 +10997,37 @@ components:
         A container of advance properties for a MACsec interface.
       type: object
       properties:
+        static_key:
+          $ref: '#/components/schemas/Macsec.Advance.StaticKey'
+          x-field-uid: 1
+    Macsec.Advance.StaticKey:
+      description: |-
+        Static key advance settings.
+      type: object
+      properties:
         rekey_mode:
+          $ref: '#/components/schemas/Macsec.Advance.StaticKey.RekeyMode'
+          x-field-uid: 1
+    Macsec.Advance.StaticKey.RekeyMode:
+      description: |-
+        Rekey mode.
+      type: object
+      properties:
+        choice:
           description: |-
-            Rekey mode.
+            Rekey mode choices.
           type: string
-          default: timer_based
+          default: dont_rekey
           x-field-uid: 1
           x-enum:
-            timer_based:
+            dont_rekey:
               x-field-uid: 1
-            pn_based:
+            timer_based:
               x-field-uid: 2
+            pn_based:
+              x-field-uid: 3
           enum:
+          - dont_rekey
           - timer_based
           - pn_based
     Flow:
