@@ -16,7 +16,6 @@ type macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration stru
 	obj                *otg.MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 	marshaller         marshalMacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 	unMarshaller       unMarshalMacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-	noneHolder         MacsecChoiceNone
 	inlineCryptoHolder MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 }
 
@@ -245,7 +244,6 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 }
 
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) setNil() {
-	obj.noneHolder = nil
 	obj.inlineCryptoHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -280,14 +278,8 @@ type MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration inte
 	setChoice(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoiceEnum) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 	// HasChoice checks if Choice has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 	HasChoice() bool
-	// None returns MacsecChoiceNone, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration.
-	// MacsecChoiceNone is a empty container that is used to indicate a null choice.
-	None() MacsecChoiceNone
-	// SetNone assigns MacsecChoiceNone provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration.
-	// MacsecChoiceNone is a empty container that is used to indicate a null choice.
-	SetNone(value MacsecChoiceNone) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-	// HasNone checks if None has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-	HasNone() bool
+	// getter for None to set choice.
+	None()
 	// InlineCrypto returns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration.
 	// MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine settings.
 	InlineCrypto() MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
@@ -314,6 +306,11 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 	return MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for None to set choice
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) None() {
+	obj.setChoice(MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.NONE)
+}
+
 // Hardware acceleration types.
 // Choice returns a string
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) HasChoice() bool {
@@ -331,44 +328,10 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 	obj.obj.Choice = &enumValue
 	obj.obj.InlineCrypto = nil
 	obj.inlineCryptoHolder = nil
-	obj.obj.None = nil
-	obj.noneHolder = nil
-
-	if value == MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.NONE {
-		obj.obj.None = NewMacsecChoiceNone().msg()
-	}
 
 	if value == MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.INLINE_CRYPTO {
 		obj.obj.InlineCrypto = NewMacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto().msg()
 	}
-
-	return obj
-}
-
-// description is TBD
-// None returns a MacsecChoiceNone
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) None() MacsecChoiceNone {
-	if obj.obj.None == nil {
-		obj.setChoice(MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.NONE)
-	}
-	if obj.noneHolder == nil {
-		obj.noneHolder = &macsecChoiceNone{obj: obj.obj.None}
-	}
-	return obj.noneHolder
-}
-
-// description is TBD
-// None returns a MacsecChoiceNone
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) HasNone() bool {
-	return obj.obj.None != nil
-}
-
-// description is TBD
-// SetNone sets the MacsecChoiceNone value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) SetNone(value MacsecChoiceNone) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
-	obj.setChoice(MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.NONE)
-	obj.noneHolder = nil
-	obj.obj.None = value.msg()
 
 	return obj
 }
@@ -406,11 +369,6 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 		obj.setDefault()
 	}
 
-	if obj.obj.None != nil {
-
-		obj.None().validateObj(vObj, set_default)
-	}
-
 	if obj.obj.InlineCrypto != nil {
 
 		obj.InlineCrypto().validateObj(vObj, set_default)
@@ -421,11 +379,6 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) setDefault() {
 	var choices_set int = 0
 	var choice MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoiceEnum
-
-	if obj.obj.None != nil {
-		choices_set += 1
-		choice = MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationChoice.NONE
-	}
 
 	if obj.obj.InlineCrypto != nil {
 		choices_set += 1

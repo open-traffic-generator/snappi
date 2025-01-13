@@ -7918,17 +7918,7 @@ message MacsecBasicKeyGeneration {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecBasicKeyGenerationMka mka = 2;
-
-  // Description missing in models
-  MacsecBasicKeyGenerationStatic static = 3;
-}
-
-// The container for MKA settings.
-message MacsecBasicKeyGenerationMka {
-
-  // The unique name of the MKA instance controlling MACsec.
-  optional string mka_name = 1;
+  MacsecBasicKeyGenerationStatic static = 2;
 }
 
 // The container for static key settings.
@@ -8071,28 +8061,28 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryption {
   MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn initial_pn = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration traffic = 2;
+  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration hardware_acceleration = 2;
 }
 
 // Tx PN settings.
-// choice:
-// description: >-
-// Types of Tx PN series.
-// type: string
-// default: fixed_pn
-// x-field-uid: 1
-// x-enum:
-// fixed_pn:
-// x-field-uid: 1
-// incrementing_pn:
-// x-field-uid: 2
-// fixed:
-// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
-// x-field-uid: 2
-// incrementing:
-// $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
-// x-field-uid: 3
 message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      fixed_pn = 1;
+      incrementing_pn = 2;
+    }
+  }
+  // Types of Tx PN series.
+  // default = Choice.Enum.fixed_pn
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn fixed = 2;
+
+  // Description missing in models
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn incrementing = 3;
 }
 
 // Fixed PN settings.
@@ -8146,10 +8136,7 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecChoiceNone none = 2;
-
-  // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto inline_crypto = 3;
+  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto inline_crypto = 2;
 }
 
 // A empty container that is used to indicate a null choice.

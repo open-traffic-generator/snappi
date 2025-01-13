@@ -13,11 +13,11 @@ import (
 // ***** MacsecCryptoEngineTypeStatefulEncryptionDecryption *****
 type macsecCryptoEngineTypeStatefulEncryptionDecryption struct {
 	validation
-	obj             *otg.MacsecCryptoEngineTypeStatefulEncryptionDecryption
-	marshaller      marshalMacsecCryptoEngineTypeStatefulEncryptionDecryption
-	unMarshaller    unMarshalMacsecCryptoEngineTypeStatefulEncryptionDecryption
-	initialPnHolder MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
-	trafficHolder   MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
+	obj                        *otg.MacsecCryptoEngineTypeStatefulEncryptionDecryption
+	marshaller                 marshalMacsecCryptoEngineTypeStatefulEncryptionDecryption
+	unMarshaller               unMarshalMacsecCryptoEngineTypeStatefulEncryptionDecryption
+	initialPnHolder            MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
+	hardwareAccelerationHolder MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
 }
 
 func NewMacsecCryptoEngineTypeStatefulEncryptionDecryption() MacsecCryptoEngineTypeStatefulEncryptionDecryption {
@@ -246,7 +246,7 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) Clone() (MacsecCr
 
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) setNil() {
 	obj.initialPnHolder = nil
-	obj.trafficHolder = nil
+	obj.hardwareAccelerationHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -282,14 +282,14 @@ type MacsecCryptoEngineTypeStatefulEncryptionDecryption interface {
 	SetInitialPn(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) MacsecCryptoEngineTypeStatefulEncryptionDecryption
 	// HasInitialPn checks if InitialPn has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryption
 	HasInitialPn() bool
-	// Traffic returns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration, set in MacsecCryptoEngineTypeStatefulEncryptionDecryption.
+	// HardwareAcceleration returns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration, set in MacsecCryptoEngineTypeStatefulEncryptionDecryption.
 	// MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration settings.
-	Traffic() MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-	// SetTraffic assigns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryption.
+	HardwareAcceleration() MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
+	// SetHardwareAcceleration assigns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryption.
 	// MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration settings.
-	SetTraffic(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) MacsecCryptoEngineTypeStatefulEncryptionDecryption
-	// HasTraffic checks if Traffic has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryption
-	HasTraffic() bool
+	SetHardwareAcceleration(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) MacsecCryptoEngineTypeStatefulEncryptionDecryption
+	// HasHardwareAcceleration checks if HardwareAcceleration has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryption
+	HasHardwareAcceleration() bool
 	setNil()
 }
 
@@ -322,29 +322,29 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) SetInitialPn(valu
 }
 
 // description is TBD
-// Traffic returns a MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) Traffic() MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
-	if obj.obj.Traffic == nil {
-		obj.obj.Traffic = NewMacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration().msg()
+// HardwareAcceleration returns a MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) HardwareAcceleration() MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
+	if obj.obj.HardwareAcceleration == nil {
+		obj.obj.HardwareAcceleration = NewMacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration().msg()
 	}
-	if obj.trafficHolder == nil {
-		obj.trafficHolder = &macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration{obj: obj.obj.Traffic}
+	if obj.hardwareAccelerationHolder == nil {
+		obj.hardwareAccelerationHolder = &macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration{obj: obj.obj.HardwareAcceleration}
 	}
-	return obj.trafficHolder
+	return obj.hardwareAccelerationHolder
 }
 
 // description is TBD
-// Traffic returns a MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) HasTraffic() bool {
-	return obj.obj.Traffic != nil
+// HardwareAcceleration returns a MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) HasHardwareAcceleration() bool {
+	return obj.obj.HardwareAcceleration != nil
 }
 
 // description is TBD
-// SetTraffic sets the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration value in the MacsecCryptoEngineTypeStatefulEncryptionDecryption object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) SetTraffic(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) MacsecCryptoEngineTypeStatefulEncryptionDecryption {
+// SetHardwareAcceleration sets the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration value in the MacsecCryptoEngineTypeStatefulEncryptionDecryption object
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) SetHardwareAcceleration(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration) MacsecCryptoEngineTypeStatefulEncryptionDecryption {
 
-	obj.trafficHolder = nil
-	obj.obj.Traffic = value.msg()
+	obj.hardwareAccelerationHolder = nil
+	obj.obj.HardwareAcceleration = value.msg()
 
 	return obj
 }
@@ -359,9 +359,9 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryption) validateObj(vObj 
 		obj.InitialPn().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Traffic != nil {
+	if obj.obj.HardwareAcceleration != nil {
 
-		obj.Traffic().validateObj(vObj, set_default)
+		obj.HardwareAcceleration().validateObj(vObj, set_default)
 	}
 
 }

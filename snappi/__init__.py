@@ -354,7 +354,6 @@ from .snappi import DeviceMacsec
 from .snappi import MacsecEthernetInterface
 from .snappi import MacsecBasic
 from .snappi import MacsecBasicKeyGeneration
-from .snappi import MacsecBasicKeyGenerationMka
 from .snappi import MacsecBasicKeyGenerationStatic
 from .snappi import MacsecBasicKeyGenerationStaticSak
 from .snappi import MacsecBasicKeyGenerationStaticSakIter
@@ -366,11 +365,12 @@ from .snappi import MacsecCryptoEngine
 from .snappi import MacsecCryptoEngineType
 from .snappi import MacsecCryptoEngineTypeStatelessEncryptionOnly
 from .snappi import MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
+from .snappi import MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+from .snappi import MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 from .snappi import MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryption
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration
-from .snappi import MacsecChoiceNone
 from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 from .snappi import MacsecAdvance
 from .snappi import MacsecEthernetInterfaceIter
