@@ -13,9 +13,10 @@ import (
 // ***** MacsecAdvance *****
 type macsecAdvance struct {
 	validation
-	obj          *otg.MacsecAdvance
-	marshaller   marshalMacsecAdvance
-	unMarshaller unMarshalMacsecAdvance
+	obj             *otg.MacsecAdvance
+	marshaller      marshalMacsecAdvance
+	unMarshaller    unMarshalMacsecAdvance
+	staticKeyHolder MacsecAdvanceStaticKey
 }
 
 func NewMacsecAdvance() MacsecAdvance {
@@ -29,7 +30,7 @@ func (obj *macsecAdvance) msg() *otg.MacsecAdvance {
 }
 
 func (obj *macsecAdvance) setMsg(msg *otg.MacsecAdvance) MacsecAdvance {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalmacsecAdvance) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalmacsecAdvance) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalmacsecAdvance) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *macsecAdvance) Clone() (MacsecAdvance, error) {
 	return newObj, nil
 }
 
+func (obj *macsecAdvance) setNil() {
+	obj.staticKeyHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // MacsecAdvance is a container of advance properties for a MACsec interface.
 type MacsecAdvance interface {
 	Validation
@@ -264,44 +272,41 @@ type MacsecAdvance interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// RekeyMode returns MacsecAdvanceRekeyModeEnum, set in MacsecAdvance
-	RekeyMode() MacsecAdvanceRekeyModeEnum
-	// SetRekeyMode assigns MacsecAdvanceRekeyModeEnum provided by user to MacsecAdvance
-	SetRekeyMode(value MacsecAdvanceRekeyModeEnum) MacsecAdvance
-	// HasRekeyMode checks if RekeyMode has been set in MacsecAdvance
-	HasRekeyMode() bool
+	// StaticKey returns MacsecAdvanceStaticKey, set in MacsecAdvance.
+	// MacsecAdvanceStaticKey is static key advance settings.
+	StaticKey() MacsecAdvanceStaticKey
+	// SetStaticKey assigns MacsecAdvanceStaticKey provided by user to MacsecAdvance.
+	// MacsecAdvanceStaticKey is static key advance settings.
+	SetStaticKey(value MacsecAdvanceStaticKey) MacsecAdvance
+	// HasStaticKey checks if StaticKey has been set in MacsecAdvance
+	HasStaticKey() bool
+	setNil()
 }
 
-type MacsecAdvanceRekeyModeEnum string
-
-// Enum of RekeyMode on MacsecAdvance
-var MacsecAdvanceRekeyMode = struct {
-	TIMER_BASED MacsecAdvanceRekeyModeEnum
-	PN_BASED    MacsecAdvanceRekeyModeEnum
-}{
-	TIMER_BASED: MacsecAdvanceRekeyModeEnum("timer_based"),
-	PN_BASED:    MacsecAdvanceRekeyModeEnum("pn_based"),
-}
-
-func (obj *macsecAdvance) RekeyMode() MacsecAdvanceRekeyModeEnum {
-	return MacsecAdvanceRekeyModeEnum(obj.obj.RekeyMode.Enum().String())
-}
-
-// Rekey mode.
-// RekeyMode returns a string
-func (obj *macsecAdvance) HasRekeyMode() bool {
-	return obj.obj.RekeyMode != nil
-}
-
-func (obj *macsecAdvance) SetRekeyMode(value MacsecAdvanceRekeyModeEnum) MacsecAdvance {
-	intValue, ok := otg.MacsecAdvance_RekeyMode_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on MacsecAdvanceRekeyModeEnum", string(value)))
-		return obj
+// description is TBD
+// StaticKey returns a MacsecAdvanceStaticKey
+func (obj *macsecAdvance) StaticKey() MacsecAdvanceStaticKey {
+	if obj.obj.StaticKey == nil {
+		obj.obj.StaticKey = NewMacsecAdvanceStaticKey().msg()
 	}
-	enumValue := otg.MacsecAdvance_RekeyMode_Enum(intValue)
-	obj.obj.RekeyMode = &enumValue
+	if obj.staticKeyHolder == nil {
+		obj.staticKeyHolder = &macsecAdvanceStaticKey{obj: obj.obj.StaticKey}
+	}
+	return obj.staticKeyHolder
+}
+
+// description is TBD
+// StaticKey returns a MacsecAdvanceStaticKey
+func (obj *macsecAdvance) HasStaticKey() bool {
+	return obj.obj.StaticKey != nil
+}
+
+// description is TBD
+// SetStaticKey sets the MacsecAdvanceStaticKey value in the MacsecAdvance object
+func (obj *macsecAdvance) SetStaticKey(value MacsecAdvanceStaticKey) MacsecAdvance {
+
+	obj.staticKeyHolder = nil
+	obj.obj.StaticKey = value.msg()
 
 	return obj
 }
@@ -311,12 +316,13 @@ func (obj *macsecAdvance) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
+	if obj.obj.StaticKey != nil {
+
+		obj.StaticKey().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *macsecAdvance) setDefault() {
-	if obj.obj.RekeyMode == nil {
-		obj.SetRekeyMode(MacsecAdvanceRekeyMode.TIMER_BASED)
-
-	}
 
 }
