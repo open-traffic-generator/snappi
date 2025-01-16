@@ -17,8 +17,8 @@ type macsecEthernetInterface struct {
 	marshaller         marshalMacsecEthernetInterface
 	unMarshaller       unMarshalMacsecEthernetInterface
 	basicHolder        MacsecBasic
-	txHolder           MacsecTx
-	rxHolder           MacsecRx
+	txscsHolder        MacsecEthernetInterfaceMacsecTxScIter
+	rxscsHolder        MacsecEthernetInterfaceMacsecRxScIter
 	cryptoEngineHolder MacsecCryptoEngine
 	advanceHolder      MacsecAdvance
 }
@@ -249,8 +249,8 @@ func (obj *macsecEthernetInterface) Clone() (MacsecEthernetInterface, error) {
 
 func (obj *macsecEthernetInterface) setNil() {
 	obj.basicHolder = nil
-	obj.txHolder = nil
-	obj.rxHolder = nil
+	obj.txscsHolder = nil
+	obj.rxscsHolder = nil
 	obj.cryptoEngineHolder = nil
 	obj.advanceHolder = nil
 	obj.validationErrors = nil
@@ -294,18 +294,10 @@ type MacsecEthernetInterface interface {
 	// SetBasic assigns MacsecBasic provided by user to MacsecEthernetInterface.
 	// MacsecBasic is a container of basic properties for a MACsec interface.
 	SetBasic(value MacsecBasic) MacsecEthernetInterface
-	// Tx returns MacsecTx, set in MacsecEthernetInterface.
-	// MacsecTx is the container for Tx settings.
-	Tx() MacsecTx
-	// SetTx assigns MacsecTx provided by user to MacsecEthernetInterface.
-	// MacsecTx is the container for Tx settings.
-	SetTx(value MacsecTx) MacsecEthernetInterface
-	// Rx returns MacsecRx, set in MacsecEthernetInterface.
-	// MacsecRx is the container for Rx settings.
-	Rx() MacsecRx
-	// SetRx assigns MacsecRx provided by user to MacsecEthernetInterface.
-	// MacsecRx is the container for Rx settings.
-	SetRx(value MacsecRx) MacsecEthernetInterface
+	// Txscs returns MacsecEthernetInterfaceMacsecTxScIterIter, set in MacsecEthernetInterface
+	Txscs() MacsecEthernetInterfaceMacsecTxScIter
+	// Rxscs returns MacsecEthernetInterfaceMacsecRxScIterIter, set in MacsecEthernetInterface
+	Rxscs() MacsecEthernetInterfaceMacsecRxScIter
 	// CryptoEngine returns MacsecCryptoEngine, set in MacsecEthernetInterface.
 	// MacsecCryptoEngine is a container of crypto engine properties for a MACsec interface.
 	CryptoEngine() MacsecCryptoEngine
@@ -385,47 +377,177 @@ func (obj *macsecEthernetInterface) SetBasic(value MacsecBasic) MacsecEthernetIn
 	return obj
 }
 
-// This contains the Tx properties of MACsec.
-// Tx returns a MacsecTx
-func (obj *macsecEthernetInterface) Tx() MacsecTx {
-	if obj.obj.Tx == nil {
-		obj.obj.Tx = NewMacsecTx().msg()
+// Tx secure channels.
+// Txscs returns a []MacsecTxSc
+func (obj *macsecEthernetInterface) Txscs() MacsecEthernetInterfaceMacsecTxScIter {
+	if len(obj.obj.Txscs) == 0 {
+		obj.obj.Txscs = []*otg.MacsecTxSc{}
 	}
-	if obj.txHolder == nil {
-		obj.txHolder = &macsecTx{obj: obj.obj.Tx}
+	if obj.txscsHolder == nil {
+		obj.txscsHolder = newMacsecEthernetInterfaceMacsecTxScIter(&obj.obj.Txscs).setMsg(obj)
 	}
-	return obj.txHolder
+	return obj.txscsHolder
 }
 
-// This contains the Tx properties of MACsec.
-// SetTx sets the MacsecTx value in the MacsecEthernetInterface object
-func (obj *macsecEthernetInterface) SetTx(value MacsecTx) MacsecEthernetInterface {
+type macsecEthernetInterfaceMacsecTxScIter struct {
+	obj             *macsecEthernetInterface
+	macsecTxScSlice []MacsecTxSc
+	fieldPtr        *[]*otg.MacsecTxSc
+}
 
-	obj.txHolder = nil
-	obj.obj.Tx = value.msg()
+func newMacsecEthernetInterfaceMacsecTxScIter(ptr *[]*otg.MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter {
+	return &macsecEthernetInterfaceMacsecTxScIter{fieldPtr: ptr}
+}
 
+type MacsecEthernetInterfaceMacsecTxScIter interface {
+	setMsg(*macsecEthernetInterface) MacsecEthernetInterfaceMacsecTxScIter
+	Items() []MacsecTxSc
+	Add() MacsecTxSc
+	Append(items ...MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter
+	Set(index int, newObj MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter
+	Clear() MacsecEthernetInterfaceMacsecTxScIter
+	clearHolderSlice() MacsecEthernetInterfaceMacsecTxScIter
+	appendHolderSlice(item MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter
+}
+
+func (obj *macsecEthernetInterfaceMacsecTxScIter) setMsg(msg *macsecEthernetInterface) MacsecEthernetInterfaceMacsecTxScIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&macsecTxSc{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// This contains the Rx properties of MACsec.
-// Rx returns a MacsecRx
-func (obj *macsecEthernetInterface) Rx() MacsecRx {
-	if obj.obj.Rx == nil {
-		obj.obj.Rx = NewMacsecRx().msg()
-	}
-	if obj.rxHolder == nil {
-		obj.rxHolder = &macsecRx{obj: obj.obj.Rx}
-	}
-	return obj.rxHolder
+func (obj *macsecEthernetInterfaceMacsecTxScIter) Items() []MacsecTxSc {
+	return obj.macsecTxScSlice
 }
 
-// This contains the Rx properties of MACsec.
-// SetRx sets the MacsecRx value in the MacsecEthernetInterface object
-func (obj *macsecEthernetInterface) SetRx(value MacsecRx) MacsecEthernetInterface {
+func (obj *macsecEthernetInterfaceMacsecTxScIter) Add() MacsecTxSc {
+	newObj := &otg.MacsecTxSc{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &macsecTxSc{obj: newObj}
+	newLibObj.setDefault()
+	obj.macsecTxScSlice = append(obj.macsecTxScSlice, newLibObj)
+	return newLibObj
+}
 
-	obj.rxHolder = nil
-	obj.obj.Rx = value.msg()
+func (obj *macsecEthernetInterfaceMacsecTxScIter) Append(items ...MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
+	}
+	return obj
+}
 
+func (obj *macsecEthernetInterfaceMacsecTxScIter) Set(index int, newObj MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.macsecTxScSlice[index] = newObj
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecTxScIter) Clear() MacsecEthernetInterfaceMacsecTxScIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MacsecTxSc{}
+		obj.macsecTxScSlice = []MacsecTxSc{}
+	}
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecTxScIter) clearHolderSlice() MacsecEthernetInterfaceMacsecTxScIter {
+	if len(obj.macsecTxScSlice) > 0 {
+		obj.macsecTxScSlice = []MacsecTxSc{}
+	}
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecTxScIter) appendHolderSlice(item MacsecTxSc) MacsecEthernetInterfaceMacsecTxScIter {
+	obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
+	return obj
+}
+
+// Rx secure channels.
+// Rxscs returns a []MacsecRxSc
+func (obj *macsecEthernetInterface) Rxscs() MacsecEthernetInterfaceMacsecRxScIter {
+	if len(obj.obj.Rxscs) == 0 {
+		obj.obj.Rxscs = []*otg.MacsecRxSc{}
+	}
+	if obj.rxscsHolder == nil {
+		obj.rxscsHolder = newMacsecEthernetInterfaceMacsecRxScIter(&obj.obj.Rxscs).setMsg(obj)
+	}
+	return obj.rxscsHolder
+}
+
+type macsecEthernetInterfaceMacsecRxScIter struct {
+	obj             *macsecEthernetInterface
+	macsecRxScSlice []MacsecRxSc
+	fieldPtr        *[]*otg.MacsecRxSc
+}
+
+func newMacsecEthernetInterfaceMacsecRxScIter(ptr *[]*otg.MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter {
+	return &macsecEthernetInterfaceMacsecRxScIter{fieldPtr: ptr}
+}
+
+type MacsecEthernetInterfaceMacsecRxScIter interface {
+	setMsg(*macsecEthernetInterface) MacsecEthernetInterfaceMacsecRxScIter
+	Items() []MacsecRxSc
+	Add() MacsecRxSc
+	Append(items ...MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter
+	Set(index int, newObj MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter
+	Clear() MacsecEthernetInterfaceMacsecRxScIter
+	clearHolderSlice() MacsecEthernetInterfaceMacsecRxScIter
+	appendHolderSlice(item MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter
+}
+
+func (obj *macsecEthernetInterfaceMacsecRxScIter) setMsg(msg *macsecEthernetInterface) MacsecEthernetInterfaceMacsecRxScIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&macsecRxSc{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *macsecEthernetInterfaceMacsecRxScIter) Items() []MacsecRxSc {
+	return obj.macsecRxScSlice
+}
+
+func (obj *macsecEthernetInterfaceMacsecRxScIter) Add() MacsecRxSc {
+	newObj := &otg.MacsecRxSc{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &macsecRxSc{obj: newObj}
+	newLibObj.setDefault()
+	obj.macsecRxScSlice = append(obj.macsecRxScSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *macsecEthernetInterfaceMacsecRxScIter) Append(items ...MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
+	}
+	return obj
+}
+
+func (obj *macsecEthernetInterfaceMacsecRxScIter) Set(index int, newObj MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.macsecRxScSlice[index] = newObj
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecRxScIter) Clear() MacsecEthernetInterfaceMacsecRxScIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MacsecRxSc{}
+		obj.macsecRxScSlice = []MacsecRxSc{}
+	}
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecRxScIter) clearHolderSlice() MacsecEthernetInterfaceMacsecRxScIter {
+	if len(obj.macsecRxScSlice) > 0 {
+		obj.macsecRxScSlice = []MacsecRxSc{}
+	}
+	return obj
+}
+func (obj *macsecEthernetInterfaceMacsecRxScIter) appendHolderSlice(item MacsecRxSc) MacsecEthernetInterfaceMacsecRxScIter {
+	obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
 	return obj
 }
 
@@ -504,24 +626,32 @@ func (obj *macsecEthernetInterface) validateObj(vObj *validation, set_default bo
 		obj.Basic().validateObj(vObj, set_default)
 	}
 
-	// Tx is required
-	if obj.obj.Tx == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Tx is required field on interface MacsecEthernetInterface")
+	if len(obj.obj.Txscs) != 0 {
+
+		if set_default {
+			obj.Txscs().clearHolderSlice()
+			for _, item := range obj.obj.Txscs {
+				obj.Txscs().appendHolderSlice(&macsecTxSc{obj: item})
+			}
+		}
+		for _, item := range obj.Txscs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
-	if obj.obj.Tx != nil {
+	if len(obj.obj.Rxscs) != 0 {
 
-		obj.Tx().validateObj(vObj, set_default)
-	}
+		if set_default {
+			obj.Rxscs().clearHolderSlice()
+			for _, item := range obj.obj.Rxscs {
+				obj.Rxscs().appendHolderSlice(&macsecRxSc{obj: item})
+			}
+		}
+		for _, item := range obj.Rxscs().Items() {
+			item.validateObj(vObj, set_default)
+		}
 
-	// Rx is required
-	if obj.obj.Rx == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Rx is required field on interface MacsecEthernetInterface")
-	}
-
-	if obj.obj.Rx != nil {
-
-		obj.Rx().validateObj(vObj, set_default)
 	}
 
 	// CryptoEngine is required

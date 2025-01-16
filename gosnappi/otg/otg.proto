@@ -7880,13 +7880,11 @@ message MacsecEthernetInterface {
   // required = true
   MacsecBasic basic = 3;
 
-  // This contains the Tx properties of MACsec.
-  // required = true
-  MacsecTx tx = 4;
+  // Tx secure channels.
+  repeated MacsecTxSc txscs = 4;
 
-  // This contains the Rx properties of MACsec.
-  // required = true
-  MacsecRx rx = 5;
+  // Rx secure channels.
+  repeated MacsecRxSc rxscs = 5;
 
   // This contains crypto engine properties of MACsec.
   // required = true
@@ -7941,12 +7939,6 @@ message MacsecBasicKeyGenerationStatic {
   // Confidentiality offset.
   // default = 0
   optional int32 confidentialty_offset = 2;
-
-  // Tx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak tx_sak_pool = 3;
-
-  // Rx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak rx_sak_pool = 4;
 }
 
 // The container for SAK.
@@ -7960,15 +7952,15 @@ message MacsecBasicKeyGenerationStaticSak {
   optional string sak = 2;
 }
 
-// The container for Tx settings.
-message MacsecTx {
+// The container for Tx SC settings.
+message MacsecTxSc {
 
   // Description missing in models
-  MacsecTxStaticKey static_key = 1;
+  MacsecTxScStaticKey static_key = 1;
 }
 
-// Static key Tx settings.
-message MacsecTxStaticKey {
+// Tx SC setting for static key.
+message MacsecTxScStaticKey {
 
   // System ID.
   optional string system_id = 1;
@@ -7988,17 +7980,20 @@ message MacsecTxStaticKey {
   // Encrypt or not.
   // default = True
   optional bool confidentiality = 5;
+
+  // Tx SAK pool.
+  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 6;
 }
 
-// The container for Rx settings.
-message MacsecRx {
+// The container for Rx SC settings.
+message MacsecRxSc {
 
   // Description missing in models
-  MacsecRxStaticKey static_key = 1;
+  MacsecRxScStaticKey static_key = 1;
 }
 
-// Static key Rx settings.
-message MacsecRxStaticKey {
+// Rx SC settings for static key.
+message MacsecRxScStaticKey {
 
   // DUT system ID.
   optional string dut_system_id = 1;
@@ -8014,6 +8009,9 @@ message MacsecRxStaticKey {
   // Replay window size.
   // default = 1
   optional int32 replay_window = 4;
+
+  // Rx SAK pool.
+  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 5;
 }
 
 // A container of crypto engine properties for a MACsec interface.
