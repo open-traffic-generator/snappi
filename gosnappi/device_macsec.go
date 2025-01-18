@@ -250,7 +250,7 @@ func (obj *deviceMacsec) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// DeviceMacsec is a container of properties for a MACsec interface.
+// DeviceMacsec is a container of properties for a MACsec capable device.
 type DeviceMacsec interface {
 	Validation
 	// msg marshals DeviceMacsec to protobuf object *otg.DeviceMacsec

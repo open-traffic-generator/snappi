@@ -353,10 +353,10 @@ type Device interface {
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
 	// Macsec returns DeviceMacsec, set in Device.
-	// DeviceMacsec is a container of properties for a MACsec interface.
+	// DeviceMacsec is a container of properties for a MACsec capable device.
 	Macsec() DeviceMacsec
 	// SetMacsec assigns DeviceMacsec provided by user to Device.
-	// DeviceMacsec is a container of properties for a MACsec interface.
+	// DeviceMacsec is a container of properties for a MACsec capable device.
 	SetMacsec(value DeviceMacsec) Device
 	// HasMacsec checks if Macsec has been set in Device
 	HasMacsec() bool

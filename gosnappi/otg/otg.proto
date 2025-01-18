@@ -7853,7 +7853,7 @@ message Ospfv2V4RRExtdPrefixFlags {
   optional bool n_flag = 2;
 }
 
-// A container of properties for a MACsec interface.
+// A container of properties for a MACsec capable device.
 message DeviceMacsec {
 
   // Ethernet Interfaces
@@ -7871,38 +7871,46 @@ message MacsecEthernetInterface {
   // required = true
   optional string eth_name = 1;
 
+  // This contains the properties of Secure Entity (SecY).
+  // required = true
+  MacsecSecY secy = 2;
+}
+
+// Configuration for a Secure Entity (SecY).
+message MacsecSecY {
+
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
-  optional string name = 2;
+  optional string name = 1;
 
-  // This contains the basic properties of MACsec.
+  // This contains the basic properties of SecY.
   // required = true
-  MacsecBasic basic = 3;
+  MacsecSecYBasic basic = 2;
 
   // Tx secure channels.
-  repeated MacsecTxSc txscs = 4;
+  repeated MacsecSecYTxSc txscs = 3;
 
   // Rx secure channels.
-  repeated MacsecRxSc rxscs = 5;
+  repeated MacsecSecYRxSc rxscs = 4;
 
-  // This contains crypto engine properties of MACsec.
+  // This contains crypto engine properties of SecY.
   // required = true
-  MacsecCryptoEngine crypto_engine = 6;
+  MacsecSecYCryptoEngine crypto_engine = 5;
 
-  // This contains advance properties of MACsec.
-  MacsecAdvance advance = 7;
+  // This contains advance properties of SecY.
+  MacsecSecYAdvance advance = 6;
 }
 
-// A container of basic properties for a MACsec interface.
-message MacsecBasic {
+// A container of basic properties for a SecY.
+message MacsecSecYBasic {
 
   // Description missing in models
-  MacsecBasicKeyGeneration key_generation = 1;
+  MacsecSecYBasicKeyGeneration key_generation = 1;
 }
 
 // Key Generation.
-message MacsecBasicKeyGeneration {
+message MacsecSecYBasicKeyGeneration {
 
   message Choice {
     enum Enum {
@@ -7911,16 +7919,16 @@ message MacsecBasicKeyGeneration {
       static = 2;
     }
   }
-  // The type of control protocol of MACsec.
+  // The type of control protocol of SecY.
   // default = Choice.Enum.mka
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecBasicKeyGenerationStatic static = 2;
+  MacsecSecYBasicKeyGenerationStatic static = 2;
 }
 
 // The container for static key settings.
-message MacsecBasicKeyGenerationStatic {
+message MacsecSecYBasicKeyGenerationStatic {
 
   message CipherSuite {
     enum Enum {
@@ -7942,7 +7950,7 @@ message MacsecBasicKeyGenerationStatic {
 }
 
 // The container for SAK.
-message MacsecBasicKeyGenerationStaticSak {
+message MacsecSecYBasicKeyGenerationStaticSak {
 
   // SAK name.
   optional string name = 1;
@@ -7953,14 +7961,14 @@ message MacsecBasicKeyGenerationStaticSak {
 }
 
 // The container for Tx SC settings.
-message MacsecTxSc {
+message MacsecSecYTxSc {
 
   // Description missing in models
-  MacsecTxScStaticKey static_key = 1;
+  MacsecSecYTxScStaticKey static_key = 1;
 }
 
 // Tx SC setting for static key.
-message MacsecTxScStaticKey {
+message MacsecSecYTxScStaticKey {
 
   // System ID.
   optional string system_id = 1;
@@ -7982,18 +7990,18 @@ message MacsecTxScStaticKey {
   optional bool confidentiality = 5;
 
   // Tx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 6;
+  repeated MacsecSecYBasicKeyGenerationStaticSak sak_pool = 6;
 }
 
 // The container for Rx SC settings.
-message MacsecRxSc {
+message MacsecSecYRxSc {
 
   // Description missing in models
-  MacsecRxScStaticKey static_key = 1;
+  MacsecSecYRxScStaticKey static_key = 1;
 }
 
 // Rx SC settings for static key.
-message MacsecRxScStaticKey {
+message MacsecSecYRxScStaticKey {
 
   // DUT system ID.
   optional string dut_system_id = 1;
@@ -8011,18 +8019,18 @@ message MacsecRxScStaticKey {
   optional int32 replay_window = 4;
 
   // Rx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 5;
+  repeated MacsecSecYBasicKeyGenerationStaticSak sak_pool = 5;
 }
 
-// A container of crypto engine properties for a MACsec interface.
-message MacsecCryptoEngine {
+// A container of crypto engine properties of a SecY.
+message MacsecSecYCryptoEngine {
 
   // Description missing in models
-  MacsecCryptoEngineType engine_type = 1;
+  MacsecSecYCryptoEngineType engine_type = 1;
 }
 
 // Crypto engine type.
-message MacsecCryptoEngineType {
+message MacsecSecYCryptoEngineType {
 
   message Choice {
     enum Enum {
@@ -8036,34 +8044,34 @@ message MacsecCryptoEngineType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnly stateless_encryption_only = 2;
+  MacsecSecYCryptoEngineTypeStatelessEncryptionOnly stateless_encryption_only = 2;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryption stateful_encryption_decryption = 3;
+  MacsecSecYCryptoEngineTypeStatefulEncryptionDecryption stateful_encryption_decryption = 3;
 }
 
 // The container for stateless encryption only engine settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnly {
+message MacsecSecYCryptoEngineTypeStatelessEncryptionOnly {
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn tx_pn = 1;
+  MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyTxPn tx_pn = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic traffic = 2;
+  MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyTraffic traffic = 2;
 }
 
 // The container for stateful encryption and decryption engine settings.
-message MacsecCryptoEngineTypeStatefulEncryptionDecryption {
+message MacsecSecYCryptoEngineTypeStatefulEncryptionDecryption {
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn initial_pn = 1;
+  MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn initial_pn = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration hardware_acceleration = 2;
+  MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration hardware_acceleration = 2;
 }
 
 // Tx PN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
+message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyTxPn {
 
   message Choice {
     enum Enum {
@@ -8077,14 +8085,14 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn fixed = 2;
+  MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyFixedPn fixed = 2;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn incrementing = 3;
+  MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn incrementing = 3;
 }
 
 // Fixed PN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
+message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 
   // Fixed Tx PN.
   // default = 6
@@ -8092,7 +8100,7 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 }
 
 // Incrementing PN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
+message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
 
   // Count of packet numbers in series.
   // default = 100
@@ -8104,7 +8112,7 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
 }
 
 // Encryption only traffic settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic {
+message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyTraffic {
 
   // Send gratuitous ARP or not.
   // default = True
@@ -8112,7 +8120,7 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic {
 }
 
 // Initial PN settings.
-message MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
+message MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
 
   // Initial Tx PN.
   // default = 1
@@ -8120,7 +8128,7 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
 }
 
 // Hardware acceleration settings.
-message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
+message MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
 
   message Choice {
     enum Enum {
@@ -8134,15 +8142,11 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleration {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto inline_crypto = 2;
-}
-
-// A empty container that is used to indicate a null choice.
-message MacsecChoiceNone {
+  MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto inline_crypto = 2;
 }
 
 // Inline cryto engine settings.
-message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
+message MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
   // Offset of Rx secTAG from the first byte in packet.
   // default = 12
@@ -8184,22 +8188,22 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationIn
   optional RxScIdentifyingField.Enum rx_sc_identifying_field = 6;
 }
 
-// A container of advance properties for a MACsec interface.
-message MacsecAdvance {
+// A container of advance properties SecY.
+message MacsecSecYAdvance {
 
   // Description missing in models
-  MacsecAdvanceStaticKey static_key = 1;
+  MacsecSecYAdvanceStaticKey static_key = 1;
 }
 
 // Static key advance settings.
-message MacsecAdvanceStaticKey {
+message MacsecSecYAdvanceStaticKey {
 
   // Description missing in models
-  MacsecAdvanceStaticKeyRekeyMode rekey_mode = 1;
+  MacsecSecYAdvanceStaticKeyRekeyMode rekey_mode = 1;
 }
 
 // Rekey mode.
-message MacsecAdvanceStaticKeyRekeyMode {
+message MacsecSecYAdvanceStaticKeyRekeyMode {
 
   message Choice {
     enum Enum {
