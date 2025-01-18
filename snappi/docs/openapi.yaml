@@ -10564,8 +10564,8 @@ components:
       - eth_name
       - name
       - basic
-      - tx
-      - rx
+      - txscs
+      - rxscs
       - crypto_engine
       properties:
         eth_name:
@@ -10590,15 +10590,19 @@ components:
             This contains the basic properties of MACsec.
           $ref: '#/components/schemas/Macsec.Basic'
           x-field-uid: 3
-        tx:
+        txscs:
           description: |-
-            This contains the Tx properties of MACsec.
-          $ref: '#/components/schemas/Macsec.Tx'
+            Tx secure channels.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.TxSc'
           x-field-uid: 4
-        rx:
+        rxscs:
           description: |-
-            This contains the Rx properties of MACsec.
-          $ref: '#/components/schemas/Macsec.Rx'
+            Rx secure channels.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.RxSc'
           x-field-uid: 5
         crypto_engine:
           description: |-
@@ -10678,18 +10682,6 @@ components:
               x-field-uid: 2
             '50':
               x-field-uid: 3
-        tx_sak_pool:
-          description: "Tx SAK pool. "
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
-          x-field-uid: 3
-        rx_sak_pool:
-          description: "Rx SAK pool. "
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
-          x-field-uid: 4
     Macsec.Basic.KeyGeneration.Static.Sak:
       description: |-
         The container for SAK.
@@ -10704,17 +10696,17 @@ components:
             SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
           type: string
           x-field-uid: 2
-    Macsec.Tx:
+    Macsec.TxSc:
       description: |-
-        The container for Tx settings.
+        The container for Tx SC settings.
       type: object
       properties:
         static_key:
-          $ref: '#/components/schemas/Macsec.Tx.StaticKey'
+          $ref: '#/components/schemas/Macsec.TxSc.StaticKey'
           x-field-uid: 1
-    Macsec.Tx.StaticKey:
+    Macsec.TxSc.StaticKey:
       description: |-
-        Static key Tx settings.
+        Tx SC setting for static key.
       type: object
       properties:
         system_id:
@@ -10742,17 +10734,24 @@ components:
           type: boolean
           default: true
           x-field-uid: 5
-    Macsec.Rx:
+        sak_pool:
+          description: |-
+            Tx SAK pool.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
+          x-field-uid: 6
+    Macsec.RxSc:
       description: |-
-        The container for Rx settings.
+        The container for Rx SC settings.
       type: object
       properties:
         static_key:
-          $ref: '#/components/schemas/Macsec.Rx.StaticKey'
+          $ref: '#/components/schemas/Macsec.RxSc.StaticKey'
           x-field-uid: 1
-    Macsec.Rx.StaticKey:
+    Macsec.RxSc.StaticKey:
       description: |-
-        Static key Rx settings.
+        Rx SC settings for static key.
       type: object
       properties:
         dut_system_id:
@@ -10775,6 +10774,13 @@ components:
           type: integer
           default: 1
           x-field-uid: 4
+        sak_pool:
+          description: |-
+            Rx SAK pool.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
+          x-field-uid: 5
     Macsec.CryptoEngine:
       description: |-
         A container of crypto engine properties for a MACsec interface.
