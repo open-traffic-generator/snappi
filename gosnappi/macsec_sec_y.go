@@ -258,7 +258,7 @@ func (obj *macsecSecY) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecSecY is configuration for a Secure Entity (SecY).
+// MacsecSecY is configuration of a Secure Entity (SecY).
 type MacsecSecY interface {
 	Validation
 	// msg marshals MacsecSecY to protobuf object *otg.MacsecSecY
@@ -300,6 +300,8 @@ type MacsecSecY interface {
 	// SetCryptoEngine assigns MacsecSecYCryptoEngine provided by user to MacsecSecY.
 	// MacsecSecYCryptoEngine is a container of crypto engine properties of a SecY.
 	SetCryptoEngine(value MacsecSecYCryptoEngine) MacsecSecY
+	// HasCryptoEngine checks if CryptoEngine has been set in MacsecSecY
+	HasCryptoEngine() bool
 	// Advance returns MacsecSecYAdvance, set in MacsecSecY.
 	// MacsecSecYAdvance is a container of advance properties SecY.
 	Advance() MacsecSecYAdvance
@@ -536,6 +538,12 @@ func (obj *macsecSecY) CryptoEngine() MacsecSecYCryptoEngine {
 }
 
 // This contains crypto engine properties of SecY.
+// CryptoEngine returns a MacsecSecYCryptoEngine
+func (obj *macsecSecY) HasCryptoEngine() bool {
+	return obj.obj.CryptoEngine != nil
+}
+
+// This contains crypto engine properties of SecY.
 // SetCryptoEngine sets the MacsecSecYCryptoEngine value in the MacsecSecY object
 func (obj *macsecSecY) SetCryptoEngine(value MacsecSecYCryptoEngine) MacsecSecY {
 
@@ -619,11 +627,6 @@ func (obj *macsecSecY) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
-	}
-
-	// CryptoEngine is required
-	if obj.obj.CryptoEngine == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "CryptoEngine is required field on interface MacsecSecY")
 	}
 
 	if obj.obj.CryptoEngine != nil {

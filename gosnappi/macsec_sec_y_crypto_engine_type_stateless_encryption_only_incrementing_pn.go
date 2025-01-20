@@ -264,59 +264,59 @@ type MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Count returns int32, set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.
-	Count() int32
-	// SetCount assigns int32 provided by user to MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
-	SetCount(value int32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+	// Count returns uint32, set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.
+	Count() uint32
+	// SetCount assigns uint32 provided by user to MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+	SetCount(value uint32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 	// HasCount checks if Count has been set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 	HasCount() bool
-	// First returns int32, set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.
-	First() int32
-	// SetFirst assigns int32 provided by user to MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
-	SetFirst(value int32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+	// First returns uint32, set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.
+	First() uint32
+	// SetFirst assigns uint32 provided by user to MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
+	SetFirst(value uint32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 	// HasFirst checks if First has been set in MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn
 	HasFirst() bool
 }
 
 // Count of packet numbers in series.
-// Count returns a int32
-func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) Count() int32 {
+// Count returns a uint32
+func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) Count() uint32 {
 
 	return *obj.obj.Count
 
 }
 
 // Count of packet numbers in series.
-// Count returns a int32
+// Count returns a uint32
 func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) HasCount() bool {
 	return obj.obj.Count != nil
 }
 
 // Count of packet numbers in series.
-// SetCount sets the int32 value in the MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn object
-func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) SetCount(value int32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
+// SetCount sets the uint32 value in the MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn object
+func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) SetCount(value uint32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
 
 	obj.obj.Count = &value
 	return obj
 }
 
 // First PN.
-// First returns a int32
-func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) First() int32 {
+// First returns a uint32
+func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) First() uint32 {
 
 	return *obj.obj.First
 
 }
 
 // First PN.
-// First returns a int32
+// First returns a uint32
 func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) HasFirst() bool {
 	return obj.obj.First != nil
 }
 
 // First PN.
-// SetFirst sets the int32 value in the MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn object
-func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) SetFirst(value int32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
+// SetFirst sets the uint32 value in the MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn object
+func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) SetFirst(value uint32) MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
 
 	obj.obj.First = &value
 	return obj
@@ -325,6 +325,26 @@ func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) SetF
 func (obj *macsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Count != nil {
+
+		if *obj.obj.Count < 2 || *obj.obj.Count > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.Count <= 4294967295 but Got %d", *obj.obj.Count))
+		}
+
+	}
+
+	if obj.obj.First != nil {
+
+		if *obj.obj.First < 1 || *obj.obj.First > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn.First <= 4294967295 but Got %d", *obj.obj.First))
+		}
+
 	}
 
 }

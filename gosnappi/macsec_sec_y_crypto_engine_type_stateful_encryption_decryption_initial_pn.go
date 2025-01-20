@@ -264,31 +264,31 @@ type MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Pn returns int32, set in MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn.
-	Pn() int32
-	// SetPn assigns int32 provided by user to MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
-	SetPn(value int32) MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
+	// Pn returns uint32, set in MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn.
+	Pn() uint32
+	// SetPn assigns uint32 provided by user to MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
+	SetPn(value uint32) MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
 	// HasPn checks if Pn has been set in MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn
 	HasPn() bool
 }
 
 // Initial Tx PN.
-// Pn returns a int32
-func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) Pn() int32 {
+// Pn returns a uint32
+func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) Pn() uint32 {
 
 	return *obj.obj.Pn
 
 }
 
 // Initial Tx PN.
-// Pn returns a int32
+// Pn returns a uint32
 func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) HasPn() bool {
 	return obj.obj.Pn != nil
 }
 
 // Initial Tx PN.
-// SetPn sets the int32 value in the MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn object
-func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) SetPn(value int32) MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
+// SetPn sets the uint32 value in the MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn object
+func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) SetPn(value uint32) MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
 
 	obj.obj.Pn = &value
 	return obj
@@ -297,6 +297,16 @@ func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) SetP
 func (obj *macsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Pn != nil {
+
+		if *obj.obj.Pn < 1 || *obj.obj.Pn > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
+		}
+
 	}
 
 }

@@ -270,12 +270,12 @@ type MacsecSecYAdvanceStaticKeyRekeyMode interface {
 	setChoice(value MacsecSecYAdvanceStaticKeyRekeyModeChoiceEnum) MacsecSecYAdvanceStaticKeyRekeyMode
 	// HasChoice checks if Choice has been set in MacsecSecYAdvanceStaticKeyRekeyMode
 	HasChoice() bool
-	// getter for TimerBased to set choice.
-	TimerBased()
 	// getter for DontRekey to set choice.
 	DontRekey()
 	// getter for PnBased to set choice.
 	PnBased()
+	// getter for TimerBased to set choice.
+	TimerBased()
 }
 
 type MacsecSecYAdvanceStaticKeyRekeyModeChoiceEnum string
@@ -295,11 +295,6 @@ func (obj *macsecSecYAdvanceStaticKeyRekeyMode) Choice() MacsecSecYAdvanceStatic
 	return MacsecSecYAdvanceStaticKeyRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for TimerBased to set choice
-func (obj *macsecSecYAdvanceStaticKeyRekeyMode) TimerBased() {
-	obj.setChoice(MacsecSecYAdvanceStaticKeyRekeyModeChoice.TIMER_BASED)
-}
-
 // getter for DontRekey to set choice
 func (obj *macsecSecYAdvanceStaticKeyRekeyMode) DontRekey() {
 	obj.setChoice(MacsecSecYAdvanceStaticKeyRekeyModeChoice.DONT_REKEY)
@@ -308,6 +303,11 @@ func (obj *macsecSecYAdvanceStaticKeyRekeyMode) DontRekey() {
 // getter for PnBased to set choice
 func (obj *macsecSecYAdvanceStaticKeyRekeyMode) PnBased() {
 	obj.setChoice(MacsecSecYAdvanceStaticKeyRekeyModeChoice.PN_BASED)
+}
+
+// getter for TimerBased to set choice
+func (obj *macsecSecYAdvanceStaticKeyRekeyMode) TimerBased() {
+	obj.setChoice(MacsecSecYAdvanceStaticKeyRekeyModeChoice.TIMER_BASED)
 }
 
 // Rekey mode choices.

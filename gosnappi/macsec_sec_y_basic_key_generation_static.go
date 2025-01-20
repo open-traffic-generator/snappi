@@ -270,12 +270,12 @@ type MacsecSecYBasicKeyGenerationStatic interface {
 	SetCipherSuite(value MacsecSecYBasicKeyGenerationStaticCipherSuiteEnum) MacsecSecYBasicKeyGenerationStatic
 	// HasCipherSuite checks if CipherSuite has been set in MacsecSecYBasicKeyGenerationStatic
 	HasCipherSuite() bool
-	// ConfidentialtyOffset returns int32, set in MacsecSecYBasicKeyGenerationStatic.
-	ConfidentialtyOffset() int32
-	// SetConfidentialtyOffset assigns int32 provided by user to MacsecSecYBasicKeyGenerationStatic
-	SetConfidentialtyOffset(value int32) MacsecSecYBasicKeyGenerationStatic
-	// HasConfidentialtyOffset checks if ConfidentialtyOffset has been set in MacsecSecYBasicKeyGenerationStatic
-	HasConfidentialtyOffset() bool
+	// ConfidentialityOffset returns uint32, set in MacsecSecYBasicKeyGenerationStatic.
+	ConfidentialityOffset() uint32
+	// SetConfidentialityOffset assigns uint32 provided by user to MacsecSecYBasicKeyGenerationStatic
+	SetConfidentialityOffset(value uint32) MacsecSecYBasicKeyGenerationStatic
+	// HasConfidentialityOffset checks if ConfidentialityOffset has been set in MacsecSecYBasicKeyGenerationStatic
+	HasConfidentialityOffset() bool
 }
 
 type MacsecSecYBasicKeyGenerationStaticCipherSuiteEnum string
@@ -317,24 +317,24 @@ func (obj *macsecSecYBasicKeyGenerationStatic) SetCipherSuite(value MacsecSecYBa
 }
 
 // Confidentiality offset.
-// ConfidentialtyOffset returns a int32
-func (obj *macsecSecYBasicKeyGenerationStatic) ConfidentialtyOffset() int32 {
+// ConfidentialityOffset returns a uint32
+func (obj *macsecSecYBasicKeyGenerationStatic) ConfidentialityOffset() uint32 {
 
-	return *obj.obj.ConfidentialtyOffset
+	return *obj.obj.ConfidentialityOffset
 
 }
 
 // Confidentiality offset.
-// ConfidentialtyOffset returns a int32
-func (obj *macsecSecYBasicKeyGenerationStatic) HasConfidentialtyOffset() bool {
-	return obj.obj.ConfidentialtyOffset != nil
+// ConfidentialityOffset returns a uint32
+func (obj *macsecSecYBasicKeyGenerationStatic) HasConfidentialityOffset() bool {
+	return obj.obj.ConfidentialityOffset != nil
 }
 
 // Confidentiality offset.
-// SetConfidentialtyOffset sets the int32 value in the MacsecSecYBasicKeyGenerationStatic object
-func (obj *macsecSecYBasicKeyGenerationStatic) SetConfidentialtyOffset(value int32) MacsecSecYBasicKeyGenerationStatic {
+// SetConfidentialityOffset sets the uint32 value in the MacsecSecYBasicKeyGenerationStatic object
+func (obj *macsecSecYBasicKeyGenerationStatic) SetConfidentialityOffset(value uint32) MacsecSecYBasicKeyGenerationStatic {
 
-	obj.obj.ConfidentialtyOffset = &value
+	obj.obj.ConfidentialityOffset = &value
 	return obj
 }
 
@@ -350,8 +350,8 @@ func (obj *macsecSecYBasicKeyGenerationStatic) setDefault() {
 		obj.SetCipherSuite(MacsecSecYBasicKeyGenerationStaticCipherSuite.GCM_AES_128)
 
 	}
-	if obj.obj.ConfidentialtyOffset == nil {
-		obj.SetConfidentialtyOffset(0)
+	if obj.obj.ConfidentialityOffset == nil {
+		obj.SetConfidentialityOffset(0)
 	}
 
 }

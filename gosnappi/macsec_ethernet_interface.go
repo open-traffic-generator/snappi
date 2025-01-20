@@ -277,10 +277,10 @@ type MacsecEthernetInterface interface {
 	// SetEthName assigns string provided by user to MacsecEthernetInterface
 	SetEthName(value string) MacsecEthernetInterface
 	// Secy returns MacsecSecY, set in MacsecEthernetInterface.
-	// MacsecSecY is configuration for a Secure Entity (SecY).
+	// MacsecSecY is configuration of a Secure Entity (SecY).
 	Secy() MacsecSecY
 	// SetSecy assigns MacsecSecY provided by user to MacsecEthernetInterface.
-	// MacsecSecY is configuration for a Secure Entity (SecY).
+	// MacsecSecY is configuration of a Secure Entity (SecY).
 	SetSecy(value MacsecSecY) MacsecEthernetInterface
 	setNil()
 }

@@ -278,10 +278,10 @@ type MacsecSecYRxScStaticKey interface {
 	SetDutSystemId(value string) MacsecSecYRxScStaticKey
 	// HasDutSystemId checks if DutSystemId has been set in MacsecSecYRxScStaticKey
 	HasDutSystemId() bool
-	// DutSciPortId returns int32, set in MacsecSecYRxScStaticKey.
-	DutSciPortId() int32
-	// SetDutSciPortId assigns int32 provided by user to MacsecSecYRxScStaticKey
-	SetDutSciPortId(value int32) MacsecSecYRxScStaticKey
+	// DutSciPortId returns uint32, set in MacsecSecYRxScStaticKey.
+	DutSciPortId() uint32
+	// SetDutSciPortId assigns uint32 provided by user to MacsecSecYRxScStaticKey
+	SetDutSciPortId(value uint32) MacsecSecYRxScStaticKey
 	// HasDutSciPortId checks if DutSciPortId has been set in MacsecSecYRxScStaticKey
 	HasDutSciPortId() bool
 	// ReplayProtection returns bool, set in MacsecSecYRxScStaticKey.
@@ -290,10 +290,10 @@ type MacsecSecYRxScStaticKey interface {
 	SetReplayProtection(value bool) MacsecSecYRxScStaticKey
 	// HasReplayProtection checks if ReplayProtection has been set in MacsecSecYRxScStaticKey
 	HasReplayProtection() bool
-	// ReplayWindow returns int32, set in MacsecSecYRxScStaticKey.
-	ReplayWindow() int32
-	// SetReplayWindow assigns int32 provided by user to MacsecSecYRxScStaticKey
-	SetReplayWindow(value int32) MacsecSecYRxScStaticKey
+	// ReplayWindow returns uint32, set in MacsecSecYRxScStaticKey.
+	ReplayWindow() uint32
+	// SetReplayWindow assigns uint32 provided by user to MacsecSecYRxScStaticKey
+	SetReplayWindow(value uint32) MacsecSecYRxScStaticKey
 	// HasReplayWindow checks if ReplayWindow has been set in MacsecSecYRxScStaticKey
 	HasReplayWindow() bool
 	// SakPool returns MacsecSecYRxScStaticKeyMacsecSecYBasicKeyGenerationStaticSakIterIter, set in MacsecSecYRxScStaticKey
@@ -324,22 +324,22 @@ func (obj *macsecSecYRxScStaticKey) SetDutSystemId(value string) MacsecSecYRxScS
 }
 
 // DUT SCI Port ID.
-// DutSciPortId returns a int32
-func (obj *macsecSecYRxScStaticKey) DutSciPortId() int32 {
+// DutSciPortId returns a uint32
+func (obj *macsecSecYRxScStaticKey) DutSciPortId() uint32 {
 
 	return *obj.obj.DutSciPortId
 
 }
 
 // DUT SCI Port ID.
-// DutSciPortId returns a int32
+// DutSciPortId returns a uint32
 func (obj *macsecSecYRxScStaticKey) HasDutSciPortId() bool {
 	return obj.obj.DutSciPortId != nil
 }
 
 // DUT SCI Port ID.
-// SetDutSciPortId sets the int32 value in the MacsecSecYRxScStaticKey object
-func (obj *macsecSecYRxScStaticKey) SetDutSciPortId(value int32) MacsecSecYRxScStaticKey {
+// SetDutSciPortId sets the uint32 value in the MacsecSecYRxScStaticKey object
+func (obj *macsecSecYRxScStaticKey) SetDutSciPortId(value uint32) MacsecSecYRxScStaticKey {
 
 	obj.obj.DutSciPortId = &value
 	return obj
@@ -368,22 +368,22 @@ func (obj *macsecSecYRxScStaticKey) SetReplayProtection(value bool) MacsecSecYRx
 }
 
 // Replay window size.
-// ReplayWindow returns a int32
-func (obj *macsecSecYRxScStaticKey) ReplayWindow() int32 {
+// ReplayWindow returns a uint32
+func (obj *macsecSecYRxScStaticKey) ReplayWindow() uint32 {
 
 	return *obj.obj.ReplayWindow
 
 }
 
 // Replay window size.
-// ReplayWindow returns a int32
+// ReplayWindow returns a uint32
 func (obj *macsecSecYRxScStaticKey) HasReplayWindow() bool {
 	return obj.obj.ReplayWindow != nil
 }
 
 // Replay window size.
-// SetReplayWindow sets the int32 value in the MacsecSecYRxScStaticKey object
-func (obj *macsecSecYRxScStaticKey) SetReplayWindow(value int32) MacsecSecYRxScStaticKey {
+// SetReplayWindow sets the uint32 value in the MacsecSecYRxScStaticKey object
+func (obj *macsecSecYRxScStaticKey) SetReplayWindow(value uint32) MacsecSecYRxScStaticKey {
 
 	obj.obj.ReplayWindow = &value
 	return obj
@@ -486,6 +486,26 @@ func (obj *macsecSecYRxScStaticKey) validateObj(vObj *validation, set_default bo
 		err := obj.validateMac(obj.DutSystemId())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on MacsecSecYRxScStaticKey.DutSystemId"))
+		}
+
+	}
+
+	if obj.obj.DutSciPortId != nil {
+
+		if *obj.obj.DutSciPortId < 1 || *obj.obj.DutSciPortId > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecSecYRxScStaticKey.DutSciPortId <= 65535 but Got %d", *obj.obj.DutSciPortId))
+		}
+
+	}
+
+	if obj.obj.ReplayWindow != nil {
+
+		if *obj.obj.ReplayWindow < 1 || *obj.obj.ReplayWindow > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecSecYRxScStaticKey.ReplayWindow <= 4294967295 but Got %d", *obj.obj.ReplayWindow))
 		}
 
 	}

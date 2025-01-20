@@ -7876,7 +7876,7 @@ message MacsecEthernetInterface {
   MacsecSecY secy = 2;
 }
 
-// Configuration for a Secure Entity (SecY).
+// Configuration of a Secure Entity (SecY).
 message MacsecSecY {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -7895,7 +7895,6 @@ message MacsecSecY {
   repeated MacsecSecYRxSc rxscs = 4;
 
   // This contains crypto engine properties of SecY.
-  // required = true
   MacsecSecYCryptoEngine crypto_engine = 5;
 
   // This contains advance properties of SecY.
@@ -7946,7 +7945,7 @@ message MacsecSecYBasicKeyGenerationStatic {
 
   // Confidentiality offset.
   // default = 0
-  optional int32 confidentialty_offset = 2;
+  optional uint32 confidentiality_offset = 2;
 }
 
 // The container for SAK.
@@ -7975,7 +7974,7 @@ message MacsecSecYTxScStaticKey {
 
   // Port ID.
   // default = 1
-  optional int32 port_id = 2;
+  optional uint32 port_id = 2;
 
   // End station on not.
   // default = False
@@ -8008,7 +8007,7 @@ message MacsecSecYRxScStaticKey {
 
   // DUT SCI Port ID.
   // default = 1
-  optional int32 dut_sci_port_id = 2;
+  optional uint32 dut_sci_port_id = 2;
 
   // Enable replay protection on not.
   // default = False
@@ -8016,7 +8015,7 @@ message MacsecSecYRxScStaticKey {
 
   // Replay window size.
   // default = 1
-  optional int32 replay_window = 4;
+  optional uint32 replay_window = 4;
 
   // Rx SAK pool.
   repeated MacsecSecYBasicKeyGenerationStaticSak sak_pool = 5;
@@ -8096,7 +8095,7 @@ message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 
   // Fixed Tx PN.
   // default = 6
-  optional int32 pn = 1;
+  optional uint32 pn = 1;
 }
 
 // Incrementing PN settings.
@@ -8104,11 +8103,11 @@ message MacsecSecYCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
 
   // Count of packet numbers in series.
   // default = 100
-  optional int32 count = 1;
+  optional uint32 count = 1;
 
   // First PN.
   // default = 10000
-  optional int32 first = 2;
+  optional uint32 first = 2;
 }
 
 // Encryption only traffic settings.
@@ -8124,7 +8123,7 @@ message MacsecSecYCryptoEngineTypeStatefulEncryptionDecryptionInitialPn {
 
   // Initial Tx PN.
   // default = 1
-  optional int32 pn = 1;
+  optional uint32 pn = 1;
 }
 
 // Hardware acceleration settings.

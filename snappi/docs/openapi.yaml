@@ -10581,12 +10581,11 @@ components:
           x-field-uid: 2
     Macsec.SecY:
       description: |-
-        Configuration for a Secure Entity (SecY).
+        Configuration of a Secure Entity (SecY).
       type: object
       required:
       - name
       - basic
-      - crypto_engine
       properties:
         name:
           x-field-uid: 1
@@ -10679,10 +10678,11 @@ components:
           - gcm_aes_256
           - gcm_aes_xpn_128
           - gcm_aes_xpn_256
-        confidentialty_offset:
+        confidentiality_offset:
           description: |-
             Confidentiality offset.
           type: integer
+          format: uint32
           default: 0
           x-field-uid: 2
           x-enum:
@@ -10727,6 +10727,9 @@ components:
         port_id:
           description: "Port ID. "
           type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
           default: 1
           x-field-uid: 2
         end_station:
@@ -10772,6 +10775,9 @@ components:
         dut_sci_port_id:
           description: "DUT SCI Port ID. "
           type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
           default: 1
           x-field-uid: 2
         replay_protection:
@@ -10782,6 +10788,8 @@ components:
         replay_window:
           description: "Replay window size. "
           type: integer
+          format: uint32
+          minimum: 1
           default: 1
           x-field-uid: 4
         sak_pool:
@@ -10880,6 +10888,8 @@ components:
           description: |-
             Fixed Tx PN.
           type: integer
+          format: uint32
+          minimum: 1
           default: 6
           x-field-uid: 1
     Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn:
@@ -10890,12 +10900,16 @@ components:
         count:
           description: "Count of packet numbers in series. "
           type: integer
+          format: uint32
+          minimum: 2
           default: 100
           x-field-uid: 1
         first:
           description: |-
             First PN.
           type: integer
+          format: uint32
+          minimum: 1
           default: 10000
           x-field-uid: 2
     Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.Traffic:
@@ -10918,6 +10932,8 @@ components:
           description: |-
             Initial Tx PN.
           type: integer
+          format: uint32
+          minimum: 1
           default: 1
           x-field-uid: 1
     Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration:

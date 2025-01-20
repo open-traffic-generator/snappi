@@ -278,10 +278,10 @@ type MacsecSecYTxScStaticKey interface {
 	SetSystemId(value string) MacsecSecYTxScStaticKey
 	// HasSystemId checks if SystemId has been set in MacsecSecYTxScStaticKey
 	HasSystemId() bool
-	// PortId returns int32, set in MacsecSecYTxScStaticKey.
-	PortId() int32
-	// SetPortId assigns int32 provided by user to MacsecSecYTxScStaticKey
-	SetPortId(value int32) MacsecSecYTxScStaticKey
+	// PortId returns uint32, set in MacsecSecYTxScStaticKey.
+	PortId() uint32
+	// SetPortId assigns uint32 provided by user to MacsecSecYTxScStaticKey
+	SetPortId(value uint32) MacsecSecYTxScStaticKey
 	// HasPortId checks if PortId has been set in MacsecSecYTxScStaticKey
 	HasPortId() bool
 	// EndStation returns bool, set in MacsecSecYTxScStaticKey.
@@ -330,22 +330,22 @@ func (obj *macsecSecYTxScStaticKey) SetSystemId(value string) MacsecSecYTxScStat
 }
 
 // Port ID.
-// PortId returns a int32
-func (obj *macsecSecYTxScStaticKey) PortId() int32 {
+// PortId returns a uint32
+func (obj *macsecSecYTxScStaticKey) PortId() uint32 {
 
 	return *obj.obj.PortId
 
 }
 
 // Port ID.
-// PortId returns a int32
+// PortId returns a uint32
 func (obj *macsecSecYTxScStaticKey) HasPortId() bool {
 	return obj.obj.PortId != nil
 }
 
 // Port ID.
-// SetPortId sets the int32 value in the MacsecSecYTxScStaticKey object
-func (obj *macsecSecYTxScStaticKey) SetPortId(value int32) MacsecSecYTxScStaticKey {
+// SetPortId sets the uint32 value in the MacsecSecYTxScStaticKey object
+func (obj *macsecSecYTxScStaticKey) SetPortId(value uint32) MacsecSecYTxScStaticKey {
 
 	obj.obj.PortId = &value
 	return obj
@@ -514,6 +514,16 @@ func (obj *macsecSecYTxScStaticKey) validateObj(vObj *validation, set_default bo
 		err := obj.validateMac(obj.SystemId())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on MacsecSecYTxScStaticKey.SystemId"))
+		}
+
+	}
+
+	if obj.obj.PortId != nil {
+
+		if *obj.obj.PortId < 1 || *obj.obj.PortId > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecSecYTxScStaticKey.PortId <= 65535 but Got %d", *obj.obj.PortId))
 		}
 
 	}
