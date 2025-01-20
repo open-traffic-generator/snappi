@@ -10681,17 +10681,20 @@ components:
         confidentiality_offset:
           description: |-
             Confidentiality offset.
-          type: integer
-          format: uint32
-          default: 0
+          type: string
+          default: zero
           x-field-uid: 2
           x-enum:
-            '0':
+            zero:
               x-field-uid: 1
-            '30':
+            thirty:
               x-field-uid: 2
-            '50':
+            fifty:
               x-field-uid: 3
+          enum:
+          - zero
+          - thirty
+          - fifty
     Macsec.SecY.Basic.KeyGeneration.Static.Sak:
       description: |-
         The container for SAK.

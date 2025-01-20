@@ -7943,9 +7943,17 @@ message MacsecSecYBasicKeyGenerationStatic {
   // default = CipherSuite.Enum.gcm_aes_128
   optional CipherSuite.Enum cipher_suite = 1;
 
+  message ConfidentialityOffset {
+    enum Enum {
+      unspecified = 0;
+      zero = 1;
+      thirty = 2;
+      fifty = 3;
+    }
+  }
   // Confidentiality offset.
-  // default = 0
-  optional uint32 confidentiality_offset = 2;
+  // default = ConfidentialityOffset.Enum.zero
+  optional ConfidentialityOffset.Enum confidentiality_offset = 2;
 }
 
 // The container for SAK.
