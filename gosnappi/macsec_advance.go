@@ -250,7 +250,7 @@ func (obj *macsecAdvance) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecAdvance is a container of advance properties for a MACsec interface.
+// MacsecAdvance is a container of advance properties SecY.
 type MacsecAdvance interface {
 	Validation
 	// msg marshals MacsecAdvance to protobuf object *otg.MacsecAdvance

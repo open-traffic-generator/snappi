@@ -250,7 +250,7 @@ func (obj *macsecCryptoEngine) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecCryptoEngine is a container of crypto engine properties for a MACsec interface.
+// MacsecCryptoEngine is a container of crypto engine properties of a SecY.
 type MacsecCryptoEngine interface {
 	Validation
 	// msg marshals MacsecCryptoEngine to protobuf object *otg.MacsecCryptoEngine

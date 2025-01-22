@@ -264,31 +264,31 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Pn returns int32, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.
-	Pn() int32
-	// SetPn assigns int32 provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
-	SetPn(value int32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	// Pn returns uint32, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.
+	Pn() uint32
+	// SetPn assigns uint32 provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	SetPn(value uint32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
 	// HasPn checks if Pn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
 	HasPn() bool
 }
 
 // Fixed Tx PN.
-// Pn returns a int32
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) Pn() int32 {
+// Pn returns a uint32
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) Pn() uint32 {
 
 	return *obj.obj.Pn
 
 }
 
 // Fixed Tx PN.
-// Pn returns a int32
+// Pn returns a uint32
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) HasPn() bool {
 	return obj.obj.Pn != nil
 }
 
 // Fixed Tx PN.
-// SetPn sets the int32 value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn object
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetPn(value int32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
+// SetPn sets the uint32 value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn object
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetPn(value uint32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 
 	obj.obj.Pn = &value
 	return obj
@@ -297,6 +297,16 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetPn(value int
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Pn != nil {
+
+		if *obj.obj.Pn < 1 || *obj.obj.Pn > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
+		}
+
 	}
 
 }

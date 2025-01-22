@@ -278,10 +278,10 @@ type MacsecTxScStaticKey interface {
 	SetSystemId(value string) MacsecTxScStaticKey
 	// HasSystemId checks if SystemId has been set in MacsecTxScStaticKey
 	HasSystemId() bool
-	// PortId returns int32, set in MacsecTxScStaticKey.
-	PortId() int32
-	// SetPortId assigns int32 provided by user to MacsecTxScStaticKey
-	SetPortId(value int32) MacsecTxScStaticKey
+	// PortId returns uint32, set in MacsecTxScStaticKey.
+	PortId() uint32
+	// SetPortId assigns uint32 provided by user to MacsecTxScStaticKey
+	SetPortId(value uint32) MacsecTxScStaticKey
 	// HasPortId checks if PortId has been set in MacsecTxScStaticKey
 	HasPortId() bool
 	// EndStation returns bool, set in MacsecTxScStaticKey.
@@ -330,22 +330,22 @@ func (obj *macsecTxScStaticKey) SetSystemId(value string) MacsecTxScStaticKey {
 }
 
 // Port ID.
-// PortId returns a int32
-func (obj *macsecTxScStaticKey) PortId() int32 {
+// PortId returns a uint32
+func (obj *macsecTxScStaticKey) PortId() uint32 {
 
 	return *obj.obj.PortId
 
 }
 
 // Port ID.
-// PortId returns a int32
+// PortId returns a uint32
 func (obj *macsecTxScStaticKey) HasPortId() bool {
 	return obj.obj.PortId != nil
 }
 
 // Port ID.
-// SetPortId sets the int32 value in the MacsecTxScStaticKey object
-func (obj *macsecTxScStaticKey) SetPortId(value int32) MacsecTxScStaticKey {
+// SetPortId sets the uint32 value in the MacsecTxScStaticKey object
+func (obj *macsecTxScStaticKey) SetPortId(value uint32) MacsecTxScStaticKey {
 
 	obj.obj.PortId = &value
 	return obj
@@ -514,6 +514,16 @@ func (obj *macsecTxScStaticKey) validateObj(vObj *validation, set_default bool) 
 		err := obj.validateMac(obj.SystemId())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on MacsecTxScStaticKey.SystemId"))
+		}
+
+	}
+
+	if obj.obj.PortId != nil {
+
+		if *obj.obj.PortId < 1 || *obj.obj.PortId > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecTxScStaticKey.PortId <= 65535 but Got %d", *obj.obj.PortId))
 		}
 
 	}
