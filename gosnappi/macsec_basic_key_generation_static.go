@@ -270,12 +270,12 @@ type MacsecBasicKeyGenerationStatic interface {
 	SetCipherSuite(value MacsecBasicKeyGenerationStaticCipherSuiteEnum) MacsecBasicKeyGenerationStatic
 	// HasCipherSuite checks if CipherSuite has been set in MacsecBasicKeyGenerationStatic
 	HasCipherSuite() bool
-	// ConfidentialtyOffset returns int32, set in MacsecBasicKeyGenerationStatic.
-	ConfidentialtyOffset() int32
-	// SetConfidentialtyOffset assigns int32 provided by user to MacsecBasicKeyGenerationStatic
-	SetConfidentialtyOffset(value int32) MacsecBasicKeyGenerationStatic
-	// HasConfidentialtyOffset checks if ConfidentialtyOffset has been set in MacsecBasicKeyGenerationStatic
-	HasConfidentialtyOffset() bool
+	// ConfidentialityOffset returns MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum, set in MacsecBasicKeyGenerationStatic
+	ConfidentialityOffset() MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum
+	// SetConfidentialityOffset assigns MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum provided by user to MacsecBasicKeyGenerationStatic
+	SetConfidentialityOffset(value MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum) MacsecBasicKeyGenerationStatic
+	// HasConfidentialityOffset checks if ConfidentialityOffset has been set in MacsecBasicKeyGenerationStatic
+	HasConfidentialityOffset() bool
 }
 
 type MacsecBasicKeyGenerationStaticCipherSuiteEnum string
@@ -316,25 +316,39 @@ func (obj *macsecBasicKeyGenerationStatic) SetCipherSuite(value MacsecBasicKeyGe
 	return obj
 }
 
-// Confidentiality offset.
-// ConfidentialtyOffset returns a int32
-func (obj *macsecBasicKeyGenerationStatic) ConfidentialtyOffset() int32 {
+type MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum string
 
-	return *obj.obj.ConfidentialtyOffset
+// Enum of ConfidentialityOffset on MacsecBasicKeyGenerationStatic
+var MacsecBasicKeyGenerationStaticConfidentialityOffset = struct {
+	ZERO   MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum
+	THIRTY MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum
+	FIFTY  MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum
+}{
+	ZERO:   MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum("zero"),
+	THIRTY: MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum("thirty"),
+	FIFTY:  MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum("fifty"),
+}
 
+func (obj *macsecBasicKeyGenerationStatic) ConfidentialityOffset() MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum {
+	return MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum(obj.obj.ConfidentialityOffset.Enum().String())
 }
 
 // Confidentiality offset.
-// ConfidentialtyOffset returns a int32
-func (obj *macsecBasicKeyGenerationStatic) HasConfidentialtyOffset() bool {
-	return obj.obj.ConfidentialtyOffset != nil
+// ConfidentialityOffset returns a string
+func (obj *macsecBasicKeyGenerationStatic) HasConfidentialityOffset() bool {
+	return obj.obj.ConfidentialityOffset != nil
 }
 
-// Confidentiality offset.
-// SetConfidentialtyOffset sets the int32 value in the MacsecBasicKeyGenerationStatic object
-func (obj *macsecBasicKeyGenerationStatic) SetConfidentialtyOffset(value int32) MacsecBasicKeyGenerationStatic {
+func (obj *macsecBasicKeyGenerationStatic) SetConfidentialityOffset(value MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum) MacsecBasicKeyGenerationStatic {
+	intValue, ok := otg.MacsecBasicKeyGenerationStatic_ConfidentialityOffset_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on MacsecBasicKeyGenerationStaticConfidentialityOffsetEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.MacsecBasicKeyGenerationStatic_ConfidentialityOffset_Enum(intValue)
+	obj.obj.ConfidentialityOffset = &enumValue
 
-	obj.obj.ConfidentialtyOffset = &value
 	return obj
 }
 
@@ -350,8 +364,9 @@ func (obj *macsecBasicKeyGenerationStatic) setDefault() {
 		obj.SetCipherSuite(MacsecBasicKeyGenerationStaticCipherSuite.GCM_AES_128)
 
 	}
-	if obj.obj.ConfidentialtyOffset == nil {
-		obj.SetConfidentialtyOffset(0)
+	if obj.obj.ConfidentialityOffset == nil {
+		obj.SetConfidentialityOffset(MacsecBasicKeyGenerationStaticConfidentialityOffset.ZERO)
+
 	}
 
 }

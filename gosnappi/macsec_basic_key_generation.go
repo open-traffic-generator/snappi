@@ -311,7 +311,7 @@ func (obj *macsecBasicKeyGeneration) Mka() {
 	obj.setChoice(MacsecBasicKeyGenerationChoice.MKA)
 }
 
-// The type of control protocol of MACsec.
+// The type of control protocol of SecY.
 // Choice returns a string
 func (obj *macsecBasicKeyGeneration) HasChoice() bool {
 	return obj.obj.Choice != nil

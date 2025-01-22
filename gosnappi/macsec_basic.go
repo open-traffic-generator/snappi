@@ -250,7 +250,7 @@ func (obj *macsecBasic) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecBasic is a container of basic properties for a MACsec interface.
+// MacsecBasic is a container of basic properties for a SecY.
 type MacsecBasic interface {
 	Validation
 	// msg marshals MacsecBasic to protobuf object *otg.MacsecBasic

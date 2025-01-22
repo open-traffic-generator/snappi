@@ -2466,8 +2466,8 @@ components:
           x-field-uid: 10
         macsec:
           description: |-
-            Configuration of MACsec interfaces.
-          $ref: '#/components/schemas/Device.Macsec'
+            Configuration of MACsec device.
+          $ref: '#/components/schemas/Device.MacsecDevice'
           x-field-uid: 11
       required:
       - name
@@ -10542,7 +10542,7 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
-    Device.Macsec:
+    Device.MacsecDevice:
       description: |-
         A container of properties for a MACsec capable device.
       type: object
@@ -10554,9 +10554,9 @@ components:
             Ethernet Interfaces
           type: array
           items:
-            $ref: '#/components/schemas/Macsec.EthernetInterface'
+            $ref: '#/components/schemas/MacsecDevice.EthernetInterface'
           x-field-uid: 1
-    Macsec.EthernetInterface:
+    MacsecDevice.EthernetInterface:
       description: |-
         Configuration for single MACsec interface.
       type: object
@@ -10577,9 +10577,9 @@ components:
         secy:
           description: |-
             This contains the properties of Secure Entity (SecY).
-          $ref: '#/components/schemas/Macsec.SecY'
+          $ref: '#/components/schemas/Macsec'
           x-field-uid: 2
-    Macsec.SecY:
+    Macsec:
       description: |-
         Configuration of a Secure Entity (SecY).
       type: object
@@ -10597,41 +10597,41 @@ components:
         basic:
           description: |-
             This contains the basic properties of SecY.
-          $ref: '#/components/schemas/Macsec.SecY.Basic'
+          $ref: '#/components/schemas/Macsec.Basic'
           x-field-uid: 2
         txscs:
           description: |-
             Tx secure channels.
           type: array
           items:
-            $ref: '#/components/schemas/Macsec.SecY.TxSc'
+            $ref: '#/components/schemas/Macsec.TxSc'
           x-field-uid: 3
         rxscs:
           description: |-
             Rx secure channels.
           type: array
           items:
-            $ref: '#/components/schemas/Macsec.SecY.RxSc'
+            $ref: '#/components/schemas/Macsec.RxSc'
           x-field-uid: 4
         crypto_engine:
           description: |-
             This contains crypto engine properties of SecY.
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine'
+          $ref: '#/components/schemas/Macsec.CryptoEngine'
           x-field-uid: 5
         advance:
           description: |-
             This contains advance properties of SecY.
-          $ref: '#/components/schemas/Macsec.SecY.Advance'
+          $ref: '#/components/schemas/Macsec.Advance'
           x-field-uid: 6
-    Macsec.SecY.Basic:
+    Macsec.Basic:
       description: |-
         A container of basic properties for a SecY.
       type: object
       properties:
         key_generation:
-          $ref: '#/components/schemas/Macsec.SecY.Basic.KeyGeneration'
+          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration'
           x-field-uid: 1
-    Macsec.SecY.Basic.KeyGeneration:
+    Macsec.Basic.KeyGeneration:
       description: |-
         Key Generation.
       type: object
@@ -10651,9 +10651,9 @@ components:
           - mka
           - static
         static:
-          $ref: '#/components/schemas/Macsec.SecY.Basic.KeyGeneration.Static'
+          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static'
           x-field-uid: 2
-    Macsec.SecY.Basic.KeyGeneration.Static:
+    Macsec.Basic.KeyGeneration.Static:
       description: |-
         The container for static key settings.
       type: object
@@ -10695,7 +10695,7 @@ components:
           - zero
           - thirty
           - fifty
-    Macsec.SecY.Basic.KeyGeneration.Static.Sak:
+    Macsec.Basic.KeyGeneration.Static.Sak:
       description: |-
         The container for SAK.
       type: object
@@ -10709,15 +10709,15 @@ components:
             SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
           type: string
           x-field-uid: 2
-    Macsec.SecY.TxSc:
+    Macsec.TxSc:
       description: |-
         The container for Tx SC settings.
       type: object
       properties:
         static_key:
-          $ref: '#/components/schemas/Macsec.SecY.TxSc.StaticKey'
+          $ref: '#/components/schemas/Macsec.TxSc.StaticKey'
           x-field-uid: 1
-    Macsec.SecY.TxSc.StaticKey:
+    Macsec.TxSc.StaticKey:
       description: |-
         Tx SC setting for static key.
       type: object
@@ -10755,17 +10755,17 @@ components:
             Tx SAK pool.
           type: array
           items:
-            $ref: '#/components/schemas/Macsec.SecY.Basic.KeyGeneration.Static.Sak'
+            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
           x-field-uid: 6
-    Macsec.SecY.RxSc:
+    Macsec.RxSc:
       description: |-
         The container for Rx SC settings.
       type: object
       properties:
         static_key:
-          $ref: '#/components/schemas/Macsec.SecY.RxSc.StaticKey'
+          $ref: '#/components/schemas/Macsec.RxSc.StaticKey'
           x-field-uid: 1
-    Macsec.SecY.RxSc.StaticKey:
+    Macsec.RxSc.StaticKey:
       description: |-
         Rx SC settings for static key.
       type: object
@@ -10800,17 +10800,17 @@ components:
             Rx SAK pool.
           type: array
           items:
-            $ref: '#/components/schemas/Macsec.SecY.Basic.KeyGeneration.Static.Sak'
+            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
           x-field-uid: 5
-    Macsec.SecY.CryptoEngine:
+    Macsec.CryptoEngine:
       description: |-
         A container of crypto engine properties of a SecY.
       type: object
       properties:
         engine_type:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type'
           x-field-uid: 1
-    Macsec.SecY.CryptoEngine.Type:
+    Macsec.CryptoEngine.Type:
       description: |-
         Crypto engine type.
       type: object
@@ -10830,34 +10830,34 @@ components:
           - stateless_encryption_only
           - stateful_encryption_decryption
         stateless_encryption_only:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly'
           x-field-uid: 2
         stateful_encryption_decryption:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption'
           x-field-uid: 3
-    Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly:
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly:
       description: |-
         The container for stateless encryption only engine settings.
       type: object
       properties:
         tx_pn:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.TxPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxPn'
           x-field-uid: 1
         traffic:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.Traffic'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic'
           x-field-uid: 2
-    Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption:
+    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption:
       description: |-
         The container for stateful encryption and decryption engine settings.
       type: object
       properties:
         initial_pn:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn'
           x-field-uid: 1
         hardware_acceleration:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration'
           x-field-uid: 2
-    Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.TxPn:
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxPn:
       description: |-
         Tx PN settings.
       type: object
@@ -10877,12 +10877,12 @@ components:
           - fixed_pn
           - incrementing_pn
         fixed:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
           x-field-uid: 2
         incrementing:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
           x-field-uid: 3
-    Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn:
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn:
       description: |-
         Fixed PN settings.
       type: object
@@ -10895,7 +10895,7 @@ components:
           minimum: 1
           default: 6
           x-field-uid: 1
-    Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn:
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn:
       description: |-
         Incrementing PN settings.
       type: object
@@ -10915,7 +10915,7 @@ components:
           minimum: 1
           default: 10000
           x-field-uid: 2
-    Macsec.SecY.CryptoEngine.Type.StatelessEncryptionOnly.Traffic:
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic:
       description: |-
         Encryption only traffic settings.
       type: object
@@ -10926,7 +10926,7 @@ components:
           type: boolean
           default: true
           x-field-uid: 1
-    Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn:
+    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn:
       description: |-
         Initial PN settings.
       type: object
@@ -10939,7 +10939,7 @@ components:
           minimum: 1
           default: 1
           x-field-uid: 1
-    Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration:
+    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration:
       description: |-
         Hardware acceleration settings.
       type: object
@@ -10959,9 +10959,9 @@ components:
           - none
           - inline_crypto
         inline_crypto:
-          $ref: '#/components/schemas/Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto'
           x-field-uid: 2
-    Macsec.SecY.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto:
+    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto:
       description: |-
         Inline cryto engine settings.
       type: object
@@ -11023,23 +11023,23 @@ components:
           - source_mac
           - sci_sytem_id
           - sci_port_id
-    Macsec.SecY.Advance:
+    Macsec.Advance:
       description: |-
         A container of advance properties SecY.
       type: object
       properties:
         static_key:
-          $ref: '#/components/schemas/Macsec.SecY.Advance.StaticKey'
+          $ref: '#/components/schemas/Macsec.Advance.StaticKey'
           x-field-uid: 1
-    Macsec.SecY.Advance.StaticKey:
+    Macsec.Advance.StaticKey:
       description: |-
         Static key advance settings.
       type: object
       properties:
         rekey_mode:
-          $ref: '#/components/schemas/Macsec.SecY.Advance.StaticKey.RekeyMode'
+          $ref: '#/components/schemas/Macsec.Advance.StaticKey.RekeyMode'
           x-field-uid: 1
-    Macsec.SecY.Advance.StaticKey.RekeyMode:
+    Macsec.Advance.StaticKey.RekeyMode:
       description: |-
         Rekey mode.
       type: object
