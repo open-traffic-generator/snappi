@@ -25,7 +25,7 @@ type device struct {
 	rsvpHolder          DeviceRsvp
 	dhcpServerHolder    DeviceDhcpServer
 	ospfv2Holder        DeviceOspfv2Router
-	macsecHolder        DeviceMacsecDevice
+	macsecHolder        DeviceMacsec
 }
 
 func NewDevice() Device {
@@ -352,12 +352,12 @@ type Device interface {
 	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
-	// Macsec returns DeviceMacsecDevice, set in Device.
-	// DeviceMacsecDevice is a container of properties for a MACsec capable device.
-	Macsec() DeviceMacsecDevice
-	// SetMacsec assigns DeviceMacsecDevice provided by user to Device.
-	// DeviceMacsecDevice is a container of properties for a MACsec capable device.
-	SetMacsec(value DeviceMacsecDevice) Device
+	// Macsec returns DeviceMacsec, set in Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device.
+	Macsec() DeviceMacsec
+	// SetMacsec assigns DeviceMacsec provided by user to Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device.
+	SetMacsec(value DeviceMacsec) Device
 	// HasMacsec checks if Macsec has been set in Device
 	HasMacsec() bool
 	setNil()
@@ -809,26 +809,26 @@ func (obj *device) SetOspfv2(value DeviceOspfv2Router) Device {
 }
 
 // Configuration of MACsec device.
-// Macsec returns a DeviceMacsecDevice
-func (obj *device) Macsec() DeviceMacsecDevice {
+// Macsec returns a DeviceMacsec
+func (obj *device) Macsec() DeviceMacsec {
 	if obj.obj.Macsec == nil {
-		obj.obj.Macsec = NewDeviceMacsecDevice().msg()
+		obj.obj.Macsec = NewDeviceMacsec().msg()
 	}
 	if obj.macsecHolder == nil {
-		obj.macsecHolder = &deviceMacsecDevice{obj: obj.obj.Macsec}
+		obj.macsecHolder = &deviceMacsec{obj: obj.obj.Macsec}
 	}
 	return obj.macsecHolder
 }
 
 // Configuration of MACsec device.
-// Macsec returns a DeviceMacsecDevice
+// Macsec returns a DeviceMacsec
 func (obj *device) HasMacsec() bool {
 	return obj.obj.Macsec != nil
 }
 
 // Configuration of MACsec device.
-// SetMacsec sets the DeviceMacsecDevice value in the Device object
-func (obj *device) SetMacsec(value DeviceMacsecDevice) Device {
+// SetMacsec sets the DeviceMacsec value in the Device object
+func (obj *device) SetMacsec(value DeviceMacsec) Device {
 
 	obj.macsecHolder = nil
 	obj.obj.Macsec = value.msg()

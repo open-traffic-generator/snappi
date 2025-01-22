@@ -2467,7 +2467,7 @@ components:
         macsec:
           description: |-
             Configuration of MACsec device.
-          $ref: '#/components/schemas/Device.MacsecDevice'
+          $ref: '#/components/schemas/Device.Macsec'
           x-field-uid: 11
       required:
       - name
@@ -10542,7 +10542,7 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
-    Device.MacsecDevice:
+    Device.Macsec:
       description: |-
         A container of properties for a MACsec capable device.
       type: object
@@ -10554,9 +10554,9 @@ components:
             Ethernet Interfaces
           type: array
           items:
-            $ref: '#/components/schemas/MacsecDevice.EthernetInterface'
+            $ref: '#/components/schemas/Device.Macsec.EthernetInterface'
           x-field-uid: 1
-    MacsecDevice.EthernetInterface:
+    Device.Macsec.EthernetInterface:
       description: |-
         Configuration for single MACsec interface.
       type: object

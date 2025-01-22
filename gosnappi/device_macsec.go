@@ -16,7 +16,7 @@ type deviceMacsec struct {
 	obj                      *otg.DeviceMacsec
 	marshaller               marshalDeviceMacsec
 	unMarshaller             unMarshalDeviceMacsec
-	ethernetInterfacesHolder DeviceMacsecMacsecEthernetInterfaceIter
+	ethernetInterfacesHolder DeviceMacsecDeviceMacsecEthernetInterfaceIter
 }
 
 func NewDeviceMacsec() DeviceMacsec {
@@ -272,95 +272,95 @@ type DeviceMacsec interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// EthernetInterfaces returns DeviceMacsecMacsecEthernetInterfaceIterIter, set in DeviceMacsec
-	EthernetInterfaces() DeviceMacsecMacsecEthernetInterfaceIter
+	// EthernetInterfaces returns DeviceMacsecDeviceMacsecEthernetInterfaceIterIter, set in DeviceMacsec
+	EthernetInterfaces() DeviceMacsecDeviceMacsecEthernetInterfaceIter
 	setNil()
 }
 
 // Ethernet Interfaces
-// EthernetInterfaces returns a []MacsecEthernetInterface
-func (obj *deviceMacsec) EthernetInterfaces() DeviceMacsecMacsecEthernetInterfaceIter {
+// EthernetInterfaces returns a []DeviceMacsecEthernetInterface
+func (obj *deviceMacsec) EthernetInterfaces() DeviceMacsecDeviceMacsecEthernetInterfaceIter {
 	if len(obj.obj.EthernetInterfaces) == 0 {
-		obj.obj.EthernetInterfaces = []*otg.MacsecEthernetInterface{}
+		obj.obj.EthernetInterfaces = []*otg.DeviceMacsecEthernetInterface{}
 	}
 	if obj.ethernetInterfacesHolder == nil {
-		obj.ethernetInterfacesHolder = newDeviceMacsecMacsecEthernetInterfaceIter(&obj.obj.EthernetInterfaces).setMsg(obj)
+		obj.ethernetInterfacesHolder = newDeviceMacsecDeviceMacsecEthernetInterfaceIter(&obj.obj.EthernetInterfaces).setMsg(obj)
 	}
 	return obj.ethernetInterfacesHolder
 }
 
-type deviceMacsecMacsecEthernetInterfaceIter struct {
-	obj                          *deviceMacsec
-	macsecEthernetInterfaceSlice []MacsecEthernetInterface
-	fieldPtr                     *[]*otg.MacsecEthernetInterface
+type deviceMacsecDeviceMacsecEthernetInterfaceIter struct {
+	obj                                *deviceMacsec
+	deviceMacsecEthernetInterfaceSlice []DeviceMacsecEthernetInterface
+	fieldPtr                           *[]*otg.DeviceMacsecEthernetInterface
 }
 
-func newDeviceMacsecMacsecEthernetInterfaceIter(ptr *[]*otg.MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter {
-	return &deviceMacsecMacsecEthernetInterfaceIter{fieldPtr: ptr}
+func newDeviceMacsecDeviceMacsecEthernetInterfaceIter(ptr *[]*otg.DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter {
+	return &deviceMacsecDeviceMacsecEthernetInterfaceIter{fieldPtr: ptr}
 }
 
-type DeviceMacsecMacsecEthernetInterfaceIter interface {
-	setMsg(*deviceMacsec) DeviceMacsecMacsecEthernetInterfaceIter
-	Items() []MacsecEthernetInterface
-	Add() MacsecEthernetInterface
-	Append(items ...MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter
-	Set(index int, newObj MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter
-	Clear() DeviceMacsecMacsecEthernetInterfaceIter
-	clearHolderSlice() DeviceMacsecMacsecEthernetInterfaceIter
-	appendHolderSlice(item MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter
+type DeviceMacsecDeviceMacsecEthernetInterfaceIter interface {
+	setMsg(*deviceMacsec) DeviceMacsecDeviceMacsecEthernetInterfaceIter
+	Items() []DeviceMacsecEthernetInterface
+	Add() DeviceMacsecEthernetInterface
+	Append(items ...DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter
+	Set(index int, newObj DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter
+	Clear() DeviceMacsecDeviceMacsecEthernetInterfaceIter
+	clearHolderSlice() DeviceMacsecDeviceMacsecEthernetInterfaceIter
+	appendHolderSlice(item DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter
 }
 
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) setMsg(msg *deviceMacsec) DeviceMacsecMacsecEthernetInterfaceIter {
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) setMsg(msg *deviceMacsec) DeviceMacsecDeviceMacsecEthernetInterfaceIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&macsecEthernetInterface{obj: val})
+		obj.appendHolderSlice(&deviceMacsecEthernetInterface{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) Items() []MacsecEthernetInterface {
-	return obj.macsecEthernetInterfaceSlice
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) Items() []DeviceMacsecEthernetInterface {
+	return obj.deviceMacsecEthernetInterfaceSlice
 }
 
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) Add() MacsecEthernetInterface {
-	newObj := &otg.MacsecEthernetInterface{}
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) Add() DeviceMacsecEthernetInterface {
+	newObj := &otg.DeviceMacsecEthernetInterface{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &macsecEthernetInterface{obj: newObj}
+	newLibObj := &deviceMacsecEthernetInterface{obj: newObj}
 	newLibObj.setDefault()
-	obj.macsecEthernetInterfaceSlice = append(obj.macsecEthernetInterfaceSlice, newLibObj)
+	obj.deviceMacsecEthernetInterfaceSlice = append(obj.deviceMacsecEthernetInterfaceSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) Append(items ...MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter {
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) Append(items ...DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.macsecEthernetInterfaceSlice = append(obj.macsecEthernetInterfaceSlice, item)
+		obj.deviceMacsecEthernetInterfaceSlice = append(obj.deviceMacsecEthernetInterfaceSlice, item)
 	}
 	return obj
 }
 
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) Set(index int, newObj MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter {
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) Set(index int, newObj DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.macsecEthernetInterfaceSlice[index] = newObj
+	obj.deviceMacsecEthernetInterfaceSlice[index] = newObj
 	return obj
 }
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) Clear() DeviceMacsecMacsecEthernetInterfaceIter {
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) Clear() DeviceMacsecDeviceMacsecEthernetInterfaceIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MacsecEthernetInterface{}
-		obj.macsecEthernetInterfaceSlice = []MacsecEthernetInterface{}
+		*obj.fieldPtr = []*otg.DeviceMacsecEthernetInterface{}
+		obj.deviceMacsecEthernetInterfaceSlice = []DeviceMacsecEthernetInterface{}
 	}
 	return obj
 }
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) clearHolderSlice() DeviceMacsecMacsecEthernetInterfaceIter {
-	if len(obj.macsecEthernetInterfaceSlice) > 0 {
-		obj.macsecEthernetInterfaceSlice = []MacsecEthernetInterface{}
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) clearHolderSlice() DeviceMacsecDeviceMacsecEthernetInterfaceIter {
+	if len(obj.deviceMacsecEthernetInterfaceSlice) > 0 {
+		obj.deviceMacsecEthernetInterfaceSlice = []DeviceMacsecEthernetInterface{}
 	}
 	return obj
 }
-func (obj *deviceMacsecMacsecEthernetInterfaceIter) appendHolderSlice(item MacsecEthernetInterface) DeviceMacsecMacsecEthernetInterfaceIter {
-	obj.macsecEthernetInterfaceSlice = append(obj.macsecEthernetInterfaceSlice, item)
+func (obj *deviceMacsecDeviceMacsecEthernetInterfaceIter) appendHolderSlice(item DeviceMacsecEthernetInterface) DeviceMacsecDeviceMacsecEthernetInterfaceIter {
+	obj.deviceMacsecEthernetInterfaceSlice = append(obj.deviceMacsecEthernetInterfaceSlice, item)
 	return obj
 }
 
@@ -374,7 +374,7 @@ func (obj *deviceMacsec) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.EthernetInterfaces().clearHolderSlice()
 			for _, item := range obj.obj.EthernetInterfaces {
-				obj.EthernetInterfaces().appendHolderSlice(&macsecEthernetInterface{obj: item})
+				obj.EthernetInterfaces().appendHolderSlice(&deviceMacsecEthernetInterface{obj: item})
 			}
 		}
 		for _, item := range obj.EthernetInterfaces().Items() {

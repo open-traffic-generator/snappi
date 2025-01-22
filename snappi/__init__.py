@@ -350,8 +350,8 @@ from .snappi import Ospfv2V4RRExternalType1
 from .snappi import Ospfv2V4RRExternalType2
 from .snappi import Ospfv2V4RRNssaExternal
 from .snappi import Ospfv2V4RouteRangeIter
-from .snappi import DeviceMacsecDevice
-from .snappi import MacsecDeviceEthernetInterface
+from .snappi import DeviceMacsec
+from .snappi import DeviceMacsecEthernetInterface
 from .snappi import Macsec
 from .snappi import MacsecBasic
 from .snappi import MacsecBasicKeyGeneration
@@ -378,7 +378,7 @@ from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAc
 from .snappi import MacsecAdvance
 from .snappi import MacsecAdvanceStaticKey
 from .snappi import MacsecAdvanceStaticKeyRekeyMode
-from .snappi import MacsecDeviceEthernetInterfaceIter
+from .snappi import DeviceMacsecEthernetInterfaceIter
 from .snappi import DeviceIter
 from .snappi import Flow
 from .snappi import FlowTxRx

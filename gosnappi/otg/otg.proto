@@ -1680,7 +1680,7 @@ message Device {
   DeviceOspfv2Router ospfv2 = 10;
 
   // Configuration of MACsec device.
-  DeviceMacsecDevice macsec = 11;
+  DeviceMacsec macsec = 11;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -7854,14 +7854,14 @@ message Ospfv2V4RRExtdPrefixFlags {
 }
 
 // A container of properties for a MACsec capable device.
-message DeviceMacsecDevice {
+message DeviceMacsec {
 
   // Ethernet Interfaces
-  repeated MacsecDeviceEthernetInterface ethernet_interfaces = 1;
+  repeated DeviceMacsecEthernetInterface ethernet_interfaces = 1;
 }
 
 // Configuration for single MACsec interface.
-message MacsecDeviceEthernetInterface {
+message DeviceMacsecEthernetInterface {
 
   // The unique name of the Ethernet interface on which MACsec is enabled.
   // 
