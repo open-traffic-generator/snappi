@@ -7956,14 +7956,14 @@ message MacsecBasicKeyGenerationStatic {
   optional ConfidentialityOffset.Enum confidentiality_offset = 2;
 }
 
-// The container for SAK Pool.
+// The container for Secure Association Key(SAK) Pool.
 message MacsecBasicKeyGenerationStaticSakPool {
 
   // SAK pool name.
   optional string name = 1;
 
-  // SAK.
-  repeated MacsecBasicKeyGenerationStaticSak sak = 2;
+  // Secure Association Keys.
+  repeated MacsecBasicKeyGenerationStaticSak saks = 2;
 }
 
 // The container for SAK.

@@ -10697,7 +10697,7 @@ components:
           - fifty
     Macsec.Basic.KeyGeneration.Static.SakPool:
       description: |-
-        The container for SAK Pool.
+        The container for Secure Association Key(SAK) Pool.
       type: object
       properties:
         name:
@@ -10705,9 +10705,9 @@ components:
             SAK pool name.
           type: string
           x-field-uid: 1
-        sak:
+        saks:
           description: |-
-            SAK.
+            Secure Association Keys.
           type: array
           x-field-uid: 2
           items:

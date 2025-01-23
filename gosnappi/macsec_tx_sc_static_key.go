@@ -303,10 +303,10 @@ type MacsecTxScStaticKey interface {
 	// HasConfidentiality checks if Confidentiality has been set in MacsecTxScStaticKey
 	HasConfidentiality() bool
 	// SakPool returns MacsecBasicKeyGenerationStaticSakPool, set in MacsecTxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
 	SakPool() MacsecBasicKeyGenerationStaticSakPool
 	// SetSakPool assigns MacsecBasicKeyGenerationStaticSakPool provided by user to MacsecTxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
 	SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecTxScStaticKey
 	// HasSakPool checks if SakPool has been set in MacsecTxScStaticKey
 	HasSakPool() bool

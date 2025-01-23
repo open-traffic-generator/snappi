@@ -297,10 +297,10 @@ type MacsecRxScStaticKey interface {
 	// HasReplayWindow checks if ReplayWindow has been set in MacsecRxScStaticKey
 	HasReplayWindow() bool
 	// SakPool returns MacsecBasicKeyGenerationStaticSakPool, set in MacsecRxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
 	SakPool() MacsecBasicKeyGenerationStaticSakPool
 	// SetSakPool assigns MacsecBasicKeyGenerationStaticSakPool provided by user to MacsecRxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
 	SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecRxScStaticKey
 	// HasSakPool checks if SakPool has been set in MacsecRxScStaticKey
 	HasSakPool() bool
