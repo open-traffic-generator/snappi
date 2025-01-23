@@ -358,6 +358,7 @@ from .snappi import MacsecBasicKeyGeneration
 from .snappi import MacsecBasicKeyGenerationStatic
 from .snappi import MacsecTxSc
 from .snappi import MacsecTxScStaticKey
+from .snappi import MacsecBasicKeyGenerationStaticSakPool
 from .snappi import MacsecBasicKeyGenerationStaticSak
 from .snappi import MacsecBasicKeyGenerationStaticSakIter
 from .snappi import MacsecTxScIter

@@ -7956,15 +7956,23 @@ message MacsecBasicKeyGenerationStatic {
   optional ConfidentialityOffset.Enum confidentiality_offset = 2;
 }
 
+// The container for SAK Pool.
+message MacsecBasicKeyGenerationStaticSakPool {
+
+  // SAK pool name.
+  optional string name = 1;
+
+  // SAK.
+  repeated MacsecBasicKeyGenerationStaticSak sak = 2;
+}
+
 // The container for SAK.
 message MacsecBasicKeyGenerationStaticSak {
 
-  // SAK name.
-  optional string name = 1;
-
   // SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite
   // chosen.
-  optional string sak = 2;
+  // default = F123456789ABCDEF0123456789ABCDEF
+  optional string sak = 1;
 }
 
 // The container for Tx SC settings.
@@ -7997,7 +8005,7 @@ message MacsecTxScStaticKey {
   optional bool confidentiality = 5;
 
   // Tx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 6;
+  MacsecBasicKeyGenerationStaticSakPool sak_pool = 6;
 }
 
 // The container for Rx SC settings.
@@ -8010,12 +8018,12 @@ message MacsecRxSc {
 // Rx SC settings for static key.
 message MacsecRxScStaticKey {
 
-  // DUT system ID.
+  // System ID in DUT SCI.
   optional string dut_system_id = 1;
 
-  // DUT SCI Port ID.
+  // Port ID in DUT SCI.
   // default = 1
-  optional uint32 dut_sci_port_id = 2;
+  optional uint32 dut_port_id = 2;
 
   // Enable replay protection on not.
   // default = False
@@ -8026,7 +8034,7 @@ message MacsecRxScStaticKey {
   optional uint32 replay_window = 4;
 
   // Rx SAK pool.
-  repeated MacsecBasicKeyGenerationStaticSak sak_pool = 5;
+  MacsecBasicKeyGenerationStaticSakPool sak_pool = 5;
 }
 
 // A container of crypto engine properties of a SecY.

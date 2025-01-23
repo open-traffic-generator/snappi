@@ -10695,20 +10695,37 @@ components:
           - zero
           - thirty
           - fifty
+    Macsec.Basic.KeyGeneration.Static.SakPool:
+      description: |-
+        The container for SAK Pool.
+      type: object
+      properties:
+        name:
+          description: |-
+            SAK pool name.
+          type: string
+          x-field-uid: 1
+        sak:
+          description: |-
+            SAK.
+          type: array
+          x-field-uid: 2
+          items:
+            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
     Macsec.Basic.KeyGeneration.Static.Sak:
       description: |-
         The container for SAK.
       type: object
       properties:
-        name:
-          description: "SAK name. "
-          type: string
-          x-field-uid: 1
         sak:
           description: |-
             SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
           type: string
-          x-field-uid: 2
+          format: hex
+          minLength: 16
+          maxLength: 32
+          default: F123456789ABCDEF0123456789ABCDEF
+          x-field-uid: 1
     Macsec.TxSc:
       description: |-
         The container for Tx SC settings.
@@ -10753,9 +10770,7 @@ components:
         sak_pool:
           description: |-
             Tx SAK pool.
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
+          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.SakPool'
           x-field-uid: 6
     Macsec.RxSc:
       description: |-
@@ -10771,12 +10786,12 @@ components:
       type: object
       properties:
         dut_system_id:
-          description: "DUT system ID. "
+          description: "System ID in DUT SCI. "
           type: string
           format: mac
           x-field-uid: 1
-        dut_sci_port_id:
-          description: "DUT SCI Port ID. "
+        dut_port_id:
+          description: "Port ID in DUT SCI. "
           type: integer
           format: uint32
           minimum: 1
@@ -10798,9 +10813,7 @@ components:
         sak_pool:
           description: |-
             Rx SAK pool.
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
+          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.SakPool'
           x-field-uid: 5
     Macsec.CryptoEngine:
       description: |-

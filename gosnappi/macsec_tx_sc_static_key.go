@@ -16,7 +16,7 @@ type macsecTxScStaticKey struct {
 	obj           *otg.MacsecTxScStaticKey
 	marshaller    marshalMacsecTxScStaticKey
 	unMarshaller  unMarshalMacsecTxScStaticKey
-	sakPoolHolder MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
+	sakPoolHolder MacsecBasicKeyGenerationStaticSakPool
 }
 
 func NewMacsecTxScStaticKey() MacsecTxScStaticKey {
@@ -302,8 +302,14 @@ type MacsecTxScStaticKey interface {
 	SetConfidentiality(value bool) MacsecTxScStaticKey
 	// HasConfidentiality checks if Confidentiality has been set in MacsecTxScStaticKey
 	HasConfidentiality() bool
-	// SakPool returns MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIterIter, set in MacsecTxScStaticKey
-	SakPool() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
+	// SakPool returns MacsecBasicKeyGenerationStaticSakPool, set in MacsecTxScStaticKey.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	SakPool() MacsecBasicKeyGenerationStaticSakPool
+	// SetSakPool assigns MacsecBasicKeyGenerationStaticSakPool provided by user to MacsecTxScStaticKey.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecTxScStaticKey
+	// HasSakPool checks if SakPool has been set in MacsecTxScStaticKey
+	HasSakPool() bool
 	setNil()
 }
 
@@ -418,89 +424,30 @@ func (obj *macsecTxScStaticKey) SetConfidentiality(value bool) MacsecTxScStaticK
 }
 
 // Tx SAK pool.
-// SakPool returns a []MacsecBasicKeyGenerationStaticSak
-func (obj *macsecTxScStaticKey) SakPool() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(obj.obj.SakPool) == 0 {
-		obj.obj.SakPool = []*otg.MacsecBasicKeyGenerationStaticSak{}
+// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
+func (obj *macsecTxScStaticKey) SakPool() MacsecBasicKeyGenerationStaticSakPool {
+	if obj.obj.SakPool == nil {
+		obj.obj.SakPool = NewMacsecBasicKeyGenerationStaticSakPool().msg()
 	}
 	if obj.sakPoolHolder == nil {
-		obj.sakPoolHolder = newMacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter(&obj.obj.SakPool).setMsg(obj)
+		obj.sakPoolHolder = &macsecBasicKeyGenerationStaticSakPool{obj: obj.obj.SakPool}
 	}
 	return obj.sakPoolHolder
 }
 
-type macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter struct {
-	obj                                    *macsecTxScStaticKey
-	macsecBasicKeyGenerationStaticSakSlice []MacsecBasicKeyGenerationStaticSak
-	fieldPtr                               *[]*otg.MacsecBasicKeyGenerationStaticSak
+// Tx SAK pool.
+// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
+func (obj *macsecTxScStaticKey) HasSakPool() bool {
+	return obj.obj.SakPool != nil
 }
 
-func newMacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter(ptr *[]*otg.MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	return &macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter{fieldPtr: ptr}
-}
+// Tx SAK pool.
+// SetSakPool sets the MacsecBasicKeyGenerationStaticSakPool value in the MacsecTxScStaticKey object
+func (obj *macsecTxScStaticKey) SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecTxScStaticKey {
 
-type MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter interface {
-	setMsg(*macsecTxScStaticKey) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Items() []MacsecBasicKeyGenerationStaticSak
-	Add() MacsecBasicKeyGenerationStaticSak
-	Append(items ...MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Set(index int, newObj MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Clear() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	clearHolderSlice() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	appendHolderSlice(item MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-}
+	obj.sakPoolHolder = nil
+	obj.obj.SakPool = value.msg()
 
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) setMsg(msg *macsecTxScStaticKey) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&macsecBasicKeyGenerationStaticSak{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Items() []MacsecBasicKeyGenerationStaticSak {
-	return obj.macsecBasicKeyGenerationStaticSakSlice
-}
-
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Add() MacsecBasicKeyGenerationStaticSak {
-	newObj := &otg.MacsecBasicKeyGenerationStaticSak{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &macsecBasicKeyGenerationStaticSak{obj: newObj}
-	newLibObj.setDefault()
-	obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Append(items ...MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, item)
-	}
-	return obj
-}
-
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Set(index int, newObj MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.macsecBasicKeyGenerationStaticSakSlice[index] = newObj
-	return obj
-}
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Clear() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MacsecBasicKeyGenerationStaticSak{}
-		obj.macsecBasicKeyGenerationStaticSakSlice = []MacsecBasicKeyGenerationStaticSak{}
-	}
-	return obj
-}
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) clearHolderSlice() MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(obj.macsecBasicKeyGenerationStaticSakSlice) > 0 {
-		obj.macsecBasicKeyGenerationStaticSakSlice = []MacsecBasicKeyGenerationStaticSak{}
-	}
-	return obj
-}
-func (obj *macsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) appendHolderSlice(item MacsecBasicKeyGenerationStaticSak) MacsecTxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, item)
 	return obj
 }
 
@@ -528,18 +475,9 @@ func (obj *macsecTxScStaticKey) validateObj(vObj *validation, set_default bool) 
 
 	}
 
-	if len(obj.obj.SakPool) != 0 {
+	if obj.obj.SakPool != nil {
 
-		if set_default {
-			obj.SakPool().clearHolderSlice()
-			for _, item := range obj.obj.SakPool {
-				obj.SakPool().appendHolderSlice(&macsecBasicKeyGenerationStaticSak{obj: item})
-			}
-		}
-		for _, item := range obj.SakPool().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
+		obj.SakPool().validateObj(vObj, set_default)
 	}
 
 }

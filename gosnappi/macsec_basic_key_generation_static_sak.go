@@ -264,40 +264,12 @@ type MacsecBasicKeyGenerationStaticSak interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Name returns string, set in MacsecBasicKeyGenerationStaticSak.
-	Name() string
-	// SetName assigns string provided by user to MacsecBasicKeyGenerationStaticSak
-	SetName(value string) MacsecBasicKeyGenerationStaticSak
-	// HasName checks if Name has been set in MacsecBasicKeyGenerationStaticSak
-	HasName() bool
 	// Sak returns string, set in MacsecBasicKeyGenerationStaticSak.
 	Sak() string
 	// SetSak assigns string provided by user to MacsecBasicKeyGenerationStaticSak
 	SetSak(value string) MacsecBasicKeyGenerationStaticSak
 	// HasSak checks if Sak has been set in MacsecBasicKeyGenerationStaticSak
 	HasSak() bool
-}
-
-// SAK name.
-// Name returns a string
-func (obj *macsecBasicKeyGenerationStaticSak) Name() string {
-
-	return *obj.obj.Name
-
-}
-
-// SAK name.
-// Name returns a string
-func (obj *macsecBasicKeyGenerationStaticSak) HasName() bool {
-	return obj.obj.Name != nil
-}
-
-// SAK name.
-// SetName sets the string value in the MacsecBasicKeyGenerationStaticSak object
-func (obj *macsecBasicKeyGenerationStaticSak) SetName(value string) MacsecBasicKeyGenerationStaticSak {
-
-	obj.obj.Name = &value
-	return obj
 }
 
 // SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
@@ -327,8 +299,23 @@ func (obj *macsecBasicKeyGenerationStaticSak) validateObj(vObj *validation, set_
 		obj.setDefault()
 	}
 
+	if obj.obj.Sak != nil {
+
+		if len(*obj.obj.Sak) < 16 || len(*obj.obj.Sak) > 32 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"16 <= length of MacsecBasicKeyGenerationStaticSak.Sak <= 32 but Got %d",
+					len(*obj.obj.Sak)))
+		}
+
+	}
+
 }
 
 func (obj *macsecBasicKeyGenerationStaticSak) setDefault() {
+	if obj.obj.Sak == nil {
+		obj.SetSak("F123456789ABCDEF0123456789ABCDEF")
+	}
 
 }

@@ -16,7 +16,7 @@ type macsecRxScStaticKey struct {
 	obj           *otg.MacsecRxScStaticKey
 	marshaller    marshalMacsecRxScStaticKey
 	unMarshaller  unMarshalMacsecRxScStaticKey
-	sakPoolHolder MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
+	sakPoolHolder MacsecBasicKeyGenerationStaticSakPool
 }
 
 func NewMacsecRxScStaticKey() MacsecRxScStaticKey {
@@ -278,12 +278,12 @@ type MacsecRxScStaticKey interface {
 	SetDutSystemId(value string) MacsecRxScStaticKey
 	// HasDutSystemId checks if DutSystemId has been set in MacsecRxScStaticKey
 	HasDutSystemId() bool
-	// DutSciPortId returns uint32, set in MacsecRxScStaticKey.
-	DutSciPortId() uint32
-	// SetDutSciPortId assigns uint32 provided by user to MacsecRxScStaticKey
-	SetDutSciPortId(value uint32) MacsecRxScStaticKey
-	// HasDutSciPortId checks if DutSciPortId has been set in MacsecRxScStaticKey
-	HasDutSciPortId() bool
+	// DutPortId returns uint32, set in MacsecRxScStaticKey.
+	DutPortId() uint32
+	// SetDutPortId assigns uint32 provided by user to MacsecRxScStaticKey
+	SetDutPortId(value uint32) MacsecRxScStaticKey
+	// HasDutPortId checks if DutPortId has been set in MacsecRxScStaticKey
+	HasDutPortId() bool
 	// ReplayProtection returns bool, set in MacsecRxScStaticKey.
 	ReplayProtection() bool
 	// SetReplayProtection assigns bool provided by user to MacsecRxScStaticKey
@@ -296,12 +296,18 @@ type MacsecRxScStaticKey interface {
 	SetReplayWindow(value uint32) MacsecRxScStaticKey
 	// HasReplayWindow checks if ReplayWindow has been set in MacsecRxScStaticKey
 	HasReplayWindow() bool
-	// SakPool returns MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIterIter, set in MacsecRxScStaticKey
-	SakPool() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
+	// SakPool returns MacsecBasicKeyGenerationStaticSakPool, set in MacsecRxScStaticKey.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	SakPool() MacsecBasicKeyGenerationStaticSakPool
+	// SetSakPool assigns MacsecBasicKeyGenerationStaticSakPool provided by user to MacsecRxScStaticKey.
+	// MacsecBasicKeyGenerationStaticSakPool is the container for SAK Pool.
+	SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecRxScStaticKey
+	// HasSakPool checks if SakPool has been set in MacsecRxScStaticKey
+	HasSakPool() bool
 	setNil()
 }
 
-// DUT system ID.
+// System ID in DUT SCI.
 // DutSystemId returns a string
 func (obj *macsecRxScStaticKey) DutSystemId() string {
 
@@ -309,13 +315,13 @@ func (obj *macsecRxScStaticKey) DutSystemId() string {
 
 }
 
-// DUT system ID.
+// System ID in DUT SCI.
 // DutSystemId returns a string
 func (obj *macsecRxScStaticKey) HasDutSystemId() bool {
 	return obj.obj.DutSystemId != nil
 }
 
-// DUT system ID.
+// System ID in DUT SCI.
 // SetDutSystemId sets the string value in the MacsecRxScStaticKey object
 func (obj *macsecRxScStaticKey) SetDutSystemId(value string) MacsecRxScStaticKey {
 
@@ -323,25 +329,25 @@ func (obj *macsecRxScStaticKey) SetDutSystemId(value string) MacsecRxScStaticKey
 	return obj
 }
 
-// DUT SCI Port ID.
-// DutSciPortId returns a uint32
-func (obj *macsecRxScStaticKey) DutSciPortId() uint32 {
+// Port ID in DUT SCI.
+// DutPortId returns a uint32
+func (obj *macsecRxScStaticKey) DutPortId() uint32 {
 
-	return *obj.obj.DutSciPortId
+	return *obj.obj.DutPortId
 
 }
 
-// DUT SCI Port ID.
-// DutSciPortId returns a uint32
-func (obj *macsecRxScStaticKey) HasDutSciPortId() bool {
-	return obj.obj.DutSciPortId != nil
+// Port ID in DUT SCI.
+// DutPortId returns a uint32
+func (obj *macsecRxScStaticKey) HasDutPortId() bool {
+	return obj.obj.DutPortId != nil
 }
 
-// DUT SCI Port ID.
-// SetDutSciPortId sets the uint32 value in the MacsecRxScStaticKey object
-func (obj *macsecRxScStaticKey) SetDutSciPortId(value uint32) MacsecRxScStaticKey {
+// Port ID in DUT SCI.
+// SetDutPortId sets the uint32 value in the MacsecRxScStaticKey object
+func (obj *macsecRxScStaticKey) SetDutPortId(value uint32) MacsecRxScStaticKey {
 
-	obj.obj.DutSciPortId = &value
+	obj.obj.DutPortId = &value
 	return obj
 }
 
@@ -390,89 +396,30 @@ func (obj *macsecRxScStaticKey) SetReplayWindow(value uint32) MacsecRxScStaticKe
 }
 
 // Rx SAK pool.
-// SakPool returns a []MacsecBasicKeyGenerationStaticSak
-func (obj *macsecRxScStaticKey) SakPool() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(obj.obj.SakPool) == 0 {
-		obj.obj.SakPool = []*otg.MacsecBasicKeyGenerationStaticSak{}
+// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
+func (obj *macsecRxScStaticKey) SakPool() MacsecBasicKeyGenerationStaticSakPool {
+	if obj.obj.SakPool == nil {
+		obj.obj.SakPool = NewMacsecBasicKeyGenerationStaticSakPool().msg()
 	}
 	if obj.sakPoolHolder == nil {
-		obj.sakPoolHolder = newMacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter(&obj.obj.SakPool).setMsg(obj)
+		obj.sakPoolHolder = &macsecBasicKeyGenerationStaticSakPool{obj: obj.obj.SakPool}
 	}
 	return obj.sakPoolHolder
 }
 
-type macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter struct {
-	obj                                    *macsecRxScStaticKey
-	macsecBasicKeyGenerationStaticSakSlice []MacsecBasicKeyGenerationStaticSak
-	fieldPtr                               *[]*otg.MacsecBasicKeyGenerationStaticSak
+// Rx SAK pool.
+// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
+func (obj *macsecRxScStaticKey) HasSakPool() bool {
+	return obj.obj.SakPool != nil
 }
 
-func newMacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter(ptr *[]*otg.MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	return &macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter{fieldPtr: ptr}
-}
+// Rx SAK pool.
+// SetSakPool sets the MacsecBasicKeyGenerationStaticSakPool value in the MacsecRxScStaticKey object
+func (obj *macsecRxScStaticKey) SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecRxScStaticKey {
 
-type MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter interface {
-	setMsg(*macsecRxScStaticKey) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Items() []MacsecBasicKeyGenerationStaticSak
-	Add() MacsecBasicKeyGenerationStaticSak
-	Append(items ...MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Set(index int, newObj MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	Clear() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	clearHolderSlice() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-	appendHolderSlice(item MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter
-}
+	obj.sakPoolHolder = nil
+	obj.obj.SakPool = value.msg()
 
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) setMsg(msg *macsecRxScStaticKey) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&macsecBasicKeyGenerationStaticSak{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Items() []MacsecBasicKeyGenerationStaticSak {
-	return obj.macsecBasicKeyGenerationStaticSakSlice
-}
-
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Add() MacsecBasicKeyGenerationStaticSak {
-	newObj := &otg.MacsecBasicKeyGenerationStaticSak{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &macsecBasicKeyGenerationStaticSak{obj: newObj}
-	newLibObj.setDefault()
-	obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Append(items ...MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, item)
-	}
-	return obj
-}
-
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Set(index int, newObj MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.macsecBasicKeyGenerationStaticSakSlice[index] = newObj
-	return obj
-}
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) Clear() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MacsecBasicKeyGenerationStaticSak{}
-		obj.macsecBasicKeyGenerationStaticSakSlice = []MacsecBasicKeyGenerationStaticSak{}
-	}
-	return obj
-}
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) clearHolderSlice() MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	if len(obj.macsecBasicKeyGenerationStaticSakSlice) > 0 {
-		obj.macsecBasicKeyGenerationStaticSakSlice = []MacsecBasicKeyGenerationStaticSak{}
-	}
-	return obj
-}
-func (obj *macsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter) appendHolderSlice(item MacsecBasicKeyGenerationStaticSak) MacsecRxScStaticKeyMacsecBasicKeyGenerationStaticSakIter {
-	obj.macsecBasicKeyGenerationStaticSakSlice = append(obj.macsecBasicKeyGenerationStaticSakSlice, item)
 	return obj
 }
 
@@ -490,12 +437,12 @@ func (obj *macsecRxScStaticKey) validateObj(vObj *validation, set_default bool) 
 
 	}
 
-	if obj.obj.DutSciPortId != nil {
+	if obj.obj.DutPortId != nil {
 
-		if *obj.obj.DutSciPortId < 1 || *obj.obj.DutSciPortId > 65535 {
+		if *obj.obj.DutPortId < 1 || *obj.obj.DutPortId > 65535 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= MacsecRxScStaticKey.DutSciPortId <= 65535 but Got %d", *obj.obj.DutSciPortId))
+				fmt.Sprintf("1 <= MacsecRxScStaticKey.DutPortId <= 65535 but Got %d", *obj.obj.DutPortId))
 		}
 
 	}
@@ -510,25 +457,16 @@ func (obj *macsecRxScStaticKey) validateObj(vObj *validation, set_default bool) 
 
 	}
 
-	if len(obj.obj.SakPool) != 0 {
+	if obj.obj.SakPool != nil {
 
-		if set_default {
-			obj.SakPool().clearHolderSlice()
-			for _, item := range obj.obj.SakPool {
-				obj.SakPool().appendHolderSlice(&macsecBasicKeyGenerationStaticSak{obj: item})
-			}
-		}
-		for _, item := range obj.SakPool().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
+		obj.SakPool().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *macsecRxScStaticKey) setDefault() {
-	if obj.obj.DutSciPortId == nil {
-		obj.SetDutSciPortId(1)
+	if obj.obj.DutPortId == nil {
+		obj.SetDutPortId(1)
 	}
 	if obj.obj.ReplayProtection == nil {
 		obj.SetReplayProtection(false)
