@@ -11296,6 +11296,7 @@ components:
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
+          - /components/schemas/Macsec/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -11321,6 +11322,7 @@ components:
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
+            - /components/schemas/Macsec/properties/name
         rx_names:
           type: array
           items:
@@ -11340,6 +11342,7 @@ components:
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
+          - /components/schemas/Macsec/properties/name
           example:
           - Eth 1
           - Eth 2
@@ -11365,6 +11368,7 @@ components:
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
+            - /components/schemas/Macsec/properties/name
     Flow.Header:
       description: |-
         Configuration for all traffic packet headers

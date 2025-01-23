@@ -280,10 +280,10 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn interface {
 	setChoice(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
 	// HasChoice checks if Choice has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
 	HasChoice() bool
-	// getter for FixedPn to set choice.
-	FixedPn()
 	// getter for IncrementingPn to set choice.
 	IncrementingPn()
+	// getter for FixedPn to set choice.
+	FixedPn()
 	// Fixed returns MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn.
 	// MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn is fixed PN settings.
 	Fixed() MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
@@ -318,14 +318,14 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) Choice() MacsecCry
 	return MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for FixedPn to set choice
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FixedPn() {
-	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.FIXED_PN)
-}
-
 // getter for IncrementingPn to set choice
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) IncrementingPn() {
 	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.INCREMENTING_PN)
+}
+
+// getter for FixedPn to set choice
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) FixedPn() {
+	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPnChoice.FIXED_PN)
 }
 
 // Types of Tx PN series.

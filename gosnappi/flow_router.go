@@ -355,6 +355,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
+// - /components/schemas/Macsec/properties/name
 //
 // TxNames returns a []string
 func (obj *flowRouter) TxNames() []string {
@@ -379,6 +380,7 @@ func (obj *flowRouter) TxNames() []string {
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
+// - /components/schemas/Macsec/properties/name
 //
 // SetTxNames sets the []string value in the FlowRouter object
 func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
@@ -406,6 +408,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
+// - /components/schemas/Macsec/properties/name
 //
 // RxNames returns a []string
 func (obj *flowRouter) RxNames() []string {
@@ -430,6 +433,7 @@ func (obj *flowRouter) RxNames() []string {
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
+// - /components/schemas/Macsec/properties/name
 //
 // SetRxNames sets the []string value in the FlowRouter object
 func (obj *flowRouter) SetRxNames(value []string) FlowRouter {

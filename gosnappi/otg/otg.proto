@@ -8414,6 +8414,7 @@ message FlowRouter {
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
+  // - /components/schemas/Macsec/properties/name
   // 
   repeated string tx_names = 2;
 
@@ -8432,6 +8433,7 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
+  // - /components/schemas/Macsec/properties/name
   // 
   repeated string rx_names = 3;
 }
