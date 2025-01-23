@@ -11558,6 +11558,8 @@ message MetricsRequest {
       rsvp = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
+      httpclient = 12;
+      httpserver = 13;
     }
   }
   // Description missing in models
@@ -11596,6 +11598,12 @@ message MetricsRequest {
 
   // Description missing in models
   Dhcpv4ServerMetricsRequest dhcpv4_server = 12;
+
+  // Description missing in models
+  Httpclient_statMetricsRequest httpclient = 13;
+
+  // Description missing in models
+  Httpserver_statMetricsRequest httpserver = 14;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -11615,6 +11623,8 @@ message MetricsResponse {
       rsvp_metrics = 9;
       dhcpv4_client = 10;
       dhcpv4_server = 11;
+      httpclient_metrics = 12;
+      httpserver_metrics = 13;
     }
   }
   // Description missing in models
@@ -11653,6 +11663,12 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Dhcpv4ServerMetric dhcpv4server_metrics = 12;
+
+  // Description missing in models
+  repeated Httpclient_statMetric httpclient_metrics = 13;
+
+  // Description missing in models
+  repeated Httpserver_statMetric httpserver_metrics = 14;
 }
 
 // The port result request to the traffic generator
@@ -12907,6 +12923,68 @@ message Dhcpv4ServerMetric {
 
   // Number of DHCPDECLINE messages received.
   optional uint64 declines_received = 8;
+}
+
+// The client Stat
+message Httpclient_statMetricsRequest {
+
+  // The client stats
+  repeated string stat_name = 1;
+
+  // Details of all client stats
+  // default = False
+  optional bool all_stats = 2;
+}
+
+// Description missing in models
+message Httpclient_statMetric {
+
+  // The name of a configured stat
+  optional string name = 1;
+
+  // stat value at the current timestamp
+  repeated MetricStat_Value stat_value = 2;
+}
+
+// Description missing in models
+message MetricStat_Value {
+
+  // Timestamp pair for each stat
+  repeated Stat_ValueTimestamp timestamp = 1;
+
+  // Description missing in models
+  repeated string values = 2;
+}
+
+// For Statistics value - Timestamp details
+message Stat_ValueTimestamp {
+
+  // Timestamp id
+  optional string timestamp_id = 1;
+
+  // Stat Value for each timestamp
+  optional string value = 2;
+}
+
+// The Server Stat
+message Httpserver_statMetricsRequest {
+
+  // The Server stats
+  repeated string stat_name = 1;
+
+  // Details of all server stats
+  // default = False
+  optional bool all_stats = 2;
+}
+
+// Description missing in models
+message Httpserver_statMetric {
+
+  // The name of a configured stat
+  optional string name = 1;
+
+  // stat value at the current timestamp
+  repeated MetricStat_Value stat_value = 2;
 }
 
 // Request to traffic generator for states of choice
