@@ -361,6 +361,12 @@ type PortMetric interface {
 	SetTransmit(value PortMetricTransmitEnum) PortMetric
 	// HasTransmit checks if Transmit has been set in PortMetric
 	HasTransmit() bool
+	// LastChange returns uint64, set in PortMetric.
+	LastChange() uint64
+	// SetLastChange assigns uint64 provided by user to PortMetric
+	SetLastChange(value uint64) PortMetric
+	// HasLastChange checks if LastChange has been set in PortMetric
+	HasLastChange() bool
 }
 
 // The name of a configured port
@@ -703,6 +709,40 @@ func (obj *portMetric) SetTransmit(value PortMetricTransmitEnum) PortMetric {
 	enumValue := otg.PortMetric_Transmit_Enum(intValue)
 	obj.obj.Transmit = &enumValue
 
+	return obj
+}
+
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// LastChange returns a uint64
+func (obj *portMetric) LastChange() uint64 {
+
+	return *obj.obj.LastChange
+
+}
+
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// LastChange returns a uint64
+func (obj *portMetric) HasLastChange() bool {
+	return obj.obj.LastChange != nil
+}
+
+// The timestamp indicates the absolute time of the last
+// link state change of the test port (e.g., up-to-down transition).
+//
+// The value is the timestamp in nanoseconds relative to
+// the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+// SetLastChange sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetLastChange(value uint64) PortMetric {
+
+	obj.obj.LastChange = &value
 	return obj
 }
 

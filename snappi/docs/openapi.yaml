@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.17.0
+  version: 1.19.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -9782,7 +9782,7 @@ components:
           x-field-uid: 1
         prefix_len:
           description: |-
-            The IPv6 network prefix length is used for incrementing the lease address within the lease pool where multiple addresses are configured by using the size field. The address is incremented using the configured Prefix Length and Step.
+            The prefix_len ( in conjunction with the step) can be used to increment the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses are configured by using the size field  in the pool. The address is incremented using the prefix_len and step.
           type: integer
           format: uint32
           default: 64
@@ -9799,7 +9799,7 @@ components:
           x-field-uid: 3
         step:
           description: |-
-            The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the configured Prefix Length and Step.
+            The increment value for the lease address within the lease pool where multiple addresses are present.  The value of the advertised IPv6 prefixes are incremented according to the prefix_len and step.
           type: integer
           format: uint32
           default: 1
@@ -9817,13 +9817,11 @@ components:
           format: ipv6
           x-field-uid: 1
         configured_prefix_len:
-          description: "The IPv6 network prefix length is used for incrementing the\
-            \ lease address within the lease pool where multiple addresses are configured\
-            \ by using the size field. The address is incremented using the configured\
-            \ Prefix Length and Step. "
+          description: |-
+            The configured_prefix_len ( in conjunction with the prefix_step) can be used to increment the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses are configured by using the size field in the pool.  e.g. This can be used to assign multiple IPv6 host addresses within the same IPv6 subnet ( defined by advertised_prefix_len )  to multiple requesting clients.
           type: integer
           format: uint32
-          default: 64
+          default: 128
           maximum: 128
           x-field-uid: 2
         prefix_size:
@@ -9837,7 +9835,7 @@ components:
           x-field-uid: 3
         prefix_step:
           description: |-
-            The increment value for the lease address within the lease pool where multiple addresses are present. The value is incremented according to the Prefix Length and Step.
+            The increment value for the lease address within the lease pool where multiple addresses are present.  The value of the advertised IPv6 prefixes are incremented according to the configured_prefix_len and prefix_step.
           type: integer
           format: uint32
           default: 1
@@ -15881,6 +15879,8 @@ components:
                 x-field-uid: 11
               bytes_rx_rate:
                 x-field-uid: 12
+              last_change:
+                x-field-uid: 13
             enum:
             - transmit
             - location
@@ -15894,6 +15894,7 @@ components:
             - frames_rx_rate
             - bytes_tx_rate
             - bytes_rx_rate
+            - last_change
           x-field-uid: 2
     Port.Metric:
       type: object
@@ -16000,6 +16001,14 @@ components:
           enum:
           - started
           - stopped
+        last_change:
+          description: "The timestamp indicates the absolute time of the last \nlink\
+            \ state change of the test port (e.g., up-to-down transition).\n\nThe\
+            \ value is the timestamp in nanoseconds relative to\nthe Unix Epoch (Jan\
+            \ 1, 1970 00:00:00 UTC)."
+          type: integer
+          format: uint64
+          x-field-uid: 14
     Flow.Metrics.Request:
       description: |-
         The container for a flow metric request.
