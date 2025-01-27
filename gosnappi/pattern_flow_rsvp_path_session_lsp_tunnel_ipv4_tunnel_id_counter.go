@@ -47,6 +47,8 @@ type marshalPatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter) FromYa
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSessionLspTunnelIpv4TunnelIdCounter) ToJson() (string, error) {

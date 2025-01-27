@@ -63,6 +63,8 @@ type marshalFlowTcp interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowTcp to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowTcp to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowTcp struct {
@@ -180,6 +182,23 @@ func (m *unMarshalflowTcp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowTcp) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowTcp) ToJson() (string, error) {

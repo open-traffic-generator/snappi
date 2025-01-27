@@ -47,6 +47,8 @@ type marshalCaptureRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals CaptureRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals CaptureRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalcaptureRequest struct {
@@ -164,6 +166,23 @@ func (m *unMarshalcaptureRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalcaptureRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalcaptureRequest) ToJson() (string, error) {

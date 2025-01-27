@@ -48,6 +48,8 @@ type marshalVxlanV4TunnelDestinationIPModeUnicastVtep interface {
 	ToYaml() (string, error)
 	// ToJson marshals VxlanV4TunnelDestinationIPModeUnicastVtep to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals VxlanV4TunnelDestinationIPModeUnicastVtep to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalvxlanV4TunnelDestinationIPModeUnicastVtep struct {
@@ -165,6 +167,23 @@ func (m *unMarshalvxlanV4TunnelDestinationIPModeUnicastVtep) FromYaml(value stri
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalvxlanV4TunnelDestinationIPModeUnicastVtep) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalvxlanV4TunnelDestinationIPModeUnicastVtep) ToJson() (string, error) {

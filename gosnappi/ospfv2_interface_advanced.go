@@ -47,6 +47,8 @@ type marshalOspfv2InterfaceAdvanced interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2InterfaceAdvanced to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv2InterfaceAdvanced to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2InterfaceAdvanced struct {
@@ -164,6 +166,23 @@ func (m *unMarshalospfv2InterfaceAdvanced) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv2InterfaceAdvanced) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv2InterfaceAdvanced) ToJson() (string, error) {

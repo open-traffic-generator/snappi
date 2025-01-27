@@ -49,6 +49,8 @@ type marshalResultExtendedCommunityTransitiveIpv4AddressType interface {
 	ToYaml() (string, error)
 	// ToJson marshals ResultExtendedCommunityTransitiveIpv4AddressType to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals ResultExtendedCommunityTransitiveIpv4AddressType to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalresultExtendedCommunityTransitiveIpv4AddressType struct {
@@ -166,6 +168,23 @@ func (m *unMarshalresultExtendedCommunityTransitiveIpv4AddressType) FromYaml(val
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalresultExtendedCommunityTransitiveIpv4AddressType) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalresultExtendedCommunityTransitiveIpv4AddressType) ToJson() (string, error) {

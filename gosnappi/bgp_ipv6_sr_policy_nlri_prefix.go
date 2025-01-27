@@ -47,6 +47,8 @@ type marshalBgpIpv6SrPolicyNLRIPrefix interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpIpv6SrPolicyNLRIPrefix to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpIpv6SrPolicyNLRIPrefix to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpIpv6SrPolicyNLRIPrefix struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpIpv6SrPolicyNLRIPrefix) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpIpv6SrPolicyNLRIPrefix) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpIpv6SrPolicyNLRIPrefix) ToJson() (string, error) {

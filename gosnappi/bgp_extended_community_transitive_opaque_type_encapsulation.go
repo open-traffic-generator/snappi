@@ -47,6 +47,8 @@ type marshalBgpExtendedCommunityTransitiveOpaqueTypeEncapsulation interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpExtendedCommunityTransitiveOpaqueTypeEncapsulation to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpExtendedCommunityTransitiveOpaqueTypeEncapsulation struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpExtendedCommunityTransitiveOpaqueTypeEncapsulation) FromYam
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpExtendedCommunityTransitiveOpaqueTypeEncapsulation) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpExtendedCommunityTransitiveOpaqueTypeEncapsulation) ToJson() (string, error) {

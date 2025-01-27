@@ -49,6 +49,8 @@ type marshalFlowRSVPPathObjectsClassTimeValues interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathObjectsClassTimeValues to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPPathObjectsClassTimeValues to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathObjectsClassTimeValues struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowRSVPPathObjectsClassTimeValues) FromYaml(value string) err
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowRSVPPathObjectsClassTimeValues) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathObjectsClassTimeValues) ToJson() (string, error) {

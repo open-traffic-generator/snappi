@@ -47,6 +47,8 @@ type marshalPatternFlowIpv4DscpPhbCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4DscpPhbCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIpv4DscpPhbCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4DscpPhbCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIpv4DscpPhbCounter) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIpv4DscpPhbCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4DscpPhbCounter) ToJson() (string, error) {

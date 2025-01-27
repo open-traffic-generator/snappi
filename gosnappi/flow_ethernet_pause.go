@@ -52,6 +52,8 @@ type marshalFlowEthernetPause interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowEthernetPause to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowEthernetPause to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowEthernetPause struct {
@@ -169,6 +171,23 @@ func (m *unMarshalflowEthernetPause) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowEthernetPause) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowEthernetPause) ToJson() (string, error) {

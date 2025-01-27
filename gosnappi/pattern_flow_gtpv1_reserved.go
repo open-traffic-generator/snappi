@@ -50,6 +50,8 @@ type marshalPatternFlowGtpv1Reserved interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpv1Reserved to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowGtpv1Reserved to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpv1Reserved struct {
@@ -167,6 +169,23 @@ func (m *unMarshalpatternFlowGtpv1Reserved) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowGtpv1Reserved) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpv1Reserved) ToJson() (string, error) {

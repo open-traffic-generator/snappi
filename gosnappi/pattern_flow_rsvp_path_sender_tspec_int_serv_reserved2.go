@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathSenderTspecIntServReserved2 interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTspecIntServReserved2 to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathSenderTspecIntServReserved2 to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTspecIntServReserved2 struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathSenderTspecIntServReserved2) FromYaml(value
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathSenderTspecIntServReserved2) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTspecIntServReserved2) ToJson() (string, error) {

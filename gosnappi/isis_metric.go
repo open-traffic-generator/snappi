@@ -47,6 +47,8 @@ type marshalIsisMetric interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisMetric to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals IsisMetric to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisMetric struct {
@@ -164,6 +166,23 @@ func (m *unMarshalisisMetric) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalisisMetric) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalisisMetric) ToJson() (string, error) {
