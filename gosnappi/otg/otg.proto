@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.19.0
+/* Open Traffic Generator API 1.16.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -121,10 +121,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -301,17 +297,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -320,11 +308,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -349,10 +332,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -458,10 +437,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -532,10 +507,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1249,10 +1220,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1304,16 +1271,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1454,17 +1415,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1723,6 +1678,9 @@ message Device {
 
   // Configuration for OSPFv2 router.
   DeviceOspfv2Router ospfv2 = 10;
+
+  // Configuration for RoCEv2 .
+  DeviceRoCEv2Peer rocev2 = 11;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1792,10 +1750,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -2620,12 +2574,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -3385,8 +3333,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -3846,8 +3792,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6211,12 +6155,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6478,11 +6416,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6506,11 +6439,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -6674,10 +6602,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -6739,11 +6663,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7173,10 +7092,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7249,10 +7164,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7344,10 +7255,9 @@ message Dhcpv6ServerPoolInfo {
   // The first IP address of the lease pool.
   optional string start_address = 1;
 
-  // The prefix_len ( in conjunction with the step) can be used to increment the IPv6
-  // lease addresses  to be assigned to the requested clients when multiple addresses
-  // are configured by using the size field  in the pool. The address is incremented using
-  // the prefix_len and step.
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
   // default = 64
   optional uint32 prefix_len = 2;
 
@@ -7356,8 +7266,8 @@ message Dhcpv6ServerPoolInfo {
   optional uint32 size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
-  // are present.  The value of the advertised IPv6 prefixes are incremented according
-  // to the prefix_len and step.
+  // are present. The value is incremented according to the configured Prefix Length and
+  // Step.
   // default = 1
   optional uint32 step = 4;
 }
@@ -7368,12 +7278,10 @@ message Dhcpv6ServerIapdPoolInfo {
   // The first IP address of the prefix pool.
   optional string start_prefix_address = 1;
 
-  // The configured_prefix_len ( in conjunction with the prefix_step) can be used to increment
-  // the IPv6 lease addresses  to be assigned to the requested clients when multiple addresses
-  // are configured by using the size field in the pool.  e.g. This can be used to assign
-  // multiple IPv6 host addresses within the same IPv6 subnet ( defined by advertised_prefix_len
-  // )  to multiple requesting clients.
-  // default = 128
+  // The IPv6 network prefix length is used for incrementing the lease address within
+  // the lease pool where multiple addresses are configured by using the size field. The
+  // address is incremented using the configured Prefix Length and Step.
+  // default = 64
   optional uint32 configured_prefix_len = 2;
 
   // The total number of addresses in the pool.
@@ -7381,8 +7289,7 @@ message Dhcpv6ServerIapdPoolInfo {
   optional uint32 prefix_size = 3;
 
   // The increment value for the lease address within the lease pool where multiple addresses
-  // are present.  The value of the advertised IPv6 prefixes are incremented according
-  // to the configured_prefix_len and prefix_step.
+  // are present. The value is incremented according to the Prefix Length and Step.
   // default = 1
   optional uint32 prefix_step = 4;
 
@@ -7424,8 +7331,6 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
@@ -7565,10 +7470,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7948,6 +7849,272 @@ message Ospfv2V4RRExtdPrefixFlags {
   optional bool n_flag = 2;
 }
 
+// Configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+message DeviceRoCEv2Peer {
+
+  // This contains an array of references to IPv4 interfaces,  each of which will have
+  // list of peers to different destinations.
+  repeated RoCEv2V4Interface ipv4_interfaces = 1;
+
+  // This contains an array of references to IPv6 interfaces,  each of which will have
+  // list of peers to different destinations.
+  repeated RoCEv2V6Interface ipv6_interfaces = 2;
+}
+
+// Configuration for RoCEv2 IPv4 peers.
+message RoCEv2V4Peer {
+
+  // Maximum number of QP per External Endpoint.
+  // required = true
+  optional int32 max_num_of_qp = 1;
+
+  // Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+  // required = true
+  optional string remote_end_point_ip_address = 2;
+
+  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
+  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
+  // as configured IB MTU. You can configure custom size also.
+  // required = true
+  optional uint32 ib_mtu = 3;
+
+  // The name of RoCEv2 Peer
+  optional string name = 4;
+
+  // This section has two views, Local End and Remote End. Both views have same configurations.
+  // However, the remote and local peer IP addresses are interchanged. This configuration
+  // allows you to configure RDMA flow over the same QP number from same source and destination.
+  // Default value for commands at Remote peer is set to None. So that by default, this
+  // remote peer does not initiate any traffic flow.
+  repeated RoCEv2FlowSettings flow_settings = 5;
+}
+
+// Configuration for RoCEv2 IPv4 peers.
+message RoCEv2V4Interface {
+
+  // The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 1;
+
+  // This contains the list of RoCEv2 peers configured on this interface.
+  repeated RoCEv2V4Peer peers = 2;
+}
+
+// This section has two views, Local End and Remote End.
+// Both views have same configurations. However, the remote and local peer IP addresses
+// are interchanged.
+// This configuration allows you to configure RDMA flow over the same QP number from
+// same source and destination.
+// Default value for commands at Remote peer is set to None.
+// So that by default, this remote peer does not initiate any traffic flow.
+message RoCEv2FlowSettings {
+
+  // Description missing in models
+  RoCEv2FlowSettingsLocalEnd local_end = 1;
+
+  // Description missing in models
+  RoCEv2FlowSettingsRemoteEnd remote_end = 2;
+}
+
+// Local End Flow Settings
+message RoCEv2FlowSettingsLocalEnd {
+
+  // Turn on to define QP number.
+  // default = False
+  optional bool custom_qp = 1;
+
+  // Configure the QP range.
+  // default = 1
+  optional uint32 custom_qp_number = 2;
+
+  // DSCP value for this flow
+  // default = 24
+  optional uint32 dscp = 3;
+
+  // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
+  // header to encode four different code points.
+  // default = 1
+  optional uint32 ecn = 4;
+
+  // UDP source port number for this flow.
+  // default = 49152
+  optional uint32 udp_source_port = 5;
+
+  message ExecuteCommands {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      RDMAWrite = 2;
+    }
+  }
+  // UDP source port number for this flow.
+  optional ExecuteCommands.Enum execute_commands = 6;
+
+  // Immediate Data field required for SEND/WRITE with immediate verb.
+  // default = 00 00 00 00
+  optional string immediate_data = 7;
+
+  // The Maximum message size that is allowed to transfer depends on the MTU size and
+  // the number of VLANs configured on the interfaces. For any MTU, the maximum number
+  // of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single
+  // RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE
+  // MIDDLE messages. The maximum message size that is allowed to be transferred for a
+  // given MTU is constrained by the above conditions. For example, for an MTU size of
+  // 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet
+  // Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size.
+  // This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to
+  // add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then
+  // the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common
+  // header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500
+  // - 62) = 94239314 bytes or 89 MB.
+  // default = 1
+  optional uint32 message_size = 8;
+
+  message MessageSizeUnit {
+    enum Enum {
+      unspecified = 0;
+      Byte = 1;
+      KB = 2;
+      MB = 3;
+    }
+  }
+  // Unit of the transfer message size. Available options are Bytes, KB, MB.
+  optional MessageSizeUnit.Enum message_size_unit = 9;
+
+  // Initial PSN
+  // default = 24
+  optional uint32 initial_psn = 10;
+}
+
+// Remote End Flow Settings
+message RoCEv2FlowSettingsRemoteEnd {
+
+  // Turn on to define QP number.
+  // default = False
+  optional bool custom_qp = 1;
+
+  // Configure the QP range.
+  // default = 1
+  optional uint32 custom_qp_number = 2;
+
+  // DSCP value for this flow
+  // default = 24
+  optional uint32 dscp = 3;
+
+  // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
+  // header to encode four different code points.
+  // default = 1
+  optional uint32 ecn = 4;
+
+  // UDP source port number for this flow.
+  // default = 49152
+  optional uint32 udp_source_port = 5;
+
+  message ExecuteCommands {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      RDMAWrite = 2;
+    }
+  }
+  // UDP source port number for this flow.
+  optional ExecuteCommands.Enum execute_commands = 6;
+
+  // Immediate Data field required for SEND/WRITE with immediate verb.
+  // default = 00 00 00 00
+  optional string immediate_data = 7;
+
+  // The Maximum message size that is allowed to transfer depends on the MTU size and
+  // the number of VLANs configured on the interfaces. For any MTU, the maximum number
+  // of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single
+  // RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE
+  // MIDDLE messages. The maximum message size that is allowed to be transferred for a
+  // given MTU is constrained by the above conditions. For example, for an MTU size of
+  // 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet
+  // Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size.
+  // This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to
+  // add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then
+  // the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common
+  // header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500
+  // - 62) = 94239314 bytes or 89 MB.
+  // default = 1
+  optional uint32 message_size = 8;
+
+  message MessageSizeUnit {
+    enum Enum {
+      unspecified = 0;
+      Byte = 1;
+      KB = 2;
+      MB = 3;
+    }
+  }
+  // Unit of the transfer message size. Available options are Bytes, KB, MB.
+  optional MessageSizeUnit.Enum message_size_unit = 9;
+
+  // Remote QP Number.
+  // default = 0
+  optional uint32 remote_qp_number = 10;
+
+  // Remote virtual address.
+  // default = 00 00 00 00 00 00 00 00
+  optional string virtual_address = 11;
+
+  // Remote Key.
+  // default = 00 00 00 00
+  optional string remote_key = 12;
+
+  // Initial PSN.
+  // default = 0
+  optional uint32 initial_psn = 13;
+}
+
+// Configuration for RoCEv2 IPv6 peer settings.
+message RoCEv2V6Peer {
+
+  // Maximum number of QP per External Endpoint.
+  // required = true
+  optional int32 max_num_of_qp = 1;
+
+  // Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+  // required = true
+  optional string remote_end_point_ip_address = 2;
+
+  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
+  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
+  // as configured IB MTU. You can configure custom size also.
+  // required = true
+  optional uint32 ib_mtu = 3;
+
+  // The name of RoCEv2 Peer
+  optional string name = 4;
+
+  // This section has two views, Local End and Remote End. Both views have same configurations.
+  // However, the remote and local peer IP addresses are interchanged. This configuration
+  // allows you to configure RDMA flow over the same QP number from same source and destination.
+  // Default value for commands at Remote peer is set to None. So that by default, this
+  // remote peer does not initiate any traffic flow.
+  repeated RoCEv2FlowSettings flow_settings = 5;
+}
+
+// Configuration for RoCEv2 IPv6 peers.
+message RoCEv2V6Interface {
+
+  // The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 1;
+
+  // This contains the list of RoCEv2 IPv6 peers configured on this interface.
+  repeated RoCEv2V6Peer peers = 2;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -7971,10 +8138,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -8041,16 +8204,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -8059,19 +8215,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -8151,39 +8297,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -10767,12 +10883,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -10849,10 +10959,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11177,6 +11283,7 @@ message StateProtocol {
       bgp = 4;
       isis = 5;
       ospfv2 = 6;
+      rocev2 = 7;
     }
   }
   // Description missing in models
@@ -11200,16 +11307,15 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolOspfv2 ospfv2 = 7;
+
+  // Description missing in models
+  StateProtocolRoCEv2 rocev2 = 8;
 }
 
 // Sets the link of configured ports.
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11239,10 +11345,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -11264,10 +11366,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -11330,14 +11428,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -11382,10 +11472,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -11407,10 +11493,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11451,11 +11533,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -11504,10 +11581,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -11551,10 +11624,6 @@ message StateProtocolOspfv2Routers {
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -11568,6 +11637,50 @@ message StateProtocolOspfv2Routers {
   // bring up the OSPFv2 session(s) with respective peer(s) and advertise route(s), if
   // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
   // respective peer(s).
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured RoCEv2 peers.
+message StateProtocolRoCEv2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      peers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolRoCEv2Peers peers = 2;
+}
+
+// Sets state of configured RoCEv2 peers.
+message StateProtocolRoCEv2Peers {
+
+  // The names of RoCEv2 peers for which the state has to be applied. An empty or null
+  // list will control all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/RoCEv2.V4Peer/properties/name
+  // - /components/schemas/RoCEv2.V6Peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of RoCEv2 peer. If the desired state is 'up', underlying IP interface(s)
+  // would be brought up automatically (if not already up), would attempt to bring up
+  // the RoCEv2 session(s) and advertise route(s), if configured. If the desired state
+  // is 'down', RoCEv2 session(s) would be brought down.
   // required = true
   optional State.Enum state = 2;
 }
@@ -11625,6 +11738,7 @@ message ActionProtocol {
       ipv4 = 1;
       ipv6 = 2;
       bgp = 3;
+      rocev2 = 4;
     }
   }
   // Description missing in models
@@ -11705,18 +11819,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11738,10 +11846,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -11808,18 +11912,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11841,10 +11939,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -11905,11 +11999,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -11965,11 +12054,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -12060,6 +12144,8 @@ message MetricsRequest {
       dhcpv6_client = 12;
       dhcpv6_server = 13;
       ospfv2 = 14;
+      rocev2 = 15;
+      rocev2_ipv6 = 16;
     }
   }
   // Description missing in models
@@ -12107,6 +12193,12 @@ message MetricsRequest {
 
   // Description missing in models
   Ospfv2MetricsRequest ospfv2 = 15;
+
+  // Description missing in models
+  RoCEv2MetricsRequest rocev2 = 16;
+
+  // Description missing in models
+  RoCEv2IPv6MetricsRequest rocev2_ipv6 = 17;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -12129,6 +12221,8 @@ message MetricsResponse {
       dhcpv6_client = 12;
       dhcpv6_server = 13;
       ospfv2_metrics = 14;
+      rocev2_metrics = 15;
+      rocev2_ipv6_metrics = 16;
     }
   }
   // Description missing in models
@@ -12176,6 +12270,12 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Ospfv2Metric ospfv2_metrics = 15;
+
+  // Description missing in models
+  repeated RoCEv2Metric rocev2_metrics = 16;
+
+  // Description missing in models
+  repeated RoCEv2IPv6Metric rocev2_ipv6_metrics = 17;
 }
 
 // The port result request to the traffic generator
@@ -12183,10 +12283,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12208,7 +12304,6 @@ message PortMetricsRequest {
       frames_rx_rate = 10;
       bytes_tx_rate = 11;
       bytes_rx_rate = 12;
-      last_change = 13;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -12220,10 +12315,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12288,13 +12379,6 @@ message PortMetric {
   }
   // The transmit state of the flow.
   optional Transmit.Enum transmit = 13;
-
-  // The timestamp indicates the absolute time of the last
-  // link state change of the test port (e.g., up-to-down transition).
-  // 
-  // The value is the timestamp in nanoseconds relative to
-  // the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
-  optional uint64 last_change = 14;
 }
 
 // The container for a flow metric request.
@@ -12302,10 +12386,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -12540,10 +12620,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -12670,10 +12746,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -12796,10 +12868,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -12937,10 +13005,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -12967,10 +13031,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -13025,18 +13085,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13157,10 +13209,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -13219,10 +13267,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -13383,10 +13427,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -13444,10 +13484,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -13501,10 +13537,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -13586,10 +13618,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -13679,10 +13707,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -13841,6 +13865,210 @@ message Ospfv2Metric {
   optional uint64 opaque_domain_received = 34;
 }
 
+// The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+message RoCEv2MetricsRequest {
+
+  // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/RoCEv2.V4peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      qp_confugred = 2;
+      qp_up = 3;
+      qp_down = 4;
+      connect_request_tx = 5;
+      connect_request_rx = 6;
+      connect_reply_tx = 7;
+      connect_reply_rx = 8;
+      ready_tx = 9;
+      ready_rx = 10;
+      disconnect_request_tx = 11;
+      disconnect_request_rx = 12;
+      disconnect_reply_tx = 13;
+      disconnect_reply_rx = 14;
+      reject_tx = 15;
+      reject_rx = 16;
+      unknown_msg_rx = 17;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the RoCEv2 peer cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// RoCEv2 per peer statistics information.
+message RoCEv2Metric {
+
+  // The name of a configured RoCEv2 peer.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 3;
+
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 4;
+
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 5;
+
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 6;
+
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 7;
+
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 9;
+
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 10;
+
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 11;
+
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 12;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 13;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 14;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 15;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 16;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 17;
+
+  // Number of Unknow Message Received.
+  optional uint64 unknown_msg_rx = 18;
+}
+
+// The request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+message RoCEv2IPv6MetricsRequest {
+
+  // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/RoCEv2.V6peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      qp_confugred = 2;
+      qp_up = 3;
+      qp_down = 4;
+      connect_request_tx = 5;
+      connect_request_rx = 6;
+      connect_reply_tx = 7;
+      connect_reply_rx = 8;
+      ready_tx = 9;
+      ready_rx = 10;
+      disconnect_request_tx = 11;
+      disconnect_request_rx = 12;
+      disconnect_reply_tx = 13;
+      disconnect_reply_rx = 14;
+      reject_tx = 15;
+      reject_rx = 16;
+      unknown_msg_rx = 17;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the RoCEv2 peer cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// RoCEv2 per peer statistics information.
+message RoCEv2IPv6Metric {
+
+  // The name of a configured RoCEv2 peer.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 3;
+
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 4;
+
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 5;
+
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 6;
+
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 7;
+
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 9;
+
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 10;
+
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 11;
+
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 12;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 13;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 14;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 15;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 16;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 17;
+
+  // Number of Unknow Message Received.
+  optional uint64 unknown_msg_rx = 18;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -13965,10 +14193,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -13998,10 +14222,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -14027,11 +14247,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14585,10 +14800,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -14902,10 +15113,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -15069,10 +15276,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -15207,10 +15410,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -15244,10 +15443,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -15298,10 +15493,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -15357,10 +15548,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -15408,10 +15595,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -15617,10 +15800,6 @@ message Ospfv2Link {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -21930,11 +22109,10 @@ message PatternFlowGreProtocol {
       values = 3;
       increment = 4;
       decrement = 5;
-      auto = 1;
     }
   }
   // Description missing in models
-  // default = Choice.Enum.auto
+  // default = Choice.Enum.value
   optional Choice.Enum choice = 1;
 
   // Description missing in models
@@ -21955,12 +22133,6 @@ message PatternFlowGreProtocol {
   // a corresponding header field for metrics per each applicable value. These would appear
   // as tagged metrics in corresponding flow metrics.
   repeated PatternFlowGreProtocolMetricTag metric_tags = 7;
-
-  // The OTG implementation can provide a system generated
-  // value for this property. If the OTG is unable to generate a value
-  // the default value must be used.
-  // default = 2048
-  optional uint32 auto = 8;
 }
 
 // Optional checksum of GRE header and payload. Only present if the checksum_present

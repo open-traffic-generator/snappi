@@ -280,6 +280,8 @@ type ActionProtocol interface {
 	Choice() ActionProtocolChoiceEnum
 	// setChoice assigns ActionProtocolChoiceEnum provided by user to ActionProtocol
 	setChoice(value ActionProtocolChoiceEnum) ActionProtocol
+	// getter for Rocev2 to set choice.
+	Rocev2()
 	// Ipv4 returns ActionProtocolIpv4, set in ActionProtocol.
 	// ActionProtocolIpv4 is actions associated with IPv4 on configured resources.
 	Ipv4() ActionProtocolIpv4
@@ -311,17 +313,24 @@ type ActionProtocolChoiceEnum string
 
 // Enum of Choice on ActionProtocol
 var ActionProtocolChoice = struct {
-	IPV4 ActionProtocolChoiceEnum
-	IPV6 ActionProtocolChoiceEnum
-	BGP  ActionProtocolChoiceEnum
+	IPV4   ActionProtocolChoiceEnum
+	IPV6   ActionProtocolChoiceEnum
+	BGP    ActionProtocolChoiceEnum
+	ROCEV2 ActionProtocolChoiceEnum
 }{
-	IPV4: ActionProtocolChoiceEnum("ipv4"),
-	IPV6: ActionProtocolChoiceEnum("ipv6"),
-	BGP:  ActionProtocolChoiceEnum("bgp"),
+	IPV4:   ActionProtocolChoiceEnum("ipv4"),
+	IPV6:   ActionProtocolChoiceEnum("ipv6"),
+	BGP:    ActionProtocolChoiceEnum("bgp"),
+	ROCEV2: ActionProtocolChoiceEnum("rocev2"),
 }
 
 func (obj *actionProtocol) Choice() ActionProtocolChoiceEnum {
 	return ActionProtocolChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Rocev2 to set choice
+func (obj *actionProtocol) Rocev2() {
+	obj.setChoice(ActionProtocolChoice.ROCEV2)
 }
 
 func (obj *actionProtocol) setChoice(value ActionProtocolChoiceEnum) ActionProtocol {

@@ -22,6 +22,7 @@ type stateProtocol struct {
 	bgpHolder    StateProtocolBgp
 	isisHolder   StateProtocolIsis
 	ospfv2Holder StateProtocolOspfv2
+	rocev2Holder StateProtocolRoCEv2
 }
 
 func NewStateProtocol() StateProtocol {
@@ -255,6 +256,7 @@ func (obj *stateProtocol) setNil() {
 	obj.bgpHolder = nil
 	obj.isisHolder = nil
 	obj.ospfv2Holder = nil
+	obj.rocev2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -336,6 +338,14 @@ type StateProtocol interface {
 	SetOspfv2(value StateProtocolOspfv2) StateProtocol
 	// HasOspfv2 checks if Ospfv2 has been set in StateProtocol
 	HasOspfv2() bool
+	// Rocev2 returns StateProtocolRoCEv2, set in StateProtocol.
+	// StateProtocolRoCEv2 is sets state of configured RoCEv2 peers.
+	Rocev2() StateProtocolRoCEv2
+	// SetRocev2 assigns StateProtocolRoCEv2 provided by user to StateProtocol.
+	// StateProtocolRoCEv2 is sets state of configured RoCEv2 peers.
+	SetRocev2(value StateProtocolRoCEv2) StateProtocol
+	// HasRocev2 checks if Rocev2 has been set in StateProtocol
+	HasRocev2() bool
 	setNil()
 }
 
@@ -349,6 +359,7 @@ var StateProtocolChoice = struct {
 	BGP    StateProtocolChoiceEnum
 	ISIS   StateProtocolChoiceEnum
 	OSPFV2 StateProtocolChoiceEnum
+	ROCEV2 StateProtocolChoiceEnum
 }{
 	ALL:    StateProtocolChoiceEnum("all"),
 	ROUTE:  StateProtocolChoiceEnum("route"),
@@ -356,6 +367,7 @@ var StateProtocolChoice = struct {
 	BGP:    StateProtocolChoiceEnum("bgp"),
 	ISIS:   StateProtocolChoiceEnum("isis"),
 	OSPFV2: StateProtocolChoiceEnum("ospfv2"),
+	ROCEV2: StateProtocolChoiceEnum("rocev2"),
 }
 
 func (obj *stateProtocol) Choice() StateProtocolChoiceEnum {
@@ -371,6 +383,8 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 	}
 	enumValue := otg.StateProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Rocev2 = nil
+	obj.rocev2Holder = nil
 	obj.obj.Ospfv2 = nil
 	obj.ospfv2Holder = nil
 	obj.obj.Isis = nil
@@ -406,6 +420,10 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 
 	if value == StateProtocolChoice.OSPFV2 {
 		obj.obj.Ospfv2 = NewStateProtocolOspfv2().msg()
+	}
+
+	if value == StateProtocolChoice.ROCEV2 {
+		obj.obj.Rocev2 = NewStateProtocolRoCEv2().msg()
 	}
 
 	return obj
@@ -579,6 +597,34 @@ func (obj *stateProtocol) SetOspfv2(value StateProtocolOspfv2) StateProtocol {
 	return obj
 }
 
+// description is TBD
+// Rocev2 returns a StateProtocolRoCEv2
+func (obj *stateProtocol) Rocev2() StateProtocolRoCEv2 {
+	if obj.obj.Rocev2 == nil {
+		obj.setChoice(StateProtocolChoice.ROCEV2)
+	}
+	if obj.rocev2Holder == nil {
+		obj.rocev2Holder = &stateProtocolRoCEv2{obj: obj.obj.Rocev2}
+	}
+	return obj.rocev2Holder
+}
+
+// description is TBD
+// Rocev2 returns a StateProtocolRoCEv2
+func (obj *stateProtocol) HasRocev2() bool {
+	return obj.obj.Rocev2 != nil
+}
+
+// description is TBD
+// SetRocev2 sets the StateProtocolRoCEv2 value in the StateProtocol object
+func (obj *stateProtocol) SetRocev2(value StateProtocolRoCEv2) StateProtocol {
+	obj.setChoice(StateProtocolChoice.ROCEV2)
+	obj.rocev2Holder = nil
+	obj.obj.Rocev2 = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -619,6 +665,11 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 		obj.Ospfv2().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Rocev2 != nil {
+
+		obj.Rocev2().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *stateProtocol) setDefault() {
@@ -653,6 +704,11 @@ func (obj *stateProtocol) setDefault() {
 	if obj.obj.Ospfv2 != nil {
 		choices_set += 1
 		choice = StateProtocolChoice.OSPFV2
+	}
+
+	if obj.obj.Rocev2 != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.ROCEV2
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

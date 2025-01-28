@@ -279,9 +279,6 @@ type PortMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *portMetricsRequest) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -291,9 +288,6 @@ func (obj *portMetricsRequest) PortNames() []string {
 }
 
 // The names of objects to return results for. An empty list will return all port row results.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -325,7 +319,6 @@ var PortMetricsRequestColumnNames = struct {
 	FRAMES_RX_RATE PortMetricsRequestColumnNamesEnum
 	BYTES_TX_RATE  PortMetricsRequestColumnNamesEnum
 	BYTES_RX_RATE  PortMetricsRequestColumnNamesEnum
-	LAST_CHANGE    PortMetricsRequestColumnNamesEnum
 }{
 	TRANSMIT:       PortMetricsRequestColumnNamesEnum("transmit"),
 	LOCATION:       PortMetricsRequestColumnNamesEnum("location"),
@@ -339,7 +332,6 @@ var PortMetricsRequestColumnNames = struct {
 	FRAMES_RX_RATE: PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
 	BYTES_TX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
 	BYTES_RX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
-	LAST_CHANGE:    PortMetricsRequestColumnNamesEnum("last_change"),
 }
 
 func (obj *portMetricsRequest) ColumnNames() []PortMetricsRequestColumnNamesEnum {

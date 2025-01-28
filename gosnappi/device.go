@@ -25,6 +25,7 @@ type device struct {
 	rsvpHolder          DeviceRsvp
 	dhcpServerHolder    DeviceDhcpServer
 	ospfv2Holder        DeviceOspfv2Router
+	rocev2Holder        DeviceRoCEv2Peer
 }
 
 func NewDevice() Device {
@@ -261,6 +262,7 @@ func (obj *device) setNil() {
 	obj.rsvpHolder = nil
 	obj.dhcpServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.rocev2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -341,19 +343,23 @@ type Device interface {
 	// Ospfv2 returns DeviceOspfv2Router, set in Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	Ospfv2() DeviceOspfv2Router
 	// SetOspfv2 assigns DeviceOspfv2Router provided by user to Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
+	// Rocev2 returns DeviceRoCEv2Peer, set in Device.
+	// DeviceRoCEv2Peer is configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+	Rocev2() DeviceRoCEv2Peer
+	// SetRocev2 assigns DeviceRoCEv2Peer provided by user to Device.
+	// DeviceRoCEv2Peer is configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+	SetRocev2(value DeviceRoCEv2Peer) Device
+	// HasRocev2 checks if Rocev2 has been set in Device
+	HasRocev2() bool
 	setNil()
 }
 
@@ -802,6 +808,34 @@ func (obj *device) SetOspfv2(value DeviceOspfv2Router) Device {
 	return obj
 }
 
+// Configuration for RoCEv2 .
+// Rocev2 returns a DeviceRoCEv2Peer
+func (obj *device) Rocev2() DeviceRoCEv2Peer {
+	if obj.obj.Rocev2 == nil {
+		obj.obj.Rocev2 = NewDeviceRoCEv2Peer().msg()
+	}
+	if obj.rocev2Holder == nil {
+		obj.rocev2Holder = &deviceRoCEv2Peer{obj: obj.obj.Rocev2}
+	}
+	return obj.rocev2Holder
+}
+
+// Configuration for RoCEv2 .
+// Rocev2 returns a DeviceRoCEv2Peer
+func (obj *device) HasRocev2() bool {
+	return obj.obj.Rocev2 != nil
+}
+
+// Configuration for RoCEv2 .
+// SetRocev2 sets the DeviceRoCEv2Peer value in the Device object
+func (obj *device) SetRocev2(value DeviceRoCEv2Peer) Device {
+
+	obj.rocev2Holder = nil
+	obj.obj.Rocev2 = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -882,6 +916,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2 != nil {
+
+		obj.Rocev2().validateObj(vObj, set_default)
 	}
 
 }

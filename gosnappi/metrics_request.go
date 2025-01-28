@@ -30,6 +30,8 @@ type metricsRequest struct {
 	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
+	rocev2Holder       RoCEv2MetricsRequest
+	rocev2Ipv6Holder   RoCEv2IPv6MetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -271,6 +273,8 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv6ClientHolder = nil
 	obj.dhcpv6ServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.rocev2Holder = nil
+	obj.rocev2Ipv6Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -416,6 +420,22 @@ type MetricsRequest interface {
 	SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
+	// Rocev2 returns RoCEv2MetricsRequest, set in MetricsRequest.
+	// RoCEv2MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	Rocev2() RoCEv2MetricsRequest
+	// SetRocev2 assigns RoCEv2MetricsRequest provided by user to MetricsRequest.
+	// RoCEv2MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	SetRocev2(value RoCEv2MetricsRequest) MetricsRequest
+	// HasRocev2 checks if Rocev2 has been set in MetricsRequest
+	HasRocev2() bool
+	// Rocev2Ipv6 returns RoCEv2IPv6MetricsRequest, set in MetricsRequest.
+	// RoCEv2IPv6MetricsRequest is the request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+	Rocev2Ipv6() RoCEv2IPv6MetricsRequest
+	// SetRocev2Ipv6 assigns RoCEv2IPv6MetricsRequest provided by user to MetricsRequest.
+	// RoCEv2IPv6MetricsRequest is the request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+	SetRocev2Ipv6(value RoCEv2IPv6MetricsRequest) MetricsRequest
+	// HasRocev2Ipv6 checks if Rocev2Ipv6 has been set in MetricsRequest
+	HasRocev2Ipv6() bool
 	setNil()
 }
 
@@ -437,6 +457,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT MetricsRequestChoiceEnum
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 	OSPFV2        MetricsRequestChoiceEnum
+	ROCEV2        MetricsRequestChoiceEnum
+	ROCEV2_IPV6   MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -452,6 +474,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
+	ROCEV2:        MetricsRequestChoiceEnum("rocev2"),
+	ROCEV2_IPV6:   MetricsRequestChoiceEnum("rocev2_ipv6"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -473,6 +497,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Rocev2Ipv6 = nil
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2 = nil
+	obj.rocev2Holder = nil
 	obj.obj.Ospfv2 = nil
 	obj.ospfv2Holder = nil
 	obj.obj.Dhcpv6Server = nil
@@ -556,6 +584,14 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.OSPFV2 {
 		obj.obj.Ospfv2 = NewOspfv2MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2 {
+		obj.obj.Rocev2 = NewRoCEv2MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2_IPV6 {
+		obj.obj.Rocev2Ipv6 = NewRoCEv2IPv6MetricsRequest().msg()
 	}
 
 	return obj
@@ -953,6 +989,62 @@ func (obj *metricsRequest) SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest 
 	return obj
 }
 
+// description is TBD
+// Rocev2 returns a RoCEv2MetricsRequest
+func (obj *metricsRequest) Rocev2() RoCEv2MetricsRequest {
+	if obj.obj.Rocev2 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2)
+	}
+	if obj.rocev2Holder == nil {
+		obj.rocev2Holder = &roCEv2MetricsRequest{obj: obj.obj.Rocev2}
+	}
+	return obj.rocev2Holder
+}
+
+// description is TBD
+// Rocev2 returns a RoCEv2MetricsRequest
+func (obj *metricsRequest) HasRocev2() bool {
+	return obj.obj.Rocev2 != nil
+}
+
+// description is TBD
+// SetRocev2 sets the RoCEv2MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2(value RoCEv2MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2)
+	obj.rocev2Holder = nil
+	obj.obj.Rocev2 = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Rocev2Ipv6 returns a RoCEv2IPv6MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv6() RoCEv2IPv6MetricsRequest {
+	if obj.obj.Rocev2Ipv6 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
+	}
+	if obj.rocev2Ipv6Holder == nil {
+		obj.rocev2Ipv6Holder = &roCEv2IPv6MetricsRequest{obj: obj.obj.Rocev2Ipv6}
+	}
+	return obj.rocev2Ipv6Holder
+}
+
+// description is TBD
+// Rocev2Ipv6 returns a RoCEv2IPv6MetricsRequest
+func (obj *metricsRequest) HasRocev2Ipv6() bool {
+	return obj.obj.Rocev2Ipv6 != nil
+}
+
+// description is TBD
+// SetRocev2Ipv6 sets the RoCEv2IPv6MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv6(value RoCEv2IPv6MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2Ipv6 = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1026,6 +1118,16 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2 != nil {
+
+		obj.Rocev2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2Ipv6 != nil {
+
+		obj.Rocev2Ipv6().validateObj(vObj, set_default)
 	}
 
 }
@@ -1102,6 +1204,16 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Ospfv2 != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.OSPFV2
+	}
+
+	if obj.obj.Rocev2 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2
+	}
+
+	if obj.obj.Rocev2Ipv6 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2_IPV6
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
