@@ -2,7 +2,7 @@
 
 
 class Version:
-    models_version = "1.19.0"
+    models_version = "1.20.0"
     version = "1.19.1"
     package_name = "snappi"
     protobuf_name = "otg"
