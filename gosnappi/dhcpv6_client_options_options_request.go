@@ -278,14 +278,14 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	setChoice(value Dhcpv6ClientOptionsOptionsRequestChoiceEnum) Dhcpv6ClientOptionsOptionsRequest
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsOptionsRequest
 	HasChoice() bool
-	// getter for Sztp to set choice.
-	Sztp()
 	// getter for BootfileUrl to set choice.
 	BootfileUrl()
-	// getter for Fqdn to set choice.
-	Fqdn()
+	// getter for Sztp to set choice.
+	Sztp()
 	// getter for VendorInformation to set choice.
 	VendorInformation()
+	// getter for Fqdn to set choice.
+	Fqdn()
 	// getter for NameServers to set choice.
 	NameServers()
 	// Custom returns Dhcpv6ClientOptionsCustom, set in Dhcpv6ClientOptionsOptionsRequest.
@@ -322,24 +322,24 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) Choice() Dhcpv6ClientOptionsOption
 	return Dhcpv6ClientOptionsOptionsRequestChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Sztp to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
-}
-
 // getter for BootfileUrl to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
 }
 
-// getter for Fqdn to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
+// getter for Sztp to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
 }
 
 // getter for VendorInformation to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) VendorInformation() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.VENDOR_INFORMATION)
+}
+
+// getter for Fqdn to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
 }
 
 // getter for NameServers to set choice
