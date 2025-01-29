@@ -13,12 +13,11 @@ import (
 // ***** Event *****
 type event struct {
 	validation
-	obj                          *otg.Event
-	marshaller                   marshalEvent
-	unMarshaller                 unMarshalEvent
-	linkHolder                   EventLink
-	rxRateThresholdHolder        EventRxRateThreshold
-	routeAdvertiseWithdrawHolder EventRouteAdvertiseWithdraw
+	obj            *otg.Event
+	marshaller     marshalEvent
+	unMarshaller   unMarshalEvent
+	cpEventsHolder EventCPEvents
+	dpEventsHolder EventDPEvents
 }
 
 func NewEvent() Event {
@@ -246,15 +245,20 @@ func (obj *event) Clone() (Event, error) {
 }
 
 func (obj *event) setNil() {
-	obj.linkHolder = nil
-	obj.rxRateThresholdHolder = nil
-	obj.routeAdvertiseWithdrawHolder = nil
+	obj.cpEventsHolder = nil
+	obj.dpEventsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Event is the optional container for event configuration.
+// Event is under Review: Event configuration is currently under review for pending exploration on use cases.
+//
+// Under Review: Event configuration is currently under review for pending exploration on use cases.
+//
+// The optional container for event configuration.
+// Both cp_events.enable and dp_events.enable must be explicitly set to true to get
+// control_plane_data_plane_convergence_us metric values for convergence metrics.
 type Event interface {
 	Validation
 	// msg marshals Event to protobuf object *otg.Event
@@ -276,147 +280,83 @@ type Event interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Enable returns bool, set in Event.
-	Enable() bool
-	// SetEnable assigns bool provided by user to Event
-	SetEnable(value bool) Event
-	// HasEnable checks if Enable has been set in Event
-	HasEnable() bool
-	// Link returns EventLink, set in Event.
-	// EventLink is the optional container for link up/down event configuration.
-	Link() EventLink
-	// SetLink assigns EventLink provided by user to Event.
-	// EventLink is the optional container for link up/down event configuration.
-	SetLink(value EventLink) Event
-	// HasLink checks if Link has been set in Event
-	HasLink() bool
-	// RxRateThreshold returns EventRxRateThreshold, set in Event.
-	// EventRxRateThreshold is the optional container for rx rate threshold event configuration.
-	RxRateThreshold() EventRxRateThreshold
-	// SetRxRateThreshold assigns EventRxRateThreshold provided by user to Event.
-	// EventRxRateThreshold is the optional container for rx rate threshold event configuration.
-	SetRxRateThreshold(value EventRxRateThreshold) Event
-	// HasRxRateThreshold checks if RxRateThreshold has been set in Event
-	HasRxRateThreshold() bool
-	// RouteAdvertiseWithdraw returns EventRouteAdvertiseWithdraw, set in Event.
-	// EventRouteAdvertiseWithdraw is the optional container for route advertise/withdraw event configuration.
-	RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw
-	// SetRouteAdvertiseWithdraw assigns EventRouteAdvertiseWithdraw provided by user to Event.
-	// EventRouteAdvertiseWithdraw is the optional container for route advertise/withdraw event configuration.
-	SetRouteAdvertiseWithdraw(value EventRouteAdvertiseWithdraw) Event
-	// HasRouteAdvertiseWithdraw checks if RouteAdvertiseWithdraw has been set in Event
-	HasRouteAdvertiseWithdraw() bool
+	// CpEvents returns EventCPEvents, set in Event.
+	// EventCPEvents is the optional container for control plane event configuration.
+	CpEvents() EventCPEvents
+	// SetCpEvents assigns EventCPEvents provided by user to Event.
+	// EventCPEvents is the optional container for control plane event configuration.
+	SetCpEvents(value EventCPEvents) Event
+	// HasCpEvents checks if CpEvents has been set in Event
+	HasCpEvents() bool
+	// DpEvents returns EventDPEvents, set in Event.
+	// EventDPEvents is the optional container for data plane event configuration.
+	DpEvents() EventDPEvents
+	// SetDpEvents assigns EventDPEvents provided by user to Event.
+	// EventDPEvents is the optional container for data plane event configuration.
+	SetDpEvents(value EventDPEvents) Event
+	// HasDpEvents checks if DpEvents has been set in Event
+	HasDpEvents() bool
 	setNil()
 }
 
-// True to enable all events.
-// Enabling this option may affect the resultant packet payload due to
-// additional instrumentation data.
-// Enable returns a bool
-func (obj *event) Enable() bool {
-
-	return *obj.obj.Enable
-
-}
-
-// True to enable all events.
-// Enabling this option may affect the resultant packet payload due to
-// additional instrumentation data.
-// Enable returns a bool
-func (obj *event) HasEnable() bool {
-	return obj.obj.Enable != nil
-}
-
-// True to enable all events.
-// Enabling this option may affect the resultant packet payload due to
-// additional instrumentation data.
-// SetEnable sets the bool value in the Event object
-func (obj *event) SetEnable(value bool) Event {
-
-	obj.obj.Enable = &value
-	return obj
-}
-
-// description is TBD
-// Link returns a EventLink
-func (obj *event) Link() EventLink {
-	if obj.obj.Link == nil {
-		obj.obj.Link = NewEventLink().msg()
+// Container for control plane(cp) event configuration.
+// CpEvents returns a EventCPEvents
+func (obj *event) CpEvents() EventCPEvents {
+	if obj.obj.CpEvents == nil {
+		obj.obj.CpEvents = NewEventCPEvents().msg()
 	}
-	if obj.linkHolder == nil {
-		obj.linkHolder = &eventLink{obj: obj.obj.Link}
+	if obj.cpEventsHolder == nil {
+		obj.cpEventsHolder = &eventCPEvents{obj: obj.obj.CpEvents}
 	}
-	return obj.linkHolder
+	return obj.cpEventsHolder
 }
 
-// description is TBD
-// Link returns a EventLink
-func (obj *event) HasLink() bool {
-	return obj.obj.Link != nil
+// Container for control plane(cp) event configuration.
+// CpEvents returns a EventCPEvents
+func (obj *event) HasCpEvents() bool {
+	return obj.obj.CpEvents != nil
 }
 
-// description is TBD
-// SetLink sets the EventLink value in the Event object
-func (obj *event) SetLink(value EventLink) Event {
+// Container for control plane(cp) event configuration.
+// SetCpEvents sets the EventCPEvents value in the Event object
+func (obj *event) SetCpEvents(value EventCPEvents) Event {
 
-	obj.linkHolder = nil
-	obj.obj.Link = value.msg()
+	obj.cpEventsHolder = nil
+	obj.obj.CpEvents = value.msg()
 
 	return obj
 }
 
-// description is TBD
-// RxRateThreshold returns a EventRxRateThreshold
-func (obj *event) RxRateThreshold() EventRxRateThreshold {
-	if obj.obj.RxRateThreshold == nil {
-		obj.obj.RxRateThreshold = NewEventRxRateThreshold().msg()
+// Container for data plane(dp) event configuration.
+// Enabling this option may affect the resultant packet payload due to
+// additional instrumentation data.
+// DpEvents returns a EventDPEvents
+func (obj *event) DpEvents() EventDPEvents {
+	if obj.obj.DpEvents == nil {
+		obj.obj.DpEvents = NewEventDPEvents().msg()
 	}
-	if obj.rxRateThresholdHolder == nil {
-		obj.rxRateThresholdHolder = &eventRxRateThreshold{obj: obj.obj.RxRateThreshold}
+	if obj.dpEventsHolder == nil {
+		obj.dpEventsHolder = &eventDPEvents{obj: obj.obj.DpEvents}
 	}
-	return obj.rxRateThresholdHolder
+	return obj.dpEventsHolder
 }
 
-// description is TBD
-// RxRateThreshold returns a EventRxRateThreshold
-func (obj *event) HasRxRateThreshold() bool {
-	return obj.obj.RxRateThreshold != nil
+// Container for data plane(dp) event configuration.
+// Enabling this option may affect the resultant packet payload due to
+// additional instrumentation data.
+// DpEvents returns a EventDPEvents
+func (obj *event) HasDpEvents() bool {
+	return obj.obj.DpEvents != nil
 }
 
-// description is TBD
-// SetRxRateThreshold sets the EventRxRateThreshold value in the Event object
-func (obj *event) SetRxRateThreshold(value EventRxRateThreshold) Event {
+// Container for data plane(dp) event configuration.
+// Enabling this option may affect the resultant packet payload due to
+// additional instrumentation data.
+// SetDpEvents sets the EventDPEvents value in the Event object
+func (obj *event) SetDpEvents(value EventDPEvents) Event {
 
-	obj.rxRateThresholdHolder = nil
-	obj.obj.RxRateThreshold = value.msg()
-
-	return obj
-}
-
-// description is TBD
-// RouteAdvertiseWithdraw returns a EventRouteAdvertiseWithdraw
-func (obj *event) RouteAdvertiseWithdraw() EventRouteAdvertiseWithdraw {
-	if obj.obj.RouteAdvertiseWithdraw == nil {
-		obj.obj.RouteAdvertiseWithdraw = NewEventRouteAdvertiseWithdraw().msg()
-	}
-	if obj.routeAdvertiseWithdrawHolder == nil {
-		obj.routeAdvertiseWithdrawHolder = &eventRouteAdvertiseWithdraw{obj: obj.obj.RouteAdvertiseWithdraw}
-	}
-	return obj.routeAdvertiseWithdrawHolder
-}
-
-// description is TBD
-// RouteAdvertiseWithdraw returns a EventRouteAdvertiseWithdraw
-func (obj *event) HasRouteAdvertiseWithdraw() bool {
-	return obj.obj.RouteAdvertiseWithdraw != nil
-}
-
-// description is TBD
-// SetRouteAdvertiseWithdraw sets the EventRouteAdvertiseWithdraw value in the Event object
-func (obj *event) SetRouteAdvertiseWithdraw(value EventRouteAdvertiseWithdraw) Event {
-
-	obj.routeAdvertiseWithdrawHolder = nil
-	obj.obj.RouteAdvertiseWithdraw = value.msg()
+	obj.dpEventsHolder = nil
+	obj.obj.DpEvents = value.msg()
 
 	return obj
 }
@@ -426,26 +366,20 @@ func (obj *event) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.Link != nil {
+	obj.addWarnings("Event is under review, Event configuration is currently under review for pending exploration on use cases.")
 
-		obj.Link().validateObj(vObj, set_default)
+	if obj.obj.CpEvents != nil {
+
+		obj.CpEvents().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.RxRateThreshold != nil {
+	if obj.obj.DpEvents != nil {
 
-		obj.RxRateThreshold().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.RouteAdvertiseWithdraw != nil {
-
-		obj.RouteAdvertiseWithdraw().validateObj(vObj, set_default)
+		obj.DpEvents().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *event) setDefault() {
-	if obj.obj.Enable == nil {
-		obj.SetEnable(false)
-	}
 
 }
