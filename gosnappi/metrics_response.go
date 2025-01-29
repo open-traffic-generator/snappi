@@ -304,10 +304,10 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Server to set choice.
-	Dhcpv4Server()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
 	// getter for Dhcpv6Client to set choice.
@@ -382,14 +382,14 @@ func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
-}
-
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
+}
+
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // getter for Dhcpv4Client to set choice
