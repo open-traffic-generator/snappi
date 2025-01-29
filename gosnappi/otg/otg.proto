@@ -7955,7 +7955,7 @@ message RoCEv2FlowSettingsLocalEnd {
   optional ExecuteCommands.Enum execute_commands = 6;
 
   // Immediate Data field required for SEND/WRITE with immediate verb.
-  // default = 00 00 00 00
+  // default = 00000000
   optional string immediate_data = 7;
 
   // The Maximum message size that is allowed to transfer depends on the MTU size and
@@ -8025,7 +8025,7 @@ message RoCEv2FlowSettingsRemoteEnd {
   optional ExecuteCommands.Enum execute_commands = 6;
 
   // Immediate Data field required for SEND/WRITE with immediate verb.
-  // default = 00 00 00 00
+  // default = 00000000
   optional string immediate_data = 7;
 
   // The Maximum message size that is allowed to transfer depends on the MTU size and
@@ -8060,11 +8060,11 @@ message RoCEv2FlowSettingsRemoteEnd {
   optional uint32 remote_qp_number = 10;
 
   // Remote virtual address.
-  // default = 00 00 00 00 00 00 00 00
+  // default = 0000000000000000
   optional string virtual_address = 11;
 
   // Remote Key.
-  // default = 00 00 00 00
+  // default = 00000000
   optional string remote_key = 12;
 
   // Initial PSN.

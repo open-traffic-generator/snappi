@@ -665,7 +665,7 @@ func (obj *roCEv2FlowSettingsLocalEnd) setDefault() {
 		obj.SetUdpSourcePort(49152)
 	}
 	if obj.obj.ImmediateData == nil {
-		obj.SetImmediateData("00 00 00 00")
+		obj.SetImmediateData("00000000")
 	}
 	if obj.obj.MessageSize == nil {
 		obj.SetMessageSize(1)

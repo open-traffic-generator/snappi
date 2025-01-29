@@ -10707,7 +10707,7 @@ components:
             Immediate Data field required for SEND/WRITE with immediate verb.
           type: string
           format: hex
-          default: 00 00 00 00
+          default: '00000000'
           x-field-uid: 7
         message_size:
           description: |-
@@ -10808,7 +10808,7 @@ components:
             Immediate Data field required for SEND/WRITE with immediate verb.
           type: string
           format: hex
-          default: 00 00 00 00
+          default: '00000000'
           x-field-uid: 7
         message_size:
           description: |-
@@ -10849,14 +10849,14 @@ components:
             Remote virtual address.
           type: string
           format: hex
-          default: 00 00 00 00 00 00 00 00
+          default: '0000000000000000'
           x-field-uid: 11
         remote_key:
           description: |-
             Remote Key.
           type: string
           format: hex
-          default: 00 00 00 00
+          default: '00000000'
           x-field-uid: 12
         initial_psn:
           description: |-

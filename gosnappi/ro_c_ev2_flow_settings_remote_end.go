@@ -777,7 +777,7 @@ func (obj *roCEv2FlowSettingsRemoteEnd) setDefault() {
 		obj.SetUdpSourcePort(49152)
 	}
 	if obj.obj.ImmediateData == nil {
-		obj.SetImmediateData("00 00 00 00")
+		obj.SetImmediateData("00000000")
 	}
 	if obj.obj.MessageSize == nil {
 		obj.SetMessageSize(1)
@@ -786,10 +786,10 @@ func (obj *roCEv2FlowSettingsRemoteEnd) setDefault() {
 		obj.SetRemoteQpNumber(0)
 	}
 	if obj.obj.VirtualAddress == nil {
-		obj.SetVirtualAddress("00 00 00 00 00 00 00 00")
+		obj.SetVirtualAddress("0000000000000000")
 	}
 	if obj.obj.RemoteKey == nil {
-		obj.SetRemoteKey("00 00 00 00")
+		obj.SetRemoteKey("00000000")
 	}
 	if obj.obj.InitialPsn == nil {
 		obj.SetInitialPsn(0)
