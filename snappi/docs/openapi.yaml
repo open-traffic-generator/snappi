@@ -388,8 +388,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -657,10 +656,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -671,10 +666,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -682,11 +673,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -711,8 +697,7 @@ components:
             \ an unconnected device in a simulated topology \n( all ethernet links\
             \ of type simulated_link ) or an emulated device connected to the Device\
             \ Under Test (has at atleast one ethernet interface with connection to\
-            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
+            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
           x-constraint:
           - '#/components/schemas/Device.Ethernet/properties/name'
           x-field-uid: 1
@@ -855,10 +840,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -960,8 +941,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1856,8 +1836,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -1951,8 +1930,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -1963,8 +1940,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -2172,8 +2147,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -2183,10 +2156,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -2495,6 +2464,11 @@ components:
             Configuration for OSPFv2 router.
           $ref: '#/components/schemas/Device.Ospfv2Router'
           x-field-uid: 10
+        ospfv3:
+          description: |-
+            Configuration for OSPFv3 router.
+          $ref: '#/components/schemas/Device.Ospfv3Router'
+          x-field-uid: 11
       required:
       - name
     Protocol.Options:
@@ -2603,10 +2577,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -3777,12 +3747,6 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -4722,8 +4686,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -5254,8 +5216,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -8288,12 +8248,6 @@ components:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -8612,11 +8566,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -8653,11 +8602,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -8867,7 +8811,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -8956,11 +8899,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -9538,10 +9476,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -9661,10 +9595,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 on which DHCPv6 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -9900,8 +9830,6 @@ components:
       description: |-
         Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 
-        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
       x-status:
         status: under_review
@@ -10106,8 +10034,7 @@ components:
           x-unique: global
         ipv4_name:
           description: "The globally unique name of the IPv4 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -10615,6 +10542,477 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
+    Device.Ospfv3Router:
+      description: |-
+        Under Review: OSPFv3 is currently under review for pending exploration on use cases.
+
+        A container of properties for an OSPFv3 router and its interfaces & Route Ranges.
+      x-status:
+        status: under_review
+        information: OSPFv3 is currently under review for pending exploration on use
+          cases.
+      type: object
+      required:
+      - name
+      - router_id
+      - interfaces
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        router_id:
+          description: |-
+            OSPFv3 Router Id.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        lsa_retransmit_time:
+          description: |-
+            The time in seconds for LSA retransmission.
+          type: integer
+          format: uint32
+          default: 5
+          minimum: 1
+          x-field-uid: 3
+        lsa_refresh_time:
+          description: |-
+            The time in seconds required for LSA refresh.
+          type: integer
+          format: uint32
+          default: 1800
+          minimum: 5
+          x-field-uid: 4
+        inter_burst_lsu_interval:
+          description: "The gap in miliseconds between each Flood Link State Update\
+            \ burst. "
+          type: integer
+          format: uint32
+          default: 1000
+          minimum: 1
+          x-field-uid: 5
+        graceful_restart:
+          $ref: '#/components/schemas/Ospfv3.GracefulRestart'
+          x-field-uid: 6
+        store_lsa:
+          description: |-
+            Configuration for controlling storage of OSPFv3 learned LSAs received from the neighbors.
+          type: boolean
+          default: false
+          x-field-uid: 7
+        capabilities:
+          description: |-
+            Optional container for OSPFv3 advanced router properties.
+          $ref: '#/components/schemas/Ospfv3.Advanced'
+          x-field-uid: 8
+        interfaces:
+          description: |-
+            List of OSPFv3 interfaces for this router.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.Interface'
+          x-field-uid: 9
+        v6_routes:
+          description: |-
+            Emulated OSPFv4 IPv6 routes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.V6RouteRange'
+          x-field-uid: 10
+    Ospfv3.Advanced:
+      description: |-
+        The OSPFv3 router optional attributes.
+      type: object
+      properties:
+        lsa_b_bit:
+          description: |-
+            Set to indicate that the router acts as an Area Border Router.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        lsa_e_bit:
+          description: |-
+            Set to indicate that the router acts as an AS Boundary Router.
+          type: boolean
+          default: false
+          x-field-uid: 2
+    Ospfv3.GracefulRestart:
+      description: |-
+        Container of properties of OSPFv3 Graceful Retstart.
+      type: object
+      properties:
+        helper_mode:
+          description: |-
+            Support of Graceful Restart in Helper Mode.
+          type: boolean
+          default: false
+          x-field-uid: 1
+    Ospfv3.Interface:
+      description: |-
+        Configuration for single OSPFv3 interface.
+      type: object
+      required:
+      - name
+      - ipv6_name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        ipv6_name:
+          description: "The globally unique name of the IPv6 interface connected to\
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv6/properties/name
+          x-field-uid: 2
+        area:
+          description: "The Area ID of the area to which the attached network belongs.\n\
+            All routing protocol packets originating from the interface are\nlabelled\
+            \ with this Area ID.           "
+          $ref: '#/components/schemas/Ospfv3Interface.Area'
+          x-field-uid: 3
+        network_type:
+          description: |-
+            The OSPF network link type.
+          $ref: '#/components/schemas/Ospfv3Interface.NetworkType'
+          x-field-uid: 4
+        authentication:
+          description: |-
+            OSPFv3 authentication properties.
+          $ref: '#/components/schemas/Ospfv3Interface.Authentication'
+          x-field-uid: 5
+        advanced:
+          description: |-
+            Container for OSPFv3 advanced interface properties.
+          $ref: '#/components/schemas/Ospfv3Interface.Advanced'
+          x-field-uid: 6
+        options:
+          description: |-
+            Container for OSPFv3 optional interface properties.
+          $ref: '#/components/schemas/Ospfv3Interface.Options'
+          x-field-uid: 7
+    Ospfv3Interface.Area:
+      description: "Container for OSPFv3 Area ID identifies the routing area to which\
+        \ the host belongs.      "
+      type: object
+      properties:
+        choice:
+          description: |-
+            The OSPFv3 Area ID identifies the routing area to which the host belongs. Area ID type can be following format.
+            - id: A 32-bit number identifying the area.
+            - ip: The Area ID in IPv4 address format.
+          type: string
+          default: id
+          x-field-uid: 1
+          x-enum:
+            id:
+              x-field-uid: 1
+            ip:
+              x-field-uid: 2
+          enum:
+          - id
+          - ip
+        id:
+          description: |-
+            The Area ID.
+          type: integer
+          format: uint32
+          default: 0
+          x-field-uid: 2
+        ip:
+          description: |-
+            The Area ID in IPv4 address format.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+    Ospfv3Interface.NetworkType:
+      description: |-
+        The OSPFv3 network link type options.
+          - Broadcast
+          - Point to Point
+      type: object
+      properties:
+        choice:
+          type: string
+          default: broadcast
+          x-field-uid: 1
+          x-enum:
+            broadcast:
+              x-field-uid: 1
+            point_to_point:
+              x-field-uid: 2
+          enum:
+          - broadcast
+          - point_to_point
+    Ospfv3Interface.Advanced:
+      description: |-
+        Contains OSPFv3 advanced properties.
+      type: object
+      properties:
+        hello_interval:
+          description: |-
+            The time interval, in seconds, between the Hello packets that
+            the router sends on the interface. Advertised in Hello packets
+            sent out this interface.
+          type: integer
+          format: uint32
+          default: 10
+          maximum: 65535
+          x-field-uid: 1
+        dead_interval:
+          description: |-
+            The time interval in seconds before the router's neighbors will declare
+            it down, when they stop hearing the router's Hello Packets.
+            Advertised in Hello packets sent out this interface.
+          type: integer
+          format: uint32
+          default: 40
+          maximum: 65535
+          x-field-uid: 2
+        link_metric:
+          description: |-
+            The cost of transmitting data on this link.
+          type: integer
+          format: uint32
+          default: 10
+          x-field-uid: 3
+        priority:
+          description: "The Priority for (Backup) Designated Router election.    \
+            \      \t\nThis value is used in Hello packets for the Designated Router\
+            \ (DR) election process.\nThe default is 0, which indicates that the router\
+            \ will not participate in the DR election process."
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 255
+          x-field-uid: 4
+        validate_received_mtu:
+          description: "If this is set to true, then the MTU received from the neighbor\
+            \ during Database (DB) Exchange \nwill be validated, otherwise it will\
+            \ be ignored.\n"
+          type: boolean
+          default: true
+          x-field-uid: 5
+    Ospfv3Interface.Options:
+      description: |-
+        The Options field is present in OSPFv3 Hello packets, Database Description packets and all LSAs.
+        The Options field enables OSPF routers to support (or not support) optional capabilities, and to
+        communicate their capability level to other OSPF routers (https://datatracker.ietf.org/doc/html/rfc2740#appendix-A.2).
+        When used in Hello packets, the Options field allows a router to reject a neighbor because of a capability mismatch.
+      type: object
+      properties:
+        dc_bit:
+          description: |-
+            Demand Circuit: This bit describes the router's handling of demand circuits.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        r_bit:
+          description: |-
+            Router: This bit indicates if the originator is an active router.
+          type: boolean
+          default: true
+          x-field-uid: 2
+        n_bit:
+          description: |-
+            NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in [Ref8], rfc2740.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        e_bit:
+          description: |-
+            External Capability: This bit describes the router's willingness to receive and forward External-Attributes-LSAs,  as specified in [Ref1], rfc2740.
+          type: boolean
+          default: true
+          x-field-uid: 4
+        v6_bit:
+          description: |-
+            V6: If set, the router/link should be included in IPv6 routing calculations.
+          type: boolean
+          default: true
+          x-field-uid: 5
+    Ospfv3Interface.Authentication:
+      description: |-
+        This contains OSPFv3 authentication properties.
+      type: object
+      properties:
+        enable:
+          description: |-
+            If enabled, it performs a non-IPsec Cryptographic authentication.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        auths:
+          description: |-
+            List of OSPFv3 SA Key IDs and Keys.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3Authentication.Auth'
+          x-field-uid: 2
+    Ospfv3Authentication.Auth:
+      description: |-
+        Container of OSPFv3 interface Cryptographic authentication.
+      type: object
+      properties:
+        algo:
+          description: |-
+            The authentication algorithm used with the OSPFv3 SA.
+          $ref: '#/components/schemas/Ospfv3Authentication.Algo'
+          x-field-uid: 1
+        key_id:
+          description: |-
+            The unique OSPFv3 Authentication Key Identifier per-interface.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 65535
+          default: 1
+          x-field-uid: 2
+        key:
+          description: |-
+            An alphanumeric Cryptographic Authentication Key associated with this OSPFv3 SA.
+          type: string
+          minLength: 1
+          maxLength: 64
+          x-field-uid: 3
+    Ospfv3Authentication.Algo:
+      description: |-
+        The authentication algorithm used with the OSPFv3 SA.
+          - HMAC-SHA-1
+          - HMAC-SHA-256
+          - HMAC-SHA-384
+          - HMAC-SHA-512
+      type: object
+      properties:
+        choice:
+          type: string
+          default: hmac_sha_1
+          x-field-uid: 1
+          x-enum:
+            hmac_sha_1:
+              x-field-uid: 1
+            hmac_sha_256:
+              x-field-uid: 2
+            hmac_sha_384:
+              x-field-uid: 3
+            hmac_sha_512:
+              x-field-uid: 4
+          enum:
+          - hmac_sha_1
+          - hmac_sha_256
+          - hmac_sha_384
+          - hmac_sha_512
+    Ospfv3.V6RouteRange:
+      description: |-
+        Emulated OSPFv3 IPv6 routes.
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        addresses:
+          description: |-
+            A list of group of IPv6 route addresses.
+          type: array
+          items:
+            $ref: '#/components/schemas/V6RouteAddress'
+          x-field-uid: 2
+        metric:
+          description: |-
+            The user-defined metric associated with this route range.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 16777215
+          x-field-uid: 3
+        route_origin:
+          description: |-
+            The type of the OSPFv3 routes.
+          $ref: '#/components/schemas/Ospfv3V6RR.RouteOrigin'
+          x-field-uid: 4
+    Ospfv3V6RR.RouteOrigin:
+      description: "Container of type of the OSPFv3 types correspond directly to the\
+        \ OSPFv3 LSAs types.  "
+      type: object
+      properties:
+        choice:
+          description: |-
+            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS meteric. - external_type_2: for Autonomous System (AS) External with internal and external AS meteric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
+          type: string
+          default: inter_area
+          x-field-uid: 1
+          x-enum:
+            intra_area:
+              x-field-uid: 1
+            inter_area:
+              x-field-uid: 2
+            external_type_1:
+              x-field-uid: 3
+            external_type_2:
+              x-field-uid: 4
+            nssa_external:
+              x-field-uid: 5
+          enum:
+          - intra_area
+          - inter_area
+          - external_type_1
+          - external_type_2
+          - nssa_external
+        nssa_external:
+          description: |-
+            Configuration for the type 7 Not-So-Stubby Area (NSSA) External.
+          $ref: '#/components/schemas/Ospfv3V6RR.NssaExternal'
+          x-field-uid: 2
+    Ospfv3V6RR.NssaExternal:
+      description: |-
+        Container for the forwarding address of NSSA External route origin configuration.
+      type: object
+      properties:
+        forwarding_address:
+          description: |-
+            Configuration for forwarding address of NSSA External route origin.
+          $ref: '#/components/schemas/Ospfv3V6RR.ForwardingAddress'
+          x-field-uid: 1
+    Ospfv3V6RR.ForwardingAddress:
+      description: |-
+        Container for the forwarding address of NSSA External route origin configuration.
+      type: object
+      properties:
+        choice:
+          description: |-
+            IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
+            - interface_ip: if set, forwarding address is set with Interface IP6 address.
+            - custom: if set, forwarding address is set with a custom IPv6 address.
+          type: string
+          default: interface_ip
+          x-field-uid: 1
+          x-enum:
+            interface_ip:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - interface_ip
+          - custom
+        custom:
+          description: |-
+            Forwarding address in IPv6 format.
+          type: string
+          format: ipv6
+          x-field-uid: 2
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -10646,10 +11044,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -10730,11 +11125,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -10744,14 +11134,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -10767,11 +11150,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -10855,6 +11233,7 @@ components:
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
+          - /components/schemas/Ospfv3.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
@@ -10880,21 +11259,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
+            - /components/schemas/Ospfv3.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
@@ -10915,6 +11280,7 @@ components:
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv4client/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
+          - /components/schemas/Ospfv3.V6RouteRange/properties/name
           - /components/schemas/Device.Dhcpv6client/properties/name
           example:
           - Eth 1
@@ -10940,21 +11306,7 @@ components:
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
+            - /components/schemas/Ospfv3.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
     Flow.Header:
       description: |-
@@ -13944,11 +14296,10 @@ components:
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
       description: "Under Review: Event configuration is currently under review for\
-        \ pending exploration on use cases.\n\nUnder Review: Event configuration is\
-        \ currently under review for pending exploration on use cases.\n\nThe optional\
-        \ container for event configuration.\nBoth cp_events.enable and dp_events.enable\
-        \ must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
-        \ metric values for convergence metrics."
+        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
+        Both cp_events.enable and dp_events.enable must be explicitly set to true\
+        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
+        \ metrics."
       x-status:
         status: under_review
         information: Event configuration is currently under review for pending exploration
@@ -14033,8 +14384,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -14138,10 +14488,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14550,6 +14896,8 @@ components:
               x-field-uid: 5
             ospfv2:
               x-field-uid: 6
+            ospfv3:
+              x-field-uid: 7
           x-field-uid: 1
           enum:
           - all
@@ -14558,6 +14906,7 @@ components:
           - bgp
           - isis
           - ospfv2
+          - ospfv3
         all:
           $ref: '#/components/schemas/State.Protocol.All'
           x-field-uid: 2
@@ -14576,6 +14925,9 @@ components:
         ospfv2:
           $ref: '#/components/schemas/State.Protocol.Ospfv2'
           x-field-uid: 7
+        ospfv3:
+          $ref: '#/components/schemas/State.Protocol.Ospfv3'
+          x-field-uid: 8
     State.Port.Link:
       description: |-
         Sets the link of configured ports.
@@ -14586,10 +14938,6 @@ components:
         port_names:
           description: |
             The names of target ports. An empty or null list will target all ports.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14626,10 +14974,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -14660,10 +15004,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -14734,14 +15074,7 @@ components:
             - /components/schemas/Isis.V4RouteRange/properties/name
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
+            - /components/schemas/Ospfv3.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -14751,6 +15084,7 @@ components:
           - /components/schemas/Isis.V4RouteRange/properties/name
           - /components/schemas/Isis.V6RouteRange/properties/name
           - /components/schemas/Ospfv2.V4RouteRange/properties/name
+          - /components/schemas/Ospfv3.V6RouteRange/properties/name
           x-field-uid: 1
         state:
           description: |-
@@ -14801,10 +15135,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -14833,10 +15163,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14886,11 +15212,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -14948,10 +15269,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -15003,10 +15320,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
           type: array
           items:
             type: string
@@ -15018,6 +15331,57 @@ components:
             \ 'up', would attempt to bring up the OSPFv2 session(s) with respective\
             \ peer(s) and advertise route(s), if configured. If the desired state\
             \ is 'down', would bring down OSPFv2 session(s) with respective peer(s). "
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+    State.Protocol.Ospfv3:
+      description: |-
+        Sets state of configured OSPFv3 routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            routers:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - routers
+        routers:
+          $ref: '#/components/schemas/State.Protocol.Ospfv3.Routers'
+          x-field-uid: 2
+    State.Protocol.Ospfv3.Routers:
+      description: |-
+        Sets state of configured OSPFv3 routers.
+      required:
+      - state
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv3/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv3/properties/name
+          x-field-uid: 1
+        state:
+          description: "The desired state of OSPFv3 router. If the desired state is\
+            \ 'up', would attempt to bring up the OSPFv3 session(s) with respective\
+            \ peer(s) and advertise route(s), if configured. If the desired state\
+            \ is 'down', would bring down OSPFv3 session(s) with respective peer(s). "
           type: string
           x-field-uid: 2
           x-enum:
@@ -15185,8 +15549,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -15197,10 +15559,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -15238,10 +15596,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -15320,8 +15674,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -15332,10 +15684,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -15373,10 +15721,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -15440,11 +15784,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -15514,11 +15853,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -15643,6 +15977,8 @@ components:
               x-field-uid: 14
             convergence:
               x-field-uid: 15
+            ospfv3:
+              x-field-uid: 16
           enum:
           - port
           - flow
@@ -15659,6 +15995,7 @@ components:
           - dhcpv6_server
           - ospfv2
           - convergence
+          - ospfv3
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -15704,6 +16041,9 @@ components:
         convergence:
           $ref: '#/components/schemas/Convergence.Request'
           x-field-uid: 16
+        ospfv3:
+          $ref: '#/components/schemas/Ospfv3.Metrics.Request'
+          x-field-uid: 17
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -15744,6 +16084,8 @@ components:
               x-field-uid: 14
             convergence_metrics:
               x-field-uid: 15
+            ospfv3_metrics:
+              x-field-uid: 16
           enum:
           - flow_metrics
           - port_metrics
@@ -15760,6 +16102,7 @@ components:
           - dhcpv6_server
           - ospfv2_metrics
           - convergence_metrics
+          - ospfv3_metrics
         port_metrics:
           type: array
           items:
@@ -15835,6 +16178,11 @@ components:
           items:
             $ref: '#/components/schemas/Convergence.Metric'
           x-field-uid: 16
+        ospfv3_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.Metric'
+          x-field-uid: 17
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -15843,10 +16191,6 @@ components:
         port_names:
           description: |
             The names of objects to return results for. An empty list will return all port row results.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -15910,10 +16254,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -16026,10 +16366,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -16390,10 +16726,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -16600,10 +16932,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -16807,10 +17135,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -17084,10 +17408,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -17139,10 +17459,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -17225,10 +17541,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -17238,10 +17550,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -17439,10 +17747,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -17530,10 +17834,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -17834,10 +18134,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -17937,10 +18233,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4Server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
           type: array
           items:
             type: string
@@ -18037,10 +18329,6 @@ components:
         client_names:
           description: |
             The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -18194,10 +18482,6 @@ components:
         server_names:
           description: |
             The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6Server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -18369,10 +18653,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -18704,8 +18984,6 @@ components:
       description: |-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Container for requesting control-plane and data-plane convergence time metrics for flows.
       x-status:
         status: under_review
@@ -18720,10 +18998,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -18732,8 +19006,6 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
         The container for convergence metrics.
@@ -18807,9 +19079,7 @@ components:
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
             \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
             - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n- /components/schemas/Flow/properties/name\n\
-            - /components/schemas/Device.Bgpv4Route/properties/name\n- /components/schemas/Device.Bgpv6Route/properties/name\n"
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -18829,6 +19099,324 @@ components:
           type: number
           format: double
           x-field-uid: 4
+    Ospfv3.Metrics.Request:
+      description: |-
+        The request to retrieve OSPFv3 per router metrics/statistics.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv3/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv3/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain.
+            If the list is empty then all columns will be returned except for
+            any result_groups.
+            The name of the OSPFv3 Router cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              full_state_count:
+                x-field-uid: 1
+              down_state_count:
+                x-field-uid: 2
+              sessions_flap:
+                x-field-uid: 3
+              hellos_sent:
+                x-field-uid: 4
+              hellos_received:
+                x-field-uid: 5
+              dbd_sent:
+                x-field-uid: 6
+              dbd_received:
+                x-field-uid: 7
+              ls_request_sent:
+                x-field-uid: 8
+              ls_request_received:
+                x-field-uid: 9
+              ls_update_sent:
+                x-field-uid: 10
+              ls_update_received:
+                x-field-uid: 11
+              ls_ack_sent:
+                x-field-uid: 12
+              ls_ack_received:
+                x-field-uid: 13
+              lsa_sent:
+                x-field-uid: 14
+              lsa_received:
+                x-field-uid: 15
+              router_lsa_sent:
+                x-field-uid: 16
+              router_lsa_received:
+                x-field-uid: 17
+              network_lsa_sent:
+                x-field-uid: 18
+              network_lsa_received:
+                x-field-uid: 19
+              inter_area_prefix_lsa_sent:
+                x-field-uid: 20
+              inter_area_prefix_lsa_received:
+                x-field-uid: 21
+              inter_area_router_lsa_sent:
+                x-field-uid: 22
+              inter_area_router_lsa_received:
+                x-field-uid: 23
+              external_lsa_sent:
+                x-field-uid: 24
+              external_lsa_received:
+                x-field-uid: 25
+              nssa_lsa_sent:
+                x-field-uid: 26
+              nssa_lsa_received:
+                x-field-uid: 27
+              link_lsa_sent:
+                x-field-uid: 28
+              link_lsa_received:
+                x-field-uid: 29
+              intra_area_prefix_lsa_sent:
+                x-field-uid: 30
+              intra_area_prefix_lsa_received:
+                x-field-uid: 31
+            enum:
+            - full_state_count
+            - down_state_count
+            - sessions_flap
+            - hellos_sent
+            - hellos_received
+            - dbd_sent
+            - dbd_received
+            - ls_request_sent
+            - ls_request_received
+            - ls_update_sent
+            - ls_update_received
+            - ls_ack_sent
+            - ls_ack_received
+            - lsa_sent
+            - lsa_received
+            - router_lsa_sent
+            - router_lsa_received
+            - network_lsa_sent
+            - network_lsa_received
+            - inter_area_prefix_lsa_sent
+            - inter_area_prefix_lsa_received
+            - inter_area_router_lsa_sent
+            - inter_area_router_lsa_received
+            - external_lsa_sent
+            - external_lsa_received
+            - nssa_lsa_sent
+            - nssa_lsa_received
+            - link_lsa_sent
+            - link_lsa_received
+            - intra_area_prefix_lsa_sent
+            - intra_area_prefix_lsa_received
+          x-field-uid: 2
+    Ospfv3.Metric:
+      description: |-
+        OSPFv3 per router statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured OSPFv3 router.
+          type: string
+          x-field-uid: 1
+        full_state_count:
+          description: |-
+            The number of OSPFv3 sessions in up state.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        down_state_count:
+          description: |-
+            The number of OSPFv3 sessions in down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        sessions_flap:
+          description: |-
+            The number of change of OSPFv3 sessions from up to down state.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        hellos_sent:
+          description: |-
+            The number of OSPFv3 Hello messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        hellos_received:
+          description: |-
+            The number of OSPFv3 Hello messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        dbd_sent:
+          description: |-
+            The number of OSPFv3 Database Description (DBD) messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        dbd_received:
+          description: |-
+            The number of OSPFv3 Database Description (DBD) messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        ls_request_sent:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Request messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        ls_request_received:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Request messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        ls_update_sent:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Update messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        ls_update_received:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Update messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        ls_ack_sent:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Acknowledgement messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        ls_ack_received:
+          description: |-
+            The number of OSPFv3 LinkState (LS) Acknowledgement messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        lsa_sent:
+          description: |-
+            The total number of OSPFv3 LinkState Advertisement (LSA) messages transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        lsa_received:
+          description: |-
+            The total number of OSPFv3 LinkState Advertisement (LSA) messages received.
+          type: integer
+          format: uint64
+          x-field-uid: 16
+        router_lsa_sent:
+          description: |-
+            The number of OSPFv3 Router (Type 1) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 17
+        router_lsa_received:
+          description: |-
+            The number of OSPFv3 Router (Type 1) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 18
+        network_lsa_sent:
+          description: |-
+            The number of OSPFv3 Network (Type 2) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 19
+        network_lsa_received:
+          description: |-
+            The number of OSPFv3 Network (Type 2) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 20
+        inter_area_prefix_lsa_sent:
+          description: "The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs transmitted.\
+            \  "
+          type: integer
+          format: uint64
+          x-field-uid: 21
+        inter_area_prefix_lsa_received:
+          description: |-
+            The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 22
+        inter_area_router_lsa_sent:
+          description: "The number of OSPFv3 Inter-Area-Router (Type 4) LSAs transmitted.\
+            \  "
+          type: integer
+          format: uint64
+          x-field-uid: 23
+        inter_area_router_lsa_received:
+          description: |-
+            The number of OSPFv3 Inter-Area-Router (Type 4) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 24
+        external_lsa_sent:
+          description: |-
+            The number of OSPFv3 External (Type 5) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 25
+        external_lsa_received:
+          description: |-
+            The number of OSPFv3 External (Type 5) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 26
+        nssa_lsa_sent:
+          description: |-
+            The number of OSPFv3 NSSA (Type 7) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 27
+        nssa_lsa_received:
+          description: |-
+            The number of OSPFv3 NSSA (Type 7) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 28
+        link_lsa_sent:
+          description: |-
+            The number of OSPFv3 Link (Type 8) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 29
+        link_lsa_received:
+          description: |-
+            The number of OSPFv3 Link (Type 8) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 30
+        intra_area_prefix_lsa_sent:
+          description: |-
+            The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 31
+        intra_area_prefix_lsa_received:
+          description: |-
+            The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs received.
+          type: integer
+          format: uint64
+          x-field-uid: 32
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -18861,6 +19449,8 @@ components:
               x-field-uid: 10
             ospfv2_lsas:
               x-field-uid: 11
+            ospfv3_lsas:
+              x-field-uid: 12
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -18873,6 +19463,7 @@ components:
           - dhcpv6_interfaces
           - dhcpv6_leases
           - ospfv2_lsas
+          - ospfv3_lsas
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -18906,6 +19497,9 @@ components:
         ospfv2_lsas:
           $ref: '#/components/schemas/Ospfv2Lsas.State.Request'
           x-field-uid: 12
+        ospfv3_lsas:
+          $ref: '#/components/schemas/Ospfv3Lsas.State.Request'
+          x-field-uid: 13
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -18938,6 +19532,8 @@ components:
               x-field-uid: 10
             ospfv2_lsas:
               x-field-uid: 11
+            ospfv3_lsas:
+              x-field-uid: 12
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -18950,6 +19546,7 @@ components:
           - dhcpv6_interfaces
           - dhcpv6_leases
           - ospfv2_lsas
+          - ospfv3_lsas
         ipv4_neighbors:
           type: array
           items:
@@ -19005,6 +19602,11 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2Lsa.State'
           x-field-uid: 12
+        ospfv3_lsas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3Lsa.State'
+          x-field-uid: 13
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -19013,10 +19615,6 @@ components:
         ethernet_names:
           description: |
             The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (ARP cache entries) for all available Ethernet interfaces.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -19062,10 +19660,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -19105,11 +19699,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -19846,10 +20435,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -20310,10 +20895,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -20549,10 +21130,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -20757,10 +21334,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -20820,10 +21393,6 @@ components:
         dhcp_server_names:
           description: |
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4server/properties/name
@@ -20905,10 +21474,6 @@ components:
         dhcp_client_names:
           description: |
             The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -21000,10 +21565,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6server/properties/name
           type: array
           items:
             type: string
@@ -21082,10 +21643,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2Router/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2Router/properties/name
@@ -21418,6 +21975,386 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
+    Ospfv3Lsas.State.Request:
+      description: |-
+        The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned by the routers.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
+
+            x-constraint:
+            - /components/schemas/Device.Ospfv3Router/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Ospfv3Router/properties/name
+          x-field-uid: 1
+    Ospfv3Lsa.State:
+      description: |-
+        The result of OSPFv3 LSA information that are retrieved.
+      type: object
+      properties:
+        router_name:
+          description: |-
+            The name of the OSPFv3 Router that learned the LSA information.
+          type: string
+          x-field-uid: 1
+        router_lsas:
+          description: |-
+            One or more OSPFv3 Router LSA - Type 1.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.RouterLsa'
+          x-field-uid: 2
+        network_lsas:
+          description: |-
+            One or more OSPFv3 Network LSA - Type 2.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.NetworkLsa'
+          x-field-uid: 3
+        inter_area_prefix_lsas:
+          description: |-
+            One or more OSPFv3 Inter-Area-Prefix LSA - Type 3.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.InterAreaPrefixLsa'
+          x-field-uid: 4
+        inter_area_router_lsas:
+          description: |-
+            One or more OSPFv3 Inter-Area-Router LSA - Type 4.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.InterAreaRouterLsa'
+          x-field-uid: 5
+        external_as_lsas:
+          description: |-
+            OSPFv3 AS-External LSA - Type 5.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.ExternalAsLsa'
+          x-field-uid: 6
+        nssa_lsas:
+          description: |-
+            One or more OSPFv3 NSSA LSA - Type 7.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.NssaLsa'
+          x-field-uid: 7
+        link_lsas:
+          description: |-
+            One or more OSPFv3 Link LSA - Type 8.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.LinkLsa'
+          x-field-uid: 8
+        intra_area_prefix_lsas:
+          description: |-
+            One or more OSPFv3 Intra-Area-Prefix LSA - Type 9.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.IntraAreaPrefixLsa'
+          x-field-uid: 9
+    Ospfv3.RouterLsa:
+      description: |-
+        Contents of the router LSA.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        neighbor_router_id:
+          description: |-
+            Neighbor router id that is described within the LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        links:
+          description: |-
+            Links that are described within the LSA.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.Link'
+          x-field-uid: 3
+    Ospfv3.NetworkLsa:
+      description: |-
+        Contents of the Network LSA.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        attached_router_ids:
+          description: |-
+            Attached router ids that are described within the LSA.
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 2
+    Ospfv3.InterAreaPrefixLsa:
+      description: |-
+        Contents of the Inter-Area-Prefix LSA - Type 3.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The prefix length for the IP address.
+          type: string
+          format: uint32
+          x-field-uid: 2
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        address_prefix:
+          description: |-
+            The prefix for Inter Area Prefix LSA Address.
+          type: string
+          format: ipv6
+          x-field-uid: 4
+    Ospfv3.InterAreaRouterLsa:
+      description: |-
+        Contents of OSPFv3 Inter-Area-Router LSA - Type 4.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        destination_router_id:
+          description: |-
+            The id of the destination router of LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 3
+    Ospfv3.ExternalAsLsa:
+      description: |-
+        Contents of OSPFv3 AS-External-LSA - Type 5.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        address_prefix:
+          description: |-
+            The first IPv6 address prefix to be advertised in the LSA.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The length of the IPv6 address prefix, in bits.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric:
+          description: |-
+            The cost metric value for the route to this destination router.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        referenced_ls_type:
+          description: |-
+            If non-zero, an LSA with this LS type is to be associated with this LSA.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        forwarding_address:
+          description: |-
+            The IPV6 address where traffic for the advertised destination is forwarded.
+          type: string
+          format: ipv6
+          x-field-uid: 6
+        route_tag:
+          description: |-
+            The optional field may be used to communicate additional information between  AS boundary routers.
+          type: string
+          format: ipv4
+          x-field-uid: 7
+    Ospfv3.NssaLsa:
+      description: |-
+        Contents of OSPFv3 NSSA LSA - Type 7.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        address_prefix:
+          description: |-
+            The first IPv6 address prefix to be advertised in the LSA.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The length of the IPv6 address prefix, in bits.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric:
+          description: |-
+            The cost metric value for the route to this destination router.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        forwarding_address:
+          description: |-
+            The IPV6 address where traffic for the advertised destination is forwarded.
+          type: string
+          format: ipv6
+          x-field-uid: 5
+        route_tag:
+          description: |-
+            The optional field may be used to communicate additional information between  AS boundary routers.
+          type: string
+          format: ipv4
+          x-field-uid: 6
+    Ospfv3.LinkLsa:
+      description: |-
+        Contents of OSPFv3 Link LSA - Type 8.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        address_prefix:
+          description: |-
+            The first IPv6 address prefix to be advertised in the LSA.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The length of the IPv6 address prefix, in bits.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        link_local_address:
+          description: |-
+            The IPV6 Link Local address for the originating router's interface attached to this link.
+          type: string
+          format: ipv6
+          x-field-uid: 4
+    Ospfv3.IntraAreaPrefixLsa:
+      description: |-
+        Contents of OSPFv3 Intra-Area-Prefix LSA - Type 9.
+      type: object
+      properties:
+        header:
+          description: |-
+            Contents of the LSA header.
+          $ref: '#/components/schemas/Ospfv3.LsaHeader'
+          x-field-uid: 1
+        address_prefix:
+          description: |-
+            The first IPv6 address prefix to be advertised in the LSA.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The length of the IPv6 address prefix, in bits.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric:
+          description: |-
+            The cost metric value for the route to this destination router.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+    Ospfv3.LsaHeader:
+      description: |-
+        Attributes in LSA Header.
+      type: object
+      properties:
+        lsa_id:
+          description: |-
+            LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        advertising_router_id:
+          description: |-
+            The router ID (in the IPv4 format) of the router that originated the LSA.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        sequence_number:
+          description: |-
+            Sequence number to detect old and duplicate LSAs. The greater the sequence number the more recent the LSA.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        age:
+          description: |-
+            The time since the LSA's generation in seconds.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+    Ospfv3.Link:
+      description: |-
+        Generic attributes used to identify links within OSPFv3.
+      type: object
+      properties:
+        type:
+          description: |-
+            The data associated with the link type. The value is dependent upon the subtype of the LSA. - point_to_point: The LSA represents a point-to-point connection to another router. - transit: The LSA represents a connection to a transit network. - stub: The LSA represents a connection to a stub network. - virtual: The LSA represents a virtual link connection.
+          type: string
+          x-enum:
+            point_to_point:
+              x-field-uid: 1
+            transit:
+              x-field-uid: 2
+            stub:
+              x-field-uid: 3
+            virtual:
+              x-field-uid: 4
+          x-field-uid: 1
+          enum:
+          - point_to_point
+          - transit
+          - stub
+          - virtual
+        metric:
+          description: |-
+            The data associated with the link type. The value is
+            dependent upon the subtype of the LSA. When the connection is
+            to a stub network it represents the mask; for p2p connections
+            that are unnumbered it represents the ifIndex value of the
+            router's interface; for all other connections it represents
+            the local system's IP address.
+          type: integer
+          format: uint32
+          x-field-uid: 2
     Capture.Request:
       description: |-
         The capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
@@ -21428,10 +22365,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
