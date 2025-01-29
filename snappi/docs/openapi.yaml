@@ -10658,7 +10658,7 @@ components:
             Configure the QP range.
           type: integer
           format: uint32
-          default: 1
+          default: 2
           minimum: 2
           maximum: 33554431
           x-field-uid: 2
@@ -10759,7 +10759,7 @@ components:
             Configure the QP range.
           type: integer
           format: uint32
-          default: 1
+          default: 2
           minimum: 2
           maximum: 33554431
           x-field-uid: 2

@@ -765,7 +765,7 @@ func (obj *roCEv2FlowSettingsRemoteEnd) setDefault() {
 		obj.SetCustomQp(false)
 	}
 	if obj.obj.CustomQpNumber == nil {
-		obj.SetCustomQpNumber(1)
+		obj.SetCustomQpNumber(2)
 	}
 	if obj.obj.Dscp == nil {
 		obj.SetDscp(24)
