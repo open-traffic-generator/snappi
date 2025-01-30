@@ -15984,6 +15984,8 @@ components:
               x-field-uid: 13
             ospfv2:
               x-field-uid: 14
+            macsec:
+              x-field-uid: 15
           enum:
           - port
           - flow
@@ -15999,6 +16001,7 @@ components:
           - dhcpv6_client
           - dhcpv6_server
           - ospfv2
+          - macsec
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -16041,6 +16044,9 @@ components:
         ospfv2:
           $ref: '#/components/schemas/Ospfv2.Metrics.Request'
           x-field-uid: 15
+        macsec:
+          $ref: '#/components/schemas/Macsec.Metrics.Request'
+          x-field-uid: 16
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -16079,6 +16085,8 @@ components:
               x-field-uid: 13
             ospfv2_metrics:
               x-field-uid: 14
+            macsec_metrics:
+              x-field-uid: 15
           enum:
           - flow_metrics
           - port_metrics
@@ -16094,6 +16102,7 @@ components:
           - dhcpv6_client
           - dhcpv6_server
           - ospfv2_metrics
+          - macsec_metrics
         port_metrics:
           type: array
           items:
@@ -16164,6 +16173,11 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Metric'
           x-field-uid: 15
+        macsec_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.Metric'
+          x-field-uid: 16
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -18961,6 +18975,220 @@ components:
           type: integer
           format: uint64
           x-field-uid: 34
+    Macsec.Metrics.Request:
+      description: |-
+        The request to retrieve MACsec per secure entity (secY) metrics/statistics.
+      type: object
+      properties:
+        secy_names:
+          description: |
+            The names of secure entities (secYs) to return results for. An empty list will return results for all secYs.
+
+            x-constraint:
+            - /components/schemas/Macsec/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Macsec/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the secY cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              session_state:
+                x-field-uid: 1
+              session_flap_count:
+                x-field-uid: 2
+              out_pkts_protected:
+                x-field-uid: 3
+              out_pkts_encrypted:
+                x-field-uid: 4
+              in_pkts_ok:
+                x-field-uid: 5
+              in_pkts_bad:
+                x-field-uid: 6
+              in_pkts_bad_tag:
+                x-field-uid: 7
+              in_pkts_late:
+                x-field-uid: 8
+              in_pkts_no_sci:
+                x-field-uid: 9
+              in_pkts_not_using_sa:
+                x-field-uid: 10
+              in_pkts_not_valid:
+                x-field-uid: 11
+              in_pkts_unknown_sci:
+                x-field-uid: 12
+              in_pkts_unused_sa:
+                x-field-uid: 13
+              in_pkts_invalid:
+                x-field-uid: 14
+              in_pkts_untagged:
+                x-field-uid: 15
+              out_octets_protected:
+                x-field-uid: 16
+              out_octets_encrypted:
+                x-field-uid: 17
+              in_octets_validated:
+                x-field-uid: 18
+              in_octets_decrypted:
+                x-field-uid: 19
+            enum:
+            - session_state
+            - session_flap_count
+            - out_pkts_protected
+            - out_pkts_encrypted
+            - in_pkts_ok
+            - in_pkts_bad
+            - in_pkts_bad_tag
+            - in_pkts_late
+            - in_pkts_no_sci
+            - in_pkts_not_using_sa
+            - in_pkts_not_valid
+            - in_pkts_unknown_sci
+            - in_pkts_unused_sa
+            - in_pkts_invalid
+            - in_pkts_untagged
+            - out_octets_protected
+            - out_octets_encrypted
+            - in_octets_validated
+            - in_octets_decrypted
+          x-field-uid: 2
+    Macsec.Metric:
+      description: |-
+        MACsec per secY statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured MACsec secY.
+          type: string
+          x-field-uid: 1
+        session_state:
+          description: |-
+            Session state as up or down. Up refers to an Established state and Down refers to any other state.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+        session_flap_count:
+          description: |-
+            Number of times the session went from Up to Down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        out_pkts_protected:
+          description: |-
+            OutPktsProtected.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        out_pkts_encrypted:
+          description: |-
+            OutPktsEncrypted.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        in_pkts_ok:
+          description: |-
+            InPktsOk.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        in_pkts_bad:
+          description: |-
+            InPktsBad.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        in_pkts_bad_tag:
+          description: |-
+            InPktsBadTag.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        in_pkts_late:
+          description: |-
+            InPktsLate.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        in_pkts_no_sci:
+          description: |-
+            InPktsNoSCI.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        in_pkts_not_using_sa:
+          description: |-
+            InPktsNotUsingSA.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        in_pkts_not_valid:
+          description: |-
+            InPktsNotValid.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        in_pkts_unknown_sci:
+          description: |-
+            InPktsUnknownSCI.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        in_pkts_unused_sa:
+          description: |-
+            InPktsUnusedSA.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        in_pkts_invalid:
+          description: |-
+            InPktsInvalid.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        in_pkts_untagged:
+          description: |-
+            InPktsUntagged.
+          type: integer
+          format: uint64
+          x-field-uid: 16
+        out_octets_protected:
+          description: |-
+            OutOctetsProtected.
+          type: integer
+          format: uint64
+          x-field-uid: 17
+        out_octets_encrypted:
+          description: |-
+            OutOctetsEncrypted.
+          type: integer
+          format: uint64
+          x-field-uid: 18
+        in_octets_validated:
+          description: |-
+            InOctetsValidated.
+          type: integer
+          format: uint64
+          x-field-uid: 19
+        in_octets_decrypted:
+          description: |-
+            InOctetsDecrypted.
+          type: integer
+          format: uint64
+          x-field-uid: 20
     States.Request:
       description: |-
         Request to traffic generator for states of choice

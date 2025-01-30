@@ -30,6 +30,7 @@ type metricsResponse struct {
 	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
+	macsecMetricsHolder       MetricsResponseMacsecMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -271,6 +272,7 @@ func (obj *metricsResponse) setNil() {
 	obj.dhcpv6ClientMetricsHolder = nil
 	obj.dhcpv6ServerMetricsHolder = nil
 	obj.ospfv2MetricsHolder = nil
+	obj.macsecMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -306,12 +308,12 @@ type MetricsResponse interface {
 	HasChoice() bool
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -340,6 +342,8 @@ type MetricsResponse interface {
 	Dhcpv6ServerMetrics() MetricsResponseDhcpv6ServerMetricIter
 	// Ospfv2Metrics returns MetricsResponseOspfv2MetricIterIter, set in MetricsResponse
 	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
+	// MacsecMetrics returns MetricsResponseMacsecMetricIterIter, set in MetricsResponse
+	MacsecMetrics() MetricsResponseMacsecMetricIter
 	setNil()
 }
 
@@ -361,6 +365,7 @@ var MetricsResponseChoice = struct {
 	DHCPV6_CLIENT  MetricsResponseChoiceEnum
 	DHCPV6_SERVER  MetricsResponseChoiceEnum
 	OSPFV2_METRICS MetricsResponseChoiceEnum
+	MACSEC_METRICS MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:   MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:   MetricsResponseChoiceEnum("port_metrics"),
@@ -376,6 +381,7 @@ var MetricsResponseChoice = struct {
 	DHCPV6_CLIENT:  MetricsResponseChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER:  MetricsResponseChoiceEnum("dhcpv6_server"),
 	OSPFV2_METRICS: MetricsResponseChoiceEnum("ospfv2_metrics"),
+	MACSEC_METRICS: MetricsResponseChoiceEnum("macsec_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
@@ -387,6 +393,11 @@ func (obj *metricsResponse) Dhcpv4Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
+// getter for Dhcpv6Client to set choice
+func (obj *metricsResponse) Dhcpv6Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
+}
+
 // getter for Dhcpv4Server to set choice
 func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
@@ -395,11 +406,6 @@ func (obj *metricsResponse) Dhcpv4Server() {
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
-}
-
-// getter for Dhcpv6Client to set choice
-func (obj *metricsResponse) Dhcpv6Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
 // description is TBD
@@ -417,6 +423,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.MacsecMetrics = nil
+	obj.macsecMetricsHolder = nil
 	obj.obj.Ospfv2Metrics = nil
 	obj.ospfv2MetricsHolder = nil
 	obj.obj.RsvpMetrics = nil
@@ -476,6 +484,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.OSPFV2_METRICS {
 		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
+	}
+
+	if value == MetricsResponseChoice.MACSEC_METRICS {
+		obj.obj.MacsecMetrics = []*otg.MacsecMetric{}
 	}
 
 	return obj
@@ -1699,6 +1711,93 @@ func (obj *metricsResponseOspfv2MetricIter) appendHolderSlice(item Ospfv2Metric)
 	return obj
 }
 
+// description is TBD
+// MacsecMetrics returns a []MacsecMetric
+func (obj *metricsResponse) MacsecMetrics() MetricsResponseMacsecMetricIter {
+	if len(obj.obj.MacsecMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.MACSEC_METRICS)
+	}
+	if obj.macsecMetricsHolder == nil {
+		obj.macsecMetricsHolder = newMetricsResponseMacsecMetricIter(&obj.obj.MacsecMetrics).setMsg(obj)
+	}
+	return obj.macsecMetricsHolder
+}
+
+type metricsResponseMacsecMetricIter struct {
+	obj               *metricsResponse
+	macsecMetricSlice []MacsecMetric
+	fieldPtr          *[]*otg.MacsecMetric
+}
+
+func newMetricsResponseMacsecMetricIter(ptr *[]*otg.MacsecMetric) MetricsResponseMacsecMetricIter {
+	return &metricsResponseMacsecMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseMacsecMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseMacsecMetricIter
+	Items() []MacsecMetric
+	Add() MacsecMetric
+	Append(items ...MacsecMetric) MetricsResponseMacsecMetricIter
+	Set(index int, newObj MacsecMetric) MetricsResponseMacsecMetricIter
+	Clear() MetricsResponseMacsecMetricIter
+	clearHolderSlice() MetricsResponseMacsecMetricIter
+	appendHolderSlice(item MacsecMetric) MetricsResponseMacsecMetricIter
+}
+
+func (obj *metricsResponseMacsecMetricIter) setMsg(msg *metricsResponse) MetricsResponseMacsecMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&macsecMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseMacsecMetricIter) Items() []MacsecMetric {
+	return obj.macsecMetricSlice
+}
+
+func (obj *metricsResponseMacsecMetricIter) Add() MacsecMetric {
+	newObj := &otg.MacsecMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &macsecMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.macsecMetricSlice = append(obj.macsecMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseMacsecMetricIter) Append(items ...MacsecMetric) MetricsResponseMacsecMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.macsecMetricSlice = append(obj.macsecMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseMacsecMetricIter) Set(index int, newObj MacsecMetric) MetricsResponseMacsecMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.macsecMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseMacsecMetricIter) Clear() MetricsResponseMacsecMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MacsecMetric{}
+		obj.macsecMetricSlice = []MacsecMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseMacsecMetricIter) clearHolderSlice() MetricsResponseMacsecMetricIter {
+	if len(obj.macsecMetricSlice) > 0 {
+		obj.macsecMetricSlice = []MacsecMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseMacsecMetricIter) appendHolderSlice(item MacsecMetric) MetricsResponseMacsecMetricIter {
+	obj.macsecMetricSlice = append(obj.macsecMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1900,6 +1999,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.MacsecMetrics) != 0 {
+
+		if set_default {
+			obj.MacsecMetrics().clearHolderSlice()
+			for _, item := range obj.obj.MacsecMetrics {
+				obj.MacsecMetrics().appendHolderSlice(&macsecMetric{obj: item})
+			}
+		}
+		for _, item := range obj.MacsecMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -1954,6 +2067,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.Ospfv2Metrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.OSPFV2_METRICS
+	}
+
+	if len(obj.obj.MacsecMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.MACSEC_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

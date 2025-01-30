@@ -12215,6 +12215,7 @@ message MetricsRequest {
       dhcpv6_client = 12;
       dhcpv6_server = 13;
       ospfv2 = 14;
+      macsec = 15;
     }
   }
   // Description missing in models
@@ -12262,6 +12263,9 @@ message MetricsRequest {
 
   // Description missing in models
   Ospfv2MetricsRequest ospfv2 = 15;
+
+  // Description missing in models
+  MacsecMetricsRequest macsec = 16;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -12284,6 +12288,7 @@ message MetricsResponse {
       dhcpv6_client = 12;
       dhcpv6_server = 13;
       ospfv2_metrics = 14;
+      macsec_metrics = 15;
     }
   }
   // Description missing in models
@@ -12331,6 +12336,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Ospfv2Metric ospfv2_metrics = 15;
+
+  // Description missing in models
+  repeated MacsecMetric macsec_metrics = 16;
 }
 
 // The port result request to the traffic generator
@@ -13926,6 +13934,119 @@ message Ospfv2Metric {
 
   // The number of OSPFv2 Opaque Domain (Type 11) LSAs received.
   optional uint64 opaque_domain_received = 34;
+}
+
+// The request to retrieve MACsec per secure entity (secY) metrics/statistics.
+message MacsecMetricsRequest {
+
+  // The names of secure entities (secYs) to return results for. An empty list will return
+  // results for all secYs.
+  // 
+  // x-constraint:
+  // - /components/schemas/Macsec/properties/name
+  // 
+  repeated string secy_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      session_flap_count = 2;
+      out_pkts_protected = 3;
+      out_pkts_encrypted = 4;
+      in_pkts_ok = 5;
+      in_pkts_bad = 6;
+      in_pkts_bad_tag = 7;
+      in_pkts_late = 8;
+      in_pkts_no_sci = 9;
+      in_pkts_not_using_sa = 10;
+      in_pkts_not_valid = 11;
+      in_pkts_unknown_sci = 12;
+      in_pkts_unused_sa = 13;
+      in_pkts_invalid = 14;
+      in_pkts_untagged = 15;
+      out_octets_protected = 16;
+      out_octets_encrypted = 17;
+      in_octets_validated = 18;
+      in_octets_decrypted = 19;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the secY cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// MACsec per secY statistics information.
+message MacsecMetric {
+
+  // The name of a configured MACsec secY.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of times the session went from Up to Down state.
+  optional uint64 session_flap_count = 3;
+
+  // OutPktsProtected.
+  optional uint64 out_pkts_protected = 4;
+
+  // OutPktsEncrypted.
+  optional uint64 out_pkts_encrypted = 5;
+
+  // InPktsOk.
+  optional uint64 in_pkts_ok = 6;
+
+  // InPktsBad.
+  optional uint64 in_pkts_bad = 7;
+
+  // InPktsBadTag.
+  optional uint64 in_pkts_bad_tag = 8;
+
+  // InPktsLate.
+  optional uint64 in_pkts_late = 9;
+
+  // InPktsNoSCI.
+  optional uint64 in_pkts_no_sci = 10;
+
+  // InPktsNotUsingSA.
+  optional uint64 in_pkts_not_using_sa = 11;
+
+  // InPktsNotValid.
+  optional uint64 in_pkts_not_valid = 12;
+
+  // InPktsUnknownSCI.
+  optional uint64 in_pkts_unknown_sci = 13;
+
+  // InPktsUnusedSA.
+  optional uint64 in_pkts_unused_sa = 14;
+
+  // InPktsInvalid.
+  optional uint64 in_pkts_invalid = 15;
+
+  // InPktsUntagged.
+  optional uint64 in_pkts_untagged = 16;
+
+  // OutOctetsProtected.
+  optional uint64 out_octets_protected = 17;
+
+  // OutOctetsEncrypted.
+  optional uint64 out_octets_encrypted = 18;
+
+  // InOctetsValidated.
+  optional uint64 in_octets_validated = 19;
+
+  // InOctetsDecrypted.
+  optional uint64 in_octets_decrypted = 20;
 }
 
 // Request to traffic generator for states of choice

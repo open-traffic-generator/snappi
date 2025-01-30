@@ -30,6 +30,7 @@ type metricsRequest struct {
 	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
+	macsecHolder       MacsecMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -271,6 +272,7 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv6ClientHolder = nil
 	obj.dhcpv6ServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.macsecHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -416,6 +418,14 @@ type MetricsRequest interface {
 	SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
+	// Macsec returns MacsecMetricsRequest, set in MetricsRequest.
+	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity (secY) metrics/statistics.
+	Macsec() MacsecMetricsRequest
+	// SetMacsec assigns MacsecMetricsRequest provided by user to MetricsRequest.
+	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity (secY) metrics/statistics.
+	SetMacsec(value MacsecMetricsRequest) MetricsRequest
+	// HasMacsec checks if Macsec has been set in MetricsRequest
+	HasMacsec() bool
 	setNil()
 }
 
@@ -437,6 +447,7 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT MetricsRequestChoiceEnum
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 	OSPFV2        MetricsRequestChoiceEnum
+	MACSEC        MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -452,6 +463,7 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
+	MACSEC:        MetricsRequestChoiceEnum("macsec"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -473,6 +485,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Macsec = nil
+	obj.macsecHolder = nil
 	obj.obj.Ospfv2 = nil
 	obj.ospfv2Holder = nil
 	obj.obj.Dhcpv6Server = nil
@@ -556,6 +570,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.OSPFV2 {
 		obj.obj.Ospfv2 = NewOspfv2MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.MACSEC {
+		obj.obj.Macsec = NewMacsecMetricsRequest().msg()
 	}
 
 	return obj
@@ -953,6 +971,34 @@ func (obj *metricsRequest) SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest 
 	return obj
 }
 
+// description is TBD
+// Macsec returns a MacsecMetricsRequest
+func (obj *metricsRequest) Macsec() MacsecMetricsRequest {
+	if obj.obj.Macsec == nil {
+		obj.setChoice(MetricsRequestChoice.MACSEC)
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &macsecMetricsRequest{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// description is TBD
+// Macsec returns a MacsecMetricsRequest
+func (obj *metricsRequest) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// description is TBD
+// SetMacsec sets the MacsecMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetMacsec(value MacsecMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.MACSEC)
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1026,6 +1072,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
 	}
 
 }
@@ -1102,6 +1153,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Ospfv2 != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.OSPFV2
+	}
+
+	if obj.obj.Macsec != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.MACSEC
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
