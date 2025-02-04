@@ -10575,14 +10575,14 @@ components:
         max_num_of_qp:
           x-field-uid: 1
           description: |-
-            Maximum number of QP per External Endpoint.
+            Maximum number of QP per Endpoint.
           type: integer
         remote_end_point_ip_address:
           x-field-uid: 2
           description: |-
-            Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+            Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
-          format: ipv4
+          format: ip
         ib_mtu:
           x-field-uid: 3
           description: |-
@@ -10636,17 +10636,6 @@ components:
             So that by default, this remote peer does not initiate any traffic flow.
       type: object
       properties:
-        local_end:
-          $ref: '#/components/schemas/RoCEv2.FlowSettings.LocalEnd'
-          x-field-uid: 1
-        remote_end:
-          $ref: '#/components/schemas/RoCEv2.FlowSettings.RemoteEnd'
-          x-field-uid: 2
-    RoCEv2.FlowSettings.LocalEnd:
-      description: |-
-        Local End Flow Settings
-      type: object
-      properties:
         custom_qp:
           description: |-
             Turn on to define QP number.
@@ -10689,19 +10678,28 @@ components:
           minimum: 0
           maximum: 65535
           x-field-uid: 5
-        execute_commands:
+        rocev2_verb:
           description: |-
-            UDP source port number for this flow.
+            RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will not take part in traffic..
           type: string
           x-enum:
             none:
               x-field-uid: 1
-            RDMAWrite:
+            write:
               x-field-uid: 2
+            write_with_immediate:
+              x-field-uid: 3
+            send:
+              x-field-uid: 4
+            send_with_immediate:
+              x-field-uid: 5
           x-field-uid: 6
           enum:
           - none
-          - RDMAWrite
+          - write
+          - write_with_immediate
+          - send
+          - send_with_immediate
         immediate_data:
           description: |-
             Immediate Data field required for SEND/WRITE with immediate verb.
@@ -10743,130 +10741,6 @@ components:
           minimum: 0
           maximum: 33554431
           x-field-uid: 10
-    RoCEv2.FlowSettings.RemoteEnd:
-      description: |-
-        Remote End Flow Settings
-      type: object
-      properties:
-        custom_qp:
-          description: |-
-            Turn on to define QP number.
-          type: boolean
-          default: false
-          x-field-uid: 1
-        custom_qp_number:
-          description: |-
-            Configure the QP range.
-          type: integer
-          format: uint32
-          default: 2
-          minimum: 2
-          maximum: 33554431
-          x-field-uid: 2
-        dscp:
-          description: |-
-            DSCP value for this flow
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 0
-          maximum: 63
-          x-field-uid: 3
-        ecn:
-          description: |-
-            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 3
-          x-field-uid: 4
-        udp_source_port:
-          description: |-
-            UDP source port number for this flow.
-          type: integer
-          format: uint32
-          default: 49152
-          minimum: 0
-          maximum: 65535
-          x-field-uid: 5
-        execute_commands:
-          description: |-
-            UDP source port number for this flow.
-          type: string
-          x-enum:
-            none:
-              x-field-uid: 1
-            RDMAWrite:
-              x-field-uid: 2
-          x-field-uid: 6
-          enum:
-          - none
-          - RDMAWrite
-        immediate_data:
-          description: |-
-            Immediate Data field required for SEND/WRITE with immediate verb.
-          type: string
-          format: hex
-          default: '00000000'
-          x-field-uid: 7
-        message_size:
-          description: |-
-            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 65535
-          x-field-uid: 8
-        message_size_unit:
-          description: |-
-            Unit of the transfer message size. Available options are Bytes, KB, MB.
-          type: string
-          x-enum:
-            Byte:
-              x-field-uid: 1
-            KB:
-              x-field-uid: 2
-            MB:
-              x-field-uid: 3
-          x-field-uid: 9
-          enum:
-          - Byte
-          - KB
-          - MB
-        remote_qp_number:
-          description: |-
-            Remote QP Number.
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 33554431
-          x-field-uid: 10
-        virtual_address:
-          description: |-
-            Remote virtual address.
-          type: string
-          format: hex
-          default: '0000000000000000'
-          x-field-uid: 11
-        remote_key:
-          description: |-
-            Remote Key.
-          type: string
-          format: hex
-          default: '00000000'
-          x-field-uid: 12
-        initial_psn:
-          description: |-
-            Initial PSN.
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 33554431
-          x-field-uid: 13
     RoCEv2.V6Peer:
       description: |-
         Configuration for RoCEv2 IPv6 peer settings.
@@ -10879,14 +10753,14 @@ components:
         max_num_of_qp:
           x-field-uid: 1
           description: |-
-            Maximum number of QP per External Endpoint.
+            Maximum number of QP per Endpoint.
           type: integer
         remote_end_point_ip_address:
           x-field-uid: 2
           description: |-
-            Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+            Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
-          format: ipv4
+          format: ip
         ib_mtu:
           x-field-uid: 3
           description: |-

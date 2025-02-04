@@ -13,11 +13,9 @@ import (
 // ***** RoCEv2FlowSettings *****
 type roCEv2FlowSettings struct {
 	validation
-	obj             *otg.RoCEv2FlowSettings
-	marshaller      marshalRoCEv2FlowSettings
-	unMarshaller    unMarshalRoCEv2FlowSettings
-	localEndHolder  RoCEv2FlowSettingsLocalEnd
-	remoteEndHolder RoCEv2FlowSettingsRemoteEnd
+	obj          *otg.RoCEv2FlowSettings
+	marshaller   marshalRoCEv2FlowSettings
+	unMarshaller unMarshalRoCEv2FlowSettings
 }
 
 func NewRoCEv2FlowSettings() RoCEv2FlowSettings {
@@ -31,7 +29,7 @@ func (obj *roCEv2FlowSettings) msg() *otg.RoCEv2FlowSettings {
 }
 
 func (obj *roCEv2FlowSettings) setMsg(msg *otg.RoCEv2FlowSettings) RoCEv2FlowSettings {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -114,7 +112,7 @@ func (m *unMarshalroCEv2FlowSettings) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -160,7 +158,7 @@ func (m *unMarshalroCEv2FlowSettings) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -199,7 +197,7 @@ func (m *unMarshalroCEv2FlowSettings) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -244,14 +242,6 @@ func (obj *roCEv2FlowSettings) Clone() (RoCEv2FlowSettings, error) {
 	return newObj, nil
 }
 
-func (obj *roCEv2FlowSettings) setNil() {
-	obj.localEndHolder = nil
-	obj.remoteEndHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // RoCEv2FlowSettings is this section has two views, Local End and Remote End.
 // Both views have same configurations. However, the remote and local peer IP addresses are interchanged.
 // This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
@@ -278,78 +268,317 @@ type RoCEv2FlowSettings interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// LocalEnd returns RoCEv2FlowSettingsLocalEnd, set in RoCEv2FlowSettings.
-	// RoCEv2FlowSettingsLocalEnd is local End Flow Settings
-	LocalEnd() RoCEv2FlowSettingsLocalEnd
-	// SetLocalEnd assigns RoCEv2FlowSettingsLocalEnd provided by user to RoCEv2FlowSettings.
-	// RoCEv2FlowSettingsLocalEnd is local End Flow Settings
-	SetLocalEnd(value RoCEv2FlowSettingsLocalEnd) RoCEv2FlowSettings
-	// HasLocalEnd checks if LocalEnd has been set in RoCEv2FlowSettings
-	HasLocalEnd() bool
-	// RemoteEnd returns RoCEv2FlowSettingsRemoteEnd, set in RoCEv2FlowSettings.
-	// RoCEv2FlowSettingsRemoteEnd is remote End Flow Settings
-	RemoteEnd() RoCEv2FlowSettingsRemoteEnd
-	// SetRemoteEnd assigns RoCEv2FlowSettingsRemoteEnd provided by user to RoCEv2FlowSettings.
-	// RoCEv2FlowSettingsRemoteEnd is remote End Flow Settings
-	SetRemoteEnd(value RoCEv2FlowSettingsRemoteEnd) RoCEv2FlowSettings
-	// HasRemoteEnd checks if RemoteEnd has been set in RoCEv2FlowSettings
-	HasRemoteEnd() bool
-	setNil()
+	// CustomQp returns bool, set in RoCEv2FlowSettings.
+	CustomQp() bool
+	// SetCustomQp assigns bool provided by user to RoCEv2FlowSettings
+	SetCustomQp(value bool) RoCEv2FlowSettings
+	// HasCustomQp checks if CustomQp has been set in RoCEv2FlowSettings
+	HasCustomQp() bool
+	// CustomQpNumber returns uint32, set in RoCEv2FlowSettings.
+	CustomQpNumber() uint32
+	// SetCustomQpNumber assigns uint32 provided by user to RoCEv2FlowSettings
+	SetCustomQpNumber(value uint32) RoCEv2FlowSettings
+	// HasCustomQpNumber checks if CustomQpNumber has been set in RoCEv2FlowSettings
+	HasCustomQpNumber() bool
+	// Dscp returns uint32, set in RoCEv2FlowSettings.
+	Dscp() uint32
+	// SetDscp assigns uint32 provided by user to RoCEv2FlowSettings
+	SetDscp(value uint32) RoCEv2FlowSettings
+	// HasDscp checks if Dscp has been set in RoCEv2FlowSettings
+	HasDscp() bool
+	// Ecn returns uint32, set in RoCEv2FlowSettings.
+	Ecn() uint32
+	// SetEcn assigns uint32 provided by user to RoCEv2FlowSettings
+	SetEcn(value uint32) RoCEv2FlowSettings
+	// HasEcn checks if Ecn has been set in RoCEv2FlowSettings
+	HasEcn() bool
+	// UdpSourcePort returns uint32, set in RoCEv2FlowSettings.
+	UdpSourcePort() uint32
+	// SetUdpSourcePort assigns uint32 provided by user to RoCEv2FlowSettings
+	SetUdpSourcePort(value uint32) RoCEv2FlowSettings
+	// HasUdpSourcePort checks if UdpSourcePort has been set in RoCEv2FlowSettings
+	HasUdpSourcePort() bool
+	// Rocev2Verb returns RoCEv2FlowSettingsRocev2VerbEnum, set in RoCEv2FlowSettings
+	Rocev2Verb() RoCEv2FlowSettingsRocev2VerbEnum
+	// SetRocev2Verb assigns RoCEv2FlowSettingsRocev2VerbEnum provided by user to RoCEv2FlowSettings
+	SetRocev2Verb(value RoCEv2FlowSettingsRocev2VerbEnum) RoCEv2FlowSettings
+	// HasRocev2Verb checks if Rocev2Verb has been set in RoCEv2FlowSettings
+	HasRocev2Verb() bool
+	// ImmediateData returns string, set in RoCEv2FlowSettings.
+	ImmediateData() string
+	// SetImmediateData assigns string provided by user to RoCEv2FlowSettings
+	SetImmediateData(value string) RoCEv2FlowSettings
+	// HasImmediateData checks if ImmediateData has been set in RoCEv2FlowSettings
+	HasImmediateData() bool
+	// MessageSize returns uint32, set in RoCEv2FlowSettings.
+	MessageSize() uint32
+	// SetMessageSize assigns uint32 provided by user to RoCEv2FlowSettings
+	SetMessageSize(value uint32) RoCEv2FlowSettings
+	// HasMessageSize checks if MessageSize has been set in RoCEv2FlowSettings
+	HasMessageSize() bool
+	// MessageSizeUnit returns RoCEv2FlowSettingsMessageSizeUnitEnum, set in RoCEv2FlowSettings
+	MessageSizeUnit() RoCEv2FlowSettingsMessageSizeUnitEnum
+	// SetMessageSizeUnit assigns RoCEv2FlowSettingsMessageSizeUnitEnum provided by user to RoCEv2FlowSettings
+	SetMessageSizeUnit(value RoCEv2FlowSettingsMessageSizeUnitEnum) RoCEv2FlowSettings
+	// HasMessageSizeUnit checks if MessageSizeUnit has been set in RoCEv2FlowSettings
+	HasMessageSizeUnit() bool
+	// InitialPsn returns uint32, set in RoCEv2FlowSettings.
+	InitialPsn() uint32
+	// SetInitialPsn assigns uint32 provided by user to RoCEv2FlowSettings
+	SetInitialPsn(value uint32) RoCEv2FlowSettings
+	// HasInitialPsn checks if InitialPsn has been set in RoCEv2FlowSettings
+	HasInitialPsn() bool
 }
 
-// description is TBD
-// LocalEnd returns a RoCEv2FlowSettingsLocalEnd
-func (obj *roCEv2FlowSettings) LocalEnd() RoCEv2FlowSettingsLocalEnd {
-	if obj.obj.LocalEnd == nil {
-		obj.obj.LocalEnd = NewRoCEv2FlowSettingsLocalEnd().msg()
+// Turn on to define QP number.
+// CustomQp returns a bool
+func (obj *roCEv2FlowSettings) CustomQp() bool {
+
+	return *obj.obj.CustomQp
+
+}
+
+// Turn on to define QP number.
+// CustomQp returns a bool
+func (obj *roCEv2FlowSettings) HasCustomQp() bool {
+	return obj.obj.CustomQp != nil
+}
+
+// Turn on to define QP number.
+// SetCustomQp sets the bool value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetCustomQp(value bool) RoCEv2FlowSettings {
+
+	obj.obj.CustomQp = &value
+	return obj
+}
+
+// Configure the QP range.
+// CustomQpNumber returns a uint32
+func (obj *roCEv2FlowSettings) CustomQpNumber() uint32 {
+
+	return *obj.obj.CustomQpNumber
+
+}
+
+// Configure the QP range.
+// CustomQpNumber returns a uint32
+func (obj *roCEv2FlowSettings) HasCustomQpNumber() bool {
+	return obj.obj.CustomQpNumber != nil
+}
+
+// Configure the QP range.
+// SetCustomQpNumber sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetCustomQpNumber(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.CustomQpNumber = &value
+	return obj
+}
+
+// DSCP value for this flow
+// Dscp returns a uint32
+func (obj *roCEv2FlowSettings) Dscp() uint32 {
+
+	return *obj.obj.Dscp
+
+}
+
+// DSCP value for this flow
+// Dscp returns a uint32
+func (obj *roCEv2FlowSettings) HasDscp() bool {
+	return obj.obj.Dscp != nil
+}
+
+// DSCP value for this flow
+// SetDscp sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetDscp(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.Dscp = &value
+	return obj
+}
+
+// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
+// Ecn returns a uint32
+func (obj *roCEv2FlowSettings) Ecn() uint32 {
+
+	return *obj.obj.Ecn
+
+}
+
+// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
+// Ecn returns a uint32
+func (obj *roCEv2FlowSettings) HasEcn() bool {
+	return obj.obj.Ecn != nil
+}
+
+// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
+// SetEcn sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetEcn(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.Ecn = &value
+	return obj
+}
+
+// UDP source port number for this flow.
+// UdpSourcePort returns a uint32
+func (obj *roCEv2FlowSettings) UdpSourcePort() uint32 {
+
+	return *obj.obj.UdpSourcePort
+
+}
+
+// UDP source port number for this flow.
+// UdpSourcePort returns a uint32
+func (obj *roCEv2FlowSettings) HasUdpSourcePort() bool {
+	return obj.obj.UdpSourcePort != nil
+}
+
+// UDP source port number for this flow.
+// SetUdpSourcePort sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetUdpSourcePort(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.UdpSourcePort = &value
+	return obj
+}
+
+type RoCEv2FlowSettingsRocev2VerbEnum string
+
+// Enum of Rocev2Verb on RoCEv2FlowSettings
+var RoCEv2FlowSettingsRocev2Verb = struct {
+	NONE                 RoCEv2FlowSettingsRocev2VerbEnum
+	WRITE                RoCEv2FlowSettingsRocev2VerbEnum
+	WRITE_WITH_IMMEDIATE RoCEv2FlowSettingsRocev2VerbEnum
+	SEND                 RoCEv2FlowSettingsRocev2VerbEnum
+	SEND_WITH_IMMEDIATE  RoCEv2FlowSettingsRocev2VerbEnum
+}{
+	NONE:                 RoCEv2FlowSettingsRocev2VerbEnum("none"),
+	WRITE:                RoCEv2FlowSettingsRocev2VerbEnum("write"),
+	WRITE_WITH_IMMEDIATE: RoCEv2FlowSettingsRocev2VerbEnum("write_with_immediate"),
+	SEND:                 RoCEv2FlowSettingsRocev2VerbEnum("send"),
+	SEND_WITH_IMMEDIATE:  RoCEv2FlowSettingsRocev2VerbEnum("send_with_immediate"),
+}
+
+func (obj *roCEv2FlowSettings) Rocev2Verb() RoCEv2FlowSettingsRocev2VerbEnum {
+	return RoCEv2FlowSettingsRocev2VerbEnum(obj.obj.Rocev2Verb.Enum().String())
+}
+
+// RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will not take part in traffic..
+// Rocev2Verb returns a string
+func (obj *roCEv2FlowSettings) HasRocev2Verb() bool {
+	return obj.obj.Rocev2Verb != nil
+}
+
+func (obj *roCEv2FlowSettings) SetRocev2Verb(value RoCEv2FlowSettingsRocev2VerbEnum) RoCEv2FlowSettings {
+	intValue, ok := otg.RoCEv2FlowSettings_Rocev2Verb_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2FlowSettingsRocev2VerbEnum", string(value)))
+		return obj
 	}
-	if obj.localEndHolder == nil {
-		obj.localEndHolder = &roCEv2FlowSettingsLocalEnd{obj: obj.obj.LocalEnd}
-	}
-	return obj.localEndHolder
-}
-
-// description is TBD
-// LocalEnd returns a RoCEv2FlowSettingsLocalEnd
-func (obj *roCEv2FlowSettings) HasLocalEnd() bool {
-	return obj.obj.LocalEnd != nil
-}
-
-// description is TBD
-// SetLocalEnd sets the RoCEv2FlowSettingsLocalEnd value in the RoCEv2FlowSettings object
-func (obj *roCEv2FlowSettings) SetLocalEnd(value RoCEv2FlowSettingsLocalEnd) RoCEv2FlowSettings {
-
-	obj.localEndHolder = nil
-	obj.obj.LocalEnd = value.msg()
+	enumValue := otg.RoCEv2FlowSettings_Rocev2Verb_Enum(intValue)
+	obj.obj.Rocev2Verb = &enumValue
 
 	return obj
 }
 
-// description is TBD
-// RemoteEnd returns a RoCEv2FlowSettingsRemoteEnd
-func (obj *roCEv2FlowSettings) RemoteEnd() RoCEv2FlowSettingsRemoteEnd {
-	if obj.obj.RemoteEnd == nil {
-		obj.obj.RemoteEnd = NewRoCEv2FlowSettingsRemoteEnd().msg()
-	}
-	if obj.remoteEndHolder == nil {
-		obj.remoteEndHolder = &roCEv2FlowSettingsRemoteEnd{obj: obj.obj.RemoteEnd}
-	}
-	return obj.remoteEndHolder
+// Immediate Data field required for SEND/WRITE with immediate verb.
+// ImmediateData returns a string
+func (obj *roCEv2FlowSettings) ImmediateData() string {
+
+	return *obj.obj.ImmediateData
+
 }
 
-// description is TBD
-// RemoteEnd returns a RoCEv2FlowSettingsRemoteEnd
-func (obj *roCEv2FlowSettings) HasRemoteEnd() bool {
-	return obj.obj.RemoteEnd != nil
+// Immediate Data field required for SEND/WRITE with immediate verb.
+// ImmediateData returns a string
+func (obj *roCEv2FlowSettings) HasImmediateData() bool {
+	return obj.obj.ImmediateData != nil
 }
 
-// description is TBD
-// SetRemoteEnd sets the RoCEv2FlowSettingsRemoteEnd value in the RoCEv2FlowSettings object
-func (obj *roCEv2FlowSettings) SetRemoteEnd(value RoCEv2FlowSettingsRemoteEnd) RoCEv2FlowSettings {
+// Immediate Data field required for SEND/WRITE with immediate verb.
+// SetImmediateData sets the string value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetImmediateData(value string) RoCEv2FlowSettings {
 
-	obj.remoteEndHolder = nil
-	obj.obj.RemoteEnd = value.msg()
+	obj.obj.ImmediateData = &value
+	return obj
+}
 
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// MessageSize returns a uint32
+func (obj *roCEv2FlowSettings) MessageSize() uint32 {
+
+	return *obj.obj.MessageSize
+
+}
+
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// MessageSize returns a uint32
+func (obj *roCEv2FlowSettings) HasMessageSize() bool {
+	return obj.obj.MessageSize != nil
+}
+
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// SetMessageSize sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetMessageSize(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.MessageSize = &value
+	return obj
+}
+
+type RoCEv2FlowSettingsMessageSizeUnitEnum string
+
+// Enum of MessageSizeUnit on RoCEv2FlowSettings
+var RoCEv2FlowSettingsMessageSizeUnit = struct {
+	BYTE RoCEv2FlowSettingsMessageSizeUnitEnum
+	KB   RoCEv2FlowSettingsMessageSizeUnitEnum
+	MB   RoCEv2FlowSettingsMessageSizeUnitEnum
+}{
+	BYTE: RoCEv2FlowSettingsMessageSizeUnitEnum("Byte"),
+	KB:   RoCEv2FlowSettingsMessageSizeUnitEnum("KB"),
+	MB:   RoCEv2FlowSettingsMessageSizeUnitEnum("MB"),
+}
+
+func (obj *roCEv2FlowSettings) MessageSizeUnit() RoCEv2FlowSettingsMessageSizeUnitEnum {
+	return RoCEv2FlowSettingsMessageSizeUnitEnum(obj.obj.MessageSizeUnit.Enum().String())
+}
+
+// Unit of the transfer message size. Available options are Bytes, KB, MB.
+// MessageSizeUnit returns a string
+func (obj *roCEv2FlowSettings) HasMessageSizeUnit() bool {
+	return obj.obj.MessageSizeUnit != nil
+}
+
+func (obj *roCEv2FlowSettings) SetMessageSizeUnit(value RoCEv2FlowSettingsMessageSizeUnitEnum) RoCEv2FlowSettings {
+	intValue, ok := otg.RoCEv2FlowSettings_MessageSizeUnit_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2FlowSettingsMessageSizeUnitEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.RoCEv2FlowSettings_MessageSizeUnit_Enum(intValue)
+	obj.obj.MessageSizeUnit = &enumValue
+
+	return obj
+}
+
+// Initial PSN
+// InitialPsn returns a uint32
+func (obj *roCEv2FlowSettings) InitialPsn() uint32 {
+
+	return *obj.obj.InitialPsn
+
+}
+
+// Initial PSN
+// InitialPsn returns a uint32
+func (obj *roCEv2FlowSettings) HasInitialPsn() bool {
+	return obj.obj.InitialPsn != nil
+}
+
+// Initial PSN
+// SetInitialPsn sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetInitialPsn(value uint32) RoCEv2FlowSettings {
+
+	obj.obj.InitialPsn = &value
 	return obj
 }
 
@@ -358,18 +587,101 @@ func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.LocalEnd != nil {
+	if obj.obj.CustomQpNumber != nil {
 
-		obj.LocalEnd().validateObj(vObj, set_default)
+		if *obj.obj.CustomQpNumber < 2 || *obj.obj.CustomQpNumber > 33554431 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= RoCEv2FlowSettings.CustomQpNumber <= 33554431 but Got %d", *obj.obj.CustomQpNumber))
+		}
+
 	}
 
-	if obj.obj.RemoteEnd != nil {
+	if obj.obj.Dscp != nil {
 
-		obj.RemoteEnd().validateObj(vObj, set_default)
+		if *obj.obj.Dscp > 63 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2FlowSettings.Dscp <= 63 but Got %d", *obj.obj.Dscp))
+		}
+
+	}
+
+	if obj.obj.Ecn != nil {
+
+		if *obj.obj.Ecn > 3 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2FlowSettings.Ecn <= 3 but Got %d", *obj.obj.Ecn))
+		}
+
+	}
+
+	if obj.obj.UdpSourcePort != nil {
+
+		if *obj.obj.UdpSourcePort > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2FlowSettings.UdpSourcePort <= 65535 but Got %d", *obj.obj.UdpSourcePort))
+		}
+
+	}
+
+	if obj.obj.ImmediateData != nil {
+
+		err := obj.validateHex(obj.ImmediateData())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on RoCEv2FlowSettings.ImmediateData"))
+		}
+
+	}
+
+	if obj.obj.MessageSize != nil {
+
+		if *obj.obj.MessageSize > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2FlowSettings.MessageSize <= 65535 but Got %d", *obj.obj.MessageSize))
+		}
+
+	}
+
+	if obj.obj.InitialPsn != nil {
+
+		if *obj.obj.InitialPsn > 33554431 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2FlowSettings.InitialPsn <= 33554431 but Got %d", *obj.obj.InitialPsn))
+		}
+
 	}
 
 }
 
 func (obj *roCEv2FlowSettings) setDefault() {
+	if obj.obj.CustomQp == nil {
+		obj.SetCustomQp(false)
+	}
+	if obj.obj.CustomQpNumber == nil {
+		obj.SetCustomQpNumber(2)
+	}
+	if obj.obj.Dscp == nil {
+		obj.SetDscp(24)
+	}
+	if obj.obj.Ecn == nil {
+		obj.SetEcn(1)
+	}
+	if obj.obj.UdpSourcePort == nil {
+		obj.SetUdpSourcePort(49152)
+	}
+	if obj.obj.ImmediateData == nil {
+		obj.SetImmediateData("00000000")
+	}
+	if obj.obj.MessageSize == nil {
+		obj.SetMessageSize(1)
+	}
+	if obj.obj.InitialPsn == nil {
+		obj.SetInitialPsn(24)
+	}
 
 }

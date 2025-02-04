@@ -295,7 +295,7 @@ type RoCEv2V6Peer interface {
 	setNil()
 }
 
-// Maximum number of QP per External Endpoint.
+// Maximum number of QP per Endpoint.
 // MaxNumOfQp returns a int32
 func (obj *roCEv2V6Peer) MaxNumOfQp() int32 {
 
@@ -303,7 +303,7 @@ func (obj *roCEv2V6Peer) MaxNumOfQp() int32 {
 
 }
 
-// Maximum number of QP per External Endpoint.
+// Maximum number of QP per Endpoint.
 // SetMaxNumOfQp sets the int32 value in the RoCEv2V6Peer object
 func (obj *roCEv2V6Peer) SetMaxNumOfQp(value int32) RoCEv2V6Peer {
 
@@ -311,7 +311,7 @@ func (obj *roCEv2V6Peer) SetMaxNumOfQp(value int32) RoCEv2V6Peer {
 	return obj
 }
 
-// Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+// Specify the IP address of External NIC i.e Remote End Point IP Address.
 // RemoteEndPointIpAddress returns a string
 func (obj *roCEv2V6Peer) RemoteEndPointIpAddress() string {
 
@@ -319,7 +319,7 @@ func (obj *roCEv2V6Peer) RemoteEndPointIpAddress() string {
 
 }
 
-// Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+// Specify the IP address of External NIC i.e Remote End Point IP Address.
 // SetRemoteEndPointIpAddress sets the string value in the RoCEv2V6Peer object
 func (obj *roCEv2V6Peer) SetRemoteEndPointIpAddress(value string) RoCEv2V6Peer {
 
@@ -465,14 +465,6 @@ func (obj *roCEv2V6Peer) validateObj(vObj *validation, set_default bool) {
 	// RemoteEndPointIpAddress is required
 	if obj.obj.RemoteEndPointIpAddress == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "RemoteEndPointIpAddress is required field on interface RoCEv2V6Peer")
-	}
-	if obj.obj.RemoteEndPointIpAddress != nil {
-
-		err := obj.validateIpv4(obj.RemoteEndPointIpAddress())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on RoCEv2V6Peer.RemoteEndPointIpAddress"))
-		}
-
 	}
 
 	// IbMtu is required

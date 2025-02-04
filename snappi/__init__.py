@@ -354,8 +354,6 @@ from .snappi import DeviceRoCEv2Peer
 from .snappi import RoCEv2V4Interface
 from .snappi import RoCEv2V4Peer
 from .snappi import RoCEv2FlowSettings
-from .snappi import RoCEv2FlowSettingsLocalEnd
-from .snappi import RoCEv2FlowSettingsRemoteEnd
 from .snappi import RoCEv2FlowSettingsIter
 from .snappi import RoCEv2V4PeerIter
 from .snappi import RoCEv2V4InterfaceIter

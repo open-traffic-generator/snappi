@@ -7864,11 +7864,11 @@ message DeviceRoCEv2Peer {
 // Configuration for RoCEv2 IPv4 peers.
 message RoCEv2V4Peer {
 
-  // Maximum number of QP per External Endpoint.
+  // Maximum number of QP per Endpoint.
   // required = true
   optional int32 max_num_of_qp = 1;
 
-  // Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+  // Specify the IP address of External NIC i.e Remote End Point IP Address.
   // required = true
   optional string remote_end_point_ip_address = 2;
 
@@ -7913,16 +7913,6 @@ message RoCEv2V4Interface {
 // So that by default, this remote peer does not initiate any traffic flow.
 message RoCEv2FlowSettings {
 
-  // Description missing in models
-  RoCEv2FlowSettingsLocalEnd local_end = 1;
-
-  // Description missing in models
-  RoCEv2FlowSettingsRemoteEnd remote_end = 2;
-}
-
-// Local End Flow Settings
-message RoCEv2FlowSettingsLocalEnd {
-
   // Turn on to define QP number.
   // default = False
   optional bool custom_qp = 1;
@@ -7944,15 +7934,19 @@ message RoCEv2FlowSettingsLocalEnd {
   // default = 49152
   optional uint32 udp_source_port = 5;
 
-  message ExecuteCommands {
+  message Rocev2Verb {
     enum Enum {
       unspecified = 0;
       none = 1;
-      RDMAWrite = 2;
+      write = 2;
+      write_with_immediate = 3;
+      send = 4;
+      send_with_immediate = 5;
     }
   }
-  // UDP source port number for this flow.
-  optional ExecuteCommands.Enum execute_commands = 6;
+  // RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will
+  // not take part in traffic..
+  optional Rocev2Verb.Enum rocev2_verb = 6;
 
   // Immediate Data field required for SEND/WRITE with immediate verb.
   // default = 00000000
@@ -7990,96 +7984,14 @@ message RoCEv2FlowSettingsLocalEnd {
   optional uint32 initial_psn = 10;
 }
 
-// Remote End Flow Settings
-message RoCEv2FlowSettingsRemoteEnd {
-
-  // Turn on to define QP number.
-  // default = False
-  optional bool custom_qp = 1;
-
-  // Configure the QP range.
-  // default = 2
-  optional uint32 custom_qp_number = 2;
-
-  // DSCP value for this flow
-  // default = 24
-  optional uint32 dscp = 3;
-
-  // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
-  // header to encode four different code points.
-  // default = 1
-  optional uint32 ecn = 4;
-
-  // UDP source port number for this flow.
-  // default = 49152
-  optional uint32 udp_source_port = 5;
-
-  message ExecuteCommands {
-    enum Enum {
-      unspecified = 0;
-      none = 1;
-      RDMAWrite = 2;
-    }
-  }
-  // UDP source port number for this flow.
-  optional ExecuteCommands.Enum execute_commands = 6;
-
-  // Immediate Data field required for SEND/WRITE with immediate verb.
-  // default = 00000000
-  optional string immediate_data = 7;
-
-  // The Maximum message size that is allowed to transfer depends on the MTU size and
-  // the number of VLANs configured on the interfaces. For any MTU, the maximum number
-  // of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single
-  // RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE
-  // MIDDLE messages. The maximum message size that is allowed to be transferred for a
-  // given MTU is constrained by the above conditions. For example, for an MTU size of
-  // 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet
-  // Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size.
-  // This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to
-  // add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then
-  // the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common
-  // header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500
-  // - 62) = 94239314 bytes or 89 MB.
-  // default = 1
-  optional uint32 message_size = 8;
-
-  message MessageSizeUnit {
-    enum Enum {
-      unspecified = 0;
-      Byte = 1;
-      KB = 2;
-      MB = 3;
-    }
-  }
-  // Unit of the transfer message size. Available options are Bytes, KB, MB.
-  optional MessageSizeUnit.Enum message_size_unit = 9;
-
-  // Remote QP Number.
-  // default = 0
-  optional uint32 remote_qp_number = 10;
-
-  // Remote virtual address.
-  // default = 0000000000000000
-  optional string virtual_address = 11;
-
-  // Remote Key.
-  // default = 00000000
-  optional string remote_key = 12;
-
-  // Initial PSN.
-  // default = 0
-  optional uint32 initial_psn = 13;
-}
-
 // Configuration for RoCEv2 IPv6 peer settings.
 message RoCEv2V6Peer {
 
-  // Maximum number of QP per External Endpoint.
+  // Maximum number of QP per Endpoint.
   // required = true
   optional int32 max_num_of_qp = 1;
 
-  // Specify the IPv4 address of External NIC i.e Remote End Point IP Address.
+  // Specify the IP address of External NIC i.e Remote End Point IP Address.
   // required = true
   optional string remote_end_point_ip_address = 2;
 
