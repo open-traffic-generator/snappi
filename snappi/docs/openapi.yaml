@@ -10582,7 +10582,6 @@ components:
           description: |-
             Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
-          format: ip
         ib_mtu:
           x-field-uid: 3
           description: |-
@@ -10760,7 +10759,6 @@ components:
           description: |-
             Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
-          format: ip
         ib_mtu:
           x-field-uid: 3
           description: |-
