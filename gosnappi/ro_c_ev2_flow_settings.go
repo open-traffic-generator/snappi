@@ -674,11 +674,19 @@ func (obj *roCEv2FlowSettings) setDefault() {
 	if obj.obj.UdpSourcePort == nil {
 		obj.SetUdpSourcePort(49152)
 	}
+	if obj.obj.Rocev2Verb == nil {
+		obj.SetRocev2Verb(RoCEv2FlowSettingsRocev2Verb.WRITE)
+
+	}
 	if obj.obj.ImmediateData == nil {
 		obj.SetImmediateData("00000000")
 	}
 	if obj.obj.MessageSize == nil {
 		obj.SetMessageSize(1)
+	}
+	if obj.obj.MessageSizeUnit == nil {
+		obj.SetMessageSizeUnit(RoCEv2FlowSettingsMessageSizeUnit.MB)
+
 	}
 	if obj.obj.InitialPsn == nil {
 		obj.SetInitialPsn(24)

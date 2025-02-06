@@ -10713,6 +10713,7 @@ components:
           description: |-
             RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will not take part in traffic..
           type: string
+          default: write
           x-enum:
             none:
               x-field-uid: 1
@@ -10751,6 +10752,7 @@ components:
           description: |-
             Unit of the transfer message size. Available options are Bytes, KB, MB.
           type: string
+          default: MB
           x-enum:
             Byte:
               x-field-uid: 1

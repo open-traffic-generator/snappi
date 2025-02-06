@@ -7970,6 +7970,7 @@ message RoCEv2FlowSettings {
   }
   // RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will
   // not take part in traffic..
+  // default = Rocev2Verb.Enum.write
   optional Rocev2Verb.Enum rocev2_verb = 6;
 
   // Immediate Data field required for SEND/WRITE with immediate verb.
@@ -8001,6 +8002,7 @@ message RoCEv2FlowSettings {
     }
   }
   // Unit of the transfer message size. Available options are Bytes, KB, MB.
+  // default = MessageSizeUnit.Enum.mb
   optional MessageSizeUnit.Enum message_size_unit = 9;
 
   // Initial PSN
