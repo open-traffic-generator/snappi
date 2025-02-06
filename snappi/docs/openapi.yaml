@@ -10983,6 +10983,7 @@ components:
           description: |-
             Offset of Rx secTAG from the first byte in packet.
           type: integer
+          format: uint32
           default: 12
           x-field-uid: 1
         type_of_ca:
@@ -11005,18 +11006,21 @@ components:
           description: |-
             Maximum CA count.
           type: integer
+          format: uint32
           default: 256
           x-field-uid: 3
         max_dut_tx_sc_per_ca:
           description: |-
             Maximum DUT Tx SC per CA.
           type: integer
+          format: uint32
           default: 1
           x-field-uid: 4
         max_device_per_ca:
           description: |-
             Maximum devices per CA.
           type: integer
+          format: uint32
           default: 256
           x-field-uid: 5
         rx_sc_identifying_field:

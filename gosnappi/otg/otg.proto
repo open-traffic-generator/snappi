@@ -8165,7 +8165,7 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationIn
 
   // Offset of Rx secTAG from the first byte in packet.
   // default = 12
-  optional int32 rx_sectag_offset = 1;
+  optional uint32 rx_sectag_offset = 1;
 
   message TypeOfCa {
     enum Enum {
@@ -8180,15 +8180,15 @@ message MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationIn
 
   // Maximum CA count.
   // default = 256
-  optional int32 max_ca_count = 3;
+  optional uint32 max_ca_count = 3;
 
   // Maximum DUT Tx SC per CA.
   // default = 1
-  optional int32 max_dut_tx_sc_per_ca = 4;
+  optional uint32 max_dut_tx_sc_per_ca = 4;
 
   // Maximum devices per CA.
   // default = 256
-  optional int32 max_device_per_ca = 5;
+  optional uint32 max_device_per_ca = 5;
 
   message RxScIdentifyingField {
     enum Enum {

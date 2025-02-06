@@ -264,10 +264,10 @@ type MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlin
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// RxSectagOffset returns int32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
-	RxSectagOffset() int32
-	// SetRxSectagOffset assigns int32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
-	SetRxSectagOffset(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	// RxSectagOffset returns uint32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
+	RxSectagOffset() uint32
+	// SetRxSectagOffset assigns uint32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	SetRxSectagOffset(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// HasRxSectagOffset checks if RxSectagOffset has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	HasRxSectagOffset() bool
 	// TypeOfCa returns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCryptoTypeOfCaEnum, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
@@ -276,22 +276,22 @@ type MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlin
 	SetTypeOfCa(value MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCryptoTypeOfCaEnum) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// HasTypeOfCa checks if TypeOfCa has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	HasTypeOfCa() bool
-	// MaxCaCount returns int32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
-	MaxCaCount() int32
-	// SetMaxCaCount assigns int32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
-	SetMaxCaCount(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	// MaxCaCount returns uint32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
+	MaxCaCount() uint32
+	// SetMaxCaCount assigns uint32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	SetMaxCaCount(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// HasMaxCaCount checks if MaxCaCount has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	HasMaxCaCount() bool
-	// MaxDutTxScPerCa returns int32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
-	MaxDutTxScPerCa() int32
-	// SetMaxDutTxScPerCa assigns int32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
-	SetMaxDutTxScPerCa(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	// MaxDutTxScPerCa returns uint32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
+	MaxDutTxScPerCa() uint32
+	// SetMaxDutTxScPerCa assigns uint32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	SetMaxDutTxScPerCa(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// HasMaxDutTxScPerCa checks if MaxDutTxScPerCa has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	HasMaxDutTxScPerCa() bool
-	// MaxDevicePerCa returns int32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
-	MaxDevicePerCa() int32
-	// SetMaxDevicePerCa assigns int32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
-	SetMaxDevicePerCa(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	// MaxDevicePerCa returns uint32, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.
+	MaxDevicePerCa() uint32
+	// SetMaxDevicePerCa assigns uint32 provided by user to MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
+	SetMaxDevicePerCa(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// HasMaxDevicePerCa checks if MaxDevicePerCa has been set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	HasMaxDevicePerCa() bool
 	// RxScIdentifyingField returns MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum, set in MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
@@ -303,22 +303,22 @@ type MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlin
 }
 
 // Offset of Rx secTAG from the first byte in packet.
-// RxSectagOffset returns a int32
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) RxSectagOffset() int32 {
+// RxSectagOffset returns a uint32
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) RxSectagOffset() uint32 {
 
 	return *obj.obj.RxSectagOffset
 
 }
 
 // Offset of Rx secTAG from the first byte in packet.
-// RxSectagOffset returns a int32
+// RxSectagOffset returns a uint32
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasRxSectagOffset() bool {
 	return obj.obj.RxSectagOffset != nil
 }
 
 // Offset of Rx secTAG from the first byte in packet.
-// SetRxSectagOffset sets the int32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetRxSectagOffset(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
+// SetRxSectagOffset sets the uint32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetRxSectagOffset(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
 	obj.obj.RxSectagOffset = &value
 	return obj
@@ -361,66 +361,66 @@ func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAcceleratio
 }
 
 // Maximum CA count.
-// MaxCaCount returns a int32
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxCaCount() int32 {
+// MaxCaCount returns a uint32
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxCaCount() uint32 {
 
 	return *obj.obj.MaxCaCount
 
 }
 
 // Maximum CA count.
-// MaxCaCount returns a int32
+// MaxCaCount returns a uint32
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxCaCount() bool {
 	return obj.obj.MaxCaCount != nil
 }
 
 // Maximum CA count.
-// SetMaxCaCount sets the int32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxCaCount(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
+// SetMaxCaCount sets the uint32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxCaCount(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
 	obj.obj.MaxCaCount = &value
 	return obj
 }
 
 // Maximum DUT Tx SC per CA.
-// MaxDutTxScPerCa returns a int32
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDutTxScPerCa() int32 {
+// MaxDutTxScPerCa returns a uint32
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDutTxScPerCa() uint32 {
 
 	return *obj.obj.MaxDutTxScPerCa
 
 }
 
 // Maximum DUT Tx SC per CA.
-// MaxDutTxScPerCa returns a int32
+// MaxDutTxScPerCa returns a uint32
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxDutTxScPerCa() bool {
 	return obj.obj.MaxDutTxScPerCa != nil
 }
 
 // Maximum DUT Tx SC per CA.
-// SetMaxDutTxScPerCa sets the int32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDutTxScPerCa(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
+// SetMaxDutTxScPerCa sets the uint32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDutTxScPerCa(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
 	obj.obj.MaxDutTxScPerCa = &value
 	return obj
 }
 
 // Maximum devices per CA.
-// MaxDevicePerCa returns a int32
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDevicePerCa() int32 {
+// MaxDevicePerCa returns a uint32
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDevicePerCa() uint32 {
 
 	return *obj.obj.MaxDevicePerCa
 
 }
 
 // Maximum devices per CA.
-// MaxDevicePerCa returns a int32
+// MaxDevicePerCa returns a uint32
 func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxDevicePerCa() bool {
 	return obj.obj.MaxDevicePerCa != nil
 }
 
 // Maximum devices per CA.
-// SetMaxDevicePerCa sets the int32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
-func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDevicePerCa(value int32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
+// SetMaxDevicePerCa sets the uint32 value in the MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
+func (obj *macsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDevicePerCa(value uint32) MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
 	obj.obj.MaxDevicePerCa = &value
 	return obj
