@@ -7864,29 +7864,53 @@ message DeviceRoCEv2Peer {
 // Configuration for RoCEv2 IPv4 peers.
 message RoCEv2V4Peer {
 
+  // Number of External Endpoints.
+  // required = true
+  optional int32 num_of_external_endpoints = 1;
+
   // Maximum number of QP per Endpoint.
   // required = true
-  optional int32 max_num_of_qp = 1;
+  optional int32 max_num_of_qp = 2;
 
   // Specify the IP address of External NIC i.e Remote End Point IP Address.
   // required = true
-  optional string remote_end_point_ip_address = 2;
+  optional string remote_end_point_ip_address = 3;
 
   // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
   // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
   // as configured IB MTU. You can configure custom size also.
   // required = true
-  optional uint32 ib_mtu = 3;
+  optional uint32 ib_mtu = 4;
+
+  message TrafficBurstMode {
+    enum Enum {
+      unspecified = 0;
+      Continuous = 1;
+      Fixed = 2;
+    }
+  }
+  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+  optional TrafficBurstMode.Enum traffic_burst_mode = 5;
+
+  message TrafficBurstCount {
+    enum Enum {
+      unspecified = 0;
+      Continuous = 1;
+      Fixed = 2;
+    }
+  }
+  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+  optional TrafficBurstCount.Enum traffic_burst_count = 6;
 
   // The name of RoCEv2 Peer
-  optional string name = 4;
+  optional string name = 7;
 
   // This section has two views, Local End and Remote End. Both views have same configurations.
   // However, the remote and local peer IP addresses are interchanged. This configuration
   // allows you to configure RDMA flow over the same QP number from same source and destination.
   // Default value for commands at Remote peer is set to None. So that by default, this
   // remote peer does not initiate any traffic flow.
-  repeated RoCEv2FlowSettings flow_settings = 5;
+  repeated RoCEv2FlowSettings flow_settings = 8;
 }
 
 // Configuration for RoCEv2 IPv4 peers.
@@ -7987,29 +8011,53 @@ message RoCEv2FlowSettings {
 // Configuration for RoCEv2 IPv6 peer settings.
 message RoCEv2V6Peer {
 
+  // Number of External Endpoints.
+  // required = true
+  optional int32 num_of_external_endpoints = 1;
+
   // Maximum number of QP per Endpoint.
   // required = true
-  optional int32 max_num_of_qp = 1;
+  optional int32 max_num_of_qp = 2;
 
   // Specify the IP address of External NIC i.e Remote End Point IP Address.
   // required = true
-  optional string remote_end_point_ip_address = 2;
+  optional string remote_end_point_ip_address = 3;
 
   // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
   // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
   // as configured IB MTU. You can configure custom size also.
   // required = true
-  optional uint32 ib_mtu = 3;
+  optional uint32 ib_mtu = 4;
+
+  message TrafficBurstMode {
+    enum Enum {
+      unspecified = 0;
+      Continuous = 1;
+      Fixed = 2;
+    }
+  }
+  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+  optional TrafficBurstMode.Enum traffic_burst_mode = 5;
+
+  message TrafficBurstCount {
+    enum Enum {
+      unspecified = 0;
+      Continuous = 1;
+      Fixed = 2;
+    }
+  }
+  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+  optional TrafficBurstCount.Enum traffic_burst_count = 6;
 
   // The name of RoCEv2 Peer
-  optional string name = 4;
+  optional string name = 7;
 
   // This section has two views, Local End and Remote End. Both views have same configurations.
   // However, the remote and local peer IP addresses are interchanged. This configuration
   // allows you to configure RDMA flow over the same QP number from same source and destination.
   // Default value for commands at Remote peer is set to None. So that by default, this
   // remote peer does not initiate any traffic flow.
-  repeated RoCEv2FlowSettings flow_settings = 5;
+  repeated RoCEv2FlowSettings flow_settings = 8;
 }
 
 // Configuration for RoCEv2 IPv6 peers.

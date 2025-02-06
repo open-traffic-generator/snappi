@@ -272,6 +272,10 @@ type RoCEv2V6Peer interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// NumOfExternalEndpoints returns int32, set in RoCEv2V6Peer.
+	NumOfExternalEndpoints() int32
+	// SetNumOfExternalEndpoints assigns int32 provided by user to RoCEv2V6Peer
+	SetNumOfExternalEndpoints(value int32) RoCEv2V6Peer
 	// MaxNumOfQp returns int32, set in RoCEv2V6Peer.
 	MaxNumOfQp() int32
 	// SetMaxNumOfQp assigns int32 provided by user to RoCEv2V6Peer
@@ -284,6 +288,18 @@ type RoCEv2V6Peer interface {
 	IbMtu() uint32
 	// SetIbMtu assigns uint32 provided by user to RoCEv2V6Peer
 	SetIbMtu(value uint32) RoCEv2V6Peer
+	// TrafficBurstMode returns RoCEv2V6PeerTrafficBurstModeEnum, set in RoCEv2V6Peer
+	TrafficBurstMode() RoCEv2V6PeerTrafficBurstModeEnum
+	// SetTrafficBurstMode assigns RoCEv2V6PeerTrafficBurstModeEnum provided by user to RoCEv2V6Peer
+	SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeEnum) RoCEv2V6Peer
+	// HasTrafficBurstMode checks if TrafficBurstMode has been set in RoCEv2V6Peer
+	HasTrafficBurstMode() bool
+	// TrafficBurstCount returns RoCEv2V6PeerTrafficBurstCountEnum, set in RoCEv2V6Peer
+	TrafficBurstCount() RoCEv2V6PeerTrafficBurstCountEnum
+	// SetTrafficBurstCount assigns RoCEv2V6PeerTrafficBurstCountEnum provided by user to RoCEv2V6Peer
+	SetTrafficBurstCount(value RoCEv2V6PeerTrafficBurstCountEnum) RoCEv2V6Peer
+	// HasTrafficBurstCount checks if TrafficBurstCount has been set in RoCEv2V6Peer
+	HasTrafficBurstCount() bool
 	// Name returns string, set in RoCEv2V6Peer.
 	Name() string
 	// SetName assigns string provided by user to RoCEv2V6Peer
@@ -293,6 +309,22 @@ type RoCEv2V6Peer interface {
 	// FlowSettings returns RoCEv2V6PeerRoCEv2FlowSettingsIterIter, set in RoCEv2V6Peer
 	FlowSettings() RoCEv2V6PeerRoCEv2FlowSettingsIter
 	setNil()
+}
+
+// Number of External Endpoints.
+// NumOfExternalEndpoints returns a int32
+func (obj *roCEv2V6Peer) NumOfExternalEndpoints() int32 {
+
+	return *obj.obj.NumOfExternalEndpoints
+
+}
+
+// Number of External Endpoints.
+// SetNumOfExternalEndpoints sets the int32 value in the RoCEv2V6Peer object
+func (obj *roCEv2V6Peer) SetNumOfExternalEndpoints(value int32) RoCEv2V6Peer {
+
+	obj.obj.NumOfExternalEndpoints = &value
+	return obj
 }
 
 // Maximum number of QP per Endpoint.
@@ -340,6 +372,74 @@ func (obj *roCEv2V6Peer) IbMtu() uint32 {
 func (obj *roCEv2V6Peer) SetIbMtu(value uint32) RoCEv2V6Peer {
 
 	obj.obj.IbMtu = &value
+	return obj
+}
+
+type RoCEv2V6PeerTrafficBurstModeEnum string
+
+// Enum of TrafficBurstMode on RoCEv2V6Peer
+var RoCEv2V6PeerTrafficBurstMode = struct {
+	CONTINUOUS RoCEv2V6PeerTrafficBurstModeEnum
+	FIXED      RoCEv2V6PeerTrafficBurstModeEnum
+}{
+	CONTINUOUS: RoCEv2V6PeerTrafficBurstModeEnum("Continuous"),
+	FIXED:      RoCEv2V6PeerTrafficBurstModeEnum("Fixed"),
+}
+
+func (obj *roCEv2V6Peer) TrafficBurstMode() RoCEv2V6PeerTrafficBurstModeEnum {
+	return RoCEv2V6PeerTrafficBurstModeEnum(obj.obj.TrafficBurstMode.Enum().String())
+}
+
+// Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+// TrafficBurstMode returns a string
+func (obj *roCEv2V6Peer) HasTrafficBurstMode() bool {
+	return obj.obj.TrafficBurstMode != nil
+}
+
+func (obj *roCEv2V6Peer) SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeEnum) RoCEv2V6Peer {
+	intValue, ok := otg.RoCEv2V6Peer_TrafficBurstMode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2V6PeerTrafficBurstModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.RoCEv2V6Peer_TrafficBurstMode_Enum(intValue)
+	obj.obj.TrafficBurstMode = &enumValue
+
+	return obj
+}
+
+type RoCEv2V6PeerTrafficBurstCountEnum string
+
+// Enum of TrafficBurstCount on RoCEv2V6Peer
+var RoCEv2V6PeerTrafficBurstCount = struct {
+	CONTINUOUS RoCEv2V6PeerTrafficBurstCountEnum
+	FIXED      RoCEv2V6PeerTrafficBurstCountEnum
+}{
+	CONTINUOUS: RoCEv2V6PeerTrafficBurstCountEnum("Continuous"),
+	FIXED:      RoCEv2V6PeerTrafficBurstCountEnum("Fixed"),
+}
+
+func (obj *roCEv2V6Peer) TrafficBurstCount() RoCEv2V6PeerTrafficBurstCountEnum {
+	return RoCEv2V6PeerTrafficBurstCountEnum(obj.obj.TrafficBurstCount.Enum().String())
+}
+
+// Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+// TrafficBurstCount returns a string
+func (obj *roCEv2V6Peer) HasTrafficBurstCount() bool {
+	return obj.obj.TrafficBurstCount != nil
+}
+
+func (obj *roCEv2V6Peer) SetTrafficBurstCount(value RoCEv2V6PeerTrafficBurstCountEnum) RoCEv2V6Peer {
+	intValue, ok := otg.RoCEv2V6Peer_TrafficBurstCount_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2V6PeerTrafficBurstCountEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.RoCEv2V6Peer_TrafficBurstCount_Enum(intValue)
+	obj.obj.TrafficBurstCount = &enumValue
+
 	return obj
 }
 
@@ -455,6 +555,11 @@ func (obj *roCEv2V6PeerRoCEv2FlowSettingsIter) appendHolderSlice(item RoCEv2Flow
 func (obj *roCEv2V6Peer) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	// NumOfExternalEndpoints is required
+	if obj.obj.NumOfExternalEndpoints == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "NumOfExternalEndpoints is required field on interface RoCEv2V6Peer")
 	}
 
 	// MaxNumOfQp is required
