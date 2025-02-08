@@ -11479,16 +11479,21 @@ components:
           x-field-uid: 6
     Mka.TxSc:
       description: |-
-        Tx SC properties.
+        Tx secure channel(SC) properties.
       type: object
       required:
       - system_id
       properties:
+        name:
+          description: |-
+            Tx SC name.
+          type: string
+          x-field-uid: 1
         system_id:
           description: "System ID. "
           type: string
           format: mac
-          x-field-uid: 1
+          x-field-uid: 2
         port_id:
           description: "Port ID. "
           type: integer
@@ -11496,7 +11501,7 @@ components:
           minimum: 1
           maximum: 65535
           default: 1
-          x-field-uid: 2
+          x-field-uid: 3
         starting_message_number:
           description: |-
             Starting Message Number.
@@ -11505,7 +11510,7 @@ components:
           minimum: 1
           maximum: 4294967295
           default: 1
-          x-field-uid: 3
+          x-field-uid: 4
     Flow:
       description: |-
         A high level data plane traffic flow.

@@ -8486,20 +8486,23 @@ message MkaKeyServer {
   optional string rekey_threshold_xpn = 6;
 }
 
-// Tx SC properties.
+// Tx secure channel(SC) properties.
 message MkaTxSc {
+
+  // Tx SC name.
+  optional string name = 1;
 
   // System ID.
   // required = true
-  optional string system_id = 1;
+  optional string system_id = 2;
 
   // Port ID.
   // default = 1
-  optional uint32 port_id = 2;
+  optional uint32 port_id = 3;
 
   // Starting Message Number.
   // default = 1
-  optional uint64 starting_message_number = 3;
+  optional uint64 starting_message_number = 4;
 }
 
 // A high level data plane traffic flow.

@@ -242,7 +242,7 @@ func (obj *mkaTxSc) Clone() (MkaTxSc, error) {
 	return newObj, nil
 }
 
-// MkaTxSc is tx SC properties.
+// MkaTxSc is tx secure channel(SC) properties.
 type MkaTxSc interface {
 	Validation
 	// msg marshals MkaTxSc to protobuf object *otg.MkaTxSc
@@ -264,6 +264,12 @@ type MkaTxSc interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// Name returns string, set in MkaTxSc.
+	Name() string
+	// SetName assigns string provided by user to MkaTxSc
+	SetName(value string) MkaTxSc
+	// HasName checks if Name has been set in MkaTxSc
+	HasName() bool
 	// SystemId returns string, set in MkaTxSc.
 	SystemId() string
 	// SetSystemId assigns string provided by user to MkaTxSc
@@ -280,6 +286,28 @@ type MkaTxSc interface {
 	SetStartingMessageNumber(value uint64) MkaTxSc
 	// HasStartingMessageNumber checks if StartingMessageNumber has been set in MkaTxSc
 	HasStartingMessageNumber() bool
+}
+
+// Tx SC name.
+// Name returns a string
+func (obj *mkaTxSc) Name() string {
+
+	return *obj.obj.Name
+
+}
+
+// Tx SC name.
+// Name returns a string
+func (obj *mkaTxSc) HasName() bool {
+	return obj.obj.Name != nil
+}
+
+// Tx SC name.
+// SetName sets the string value in the MkaTxSc object
+func (obj *mkaTxSc) SetName(value string) MkaTxSc {
+
+	obj.obj.Name = &value
+	return obj
 }
 
 // System ID.
