@@ -11461,13 +11461,22 @@ components:
           x-field-uid: 4
         rekey_threshold_pn:
           description: |-
-            Determines the PN/ XPN rekey threshold.
+            Determines the PN rekey threshold.
           type: string
           format: hex
           minLength: 4
           maxLength: 8
           default: C0000000
           x-field-uid: 5
+        rekey_threshold_xpn:
+          description: |-
+            Determines the XPN rekey threshold.
+          type: string
+          format: hex
+          minLength: 8
+          maxLength: 16
+          default: C000000000000000
+          x-field-uid: 6
     Mka.TxSc:
       description: |-
         Tx SC properties.

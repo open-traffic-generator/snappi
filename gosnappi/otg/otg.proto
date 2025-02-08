@@ -8477,9 +8477,13 @@ message MkaKeyServer {
   // default = 0
   optional uint32 starting_distributed_an = 4;
 
-  // Determines the PN/ XPN rekey threshold.
+  // Determines the PN rekey threshold.
   // default = C0000000
   optional string rekey_threshold_pn = 5;
+
+  // Determines the XPN rekey threshold.
+  // default = C000000000000000
+  optional string rekey_threshold_xpn = 6;
 }
 
 // Tx SC properties.

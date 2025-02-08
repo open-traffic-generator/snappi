@@ -294,6 +294,12 @@ type MkaKeyServer interface {
 	SetRekeyThresholdPn(value string) MkaKeyServer
 	// HasRekeyThresholdPn checks if RekeyThresholdPn has been set in MkaKeyServer
 	HasRekeyThresholdPn() bool
+	// RekeyThresholdXpn returns string, set in MkaKeyServer.
+	RekeyThresholdXpn() string
+	// SetRekeyThresholdXpn assigns string provided by user to MkaKeyServer
+	SetRekeyThresholdXpn(value string) MkaKeyServer
+	// HasRekeyThresholdXpn checks if RekeyThresholdXpn has been set in MkaKeyServer
+	HasRekeyThresholdXpn() bool
 }
 
 type MkaKeyServerConfidentialtyOffsetEnum string
@@ -416,7 +422,7 @@ func (obj *mkaKeyServer) SetStartingDistributedAn(value uint32) MkaKeyServer {
 	return obj
 }
 
-// Determines the PN/ XPN rekey threshold.
+// Determines the PN rekey threshold.
 // RekeyThresholdPn returns a string
 func (obj *mkaKeyServer) RekeyThresholdPn() string {
 
@@ -424,17 +430,39 @@ func (obj *mkaKeyServer) RekeyThresholdPn() string {
 
 }
 
-// Determines the PN/ XPN rekey threshold.
+// Determines the PN rekey threshold.
 // RekeyThresholdPn returns a string
 func (obj *mkaKeyServer) HasRekeyThresholdPn() bool {
 	return obj.obj.RekeyThresholdPn != nil
 }
 
-// Determines the PN/ XPN rekey threshold.
+// Determines the PN rekey threshold.
 // SetRekeyThresholdPn sets the string value in the MkaKeyServer object
 func (obj *mkaKeyServer) SetRekeyThresholdPn(value string) MkaKeyServer {
 
 	obj.obj.RekeyThresholdPn = &value
+	return obj
+}
+
+// Determines the XPN rekey threshold.
+// RekeyThresholdXpn returns a string
+func (obj *mkaKeyServer) RekeyThresholdXpn() string {
+
+	return *obj.obj.RekeyThresholdXpn
+
+}
+
+// Determines the XPN rekey threshold.
+// RekeyThresholdXpn returns a string
+func (obj *mkaKeyServer) HasRekeyThresholdXpn() bool {
+	return obj.obj.RekeyThresholdXpn != nil
+}
+
+// Determines the XPN rekey threshold.
+// SetRekeyThresholdXpn sets the string value in the MkaKeyServer object
+func (obj *mkaKeyServer) SetRekeyThresholdXpn(value string) MkaKeyServer {
+
+	obj.obj.RekeyThresholdXpn = &value
 	return obj
 }
 
@@ -475,6 +503,18 @@ func (obj *mkaKeyServer) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.RekeyThresholdXpn != nil {
+
+		if len(*obj.obj.RekeyThresholdXpn) < 8 || len(*obj.obj.RekeyThresholdXpn) > 16 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"8 <= length of MkaKeyServer.RekeyThresholdXpn <= 16 but Got %d",
+					len(*obj.obj.RekeyThresholdXpn)))
+		}
+
+	}
+
 }
 
 func (obj *mkaKeyServer) setDefault() {
@@ -494,6 +534,9 @@ func (obj *mkaKeyServer) setDefault() {
 	}
 	if obj.obj.RekeyThresholdPn == nil {
 		obj.SetRekeyThresholdPn("C0000000")
+	}
+	if obj.obj.RekeyThresholdXpn == nil {
+		obj.SetRekeyThresholdXpn("C000000000000000")
 	}
 
 }
