@@ -2469,6 +2469,11 @@ components:
             Configuration of MACsec device.
           $ref: '#/components/schemas/Device.Macsec'
           x-field-uid: 11
+        mka:
+          description: |-
+            Configuration of MKA supplicant.
+          $ref: '#/components/schemas/Device.Mka'
+          x-field-uid: 12
       required:
       - name
     Protocol.Options:
@@ -11074,6 +11079,424 @@ components:
           - dont_rekey
           - timer_based
           - pn_based
+    Device.Mka:
+      description: |-
+        A container of properties for a MKA supplicant.
+      type: object
+      required:
+      - ethernet_interfaces
+      properties:
+        ethernet_interfaces:
+          description: |-
+            Ethernet Interfaces
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Mka.EthernetInterface'
+          x-field-uid: 1
+    Device.Mka.EthernetInterface:
+      description: |-
+        Configuration for single MKA interface.
+      type: object
+      required:
+      - eth_name
+      - kay
+      properties:
+        eth_name:
+          description: |
+            The unique name of the Ethernet interface on which MKA is enabled.
+
+            x-constraint:
+            - /components/schemas/Device.Ethernet/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ethernet/properties/name
+          x-field-uid: 1
+        kay:
+          description: |-
+            This contains the properties of Key Agreement Entity (KaY).
+          $ref: '#/components/schemas/Mka'
+          x-field-uid: 2
+    Mka:
+      description: |-
+        Configuration of a Key Agreement Entity (KaY).
+      type: object
+      required:
+      - name
+      - basic
+      - txscs
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        basic:
+          description: |-
+            This contains the basic properties of KaY.
+          $ref: '#/components/schemas/Mka.Basic'
+          x-field-uid: 2
+        key_server:
+          description: |-
+            Key server attributes.
+          $ref: '#/components/schemas/Mka.KeyServer'
+          x-field-uid: 3
+        txscs:
+          description: |-
+            Properties for Tx secure channels.
+          type: array
+          items:
+            $ref: '#/components/schemas/Mka.TxSc'
+          x-field-uid: 4
+    Mka.Basic:
+      description: |-
+        A container of basic properties for a KaY.
+      type: object
+      required:
+      - key_source
+      properties:
+        key_derivation_function:
+          description: |-
+            Key Derivation Function.
+          type: string
+          default: aes_cmac_128
+          x-field-uid: 1
+          x-enum:
+            aes_cmac_128:
+              x-field-uid: 1
+            aes_cmac_256:
+              x-field-uid: 2
+          enum:
+          - aes_cmac_128
+          - aes_cmac_256
+        key_source:
+          description: |-
+            Key source.
+          x-field-uid: 2
+          $ref: '#/components/schemas/Mka.Basic.KeySource'
+        actor_priority:
+          description: |-
+            Actor priority.
+          type: string
+          format: hex
+          minLength: 2
+          maxLength: 2
+          default: '70'
+          x-field-uid: 3
+        macsec_desired:
+          description: |-
+            Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
+          type: boolean
+          default: true
+          x-field-uid: 4
+        macsec_capability:
+          description: |-
+            MACSec Capability.
+          type: string
+          default: macsec_integrity_with_confidentiality_offset
+          x-field-uid: 5
+          x-enum:
+            macsec_not_implemented:
+              x-field-uid: 1
+            macsec_integrity_without_confidentiality:
+              x-field-uid: 2
+            macsec_integrity_with_no_confidentiality_offset:
+              x-field-uid: 3
+            macsec_integrity_with_confidentiality_offset:
+              x-field-uid: 4
+          enum:
+          - macsec_not_implemented
+          - macsec_integrity_without_confidentiality
+          - macsec_integrity_with_no_confidentiality_offset
+          - macsec_integrity_with_confidentiality_offset
+        supported_cipher_suites:
+          description: |-
+            Supported Cipher Suites.
+          x-field-uid: 6
+          $ref: '#/components/schemas/Mka.Basic.SupportedCipherSuites'
+        mka_version:
+          description: |-
+            MKA Version.
+          type: integer
+          format: uint32
+          default: 3
+          x-field-uid: 7
+        mka_hello_time:
+          description: |-
+            MKA Hello Time (msec).
+          type: integer
+          format: uint32
+          default: 2000
+          x-field-uid: 8
+        mka_life_time:
+          description: |-
+            MKA Life Time (sec).
+          type: integer
+          format: uint32
+          default: 6
+          x-field-uid: 9
+        send_icv_indicatior_in_mkpdu:
+          description: |-
+            Send ICV Indicator in MKPDU.
+          type: boolean
+          default: true
+          x-field-uid: 10
+        delay_protect:
+          description: |-
+            Delay Protect.
+          type: boolean
+          default: true
+          x-field-uid: 11
+        rekey_mode:
+          description: |-
+            Rekey Mode.
+          x-field-uid: 12
+          $ref: '#/components/schemas/Mka.Basic.RekeyMode'
+    Mka.Basic.KeySource:
+      description: |-
+        The container for static key settings.
+      type: object
+      properties:
+        choice:
+          description: "Key source. Choose one from PSK or MSK. "
+          type: string
+          default: psk
+          x-field-uid: 1
+          x-enum:
+            psk:
+              x-field-uid: 1
+            msk:
+              x-field-uid: 2
+          enum:
+          - psk
+          - msk
+        psks:
+          description: |-
+            Pre-shared Keys.
+          type: array
+          items:
+            $ref: '#/components/schemas/Mka.Basic.KeySource.Psk'
+          x-field-uid: 2
+    Mka.Basic.SupportedCipherSuites:
+      description: |-
+        The container for supported cipher suites.
+      type: object
+      properties:
+        gcm_aes_128:
+          description: |-
+            GCM-AES-128.
+          type: boolean
+          default: true
+          x-field-uid: 1
+        gcm_aes_256:
+          description: |-
+            GCM-AES-256.
+          type: boolean
+          default: true
+          x-field-uid: 2
+        gcm_aes_xpn_128:
+          description: |-
+            GCM-AES-XPN-128.
+          type: boolean
+          default: true
+          x-field-uid: 3
+        gcm_aes_xpn_256:
+          description: |-
+            GCM-AES-XPN-256.
+          type: boolean
+          default: true
+          x-field-uid: 4
+    Mka.Basic.KeySource.Psk:
+      description: |-
+        The container for Pre-shared key(PSK).
+      type: object
+      properties:
+        cak_value:
+          description: |-
+            CAK value.
+          type: string
+          format: hex
+          minLength: 16
+          maxLength: 32
+          default: F123456789ABCDEF0123456789ABCDEF
+          x-field-uid: 1
+        cak_name:
+          description: |-
+            CAK name.
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 32
+          default: F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
+          x-field-uid: 2
+        start_time:
+          description: |-
+            Key start time in HH:MM.
+          type: string
+          default: 00:00
+          x-field-uid: 3
+        end_time:
+          description: |-
+            Key end time in HH:MM.
+          type: string
+          default: 00:00
+          x-field-uid: 4
+    Mka.Basic.RekeyMode:
+      description: |-
+        Rekey mode.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Mode choices.
+          type: string
+          default: dont_rekey
+          x-field-uid: 1
+          x-enum:
+            dont_rekey:
+              x-field-uid: 1
+            timer_based:
+              x-field-uid: 2
+            pn_based:
+              x-field-uid: 3
+          enum:
+          - dont_rekey
+          - timer_based
+          - pn_based
+        timer_based:
+          description: |-
+            Container for timer based periodic rekey properties.
+          x-field-uid: 2
+          $ref: '#/components/schemas/Mka.Basic.RekeyMode.TimerBased'
+    Mka.Basic.RekeyMode.TimerBased:
+      description: |-
+        Timer based periodic rekey properties.
+      type: object
+      properties:
+        rekey_count:
+          description: |-
+            Periodic Rekey count.
+          type: string
+          default: continuous
+          x-field-uid: 1
+          x-enum:
+            continuous:
+              x-field-uid: 1
+            fixed_count:
+              x-field-uid: 2
+          enum:
+          - continuous
+          - fixed_count
+        rekey_interval:
+          description: |-
+            Periodic Rekey Interval (sec).
+          type: integer
+          format: uint32
+          minimum: 30
+          maximum: 65535
+          default: 300
+          x-field-uid: 2
+    Mka.KeyServer:
+      description: |-
+        Key server attributes of a KaY.
+      properties:
+        confidentialty_offset:
+          description: |-
+            Confidentiality Offset.
+          type: string
+          default: no_confidentiality_offset
+          x-field-uid: 1
+          x-enum:
+            no_confidentiality:
+              x-field-uid: 1
+            no_confidentiality_offset:
+              x-field-uid: 2
+            confidentiality_offset_30_octets:
+              x-field-uid: 3
+            confidentiality_offset_50_octets:
+              x-field-uid: 4
+          enum:
+          - no_confidentiality
+          - no_confidentiality_offset
+          - confidentiality_offset_30_octets
+          - confidentiality_offset_50_octets
+        cipher_suite:
+          description: |-
+            The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+          type: string
+          default: gcm_aes_128
+          x-field-uid: 2
+          x-enum:
+            gcm_aes_128:
+              x-field-uid: 1
+            gcm_aes_256:
+              x-field-uid: 2
+            gcm_aes_xpn_128:
+              x-field-uid: 3
+            gcm_aes_xpn_256:
+              x-field-uid: 4
+          enum:
+          - gcm_aes_128
+          - gcm_aes_256
+          - gcm_aes_xpn_128
+          - gcm_aes_xpn_256
+        starting_key_number:
+          description: |-
+            Starting Key Number.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 1
+          x-field-uid: 3
+        starting_distributed_an:
+          description: |-
+            Starting Distributed AN.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 3
+          default: 0
+          x-field-uid: 4
+        rekey_threshold_pn:
+          description: |-
+            Determines the PN/ XPN rekey threshold.
+          type: string
+          format: hex
+          minLength: 4
+          maxLength: 8
+          default: C0000000
+          x-field-uid: 5
+    Mka.TxSc:
+      description: |-
+        Tx SC properties.
+      type: object
+      required:
+      - system_id
+      properties:
+        system_id:
+          description: "System ID. "
+          type: string
+          format: mac
+          x-field-uid: 1
+        port_id:
+          description: "Port ID. "
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 1
+          x-field-uid: 2
+        starting_message_number:
+          description: |-
+            Starting Message Number.
+          type: integer
+          format: uint64
+          minimum: 1
+          maximum: 4294967295
+          default: 1
+          x-field-uid: 3
     Flow:
       description: |-
         A high level data plane traffic flow.
