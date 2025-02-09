@@ -8280,6 +8280,32 @@ message MacsecAdvanceStaticKeyRekeyMode {
   // Rekey mode choices.
   // default = Choice.Enum.dont_rekey
   optional Choice.Enum choice = 1;
+
+  // Container for timer based periodic rekey properties.
+  MacsecAdvanceStaticKeyRekeyModeTimerBased timer_based = 2;
+}
+
+// Timer based periodic rekey properties.
+message MacsecAdvanceStaticKeyRekeyModeTimerBased {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      continuous = 1;
+      fixed_count = 2;
+    }
+  }
+  // Periodic rekey attempt choices.
+  // default = Choice.Enum.continuous
+  optional Choice.Enum choice = 1;
+
+  // Fixed rekey attempts.
+  // default = 10
+  optional uint32 fixed_count = 2;
+
+  // Periodic rekey interval (sec).
+  // default = 300
+  optional uint32 interval = 3;
 }
 
 // A high level data plane traffic flow.

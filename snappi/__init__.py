@@ -382,6 +382,7 @@ from .snappi import MacsecCryptoEngineTypeStatefulEncryptionDecryptionHardwareAc
 from .snappi import MacsecAdvance
 from .snappi import MacsecAdvanceStaticKey
 from .snappi import MacsecAdvanceStaticKeyRekeyMode
+from .snappi import MacsecAdvanceStaticKeyRekeyModeTimerBased
 from .snappi import DeviceMacsecEthernetInterfaceIter
 from .snappi import DeviceIter
 from .snappi import Flow

@@ -11148,6 +11148,48 @@ components:
           - dont_rekey
           - timer_based
           - pn_based
+        timer_based:
+          description: |-
+            Container for timer based periodic rekey properties.
+          x-field-uid: 2
+          $ref: '#/components/schemas/Macsec.Advance.StaticKey.RekeyMode.TimerBased'
+    Macsec.Advance.StaticKey.RekeyMode.TimerBased:
+      description: |-
+        Timer based periodic rekey properties.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Periodic rekey attempt choices.
+          type: string
+          default: continuous
+          x-field-uid: 1
+          x-enum:
+            continuous:
+              x-field-uid: 1
+            fixed_count:
+              x-field-uid: 2
+          enum:
+          - continuous
+          - fixed_count
+        fixed_count:
+          description: |-
+            Fixed rekey attempts.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 10
+          x-field-uid: 2
+        interval:
+          description: |-
+            Periodic rekey interval (sec).
+          type: integer
+          format: uint32
+          minimum: 30
+          maximum: 65535
+          default: 300
+          x-field-uid: 3
     Flow:
       description: |-
         A high level data plane traffic flow.

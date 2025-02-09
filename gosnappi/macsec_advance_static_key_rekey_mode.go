@@ -13,9 +13,10 @@ import (
 // ***** MacsecAdvanceStaticKeyRekeyMode *****
 type macsecAdvanceStaticKeyRekeyMode struct {
 	validation
-	obj          *otg.MacsecAdvanceStaticKeyRekeyMode
-	marshaller   marshalMacsecAdvanceStaticKeyRekeyMode
-	unMarshaller unMarshalMacsecAdvanceStaticKeyRekeyMode
+	obj              *otg.MacsecAdvanceStaticKeyRekeyMode
+	marshaller       marshalMacsecAdvanceStaticKeyRekeyMode
+	unMarshaller     unMarshalMacsecAdvanceStaticKeyRekeyMode
+	timerBasedHolder MacsecAdvanceStaticKeyRekeyModeTimerBased
 }
 
 func NewMacsecAdvanceStaticKeyRekeyMode() MacsecAdvanceStaticKeyRekeyMode {
@@ -29,7 +30,7 @@ func (obj *macsecAdvanceStaticKeyRekeyMode) msg() *otg.MacsecAdvanceStaticKeyRek
 }
 
 func (obj *macsecAdvanceStaticKeyRekeyMode) setMsg(msg *otg.MacsecAdvanceStaticKeyRekeyMode) MacsecAdvanceStaticKeyRekeyMode {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalmacsecAdvanceStaticKeyRekeyMode) FromPbText(value string) erro
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalmacsecAdvanceStaticKeyRekeyMode) FromYaml(value string) error 
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalmacsecAdvanceStaticKeyRekeyMode) FromJson(value string) error 
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *macsecAdvanceStaticKeyRekeyMode) Clone() (MacsecAdvanceStaticKeyRekey
 	return newObj, nil
 }
 
+func (obj *macsecAdvanceStaticKeyRekeyMode) setNil() {
+	obj.timerBasedHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // MacsecAdvanceStaticKeyRekeyMode is rekey mode.
 type MacsecAdvanceStaticKeyRekeyMode interface {
 	Validation
@@ -270,12 +278,19 @@ type MacsecAdvanceStaticKeyRekeyMode interface {
 	setChoice(value MacsecAdvanceStaticKeyRekeyModeChoiceEnum) MacsecAdvanceStaticKeyRekeyMode
 	// HasChoice checks if Choice has been set in MacsecAdvanceStaticKeyRekeyMode
 	HasChoice() bool
-	// getter for TimerBased to set choice.
-	TimerBased()
 	// getter for DontRekey to set choice.
 	DontRekey()
 	// getter for PnBased to set choice.
 	PnBased()
+	// TimerBased returns MacsecAdvanceStaticKeyRekeyModeTimerBased, set in MacsecAdvanceStaticKeyRekeyMode.
+	// MacsecAdvanceStaticKeyRekeyModeTimerBased is timer based periodic rekey properties.
+	TimerBased() MacsecAdvanceStaticKeyRekeyModeTimerBased
+	// SetTimerBased assigns MacsecAdvanceStaticKeyRekeyModeTimerBased provided by user to MacsecAdvanceStaticKeyRekeyMode.
+	// MacsecAdvanceStaticKeyRekeyModeTimerBased is timer based periodic rekey properties.
+	SetTimerBased(value MacsecAdvanceStaticKeyRekeyModeTimerBased) MacsecAdvanceStaticKeyRekeyMode
+	// HasTimerBased checks if TimerBased has been set in MacsecAdvanceStaticKeyRekeyMode
+	HasTimerBased() bool
+	setNil()
 }
 
 type MacsecAdvanceStaticKeyRekeyModeChoiceEnum string
@@ -293,11 +308,6 @@ var MacsecAdvanceStaticKeyRekeyModeChoice = struct {
 
 func (obj *macsecAdvanceStaticKeyRekeyMode) Choice() MacsecAdvanceStaticKeyRekeyModeChoiceEnum {
 	return MacsecAdvanceStaticKeyRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for TimerBased to set choice
-func (obj *macsecAdvanceStaticKeyRekeyMode) TimerBased() {
-	obj.setChoice(MacsecAdvanceStaticKeyRekeyModeChoice.TIMER_BASED)
 }
 
 // getter for DontRekey to set choice
@@ -325,6 +335,40 @@ func (obj *macsecAdvanceStaticKeyRekeyMode) setChoice(value MacsecAdvanceStaticK
 	}
 	enumValue := otg.MacsecAdvanceStaticKeyRekeyMode_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.TimerBased = nil
+	obj.timerBasedHolder = nil
+
+	if value == MacsecAdvanceStaticKeyRekeyModeChoice.TIMER_BASED {
+		obj.obj.TimerBased = NewMacsecAdvanceStaticKeyRekeyModeTimerBased().msg()
+	}
+
+	return obj
+}
+
+// Container for timer based periodic rekey properties.
+// TimerBased returns a MacsecAdvanceStaticKeyRekeyModeTimerBased
+func (obj *macsecAdvanceStaticKeyRekeyMode) TimerBased() MacsecAdvanceStaticKeyRekeyModeTimerBased {
+	if obj.obj.TimerBased == nil {
+		obj.setChoice(MacsecAdvanceStaticKeyRekeyModeChoice.TIMER_BASED)
+	}
+	if obj.timerBasedHolder == nil {
+		obj.timerBasedHolder = &macsecAdvanceStaticKeyRekeyModeTimerBased{obj: obj.obj.TimerBased}
+	}
+	return obj.timerBasedHolder
+}
+
+// Container for timer based periodic rekey properties.
+// TimerBased returns a MacsecAdvanceStaticKeyRekeyModeTimerBased
+func (obj *macsecAdvanceStaticKeyRekeyMode) HasTimerBased() bool {
+	return obj.obj.TimerBased != nil
+}
+
+// Container for timer based periodic rekey properties.
+// SetTimerBased sets the MacsecAdvanceStaticKeyRekeyModeTimerBased value in the MacsecAdvanceStaticKeyRekeyMode object
+func (obj *macsecAdvanceStaticKeyRekeyMode) SetTimerBased(value MacsecAdvanceStaticKeyRekeyModeTimerBased) MacsecAdvanceStaticKeyRekeyMode {
+	obj.setChoice(MacsecAdvanceStaticKeyRekeyModeChoice.TIMER_BASED)
+	obj.timerBasedHolder = nil
+	obj.obj.TimerBased = value.msg()
 
 	return obj
 }
@@ -334,11 +378,21 @@ func (obj *macsecAdvanceStaticKeyRekeyMode) validateObj(vObj *validation, set_de
 		obj.setDefault()
 	}
 
+	if obj.obj.TimerBased != nil {
+
+		obj.TimerBased().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *macsecAdvanceStaticKeyRekeyMode) setDefault() {
 	var choices_set int = 0
 	var choice MacsecAdvanceStaticKeyRekeyModeChoiceEnum
+
+	if obj.obj.TimerBased != nil {
+		choices_set += 1
+		choice = MacsecAdvanceStaticKeyRekeyModeChoice.TIMER_BASED
+	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
 			obj.setChoice(MacsecAdvanceStaticKeyRekeyModeChoice.DONT_REKEY)
