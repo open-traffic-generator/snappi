@@ -10856,9 +10856,12 @@ components:
         tx_pn:
           $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxPn'
           x-field-uid: 1
+        tx_xpn:
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxXpn'
+          x-field-uid: 2
         traffic:
           $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic'
-          x-field-uid: 2
+          x-field-uid: 3
     Macsec.CryptoEngine.Type.StatefulEncryptionDecryption:
       description: |-
         The container for stateful encryption and decryption engine settings.
@@ -10902,10 +10905,10 @@ components:
       properties:
         pn:
           description: |-
-            Fixed Tx PN.
+            Fixed Tx PN. PN with which all packets will be sent out.
           type: integer
           format: uint32
-          minimum: 1
+          minimum: 4294967295
           default: 6
           x-field-uid: 1
     Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn:
@@ -10918,6 +10921,7 @@ components:
           type: integer
           format: uint32
           minimum: 2
+          maximum: 4294967295
           default: 100
           x-field-uid: 1
         first:
@@ -10927,6 +10931,63 @@ components:
           format: uint32
           minimum: 1
           default: 10000
+          x-field-uid: 2
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxXpn:
+      description: |-
+        Tx XPN settings.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Types of Tx XPN series.
+          type: string
+          default: fixed_xpn
+          x-field-uid: 1
+          x-enum:
+            fixed_xpn:
+              x-field-uid: 1
+            incrementing_xpn:
+              x-field-uid: 2
+          enum:
+          - fixed_xpn
+          - incrementing_xpn
+        fixed:
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedXpn'
+          x-field-uid: 2
+        incrementing:
+          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingXpn'
+          x-field-uid: 3
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedXpn:
+      description: |-
+        Fixed XPN settings.
+      type: object
+      properties:
+        xpn:
+          description: |-
+            Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+          type: integer
+          minimum: 1
+          default: 6
+          x-field-uid: 1
+    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingXpn:
+      description: |-
+        Incrementing XPN settings.
+      type: object
+      properties:
+        count:
+          description: "Count of packet numbers in series. "
+          type: integer
+          format: uint32
+          minimum: 2
+          maximum: 4294967295
+          default: 100
+          x-field-uid: 1
+        first:
+          description: |-
+            First XPN.
+          type: integer
+          minimum: 1
+          default: 65536
           x-field-uid: 2
     Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic:
       description: |-

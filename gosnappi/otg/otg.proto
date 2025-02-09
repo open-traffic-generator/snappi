@@ -8072,7 +8072,10 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnly {
   MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn tx_pn = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic traffic = 2;
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn tx_xpn = 2;
+
+  // Description missing in models
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic traffic = 3;
 }
 
 // The container for stateful encryption and decryption engine settings.
@@ -8109,7 +8112,7 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn {
 // Fixed PN settings.
 message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 
-  // Fixed Tx PN.
+  // Fixed Tx PN. PN with which all packets will be sent out.
   // default = 6
   optional uint32 pn = 1;
 }
@@ -8124,6 +8127,47 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
   // First PN.
   // default = 10000
   optional uint32 first = 2;
+}
+
+// Tx XPN settings.
+message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      fixed_xpn = 1;
+      incrementing_xpn = 2;
+    }
+  }
+  // Types of Tx XPN series.
+  // default = Choice.Enum.fixed_xpn
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn fixed = 2;
+
+  // Description missing in models
+  MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingXpn incrementing = 3;
+}
+
+// Fixed XPN settings.
+message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn {
+
+  // Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+  // default = 6
+  optional int32 xpn = 1;
+}
+
+// Incrementing XPN settings.
+message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingXpn {
+
+  // Count of packet numbers in series.
+  // default = 100
+  optional uint32 count = 1;
+
+  // First XPN.
+  // default = 65536
+  optional int32 first = 2;
 }
 
 // Encryption only traffic settings.

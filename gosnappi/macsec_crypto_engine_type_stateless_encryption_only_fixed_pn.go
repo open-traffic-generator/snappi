@@ -272,7 +272,7 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn interface {
 	HasPn() bool
 }
 
-// Fixed Tx PN.
+// Fixed Tx PN. PN with which all packets will be sent out.
 // Pn returns a uint32
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) Pn() uint32 {
 
@@ -280,13 +280,13 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) Pn() uint32 {
 
 }
 
-// Fixed Tx PN.
+// Fixed Tx PN. PN with which all packets will be sent out.
 // Pn returns a uint32
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) HasPn() bool {
 	return obj.obj.Pn != nil
 }
 
-// Fixed Tx PN.
+// Fixed Tx PN. PN with which all packets will be sent out.
 // SetPn sets the uint32 value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn object
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetPn(value uint32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
 
@@ -301,10 +301,10 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) validateObj(vOb
 
 	if obj.obj.Pn != nil {
 
-		if *obj.obj.Pn < 1 || *obj.obj.Pn > 4294967295 {
+		if *obj.obj.Pn < 4294967295 || *obj.obj.Pn > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
+				fmt.Sprintf("4294967295 <= MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
 		}
 
 	}
