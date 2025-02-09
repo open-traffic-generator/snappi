@@ -8025,16 +8025,21 @@ message MacsecRxScStaticKey {
   // default = 1
   optional uint32 dut_port_id = 2;
 
+  // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
+  // construct the 64 bits XPN value when test starts.
+  // default = 0
+  optional uint32 dut_msb_xpn = 3;
+
   // Enable replay protection on not.
   // default = False
-  optional bool replay_protection = 3;
+  optional bool replay_protection = 4;
 
   // Replay window size.
   // default = 1
-  optional uint32 replay_window = 4;
+  optional uint32 replay_window = 5;
 
   // Rx SAK pool.
-  MacsecBasicKeyGenerationStaticSakPool sak_pool = 5;
+  MacsecBasicKeyGenerationStaticSakPool sak_pool = 6;
 }
 
 // A container of crypto engine properties of a SecY.
@@ -8135,12 +8140,12 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn {
   message Choice {
     enum Enum {
       unspecified = 0;
-      fixed_xpn = 1;
-      incrementing_xpn = 2;
+      fixed_pn = 1;
+      incrementing_pn = 2;
     }
   }
   // Types of Tx XPN series.
-  // default = Choice.Enum.fixed_xpn
+  // default = Choice.Enum.fixed_pn
   optional Choice.Enum choice = 1;
 
   // Description missing in models

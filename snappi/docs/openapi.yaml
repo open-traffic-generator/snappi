@@ -10798,23 +10798,32 @@ components:
           maximum: 65535
           default: 1
           x-field-uid: 2
+        dut_msb_xpn:
+          description: |-
+            DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 4294967295
+          default: 0
+          x-field-uid: 3
         replay_protection:
           description: "Enable replay protection on not. "
           type: boolean
           default: false
-          x-field-uid: 3
+          x-field-uid: 4
         replay_window:
           description: "Replay window size. "
           type: integer
           format: uint32
           minimum: 1
           default: 1
-          x-field-uid: 4
+          x-field-uid: 5
         sak_pool:
           description: |-
             Rx SAK pool.
           $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.SakPool'
-          x-field-uid: 5
+          x-field-uid: 6
     Macsec.CryptoEngine:
       description: |-
         A container of crypto engine properties of a SecY.
@@ -10941,16 +10950,16 @@ components:
           description: |-
             Types of Tx XPN series.
           type: string
-          default: fixed_xpn
+          default: fixed_pn
           x-field-uid: 1
           x-enum:
-            fixed_xpn:
+            fixed_pn:
               x-field-uid: 1
-            incrementing_xpn:
+            incrementing_pn:
               x-field-uid: 2
           enum:
-          - fixed_xpn
-          - incrementing_xpn
+          - fixed_pn
+          - incrementing_pn
         fixed:
           $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedXpn'
           x-field-uid: 2

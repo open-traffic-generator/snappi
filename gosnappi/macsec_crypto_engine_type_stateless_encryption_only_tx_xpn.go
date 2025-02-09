@@ -280,10 +280,10 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn interface {
 	setChoice(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum) MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
 	// HasChoice checks if Choice has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
 	HasChoice() bool
-	// getter for IncrementingXpn to set choice.
-	IncrementingXpn()
-	// getter for FixedXpn to set choice.
-	FixedXpn()
+	// getter for FixedPn to set choice.
+	FixedPn()
+	// getter for IncrementingPn to set choice.
+	IncrementingPn()
 	// Fixed returns MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn.
 	// MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn is fixed XPN settings.
 	Fixed() MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn
@@ -307,25 +307,25 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum string
 
 // Enum of Choice on MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
 var MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice = struct {
-	FIXED_XPN        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum
-	INCREMENTING_XPN MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum
+	FIXED_PN        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum
+	INCREMENTING_PN MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum
 }{
-	FIXED_XPN:        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum("fixed_xpn"),
-	INCREMENTING_XPN: MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum("incrementing_xpn"),
+	FIXED_PN:        MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum("fixed_pn"),
+	INCREMENTING_PN: MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum("incrementing_pn"),
 }
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) Choice() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum {
 	return MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IncrementingXpn to set choice
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) IncrementingXpn() {
-	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.INCREMENTING_XPN)
+// getter for FixedPn to set choice
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) FixedPn() {
+	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.FIXED_PN)
 }
 
-// getter for FixedXpn to set choice
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) FixedXpn() {
-	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.FIXED_XPN)
+// getter for IncrementingPn to set choice
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) IncrementingPn() {
+	obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.INCREMENTING_PN)
 }
 
 // Types of Tx XPN series.
@@ -425,7 +425,7 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) setDefault() {
 	var choice MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoiceEnum
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.FIXED_XPN)
+			obj.setChoice(MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpnChoice.FIXED_PN)
 
 		}
 

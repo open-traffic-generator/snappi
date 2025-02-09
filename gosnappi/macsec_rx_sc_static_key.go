@@ -284,6 +284,12 @@ type MacsecRxScStaticKey interface {
 	SetDutPortId(value uint32) MacsecRxScStaticKey
 	// HasDutPortId checks if DutPortId has been set in MacsecRxScStaticKey
 	HasDutPortId() bool
+	// DutMsbXpn returns uint32, set in MacsecRxScStaticKey.
+	DutMsbXpn() uint32
+	// SetDutMsbXpn assigns uint32 provided by user to MacsecRxScStaticKey
+	SetDutMsbXpn(value uint32) MacsecRxScStaticKey
+	// HasDutMsbXpn checks if DutMsbXpn has been set in MacsecRxScStaticKey
+	HasDutMsbXpn() bool
 	// ReplayProtection returns bool, set in MacsecRxScStaticKey.
 	ReplayProtection() bool
 	// SetReplayProtection assigns bool provided by user to MacsecRxScStaticKey
@@ -348,6 +354,28 @@ func (obj *macsecRxScStaticKey) HasDutPortId() bool {
 func (obj *macsecRxScStaticKey) SetDutPortId(value uint32) MacsecRxScStaticKey {
 
 	obj.obj.DutPortId = &value
+	return obj
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// DutMsbXpn returns a uint32
+func (obj *macsecRxScStaticKey) DutMsbXpn() uint32 {
+
+	return *obj.obj.DutMsbXpn
+
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// DutMsbXpn returns a uint32
+func (obj *macsecRxScStaticKey) HasDutMsbXpn() bool {
+	return obj.obj.DutMsbXpn != nil
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// SetDutMsbXpn sets the uint32 value in the MacsecRxScStaticKey object
+func (obj *macsecRxScStaticKey) SetDutMsbXpn(value uint32) MacsecRxScStaticKey {
+
+	obj.obj.DutMsbXpn = &value
 	return obj
 }
 
@@ -447,6 +475,16 @@ func (obj *macsecRxScStaticKey) validateObj(vObj *validation, set_default bool) 
 
 	}
 
+	if obj.obj.DutMsbXpn != nil {
+
+		if *obj.obj.DutMsbXpn > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= MacsecRxScStaticKey.DutMsbXpn <= 4294967295 but Got %d", *obj.obj.DutMsbXpn))
+		}
+
+	}
+
 	if obj.obj.ReplayWindow != nil {
 
 		if *obj.obj.ReplayWindow < 1 || *obj.obj.ReplayWindow > 4294967295 {
@@ -467,6 +505,9 @@ func (obj *macsecRxScStaticKey) validateObj(vObj *validation, set_default bool) 
 func (obj *macsecRxScStaticKey) setDefault() {
 	if obj.obj.DutPortId == nil {
 		obj.SetDutPortId(1)
+	}
+	if obj.obj.DutMsbXpn == nil {
+		obj.SetDutMsbXpn(0)
 	}
 	if obj.obj.ReplayProtection == nil {
 		obj.SetReplayProtection(false)
