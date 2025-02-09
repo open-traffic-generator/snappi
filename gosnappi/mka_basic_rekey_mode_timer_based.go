@@ -264,73 +264,118 @@ type MkaBasicRekeyModeTimerBased interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// RekeyCount returns MkaBasicRekeyModeTimerBasedRekeyCountEnum, set in MkaBasicRekeyModeTimerBased
-	RekeyCount() MkaBasicRekeyModeTimerBasedRekeyCountEnum
-	// SetRekeyCount assigns MkaBasicRekeyModeTimerBasedRekeyCountEnum provided by user to MkaBasicRekeyModeTimerBased
-	SetRekeyCount(value MkaBasicRekeyModeTimerBasedRekeyCountEnum) MkaBasicRekeyModeTimerBased
-	// HasRekeyCount checks if RekeyCount has been set in MkaBasicRekeyModeTimerBased
-	HasRekeyCount() bool
-	// RekeyInterval returns uint32, set in MkaBasicRekeyModeTimerBased.
-	RekeyInterval() uint32
-	// SetRekeyInterval assigns uint32 provided by user to MkaBasicRekeyModeTimerBased
-	SetRekeyInterval(value uint32) MkaBasicRekeyModeTimerBased
-	// HasRekeyInterval checks if RekeyInterval has been set in MkaBasicRekeyModeTimerBased
-	HasRekeyInterval() bool
+	// Choice returns MkaBasicRekeyModeTimerBasedChoiceEnum, set in MkaBasicRekeyModeTimerBased
+	Choice() MkaBasicRekeyModeTimerBasedChoiceEnum
+	// setChoice assigns MkaBasicRekeyModeTimerBasedChoiceEnum provided by user to MkaBasicRekeyModeTimerBased
+	setChoice(value MkaBasicRekeyModeTimerBasedChoiceEnum) MkaBasicRekeyModeTimerBased
+	// HasChoice checks if Choice has been set in MkaBasicRekeyModeTimerBased
+	HasChoice() bool
+	// getter for Continuous to set choice.
+	Continuous()
+	// FixedCount returns uint32, set in MkaBasicRekeyModeTimerBased.
+	FixedCount() uint32
+	// SetFixedCount assigns uint32 provided by user to MkaBasicRekeyModeTimerBased
+	SetFixedCount(value uint32) MkaBasicRekeyModeTimerBased
+	// HasFixedCount checks if FixedCount has been set in MkaBasicRekeyModeTimerBased
+	HasFixedCount() bool
+	// Interval returns uint32, set in MkaBasicRekeyModeTimerBased.
+	Interval() uint32
+	// SetInterval assigns uint32 provided by user to MkaBasicRekeyModeTimerBased
+	SetInterval(value uint32) MkaBasicRekeyModeTimerBased
+	// HasInterval checks if Interval has been set in MkaBasicRekeyModeTimerBased
+	HasInterval() bool
 }
 
-type MkaBasicRekeyModeTimerBasedRekeyCountEnum string
+type MkaBasicRekeyModeTimerBasedChoiceEnum string
 
-// Enum of RekeyCount on MkaBasicRekeyModeTimerBased
-var MkaBasicRekeyModeTimerBasedRekeyCount = struct {
-	CONTINUOUS  MkaBasicRekeyModeTimerBasedRekeyCountEnum
-	FIXED_COUNT MkaBasicRekeyModeTimerBasedRekeyCountEnum
+// Enum of Choice on MkaBasicRekeyModeTimerBased
+var MkaBasicRekeyModeTimerBasedChoice = struct {
+	CONTINUOUS  MkaBasicRekeyModeTimerBasedChoiceEnum
+	FIXED_COUNT MkaBasicRekeyModeTimerBasedChoiceEnum
 }{
-	CONTINUOUS:  MkaBasicRekeyModeTimerBasedRekeyCountEnum("continuous"),
-	FIXED_COUNT: MkaBasicRekeyModeTimerBasedRekeyCountEnum("fixed_count"),
+	CONTINUOUS:  MkaBasicRekeyModeTimerBasedChoiceEnum("continuous"),
+	FIXED_COUNT: MkaBasicRekeyModeTimerBasedChoiceEnum("fixed_count"),
 }
 
-func (obj *mkaBasicRekeyModeTimerBased) RekeyCount() MkaBasicRekeyModeTimerBasedRekeyCountEnum {
-	return MkaBasicRekeyModeTimerBasedRekeyCountEnum(obj.obj.RekeyCount.Enum().String())
+func (obj *mkaBasicRekeyModeTimerBased) Choice() MkaBasicRekeyModeTimerBasedChoiceEnum {
+	return MkaBasicRekeyModeTimerBasedChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Continuous to set choice
+func (obj *mkaBasicRekeyModeTimerBased) Continuous() {
+	obj.setChoice(MkaBasicRekeyModeTimerBasedChoice.CONTINUOUS)
 }
 
 // Periodic Rekey count.
-// RekeyCount returns a string
-func (obj *mkaBasicRekeyModeTimerBased) HasRekeyCount() bool {
-	return obj.obj.RekeyCount != nil
+// Choice returns a string
+func (obj *mkaBasicRekeyModeTimerBased) HasChoice() bool {
+	return obj.obj.Choice != nil
 }
 
-func (obj *mkaBasicRekeyModeTimerBased) SetRekeyCount(value MkaBasicRekeyModeTimerBasedRekeyCountEnum) MkaBasicRekeyModeTimerBased {
-	intValue, ok := otg.MkaBasicRekeyModeTimerBased_RekeyCount_Enum_value[string(value)]
+func (obj *mkaBasicRekeyModeTimerBased) setChoice(value MkaBasicRekeyModeTimerBasedChoiceEnum) MkaBasicRekeyModeTimerBased {
+	intValue, ok := otg.MkaBasicRekeyModeTimerBased_Choice_Enum_value[string(value)]
 	if !ok {
 		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on MkaBasicRekeyModeTimerBasedRekeyCountEnum", string(value)))
+			"%s is not a valid choice on MkaBasicRekeyModeTimerBasedChoiceEnum", string(value)))
 		return obj
 	}
-	enumValue := otg.MkaBasicRekeyModeTimerBased_RekeyCount_Enum(intValue)
-	obj.obj.RekeyCount = &enumValue
+	enumValue := otg.MkaBasicRekeyModeTimerBased_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.FixedCount = nil
+
+	if value == MkaBasicRekeyModeTimerBasedChoice.FIXED_COUNT {
+		defaultValue := uint32(10)
+		obj.obj.FixedCount = &defaultValue
+	}
 
 	return obj
 }
 
-// Periodic Rekey Interval (sec).
-// RekeyInterval returns a uint32
-func (obj *mkaBasicRekeyModeTimerBased) RekeyInterval() uint32 {
+// Fixed rekey attempts.
+// FixedCount returns a uint32
+func (obj *mkaBasicRekeyModeTimerBased) FixedCount() uint32 {
 
-	return *obj.obj.RekeyInterval
+	if obj.obj.FixedCount == nil {
+		obj.setChoice(MkaBasicRekeyModeTimerBasedChoice.FIXED_COUNT)
+	}
+
+	return *obj.obj.FixedCount
 
 }
 
-// Periodic Rekey Interval (sec).
-// RekeyInterval returns a uint32
-func (obj *mkaBasicRekeyModeTimerBased) HasRekeyInterval() bool {
-	return obj.obj.RekeyInterval != nil
+// Fixed rekey attempts.
+// FixedCount returns a uint32
+func (obj *mkaBasicRekeyModeTimerBased) HasFixedCount() bool {
+	return obj.obj.FixedCount != nil
 }
 
-// Periodic Rekey Interval (sec).
-// SetRekeyInterval sets the uint32 value in the MkaBasicRekeyModeTimerBased object
-func (obj *mkaBasicRekeyModeTimerBased) SetRekeyInterval(value uint32) MkaBasicRekeyModeTimerBased {
+// Fixed rekey attempts.
+// SetFixedCount sets the uint32 value in the MkaBasicRekeyModeTimerBased object
+func (obj *mkaBasicRekeyModeTimerBased) SetFixedCount(value uint32) MkaBasicRekeyModeTimerBased {
+	obj.setChoice(MkaBasicRekeyModeTimerBasedChoice.FIXED_COUNT)
+	obj.obj.FixedCount = &value
+	return obj
+}
 
-	obj.obj.RekeyInterval = &value
+// Periodic rekey interval (sec).
+// Interval returns a uint32
+func (obj *mkaBasicRekeyModeTimerBased) Interval() uint32 {
+
+	return *obj.obj.Interval
+
+}
+
+// Periodic rekey interval (sec).
+// Interval returns a uint32
+func (obj *mkaBasicRekeyModeTimerBased) HasInterval() bool {
+	return obj.obj.Interval != nil
+}
+
+// Periodic rekey interval (sec).
+// SetInterval sets the uint32 value in the MkaBasicRekeyModeTimerBased object
+func (obj *mkaBasicRekeyModeTimerBased) SetInterval(value uint32) MkaBasicRekeyModeTimerBased {
+
+	obj.obj.Interval = &value
 	return obj
 }
 
@@ -339,12 +384,22 @@ func (obj *mkaBasicRekeyModeTimerBased) validateObj(vObj *validation, set_defaul
 		obj.setDefault()
 	}
 
-	if obj.obj.RekeyInterval != nil {
+	if obj.obj.FixedCount != nil {
 
-		if *obj.obj.RekeyInterval < 30 || *obj.obj.RekeyInterval > 65535 {
+		if *obj.obj.FixedCount < 1 || *obj.obj.FixedCount > 65535 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("30 <= MkaBasicRekeyModeTimerBased.RekeyInterval <= 65535 but Got %d", *obj.obj.RekeyInterval))
+				fmt.Sprintf("1 <= MkaBasicRekeyModeTimerBased.FixedCount <= 65535 but Got %d", *obj.obj.FixedCount))
+		}
+
+	}
+
+	if obj.obj.Interval != nil {
+
+		if *obj.obj.Interval < 30 || *obj.obj.Interval > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("30 <= MkaBasicRekeyModeTimerBased.Interval <= 65535 but Got %d", *obj.obj.Interval))
 		}
 
 	}
@@ -352,12 +407,33 @@ func (obj *mkaBasicRekeyModeTimerBased) validateObj(vObj *validation, set_defaul
 }
 
 func (obj *mkaBasicRekeyModeTimerBased) setDefault() {
-	if obj.obj.RekeyCount == nil {
-		obj.SetRekeyCount(MkaBasicRekeyModeTimerBasedRekeyCount.CONTINUOUS)
+	var choices_set int = 0
+	var choice MkaBasicRekeyModeTimerBasedChoiceEnum
 
+	if obj.obj.FixedCount != nil {
+		choices_set += 1
+		choice = MkaBasicRekeyModeTimerBasedChoice.FIXED_COUNT
 	}
-	if obj.obj.RekeyInterval == nil {
-		obj.SetRekeyInterval(300)
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(MkaBasicRekeyModeTimerBasedChoice.CONTINUOUS)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in MkaBasicRekeyModeTimerBased")
+			}
+		} else {
+			intVal := otg.MkaBasicRekeyModeTimerBased_Choice_Enum_value[string(choice)]
+			enumValue := otg.MkaBasicRekeyModeTimerBased_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
+
+	if obj.obj.Interval == nil {
+		obj.SetInterval(300)
 	}
 
 }

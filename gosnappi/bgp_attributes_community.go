@@ -284,10 +284,10 @@ type BgpAttributesCommunity interface {
 	NoLlgr()
 	// getter for LlgrStale to set choice.
 	LlgrStale()
-	// getter for NoExportSubconfed to set choice.
-	NoExportSubconfed()
 	// getter for NoAdvertised to set choice.
 	NoAdvertised()
+	// getter for NoExportSubconfed to set choice.
+	NoExportSubconfed()
 	// CustomCommunity returns BgpAttributesCustomCommunity, set in BgpAttributesCommunity.
 	// BgpAttributesCustomCommunity is user defined COMMUNITY attribute containing 2 byte AS and custom 2 byte value defined by the administrator of the domain.
 	CustomCommunity() BgpAttributesCustomCommunity
@@ -337,14 +337,14 @@ func (obj *bgpAttributesCommunity) LlgrStale() {
 	obj.setChoice(BgpAttributesCommunityChoice.LLGR_STALE)
 }
 
-// getter for NoExportSubconfed to set choice
-func (obj *bgpAttributesCommunity) NoExportSubconfed() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT_SUBCONFED)
-}
-
 // getter for NoAdvertised to set choice
 func (obj *bgpAttributesCommunity) NoAdvertised() {
 	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
+}
+
+// getter for NoExportSubconfed to set choice
+func (obj *bgpAttributesCommunity) NoExportSubconfed() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT_SUBCONFED)
 }
 
 func (obj *bgpAttributesCommunity) setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity {

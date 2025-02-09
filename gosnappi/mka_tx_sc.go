@@ -268,8 +268,6 @@ type MkaTxSc interface {
 	Name() string
 	// SetName assigns string provided by user to MkaTxSc
 	SetName(value string) MkaTxSc
-	// HasName checks if Name has been set in MkaTxSc
-	HasName() bool
 	// SystemId returns string, set in MkaTxSc.
 	SystemId() string
 	// SetSystemId assigns string provided by user to MkaTxSc
@@ -294,12 +292,6 @@ func (obj *mkaTxSc) Name() string {
 
 	return *obj.obj.Name
 
-}
-
-// Tx SC name.
-// Name returns a string
-func (obj *mkaTxSc) HasName() bool {
-	return obj.obj.Name != nil
 }
 
 // Tx SC name.
@@ -373,6 +365,11 @@ func (obj *mkaTxSc) SetStartingMessageNumber(value uint64) MkaTxSc {
 func (obj *mkaTxSc) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	// Name is required
+	if obj.obj.Name == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface MkaTxSc")
 	}
 
 	// SystemId is required

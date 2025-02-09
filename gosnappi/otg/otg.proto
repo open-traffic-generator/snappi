@@ -8424,7 +8424,7 @@ message MkaBasicRekeyMode {
 // Timer based periodic rekey properties.
 message MkaBasicRekeyModeTimerBased {
 
-  message RekeyCount {
+  message Choice {
     enum Enum {
       unspecified = 0;
       continuous = 1;
@@ -8432,12 +8432,16 @@ message MkaBasicRekeyModeTimerBased {
     }
   }
   // Periodic Rekey count.
-  // default = RekeyCount.Enum.continuous
-  optional RekeyCount.Enum rekey_count = 1;
+  // default = Choice.Enum.continuous
+  optional Choice.Enum choice = 1;
 
-  // Periodic Rekey Interval (sec).
+  // Fixed rekey attempts.
+  // default = 10
+  optional uint32 fixed_count = 2;
+
+  // Periodic rekey interval (sec).
   // default = 300
-  optional uint32 rekey_interval = 2;
+  optional uint32 interval = 3;
 }
 
 // Key server attributes of a KaY.
@@ -8490,6 +8494,7 @@ message MkaKeyServer {
 message MkaTxSc {
 
   // Tx SC name.
+  // required = true
   optional string name = 1;
 
   // System ID.

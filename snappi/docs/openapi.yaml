@@ -11374,7 +11374,7 @@ components:
         Timer based periodic rekey properties.
       type: object
       properties:
-        rekey_count:
+        choice:
           description: |-
             Periodic Rekey count.
           type: string
@@ -11388,15 +11388,24 @@ components:
           enum:
           - continuous
           - fixed_count
-        rekey_interval:
+        fixed_count:
           description: |-
-            Periodic Rekey Interval (sec).
+            Fixed rekey attempts.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 10
+          x-field-uid: 2
+        interval:
+          description: |-
+            Periodic rekey interval (sec).
           type: integer
           format: uint32
           minimum: 30
           maximum: 65535
           default: 300
-          x-field-uid: 2
+          x-field-uid: 3
     Mka.KeyServer:
       description: |-
         Key server attributes of a KaY.
@@ -11482,6 +11491,7 @@ components:
         Tx secure channel(SC) properties.
       type: object
       required:
+      - name
       - system_id
       properties:
         name:
