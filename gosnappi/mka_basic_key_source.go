@@ -16,7 +16,7 @@ type mkaBasicKeySource struct {
 	obj            *otg.MkaBasicKeySource
 	marshaller     marshalMkaBasicKeySource
 	unMarshaller   unMarshalMkaBasicKeySource
-	pskChainHolder MkaBasicKeySourceMkaBasicKeySourcePskChainIter
+	pskChainHolder MkaBasicKeySourcePskChain
 }
 
 func NewMkaBasicKeySource() MkaBasicKeySource {
@@ -282,8 +282,14 @@ type MkaBasicKeySource interface {
 	Psk()
 	// getter for Msk to set choice.
 	Msk()
-	// PskChain returns MkaBasicKeySourceMkaBasicKeySourcePskChainIterIter, set in MkaBasicKeySource
-	PskChain() MkaBasicKeySourceMkaBasicKeySourcePskChainIter
+	// PskChain returns MkaBasicKeySourcePskChain, set in MkaBasicKeySource.
+	// MkaBasicKeySourcePskChain is the container for PSK chain settings.
+	PskChain() MkaBasicKeySourcePskChain
+	// SetPskChain assigns MkaBasicKeySourcePskChain provided by user to MkaBasicKeySource.
+	// MkaBasicKeySourcePskChain is the container for PSK chain settings.
+	SetPskChain(value MkaBasicKeySourcePskChain) MkaBasicKeySource
+	// HasPskChain checks if PskChain has been set in MkaBasicKeySource
+	HasPskChain() bool
 	setNil()
 }
 
@@ -332,89 +338,30 @@ func (obj *mkaBasicKeySource) setChoice(value MkaBasicKeySourceChoiceEnum) MkaBa
 }
 
 // PSK chain.
-// PskChain returns a []MkaBasicKeySourcePskChain
-func (obj *mkaBasicKeySource) PskChain() MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	if len(obj.obj.PskChain) == 0 {
-		obj.obj.PskChain = []*otg.MkaBasicKeySourcePskChain{}
+// PskChain returns a MkaBasicKeySourcePskChain
+func (obj *mkaBasicKeySource) PskChain() MkaBasicKeySourcePskChain {
+	if obj.obj.PskChain == nil {
+		obj.obj.PskChain = NewMkaBasicKeySourcePskChain().msg()
 	}
 	if obj.pskChainHolder == nil {
-		obj.pskChainHolder = newMkaBasicKeySourceMkaBasicKeySourcePskChainIter(&obj.obj.PskChain).setMsg(obj)
+		obj.pskChainHolder = &mkaBasicKeySourcePskChain{obj: obj.obj.PskChain}
 	}
 	return obj.pskChainHolder
 }
 
-type mkaBasicKeySourceMkaBasicKeySourcePskChainIter struct {
-	obj                            *mkaBasicKeySource
-	mkaBasicKeySourcePskChainSlice []MkaBasicKeySourcePskChain
-	fieldPtr                       *[]*otg.MkaBasicKeySourcePskChain
+// PSK chain.
+// PskChain returns a MkaBasicKeySourcePskChain
+func (obj *mkaBasicKeySource) HasPskChain() bool {
+	return obj.obj.PskChain != nil
 }
 
-func newMkaBasicKeySourceMkaBasicKeySourcePskChainIter(ptr *[]*otg.MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	return &mkaBasicKeySourceMkaBasicKeySourcePskChainIter{fieldPtr: ptr}
-}
+// PSK chain.
+// SetPskChain sets the MkaBasicKeySourcePskChain value in the MkaBasicKeySource object
+func (obj *mkaBasicKeySource) SetPskChain(value MkaBasicKeySourcePskChain) MkaBasicKeySource {
 
-type MkaBasicKeySourceMkaBasicKeySourcePskChainIter interface {
-	setMsg(*mkaBasicKeySource) MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-	Items() []MkaBasicKeySourcePskChain
-	Add() MkaBasicKeySourcePskChain
-	Append(items ...MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-	Set(index int, newObj MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-	Clear() MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-	clearHolderSlice() MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-	appendHolderSlice(item MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter
-}
+	obj.pskChainHolder = nil
+	obj.obj.PskChain = value.msg()
 
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) setMsg(msg *mkaBasicKeySource) MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&mkaBasicKeySourcePskChain{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) Items() []MkaBasicKeySourcePskChain {
-	return obj.mkaBasicKeySourcePskChainSlice
-}
-
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) Add() MkaBasicKeySourcePskChain {
-	newObj := &otg.MkaBasicKeySourcePskChain{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &mkaBasicKeySourcePskChain{obj: newObj}
-	newLibObj.setDefault()
-	obj.mkaBasicKeySourcePskChainSlice = append(obj.mkaBasicKeySourcePskChainSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) Append(items ...MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.mkaBasicKeySourcePskChainSlice = append(obj.mkaBasicKeySourcePskChainSlice, item)
-	}
-	return obj
-}
-
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) Set(index int, newObj MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.mkaBasicKeySourcePskChainSlice[index] = newObj
-	return obj
-}
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) Clear() MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MkaBasicKeySourcePskChain{}
-		obj.mkaBasicKeySourcePskChainSlice = []MkaBasicKeySourcePskChain{}
-	}
-	return obj
-}
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) clearHolderSlice() MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	if len(obj.mkaBasicKeySourcePskChainSlice) > 0 {
-		obj.mkaBasicKeySourcePskChainSlice = []MkaBasicKeySourcePskChain{}
-	}
-	return obj
-}
-func (obj *mkaBasicKeySourceMkaBasicKeySourcePskChainIter) appendHolderSlice(item MkaBasicKeySourcePskChain) MkaBasicKeySourceMkaBasicKeySourcePskChainIter {
-	obj.mkaBasicKeySourcePskChainSlice = append(obj.mkaBasicKeySourcePskChainSlice, item)
 	return obj
 }
 
@@ -423,18 +370,9 @@ func (obj *mkaBasicKeySource) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if len(obj.obj.PskChain) != 0 {
+	if obj.obj.PskChain != nil {
 
-		if set_default {
-			obj.PskChain().clearHolderSlice()
-			for _, item := range obj.obj.PskChain {
-				obj.PskChain().appendHolderSlice(&mkaBasicKeySourcePskChain{obj: item})
-			}
-		}
-		for _, item := range obj.PskChain().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
+		obj.PskChain().validateObj(vObj, set_default)
 	}
 
 }

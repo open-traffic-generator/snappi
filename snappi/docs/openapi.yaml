@@ -11306,9 +11306,7 @@ components:
         psk_chain:
           description: |-
             PSK chain.
-          type: array
-          items:
-            $ref: '#/components/schemas/Mka.Basic.KeySource.PskChain'
+          $ref: '#/components/schemas/Mka.Basic.KeySource.PskChain'
           x-field-uid: 2
     Mka.Basic.KeySource.PskChain:
       description: |-

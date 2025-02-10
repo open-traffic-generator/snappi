@@ -284,10 +284,10 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	VendorInformation()
 	// getter for NameServers to set choice.
 	NameServers()
-	// getter for Fqdn to set choice.
-	Fqdn()
 	// getter for Sztp to set choice.
 	Sztp()
+	// getter for Fqdn to set choice.
+	Fqdn()
 	// Custom returns Dhcpv6ClientOptionsCustom, set in Dhcpv6ClientOptionsOptionsRequest.
 	// Dhcpv6ClientOptionsCustom is the Custom option is used to provide a not so well known option in the message between a client and a server.
 	Custom() Dhcpv6ClientOptionsCustom
@@ -337,14 +337,14 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
 }
 
-// getter for Fqdn to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
-}
-
 // getter for Sztp to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
+}
+
+// getter for Fqdn to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
 }
 
 // The Option Request option is used to identify a list of options in a message between a client and a server. The  option code is 6. - Vendor_specific information option, requested by clients for vendor-specific informations from servers. - DNS Recursive Name Server Option, requested by clients to get the list ofIPv6 addresses of DNS recursive name

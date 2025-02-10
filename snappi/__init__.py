@@ -388,7 +388,6 @@ from .snappi import MkaBasicKeySource
 from .snappi import MkaBasicKeySourcePskChain
 from .snappi import MkaBasicKeySourcePsk
 from .snappi import MkaBasicKeySourcePskIter
-from .snappi import MkaBasicKeySourcePskChainIter
 from .snappi import MkaBasicSupportedCipherSuites
 from .snappi import MkaBasicRekeyMode
 from .snappi import MkaBasicRekeyModeTimerBased

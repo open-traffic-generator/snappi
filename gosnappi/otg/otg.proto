@@ -8379,7 +8379,7 @@ message MkaBasicKeySource {
   optional Choice.Enum choice = 1;
 
   // PSK chain.
-  repeated MkaBasicKeySourcePskChain psk_chain = 2;
+  MkaBasicKeySourcePskChain psk_chain = 2;
 }
 
 // The container for PSK chain settings.
