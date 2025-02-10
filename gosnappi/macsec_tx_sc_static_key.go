@@ -284,18 +284,6 @@ type MacsecTxScStaticKey interface {
 	SetPortId(value uint32) MacsecTxScStaticKey
 	// HasPortId checks if PortId has been set in MacsecTxScStaticKey
 	HasPortId() bool
-	// EndStation returns bool, set in MacsecTxScStaticKey.
-	EndStation() bool
-	// SetEndStation assigns bool provided by user to MacsecTxScStaticKey
-	SetEndStation(value bool) MacsecTxScStaticKey
-	// HasEndStation checks if EndStation has been set in MacsecTxScStaticKey
-	HasEndStation() bool
-	// IncludeSci returns bool, set in MacsecTxScStaticKey.
-	IncludeSci() bool
-	// SetIncludeSci assigns bool provided by user to MacsecTxScStaticKey
-	SetIncludeSci(value bool) MacsecTxScStaticKey
-	// HasIncludeSci checks if IncludeSci has been set in MacsecTxScStaticKey
-	HasIncludeSci() bool
 	// Confidentiality returns bool, set in MacsecTxScStaticKey.
 	Confidentiality() bool
 	// SetConfidentiality assigns bool provided by user to MacsecTxScStaticKey
@@ -354,50 +342,6 @@ func (obj *macsecTxScStaticKey) HasPortId() bool {
 func (obj *macsecTxScStaticKey) SetPortId(value uint32) MacsecTxScStaticKey {
 
 	obj.obj.PortId = &value
-	return obj
-}
-
-// End station on not.
-// EndStation returns a bool
-func (obj *macsecTxScStaticKey) EndStation() bool {
-
-	return *obj.obj.EndStation
-
-}
-
-// End station on not.
-// EndStation returns a bool
-func (obj *macsecTxScStaticKey) HasEndStation() bool {
-	return obj.obj.EndStation != nil
-}
-
-// End station on not.
-// SetEndStation sets the bool value in the MacsecTxScStaticKey object
-func (obj *macsecTxScStaticKey) SetEndStation(value bool) MacsecTxScStaticKey {
-
-	obj.obj.EndStation = &value
-	return obj
-}
-
-// Include SCI on not.
-// IncludeSci returns a bool
-func (obj *macsecTxScStaticKey) IncludeSci() bool {
-
-	return *obj.obj.IncludeSci
-
-}
-
-// Include SCI on not.
-// IncludeSci returns a bool
-func (obj *macsecTxScStaticKey) HasIncludeSci() bool {
-	return obj.obj.IncludeSci != nil
-}
-
-// Include SCI on not.
-// SetIncludeSci sets the bool value in the MacsecTxScStaticKey object
-func (obj *macsecTxScStaticKey) SetIncludeSci(value bool) MacsecTxScStaticKey {
-
-	obj.obj.IncludeSci = &value
 	return obj
 }
 
@@ -485,12 +429,6 @@ func (obj *macsecTxScStaticKey) validateObj(vObj *validation, set_default bool) 
 func (obj *macsecTxScStaticKey) setDefault() {
 	if obj.obj.PortId == nil {
 		obj.SetPortId(1)
-	}
-	if obj.obj.EndStation == nil {
-		obj.SetEndStation(false)
-	}
-	if obj.obj.IncludeSci == nil {
-		obj.SetIncludeSci(false)
 	}
 	if obj.obj.Confidentiality == nil {
 		obj.SetConfidentiality(true)

@@ -7983,6 +7983,14 @@ message MacsecTxSc {
 
   // Description missing in models
   MacsecTxScStaticKey static_key = 1;
+
+  // End station on not.
+  // default = False
+  optional bool end_station = 2;
+
+  // Include SCI on not.
+  // default = False
+  optional bool include_sci = 3;
 }
 
 // Tx SC setting for static key.
@@ -7995,20 +8003,12 @@ message MacsecTxScStaticKey {
   // default = 1
   optional uint32 port_id = 2;
 
-  // End station on not.
-  // default = False
-  optional bool end_station = 3;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 4;
-
   // Encrypt or not.
   // default = True
-  optional bool confidentiality = 5;
+  optional bool confidentiality = 3;
 
   // Tx SAK pool.
-  MacsecBasicKeyGenerationStaticSakPool sak_pool = 6;
+  MacsecBasicKeyGenerationStaticSakPool sak_pool = 4;
 }
 
 // The container for Rx SC settings.
@@ -8344,24 +8344,6 @@ message MkaBasic {
   MkaBasicRekeyMode rekey_mode = 12;
 }
 
-// The container for static key settings.
-message MkaBasicKeySource {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      psk = 1;
-      msk = 2;
-    }
-  }
-  // Key source. Choose one from PSK or MSK.
-  // default = Choice.Enum.psk
-  optional Choice.Enum choice = 1;
-
-  // Pre-shared Keys.
-  repeated MkaBasicKeySourcePsk psks = 2;
-}
-
 // The container for supported cipher suites.
 message MkaBasicSupportedCipherSuites {
 
@@ -8380,6 +8362,34 @@ message MkaBasicSupportedCipherSuites {
   // GCM-AES-XPN-256.
   // default = True
   optional bool gcm_aes_xpn_256 = 4;
+}
+
+// The container for static key settings.
+message MkaBasicKeySource {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      psk = 1;
+      msk = 2;
+    }
+  }
+  // Key source. Choose one from PSK or MSK.
+  // default = Choice.Enum.psk
+  optional Choice.Enum choice = 1;
+
+  // PSK chain.
+  repeated MkaBasicKeySourcePskChain psk_chain = 2;
+}
+
+// The container for PSK chain settings.
+message MkaBasicKeySourcePskChain {
+
+  // PSK chain name.
+  optional string name = 1;
+
+  // Pre-shared Keys.
+  repeated MkaBasicKeySourcePsk psks = 2;
 }
 
 // The container for Pre-shared key(PSK).
