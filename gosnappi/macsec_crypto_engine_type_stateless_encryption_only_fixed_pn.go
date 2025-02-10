@@ -270,6 +270,12 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn interface {
 	SetPn(value uint32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
 	// HasPn checks if Pn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
 	HasPn() bool
+	// Xpn returns int32, set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.
+	Xpn() int32
+	// SetXpn assigns int32 provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	SetXpn(value int32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	// HasXpn checks if Xpn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn
+	HasXpn() bool
 }
 
 // Fixed Tx PN. PN with which all packets will be sent out.
@@ -294,6 +300,28 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetPn(value uin
 	return obj
 }
 
+// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+// Xpn returns a int32
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) Xpn() int32 {
+
+	return *obj.obj.Xpn
+
+}
+
+// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+// Xpn returns a int32
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) HasXpn() bool {
+	return obj.obj.Xpn != nil
+}
+
+// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+// SetXpn sets the int32 value in the MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn object
+func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) SetXpn(value int32) MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
+
+	obj.obj.Xpn = &value
+	return obj
+}
+
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -309,11 +337,24 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) validateObj(vOb
 
 	}
 
+	if obj.obj.Xpn != nil {
+
+		if *obj.obj.Xpn < 1 || *obj.obj.Xpn > 2147483647 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn.Xpn <= 2147483647 but Got %d", *obj.obj.Xpn))
+		}
+
+	}
+
 }
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn) setDefault() {
 	if obj.obj.Pn == nil {
 		obj.SetPn(6)
+	}
+	if obj.obj.Xpn == nil {
+		obj.SetXpn(6)
 	}
 
 }

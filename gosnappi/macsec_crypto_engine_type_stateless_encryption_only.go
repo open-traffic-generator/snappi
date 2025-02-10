@@ -17,7 +17,6 @@ type macsecCryptoEngineTypeStatelessEncryptionOnly struct {
 	marshaller    marshalMacsecCryptoEngineTypeStatelessEncryptionOnly
 	unMarshaller  unMarshalMacsecCryptoEngineTypeStatelessEncryptionOnly
 	txPnHolder    MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn
-	txXpnHolder   MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
 	trafficHolder MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic
 }
 
@@ -247,7 +246,6 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) Clone() (MacsecCryptoE
 
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) setNil() {
 	obj.txPnHolder = nil
-	obj.txXpnHolder = nil
 	obj.trafficHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -284,14 +282,6 @@ type MacsecCryptoEngineTypeStatelessEncryptionOnly interface {
 	SetTxPn(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn) MacsecCryptoEngineTypeStatelessEncryptionOnly
 	// HasTxPn checks if TxPn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnly
 	HasTxPn() bool
-	// TxXpn returns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn, set in MacsecCryptoEngineTypeStatelessEncryptionOnly.
-	// MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn is tx XPN settings.
-	TxXpn() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
-	// SetTxXpn assigns MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn provided by user to MacsecCryptoEngineTypeStatelessEncryptionOnly.
-	// MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn is tx XPN settings.
-	SetTxXpn(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) MacsecCryptoEngineTypeStatelessEncryptionOnly
-	// HasTxXpn checks if TxXpn has been set in MacsecCryptoEngineTypeStatelessEncryptionOnly
-	HasTxXpn() bool
 	// Traffic returns MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic, set in MacsecCryptoEngineTypeStatelessEncryptionOnly.
 	// MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic is encryption only traffic settings.
 	Traffic() MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic
@@ -332,34 +322,6 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) SetTxPn(value MacsecCr
 }
 
 // description is TBD
-// TxXpn returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) TxXpn() MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn {
-	if obj.obj.TxXpn == nil {
-		obj.obj.TxXpn = NewMacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn().msg()
-	}
-	if obj.txXpnHolder == nil {
-		obj.txXpnHolder = &macsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn{obj: obj.obj.TxXpn}
-	}
-	return obj.txXpnHolder
-}
-
-// description is TBD
-// TxXpn returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) HasTxXpn() bool {
-	return obj.obj.TxXpn != nil
-}
-
-// description is TBD
-// SetTxXpn sets the MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn value in the MacsecCryptoEngineTypeStatelessEncryptionOnly object
-func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) SetTxXpn(value MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn) MacsecCryptoEngineTypeStatelessEncryptionOnly {
-
-	obj.txXpnHolder = nil
-	obj.obj.TxXpn = value.msg()
-
-	return obj
-}
-
-// description is TBD
 // Traffic returns a MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic
 func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) Traffic() MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic {
 	if obj.obj.Traffic == nil {
@@ -395,11 +357,6 @@ func (obj *macsecCryptoEngineTypeStatelessEncryptionOnly) validateObj(vObj *vali
 	if obj.obj.TxPn != nil {
 
 		obj.TxPn().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.TxXpn != nil {
-
-		obj.TxXpn().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Traffic != nil {

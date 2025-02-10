@@ -280,6 +280,18 @@ type MacsecTxSc interface {
 	SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc
 	// HasStaticKey checks if StaticKey has been set in MacsecTxSc
 	HasStaticKey() bool
+	// EndStation returns bool, set in MacsecTxSc.
+	EndStation() bool
+	// SetEndStation assigns bool provided by user to MacsecTxSc
+	SetEndStation(value bool) MacsecTxSc
+	// HasEndStation checks if EndStation has been set in MacsecTxSc
+	HasEndStation() bool
+	// IncludeSci returns bool, set in MacsecTxSc.
+	IncludeSci() bool
+	// SetIncludeSci assigns bool provided by user to MacsecTxSc
+	SetIncludeSci(value bool) MacsecTxSc
+	// HasIncludeSci checks if IncludeSci has been set in MacsecTxSc
+	HasIncludeSci() bool
 	setNil()
 }
 
@@ -311,6 +323,50 @@ func (obj *macsecTxSc) SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc {
 	return obj
 }
 
+// End station on not.
+// EndStation returns a bool
+func (obj *macsecTxSc) EndStation() bool {
+
+	return *obj.obj.EndStation
+
+}
+
+// End station on not.
+// EndStation returns a bool
+func (obj *macsecTxSc) HasEndStation() bool {
+	return obj.obj.EndStation != nil
+}
+
+// End station on not.
+// SetEndStation sets the bool value in the MacsecTxSc object
+func (obj *macsecTxSc) SetEndStation(value bool) MacsecTxSc {
+
+	obj.obj.EndStation = &value
+	return obj
+}
+
+// Include SCI on not.
+// IncludeSci returns a bool
+func (obj *macsecTxSc) IncludeSci() bool {
+
+	return *obj.obj.IncludeSci
+
+}
+
+// Include SCI on not.
+// IncludeSci returns a bool
+func (obj *macsecTxSc) HasIncludeSci() bool {
+	return obj.obj.IncludeSci != nil
+}
+
+// Include SCI on not.
+// SetIncludeSci sets the bool value in the MacsecTxSc object
+func (obj *macsecTxSc) SetIncludeSci(value bool) MacsecTxSc {
+
+	obj.obj.IncludeSci = &value
+	return obj
+}
+
 func (obj *macsecTxSc) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -324,5 +380,11 @@ func (obj *macsecTxSc) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *macsecTxSc) setDefault() {
+	if obj.obj.EndStation == nil {
+		obj.SetEndStation(false)
+	}
+	if obj.obj.IncludeSci == nil {
+		obj.SetIncludeSci(false)
+	}
 
 }

@@ -7980,6 +7980,14 @@ message MacsecTxSc {
 
   // Description missing in models
   MacsecTxScStaticKey static_key = 1;
+
+  // End station on not.
+  // default = False
+  optional bool end_station = 2;
+
+  // Include SCI on not.
+  // default = False
+  optional bool include_sci = 3;
 }
 
 // Tx SC setting for static key.
@@ -7992,20 +8000,12 @@ message MacsecTxScStaticKey {
   // default = 1
   optional uint32 port_id = 2;
 
-  // End station on not.
-  // default = False
-  optional bool end_station = 3;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 4;
-
   // Encrypt or not.
   // default = True
-  optional bool confidentiality = 5;
+  optional bool confidentiality = 3;
 
   // Tx SAK pool.
-  MacsecBasicKeyGenerationStaticSakPool sak_pool = 6;
+  MacsecBasicKeyGenerationStaticSakPool sak_pool = 4;
 }
 
 // The container for Rx SC settings.
@@ -8077,9 +8077,6 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnly {
   MacsecCryptoEngineTypeStatelessEncryptionOnlyTxPn tx_pn = 1;
 
   // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn tx_xpn = 2;
-
-  // Description missing in models
   MacsecCryptoEngineTypeStatelessEncryptionOnlyTraffic traffic = 3;
 }
 
@@ -8120,6 +8117,10 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedPn {
   // Fixed Tx PN. PN with which all packets will be sent out.
   // default = 6
   optional uint32 pn = 1;
+
+  // Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
+  // default = 6
+  optional int32 xpn = 2;
 }
 
 // Incrementing PN settings.
@@ -8129,50 +8130,13 @@ message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingPn {
   // default = 100
   optional uint32 count = 1;
 
-  // First PN.
+  // The first PN.
   // default = 10000
-  optional uint32 first = 2;
-}
+  optional uint32 first_pn = 2;
 
-// Tx XPN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyTxXpn {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      fixed_pn = 1;
-      incrementing_pn = 2;
-    }
-  }
-  // Types of Tx XPN series.
-  // default = Choice.Enum.fixed_pn
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn fixed = 2;
-
-  // Description missing in models
-  MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingXpn incrementing = 3;
-}
-
-// Fixed XPN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyFixedXpn {
-
-  // Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-  // default = 6
-  optional int32 xpn = 1;
-}
-
-// Incrementing XPN settings.
-message MacsecCryptoEngineTypeStatelessEncryptionOnlyIncrementingXpn {
-
-  // Count of packet numbers in series.
-  // default = 100
-  optional uint32 count = 1;
-
-  // First XPN.
+  // The first XPN.
   // default = 65536
-  optional int32 first = 2;
+  optional int32 first_xpn = 3;
 }
 
 // Encryption only traffic settings.
