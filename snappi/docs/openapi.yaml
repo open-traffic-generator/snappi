@@ -2540,7 +2540,7 @@ components:
           x-unique: global
         segment_routing:
           description: |-
-            Segment Routing (SR).
+            Optional Segment Routing (SR).
           $ref: '#/components/schemas/Isis.SegmentRouting'
           x-field-uid: 10
     Device.IsisMultiInstance:
@@ -2975,12 +2975,12 @@ components:
       type: object
       properties:
         choice:
-          description: "The choice of Adjacency-SID carries a value instead of an\
-            \ index.\nRefer to \"srlg_values\" under Isis.Interface for SR Local Block\
-            \ (SRLB) and \nIsisSR.Srgb under Isis.SRCapability for Segment Routing\
-            \ Global Block (SRGB) Descriptor.\n- sid_value: Adjacency-SID carries\
-            \ a value and then v_flag is set by the implementation.\n- sid_index:\
-            \ Adjacency-SID carries an index and then v_flag is unset by the implementation."
+          description: |-
+            Choice of whether Adjacency-SID carries and absolute value or a relative index to the SRGB/SRLB Ranges.
+            Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
+            device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
+            - sid_value: Adjacency-SID carries a value and then v_flag is set by the implementation.
+            - sid_index: Adjacency-SID carries an index and then v_flag is unset by the implementation.
           type: string
           default: sid_value
           x-field-uid: 1
@@ -2994,7 +2994,7 @@ components:
           - sid_index
         sid_value:
           description: |-
-            The corresponding Adjacency SID for a link.
+            The corresponding Adjacency SID as an absolute Value for the link that.
           type: integer
           format: uint32
           default: 1
@@ -3003,11 +3003,11 @@ components:
           x-field-uid: 2
         sid_index:
           description: |-
-            The corresponding Adjacency SID for a link.
+            Adjacency Index is relative to ranges defined for SRGB or SRLB.
           type: integer
           format: uint32
           default: 1
-          minimum: 1
+          minimum: 0
           maximum: 1048575
           x-field-uid: 3
         f_flag:
@@ -3017,7 +3017,7 @@ components:
             the Adj-SID refers to an adjacency with outgoing IPv6
             encapsulation.
           type: boolean
-          default: false
+          default: true
           x-field-uid: 4
         b_flag:
           description: |-
@@ -3028,7 +3028,7 @@ components:
         l_flag:
           description: |-
             The local flag.  If set, then the value/index carried by
-            the Adj-SID has local significance. In this case, Adjacency_sid is from  isis.interface.srlg_values
+            the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
           type: boolean
           default: true
           x-field-uid: 6
@@ -3435,13 +3435,14 @@ components:
           x-field-uid: 4
     IsisSR.PrefixSID:
       description: |-
-        This contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+        This contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
       type: object
       properties:
         choice:
           description: |-
-            The choice of Prefix-SID carries a value instead of an index.
-            Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor.
+            Choice of whether Prefix-SID carries and absolute value or a relative index to the SRGB/SRLB Ranges.
+            Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
+            device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
             - sid_value: Prefix-SID carries a value and then v_flag is set by the implementation.
             - sid_index: Prefix-SID carries an index and then v_flag is unset by the implementation.
           type: string
@@ -3457,7 +3458,7 @@ components:
           - sid_index
         sid_value:
           description: |-
-            SID/Label value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+            SID/Label as an absolute value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
           type: integer
           format: uint32
           default: 16000
@@ -3512,8 +3513,9 @@ components:
           default: false
           x-field-uid: 8
         algorithm:
-          description: "The Isis may use various algorithms when calculating reachability\
-            \ to other nodes or to prefixes attached to these nodes. "
+          description: |-
+            The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these nodes.
+            Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
           type: integer
           format: uint32
           default: 0
@@ -3607,7 +3609,7 @@ components:
             Node Flag (Bit 2)
           type: boolean
           default: false
-        prefix_sid_params:
+        prefix_sids:
           description: |-
             A list of SID parameters for a group of IPv6 route addresses.
           type: array
@@ -3617,13 +3619,16 @@ components:
       required:
       - name
     Isis.SegmentRouting:
-      description: "Segment Routing (SR) turns on any node to select any path (explicit\
-        \ or derived from IGPs Shortest Path First (SPT) computations) \nfor each\
-        \ of its traffic classes. The path does not depend on a hop-by-hop \nsignaling\
-        \ technique (unlike LDP or RSVP). \nIt only depends on a set of segments that\
-        \ are advertised by the IS-IS routing protocol. \nThese segments act as topological\
-        \ sub-paths that can be combined together to form the required path.\nReference:\
-        \ https://datatracker.ietf.org/doc/html/rfc8667"
+      description: "Segment Routing (SR) allows for a flexible definition of end-to-end\
+        \ paths within IGP topologies by encoding paths as sequences of topological\
+        \ sub-paths, \ncalled \"segments\". These segments are advertised by the link-state\
+        \ routing protocols (IS-IS and OSPF). \nPrefix segments represent an ECMP-aware\
+        \ shortest path to a prefix (or a node), as per the state of the IGP topology.\
+        \ \nAdjacency segments represent a hop over a specific adjacency between two\
+        \ nodes in the IGP. \nA prefix segment is typically a multi-hop path while\
+        \ an adjacency segment, in most of the cases, is a one-hop path. \nThese segments\
+        \ act as topological sub-paths that can be combined together to form the required\
+        \ path.\nReference: https://datatracker.ietf.org/doc/html/rfc8667"
       type: object
       properties:
         router_capability:
@@ -3636,6 +3641,9 @@ components:
       description: |-
         Container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
       type: object
+      required:
+      - algorithms
+      - srlb_ranges
       properties:
         choice:
           description: "The Router Capability ID SHOULD be identical to the value\
@@ -3670,6 +3678,7 @@ components:
             Router Capability ID in IPv4 address format.
           type: string
           format: ipv4
+          default: 0.0.0.0
           x-field-uid: 2
         s_bit:
           description: |-
@@ -3710,9 +3719,9 @@ components:
           $ref: '#/components/schemas/Isis.SRCapability'
           x-field-uid: 5
         algorithms:
-          description: "This contains one or more SR-Algorithm that a router may use\
-            \ various algorithms when calculating \nreachability to other nodes or\
-            \ to prefixes attached to these nodes."
+          description: "This contains one or more Segment Routing Algorithm that a\
+            \ router may use various algorithms when calculating \nreachability to\
+            \ other nodes or to prefixes attached to these nodes."
           type: array
           items:
             $ref: '#/components/schemas/IsisSR.Algorithm'
@@ -3731,6 +3740,8 @@ components:
         \ case where global SIDs are allocated (i.e., global indexes).\nReference:\
         \ https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv."
       type: object
+      required:
+      - srgb_ranges
       properties:
         flags:
           description: |-
@@ -3745,19 +3756,25 @@ components:
             $ref: '#/components/schemas/IsisSR.Srgb'
           x-field-uid: 2
     IsisSR.CapabilityFlags:
-      description: |-
-        Container for the configuration of IS-IS SR-CAPABILITY flags.
+      description: "Container for the configuration of IS-IS SR-CAPABILITY flags.\n\
+        The Router Capability TLV specifies flags that control its advertisement.\
+        \ \nThe SR-Capabilities sub-TLV MUST be propagated throughout the level and\
+        \ MUST NOT be advertised across level boundaries.\nTherefore, Router Capability\
+        \ TLV distribution flags are set accordingly, i.e., \nthe S-Flag in the Router\
+        \ Capability TLV [RFC7981] MUST be unset.\nReference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-5.1.1.6.1."
       type: object
       properties:
         ipv4_mpls:
           description: |-
             I-Flag for the MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated IPv4 packets on all interfaces.
           type: boolean
+          default: true
           x-field-uid: 1
         ipv6_mpls:
           description: |-
             V-Flag for the MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated IPv6 packets on all interfaces.
           type: boolean
+          default: true
           x-field-uid: 2
     IsisSR.Srgb:
       description: |-
@@ -3770,7 +3787,7 @@ components:
           type: integer
           format: uint32
           minimum: 1
-          maximum: 16777215
+          maximum: 4294967295
           default: 16000
           x-field-uid: 1
         range:
@@ -3798,7 +3815,7 @@ components:
           type: integer
           format: uint32
           minimum: 1
-          maximum: 16777215
+          maximum: 4294967295
           default: 16000
           x-field-uid: 1
         range:
@@ -14229,11 +14246,10 @@ components:
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
       description: "Under Review: Event configuration is currently under review for\
-        \ pending exploration on use cases.\n\nUnder Review: Event configuration is\
-        \ currently under review for pending exploration on use cases.\n\nThe optional\
-        \ container for event configuration.\nBoth cp_events.enable and dp_events.enable\
-        \ must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
-        \ metric values for convergence metrics."
+        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
+        Both cp_events.enable and dp_events.enable must be explicitly set to true\
+        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
+        \ metrics."
       x-status:
         status: under_review
         information: Event configuration is currently under review for pending exploration
@@ -18845,8 +18861,6 @@ components:
       description: |-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Container for requesting control-plane and data-plane convergence time metrics for flows.
       x-status:
         status: under_review
@@ -18861,10 +18875,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -18873,8 +18883,6 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
         The container for convergence metrics.
@@ -18948,9 +18956,7 @@ components:
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
             \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
             - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n- /components/schemas/Flow/properties/name\n\
-            - /components/schemas/Device.Bgpv4Route/properties/name\n- /components/schemas/Device.Bgpv6Route/properties/name\n"
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -20115,7 +20121,7 @@ components:
           x-field-uid: 7
         router_capabilities:
           description: |-
-            IS-IS Router Capabilities: Tlv 242.
+            IS-IS Router Capabilities: TLV 242.
             This container defines Router Capabilities.
           type: array
           items:
@@ -20443,7 +20449,7 @@ components:
         One bit value of ISIS Prefix attributes for the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html.
       type: object
       properties:
-        external:
+        x_flag:
           description: |-
             External prefix flag (Bit 0). Set if the prefix has been
             redistributed from another protocol. This includes
@@ -20452,14 +20458,14 @@ components:
             is another IS-IS instance.
           type: boolean
           x-field-uid: 1
-        redistribution:
+        r_flag:
           description: |-
             Readvertisement flag (Bit 1). Set when the prefix has been
             leaked from one level to another (upwards or
             downwards).
           type: boolean
           x-field-uid: 2
-        node:
+        n_flag:
           description: |-
             Node Flag (Bit 2).
             Set when the prefix identifies the
@@ -20561,7 +20567,7 @@ components:
         flags:
           description: |-
             1 octet of flags.
-          $ref: '#/components/schemas/IsisSR.CapabilityFlags'
+          $ref: '#/components/schemas/IsisLsp.CapasFlags'
           x-field-uid: 1
         srgb_ranges:
           description: |-
@@ -20569,6 +20575,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IsisLsp.Srgb'
+          x-field-uid: 2
+    IsisLsp.CapasFlags:
+      description: |-
+        Container for the configuration of IS-IS SR-CAPABILITY flags.
+      type: object
+      properties:
+        ipv4_mpls:
+          description: |-
+            I-Flag for the MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated IPv4 packets on all interfaces.
+          type: boolean
+          x-field-uid: 1
+        ipv6_mpls:
+          description: |-
+            V-Flag for the MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated IPv6 packets on all interfaces.
+          type: boolean
           x-field-uid: 2
     IsisLsp.Srgb:
       description: |-
@@ -20613,17 +20634,6 @@ components:
           type: integer
           format: uint32
           x-field-uid: 1
-    IsisLsp.SID:
-      description: |-
-        SID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
-      type: object
-      properties:
-        sid:
-          description: |-
-            The SID/Label sub-TLV contains the first value of the SRGB while the range contains the number of SRGB elements.
-          type: integer
-          format: uint32
-          x-field-uid: 1
     IsisLsp.AdjacencySID:
       description: |-
         This container defines segment routing adjacency SIDs.
@@ -20631,40 +20641,16 @@ components:
       properties:
         tlv_type:
           description: |-
-            The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID (Tlv - 31).
+            The corresponding adjacency SID type.
           type: integer
           format: uint32
           x-field-uid: 1
-        choice:
+        sid:
           description: |-
-            The choice of Adjacency-SID carries a value instead of an index.
-            - sid_value: Adjacency-SID carries a value.
-            - sid_index: Adjacency-SID carries an index.
-          type: string
-          default: sid_value
+            SID/Index is the SID/Label value associated with the IGP adjacency SID.
+          type: integer
+          format: uint32
           x-field-uid: 2
-          x-enum:
-            sid_value:
-              x-field-uid: 1
-            sid_index:
-              x-field-uid: 2
-          enum:
-          - sid_value
-          - sid_index
-        sid_value:
-          description: |-
-            SID/Label value that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-          type: integer
-          format: uint32
-          default: 16000
-          x-field-uid: 3
-        sid_index:
-          description: |-
-            SID/Label Index that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-          type: integer
-          format: uint32
-          default: 0
-          x-field-uid: 4
         f_flag:
           description: |-
             The address family flag. If unset, then the Adj-SID refers
@@ -20672,81 +20658,81 @@ components:
             the Adj-SID refers to an adjacency with outgoing IPv6
             encapsulation.
           type: boolean
-          x-field-uid: 5
+          x-field-uid: 3
         b_flag:
           description: |-
             The backup flag. If set, the Adj-SID is eligible for protection.
           type: boolean
-          x-field-uid: 6
+          x-field-uid: 4
         v_flag:
           description: |-
             The value flag. If set, then the Adj-SID carries a value.
           type: boolean
-          x-field-uid: 7
+          x-field-uid: 5
         l_flag:
           description: |-
             The local flag.  If set, then the value/index carried by
             the Adj-SID has local significance.
           type: boolean
-          x-field-uid: 8
+          x-field-uid: 6
         s_flag:
           description: |-
             The set flag. When set, the S-Flag indicates that the
             Adj-SID refers to a set of adjacencies (and therefore MAY be
             assigned to other adjacencies as well).
           type: boolean
-          x-field-uid: 9
+          x-field-uid: 7
         p_flag:
           description: |-
             The persistent flag. When set, the P-Flag indicates that
             the Adj-SID is persistently allocated, i.e., the Adj-SID value
             remains consistent across router restart and/or interface flap.
           type: boolean
-          x-field-uid: 10
+          x-field-uid: 8
         weight:
           description: "The value represents the weight of the Adj-SID for the purpose\
             \ of load balancing. "
           type: integer
           format: uint32
-          x-field-uid: 11
+          x-field-uid: 9
     IsisLsp.PrefixSidFlags:
       description: |-
         Conatiner of 1-octet Flags associated with Prefix Segment-ID.
       type: object
       properties:
-        readvertisment:
+        r_flag:
           description: |-
             Readvertisment flag. When set, the prefix to which this Prefix-SID is attached, has been propagated by
             the router either from another level or from redistribution.
           type: boolean
           x-field-uid: 1
-        node:
+        n_flag:
           description: |-
             Node flag. When set, the Prefix-SID refers to the router identified by the prefix. Typically, the
             N-Flag is set on Prefix-SIDs attached to a router loopback address.
           type: boolean
           x-field-uid: 2
-        no_php:
+        p_flag:
           description: |-
             Penultimate-Hop-Popping flag. When set, then the penultimate hop MUST NOT pop the Prefix-SID before
             delivering the packet to the node that advertised the Prefix-SID.
           type: boolean
           x-field-uid: 3
-        explicity_null:
+        e_flag:
           description: |-
             Explicit-Null flag. When set, any upstream neighbor of the Prefix-SID originator MUST replace the
             Prefix-SID with a Prefix-SID having an Explicit-NULL value (0 for IPv4 and 2 for IPv6) before forwarding
             the packet.
           type: boolean
           x-field-uid: 4
-        value:
+        v_flag:
           description: |-
-            Value flag. When set, the Prefix-SID carries avalue (instead of an index). By default the flag is UNSET.
+            Value flag. When set, the Prefix-SID carries avalue (instead of an index).
           type: boolean
           x-field-uid: 5
-        local:
-          description: "Local flag. When set, the value/index carried by the Prefix-SID\
-            \ has local significance. \nBy default the flag is UNSET."
+        l_flag:
+          description: |-
+            Local flag. When set, the value/index carried by the Prefix-SID has local significance.
           type: boolean
           x-field-uid: 6
     LldpNeighbors.State.Request:

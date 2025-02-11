@@ -308,21 +308,6 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
 }
 
-// getter for V_5 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
-}
-
-// getter for V_4 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_4() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_4)
-}
-
-// getter for V_5 to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
-}
-
 // getter for V_1 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)

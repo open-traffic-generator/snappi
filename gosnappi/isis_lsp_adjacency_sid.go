@@ -270,24 +270,12 @@ type IsisLspAdjacencySID interface {
 	SetTlvType(value uint32) IsisLspAdjacencySID
 	// HasTlvType checks if TlvType has been set in IsisLspAdjacencySID
 	HasTlvType() bool
-	// Choice returns IsisLspAdjacencySIDChoiceEnum, set in IsisLspAdjacencySID
-	Choice() IsisLspAdjacencySIDChoiceEnum
-	// setChoice assigns IsisLspAdjacencySIDChoiceEnum provided by user to IsisLspAdjacencySID
-	setChoice(value IsisLspAdjacencySIDChoiceEnum) IsisLspAdjacencySID
-	// HasChoice checks if Choice has been set in IsisLspAdjacencySID
-	HasChoice() bool
-	// SidValue returns uint32, set in IsisLspAdjacencySID.
-	SidValue() uint32
-	// SetSidValue assigns uint32 provided by user to IsisLspAdjacencySID
-	SetSidValue(value uint32) IsisLspAdjacencySID
-	// HasSidValue checks if SidValue has been set in IsisLspAdjacencySID
-	HasSidValue() bool
-	// SidIndex returns uint32, set in IsisLspAdjacencySID.
-	SidIndex() uint32
-	// SetSidIndex assigns uint32 provided by user to IsisLspAdjacencySID
-	SetSidIndex(value uint32) IsisLspAdjacencySID
-	// HasSidIndex checks if SidIndex has been set in IsisLspAdjacencySID
-	HasSidIndex() bool
+	// Sid returns uint32, set in IsisLspAdjacencySID.
+	Sid() uint32
+	// SetSid assigns uint32 provided by user to IsisLspAdjacencySID
+	SetSid(value uint32) IsisLspAdjacencySID
+	// HasSid checks if Sid has been set in IsisLspAdjacencySID
+	HasSid() bool
 	// FFlag returns bool, set in IsisLspAdjacencySID.
 	FFlag() bool
 	// SetFFlag assigns bool provided by user to IsisLspAdjacencySID
@@ -332,7 +320,7 @@ type IsisLspAdjacencySID interface {
 	HasWeight() bool
 }
 
-// The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID (Tlv - 31).
+// The corresponding adjacency SID type.
 // TlvType returns a uint32
 func (obj *isisLspAdjacencySID) TlvType() uint32 {
 
@@ -340,13 +328,13 @@ func (obj *isisLspAdjacencySID) TlvType() uint32 {
 
 }
 
-// The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID (Tlv - 31).
+// The corresponding adjacency SID type.
 // TlvType returns a uint32
 func (obj *isisLspAdjacencySID) HasTlvType() bool {
 	return obj.obj.TlvType != nil
 }
 
-// The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID (Tlv - 31).
+// The corresponding adjacency SID type.
 // SetTlvType sets the uint32 value in the IsisLspAdjacencySID object
 func (obj *isisLspAdjacencySID) SetTlvType(value uint32) IsisLspAdjacencySID {
 
@@ -354,103 +342,25 @@ func (obj *isisLspAdjacencySID) SetTlvType(value uint32) IsisLspAdjacencySID {
 	return obj
 }
 
-type IsisLspAdjacencySIDChoiceEnum string
+// SID/Index is the SID/Label value associated with the IGP adjacency SID.
+// Sid returns a uint32
+func (obj *isisLspAdjacencySID) Sid() uint32 {
 
-// Enum of Choice on IsisLspAdjacencySID
-var IsisLspAdjacencySIDChoice = struct {
-	SID_VALUE IsisLspAdjacencySIDChoiceEnum
-	SID_INDEX IsisLspAdjacencySIDChoiceEnum
-}{
-	SID_VALUE: IsisLspAdjacencySIDChoiceEnum("sid_value"),
-	SID_INDEX: IsisLspAdjacencySIDChoiceEnum("sid_index"),
-}
-
-func (obj *isisLspAdjacencySID) Choice() IsisLspAdjacencySIDChoiceEnum {
-	return IsisLspAdjacencySIDChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// The choice of Adjacency-SID carries a value instead of an index.
-// - sid_value: Adjacency-SID carries a value.
-// - sid_index: Adjacency-SID carries an index.
-// Choice returns a string
-func (obj *isisLspAdjacencySID) HasChoice() bool {
-	return obj.obj.Choice != nil
-}
-
-func (obj *isisLspAdjacencySID) setChoice(value IsisLspAdjacencySIDChoiceEnum) IsisLspAdjacencySID {
-	intValue, ok := otg.IsisLspAdjacencySID_Choice_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on IsisLspAdjacencySIDChoiceEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.IsisLspAdjacencySID_Choice_Enum(intValue)
-	obj.obj.Choice = &enumValue
-	obj.obj.SidIndex = nil
-	obj.obj.SidValue = nil
-
-	if value == IsisLspAdjacencySIDChoice.SID_VALUE {
-		defaultValue := uint32(16000)
-		obj.obj.SidValue = &defaultValue
-	}
-
-	if value == IsisLspAdjacencySIDChoice.SID_INDEX {
-		defaultValue := uint32(0)
-		obj.obj.SidIndex = &defaultValue
-	}
-
-	return obj
-}
-
-// SID/Label value that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SidValue returns a uint32
-func (obj *isisLspAdjacencySID) SidValue() uint32 {
-
-	if obj.obj.SidValue == nil {
-		obj.setChoice(IsisLspAdjacencySIDChoice.SID_VALUE)
-	}
-
-	return *obj.obj.SidValue
+	return *obj.obj.Sid
 
 }
 
-// SID/Label value that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SidValue returns a uint32
-func (obj *isisLspAdjacencySID) HasSidValue() bool {
-	return obj.obj.SidValue != nil
+// SID/Index is the SID/Label value associated with the IGP adjacency SID.
+// Sid returns a uint32
+func (obj *isisLspAdjacencySID) HasSid() bool {
+	return obj.obj.Sid != nil
 }
 
-// SID/Label value that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SetSidValue sets the uint32 value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetSidValue(value uint32) IsisLspAdjacencySID {
-	obj.setChoice(IsisLspAdjacencySIDChoice.SID_VALUE)
-	obj.obj.SidValue = &value
-	return obj
-}
+// SID/Index is the SID/Label value associated with the IGP adjacency SID.
+// SetSid sets the uint32 value in the IsisLspAdjacencySID object
+func (obj *isisLspAdjacencySID) SetSid(value uint32) IsisLspAdjacencySID {
 
-// SID/Label Index that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SidIndex returns a uint32
-func (obj *isisLspAdjacencySID) SidIndex() uint32 {
-
-	if obj.obj.SidIndex == nil {
-		obj.setChoice(IsisLspAdjacencySIDChoice.SID_INDEX)
-	}
-
-	return *obj.obj.SidIndex
-
-}
-
-// SID/Label Index that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SidIndex returns a uint32
-func (obj *isisLspAdjacencySID) HasSidIndex() bool {
-	return obj.obj.SidIndex != nil
-}
-
-// SID/Label Index that is associated with the IGP adjacency segment attached to the specific IPv4 or IPv6 prefix.
-// SetSidIndex sets the uint32 value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetSidIndex(value uint32) IsisLspAdjacencySID {
-	obj.setChoice(IsisLspAdjacencySIDChoice.SID_INDEX)
-	obj.obj.SidIndex = &value
+	obj.obj.Sid = &value
 	return obj
 }
 
@@ -640,34 +550,5 @@ func (obj *isisLspAdjacencySID) validateObj(vObj *validation, set_default bool) 
 }
 
 func (obj *isisLspAdjacencySID) setDefault() {
-	var choices_set int = 0
-	var choice IsisLspAdjacencySIDChoiceEnum
-
-	if obj.obj.SidValue != nil {
-		choices_set += 1
-		choice = IsisLspAdjacencySIDChoice.SID_VALUE
-	}
-
-	if obj.obj.SidIndex != nil {
-		choices_set += 1
-		choice = IsisLspAdjacencySIDChoice.SID_INDEX
-	}
-	if choices_set == 0 {
-		if obj.obj.Choice == nil {
-			obj.setChoice(IsisLspAdjacencySIDChoice.SID_VALUE)
-
-		}
-
-	} else if choices_set == 1 && choice != "" {
-		if obj.obj.Choice != nil {
-			if obj.Choice() != choice {
-				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in IsisLspAdjacencySID")
-			}
-		} else {
-			intVal := otg.IsisLspAdjacencySID_Choice_Enum_value[string(choice)]
-			enumValue := otg.IsisLspAdjacencySID_Choice_Enum(intVal)
-			obj.obj.Choice = &enumValue
-		}
-	}
 
 }

@@ -264,24 +264,24 @@ type IsisLspPrefixAttributes interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// External returns bool, set in IsisLspPrefixAttributes.
-	External() bool
-	// SetExternal assigns bool provided by user to IsisLspPrefixAttributes
-	SetExternal(value bool) IsisLspPrefixAttributes
-	// HasExternal checks if External has been set in IsisLspPrefixAttributes
-	HasExternal() bool
-	// Redistribution returns bool, set in IsisLspPrefixAttributes.
-	Redistribution() bool
-	// SetRedistribution assigns bool provided by user to IsisLspPrefixAttributes
-	SetRedistribution(value bool) IsisLspPrefixAttributes
-	// HasRedistribution checks if Redistribution has been set in IsisLspPrefixAttributes
-	HasRedistribution() bool
-	// Node returns bool, set in IsisLspPrefixAttributes.
-	Node() bool
-	// SetNode assigns bool provided by user to IsisLspPrefixAttributes
-	SetNode(value bool) IsisLspPrefixAttributes
-	// HasNode checks if Node has been set in IsisLspPrefixAttributes
-	HasNode() bool
+	// XFlag returns bool, set in IsisLspPrefixAttributes.
+	XFlag() bool
+	// SetXFlag assigns bool provided by user to IsisLspPrefixAttributes
+	SetXFlag(value bool) IsisLspPrefixAttributes
+	// HasXFlag checks if XFlag has been set in IsisLspPrefixAttributes
+	HasXFlag() bool
+	// RFlag returns bool, set in IsisLspPrefixAttributes.
+	RFlag() bool
+	// SetRFlag assigns bool provided by user to IsisLspPrefixAttributes
+	SetRFlag(value bool) IsisLspPrefixAttributes
+	// HasRFlag checks if RFlag has been set in IsisLspPrefixAttributes
+	HasRFlag() bool
+	// NFlag returns bool, set in IsisLspPrefixAttributes.
+	NFlag() bool
+	// SetNFlag assigns bool provided by user to IsisLspPrefixAttributes
+	SetNFlag(value bool) IsisLspPrefixAttributes
+	// HasNFlag checks if NFlag has been set in IsisLspPrefixAttributes
+	HasNFlag() bool
 }
 
 // External prefix flag (Bit 0). Set if the prefix has been
@@ -289,10 +289,10 @@ type IsisLspPrefixAttributes interface {
 // the case where multiple virtual routers are
 // supported and the source of the redistributed prefix
 // is another IS-IS instance.
-// External returns a bool
-func (obj *isisLspPrefixAttributes) External() bool {
+// XFlag returns a bool
+func (obj *isisLspPrefixAttributes) XFlag() bool {
 
-	return *obj.obj.External
+	return *obj.obj.XFlag
 
 }
 
@@ -301,9 +301,9 @@ func (obj *isisLspPrefixAttributes) External() bool {
 // the case where multiple virtual routers are
 // supported and the source of the redistributed prefix
 // is another IS-IS instance.
-// External returns a bool
-func (obj *isisLspPrefixAttributes) HasExternal() bool {
-	return obj.obj.External != nil
+// XFlag returns a bool
+func (obj *isisLspPrefixAttributes) HasXFlag() bool {
+	return obj.obj.XFlag != nil
 }
 
 // External prefix flag (Bit 0). Set if the prefix has been
@@ -311,38 +311,38 @@ func (obj *isisLspPrefixAttributes) HasExternal() bool {
 // the case where multiple virtual routers are
 // supported and the source of the redistributed prefix
 // is another IS-IS instance.
-// SetExternal sets the bool value in the IsisLspPrefixAttributes object
-func (obj *isisLspPrefixAttributes) SetExternal(value bool) IsisLspPrefixAttributes {
+// SetXFlag sets the bool value in the IsisLspPrefixAttributes object
+func (obj *isisLspPrefixAttributes) SetXFlag(value bool) IsisLspPrefixAttributes {
 
-	obj.obj.External = &value
+	obj.obj.XFlag = &value
 	return obj
 }
 
 // Readvertisement flag (Bit 1). Set when the prefix has been
 // leaked from one level to another (upwards or
 // downwards).
-// Redistribution returns a bool
-func (obj *isisLspPrefixAttributes) Redistribution() bool {
+// RFlag returns a bool
+func (obj *isisLspPrefixAttributes) RFlag() bool {
 
-	return *obj.obj.Redistribution
+	return *obj.obj.RFlag
 
 }
 
 // Readvertisement flag (Bit 1). Set when the prefix has been
 // leaked from one level to another (upwards or
 // downwards).
-// Redistribution returns a bool
-func (obj *isisLspPrefixAttributes) HasRedistribution() bool {
-	return obj.obj.Redistribution != nil
+// RFlag returns a bool
+func (obj *isisLspPrefixAttributes) HasRFlag() bool {
+	return obj.obj.RFlag != nil
 }
 
 // Readvertisement flag (Bit 1). Set when the prefix has been
 // leaked from one level to another (upwards or
 // downwards).
-// SetRedistribution sets the bool value in the IsisLspPrefixAttributes object
-func (obj *isisLspPrefixAttributes) SetRedistribution(value bool) IsisLspPrefixAttributes {
+// SetRFlag sets the bool value in the IsisLspPrefixAttributes object
+func (obj *isisLspPrefixAttributes) SetRFlag(value bool) IsisLspPrefixAttributes {
 
-	obj.obj.Redistribution = &value
+	obj.obj.RFlag = &value
 	return obj
 }
 
@@ -351,10 +351,10 @@ func (obj *isisLspPrefixAttributes) SetRedistribution(value bool) IsisLspPrefixA
 // advertising router, i.e., the prefix is a host
 // prefix advertising  a globally reachable address
 // typically associated with a loopback address.
-// Node returns a bool
-func (obj *isisLspPrefixAttributes) Node() bool {
+// NFlag returns a bool
+func (obj *isisLspPrefixAttributes) NFlag() bool {
 
-	return *obj.obj.Node
+	return *obj.obj.NFlag
 
 }
 
@@ -363,9 +363,9 @@ func (obj *isisLspPrefixAttributes) Node() bool {
 // advertising router, i.e., the prefix is a host
 // prefix advertising  a globally reachable address
 // typically associated with a loopback address.
-// Node returns a bool
-func (obj *isisLspPrefixAttributes) HasNode() bool {
-	return obj.obj.Node != nil
+// NFlag returns a bool
+func (obj *isisLspPrefixAttributes) HasNFlag() bool {
+	return obj.obj.NFlag != nil
 }
 
 // Node Flag (Bit 2).
@@ -373,10 +373,10 @@ func (obj *isisLspPrefixAttributes) HasNode() bool {
 // advertising router, i.e., the prefix is a host
 // prefix advertising  a globally reachable address
 // typically associated with a loopback address.
-// SetNode sets the bool value in the IsisLspPrefixAttributes object
-func (obj *isisLspPrefixAttributes) SetNode(value bool) IsisLspPrefixAttributes {
+// SetNFlag sets the bool value in the IsisLspPrefixAttributes object
+func (obj *isisLspPrefixAttributes) SetNFlag(value bool) IsisLspPrefixAttributes {
 
-	obj.obj.Node = &value
+	obj.obj.NFlag = &value
 	return obj
 }
 

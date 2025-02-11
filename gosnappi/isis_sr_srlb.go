@@ -334,10 +334,10 @@ func (obj *isisSRSrlb) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.StartingSid != nil {
 
-		if *obj.obj.StartingSid < 1 || *obj.obj.StartingSid > 16777215 {
+		if *obj.obj.StartingSid < 1 || *obj.obj.StartingSid > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisSRSrlb.StartingSid <= 16777215 but Got %d", *obj.obj.StartingSid))
+				fmt.Sprintf("1 <= IsisSRSrlb.StartingSid <= 4294967295 but Got %d", *obj.obj.StartingSid))
 		}
 
 	}

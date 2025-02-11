@@ -914,7 +914,7 @@ func (obj *isisLspTlvsIsisLspIpv6ReachabilityTlvIter) appendHolderSlice(item Isi
 	return obj
 }
 
-// IS-IS Router Capabilities: Tlv 242.
+// IS-IS Router Capabilities: TLV 242.
 // This container defines Router Capabilities.
 // RouterCapabilities returns a []IsisLspCapability
 func (obj *isisLspTlvs) RouterCapabilities() IsisLspTlvsIsisLspCapabilityIter {

@@ -338,9 +338,9 @@ func (obj *isisInterfaceAdjacencySID) Choice() IsisInterfaceAdjacencySIDChoiceEn
 	return IsisInterfaceAdjacencySIDChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// The choice of Adjacency-SID carries a value instead of an index.
-// Refer to "srlg_values" under Isis.Interface for SR Local Block (SRLB) and
-// IsisSR.Srgb under Isis.SRCapability for Segment Routing Global Block (SRGB) Descriptor.
+// Choice of whether Adjacency-SID carries and absolute value or a relative index to the SRGB/SRLB Ranges.
+// Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
+// device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_value: Adjacency-SID carries a value and then v_flag is set by the implementation.
 // - sid_index: Adjacency-SID carries an index and then v_flag is unset by the implementation.
 // Choice returns a string
@@ -373,7 +373,7 @@ func (obj *isisInterfaceAdjacencySID) setChoice(value IsisInterfaceAdjacencySIDC
 	return obj
 }
 
-// The corresponding Adjacency SID for a link.
+// The corresponding Adjacency SID as an absolute Value for the link that.
 // SidValue returns a uint32
 func (obj *isisInterfaceAdjacencySID) SidValue() uint32 {
 
@@ -385,13 +385,13 @@ func (obj *isisInterfaceAdjacencySID) SidValue() uint32 {
 
 }
 
-// The corresponding Adjacency SID for a link.
+// The corresponding Adjacency SID as an absolute Value for the link that.
 // SidValue returns a uint32
 func (obj *isisInterfaceAdjacencySID) HasSidValue() bool {
 	return obj.obj.SidValue != nil
 }
 
-// The corresponding Adjacency SID for a link.
+// The corresponding Adjacency SID as an absolute Value for the link that.
 // SetSidValue sets the uint32 value in the IsisInterfaceAdjacencySID object
 func (obj *isisInterfaceAdjacencySID) SetSidValue(value uint32) IsisInterfaceAdjacencySID {
 	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_VALUE)
@@ -399,7 +399,7 @@ func (obj *isisInterfaceAdjacencySID) SetSidValue(value uint32) IsisInterfaceAdj
 	return obj
 }
 
-// The corresponding Adjacency SID for a link.
+// Adjacency Index is relative to ranges defined for SRGB or SRLB.
 // SidIndex returns a uint32
 func (obj *isisInterfaceAdjacencySID) SidIndex() uint32 {
 
@@ -411,13 +411,13 @@ func (obj *isisInterfaceAdjacencySID) SidIndex() uint32 {
 
 }
 
-// The corresponding Adjacency SID for a link.
+// Adjacency Index is relative to ranges defined for SRGB or SRLB.
 // SidIndex returns a uint32
 func (obj *isisInterfaceAdjacencySID) HasSidIndex() bool {
 	return obj.obj.SidIndex != nil
 }
 
-// The corresponding Adjacency SID for a link.
+// Adjacency Index is relative to ranges defined for SRGB or SRLB.
 // SetSidIndex sets the uint32 value in the IsisInterfaceAdjacencySID object
 func (obj *isisInterfaceAdjacencySID) SetSidIndex(value uint32) IsisInterfaceAdjacencySID {
 	obj.setChoice(IsisInterfaceAdjacencySIDChoice.SID_INDEX)
@@ -479,7 +479,7 @@ func (obj *isisInterfaceAdjacencySID) SetBFlag(value bool) IsisInterfaceAdjacenc
 }
 
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance. In this case, Adjacency_sid is from  isis.interface.srlg_values
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
 // LFlag returns a bool
 func (obj *isisInterfaceAdjacencySID) LFlag() bool {
 
@@ -488,14 +488,14 @@ func (obj *isisInterfaceAdjacencySID) LFlag() bool {
 }
 
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance. In this case, Adjacency_sid is from  isis.interface.srlg_values
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
 // LFlag returns a bool
 func (obj *isisInterfaceAdjacencySID) HasLFlag() bool {
 	return obj.obj.LFlag != nil
 }
 
 // The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance. In this case, Adjacency_sid is from  isis.interface.srlg_values
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
 // SetLFlag sets the bool value in the IsisInterfaceAdjacencySID object
 func (obj *isisInterfaceAdjacencySID) SetLFlag(value bool) IsisInterfaceAdjacencySID {
 
@@ -598,10 +598,10 @@ func (obj *isisInterfaceAdjacencySID) validateObj(vObj *validation, set_default 
 
 	if obj.obj.SidIndex != nil {
 
-		if *obj.obj.SidIndex < 1 || *obj.obj.SidIndex > 1048575 {
+		if *obj.obj.SidIndex > 1048575 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisInterfaceAdjacencySID.SidIndex <= 1048575 but Got %d", *obj.obj.SidIndex))
+				fmt.Sprintf("0 <= IsisInterfaceAdjacencySID.SidIndex <= 1048575 but Got %d", *obj.obj.SidIndex))
 		}
 
 	}
@@ -650,7 +650,7 @@ func (obj *isisInterfaceAdjacencySID) setDefault() {
 	}
 
 	if obj.obj.FFlag == nil {
-		obj.SetFFlag(false)
+		obj.SetFFlag(true)
 	}
 	if obj.obj.BFlag == nil {
 		obj.SetBFlag(false)

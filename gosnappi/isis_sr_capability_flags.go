@@ -243,6 +243,11 @@ func (obj *isisSRCapabilityFlags) Clone() (IsisSRCapabilityFlags, error) {
 }
 
 // IsisSRCapabilityFlags is container for the configuration of IS-IS SR-CAPABILITY flags.
+// The Router Capability TLV specifies flags that control its advertisement.
+// The SR-Capabilities sub-TLV MUST be propagated throughout the level and MUST NOT be advertised across level boundaries.
+// Therefore, Router Capability TLV distribution flags are set accordingly, i.e.,
+// the S-Flag in the Router Capability TLV [RFC7981] MUST be unset.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-5.1.1.6.1.
 type IsisSRCapabilityFlags interface {
 	Validation
 	// msg marshals IsisSRCapabilityFlags to protobuf object *otg.IsisSRCapabilityFlags
@@ -330,5 +335,11 @@ func (obj *isisSRCapabilityFlags) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *isisSRCapabilityFlags) setDefault() {
+	if obj.obj.Ipv4Mpls == nil {
+		obj.SetIpv4Mpls(true)
+	}
+	if obj.obj.Ipv6Mpls == nil {
+		obj.SetIpv6Mpls(true)
+	}
 
 }

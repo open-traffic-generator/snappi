@@ -264,191 +264,188 @@ type IsisLspPrefixSidFlags interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Readvertisment returns bool, set in IsisLspPrefixSidFlags.
-	Readvertisment() bool
-	// SetReadvertisment assigns bool provided by user to IsisLspPrefixSidFlags
-	SetReadvertisment(value bool) IsisLspPrefixSidFlags
-	// HasReadvertisment checks if Readvertisment has been set in IsisLspPrefixSidFlags
-	HasReadvertisment() bool
-	// Node returns bool, set in IsisLspPrefixSidFlags.
-	Node() bool
-	// SetNode assigns bool provided by user to IsisLspPrefixSidFlags
-	SetNode(value bool) IsisLspPrefixSidFlags
-	// HasNode checks if Node has been set in IsisLspPrefixSidFlags
-	HasNode() bool
-	// NoPhp returns bool, set in IsisLspPrefixSidFlags.
-	NoPhp() bool
-	// SetNoPhp assigns bool provided by user to IsisLspPrefixSidFlags
-	SetNoPhp(value bool) IsisLspPrefixSidFlags
-	// HasNoPhp checks if NoPhp has been set in IsisLspPrefixSidFlags
-	HasNoPhp() bool
-	// ExplicityNull returns bool, set in IsisLspPrefixSidFlags.
-	ExplicityNull() bool
-	// SetExplicityNull assigns bool provided by user to IsisLspPrefixSidFlags
-	SetExplicityNull(value bool) IsisLspPrefixSidFlags
-	// HasExplicityNull checks if ExplicityNull has been set in IsisLspPrefixSidFlags
-	HasExplicityNull() bool
-	// Value returns bool, set in IsisLspPrefixSidFlags.
-	Value() bool
-	// SetValue assigns bool provided by user to IsisLspPrefixSidFlags
-	SetValue(value bool) IsisLspPrefixSidFlags
-	// HasValue checks if Value has been set in IsisLspPrefixSidFlags
-	HasValue() bool
-	// Local returns bool, set in IsisLspPrefixSidFlags.
-	Local() bool
-	// SetLocal assigns bool provided by user to IsisLspPrefixSidFlags
-	SetLocal(value bool) IsisLspPrefixSidFlags
-	// HasLocal checks if Local has been set in IsisLspPrefixSidFlags
-	HasLocal() bool
+	// RFlag returns bool, set in IsisLspPrefixSidFlags.
+	RFlag() bool
+	// SetRFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetRFlag(value bool) IsisLspPrefixSidFlags
+	// HasRFlag checks if RFlag has been set in IsisLspPrefixSidFlags
+	HasRFlag() bool
+	// NFlag returns bool, set in IsisLspPrefixSidFlags.
+	NFlag() bool
+	// SetNFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetNFlag(value bool) IsisLspPrefixSidFlags
+	// HasNFlag checks if NFlag has been set in IsisLspPrefixSidFlags
+	HasNFlag() bool
+	// PFlag returns bool, set in IsisLspPrefixSidFlags.
+	PFlag() bool
+	// SetPFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetPFlag(value bool) IsisLspPrefixSidFlags
+	// HasPFlag checks if PFlag has been set in IsisLspPrefixSidFlags
+	HasPFlag() bool
+	// EFlag returns bool, set in IsisLspPrefixSidFlags.
+	EFlag() bool
+	// SetEFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetEFlag(value bool) IsisLspPrefixSidFlags
+	// HasEFlag checks if EFlag has been set in IsisLspPrefixSidFlags
+	HasEFlag() bool
+	// VFlag returns bool, set in IsisLspPrefixSidFlags.
+	VFlag() bool
+	// SetVFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetVFlag(value bool) IsisLspPrefixSidFlags
+	// HasVFlag checks if VFlag has been set in IsisLspPrefixSidFlags
+	HasVFlag() bool
+	// LFlag returns bool, set in IsisLspPrefixSidFlags.
+	LFlag() bool
+	// SetLFlag assigns bool provided by user to IsisLspPrefixSidFlags
+	SetLFlag(value bool) IsisLspPrefixSidFlags
+	// HasLFlag checks if LFlag has been set in IsisLspPrefixSidFlags
+	HasLFlag() bool
 }
 
 // Readvertisment flag. When set, the prefix to which this Prefix-SID is attached, has been propagated by
 // the router either from another level or from redistribution.
-// Readvertisment returns a bool
-func (obj *isisLspPrefixSidFlags) Readvertisment() bool {
+// RFlag returns a bool
+func (obj *isisLspPrefixSidFlags) RFlag() bool {
 
-	return *obj.obj.Readvertisment
+	return *obj.obj.RFlag
 
 }
 
 // Readvertisment flag. When set, the prefix to which this Prefix-SID is attached, has been propagated by
 // the router either from another level or from redistribution.
-// Readvertisment returns a bool
-func (obj *isisLspPrefixSidFlags) HasReadvertisment() bool {
-	return obj.obj.Readvertisment != nil
+// RFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasRFlag() bool {
+	return obj.obj.RFlag != nil
 }
 
 // Readvertisment flag. When set, the prefix to which this Prefix-SID is attached, has been propagated by
 // the router either from another level or from redistribution.
-// SetReadvertisment sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetReadvertisment(value bool) IsisLspPrefixSidFlags {
+// SetRFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetRFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.Readvertisment = &value
+	obj.obj.RFlag = &value
 	return obj
 }
 
 // Node flag. When set, the Prefix-SID refers to the router identified by the prefix. Typically, the
 // N-Flag is set on Prefix-SIDs attached to a router loopback address.
-// Node returns a bool
-func (obj *isisLspPrefixSidFlags) Node() bool {
+// NFlag returns a bool
+func (obj *isisLspPrefixSidFlags) NFlag() bool {
 
-	return *obj.obj.Node
+	return *obj.obj.NFlag
 
 }
 
 // Node flag. When set, the Prefix-SID refers to the router identified by the prefix. Typically, the
 // N-Flag is set on Prefix-SIDs attached to a router loopback address.
-// Node returns a bool
-func (obj *isisLspPrefixSidFlags) HasNode() bool {
-	return obj.obj.Node != nil
+// NFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasNFlag() bool {
+	return obj.obj.NFlag != nil
 }
 
 // Node flag. When set, the Prefix-SID refers to the router identified by the prefix. Typically, the
 // N-Flag is set on Prefix-SIDs attached to a router loopback address.
-// SetNode sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetNode(value bool) IsisLspPrefixSidFlags {
+// SetNFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetNFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.Node = &value
+	obj.obj.NFlag = &value
 	return obj
 }
 
 // Penultimate-Hop-Popping flag. When set, then the penultimate hop MUST NOT pop the Prefix-SID before
 // delivering the packet to the node that advertised the Prefix-SID.
-// NoPhp returns a bool
-func (obj *isisLspPrefixSidFlags) NoPhp() bool {
+// PFlag returns a bool
+func (obj *isisLspPrefixSidFlags) PFlag() bool {
 
-	return *obj.obj.NoPhp
+	return *obj.obj.PFlag
 
 }
 
 // Penultimate-Hop-Popping flag. When set, then the penultimate hop MUST NOT pop the Prefix-SID before
 // delivering the packet to the node that advertised the Prefix-SID.
-// NoPhp returns a bool
-func (obj *isisLspPrefixSidFlags) HasNoPhp() bool {
-	return obj.obj.NoPhp != nil
+// PFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasPFlag() bool {
+	return obj.obj.PFlag != nil
 }
 
 // Penultimate-Hop-Popping flag. When set, then the penultimate hop MUST NOT pop the Prefix-SID before
 // delivering the packet to the node that advertised the Prefix-SID.
-// SetNoPhp sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetNoPhp(value bool) IsisLspPrefixSidFlags {
+// SetPFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetPFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.NoPhp = &value
+	obj.obj.PFlag = &value
 	return obj
 }
 
 // Explicit-Null flag. When set, any upstream neighbor of the Prefix-SID originator MUST replace the
 // Prefix-SID with a Prefix-SID having an Explicit-NULL value (0 for IPv4 and 2 for IPv6) before forwarding
 // the packet.
-// ExplicityNull returns a bool
-func (obj *isisLspPrefixSidFlags) ExplicityNull() bool {
+// EFlag returns a bool
+func (obj *isisLspPrefixSidFlags) EFlag() bool {
 
-	return *obj.obj.ExplicityNull
+	return *obj.obj.EFlag
 
 }
 
 // Explicit-Null flag. When set, any upstream neighbor of the Prefix-SID originator MUST replace the
 // Prefix-SID with a Prefix-SID having an Explicit-NULL value (0 for IPv4 and 2 for IPv6) before forwarding
 // the packet.
-// ExplicityNull returns a bool
-func (obj *isisLspPrefixSidFlags) HasExplicityNull() bool {
-	return obj.obj.ExplicityNull != nil
+// EFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasEFlag() bool {
+	return obj.obj.EFlag != nil
 }
 
 // Explicit-Null flag. When set, any upstream neighbor of the Prefix-SID originator MUST replace the
 // Prefix-SID with a Prefix-SID having an Explicit-NULL value (0 for IPv4 and 2 for IPv6) before forwarding
 // the packet.
-// SetExplicityNull sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetExplicityNull(value bool) IsisLspPrefixSidFlags {
+// SetEFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetEFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.ExplicityNull = &value
+	obj.obj.EFlag = &value
 	return obj
 }
 
-// Value flag. When set, the Prefix-SID carries avalue (instead of an index). By default the flag is UNSET.
-// Value returns a bool
-func (obj *isisLspPrefixSidFlags) Value() bool {
+// Value flag. When set, the Prefix-SID carries avalue (instead of an index).
+// VFlag returns a bool
+func (obj *isisLspPrefixSidFlags) VFlag() bool {
 
-	return *obj.obj.Value
+	return *obj.obj.VFlag
 
 }
 
-// Value flag. When set, the Prefix-SID carries avalue (instead of an index). By default the flag is UNSET.
-// Value returns a bool
-func (obj *isisLspPrefixSidFlags) HasValue() bool {
-	return obj.obj.Value != nil
+// Value flag. When set, the Prefix-SID carries avalue (instead of an index).
+// VFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasVFlag() bool {
+	return obj.obj.VFlag != nil
 }
 
-// Value flag. When set, the Prefix-SID carries avalue (instead of an index). By default the flag is UNSET.
-// SetValue sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetValue(value bool) IsisLspPrefixSidFlags {
+// Value flag. When set, the Prefix-SID carries avalue (instead of an index).
+// SetVFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetVFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.Value = &value
+	obj.obj.VFlag = &value
 	return obj
 }
 
 // Local flag. When set, the value/index carried by the Prefix-SID has local significance.
-// By default the flag is UNSET.
-// Local returns a bool
-func (obj *isisLspPrefixSidFlags) Local() bool {
+// LFlag returns a bool
+func (obj *isisLspPrefixSidFlags) LFlag() bool {
 
-	return *obj.obj.Local
+	return *obj.obj.LFlag
 
 }
 
 // Local flag. When set, the value/index carried by the Prefix-SID has local significance.
-// By default the flag is UNSET.
-// Local returns a bool
-func (obj *isisLspPrefixSidFlags) HasLocal() bool {
-	return obj.obj.Local != nil
+// LFlag returns a bool
+func (obj *isisLspPrefixSidFlags) HasLFlag() bool {
+	return obj.obj.LFlag != nil
 }
 
 // Local flag. When set, the value/index carried by the Prefix-SID has local significance.
-// By default the flag is UNSET.
-// SetLocal sets the bool value in the IsisLspPrefixSidFlags object
-func (obj *isisLspPrefixSidFlags) SetLocal(value bool) IsisLspPrefixSidFlags {
+// SetLFlag sets the bool value in the IsisLspPrefixSidFlags object
+func (obj *isisLspPrefixSidFlags) SetLFlag(value bool) IsisLspPrefixSidFlags {
 
-	obj.obj.Local = &value
+	obj.obj.LFlag = &value
 	return obj
 }
 

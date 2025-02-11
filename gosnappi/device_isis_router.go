@@ -333,18 +333,20 @@ type DeviceIsisRouter interface {
 	// SetName assigns string provided by user to DeviceIsisRouter
 	SetName(value string) DeviceIsisRouter
 	// SegmentRouting returns IsisSegmentRouting, set in DeviceIsisRouter.
-	// IsisSegmentRouting is segment Routing (SR) turns on any node to select any path (explicit or derived from IGPs Shortest Path First (SPT) computations)
-	// for each of its traffic classes. The path does not depend on a hop-by-hop
-	// signaling technique (unlike LDP or RSVP).
-	// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+	// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
+	// called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).
+	// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as per the state of the IGP topology.
+	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
+	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 	// These segments act as topological sub-paths that can be combined together to form the required path.
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
 	SegmentRouting() IsisSegmentRouting
 	// SetSegmentRouting assigns IsisSegmentRouting provided by user to DeviceIsisRouter.
-	// IsisSegmentRouting is segment Routing (SR) turns on any node to select any path (explicit or derived from IGPs Shortest Path First (SPT) computations)
-	// for each of its traffic classes. The path does not depend on a hop-by-hop
-	// signaling technique (unlike LDP or RSVP).
-	// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+	// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
+	// called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).
+	// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as per the state of the IGP topology.
+	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
+	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 	// These segments act as topological sub-paths that can be combined together to form the required path.
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
 	SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter
@@ -758,7 +760,7 @@ func (obj *deviceIsisRouter) SetName(value string) DeviceIsisRouter {
 	return obj
 }
 
-// Segment Routing (SR).
+// Optional Segment Routing (SR).
 // SegmentRouting returns a IsisSegmentRouting
 func (obj *deviceIsisRouter) SegmentRouting() IsisSegmentRouting {
 	if obj.obj.SegmentRouting == nil {
@@ -770,13 +772,13 @@ func (obj *deviceIsisRouter) SegmentRouting() IsisSegmentRouting {
 	return obj.segmentRoutingHolder
 }
 
-// Segment Routing (SR).
+// Optional Segment Routing (SR).
 // SegmentRouting returns a IsisSegmentRouting
 func (obj *deviceIsisRouter) HasSegmentRouting() bool {
 	return obj.obj.SegmentRouting != nil
 }
 
-// Segment Routing (SR).
+// Optional Segment Routing (SR).
 // SetSegmentRouting sets the IsisSegmentRouting value in the DeviceIsisRouter object
 func (obj *deviceIsisRouter) SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter {
 

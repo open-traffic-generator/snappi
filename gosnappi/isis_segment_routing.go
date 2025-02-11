@@ -250,10 +250,11 @@ func (obj *isisSegmentRouting) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// IsisSegmentRouting is segment Routing (SR) turns on any node to select any path (explicit or derived from IGPs Shortest Path First (SPT) computations)
-// for each of its traffic classes. The path does not depend on a hop-by-hop
-// signaling technique (unlike LDP or RSVP).
-// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
+// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
+// called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).
+// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as per the state of the IGP topology.
+// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
+// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 // These segments act as topological sub-paths that can be combined together to form the required path.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8667
 type IsisSegmentRouting interface {

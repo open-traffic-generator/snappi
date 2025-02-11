@@ -13,11 +13,11 @@ import (
 // ***** IsisV6RouteRange *****
 type isisV6RouteRange struct {
 	validation
-	obj                   *otg.IsisV6RouteRange
-	marshaller            marshalIsisV6RouteRange
-	unMarshaller          unMarshalIsisV6RouteRange
-	addressesHolder       IsisV6RouteRangeV6RouteAddressIter
-	prefixSidParamsHolder IsisV6RouteRangeIsisSRPrefixSIDIter
+	obj              *otg.IsisV6RouteRange
+	marshaller       marshalIsisV6RouteRange
+	unMarshaller     unMarshalIsisV6RouteRange
+	addressesHolder  IsisV6RouteRangeV6RouteAddressIter
+	prefixSidsHolder IsisV6RouteRangeIsisSRPrefixSIDIter
 }
 
 func NewIsisV6RouteRange() IsisV6RouteRange {
@@ -246,7 +246,7 @@ func (obj *isisV6RouteRange) Clone() (IsisV6RouteRange, error) {
 
 func (obj *isisV6RouteRange) setNil() {
 	obj.addressesHolder = nil
-	obj.prefixSidParamsHolder = nil
+	obj.prefixSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -322,8 +322,8 @@ type IsisV6RouteRange interface {
 	SetNFlag(value bool) IsisV6RouteRange
 	// HasNFlag checks if NFlag has been set in IsisV6RouteRange
 	HasNFlag() bool
-	// PrefixSidParams returns IsisV6RouteRangeIsisSRPrefixSIDIterIter, set in IsisV6RouteRange
-	PrefixSidParams() IsisV6RouteRangeIsisSRPrefixSIDIter
+	// PrefixSids returns IsisV6RouteRangeIsisSRPrefixSIDIterIter, set in IsisV6RouteRange
+	PrefixSids() IsisV6RouteRangeIsisSRPrefixSIDIter
 	setNil()
 }
 
@@ -622,15 +622,15 @@ func (obj *isisV6RouteRange) SetNFlag(value bool) IsisV6RouteRange {
 }
 
 // A list of SID parameters for a group of IPv6 route addresses.
-// PrefixSidParams returns a []IsisSRPrefixSID
-func (obj *isisV6RouteRange) PrefixSidParams() IsisV6RouteRangeIsisSRPrefixSIDIter {
-	if len(obj.obj.PrefixSidParams) == 0 {
-		obj.obj.PrefixSidParams = []*otg.IsisSRPrefixSID{}
+// PrefixSids returns a []IsisSRPrefixSID
+func (obj *isisV6RouteRange) PrefixSids() IsisV6RouteRangeIsisSRPrefixSIDIter {
+	if len(obj.obj.PrefixSids) == 0 {
+		obj.obj.PrefixSids = []*otg.IsisSRPrefixSID{}
 	}
-	if obj.prefixSidParamsHolder == nil {
-		obj.prefixSidParamsHolder = newIsisV6RouteRangeIsisSRPrefixSIDIter(&obj.obj.PrefixSidParams).setMsg(obj)
+	if obj.prefixSidsHolder == nil {
+		obj.prefixSidsHolder = newIsisV6RouteRangeIsisSRPrefixSIDIter(&obj.obj.PrefixSids).setMsg(obj)
 	}
-	return obj.prefixSidParamsHolder
+	return obj.prefixSidsHolder
 }
 
 type isisV6RouteRangeIsisSRPrefixSIDIter struct {
@@ -742,15 +742,15 @@ func (obj *isisV6RouteRange) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisV6RouteRange")
 	}
 
-	if len(obj.obj.PrefixSidParams) != 0 {
+	if len(obj.obj.PrefixSids) != 0 {
 
 		if set_default {
-			obj.PrefixSidParams().clearHolderSlice()
-			for _, item := range obj.obj.PrefixSidParams {
-				obj.PrefixSidParams().appendHolderSlice(&isisSRPrefixSID{obj: item})
+			obj.PrefixSids().clearHolderSlice()
+			for _, item := range obj.obj.PrefixSids {
+				obj.PrefixSids().appendHolderSlice(&isisSRPrefixSID{obj: item})
 			}
 		}
-		for _, item := range obj.PrefixSidParams().Items() {
+		for _, item := range obj.PrefixSids().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

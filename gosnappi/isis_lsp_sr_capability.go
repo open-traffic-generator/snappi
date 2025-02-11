@@ -16,7 +16,7 @@ type isisLspSRCapability struct {
 	obj              *otg.IsisLspSRCapability
 	marshaller       marshalIsisLspSRCapability
 	unMarshaller     unMarshalIsisLspSRCapability
-	flagsHolder      IsisSRCapabilityFlags
+	flagsHolder      IsisLspCapasFlags
 	srgbRangesHolder IsisLspSRCapabilityIsisLspSrgbIter
 }
 
@@ -274,12 +274,12 @@ type IsisLspSRCapability interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Flags returns IsisSRCapabilityFlags, set in IsisLspSRCapability.
-	// IsisSRCapabilityFlags is container for the configuration of IS-IS SR-CAPABILITY flags.
-	Flags() IsisSRCapabilityFlags
-	// SetFlags assigns IsisSRCapabilityFlags provided by user to IsisLspSRCapability.
-	// IsisSRCapabilityFlags is container for the configuration of IS-IS SR-CAPABILITY flags.
-	SetFlags(value IsisSRCapabilityFlags) IsisLspSRCapability
+	// Flags returns IsisLspCapasFlags, set in IsisLspSRCapability.
+	// IsisLspCapasFlags is container for the configuration of IS-IS SR-CAPABILITY flags.
+	Flags() IsisLspCapasFlags
+	// SetFlags assigns IsisLspCapasFlags provided by user to IsisLspSRCapability.
+	// IsisLspCapasFlags is container for the configuration of IS-IS SR-CAPABILITY flags.
+	SetFlags(value IsisLspCapasFlags) IsisLspSRCapability
 	// HasFlags checks if Flags has been set in IsisLspSRCapability
 	HasFlags() bool
 	// SrgbRanges returns IsisLspSRCapabilityIsisLspSrgbIterIter, set in IsisLspSRCapability
@@ -288,26 +288,26 @@ type IsisLspSRCapability interface {
 }
 
 // 1 octet of flags.
-// Flags returns a IsisSRCapabilityFlags
-func (obj *isisLspSRCapability) Flags() IsisSRCapabilityFlags {
+// Flags returns a IsisLspCapasFlags
+func (obj *isisLspSRCapability) Flags() IsisLspCapasFlags {
 	if obj.obj.Flags == nil {
-		obj.obj.Flags = NewIsisSRCapabilityFlags().msg()
+		obj.obj.Flags = NewIsisLspCapasFlags().msg()
 	}
 	if obj.flagsHolder == nil {
-		obj.flagsHolder = &isisSRCapabilityFlags{obj: obj.obj.Flags}
+		obj.flagsHolder = &isisLspCapasFlags{obj: obj.obj.Flags}
 	}
 	return obj.flagsHolder
 }
 
 // 1 octet of flags.
-// Flags returns a IsisSRCapabilityFlags
+// Flags returns a IsisLspCapasFlags
 func (obj *isisLspSRCapability) HasFlags() bool {
 	return obj.obj.Flags != nil
 }
 
 // 1 octet of flags.
-// SetFlags sets the IsisSRCapabilityFlags value in the IsisLspSRCapability object
-func (obj *isisLspSRCapability) SetFlags(value IsisSRCapabilityFlags) IsisLspSRCapability {
+// SetFlags sets the IsisLspCapasFlags value in the IsisLspSRCapability object
+func (obj *isisLspSRCapability) SetFlags(value IsisLspCapasFlags) IsisLspSRCapability {
 
 	obj.flagsHolder = nil
 	obj.obj.Flags = value.msg()

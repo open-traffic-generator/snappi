@@ -1725,7 +1725,7 @@ message DeviceIsisRouter {
   // required = true
   optional string name = 9;
 
-  // Segment Routing (SR).
+  // Optional Segment Routing (SR).
   IsisSegmentRouting segment_routing = 10;
 }
 
@@ -2031,19 +2031,22 @@ message IsisInterfaceAdjacencySID {
       sid_index = 2;
     }
   }
-  // The choice of Adjacency-SID carries a value instead of an index.
-  // Refer to srlg_values under Isis.Interface for SR Local Block (SRLB) and
-  // IsisSR.Srgb under Isis.SRCapability for Segment Routing Global Block (SRGB) Descriptor.
+  // Choice of whether Adjacency-SID carries and absolute value or a relative index to
+  // the SRGB/SRLB Ranges.
+  // Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges
+  // for the Segment Routing Global Block (SRGB) Descriptor and
+  // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block
+  // (SRLB).
   // - sid_value: Adjacency-SID carries a value and then v_flag is set by the implementation.
   // - sid_index: Adjacency-SID carries an index and then v_flag is unset by the implementation.
   // default = Choice.Enum.sid_value
   optional Choice.Enum choice = 1;
 
-  // The corresponding Adjacency SID for a link.
+  // The corresponding Adjacency SID as an absolute Value for the link that.
   // default = 1
   optional uint32 sid_value = 2;
 
-  // The corresponding Adjacency SID for a link.
+  // Adjacency Index is relative to ranges defined for SRGB or SRLB.
   // default = 1
   optional uint32 sid_index = 3;
 
@@ -2051,7 +2054,7 @@ message IsisInterfaceAdjacencySID {
   // to an adjacency with outgoing IPv4 encapsulation.  If set then
   // the Adj-SID refers to an adjacency with outgoing IPv6
   // encapsulation.
-  // default = False
+  // default = True
   optional bool f_flag = 4;
 
   // The backup flag. If set, the Adj-SID is eligible for protection.
@@ -2059,7 +2062,7 @@ message IsisInterfaceAdjacencySID {
   optional bool b_flag = 5;
 
   // The local flag.  If set, then the value/index carried by
-  // the Adj-SID has local significance. In this case, Adjacency_sid is from  isis.interface.srlg_values
+  // the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
   // default = True
   optional bool l_flag = 6;
 
@@ -2328,7 +2331,7 @@ message MACRouteAddress {
 }
 
 // This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
-// Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+// Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
 message IsisSRPrefixSID {
 
   message Choice {
@@ -2338,16 +2341,19 @@ message IsisSRPrefixSID {
       sid_index = 2;
     }
   }
-  // The choice of Prefix-SID carries a value instead of an index.
+  // Choice of whether Prefix-SID carries and absolute value or a relative index to the
+  // SRGB/SRLB Ranges.
   // Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges
-  // for the Segment Routing Global Block (SRGB) Descriptor.
+  // for the Segment Routing Global Block (SRGB) Descriptor and
+  // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block
+  // (SRLB).
   // - sid_value: Prefix-SID carries a value and then v_flag is set by the implementation.
   // - sid_index: Prefix-SID carries an index and then v_flag is unset by the implementation.
   // default = Choice.Enum.sid_value
   optional Choice.Enum choice = 1;
 
-  // SID/Label value that is associated with the IGP Prefix segment attached to the specific
-  // IPv4 or IPv6 prefix.
+  // SID/Label as an absolute value that is associated with the IGP Prefix segment attached
+  // to the specific IPv4 or IPv6 prefix.
   // default = 16000
   optional uint32 sid_value = 2;
 
@@ -2394,6 +2400,7 @@ message IsisSRPrefixSID {
 
   // The Isis may use various algorithms when calculating reachability to other nodes
   // or to prefixes attached to these nodes.
+  // Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
   // default = 0
   optional uint32 algorithm = 9;
 }
@@ -2466,15 +2473,19 @@ message IsisV6RouteRange {
   optional bool n_flag = 9;
 
   // A list of SID parameters for a group of IPv6 route addresses.
-  repeated IsisSRPrefixSID prefix_sid_params = 10;
+  repeated IsisSRPrefixSID prefix_sids = 10;
 }
 
-// Segment Routing (SR) turns on any node to select any path (explicit or derived from
-// IGPs Shortest Path First (SPT) computations)
-// for each of its traffic classes. The path does not depend on a hop-by-hop
-// signaling technique (unlike LDP or RSVP).
-// It only depends on a set of segments that are advertised by the IS-IS routing protocol.
-// 
+// Segment Routing (SR) allows for a flexible definition of end-to-end paths within
+// IGP topologies by encoding paths as sequences of topological sub-paths,
+// called segments. These segments are advertised by the link-state routing protocols
+// (IS-IS and OSPF).
+// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as
+// per the state of the IGP topology.
+// Adjacency segments represent a hop over a specific adjacency between two nodes in
+// the IGP.
+// A prefix segment is typically a multi-hop path while an adjacency segment, in most
+// of the cases, is a one-hop path.
 // These segments act as topological sub-paths that can be combined together to form
 // the required path.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8667
@@ -2516,6 +2527,7 @@ message IsisRouterCapability {
   optional Choice.Enum choice = 1;
 
   // Router Capability ID in IPv4 address format.
+  // default = 0.0.0.0
   optional string custom_router_cap_id = 2;
 
   message SBit {
@@ -2549,8 +2561,8 @@ message IsisRouterCapability {
   // SR-Capabilities.
   IsisSRCapability sr_capability = 5;
 
-  // This contains one or more SR-Algorithm that a router may use various algorithms when
-  // calculating
+  // This contains one or more Segment Routing Algorithm that a router may use various
+  // algorithms when calculating
   // reachability to other nodes or to prefixes attached to these nodes.
   repeated IsisSRAlgorithm algorithms = 6;
 
@@ -2575,14 +2587,22 @@ message IsisSRCapability {
 }
 
 // Container for the configuration of IS-IS SR-CAPABILITY flags.
+// The Router Capability TLV specifies flags that control its advertisement.
+// The SR-Capabilities sub-TLV MUST be propagated throughout the level and MUST NOT
+// be advertised across level boundaries.
+// Therefore, Router Capability TLV distribution flags are set accordingly, i.e.,
+// the S-Flag in the Router Capability TLV [RFC7981] MUST be unset.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-5.1.1.6.1.
 message IsisSRCapabilityFlags {
 
   // I-Flag for the MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
   // IPv4 packets on all interfaces.
+  // default = True
   optional bool ipv4_mpls = 1;
 
   // V-Flag for the MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
   // IPv6 packets on all interfaces.
+  // default = True
   optional bool ipv6_mpls = 2;
 }
 
@@ -10857,9 +10877,6 @@ message FlowRxTxRatioRxCount {
 // Under Review: Event configuration is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -13863,9 +13880,6 @@ message Ospfv2Metric {
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -13876,16 +13890,9 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
@@ -13938,13 +13945,6 @@ message ConvergenceEvent {
   // The source of the event.
   // The source MUST be the value of one of the x-constraint paths,
   // which means the source MUST be a unique name in the configuration.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14774,7 +14774,7 @@ message IsisLspTlvs {
   // Array of IPv6 Reachability TLVs (type 236) present in this LSP.
   repeated IsisLspIpv6ReachabilityTlv ipv6_reachability_tlvs = 7;
 
-  // IS-IS Router Capabilities: Tlv 242.
+  // IS-IS Router Capabilities: TLV 242.
   // This container defines Router Capabilities.
   repeated IsisLspCapability router_capabilities = 8;
 }
@@ -15007,19 +15007,19 @@ message IsisLspPrefixAttributes {
   // the case where multiple virtual routers are
   // supported and the source of the redistributed prefix
   // is another IS-IS instance.
-  optional bool external = 1;
+  optional bool x_flag = 1;
 
   // Readvertisement flag (Bit 1). Set when the prefix has been
   // leaked from one level to another (upwards or
   // downwards).
-  optional bool redistribution = 2;
+  optional bool r_flag = 2;
 
   // Node Flag (Bit 2).
   // Set when the prefix identifies the
   // advertising router, i.e., the prefix is a host
   // prefix advertising  a globally reachable address
   // typically associated with a loopback address.
-  optional bool node = 3;
+  optional bool n_flag = 3;
 }
 
 // This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
@@ -15085,10 +15085,22 @@ message IsisLspCapability {
 message IsisLspSRCapability {
 
   // 1 octet of flags.
-  IsisSRCapabilityFlags flags = 1;
+  IsisLspCapasFlags flags = 1;
 
   // This contains the list of SRGB.
   repeated IsisLspSrgb srgb_ranges = 2;
+}
+
+// Container for the configuration of IS-IS SR-CAPABILITY flags.
+message IsisLspCapasFlags {
+
+  // I-Flag for the MPLS IPv4 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv4 packets on all interfaces.
+  optional bool ipv4_mpls = 1;
+
+  // V-Flag for the MPLS IPv6 Flag. If set, then the router is capable of processing SR-MPLS-encapsulated
+  // IPv6 packets on all interfaces.
+  optional bool ipv6_mpls = 2;
 }
 
 // This contains the propeties of SRGB range. Reference: https://datatracker.ietf.org/doc/html/rfc8667#section-3.1-7.1.1
@@ -15124,73 +15136,44 @@ message IsisLspAlgorithm {
   optional uint32 algorithm = 1;
 }
 
-// SID/Index/Label: As defined in Section 2.1.1.1. Reference: https://datatracker.ietf.org/doc/html/rfc8667#VANDLFLAGS.
-message IsisLspSID {
-
-  // The SID/Label sub-TLV contains the first value of the SRGB while the range contains
-  // the number of SRGB elements.
-  optional uint32 sid = 1;
-}
-
 // This container defines segment routing adjacency SIDs.
 message IsisLspAdjacencySID {
 
-  // The corresponding adjacency SID type: Adjacency-SID (Tlv - 31) LAN Adjacency-SID
-  // (Tlv - 31).
+  // The corresponding adjacency SID type.
   optional uint32 tlv_type = 1;
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      sid_value = 1;
-      sid_index = 2;
-    }
-  }
-  // The choice of Adjacency-SID carries a value instead of an index.
-  // - sid_value: Adjacency-SID carries a value.
-  // - sid_index: Adjacency-SID carries an index.
-  // default = Choice.Enum.sid_value
-  optional Choice.Enum choice = 2;
-
-  // SID/Label value that is associated with the IGP adjacency segment attached to the
-  // specific IPv4 or IPv6 prefix.
-  // default = 16000
-  optional uint32 sid_value = 3;
-
-  // SID/Label Index that is associated with the IGP adjacency segment attached to the
-  // specific IPv4 or IPv6 prefix.
-  // default = 0
-  optional uint32 sid_index = 4;
+  // SID/Index is the SID/Label value associated with the IGP adjacency SID.
+  optional uint32 sid = 2;
 
   // The address family flag. If unset, then the Adj-SID refers
   // to an adjacency with outgoing IPv4 encapsulation.  If set then
   // the Adj-SID refers to an adjacency with outgoing IPv6
   // encapsulation.
-  optional bool f_flag = 5;
+  optional bool f_flag = 3;
 
   // The backup flag. If set, the Adj-SID is eligible for protection.
-  optional bool b_flag = 6;
+  optional bool b_flag = 4;
 
   // The value flag. If set, then the Adj-SID carries a value.
-  optional bool v_flag = 7;
+  optional bool v_flag = 5;
 
   // The local flag.  If set, then the value/index carried by
   // the Adj-SID has local significance.
-  optional bool l_flag = 8;
+  optional bool l_flag = 6;
 
   // The set flag. When set, the S-Flag indicates that the
   // Adj-SID refers to a set of adjacencies (and therefore MAY be
   // assigned to other adjacencies as well).
-  optional bool s_flag = 9;
+  optional bool s_flag = 7;
 
   // The persistent flag. When set, the P-Flag indicates that
   // the Adj-SID is persistently allocated, i.e., the Adj-SID value
   // remains consistent across router restart and/or interface flap.
-  optional bool p_flag = 10;
+  optional bool p_flag = 8;
 
   // The value represents the weight of the Adj-SID for the purpose of load balancing.
   // 
-  optional uint32 weight = 11;
+  optional uint32 weight = 9;
 }
 
 // Conatiner of 1-octet Flags associated with Prefix Segment-ID.
@@ -15199,33 +15182,30 @@ message IsisLspPrefixSidFlags {
   // Readvertisment flag. When set, the prefix to which this Prefix-SID is attached, has
   // been propagated by
   // the router either from another level or from redistribution.
-  optional bool readvertisment = 1;
+  optional bool r_flag = 1;
 
   // Node flag. When set, the Prefix-SID refers to the router identified by the prefix.
   // Typically, the
   // N-Flag is set on Prefix-SIDs attached to a router loopback address.
-  optional bool node = 2;
+  optional bool n_flag = 2;
 
   // Penultimate-Hop-Popping flag. When set, then the penultimate hop MUST NOT pop the
   // Prefix-SID before
   // delivering the packet to the node that advertised the Prefix-SID.
-  optional bool no_php = 3;
+  optional bool p_flag = 3;
 
   // Explicit-Null flag. When set, any upstream neighbor of the Prefix-SID originator
   // MUST replace the
   // Prefix-SID with a Prefix-SID having an Explicit-NULL value (0 for IPv4 and 2 for
   // IPv6) before forwarding
   // the packet.
-  optional bool explicity_null = 4;
+  optional bool e_flag = 4;
 
-  // Value flag. When set, the Prefix-SID carries avalue (instead of an index). By default
-  // the flag is UNSET.
-  optional bool value = 5;
+  // Value flag. When set, the Prefix-SID carries avalue (instead of an index).
+  optional bool v_flag = 5;
 
   // Local flag. When set, the value/index carried by the Prefix-SID has local significance.
-  // 
-  // By default the flag is UNSET.
-  optional bool local = 6;
+  optional bool l_flag = 6;
 }
 
 // The request to retrieve LLDP neighbor information for a given instance.

@@ -282,10 +282,10 @@ type IsisRouterCapability interface {
 	setChoice(value IsisRouterCapabilityChoiceEnum) IsisRouterCapability
 	// HasChoice checks if Choice has been set in IsisRouterCapability
 	HasChoice() bool
-	// getter for InterfaceIp to set choice.
-	InterfaceIp()
 	// getter for Ipv4TeRouterId to set choice.
 	Ipv4TeRouterId()
+	// getter for InterfaceIp to set choice.
+	InterfaceIp()
 	// CustomRouterCapId returns string, set in IsisRouterCapability.
 	CustomRouterCapId() string
 	// SetCustomRouterCapId assigns string provided by user to IsisRouterCapability
@@ -342,14 +342,14 @@ func (obj *isisRouterCapability) Choice() IsisRouterCapabilityChoiceEnum {
 	return IsisRouterCapabilityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for InterfaceIp to set choice
-func (obj *isisRouterCapability) InterfaceIp() {
-	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
-}
-
 // getter for Ipv4TeRouterId to set choice
 func (obj *isisRouterCapability) Ipv4TeRouterId() {
 	obj.setChoice(IsisRouterCapabilityChoice.IPV4_TE_ROUTER_ID)
+}
+
+// getter for InterfaceIp to set choice
+func (obj *isisRouterCapability) InterfaceIp() {
+	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
 }
 
 // The Router Capability ID SHOULD be identical to the value advertised in the Traffic Engineering Router ID TLV [RFC5305].
@@ -375,6 +375,12 @@ func (obj *isisRouterCapability) setChoice(value IsisRouterCapabilityChoiceEnum)
 	enumValue := otg.IsisRouterCapability_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
 	obj.obj.CustomRouterCapId = nil
+
+	if value == IsisRouterCapabilityChoice.CUSTOM_ROUTER_CAP_ID {
+		defaultValue := "0.0.0.0"
+		obj.obj.CustomRouterCapId = &defaultValue
+	}
+
 	return obj
 }
 
@@ -506,7 +512,7 @@ func (obj *isisRouterCapability) SetSrCapability(value IsisSRCapability) IsisRou
 	return obj
 }
 
-// This contains one or more SR-Algorithm that a router may use various algorithms when calculating
+// This contains one or more Segment Routing Algorithm that a router may use various algorithms when calculating
 // reachability to other nodes or to prefixes attached to these nodes.
 // Algorithms returns a []IsisSRAlgorithm
 func (obj *isisRouterCapability) Algorithms() IsisRouterCapabilityIsisSRAlgorithmIter {

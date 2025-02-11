@@ -1350,6 +1350,7 @@ from .snappi import IsisLspV6PrefixIter
 from .snappi import IsisLspIpv6ReachabilityTlvIter
 from .snappi import IsisLspCapability
 from .snappi import IsisLspSRCapability
+from .snappi import IsisLspCapasFlags
 from .snappi import IsisLspSrgb
 from .snappi import IsisLspSrgbIter
 from .snappi import IsisLspAlgorithm

@@ -242,7 +242,7 @@ func (obj *isisSRPrefixSID) Clone() (IsisSRPrefixSID, error) {
 	return newObj, nil
 }
 
-// IsisSRPrefixSID is this contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Refernce: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
+// IsisSRPrefixSID is this contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
 type IsisSRPrefixSID interface {
 	Validation
 	// msg marshals IsisSRPrefixSID to protobuf object *otg.IsisSRPrefixSID
@@ -335,8 +335,9 @@ func (obj *isisSRPrefixSID) Choice() IsisSRPrefixSIDChoiceEnum {
 	return IsisSRPrefixSIDChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// The choice of Prefix-SID carries a value instead of an index.
-// Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor.
+// Choice of whether Prefix-SID carries and absolute value or a relative index to the SRGB/SRLB Ranges.
+// Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
+// device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_value: Prefix-SID carries a value and then v_flag is set by the implementation.
 // - sid_index: Prefix-SID carries an index and then v_flag is unset by the implementation.
 // Choice returns a string
@@ -369,7 +370,7 @@ func (obj *isisSRPrefixSID) setChoice(value IsisSRPrefixSIDChoiceEnum) IsisSRPre
 	return obj
 }
 
-// SID/Label value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SID/Label as an absolute value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
 // SidValue returns a uint32
 func (obj *isisSRPrefixSID) SidValue() uint32 {
 
@@ -381,13 +382,13 @@ func (obj *isisSRPrefixSID) SidValue() uint32 {
 
 }
 
-// SID/Label value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SID/Label as an absolute value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
 // SidValue returns a uint32
 func (obj *isisSRPrefixSID) HasSidValue() bool {
 	return obj.obj.SidValue != nil
 }
 
-// SID/Label value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
+// SID/Label as an absolute value that is associated with the IGP Prefix segment attached to the specific IPv4 or IPv6 prefix.
 // SetSidValue sets the uint32 value in the IsisSRPrefixSID object
 func (obj *isisSRPrefixSID) SetSidValue(value uint32) IsisSRPrefixSID {
 	obj.setChoice(IsisSRPrefixSIDChoice.SID_VALUE)
@@ -559,6 +560,7 @@ func (obj *isisSRPrefixSID) SetLFlag(value bool) IsisSRPrefixSID {
 }
 
 // The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these nodes.
+// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
 // Algorithm returns a uint32
 func (obj *isisSRPrefixSID) Algorithm() uint32 {
 
@@ -567,12 +569,14 @@ func (obj *isisSRPrefixSID) Algorithm() uint32 {
 }
 
 // The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these nodes.
+// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
 // Algorithm returns a uint32
 func (obj *isisSRPrefixSID) HasAlgorithm() bool {
 	return obj.obj.Algorithm != nil
 }
 
 // The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these nodes.
+// Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
 // SetAlgorithm sets the uint32 value in the IsisSRPrefixSID object
 func (obj *isisSRPrefixSID) SetAlgorithm(value uint32) IsisSRPrefixSID {
 
