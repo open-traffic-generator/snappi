@@ -26,6 +26,7 @@ type device struct {
 	dhcpServerHolder    DeviceDhcpServer
 	ospfv2Holder        DeviceOspfv2Router
 	macsecHolder        DeviceMacsec
+	mkaHolder           DeviceMka
 }
 
 func NewDevice() Device {
@@ -263,6 +264,7 @@ func (obj *device) setNil() {
 	obj.dhcpServerHolder = nil
 	obj.ospfv2Holder = nil
 	obj.macsecHolder = nil
+	obj.mkaHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -360,6 +362,14 @@ type Device interface {
 	SetMacsec(value DeviceMacsec) Device
 	// HasMacsec checks if Macsec has been set in Device
 	HasMacsec() bool
+	// Mka returns DeviceMka, set in Device.
+	// DeviceMka is a container of properties for a MKA supplicant.
+	Mka() DeviceMka
+	// SetMka assigns DeviceMka provided by user to Device.
+	// DeviceMka is a container of properties for a MKA supplicant.
+	SetMka(value DeviceMka) Device
+	// HasMka checks if Mka has been set in Device
+	HasMka() bool
 	setNil()
 }
 
@@ -836,6 +846,34 @@ func (obj *device) SetMacsec(value DeviceMacsec) Device {
 	return obj
 }
 
+// Configuration of MKA supplicant.
+// Mka returns a DeviceMka
+func (obj *device) Mka() DeviceMka {
+	if obj.obj.Mka == nil {
+		obj.obj.Mka = NewDeviceMka().msg()
+	}
+	if obj.mkaHolder == nil {
+		obj.mkaHolder = &deviceMka{obj: obj.obj.Mka}
+	}
+	return obj.mkaHolder
+}
+
+// Configuration of MKA supplicant.
+// Mka returns a DeviceMka
+func (obj *device) HasMka() bool {
+	return obj.obj.Mka != nil
+}
+
+// Configuration of MKA supplicant.
+// SetMka sets the DeviceMka value in the Device object
+func (obj *device) SetMka(value DeviceMka) Device {
+
+	obj.mkaHolder = nil
+	obj.obj.Mka = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -921,6 +959,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Macsec != nil {
 
 		obj.Macsec().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Mka != nil {
+
+		obj.Mka().validateObj(vObj, set_default)
 	}
 
 }

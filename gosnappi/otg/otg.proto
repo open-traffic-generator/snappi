@@ -1681,6 +1681,9 @@ message Device {
 
   // Configuration of MACsec device.
   DeviceMacsec macsec = 11;
+
+  // Configuration of MKA supplicant.
+  DeviceMka mka = 12;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -8272,6 +8275,290 @@ message MacsecAdvanceStaticKeyRekeyModeTimerBased {
   optional uint32 interval = 3;
 }
 
+// A container of properties for a MKA supplicant.
+message DeviceMka {
+
+  // Ethernet Interfaces
+  repeated DeviceMkaEthernetInterface ethernet_interfaces = 1;
+}
+
+// Configuration for single MKA interface.
+message DeviceMkaEthernetInterface {
+
+  // The unique name of the Ethernet interface on which MKA is enabled.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ethernet/properties/name
+  // 
+  // required = true
+  optional string eth_name = 1;
+
+  // This contains the properties of Key Agreement Entity (KaY).
+  // required = true
+  Mka kay = 2;
+}
+
+// Configuration of a Key Agreement Entity (KaY).
+message Mka {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // This contains the basic properties of KaY.
+  // required = true
+  MkaBasic basic = 2;
+
+  // Key server attributes.
+  MkaKeyServer key_server = 3;
+
+  // Properties for Tx secure channels.
+  repeated MkaTxSc txscs = 4;
+}
+
+// A container of basic properties for a KaY.
+message MkaBasic {
+
+  message KeyDerivationFunction {
+    enum Enum {
+      unspecified = 0;
+      aes_cmac_128 = 1;
+      aes_cmac_256 = 2;
+    }
+  }
+  // Key Derivation Function.
+  // default = KeyDerivationFunction.Enum.aes_cmac_128
+  optional KeyDerivationFunction.Enum key_derivation_function = 1;
+
+  // Key source.
+  // required = true
+  MkaBasicKeySource key_source = 2;
+
+  // Actor priority.
+  // default = 70
+  optional string actor_priority = 3;
+
+  // Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
+  // default = True
+  optional bool macsec_desired = 4;
+
+  message MacsecCapability {
+    enum Enum {
+      unspecified = 0;
+      macsec_not_implemented = 1;
+      macsec_integrity_without_confidentiality = 2;
+      macsec_integrity_with_no_confidentiality_offset = 3;
+      macsec_integrity_with_confidentiality_offset = 4;
+    }
+  }
+  // MACSec Capability.
+  // default = MacsecCapability.Enum.macsec_integrity_with_confidentiality_offset
+  optional MacsecCapability.Enum macsec_capability = 5;
+
+  // Supported Cipher Suites.
+  MkaBasicSupportedCipherSuites supported_cipher_suites = 6;
+
+  // MKA Version.
+  // default = 3
+  optional uint32 mka_version = 7;
+
+  // MKA Hello Time (msec).
+  // default = 2000
+  optional uint32 mka_hello_time = 8;
+
+  // MKA Life Time (sec).
+  // default = 6
+  optional uint32 mka_life_time = 9;
+
+  // Send ICV Indicator in MKPDU.
+  // default = True
+  optional bool send_icv_indicatior_in_mkpdu = 10;
+
+  // Delay Protect.
+  // default = True
+  optional bool delay_protect = 11;
+
+  // Rekey Mode.
+  MkaBasicRekeyMode rekey_mode = 12;
+}
+
+// The container for supported cipher suites.
+message MkaBasicSupportedCipherSuites {
+
+  // GCM-AES-128.
+  // default = True
+  optional bool gcm_aes_128 = 1;
+
+  // GCM-AES-256.
+  // default = True
+  optional bool gcm_aes_256 = 2;
+
+  // GCM-AES-XPN-128.
+  // default = True
+  optional bool gcm_aes_xpn_128 = 3;
+
+  // GCM-AES-XPN-256.
+  // default = True
+  optional bool gcm_aes_xpn_256 = 4;
+}
+
+// The container for static key settings.
+message MkaBasicKeySource {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      psk = 1;
+      msk = 2;
+    }
+  }
+  // Key source. Choose one from PSK or MSK.
+  // default = Choice.Enum.psk
+  optional Choice.Enum choice = 1;
+
+  // PSK chain.
+  MkaBasicKeySourcePskChain psk_chain = 2;
+}
+
+// The container for PSK chain settings.
+message MkaBasicKeySourcePskChain {
+
+  // PSK chain name.
+  optional string name = 1;
+
+  // Pre-shared Keys.
+  repeated MkaBasicKeySourcePsk psks = 2;
+}
+
+// The container for Pre-shared key(PSK).
+message MkaBasicKeySourcePsk {
+
+  // CAK value.
+  // default = F123456789ABCDEF0123456789ABCDEF
+  optional string cak_value = 1;
+
+  // CAK name.
+  // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
+  optional string cak_name = 2;
+
+  // Key start time in HH:MM.
+  // default = 00:00
+  optional string start_time = 3;
+
+  // Key end time in HH:MM.
+  // default = 00:00
+  optional string end_time = 4;
+}
+
+// Rekey mode.
+message MkaBasicRekeyMode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dont_rekey = 1;
+      timer_based = 2;
+      pn_based = 3;
+    }
+  }
+  // Mode choices.
+  // default = Choice.Enum.dont_rekey
+  optional Choice.Enum choice = 1;
+
+  // Container for timer based periodic rekey properties.
+  MkaBasicRekeyModeTimerBased timer_based = 2;
+}
+
+// Timer based periodic rekey properties.
+message MkaBasicRekeyModeTimerBased {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      continuous = 1;
+      fixed_count = 2;
+    }
+  }
+  // Periodic Rekey count.
+  // default = Choice.Enum.continuous
+  optional Choice.Enum choice = 1;
+
+  // Fixed rekey attempts.
+  // default = 10
+  optional uint32 fixed_count = 2;
+
+  // Periodic rekey interval (sec).
+  // default = 300
+  optional uint32 interval = 3;
+}
+
+// Key server attributes of a KaY.
+message MkaKeyServer {
+
+  message ConfidentialtyOffset {
+    enum Enum {
+      unspecified = 0;
+      no_confidentiality = 1;
+      no_confidentiality_offset = 2;
+      confidentiality_offset_30_octets = 3;
+      confidentiality_offset_50_octets = 4;
+    }
+  }
+  // Confidentiality Offset.
+  // default = ConfidentialtyOffset.Enum.no_confidentiality_offset
+  optional ConfidentialtyOffset.Enum confidentialty_offset = 1;
+
+  message CipherSuite {
+    enum Enum {
+      unspecified = 0;
+      gcm_aes_128 = 1;
+      gcm_aes_256 = 2;
+      gcm_aes_xpn_128 = 3;
+      gcm_aes_xpn_256 = 4;
+    }
+  }
+  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+  // default = CipherSuite.Enum.gcm_aes_128
+  optional CipherSuite.Enum cipher_suite = 2;
+
+  // Starting Key Number.
+  // default = 1
+  optional uint32 starting_key_number = 3;
+
+  // Starting Distributed AN.
+  // default = 0
+  optional uint32 starting_distributed_an = 4;
+
+  // Determines the PN rekey threshold.
+  // default = C0000000
+  optional string rekey_threshold_pn = 5;
+
+  // Determines the XPN rekey threshold.
+  // default = C000000000000000
+  optional string rekey_threshold_xpn = 6;
+}
+
+// Tx secure channel(SC) properties.
+message MkaTxSc {
+
+  // Tx SC name.
+  // required = true
+  optional string name = 1;
+
+  // System ID.
+  // required = true
+  optional string system_id = 2;
+
+  // Port ID.
+  // default = 1
+  optional uint32 port_id = 3;
+
+  // Starting Message Number.
+  // default = 1
+  optional uint64 starting_message_number = 4;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -12255,6 +12542,7 @@ message MetricsRequest {
       dhcpv6_server = 13;
       ospfv2 = 14;
       macsec = 15;
+      mka = 16;
     }
   }
   // Description missing in models
@@ -12305,6 +12593,9 @@ message MetricsRequest {
 
   // Description missing in models
   MacsecMetricsRequest macsec = 16;
+
+  // Description missing in models
+  MkaMetricsRequest mka = 17;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -14086,6 +14377,83 @@ message MacsecMetric {
 
   // InOctetsDecrypted.
   optional uint64 in_octets_decrypted = 20;
+}
+
+// The request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+message MkaMetricsRequest {
+
+  // The names of key agreement entities (KaYs) to return results for. An empty list will
+  // return results for all KaYs.
+  // 
+  // x-constraint:
+  // - /components/schemas/Mka/properties/name
+  // 
+  repeated string kay_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      session_flap_count = 2;
+      mkpdu_tx = 3;
+      mkpdu_rx = 4;
+      live_peer_count = 5;
+      potential_peer_count = 6;
+      latest_key_tx_peer_count = 7;
+      latest_key_rx_peer_count = 8;
+      malformed_mkpdu = 9;
+      icv_mismatch = 10;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the KaY cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// MKA per KaY statistics information.
+message MkaMetric {
+
+  // The name of a configured MKA KaY.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of times the session went from Up to Down state.
+  optional uint64 session_flap_count = 3;
+
+  // MKPDU Tx.
+  optional uint64 mkpdu_tx = 4;
+
+  // MKPDU Rx.
+  optional uint64 mkpdu_rx = 5;
+
+  // Live Peer Count.
+  optional uint64 live_peer_count = 6;
+
+  // Potential Peer Count.
+  optional uint64 potential_peer_count = 7;
+
+  // Latest Key Tx Peer Count.
+  optional uint64 latest_key_tx_peer_count = 8;
+
+  // Latest Key Rx Peer Count.
+  optional uint64 latest_key_rx_peer_count = 9;
+
+  // Malformed MKPDU.
+  optional uint64 malformed_mkpdu = 10;
+
+  // ICV Mismatch.
+  optional uint64 icv_mismatch = 11;
 }
 
 // Request to traffic generator for states of choice
