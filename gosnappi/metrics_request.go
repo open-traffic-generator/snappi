@@ -30,6 +30,7 @@ type metricsRequest struct {
 	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
+	convergenceHolder  ConvergenceRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -271,6 +272,7 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv6ClientHolder = nil
 	obj.dhcpv6ServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.convergenceHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -416,6 +418,22 @@ type MetricsRequest interface {
 	SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
+	// Convergence returns ConvergenceRequest, set in MetricsRequest.
+	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
+	//
+	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+	//
+	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	Convergence() ConvergenceRequest
+	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
+	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
+	//
+	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+	//
+	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	SetConvergence(value ConvergenceRequest) MetricsRequest
+	// HasConvergence checks if Convergence has been set in MetricsRequest
+	HasConvergence() bool
 	setNil()
 }
 
@@ -437,6 +455,7 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT MetricsRequestChoiceEnum
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 	OSPFV2        MetricsRequestChoiceEnum
+	CONVERGENCE   MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -452,6 +471,7 @@ var MetricsRequestChoice = struct {
 	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
+	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -473,6 +493,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Convergence = nil
+	obj.convergenceHolder = nil
 	obj.obj.Ospfv2 = nil
 	obj.ospfv2Holder = nil
 	obj.obj.Dhcpv6Server = nil
@@ -556,6 +578,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.OSPFV2 {
 		obj.obj.Ospfv2 = NewOspfv2MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.CONVERGENCE {
+		obj.obj.Convergence = NewConvergenceRequest().msg()
 	}
 
 	return obj
@@ -953,6 +979,34 @@ func (obj *metricsRequest) SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest 
 	return obj
 }
 
+// description is TBD
+// Convergence returns a ConvergenceRequest
+func (obj *metricsRequest) Convergence() ConvergenceRequest {
+	if obj.obj.Convergence == nil {
+		obj.setChoice(MetricsRequestChoice.CONVERGENCE)
+	}
+	if obj.convergenceHolder == nil {
+		obj.convergenceHolder = &convergenceRequest{obj: obj.obj.Convergence}
+	}
+	return obj.convergenceHolder
+}
+
+// description is TBD
+// Convergence returns a ConvergenceRequest
+func (obj *metricsRequest) HasConvergence() bool {
+	return obj.obj.Convergence != nil
+}
+
+// description is TBD
+// SetConvergence sets the ConvergenceRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetConvergence(value ConvergenceRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.CONVERGENCE)
+	obj.convergenceHolder = nil
+	obj.obj.Convergence = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1026,6 +1080,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Convergence != nil {
+
+		obj.Convergence().validateObj(vObj, set_default)
 	}
 
 }
@@ -1102,6 +1161,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Ospfv2 != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.OSPFV2
+	}
+
+	if obj.obj.Convergence != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.CONVERGENCE
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
