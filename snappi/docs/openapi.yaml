@@ -10606,16 +10606,11 @@ components:
         traffic_burst_count:
           x-field-uid: 5
           description: |-
-            Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-          type: string
-          x-enum:
-            Continuous:
-              x-field-uid: 1
-            Fixed:
-              x-field-uid: 2
-          enum:
-          - Continuous
-          - Fixed
+            Burst Count to applied in RoCEv2 Traffic item.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 16777216
         name:
           x-field-uid: 6
           description: |-
@@ -10802,16 +10797,11 @@ components:
         traffic_burst_count:
           x-field-uid: 5
           description: |-
-            Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-          type: string
-          x-enum:
-            Continuous:
-              x-field-uid: 1
-            Fixed:
-              x-field-uid: 2
-          enum:
-          - Continuous
-          - Fixed
+            Burst Count to applied in RoCEv2 Traffic item.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 16777216
         name:
           x-field-uid: 6
           description: |-

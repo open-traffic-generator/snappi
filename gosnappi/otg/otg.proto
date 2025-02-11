@@ -7888,15 +7888,8 @@ message RoCEv2V4Peer {
   // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
   optional TrafficBurstMode.Enum traffic_burst_mode = 4;
 
-  message TrafficBurstCount {
-    enum Enum {
-      unspecified = 0;
-      Continuous = 1;
-      Fixed = 2;
-    }
-  }
-  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-  optional TrafficBurstCount.Enum traffic_burst_count = 5;
+  // Burst Count to applied in RoCEv2 Traffic item.
+  optional uint32 traffic_burst_count = 5;
 
   // The name of RoCEv2 Peer
   optional string name = 6;
@@ -8029,15 +8022,8 @@ message RoCEv2V6Peer {
   // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
   optional TrafficBurstMode.Enum traffic_burst_mode = 4;
 
-  message TrafficBurstCount {
-    enum Enum {
-      unspecified = 0;
-      Continuous = 1;
-      Fixed = 2;
-    }
-  }
-  // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-  optional TrafficBurstCount.Enum traffic_burst_count = 5;
+  // Burst Count to applied in RoCEv2 Traffic item.
+  optional uint32 traffic_burst_count = 5;
 
   // The name of RoCEv2 Peer
   optional string name = 6;

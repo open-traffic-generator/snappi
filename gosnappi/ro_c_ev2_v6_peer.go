@@ -290,10 +290,10 @@ type RoCEv2V6Peer interface {
 	SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeEnum) RoCEv2V6Peer
 	// HasTrafficBurstMode checks if TrafficBurstMode has been set in RoCEv2V6Peer
 	HasTrafficBurstMode() bool
-	// TrafficBurstCount returns RoCEv2V6PeerTrafficBurstCountEnum, set in RoCEv2V6Peer
-	TrafficBurstCount() RoCEv2V6PeerTrafficBurstCountEnum
-	// SetTrafficBurstCount assigns RoCEv2V6PeerTrafficBurstCountEnum provided by user to RoCEv2V6Peer
-	SetTrafficBurstCount(value RoCEv2V6PeerTrafficBurstCountEnum) RoCEv2V6Peer
+	// TrafficBurstCount returns uint32, set in RoCEv2V6Peer.
+	TrafficBurstCount() uint32
+	// SetTrafficBurstCount assigns uint32 provided by user to RoCEv2V6Peer
+	SetTrafficBurstCount(value uint32) RoCEv2V6Peer
 	// HasTrafficBurstCount checks if TrafficBurstCount has been set in RoCEv2V6Peer
 	HasTrafficBurstCount() bool
 	// Name returns string, set in RoCEv2V6Peer.
@@ -389,37 +389,25 @@ func (obj *roCEv2V6Peer) SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeE
 	return obj
 }
 
-type RoCEv2V6PeerTrafficBurstCountEnum string
+// Burst Count to applied in RoCEv2 Traffic item.
+// TrafficBurstCount returns a uint32
+func (obj *roCEv2V6Peer) TrafficBurstCount() uint32 {
 
-// Enum of TrafficBurstCount on RoCEv2V6Peer
-var RoCEv2V6PeerTrafficBurstCount = struct {
-	CONTINUOUS RoCEv2V6PeerTrafficBurstCountEnum
-	FIXED      RoCEv2V6PeerTrafficBurstCountEnum
-}{
-	CONTINUOUS: RoCEv2V6PeerTrafficBurstCountEnum("Continuous"),
-	FIXED:      RoCEv2V6PeerTrafficBurstCountEnum("Fixed"),
+	return *obj.obj.TrafficBurstCount
+
 }
 
-func (obj *roCEv2V6Peer) TrafficBurstCount() RoCEv2V6PeerTrafficBurstCountEnum {
-	return RoCEv2V6PeerTrafficBurstCountEnum(obj.obj.TrafficBurstCount.Enum().String())
-}
-
-// Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-// TrafficBurstCount returns a string
+// Burst Count to applied in RoCEv2 Traffic item.
+// TrafficBurstCount returns a uint32
 func (obj *roCEv2V6Peer) HasTrafficBurstCount() bool {
 	return obj.obj.TrafficBurstCount != nil
 }
 
-func (obj *roCEv2V6Peer) SetTrafficBurstCount(value RoCEv2V6PeerTrafficBurstCountEnum) RoCEv2V6Peer {
-	intValue, ok := otg.RoCEv2V6Peer_TrafficBurstCount_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on RoCEv2V6PeerTrafficBurstCountEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.RoCEv2V6Peer_TrafficBurstCount_Enum(intValue)
-	obj.obj.TrafficBurstCount = &enumValue
+// Burst Count to applied in RoCEv2 Traffic item.
+// SetTrafficBurstCount sets the uint32 value in the RoCEv2V6Peer object
+func (obj *roCEv2V6Peer) SetTrafficBurstCount(value uint32) RoCEv2V6Peer {
 
+	obj.obj.TrafficBurstCount = &value
 	return obj
 }
 
@@ -557,6 +545,16 @@ func (obj *roCEv2V6Peer) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= RoCEv2V6Peer.IbMtu <= 14000 but Got %d", *obj.obj.IbMtu))
+		}
+
+	}
+
+	if obj.obj.TrafficBurstCount != nil {
+
+		if *obj.obj.TrafficBurstCount > 16777216 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= RoCEv2V6Peer.TrafficBurstCount <= 16777216 but Got %d", *obj.obj.TrafficBurstCount))
 		}
 
 	}
