@@ -35,7 +35,7 @@ sdk_version = Version.version
 USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
-# supported values - branch name or None
+# supported values - branch name or None  
 USE_OPENAPIART_BRANCH = None
 USE_MODELS_BRANCH = "mka"
 
