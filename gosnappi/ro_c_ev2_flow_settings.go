@@ -322,12 +322,6 @@ type RoCEv2FlowSettings interface {
 	SetMessageSizeUnit(value RoCEv2FlowSettingsMessageSizeUnitEnum) RoCEv2FlowSettings
 	// HasMessageSizeUnit checks if MessageSizeUnit has been set in RoCEv2FlowSettings
 	HasMessageSizeUnit() bool
-	// InitialPsn returns uint32, set in RoCEv2FlowSettings.
-	InitialPsn() uint32
-	// SetInitialPsn assigns uint32 provided by user to RoCEv2FlowSettings
-	SetInitialPsn(value uint32) RoCEv2FlowSettings
-	// HasInitialPsn checks if InitialPsn has been set in RoCEv2FlowSettings
-	HasInitialPsn() bool
 }
 
 // Turn on to define QP number.
@@ -560,28 +554,6 @@ func (obj *roCEv2FlowSettings) SetMessageSizeUnit(value RoCEv2FlowSettingsMessag
 	return obj
 }
 
-// Initial PSN
-// InitialPsn returns a uint32
-func (obj *roCEv2FlowSettings) InitialPsn() uint32 {
-
-	return *obj.obj.InitialPsn
-
-}
-
-// Initial PSN
-// InitialPsn returns a uint32
-func (obj *roCEv2FlowSettings) HasInitialPsn() bool {
-	return obj.obj.InitialPsn != nil
-}
-
-// Initial PSN
-// SetInitialPsn sets the uint32 value in the RoCEv2FlowSettings object
-func (obj *roCEv2FlowSettings) SetInitialPsn(value uint32) RoCEv2FlowSettings {
-
-	obj.obj.InitialPsn = &value
-	return obj
-}
-
 func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -646,16 +618,6 @@ func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.InitialPsn != nil {
-
-		if *obj.obj.InitialPsn > 33554431 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= RoCEv2FlowSettings.InitialPsn <= 33554431 but Got %d", *obj.obj.InitialPsn))
-		}
-
-	}
-
 }
 
 func (obj *roCEv2FlowSettings) setDefault() {
@@ -687,9 +649,6 @@ func (obj *roCEv2FlowSettings) setDefault() {
 	if obj.obj.MessageSizeUnit == nil {
 		obj.SetMessageSizeUnit(RoCEv2FlowSettingsMessageSizeUnit.MB)
 
-	}
-	if obj.obj.InitialPsn == nil {
-		obj.SetInitialPsn(24)
 	}
 
 }

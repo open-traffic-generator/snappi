@@ -272,14 +272,10 @@ type RoCEv2V4Peer interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// NumOfExternalEndpoints returns int32, set in RoCEv2V4Peer.
-	NumOfExternalEndpoints() int32
-	// SetNumOfExternalEndpoints assigns int32 provided by user to RoCEv2V4Peer
-	SetNumOfExternalEndpoints(value int32) RoCEv2V4Peer
-	// MaxNumOfQp returns int32, set in RoCEv2V4Peer.
-	MaxNumOfQp() int32
-	// SetMaxNumOfQp assigns int32 provided by user to RoCEv2V4Peer
-	SetMaxNumOfQp(value int32) RoCEv2V4Peer
+	// NumOfQps returns int32, set in RoCEv2V4Peer.
+	NumOfQps() int32
+	// SetNumOfQps assigns int32 provided by user to RoCEv2V4Peer
+	SetNumOfQps(value int32) RoCEv2V4Peer
 	// RemoteEndPointIpAddress returns string, set in RoCEv2V4Peer.
 	RemoteEndPointIpAddress() string
 	// SetRemoteEndPointIpAddress assigns string provided by user to RoCEv2V4Peer
@@ -311,35 +307,19 @@ type RoCEv2V4Peer interface {
 	setNil()
 }
 
-// Number of External Endpoints.
-// NumOfExternalEndpoints returns a int32
-func (obj *roCEv2V4Peer) NumOfExternalEndpoints() int32 {
-
-	return *obj.obj.NumOfExternalEndpoints
-
-}
-
-// Number of External Endpoints.
-// SetNumOfExternalEndpoints sets the int32 value in the RoCEv2V4Peer object
-func (obj *roCEv2V4Peer) SetNumOfExternalEndpoints(value int32) RoCEv2V4Peer {
-
-	obj.obj.NumOfExternalEndpoints = &value
-	return obj
-}
-
 // Maximum number of QP per Endpoint.
-// MaxNumOfQp returns a int32
-func (obj *roCEv2V4Peer) MaxNumOfQp() int32 {
+// NumOfQps returns a int32
+func (obj *roCEv2V4Peer) NumOfQps() int32 {
 
-	return *obj.obj.MaxNumOfQp
+	return *obj.obj.NumOfQps
 
 }
 
 // Maximum number of QP per Endpoint.
-// SetMaxNumOfQp sets the int32 value in the RoCEv2V4Peer object
-func (obj *roCEv2V4Peer) SetMaxNumOfQp(value int32) RoCEv2V4Peer {
+// SetNumOfQps sets the int32 value in the RoCEv2V4Peer object
+func (obj *roCEv2V4Peer) SetNumOfQps(value int32) RoCEv2V4Peer {
 
-	obj.obj.MaxNumOfQp = &value
+	obj.obj.NumOfQps = &value
 	return obj
 }
 
@@ -557,14 +537,9 @@ func (obj *roCEv2V4Peer) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	// NumOfExternalEndpoints is required
-	if obj.obj.NumOfExternalEndpoints == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "NumOfExternalEndpoints is required field on interface RoCEv2V4Peer")
-	}
-
-	// MaxNumOfQp is required
-	if obj.obj.MaxNumOfQp == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "MaxNumOfQp is required field on interface RoCEv2V4Peer")
+	// NumOfQps is required
+	if obj.obj.NumOfQps == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "NumOfQps is required field on interface RoCEv2V4Peer")
 	}
 
 	// RemoteEndPointIpAddress is required

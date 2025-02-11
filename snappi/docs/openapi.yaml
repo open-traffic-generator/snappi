@@ -10568,28 +10568,22 @@ components:
         Configuration for RoCEv2 IPv4 peers.
       type: object
       required:
-      - num_of_external_endpoints
-      - max_num_of_qp
+      - num_of_qps
       - remote_end_point_ip_address
       - ib_mtu
       properties:
-        num_of_external_endpoints:
+        num_of_qps:
           x-field-uid: 1
-          description: |-
-            Number of External Endpoints.
-          type: integer
-        max_num_of_qp:
-          x-field-uid: 2
           description: |-
             Maximum number of QP per Endpoint.
           type: integer
         remote_end_point_ip_address:
-          x-field-uid: 3
+          x-field-uid: 2
           description: |-
             Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
         ib_mtu:
-          x-field-uid: 4
+          x-field-uid: 3
           description: |-
             InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
           type: integer
@@ -10597,7 +10591,7 @@ components:
           minimum: 0
           maximum: 14000
         traffic_burst_mode:
-          x-field-uid: 5
+          x-field-uid: 4
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10610,7 +10604,7 @@ components:
           - Continuous
           - Fixed
         traffic_burst_count:
-          x-field-uid: 6
+          x-field-uid: 5
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10623,12 +10617,12 @@ components:
           - Continuous
           - Fixed
         name:
-          x-field-uid: 7
+          x-field-uid: 6
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 8
+          x-field-uid: 7
           type: array
           description: |-
             This section has two views, Local End and Remote End. Both views have same configurations. However, the remote and local peer IP addresses are interchanged. This configuration allows you to configure RDMA flow over the same QP number from same source and destination. Default value for commands at Remote peer is set to None. So that by default, this remote peer does not initiate any traffic flow.
@@ -10765,42 +10759,27 @@ components:
           - Byte
           - KB
           - MB
-        initial_psn:
-          description: |-
-            Initial PSN
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 0
-          maximum: 33554431
-          x-field-uid: 10
     RoCEv2.V6Peer:
       description: |-
         Configuration for RoCEv2 IPv6 peer settings.
       type: object
       required:
-      - num_of_external_endpoints
-      - max_num_of_qp
+      - num_of_qps
       - remote_end_point_ip_address
       - ib_mtu
       properties:
-        num_of_external_endpoints:
+        num_of_qps:
           x-field-uid: 1
-          description: |-
-            Number of External Endpoints.
-          type: integer
-        max_num_of_qp:
-          x-field-uid: 2
           description: |-
             Maximum number of QP per Endpoint.
           type: integer
         remote_end_point_ip_address:
-          x-field-uid: 3
+          x-field-uid: 2
           description: |-
             Specify the IP address of External NIC i.e Remote End Point IP Address.
           type: string
         ib_mtu:
-          x-field-uid: 4
+          x-field-uid: 3
           description: |-
             InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
           type: integer
@@ -10808,7 +10787,7 @@ components:
           minimum: 0
           maximum: 14000
         traffic_burst_mode:
-          x-field-uid: 5
+          x-field-uid: 4
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10821,7 +10800,7 @@ components:
           - Continuous
           - Fixed
         traffic_burst_count:
-          x-field-uid: 6
+          x-field-uid: 5
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10834,12 +10813,12 @@ components:
           - Continuous
           - Fixed
         name:
-          x-field-uid: 7
+          x-field-uid: 6
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 8
+          x-field-uid: 7
           type: array
           description: |-
             This section has two views, Local End and Remote End. Both views have same configurations. However, the remote and local peer IP addresses are interchanged. This configuration allows you to configure RDMA flow over the same QP number from same source and destination. Default value for commands at Remote peer is set to None. So that by default, this remote peer does not initiate any traffic flow.
