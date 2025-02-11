@@ -16451,6 +16451,8 @@ components:
               x-field-uid: 14
             macsec:
               x-field-uid: 15
+            mka:
+              x-field-uid: 16
           enum:
           - port
           - flow
@@ -16467,6 +16469,7 @@ components:
           - dhcpv6_server
           - ospfv2
           - macsec
+          - mka
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -16512,6 +16515,9 @@ components:
         macsec:
           $ref: '#/components/schemas/Macsec.Metrics.Request'
           x-field-uid: 16
+        mka:
+          $ref: '#/components/schemas/Mka.Metrics.Request'
+          x-field-uid: 17
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -19654,6 +19660,139 @@ components:
           type: integer
           format: uint64
           x-field-uid: 20
+    Mka.Metrics.Request:
+      description: |-
+        The request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+      type: object
+      properties:
+        kay_names:
+          description: |
+            The names of key agreement entities (KaYs) to return results for. An empty list will return results for all KaYs.
+
+            x-constraint:
+            - /components/schemas/Mka/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Mka/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the KaY cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              session_state:
+                x-field-uid: 1
+              session_flap_count:
+                x-field-uid: 2
+              mkpdu_tx:
+                x-field-uid: 3
+              mkpdu_rx:
+                x-field-uid: 4
+              live_peer_count:
+                x-field-uid: 5
+              potential_peer_count:
+                x-field-uid: 6
+              latest_key_tx_peer_count:
+                x-field-uid: 7
+              latest_key_rx_peer_count:
+                x-field-uid: 8
+              malformed_mkpdu:
+                x-field-uid: 9
+              icv_mismatch:
+                x-field-uid: 10
+            enum:
+            - session_state
+            - session_flap_count
+            - mkpdu_tx
+            - mkpdu_rx
+            - live_peer_count
+            - potential_peer_count
+            - latest_key_tx_peer_count
+            - latest_key_rx_peer_count
+            - malformed_mkpdu
+            - icv_mismatch
+          x-field-uid: 2
+    Mka.Metric:
+      description: |-
+        MKA per KaY statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of a configured MKA KaY.
+          type: string
+          x-field-uid: 1
+        session_state:
+          description: |-
+            Session state as up or down. Up refers to an Established state and Down refers to any other state.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+        session_flap_count:
+          description: |-
+            Number of times the session went from Up to Down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        mkpdu_tx:
+          description: |-
+            MKPDU Tx.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        mkpdu_rx:
+          description: |-
+            MKPDU Rx.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        live_peer_count:
+          description: |-
+            Live Peer Count.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        potential_peer_count:
+          description: |-
+            Potential Peer Count.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        latest_key_tx_peer_count:
+          description: |-
+            Latest Key Tx Peer Count.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        latest_key_rx_peer_count:
+          description: |-
+            Latest Key Rx Peer Count.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        malformed_mkpdu:
+          description: |-
+            Malformed MKPDU.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        icv_mismatch:
+          description: |-
+            ICV Mismatch.
+          type: integer
+          format: uint64
+          x-field-uid: 11
     States.Request:
       description: |-
         Request to traffic generator for states of choice

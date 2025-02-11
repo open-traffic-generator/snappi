@@ -1259,6 +1259,7 @@ from .snappi import Dhcpv6ClientMetricsRequest
 from .snappi import Dhcpv6ServerMetricsRequest
 from .snappi import Ospfv2MetricsRequest
 from .snappi import MacsecMetricsRequest
+from .snappi import MkaMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter

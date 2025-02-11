@@ -12503,6 +12503,7 @@ message MetricsRequest {
       dhcpv6_server = 13;
       ospfv2 = 14;
       macsec = 15;
+      mka = 16;
     }
   }
   // Description missing in models
@@ -12553,6 +12554,9 @@ message MetricsRequest {
 
   // Description missing in models
   MacsecMetricsRequest macsec = 16;
+
+  // Description missing in models
+  MkaMetricsRequest mka = 17;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -14334,6 +14338,83 @@ message MacsecMetric {
 
   // InOctetsDecrypted.
   optional uint64 in_octets_decrypted = 20;
+}
+
+// The request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+message MkaMetricsRequest {
+
+  // The names of key agreement entities (KaYs) to return results for. An empty list will
+  // return results for all KaYs.
+  // 
+  // x-constraint:
+  // - /components/schemas/Mka/properties/name
+  // 
+  repeated string kay_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      session_flap_count = 2;
+      mkpdu_tx = 3;
+      mkpdu_rx = 4;
+      live_peer_count = 5;
+      potential_peer_count = 6;
+      latest_key_tx_peer_count = 7;
+      latest_key_rx_peer_count = 8;
+      malformed_mkpdu = 9;
+      icv_mismatch = 10;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the KaY cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// MKA per KaY statistics information.
+message MkaMetric {
+
+  // The name of a configured MKA KaY.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of times the session went from Up to Down state.
+  optional uint64 session_flap_count = 3;
+
+  // MKPDU Tx.
+  optional uint64 mkpdu_tx = 4;
+
+  // MKPDU Rx.
+  optional uint64 mkpdu_rx = 5;
+
+  // Live Peer Count.
+  optional uint64 live_peer_count = 6;
+
+  // Potential Peer Count.
+  optional uint64 potential_peer_count = 7;
+
+  // Latest Key Tx Peer Count.
+  optional uint64 latest_key_tx_peer_count = 8;
+
+  // Latest Key Rx Peer Count.
+  optional uint64 latest_key_rx_peer_count = 9;
+
+  // Malformed MKPDU.
+  optional uint64 malformed_mkpdu = 10;
+
+  // ICV Mismatch.
+  optional uint64 icv_mismatch = 11;
 }
 
 // Request to traffic generator for states of choice
