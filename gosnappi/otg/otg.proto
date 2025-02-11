@@ -12619,6 +12619,7 @@ message MetricsResponse {
       dhcpv6_server = 13;
       ospfv2_metrics = 14;
       macsec_metrics = 15;
+      mka_metrics = 16;
     }
   }
   // Description missing in models
@@ -12669,6 +12670,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated MacsecMetric macsec_metrics = 16;
+
+  // Description missing in models
+  repeated MkaMetric mka_metrics = 17;
 }
 
 // The port result request to the traffic generator

@@ -1299,6 +1299,8 @@ from .snappi import Ospfv2Metric
 from .snappi import Ospfv2MetricIter
 from .snappi import MacsecMetric
 from .snappi import MacsecMetricIter
+from .snappi import MkaMetric
+from .snappi import MkaMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest

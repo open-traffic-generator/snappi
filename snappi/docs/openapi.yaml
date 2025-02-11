@@ -16628,6 +16628,8 @@ components:
               x-field-uid: 14
             macsec_metrics:
               x-field-uid: 15
+            mka_metrics:
+              x-field-uid: 16
           enum:
           - flow_metrics
           - port_metrics
@@ -16644,6 +16646,7 @@ components:
           - dhcpv6_server
           - ospfv2_metrics
           - macsec_metrics
+          - mka_metrics
         port_metrics:
           type: array
           items:
@@ -16719,6 +16722,11 @@ components:
           items:
             $ref: '#/components/schemas/Macsec.Metric'
           x-field-uid: 16
+        mka_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mka.Metric'
+          x-field-uid: 17
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
