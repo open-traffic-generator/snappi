@@ -17,7 +17,7 @@ type deviceOspfv3Router struct {
 	marshaller            marshalDeviceOspfv3Router
 	unMarshaller          unMarshalDeviceOspfv3Router
 	gracefulRestartHolder Ospfv3GracefulRestart
-	capabilitiesHolder    Ospfv3Advanced
+	capabilitiesHolder    Ospfv3Capabilities
 	interfacesHolder      DeviceOspfv3RouterOspfv3InterfaceIter
 	v6RoutesHolder        DeviceOspfv3RouterOspfv3V6RouteRangeIter
 }
@@ -320,12 +320,12 @@ type DeviceOspfv3Router interface {
 	SetStoreLsa(value bool) DeviceOspfv3Router
 	// HasStoreLsa checks if StoreLsa has been set in DeviceOspfv3Router
 	HasStoreLsa() bool
-	// Capabilities returns Ospfv3Advanced, set in DeviceOspfv3Router.
-	// Ospfv3Advanced is the OSPFv3 router optional attributes.
-	Capabilities() Ospfv3Advanced
-	// SetCapabilities assigns Ospfv3Advanced provided by user to DeviceOspfv3Router.
-	// Ospfv3Advanced is the OSPFv3 router optional attributes.
-	SetCapabilities(value Ospfv3Advanced) DeviceOspfv3Router
+	// Capabilities returns Ospfv3Capabilities, set in DeviceOspfv3Router.
+	// Ospfv3Capabilities is the OSPFv3 router optional attributes.
+	Capabilities() Ospfv3Capabilities
+	// SetCapabilities assigns Ospfv3Capabilities provided by user to DeviceOspfv3Router.
+	// Ospfv3Capabilities is the OSPFv3 router optional attributes.
+	SetCapabilities(value Ospfv3Capabilities) DeviceOspfv3Router
 	// HasCapabilities checks if Capabilities has been set in DeviceOspfv3Router
 	HasCapabilities() bool
 	// Interfaces returns DeviceOspfv3RouterOspfv3InterfaceIterIter, set in DeviceOspfv3Router
@@ -483,27 +483,27 @@ func (obj *deviceOspfv3Router) SetStoreLsa(value bool) DeviceOspfv3Router {
 	return obj
 }
 
-// Optional container for OSPFv3 advanced router properties.
-// Capabilities returns a Ospfv3Advanced
-func (obj *deviceOspfv3Router) Capabilities() Ospfv3Advanced {
+// Optional container for OSPFv3 router capabilities.
+// Capabilities returns a Ospfv3Capabilities
+func (obj *deviceOspfv3Router) Capabilities() Ospfv3Capabilities {
 	if obj.obj.Capabilities == nil {
-		obj.obj.Capabilities = NewOspfv3Advanced().msg()
+		obj.obj.Capabilities = NewOspfv3Capabilities().msg()
 	}
 	if obj.capabilitiesHolder == nil {
-		obj.capabilitiesHolder = &ospfv3Advanced{obj: obj.obj.Capabilities}
+		obj.capabilitiesHolder = &ospfv3Capabilities{obj: obj.obj.Capabilities}
 	}
 	return obj.capabilitiesHolder
 }
 
-// Optional container for OSPFv3 advanced router properties.
-// Capabilities returns a Ospfv3Advanced
+// Optional container for OSPFv3 router capabilities.
+// Capabilities returns a Ospfv3Capabilities
 func (obj *deviceOspfv3Router) HasCapabilities() bool {
 	return obj.obj.Capabilities != nil
 }
 
-// Optional container for OSPFv3 advanced router properties.
-// SetCapabilities sets the Ospfv3Advanced value in the DeviceOspfv3Router object
-func (obj *deviceOspfv3Router) SetCapabilities(value Ospfv3Advanced) DeviceOspfv3Router {
+// Optional container for OSPFv3 router capabilities.
+// SetCapabilities sets the Ospfv3Capabilities value in the DeviceOspfv3Router object
+func (obj *deviceOspfv3Router) SetCapabilities(value Ospfv3Capabilities) DeviceOspfv3Router {
 
 	obj.capabilitiesHolder = nil
 	obj.obj.Capabilities = value.msg()

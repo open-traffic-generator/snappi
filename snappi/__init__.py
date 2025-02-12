@@ -352,7 +352,7 @@ from .snappi import Ospfv2V4RRNssaExternal
 from .snappi import Ospfv2V4RouteRangeIter
 from .snappi import DeviceOspfv3Router
 from .snappi import Ospfv3GracefulRestart
-from .snappi import Ospfv3Advanced
+from .snappi import Ospfv3Capabilities
 from .snappi import Ospfv3Interface
 from .snappi import Ospfv3InterfaceArea
 from .snappi import Ospfv3InterfaceNetworkType
@@ -360,7 +360,7 @@ from .snappi import Ospfv3InterfaceAuthentication
 from .snappi import Ospfv3AuthenticationAuth
 from .snappi import Ospfv3AuthenticationAlgo
 from .snappi import Ospfv3AuthenticationAuthIter
-from .snappi import Ospfv3InterfaceAdvanced
+from .snappi import Ospfv3InterfaceCapabilities
 from .snappi import Ospfv3InterfaceOptions
 from .snappi import Ospfv3InterfaceIter
 from .snappi import Ospfv3V6RouteRange

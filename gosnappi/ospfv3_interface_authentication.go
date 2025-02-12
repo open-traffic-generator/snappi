@@ -272,37 +272,9 @@ type Ospfv3InterfaceAuthentication interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Enable returns bool, set in Ospfv3InterfaceAuthentication.
-	Enable() bool
-	// SetEnable assigns bool provided by user to Ospfv3InterfaceAuthentication
-	SetEnable(value bool) Ospfv3InterfaceAuthentication
-	// HasEnable checks if Enable has been set in Ospfv3InterfaceAuthentication
-	HasEnable() bool
 	// Auths returns Ospfv3InterfaceAuthenticationOspfv3AuthenticationAuthIterIter, set in Ospfv3InterfaceAuthentication
 	Auths() Ospfv3InterfaceAuthenticationOspfv3AuthenticationAuthIter
 	setNil()
-}
-
-// If enabled, it performs a non-IPsec Cryptographic authentication.
-// Enable returns a bool
-func (obj *ospfv3InterfaceAuthentication) Enable() bool {
-
-	return *obj.obj.Enable
-
-}
-
-// If enabled, it performs a non-IPsec Cryptographic authentication.
-// Enable returns a bool
-func (obj *ospfv3InterfaceAuthentication) HasEnable() bool {
-	return obj.obj.Enable != nil
-}
-
-// If enabled, it performs a non-IPsec Cryptographic authentication.
-// SetEnable sets the bool value in the Ospfv3InterfaceAuthentication object
-func (obj *ospfv3InterfaceAuthentication) SetEnable(value bool) Ospfv3InterfaceAuthentication {
-
-	obj.obj.Enable = &value
-	return obj
 }
 
 // List of OSPFv3 SA Key IDs and Keys.
@@ -414,8 +386,5 @@ func (obj *ospfv3InterfaceAuthentication) validateObj(vObj *validation, set_defa
 }
 
 func (obj *ospfv3InterfaceAuthentication) setDefault() {
-	if obj.obj.Enable == nil {
-		obj.SetEnable(false)
-	}
 
 }

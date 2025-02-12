@@ -280,10 +280,16 @@ type Ospfv3InterAreaPrefixLsa interface {
 	SetHeader(value Ospfv3LsaHeader) Ospfv3InterAreaPrefixLsa
 	// HasHeader checks if Header has been set in Ospfv3InterAreaPrefixLsa
 	HasHeader() bool
-	// PrefixLength returns string, set in Ospfv3InterAreaPrefixLsa.
-	PrefixLength() string
-	// SetPrefixLength assigns string provided by user to Ospfv3InterAreaPrefixLsa
-	SetPrefixLength(value string) Ospfv3InterAreaPrefixLsa
+	// AddressPrefix returns string, set in Ospfv3InterAreaPrefixLsa.
+	AddressPrefix() string
+	// SetAddressPrefix assigns string provided by user to Ospfv3InterAreaPrefixLsa
+	SetAddressPrefix(value string) Ospfv3InterAreaPrefixLsa
+	// HasAddressPrefix checks if AddressPrefix has been set in Ospfv3InterAreaPrefixLsa
+	HasAddressPrefix() bool
+	// PrefixLength returns uint32, set in Ospfv3InterAreaPrefixLsa.
+	PrefixLength() uint32
+	// SetPrefixLength assigns uint32 provided by user to Ospfv3InterAreaPrefixLsa
+	SetPrefixLength(value uint32) Ospfv3InterAreaPrefixLsa
 	// HasPrefixLength checks if PrefixLength has been set in Ospfv3InterAreaPrefixLsa
 	HasPrefixLength() bool
 	// Metric returns uint32, set in Ospfv3InterAreaPrefixLsa.
@@ -292,12 +298,6 @@ type Ospfv3InterAreaPrefixLsa interface {
 	SetMetric(value uint32) Ospfv3InterAreaPrefixLsa
 	// HasMetric checks if Metric has been set in Ospfv3InterAreaPrefixLsa
 	HasMetric() bool
-	// AddressPrefix returns string, set in Ospfv3InterAreaPrefixLsa.
-	AddressPrefix() string
-	// SetAddressPrefix assigns string provided by user to Ospfv3InterAreaPrefixLsa
-	SetAddressPrefix(value string) Ospfv3InterAreaPrefixLsa
-	// HasAddressPrefix checks if AddressPrefix has been set in Ospfv3InterAreaPrefixLsa
-	HasAddressPrefix() bool
 	setNil()
 }
 
@@ -329,23 +329,45 @@ func (obj *ospfv3InterAreaPrefixLsa) SetHeader(value Ospfv3LsaHeader) Ospfv3Inte
 	return obj
 }
 
+// The prefix for Inter Area Prefix LSA Address.
+// AddressPrefix returns a string
+func (obj *ospfv3InterAreaPrefixLsa) AddressPrefix() string {
+
+	return *obj.obj.AddressPrefix
+
+}
+
+// The prefix for Inter Area Prefix LSA Address.
+// AddressPrefix returns a string
+func (obj *ospfv3InterAreaPrefixLsa) HasAddressPrefix() bool {
+	return obj.obj.AddressPrefix != nil
+}
+
+// The prefix for Inter Area Prefix LSA Address.
+// SetAddressPrefix sets the string value in the Ospfv3InterAreaPrefixLsa object
+func (obj *ospfv3InterAreaPrefixLsa) SetAddressPrefix(value string) Ospfv3InterAreaPrefixLsa {
+
+	obj.obj.AddressPrefix = &value
+	return obj
+}
+
 // The prefix length for the IP address.
-// PrefixLength returns a string
-func (obj *ospfv3InterAreaPrefixLsa) PrefixLength() string {
+// PrefixLength returns a uint32
+func (obj *ospfv3InterAreaPrefixLsa) PrefixLength() uint32 {
 
 	return *obj.obj.PrefixLength
 
 }
 
 // The prefix length for the IP address.
-// PrefixLength returns a string
+// PrefixLength returns a uint32
 func (obj *ospfv3InterAreaPrefixLsa) HasPrefixLength() bool {
 	return obj.obj.PrefixLength != nil
 }
 
 // The prefix length for the IP address.
-// SetPrefixLength sets the string value in the Ospfv3InterAreaPrefixLsa object
-func (obj *ospfv3InterAreaPrefixLsa) SetPrefixLength(value string) Ospfv3InterAreaPrefixLsa {
+// SetPrefixLength sets the uint32 value in the Ospfv3InterAreaPrefixLsa object
+func (obj *ospfv3InterAreaPrefixLsa) SetPrefixLength(value uint32) Ospfv3InterAreaPrefixLsa {
 
 	obj.obj.PrefixLength = &value
 	return obj
@@ -370,28 +392,6 @@ func (obj *ospfv3InterAreaPrefixLsa) HasMetric() bool {
 func (obj *ospfv3InterAreaPrefixLsa) SetMetric(value uint32) Ospfv3InterAreaPrefixLsa {
 
 	obj.obj.Metric = &value
-	return obj
-}
-
-// The prefix for Inter Area Prefix LSA Address.
-// AddressPrefix returns a string
-func (obj *ospfv3InterAreaPrefixLsa) AddressPrefix() string {
-
-	return *obj.obj.AddressPrefix
-
-}
-
-// The prefix for Inter Area Prefix LSA Address.
-// AddressPrefix returns a string
-func (obj *ospfv3InterAreaPrefixLsa) HasAddressPrefix() bool {
-	return obj.obj.AddressPrefix != nil
-}
-
-// The prefix for Inter Area Prefix LSA Address.
-// SetAddressPrefix sets the string value in the Ospfv3InterAreaPrefixLsa object
-func (obj *ospfv3InterAreaPrefixLsa) SetAddressPrefix(value string) Ospfv3InterAreaPrefixLsa {
-
-	obj.obj.AddressPrefix = &value
 	return obj
 }
 

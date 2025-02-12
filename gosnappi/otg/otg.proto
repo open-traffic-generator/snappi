@@ -7886,8 +7886,8 @@ message DeviceOspfv3Router {
   // default = False
   optional bool store_lsa = 7;
 
-  // Optional container for OSPFv3 advanced router properties.
-  Ospfv3Advanced capabilities = 8;
+  // Optional container for OSPFv3 router capabilities.
+  Ospfv3Capabilities capabilities = 8;
 
   // List of OSPFv3 interfaces for this router.
   repeated Ospfv3Interface interfaces = 9;
@@ -7897,7 +7897,7 @@ message DeviceOspfv3Router {
 }
 
 // The OSPFv3 router optional attributes.
-message Ospfv3Advanced {
+message Ospfv3Capabilities {
 
   // Set to indicate that the router acts as an Area Border Router.
   // default = False
@@ -7943,8 +7943,8 @@ message Ospfv3Interface {
   // OSPFv3 authentication properties.
   Ospfv3InterfaceAuthentication authentication = 5;
 
-  // Container for OSPFv3 advanced interface properties.
-  Ospfv3InterfaceAdvanced advanced = 6;
+  // Container for OSPFv3 interface capabilities.
+  Ospfv3InterfaceCapabilities capabilities = 6;
 
   // Container for OSPFv3 optional interface properties.
   Ospfv3InterfaceOptions options = 7;
@@ -7993,8 +7993,8 @@ message Ospfv3InterfaceNetworkType {
   optional Choice.Enum choice = 1;
 }
 
-// Contains OSPFv3 advanced properties.
-message Ospfv3InterfaceAdvanced {
+// Contains OSPFv3 interface capabilities.
+message Ospfv3InterfaceCapabilities {
 
   // The time interval, in seconds, between the Hello packets that
   // the router sends on the interface. Advertised in Hello packets
@@ -8062,12 +8062,8 @@ message Ospfv3InterfaceOptions {
 // This contains OSPFv3 authentication properties.
 message Ospfv3InterfaceAuthentication {
 
-  // If enabled, it performs a non-IPsec Cryptographic authentication.
-  // default = False
-  optional bool enable = 1;
-
   // List of OSPFv3 SA Key IDs and Keys.
-  repeated Ospfv3AuthenticationAuth auths = 2;
+  repeated Ospfv3AuthenticationAuth auths = 1;
 }
 
 // Container of OSPFv3 interface Cryptographic authentication.
@@ -15973,14 +15969,14 @@ message Ospfv3InterAreaPrefixLsa {
   // Contents of the LSA header.
   Ospfv3LsaHeader header = 1;
 
+  // The prefix for Inter Area Prefix LSA Address.
+  optional string address_prefix = 2;
+
   // The prefix length for the IP address.
-  optional string prefix_length = 2;
+  optional uint32 prefix_length = 3;
 
   // The cost of the summary route TOS level 0 and all unspecified levels.
-  optional uint32 metric = 3;
-
-  // The prefix for Inter Area Prefix LSA Address.
-  optional string address_prefix = 4;
+  optional uint32 metric = 4;
 }
 
 // Contents of OSPFv3 Inter-Area-Router LSA - Type 4.

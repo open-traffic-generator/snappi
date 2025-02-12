@@ -10605,8 +10605,8 @@ components:
           x-field-uid: 7
         capabilities:
           description: |-
-            Optional container for OSPFv3 advanced router properties.
-          $ref: '#/components/schemas/Ospfv3.Advanced'
+            Optional container for OSPFv3 router capabilities.
+          $ref: '#/components/schemas/Ospfv3.Capabilities'
           x-field-uid: 8
         interfaces:
           description: |-
@@ -10622,7 +10622,7 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv3.V6RouteRange'
           x-field-uid: 10
-    Ospfv3.Advanced:
+    Ospfv3.Capabilities:
       description: |-
         The OSPFv3 router optional attributes.
       type: object
@@ -10688,10 +10688,10 @@ components:
             OSPFv3 authentication properties.
           $ref: '#/components/schemas/Ospfv3Interface.Authentication'
           x-field-uid: 5
-        advanced:
+        capabilities:
           description: |-
-            Container for OSPFv3 advanced interface properties.
-          $ref: '#/components/schemas/Ospfv3Interface.Advanced'
+            Container for OSPFv3 interface capabilities.
+          $ref: '#/components/schemas/Ospfv3Interface.Capabilities'
           x-field-uid: 6
         options:
           description: |-
@@ -10751,9 +10751,9 @@ components:
           enum:
           - broadcast
           - point_to_point
-    Ospfv3Interface.Advanced:
+    Ospfv3Interface.Capabilities:
       description: |-
-        Contains OSPFv3 advanced properties.
+        Contains OSPFv3 interface capabilities.
       type: object
       properties:
         hello_interval:
@@ -10843,19 +10843,13 @@ components:
         This contains OSPFv3 authentication properties.
       type: object
       properties:
-        enable:
-          description: |-
-            If enabled, it performs a non-IPsec Cryptographic authentication.
-          type: boolean
-          default: false
-          x-field-uid: 1
         auths:
           description: |-
             List of OSPFv3 SA Key IDs and Keys.
           type: array
           items:
             $ref: '#/components/schemas/Ospfv3Authentication.Auth'
-          x-field-uid: 2
+          x-field-uid: 1
     Ospfv3Authentication.Auth:
       description: |-
         Container of OSPFv3 interface Cryptographic authentication.
@@ -22109,23 +22103,23 @@ components:
             Contents of the LSA header.
           $ref: '#/components/schemas/Ospfv3.LsaHeader'
           x-field-uid: 1
-        prefix_length:
-          description: |-
-            The prefix length for the IP address.
-          type: string
-          format: uint32
-          x-field-uid: 2
-        metric:
-          description: |-
-            The cost of the summary route TOS level 0 and all unspecified levels.
-          type: integer
-          format: uint32
-          x-field-uid: 3
         address_prefix:
           description: |-
             The prefix for Inter Area Prefix LSA Address.
           type: string
           format: ipv6
+          x-field-uid: 2
+        prefix_length:
+          description: |-
+            The prefix length for the IP address.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        metric:
+          description: |-
+            The cost of the summary route TOS level 0 and all unspecified levels.
+          type: integer
+          format: uint32
           x-field-uid: 4
     Ospfv3.InterAreaRouterLsa:
       description: |-
