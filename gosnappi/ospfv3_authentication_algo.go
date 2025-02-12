@@ -274,14 +274,14 @@ type Ospfv3AuthenticationAlgo interface {
 	setChoice(value Ospfv3AuthenticationAlgoChoiceEnum) Ospfv3AuthenticationAlgo
 	// HasChoice checks if Choice has been set in Ospfv3AuthenticationAlgo
 	HasChoice() bool
-	// getter for HmacSha_384 to set choice.
-	HmacSha_384()
 	// getter for HmacSha_512 to set choice.
 	HmacSha_512()
-	// getter for HmacSha_256 to set choice.
-	HmacSha_256()
+	// getter for HmacSha_384 to set choice.
+	HmacSha_384()
 	// getter for HmacSha_1 to set choice.
 	HmacSha_1()
+	// getter for HmacSha_256 to set choice.
+	HmacSha_256()
 }
 
 type Ospfv3AuthenticationAlgoChoiceEnum string
@@ -303,24 +303,24 @@ func (obj *ospfv3AuthenticationAlgo) Choice() Ospfv3AuthenticationAlgoChoiceEnum
 	return Ospfv3AuthenticationAlgoChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for HmacSha_384 to set choice
-func (obj *ospfv3AuthenticationAlgo) HmacSha_384() {
-	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_384)
-}
-
 // getter for HmacSha_512 to set choice
 func (obj *ospfv3AuthenticationAlgo) HmacSha_512() {
 	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_512)
 }
 
-// getter for HmacSha_256 to set choice
-func (obj *ospfv3AuthenticationAlgo) HmacSha_256() {
-	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_256)
+// getter for HmacSha_384 to set choice
+func (obj *ospfv3AuthenticationAlgo) HmacSha_384() {
+	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_384)
 }
 
 // getter for HmacSha_1 to set choice
 func (obj *ospfv3AuthenticationAlgo) HmacSha_1() {
 	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_1)
+}
+
+// getter for HmacSha_256 to set choice
+func (obj *ospfv3AuthenticationAlgo) HmacSha_256() {
+	obj.setChoice(Ospfv3AuthenticationAlgoChoice.HMAC_SHA_256)
 }
 
 // description is TBD
