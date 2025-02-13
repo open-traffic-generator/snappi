@@ -356,10 +356,6 @@ from .snappi import Ospfv3Capabilities
 from .snappi import Ospfv3Interface
 from .snappi import Ospfv3InterfaceArea
 from .snappi import Ospfv3InterfaceNetworkType
-from .snappi import Ospfv3InterfaceAuthentication
-from .snappi import Ospfv3AuthenticationAuth
-from .snappi import Ospfv3AuthenticationAlgo
-from .snappi import Ospfv3AuthenticationAuthIter
 from .snappi import Ospfv3InterfaceCapabilities
 from .snappi import Ospfv3InterfaceOptions
 from .snappi import Ospfv3InterfaceIter

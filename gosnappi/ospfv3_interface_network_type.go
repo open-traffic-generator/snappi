@@ -272,10 +272,10 @@ type Ospfv3InterfaceNetworkType interface {
 	setChoice(value Ospfv3InterfaceNetworkTypeChoiceEnum) Ospfv3InterfaceNetworkType
 	// HasChoice checks if Choice has been set in Ospfv3InterfaceNetworkType
 	HasChoice() bool
-	// getter for Broadcast to set choice.
-	Broadcast()
 	// getter for PointToPoint to set choice.
 	PointToPoint()
+	// getter for Broadcast to set choice.
+	Broadcast()
 }
 
 type Ospfv3InterfaceNetworkTypeChoiceEnum string
@@ -293,14 +293,14 @@ func (obj *ospfv3InterfaceNetworkType) Choice() Ospfv3InterfaceNetworkTypeChoice
 	return Ospfv3InterfaceNetworkTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Broadcast to set choice
-func (obj *ospfv3InterfaceNetworkType) Broadcast() {
-	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)
-}
-
 // getter for PointToPoint to set choice
 func (obj *ospfv3InterfaceNetworkType) PointToPoint() {
 	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.POINT_TO_POINT)
+}
+
+// getter for Broadcast to set choice
+func (obj *ospfv3InterfaceNetworkType) Broadcast() {
+	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)
 }
 
 // description is TBD

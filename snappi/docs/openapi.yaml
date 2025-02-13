@@ -10683,21 +10683,16 @@ components:
             The OSPF network link type.
           $ref: '#/components/schemas/Ospfv3Interface.NetworkType'
           x-field-uid: 4
-        authentication:
-          description: |-
-            OSPFv3 authentication properties.
-          $ref: '#/components/schemas/Ospfv3Interface.Authentication'
-          x-field-uid: 5
         capabilities:
           description: |-
             Container for OSPFv3 interface capabilities.
           $ref: '#/components/schemas/Ospfv3Interface.Capabilities'
-          x-field-uid: 6
+          x-field-uid: 5
         options:
           description: |-
             Container for OSPFv3 optional interface properties.
           $ref: '#/components/schemas/Ospfv3Interface.Options'
-          x-field-uid: 7
+          x-field-uid: 6
     Ospfv3Interface.Area:
       description: "Container for OSPFv3 Area ID identifies the routing area to which\
         \ the host belongs.      "
@@ -10838,71 +10833,6 @@ components:
           type: boolean
           default: true
           x-field-uid: 5
-    Ospfv3Interface.Authentication:
-      description: |-
-        This contains OSPFv3 authentication properties.
-      type: object
-      properties:
-        auths:
-          description: |-
-            List of OSPFv3 SA Key IDs and Keys.
-          type: array
-          items:
-            $ref: '#/components/schemas/Ospfv3Authentication.Auth'
-          x-field-uid: 1
-    Ospfv3Authentication.Auth:
-      description: |-
-        Container of OSPFv3 interface Cryptographic authentication.
-      type: object
-      properties:
-        algo:
-          description: |-
-            The authentication algorithm used with the OSPFv3 SA.
-          $ref: '#/components/schemas/Ospfv3Authentication.Algo'
-          x-field-uid: 1
-        key_id:
-          description: |-
-            The unique OSPFv3 Authentication Key Identifier per-interface.
-          type: integer
-          format: uint32
-          minimum: 0
-          maximum: 65535
-          default: 1
-          x-field-uid: 2
-        key:
-          description: |-
-            An alphanumeric Cryptographic Authentication Key associated with this OSPFv3 SA.
-          type: string
-          minLength: 1
-          maxLength: 64
-          x-field-uid: 3
-    Ospfv3Authentication.Algo:
-      description: |-
-        The authentication algorithm used with the OSPFv3 SA.
-          - HMAC-SHA-1
-          - HMAC-SHA-256
-          - HMAC-SHA-384
-          - HMAC-SHA-512
-      type: object
-      properties:
-        choice:
-          type: string
-          default: hmac_sha_1
-          x-field-uid: 1
-          x-enum:
-            hmac_sha_1:
-              x-field-uid: 1
-            hmac_sha_256:
-              x-field-uid: 2
-            hmac_sha_384:
-              x-field-uid: 3
-            hmac_sha_512:
-              x-field-uid: 4
-          enum:
-          - hmac_sha_1
-          - hmac_sha_256
-          - hmac_sha_384
-          - hmac_sha_512
     Ospfv3.V6RouteRange:
       description: |-
         Emulated OSPFv3 IPv6 routes.

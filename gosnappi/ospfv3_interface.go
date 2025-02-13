@@ -13,14 +13,13 @@ import (
 // ***** Ospfv3Interface *****
 type ospfv3Interface struct {
 	validation
-	obj                  *otg.Ospfv3Interface
-	marshaller           marshalOspfv3Interface
-	unMarshaller         unMarshalOspfv3Interface
-	areaHolder           Ospfv3InterfaceArea
-	networkTypeHolder    Ospfv3InterfaceNetworkType
-	authenticationHolder Ospfv3InterfaceAuthentication
-	capabilitiesHolder   Ospfv3InterfaceCapabilities
-	optionsHolder        Ospfv3InterfaceOptions
+	obj                *otg.Ospfv3Interface
+	marshaller         marshalOspfv3Interface
+	unMarshaller       unMarshalOspfv3Interface
+	areaHolder         Ospfv3InterfaceArea
+	networkTypeHolder  Ospfv3InterfaceNetworkType
+	capabilitiesHolder Ospfv3InterfaceCapabilities
+	optionsHolder      Ospfv3InterfaceOptions
 }
 
 func NewOspfv3Interface() Ospfv3Interface {
@@ -250,7 +249,6 @@ func (obj *ospfv3Interface) Clone() (Ospfv3Interface, error) {
 func (obj *ospfv3Interface) setNil() {
 	obj.areaHolder = nil
 	obj.networkTypeHolder = nil
-	obj.authenticationHolder = nil
 	obj.capabilitiesHolder = nil
 	obj.optionsHolder = nil
 	obj.validationErrors = nil
@@ -308,14 +306,6 @@ type Ospfv3Interface interface {
 	SetNetworkType(value Ospfv3InterfaceNetworkType) Ospfv3Interface
 	// HasNetworkType checks if NetworkType has been set in Ospfv3Interface
 	HasNetworkType() bool
-	// Authentication returns Ospfv3InterfaceAuthentication, set in Ospfv3Interface.
-	// Ospfv3InterfaceAuthentication is this contains OSPFv3 authentication properties.
-	Authentication() Ospfv3InterfaceAuthentication
-	// SetAuthentication assigns Ospfv3InterfaceAuthentication provided by user to Ospfv3Interface.
-	// Ospfv3InterfaceAuthentication is this contains OSPFv3 authentication properties.
-	SetAuthentication(value Ospfv3InterfaceAuthentication) Ospfv3Interface
-	// HasAuthentication checks if Authentication has been set in Ospfv3Interface
-	HasAuthentication() bool
 	// Capabilities returns Ospfv3InterfaceCapabilities, set in Ospfv3Interface.
 	// Ospfv3InterfaceCapabilities is contains OSPFv3 interface capabilities.
 	Capabilities() Ospfv3InterfaceCapabilities
@@ -443,34 +433,6 @@ func (obj *ospfv3Interface) SetNetworkType(value Ospfv3InterfaceNetworkType) Osp
 	return obj
 }
 
-// OSPFv3 authentication properties.
-// Authentication returns a Ospfv3InterfaceAuthentication
-func (obj *ospfv3Interface) Authentication() Ospfv3InterfaceAuthentication {
-	if obj.obj.Authentication == nil {
-		obj.obj.Authentication = NewOspfv3InterfaceAuthentication().msg()
-	}
-	if obj.authenticationHolder == nil {
-		obj.authenticationHolder = &ospfv3InterfaceAuthentication{obj: obj.obj.Authentication}
-	}
-	return obj.authenticationHolder
-}
-
-// OSPFv3 authentication properties.
-// Authentication returns a Ospfv3InterfaceAuthentication
-func (obj *ospfv3Interface) HasAuthentication() bool {
-	return obj.obj.Authentication != nil
-}
-
-// OSPFv3 authentication properties.
-// SetAuthentication sets the Ospfv3InterfaceAuthentication value in the Ospfv3Interface object
-func (obj *ospfv3Interface) SetAuthentication(value Ospfv3InterfaceAuthentication) Ospfv3Interface {
-
-	obj.authenticationHolder = nil
-	obj.obj.Authentication = value.msg()
-
-	return obj
-}
-
 // Container for OSPFv3 interface capabilities.
 // Capabilities returns a Ospfv3InterfaceCapabilities
 func (obj *ospfv3Interface) Capabilities() Ospfv3InterfaceCapabilities {
@@ -550,11 +512,6 @@ func (obj *ospfv3Interface) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.NetworkType != nil {
 
 		obj.NetworkType().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Authentication != nil {
-
-		obj.Authentication().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Capabilities != nil {

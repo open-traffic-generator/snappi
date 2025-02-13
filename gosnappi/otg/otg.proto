@@ -7940,14 +7940,11 @@ message Ospfv3Interface {
   // The OSPF network link type.
   Ospfv3InterfaceNetworkType network_type = 4;
 
-  // OSPFv3 authentication properties.
-  Ospfv3InterfaceAuthentication authentication = 5;
-
   // Container for OSPFv3 interface capabilities.
-  Ospfv3InterfaceCapabilities capabilities = 6;
+  Ospfv3InterfaceCapabilities capabilities = 5;
 
   // Container for OSPFv3 optional interface properties.
-  Ospfv3InterfaceOptions options = 7;
+  Ospfv3InterfaceOptions options = 6;
 }
 
 // Container for OSPFv3 Area ID identifies the routing area to which the host belongs.
@@ -8057,48 +8054,6 @@ message Ospfv3InterfaceOptions {
   // V6: If set, the router/link should be included in IPv6 routing calculations.
   // default = True
   optional bool v6_bit = 5;
-}
-
-// This contains OSPFv3 authentication properties.
-message Ospfv3InterfaceAuthentication {
-
-  // List of OSPFv3 SA Key IDs and Keys.
-  repeated Ospfv3AuthenticationAuth auths = 1;
-}
-
-// Container of OSPFv3 interface Cryptographic authentication.
-message Ospfv3AuthenticationAuth {
-
-  // The authentication algorithm used with the OSPFv3 SA.
-  Ospfv3AuthenticationAlgo algo = 1;
-
-  // The unique OSPFv3 Authentication Key Identifier per-interface.
-  // default = 1
-  optional uint32 key_id = 2;
-
-  // An alphanumeric Cryptographic Authentication Key associated with this OSPFv3 SA.
-  optional string key = 3;
-}
-
-// The authentication algorithm used with the OSPFv3 SA.
-// - HMAC-SHA-1
-// - HMAC-SHA-256
-// - HMAC-SHA-384
-// - HMAC-SHA-512
-message Ospfv3AuthenticationAlgo {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      hmac_sha_1 = 1;
-      hmac_sha_256 = 2;
-      hmac_sha_384 = 3;
-      hmac_sha_512 = 4;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.hmac_sha_1
-  optional Choice.Enum choice = 1;
 }
 
 // Emulated OSPFv3 IPv6 routes.
