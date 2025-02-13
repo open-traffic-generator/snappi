@@ -16,6 +16,7 @@ type macsecRxStaticKey struct {
 	obj          *otg.MacsecRxStaticKey
 	marshaller   marshalMacsecRxStaticKey
 	unMarshaller unMarshalMacsecRxStaticKey
+	scsHolder    MacsecRxStaticKeyMacsecRxScIter
 }
 
 func NewMacsecRxStaticKey() MacsecRxStaticKey {
@@ -29,7 +30,7 @@ func (obj *macsecRxStaticKey) msg() *otg.MacsecRxStaticKey {
 }
 
 func (obj *macsecRxStaticKey) setMsg(msg *otg.MacsecRxStaticKey) MacsecRxStaticKey {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalmacsecRxStaticKey) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalmacsecRxStaticKey) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalmacsecRxStaticKey) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,7 +243,14 @@ func (obj *macsecRxStaticKey) Clone() (MacsecRxStaticKey, error) {
 	return newObj, nil
 }
 
-// MacsecRxStaticKey is static key Rx settings.
+func (obj *macsecRxStaticKey) setNil() {
+	obj.scsHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// MacsecRxStaticKey is container for Rx setting for static key.
 type MacsecRxStaticKey interface {
 	Validation
 	// msg marshals MacsecRxStaticKey to protobuf object *otg.MacsecRxStaticKey
@@ -264,117 +272,95 @@ type MacsecRxStaticKey interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// DutSystemId returns string, set in MacsecRxStaticKey.
-	DutSystemId() string
-	// SetDutSystemId assigns string provided by user to MacsecRxStaticKey
-	SetDutSystemId(value string) MacsecRxStaticKey
-	// HasDutSystemId checks if DutSystemId has been set in MacsecRxStaticKey
-	HasDutSystemId() bool
-	// DutSciPortId returns int32, set in MacsecRxStaticKey.
-	DutSciPortId() int32
-	// SetDutSciPortId assigns int32 provided by user to MacsecRxStaticKey
-	SetDutSciPortId(value int32) MacsecRxStaticKey
-	// HasDutSciPortId checks if DutSciPortId has been set in MacsecRxStaticKey
-	HasDutSciPortId() bool
-	// ReplayProtection returns bool, set in MacsecRxStaticKey.
-	ReplayProtection() bool
-	// SetReplayProtection assigns bool provided by user to MacsecRxStaticKey
-	SetReplayProtection(value bool) MacsecRxStaticKey
-	// HasReplayProtection checks if ReplayProtection has been set in MacsecRxStaticKey
-	HasReplayProtection() bool
-	// ReplayWindow returns int32, set in MacsecRxStaticKey.
-	ReplayWindow() int32
-	// SetReplayWindow assigns int32 provided by user to MacsecRxStaticKey
-	SetReplayWindow(value int32) MacsecRxStaticKey
-	// HasReplayWindow checks if ReplayWindow has been set in MacsecRxStaticKey
-	HasReplayWindow() bool
+	// Scs returns MacsecRxStaticKeyMacsecRxScIterIter, set in MacsecRxStaticKey
+	Scs() MacsecRxStaticKeyMacsecRxScIter
+	setNil()
 }
 
-// DUT system ID.
-// DutSystemId returns a string
-func (obj *macsecRxStaticKey) DutSystemId() string {
-
-	return *obj.obj.DutSystemId
-
+// Rx secure channels.
+// Scs returns a []MacsecRxSc
+func (obj *macsecRxStaticKey) Scs() MacsecRxStaticKeyMacsecRxScIter {
+	if len(obj.obj.Scs) == 0 {
+		obj.obj.Scs = []*otg.MacsecRxSc{}
+	}
+	if obj.scsHolder == nil {
+		obj.scsHolder = newMacsecRxStaticKeyMacsecRxScIter(&obj.obj.Scs).setMsg(obj)
+	}
+	return obj.scsHolder
 }
 
-// DUT system ID.
-// DutSystemId returns a string
-func (obj *macsecRxStaticKey) HasDutSystemId() bool {
-	return obj.obj.DutSystemId != nil
+type macsecRxStaticKeyMacsecRxScIter struct {
+	obj             *macsecRxStaticKey
+	macsecRxScSlice []MacsecRxSc
+	fieldPtr        *[]*otg.MacsecRxSc
 }
 
-// DUT system ID.
-// SetDutSystemId sets the string value in the MacsecRxStaticKey object
-func (obj *macsecRxStaticKey) SetDutSystemId(value string) MacsecRxStaticKey {
+func newMacsecRxStaticKeyMacsecRxScIter(ptr *[]*otg.MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter {
+	return &macsecRxStaticKeyMacsecRxScIter{fieldPtr: ptr}
+}
 
-	obj.obj.DutSystemId = &value
+type MacsecRxStaticKeyMacsecRxScIter interface {
+	setMsg(*macsecRxStaticKey) MacsecRxStaticKeyMacsecRxScIter
+	Items() []MacsecRxSc
+	Add() MacsecRxSc
+	Append(items ...MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter
+	Set(index int, newObj MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter
+	Clear() MacsecRxStaticKeyMacsecRxScIter
+	clearHolderSlice() MacsecRxStaticKeyMacsecRxScIter
+	appendHolderSlice(item MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter
+}
+
+func (obj *macsecRxStaticKeyMacsecRxScIter) setMsg(msg *macsecRxStaticKey) MacsecRxStaticKeyMacsecRxScIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&macsecRxSc{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// DUT SCI Port ID.
-// DutSciPortId returns a int32
-func (obj *macsecRxStaticKey) DutSciPortId() int32 {
-
-	return *obj.obj.DutSciPortId
-
+func (obj *macsecRxStaticKeyMacsecRxScIter) Items() []MacsecRxSc {
+	return obj.macsecRxScSlice
 }
 
-// DUT SCI Port ID.
-// DutSciPortId returns a int32
-func (obj *macsecRxStaticKey) HasDutSciPortId() bool {
-	return obj.obj.DutSciPortId != nil
+func (obj *macsecRxStaticKeyMacsecRxScIter) Add() MacsecRxSc {
+	newObj := &otg.MacsecRxSc{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &macsecRxSc{obj: newObj}
+	newLibObj.setDefault()
+	obj.macsecRxScSlice = append(obj.macsecRxScSlice, newLibObj)
+	return newLibObj
 }
 
-// DUT SCI Port ID.
-// SetDutSciPortId sets the int32 value in the MacsecRxStaticKey object
-func (obj *macsecRxStaticKey) SetDutSciPortId(value int32) MacsecRxStaticKey {
-
-	obj.obj.DutSciPortId = &value
+func (obj *macsecRxStaticKeyMacsecRxScIter) Append(items ...MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
+	}
 	return obj
 }
 
-// Enable replay protection on not.
-// ReplayProtection returns a bool
-func (obj *macsecRxStaticKey) ReplayProtection() bool {
-
-	return *obj.obj.ReplayProtection
-
-}
-
-// Enable replay protection on not.
-// ReplayProtection returns a bool
-func (obj *macsecRxStaticKey) HasReplayProtection() bool {
-	return obj.obj.ReplayProtection != nil
-}
-
-// Enable replay protection on not.
-// SetReplayProtection sets the bool value in the MacsecRxStaticKey object
-func (obj *macsecRxStaticKey) SetReplayProtection(value bool) MacsecRxStaticKey {
-
-	obj.obj.ReplayProtection = &value
+func (obj *macsecRxStaticKeyMacsecRxScIter) Set(index int, newObj MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.macsecRxScSlice[index] = newObj
 	return obj
 }
-
-// Replay window size.
-// ReplayWindow returns a int32
-func (obj *macsecRxStaticKey) ReplayWindow() int32 {
-
-	return *obj.obj.ReplayWindow
-
+func (obj *macsecRxStaticKeyMacsecRxScIter) Clear() MacsecRxStaticKeyMacsecRxScIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MacsecRxSc{}
+		obj.macsecRxScSlice = []MacsecRxSc{}
+	}
+	return obj
 }
-
-// Replay window size.
-// ReplayWindow returns a int32
-func (obj *macsecRxStaticKey) HasReplayWindow() bool {
-	return obj.obj.ReplayWindow != nil
+func (obj *macsecRxStaticKeyMacsecRxScIter) clearHolderSlice() MacsecRxStaticKeyMacsecRxScIter {
+	if len(obj.macsecRxScSlice) > 0 {
+		obj.macsecRxScSlice = []MacsecRxSc{}
+	}
+	return obj
 }
-
-// Replay window size.
-// SetReplayWindow sets the int32 value in the MacsecRxStaticKey object
-func (obj *macsecRxStaticKey) SetReplayWindow(value int32) MacsecRxStaticKey {
-
-	obj.obj.ReplayWindow = &value
+func (obj *macsecRxStaticKeyMacsecRxScIter) appendHolderSlice(item MacsecRxSc) MacsecRxStaticKeyMacsecRxScIter {
+	obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
 	return obj
 }
 
@@ -383,11 +369,16 @@ func (obj *macsecRxStaticKey) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.DutSystemId != nil {
+	if len(obj.obj.Scs) != 0 {
 
-		err := obj.validateMac(obj.DutSystemId())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on MacsecRxStaticKey.DutSystemId"))
+		if set_default {
+			obj.Scs().clearHolderSlice()
+			for _, item := range obj.obj.Scs {
+				obj.Scs().appendHolderSlice(&macsecRxSc{obj: item})
+			}
+		}
+		for _, item := range obj.Scs().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}
@@ -395,14 +386,5 @@ func (obj *macsecRxStaticKey) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *macsecRxStaticKey) setDefault() {
-	if obj.obj.DutSciPortId == nil {
-		obj.SetDutSciPortId(1)
-	}
-	if obj.obj.ReplayProtection == nil {
-		obj.SetReplayProtection(false)
-	}
-	if obj.obj.ReplayWindow == nil {
-		obj.SetReplayWindow(1)
-	}
 
 }

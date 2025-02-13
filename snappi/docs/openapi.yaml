@@ -10590,7 +10590,6 @@ components:
       type: object
       required:
       - name
-      - basic
       properties:
         name:
           x-field-uid: 1
@@ -10599,68 +10598,29 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
-        basic:
+        static_key:
           description: |-
-            This contains the basic properties of SecY.
-          $ref: '#/components/schemas/Macsec.Basic'
+            Static key properties properties of SecY. Static key is used in absence MKA.
+          $ref: '#/components/schemas/Macsec.StaticKey'
           x-field-uid: 2
-        txscs:
+        tx:
           description: |-
-            Tx secure channels.
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.TxSc'
+            Tx properties of SecY.
+          $ref: '#/components/schemas/Macsec.Tx'
           x-field-uid: 3
-        rxscs:
+        rx:
           description: |-
-            Rx secure channels.
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.RxSc'
+            Rx properties of SecY.
+          $ref: '#/components/schemas/Macsec.Rx'
           x-field-uid: 4
         crypto_engine:
           description: |-
-            This contains crypto engine properties of SecY.
+            Crypto engine properties of SecY.
           $ref: '#/components/schemas/Macsec.CryptoEngine'
           x-field-uid: 5
-        advance:
-          description: |-
-            This contains advance properties of SecY.
-          $ref: '#/components/schemas/Macsec.Advance'
-          x-field-uid: 6
-    Macsec.Basic:
+    Macsec.StaticKey:
       description: |-
-        A container of basic properties for a SecY.
-      type: object
-      properties:
-        key_generation:
-          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration'
-          x-field-uid: 1
-    Macsec.Basic.KeyGeneration:
-      description: |-
-        Key Generation.
-      type: object
-      properties:
-        choice:
-          description: |-
-            The type of control protocol of SecY.
-          type: string
-          default: mka
-          x-field-uid: 1
-          x-enum:
-            mka:
-              x-field-uid: 1
-            static:
-              x-field-uid: 2
-          enum:
-          - mka
-          - static
-        static:
-          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static'
-          x-field-uid: 2
-    Macsec.Basic.KeyGeneration.Static:
-      description: |-
-        The container for static key settings.
+        A container of static key properties for a SecY.
       type: object
       properties:
         cipher_suite:
@@ -10700,7 +10660,71 @@ components:
           - zero
           - thirty
           - fifty
-    Macsec.Basic.KeyGeneration.Static.SakPool:
+    Macsec.StaticKey.RekeyMode:
+      description: |-
+        Rekey mode.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Rekey mode choices.
+          type: string
+          default: dont_rekey
+          x-field-uid: 1
+          x-enum:
+            dont_rekey:
+              x-field-uid: 1
+            timer_based:
+              x-field-uid: 2
+            pn_based:
+              x-field-uid: 3
+          enum:
+          - dont_rekey
+          - timer_based
+          - pn_based
+        timer_based:
+          description: |-
+            Container for timer based periodic rekey properties.
+          x-field-uid: 2
+          $ref: '#/components/schemas/Macsec.StaticKey.RekeyMode.TimerBased'
+    Macsec.StaticKey.RekeyMode.TimerBased:
+      description: |-
+        Timer based periodic rekey properties.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Periodic rekey attempt choices.
+          type: string
+          default: continuous
+          x-field-uid: 1
+          x-enum:
+            continuous:
+              x-field-uid: 1
+            fixed_count:
+              x-field-uid: 2
+          enum:
+          - continuous
+          - fixed_count
+        fixed_count:
+          description: |-
+            Fixed rekey attempts.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 65535
+          default: 10
+          x-field-uid: 2
+        interval:
+          description: |-
+            Periodic rekey interval (sec).
+          type: integer
+          format: uint32
+          minimum: 30
+          maximum: 65535
+          default: 300
+          x-field-uid: 3
+    Macsec.StaticKey.SakPool:
       description: |-
         The container for Secure Association Key(SAK) Pool.
       type: object
@@ -10716,8 +10740,8 @@ components:
           type: array
           x-field-uid: 2
           items:
-            $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.Sak'
-    Macsec.Basic.KeyGeneration.Static.Sak:
+            $ref: '#/components/schemas/Macsec.StaticKey.Sak'
+    Macsec.StaticKey.Sak:
       description: |-
         The container for SAK.
       type: object
@@ -10731,25 +10755,48 @@ components:
           maxLength: 32
           default: F123456789ABCDEF0123456789ABCDEF
           x-field-uid: 1
+    Macsec.Tx:
+      description: |-
+        A container of Tx properties of SecY.
+      type: object
+      properties:
+        scs:
+          description: |-
+            Tx secure channels.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.TxSc'
+          x-field-uid: 1
+        static_key:
+          $ref: '#/components/schemas/Macsec.Tx.StaticKey'
+          x-field-uid: 2
+    Macsec.Tx.StaticKey:
+      description: |-
+        Tx setting for static key.
+      type: object
+      properties:
+        rekey_mode:
+          $ref: '#/components/schemas/Macsec.StaticKey.RekeyMode'
+          x-field-uid: 1
     Macsec.TxSc:
       description: |-
         The container for Tx SC settings.
       type: object
       properties:
-        static_key:
-          $ref: '#/components/schemas/Macsec.TxSc.StaticKey'
-          x-field-uid: 1
         end_station:
           description: |-
             End station on not.
           type: boolean
           default: false
-          x-field-uid: 2
+          x-field-uid: 1
         include_sci:
           description: |-
             Include SCI on not.
           type: boolean
           default: false
+          x-field-uid: 2
+        static_key:
+          $ref: '#/components/schemas/Macsec.TxSc.StaticKey'
           x-field-uid: 3
     Macsec.TxSc.StaticKey:
       description: |-
@@ -10777,19 +10824,45 @@ components:
         sak_pool:
           description: |-
             Tx SAK pool.
-          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.SakPool'
+          $ref: '#/components/schemas/Macsec.StaticKey.SakPool'
           x-field-uid: 4
-    Macsec.RxSc:
+    Macsec.Rx:
       description: |-
-        The container for Rx SC settings.
+        The container for Rx settings of SecY.
       type: object
       properties:
-        static_key:
-          $ref: '#/components/schemas/Macsec.RxSc.StaticKey'
+        replay_protection:
+          description: "Enable replay protection on not. "
+          type: boolean
+          default: false
           x-field-uid: 1
-    Macsec.RxSc.StaticKey:
+        replay_window:
+          description: "Replay window size. "
+          type: integer
+          format: uint32
+          minimum: 1
+          default: 1
+          x-field-uid: 2
+        static_key:
+          description: |-
+            Rx setting for static key.
+          $ref: '#/components/schemas/Macsec.Rx.StaticKey'
+          x-field-uid: 3
+    Macsec.Rx.StaticKey:
       description: |-
-        Rx SC settings for static key.
+        Container for Rx setting for static key.
+      type: object
+      properties:
+        scs:
+          description: |-
+            Rx secure channels.
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.RxSc'
+          x-field-uid: 1
+    Macsec.RxSc:
+      description: |-
+        Rx SC settings.
       type: object
       properties:
         dut_system_id:
@@ -10813,35 +10886,15 @@ components:
           minimum: 0
           maximum: 4294967295
           default: 0
-          x-field-uid: 3
-        replay_protection:
-          description: "Enable replay protection on not. "
-          type: boolean
-          default: false
           x-field-uid: 4
-        replay_window:
-          description: "Replay window size. "
-          type: integer
-          format: uint32
-          minimum: 1
-          default: 1
-          x-field-uid: 5
         sak_pool:
           description: |-
             Rx SAK pool.
-          $ref: '#/components/schemas/Macsec.Basic.KeyGeneration.Static.SakPool'
-          x-field-uid: 6
+          $ref: '#/components/schemas/Macsec.StaticKey.SakPool'
+          x-field-uid: 3
     Macsec.CryptoEngine:
       description: |-
         A container of crypto engine properties of a SecY.
-      type: object
-      properties:
-        engine_type:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type'
-          x-field-uid: 1
-    Macsec.CryptoEngine.Type:
-      description: |-
-        Crypto engine type.
       type: object
       properties:
         choice:
@@ -10859,34 +10912,34 @@ components:
           - stateless_encryption_only
           - stateful_encryption_decryption
         stateless_encryption_only:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatelessEncryptionOnly'
           x-field-uid: 2
         stateful_encryption_decryption:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatefulEncryptionDecryption'
           x-field-uid: 3
-    Macsec.CryptoEngine.Type.StatelessEncryptionOnly:
+    Macsec.CryptoEngine.StatelessEncryptionOnly:
       description: |-
         The container for stateless encryption only engine settings.
       type: object
       properties:
         tx_pn:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatelessEncryptionOnly.TxPn'
           x-field-uid: 1
         traffic:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatelessEncryptionOnly.Traffic'
           x-field-uid: 3
-    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption:
+    Macsec.CryptoEngine.StatefulEncryptionDecryption:
       description: |-
         The container for stateful encryption and decryption engine settings.
       type: object
       properties:
         initial_pn:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatefulEncryptionDecryption.InitialPn'
           x-field-uid: 1
         hardware_acceleration:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration'
           x-field-uid: 2
-    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.TxPn:
+    Macsec.CryptoEngine.StatelessEncryptionOnly.TxPn:
       description: |-
         Tx PN settings.
       type: object
@@ -10906,12 +10959,12 @@ components:
           - fixed_pn
           - incrementing_pn
         fixed:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatelessEncryptionOnly.FixedPn'
           x-field-uid: 2
         incrementing:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatelessEncryptionOnly.IncrementingPn'
           x-field-uid: 3
-    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.FixedPn:
+    Macsec.CryptoEngine.StatelessEncryptionOnly.FixedPn:
       description: |-
         Fixed PN settings.
       type: object
@@ -10931,7 +10984,7 @@ components:
           minimum: 1
           default: 6
           x-field-uid: 2
-    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.IncrementingPn:
+    Macsec.CryptoEngine.StatelessEncryptionOnly.IncrementingPn:
       description: |-
         Incrementing PN settings.
       type: object
@@ -10959,7 +11012,7 @@ components:
           minimum: 1
           default: 65536
           x-field-uid: 3
-    Macsec.CryptoEngine.Type.StatelessEncryptionOnly.Traffic:
+    Macsec.CryptoEngine.StatelessEncryptionOnly.Traffic:
       description: |-
         Encryption only traffic settings.
       type: object
@@ -10970,7 +11023,7 @@ components:
           type: boolean
           default: true
           x-field-uid: 1
-    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.InitialPn:
+    Macsec.CryptoEngine.StatefulEncryptionDecryption.InitialPn:
       description: |-
         Initial PN settings.
       type: object
@@ -10983,7 +11036,7 @@ components:
           minimum: 1
           default: 1
           x-field-uid: 1
-    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration:
+    Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration:
       description: |-
         Hardware acceleration settings.
       type: object
@@ -11003,9 +11056,9 @@ components:
           - none
           - inline_crypto
         inline_crypto:
-          $ref: '#/components/schemas/Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto'
+          $ref: '#/components/schemas/Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto'
           x-field-uid: 2
-    Macsec.CryptoEngine.Type.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto:
+    Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto:
       description: |-
         Inline cryto engine settings.
       type: object
@@ -11071,86 +11124,6 @@ components:
           - source_mac
           - sci_sytem_id
           - sci_port_id
-    Macsec.Advance:
-      description: |-
-        A container of advance properties SecY.
-      type: object
-      properties:
-        static_key:
-          $ref: '#/components/schemas/Macsec.Advance.StaticKey'
-          x-field-uid: 1
-    Macsec.Advance.StaticKey:
-      description: |-
-        Static key advance settings.
-      type: object
-      properties:
-        rekey_mode:
-          $ref: '#/components/schemas/Macsec.Advance.StaticKey.RekeyMode'
-          x-field-uid: 1
-    Macsec.Advance.StaticKey.RekeyMode:
-      description: |-
-        Rekey mode.
-      type: object
-      properties:
-        choice:
-          description: |-
-            Rekey mode choices.
-          type: string
-          default: dont_rekey
-          x-field-uid: 1
-          x-enum:
-            dont_rekey:
-              x-field-uid: 1
-            timer_based:
-              x-field-uid: 2
-            pn_based:
-              x-field-uid: 3
-          enum:
-          - dont_rekey
-          - timer_based
-          - pn_based
-        timer_based:
-          description: |-
-            Container for timer based periodic rekey properties.
-          x-field-uid: 2
-          $ref: '#/components/schemas/Macsec.Advance.StaticKey.RekeyMode.TimerBased'
-    Macsec.Advance.StaticKey.RekeyMode.TimerBased:
-      description: |-
-        Timer based periodic rekey properties.
-      type: object
-      properties:
-        choice:
-          description: |-
-            Periodic rekey attempt choices.
-          type: string
-          default: continuous
-          x-field-uid: 1
-          x-enum:
-            continuous:
-              x-field-uid: 1
-            fixed_count:
-              x-field-uid: 2
-          enum:
-          - continuous
-          - fixed_count
-        fixed_count:
-          description: |-
-            Fixed rekey attempts.
-          type: integer
-          format: uint32
-          minimum: 1
-          maximum: 65535
-          default: 10
-          x-field-uid: 2
-        interval:
-          description: |-
-            Periodic rekey interval (sec).
-          type: integer
-          format: uint32
-          minimum: 30
-          maximum: 65535
-          default: 300
-          x-field-uid: 3
     Device.Mka:
       description: |-
         A container of properties for a MKA supplicant.

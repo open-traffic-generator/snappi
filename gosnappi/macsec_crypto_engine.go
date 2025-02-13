@@ -13,10 +13,11 @@ import (
 // ***** MacsecCryptoEngine *****
 type macsecCryptoEngine struct {
 	validation
-	obj              *otg.MacsecCryptoEngine
-	marshaller       marshalMacsecCryptoEngine
-	unMarshaller     unMarshalMacsecCryptoEngine
-	engineTypeHolder MacsecCryptoEngineType
+	obj                                *otg.MacsecCryptoEngine
+	marshaller                         marshalMacsecCryptoEngine
+	unMarshaller                       unMarshalMacsecCryptoEngine
+	statelessEncryptionOnlyHolder      MacsecCryptoEngineStatelessEncryptionOnly
+	statefulEncryptionDecryptionHolder MacsecCryptoEngineStatefulEncryptionDecryption
 }
 
 func NewMacsecCryptoEngine() MacsecCryptoEngine {
@@ -244,7 +245,8 @@ func (obj *macsecCryptoEngine) Clone() (MacsecCryptoEngine, error) {
 }
 
 func (obj *macsecCryptoEngine) setNil() {
-	obj.engineTypeHolder = nil
+	obj.statelessEncryptionOnlyHolder = nil
+	obj.statefulEncryptionDecryptionHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -272,41 +274,129 @@ type MacsecCryptoEngine interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// EngineType returns MacsecCryptoEngineType, set in MacsecCryptoEngine.
-	// MacsecCryptoEngineType is crypto engine type.
-	EngineType() MacsecCryptoEngineType
-	// SetEngineType assigns MacsecCryptoEngineType provided by user to MacsecCryptoEngine.
-	// MacsecCryptoEngineType is crypto engine type.
-	SetEngineType(value MacsecCryptoEngineType) MacsecCryptoEngine
-	// HasEngineType checks if EngineType has been set in MacsecCryptoEngine
-	HasEngineType() bool
+	// Choice returns MacsecCryptoEngineChoiceEnum, set in MacsecCryptoEngine
+	Choice() MacsecCryptoEngineChoiceEnum
+	// setChoice assigns MacsecCryptoEngineChoiceEnum provided by user to MacsecCryptoEngine
+	setChoice(value MacsecCryptoEngineChoiceEnum) MacsecCryptoEngine
+	// HasChoice checks if Choice has been set in MacsecCryptoEngine
+	HasChoice() bool
+	// StatelessEncryptionOnly returns MacsecCryptoEngineStatelessEncryptionOnly, set in MacsecCryptoEngine.
+	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine settings.
+	StatelessEncryptionOnly() MacsecCryptoEngineStatelessEncryptionOnly
+	// SetStatelessEncryptionOnly assigns MacsecCryptoEngineStatelessEncryptionOnly provided by user to MacsecCryptoEngine.
+	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine settings.
+	SetStatelessEncryptionOnly(value MacsecCryptoEngineStatelessEncryptionOnly) MacsecCryptoEngine
+	// HasStatelessEncryptionOnly checks if StatelessEncryptionOnly has been set in MacsecCryptoEngine
+	HasStatelessEncryptionOnly() bool
+	// StatefulEncryptionDecryption returns MacsecCryptoEngineStatefulEncryptionDecryption, set in MacsecCryptoEngine.
+	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine settings.
+	StatefulEncryptionDecryption() MacsecCryptoEngineStatefulEncryptionDecryption
+	// SetStatefulEncryptionDecryption assigns MacsecCryptoEngineStatefulEncryptionDecryption provided by user to MacsecCryptoEngine.
+	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine settings.
+	SetStatefulEncryptionDecryption(value MacsecCryptoEngineStatefulEncryptionDecryption) MacsecCryptoEngine
+	// HasStatefulEncryptionDecryption checks if StatefulEncryptionDecryption has been set in MacsecCryptoEngine
+	HasStatefulEncryptionDecryption() bool
 	setNil()
 }
 
-// description is TBD
-// EngineType returns a MacsecCryptoEngineType
-func (obj *macsecCryptoEngine) EngineType() MacsecCryptoEngineType {
-	if obj.obj.EngineType == nil {
-		obj.obj.EngineType = NewMacsecCryptoEngineType().msg()
+type MacsecCryptoEngineChoiceEnum string
+
+// Enum of Choice on MacsecCryptoEngine
+var MacsecCryptoEngineChoice = struct {
+	STATELESS_ENCRYPTION_ONLY      MacsecCryptoEngineChoiceEnum
+	STATEFUL_ENCRYPTION_DECRYPTION MacsecCryptoEngineChoiceEnum
+}{
+	STATELESS_ENCRYPTION_ONLY:      MacsecCryptoEngineChoiceEnum("stateless_encryption_only"),
+	STATEFUL_ENCRYPTION_DECRYPTION: MacsecCryptoEngineChoiceEnum("stateful_encryption_decryption"),
+}
+
+func (obj *macsecCryptoEngine) Choice() MacsecCryptoEngineChoiceEnum {
+	return MacsecCryptoEngineChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// Engine type based on encryption and/ or decryption capability..
+// Choice returns a string
+func (obj *macsecCryptoEngine) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
+
+func (obj *macsecCryptoEngine) setChoice(value MacsecCryptoEngineChoiceEnum) MacsecCryptoEngine {
+	intValue, ok := otg.MacsecCryptoEngine_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on MacsecCryptoEngineChoiceEnum", string(value)))
+		return obj
 	}
-	if obj.engineTypeHolder == nil {
-		obj.engineTypeHolder = &macsecCryptoEngineType{obj: obj.obj.EngineType}
+	enumValue := otg.MacsecCryptoEngine_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.StatefulEncryptionDecryption = nil
+	obj.statefulEncryptionDecryptionHolder = nil
+	obj.obj.StatelessEncryptionOnly = nil
+	obj.statelessEncryptionOnlyHolder = nil
+
+	if value == MacsecCryptoEngineChoice.STATELESS_ENCRYPTION_ONLY {
+		obj.obj.StatelessEncryptionOnly = NewMacsecCryptoEngineStatelessEncryptionOnly().msg()
 	}
-	return obj.engineTypeHolder
+
+	if value == MacsecCryptoEngineChoice.STATEFUL_ENCRYPTION_DECRYPTION {
+		obj.obj.StatefulEncryptionDecryption = NewMacsecCryptoEngineStatefulEncryptionDecryption().msg()
+	}
+
+	return obj
 }
 
 // description is TBD
-// EngineType returns a MacsecCryptoEngineType
-func (obj *macsecCryptoEngine) HasEngineType() bool {
-	return obj.obj.EngineType != nil
+// StatelessEncryptionOnly returns a MacsecCryptoEngineStatelessEncryptionOnly
+func (obj *macsecCryptoEngine) StatelessEncryptionOnly() MacsecCryptoEngineStatelessEncryptionOnly {
+	if obj.obj.StatelessEncryptionOnly == nil {
+		obj.setChoice(MacsecCryptoEngineChoice.STATELESS_ENCRYPTION_ONLY)
+	}
+	if obj.statelessEncryptionOnlyHolder == nil {
+		obj.statelessEncryptionOnlyHolder = &macsecCryptoEngineStatelessEncryptionOnly{obj: obj.obj.StatelessEncryptionOnly}
+	}
+	return obj.statelessEncryptionOnlyHolder
 }
 
 // description is TBD
-// SetEngineType sets the MacsecCryptoEngineType value in the MacsecCryptoEngine object
-func (obj *macsecCryptoEngine) SetEngineType(value MacsecCryptoEngineType) MacsecCryptoEngine {
+// StatelessEncryptionOnly returns a MacsecCryptoEngineStatelessEncryptionOnly
+func (obj *macsecCryptoEngine) HasStatelessEncryptionOnly() bool {
+	return obj.obj.StatelessEncryptionOnly != nil
+}
 
-	obj.engineTypeHolder = nil
-	obj.obj.EngineType = value.msg()
+// description is TBD
+// SetStatelessEncryptionOnly sets the MacsecCryptoEngineStatelessEncryptionOnly value in the MacsecCryptoEngine object
+func (obj *macsecCryptoEngine) SetStatelessEncryptionOnly(value MacsecCryptoEngineStatelessEncryptionOnly) MacsecCryptoEngine {
+	obj.setChoice(MacsecCryptoEngineChoice.STATELESS_ENCRYPTION_ONLY)
+	obj.statelessEncryptionOnlyHolder = nil
+	obj.obj.StatelessEncryptionOnly = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// StatefulEncryptionDecryption returns a MacsecCryptoEngineStatefulEncryptionDecryption
+func (obj *macsecCryptoEngine) StatefulEncryptionDecryption() MacsecCryptoEngineStatefulEncryptionDecryption {
+	if obj.obj.StatefulEncryptionDecryption == nil {
+		obj.setChoice(MacsecCryptoEngineChoice.STATEFUL_ENCRYPTION_DECRYPTION)
+	}
+	if obj.statefulEncryptionDecryptionHolder == nil {
+		obj.statefulEncryptionDecryptionHolder = &macsecCryptoEngineStatefulEncryptionDecryption{obj: obj.obj.StatefulEncryptionDecryption}
+	}
+	return obj.statefulEncryptionDecryptionHolder
+}
+
+// description is TBD
+// StatefulEncryptionDecryption returns a MacsecCryptoEngineStatefulEncryptionDecryption
+func (obj *macsecCryptoEngine) HasStatefulEncryptionDecryption() bool {
+	return obj.obj.StatefulEncryptionDecryption != nil
+}
+
+// description is TBD
+// SetStatefulEncryptionDecryption sets the MacsecCryptoEngineStatefulEncryptionDecryption value in the MacsecCryptoEngine object
+func (obj *macsecCryptoEngine) SetStatefulEncryptionDecryption(value MacsecCryptoEngineStatefulEncryptionDecryption) MacsecCryptoEngine {
+	obj.setChoice(MacsecCryptoEngineChoice.STATEFUL_ENCRYPTION_DECRYPTION)
+	obj.statefulEncryptionDecryptionHolder = nil
+	obj.obj.StatefulEncryptionDecryption = value.msg()
 
 	return obj
 }
@@ -316,13 +406,47 @@ func (obj *macsecCryptoEngine) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.EngineType != nil {
+	if obj.obj.StatelessEncryptionOnly != nil {
 
-		obj.EngineType().validateObj(vObj, set_default)
+		obj.StatelessEncryptionOnly().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.StatefulEncryptionDecryption != nil {
+
+		obj.StatefulEncryptionDecryption().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *macsecCryptoEngine) setDefault() {
+	var choices_set int = 0
+	var choice MacsecCryptoEngineChoiceEnum
+
+	if obj.obj.StatelessEncryptionOnly != nil {
+		choices_set += 1
+		choice = MacsecCryptoEngineChoice.STATELESS_ENCRYPTION_ONLY
+	}
+
+	if obj.obj.StatefulEncryptionDecryption != nil {
+		choices_set += 1
+		choice = MacsecCryptoEngineChoice.STATEFUL_ENCRYPTION_DECRYPTION
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(MacsecCryptoEngineChoice.STATELESS_ENCRYPTION_ONLY)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in MacsecCryptoEngine")
+			}
+		} else {
+			intVal := otg.MacsecCryptoEngine_Choice_Enum_value[string(choice)]
+			enumValue := otg.MacsecCryptoEngine_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

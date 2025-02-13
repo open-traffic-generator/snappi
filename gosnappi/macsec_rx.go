@@ -250,7 +250,7 @@ func (obj *macsecRx) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecRx is the container for Rx settings.
+// MacsecRx is the container for Rx settings of SecY.
 type MacsecRx interface {
 	Validation
 	// msg marshals MacsecRx to protobuf object *otg.MacsecRx
@@ -272,18 +272,74 @@ type MacsecRx interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// ReplayProtection returns bool, set in MacsecRx.
+	ReplayProtection() bool
+	// SetReplayProtection assigns bool provided by user to MacsecRx
+	SetReplayProtection(value bool) MacsecRx
+	// HasReplayProtection checks if ReplayProtection has been set in MacsecRx
+	HasReplayProtection() bool
+	// ReplayWindow returns uint32, set in MacsecRx.
+	ReplayWindow() uint32
+	// SetReplayWindow assigns uint32 provided by user to MacsecRx
+	SetReplayWindow(value uint32) MacsecRx
+	// HasReplayWindow checks if ReplayWindow has been set in MacsecRx
+	HasReplayWindow() bool
 	// StaticKey returns MacsecRxStaticKey, set in MacsecRx.
-	// MacsecRxStaticKey is static key Rx settings.
+	// MacsecRxStaticKey is container for Rx setting for static key.
 	StaticKey() MacsecRxStaticKey
 	// SetStaticKey assigns MacsecRxStaticKey provided by user to MacsecRx.
-	// MacsecRxStaticKey is static key Rx settings.
+	// MacsecRxStaticKey is container for Rx setting for static key.
 	SetStaticKey(value MacsecRxStaticKey) MacsecRx
 	// HasStaticKey checks if StaticKey has been set in MacsecRx
 	HasStaticKey() bool
 	setNil()
 }
 
-// description is TBD
+// Enable replay protection on not.
+// ReplayProtection returns a bool
+func (obj *macsecRx) ReplayProtection() bool {
+
+	return *obj.obj.ReplayProtection
+
+}
+
+// Enable replay protection on not.
+// ReplayProtection returns a bool
+func (obj *macsecRx) HasReplayProtection() bool {
+	return obj.obj.ReplayProtection != nil
+}
+
+// Enable replay protection on not.
+// SetReplayProtection sets the bool value in the MacsecRx object
+func (obj *macsecRx) SetReplayProtection(value bool) MacsecRx {
+
+	obj.obj.ReplayProtection = &value
+	return obj
+}
+
+// Replay window size.
+// ReplayWindow returns a uint32
+func (obj *macsecRx) ReplayWindow() uint32 {
+
+	return *obj.obj.ReplayWindow
+
+}
+
+// Replay window size.
+// ReplayWindow returns a uint32
+func (obj *macsecRx) HasReplayWindow() bool {
+	return obj.obj.ReplayWindow != nil
+}
+
+// Replay window size.
+// SetReplayWindow sets the uint32 value in the MacsecRx object
+func (obj *macsecRx) SetReplayWindow(value uint32) MacsecRx {
+
+	obj.obj.ReplayWindow = &value
+	return obj
+}
+
+// Rx setting for static key.
 // StaticKey returns a MacsecRxStaticKey
 func (obj *macsecRx) StaticKey() MacsecRxStaticKey {
 	if obj.obj.StaticKey == nil {
@@ -295,13 +351,13 @@ func (obj *macsecRx) StaticKey() MacsecRxStaticKey {
 	return obj.staticKeyHolder
 }
 
-// description is TBD
+// Rx setting for static key.
 // StaticKey returns a MacsecRxStaticKey
 func (obj *macsecRx) HasStaticKey() bool {
 	return obj.obj.StaticKey != nil
 }
 
-// description is TBD
+// Rx setting for static key.
 // SetStaticKey sets the MacsecRxStaticKey value in the MacsecRx object
 func (obj *macsecRx) SetStaticKey(value MacsecRxStaticKey) MacsecRx {
 
@@ -316,6 +372,16 @@ func (obj *macsecRx) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
+	if obj.obj.ReplayWindow != nil {
+
+		if *obj.obj.ReplayWindow < 1 || *obj.obj.ReplayWindow > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecRx.ReplayWindow <= 4294967295 but Got %d", *obj.obj.ReplayWindow))
+		}
+
+	}
+
 	if obj.obj.StaticKey != nil {
 
 		obj.StaticKey().validateObj(vObj, set_default)
@@ -324,5 +390,11 @@ func (obj *macsecRx) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *macsecRx) setDefault() {
+	if obj.obj.ReplayProtection == nil {
+		obj.SetReplayProtection(false)
+	}
+	if obj.obj.ReplayWindow == nil {
+		obj.SetReplayWindow(1)
+	}
 
 }

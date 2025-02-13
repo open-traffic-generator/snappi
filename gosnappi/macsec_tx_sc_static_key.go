@@ -16,7 +16,7 @@ type macsecTxScStaticKey struct {
 	obj           *otg.MacsecTxScStaticKey
 	marshaller    marshalMacsecTxScStaticKey
 	unMarshaller  unMarshalMacsecTxScStaticKey
-	sakPoolHolder MacsecBasicKeyGenerationStaticSakPool
+	sakPoolHolder MacsecStaticKeySakPool
 }
 
 func NewMacsecTxScStaticKey() MacsecTxScStaticKey {
@@ -290,12 +290,12 @@ type MacsecTxScStaticKey interface {
 	SetConfidentiality(value bool) MacsecTxScStaticKey
 	// HasConfidentiality checks if Confidentiality has been set in MacsecTxScStaticKey
 	HasConfidentiality() bool
-	// SakPool returns MacsecBasicKeyGenerationStaticSakPool, set in MacsecTxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
-	SakPool() MacsecBasicKeyGenerationStaticSakPool
-	// SetSakPool assigns MacsecBasicKeyGenerationStaticSakPool provided by user to MacsecTxScStaticKey.
-	// MacsecBasicKeyGenerationStaticSakPool is the container for Secure Association Key(SAK) Pool.
-	SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecTxScStaticKey
+	// SakPool returns MacsecStaticKeySakPool, set in MacsecTxScStaticKey.
+	// MacsecStaticKeySakPool is the container for Secure Association Key(SAK) Pool.
+	SakPool() MacsecStaticKeySakPool
+	// SetSakPool assigns MacsecStaticKeySakPool provided by user to MacsecTxScStaticKey.
+	// MacsecStaticKeySakPool is the container for Secure Association Key(SAK) Pool.
+	SetSakPool(value MacsecStaticKeySakPool) MacsecTxScStaticKey
 	// HasSakPool checks if SakPool has been set in MacsecTxScStaticKey
 	HasSakPool() bool
 	setNil()
@@ -368,26 +368,26 @@ func (obj *macsecTxScStaticKey) SetConfidentiality(value bool) MacsecTxScStaticK
 }
 
 // Tx SAK pool.
-// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
-func (obj *macsecTxScStaticKey) SakPool() MacsecBasicKeyGenerationStaticSakPool {
+// SakPool returns a MacsecStaticKeySakPool
+func (obj *macsecTxScStaticKey) SakPool() MacsecStaticKeySakPool {
 	if obj.obj.SakPool == nil {
-		obj.obj.SakPool = NewMacsecBasicKeyGenerationStaticSakPool().msg()
+		obj.obj.SakPool = NewMacsecStaticKeySakPool().msg()
 	}
 	if obj.sakPoolHolder == nil {
-		obj.sakPoolHolder = &macsecBasicKeyGenerationStaticSakPool{obj: obj.obj.SakPool}
+		obj.sakPoolHolder = &macsecStaticKeySakPool{obj: obj.obj.SakPool}
 	}
 	return obj.sakPoolHolder
 }
 
 // Tx SAK pool.
-// SakPool returns a MacsecBasicKeyGenerationStaticSakPool
+// SakPool returns a MacsecStaticKeySakPool
 func (obj *macsecTxScStaticKey) HasSakPool() bool {
 	return obj.obj.SakPool != nil
 }
 
 // Tx SAK pool.
-// SetSakPool sets the MacsecBasicKeyGenerationStaticSakPool value in the MacsecTxScStaticKey object
-func (obj *macsecTxScStaticKey) SetSakPool(value MacsecBasicKeyGenerationStaticSakPool) MacsecTxScStaticKey {
+// SetSakPool sets the MacsecStaticKeySakPool value in the MacsecTxScStaticKey object
+func (obj *macsecTxScStaticKey) SetSakPool(value MacsecStaticKeySakPool) MacsecTxScStaticKey {
 
 	obj.sakPoolHolder = nil
 	obj.obj.SakPool = value.msg()

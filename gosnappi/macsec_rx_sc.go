@@ -13,10 +13,10 @@ import (
 // ***** MacsecRxSc *****
 type macsecRxSc struct {
 	validation
-	obj             *otg.MacsecRxSc
-	marshaller      marshalMacsecRxSc
-	unMarshaller    unMarshalMacsecRxSc
-	staticKeyHolder MacsecRxScStaticKey
+	obj           *otg.MacsecRxSc
+	marshaller    marshalMacsecRxSc
+	unMarshaller  unMarshalMacsecRxSc
+	sakPoolHolder MacsecStaticKeySakPool
 }
 
 func NewMacsecRxSc() MacsecRxSc {
@@ -244,13 +244,13 @@ func (obj *macsecRxSc) Clone() (MacsecRxSc, error) {
 }
 
 func (obj *macsecRxSc) setNil() {
-	obj.staticKeyHolder = nil
+	obj.sakPoolHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecRxSc is the container for Rx SC settings.
+// MacsecRxSc is rx SC settings.
 type MacsecRxSc interface {
 	Validation
 	// msg marshals MacsecRxSc to protobuf object *otg.MacsecRxSc
@@ -272,41 +272,125 @@ type MacsecRxSc interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// StaticKey returns MacsecRxScStaticKey, set in MacsecRxSc.
-	// MacsecRxScStaticKey is rx SC settings for static key.
-	StaticKey() MacsecRxScStaticKey
-	// SetStaticKey assigns MacsecRxScStaticKey provided by user to MacsecRxSc.
-	// MacsecRxScStaticKey is rx SC settings for static key.
-	SetStaticKey(value MacsecRxScStaticKey) MacsecRxSc
-	// HasStaticKey checks if StaticKey has been set in MacsecRxSc
-	HasStaticKey() bool
+	// DutSystemId returns string, set in MacsecRxSc.
+	DutSystemId() string
+	// SetDutSystemId assigns string provided by user to MacsecRxSc
+	SetDutSystemId(value string) MacsecRxSc
+	// HasDutSystemId checks if DutSystemId has been set in MacsecRxSc
+	HasDutSystemId() bool
+	// DutPortId returns uint32, set in MacsecRxSc.
+	DutPortId() uint32
+	// SetDutPortId assigns uint32 provided by user to MacsecRxSc
+	SetDutPortId(value uint32) MacsecRxSc
+	// HasDutPortId checks if DutPortId has been set in MacsecRxSc
+	HasDutPortId() bool
+	// DutMsbXpn returns uint32, set in MacsecRxSc.
+	DutMsbXpn() uint32
+	// SetDutMsbXpn assigns uint32 provided by user to MacsecRxSc
+	SetDutMsbXpn(value uint32) MacsecRxSc
+	// HasDutMsbXpn checks if DutMsbXpn has been set in MacsecRxSc
+	HasDutMsbXpn() bool
+	// SakPool returns MacsecStaticKeySakPool, set in MacsecRxSc.
+	// MacsecStaticKeySakPool is the container for Secure Association Key(SAK) Pool.
+	SakPool() MacsecStaticKeySakPool
+	// SetSakPool assigns MacsecStaticKeySakPool provided by user to MacsecRxSc.
+	// MacsecStaticKeySakPool is the container for Secure Association Key(SAK) Pool.
+	SetSakPool(value MacsecStaticKeySakPool) MacsecRxSc
+	// HasSakPool checks if SakPool has been set in MacsecRxSc
+	HasSakPool() bool
 	setNil()
 }
 
-// description is TBD
-// StaticKey returns a MacsecRxScStaticKey
-func (obj *macsecRxSc) StaticKey() MacsecRxScStaticKey {
-	if obj.obj.StaticKey == nil {
-		obj.obj.StaticKey = NewMacsecRxScStaticKey().msg()
-	}
-	if obj.staticKeyHolder == nil {
-		obj.staticKeyHolder = &macsecRxScStaticKey{obj: obj.obj.StaticKey}
-	}
-	return obj.staticKeyHolder
+// System ID in DUT SCI.
+// DutSystemId returns a string
+func (obj *macsecRxSc) DutSystemId() string {
+
+	return *obj.obj.DutSystemId
+
 }
 
-// description is TBD
-// StaticKey returns a MacsecRxScStaticKey
-func (obj *macsecRxSc) HasStaticKey() bool {
-	return obj.obj.StaticKey != nil
+// System ID in DUT SCI.
+// DutSystemId returns a string
+func (obj *macsecRxSc) HasDutSystemId() bool {
+	return obj.obj.DutSystemId != nil
 }
 
-// description is TBD
-// SetStaticKey sets the MacsecRxScStaticKey value in the MacsecRxSc object
-func (obj *macsecRxSc) SetStaticKey(value MacsecRxScStaticKey) MacsecRxSc {
+// System ID in DUT SCI.
+// SetDutSystemId sets the string value in the MacsecRxSc object
+func (obj *macsecRxSc) SetDutSystemId(value string) MacsecRxSc {
 
-	obj.staticKeyHolder = nil
-	obj.obj.StaticKey = value.msg()
+	obj.obj.DutSystemId = &value
+	return obj
+}
+
+// Port ID in DUT SCI.
+// DutPortId returns a uint32
+func (obj *macsecRxSc) DutPortId() uint32 {
+
+	return *obj.obj.DutPortId
+
+}
+
+// Port ID in DUT SCI.
+// DutPortId returns a uint32
+func (obj *macsecRxSc) HasDutPortId() bool {
+	return obj.obj.DutPortId != nil
+}
+
+// Port ID in DUT SCI.
+// SetDutPortId sets the uint32 value in the MacsecRxSc object
+func (obj *macsecRxSc) SetDutPortId(value uint32) MacsecRxSc {
+
+	obj.obj.DutPortId = &value
+	return obj
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// DutMsbXpn returns a uint32
+func (obj *macsecRxSc) DutMsbXpn() uint32 {
+
+	return *obj.obj.DutMsbXpn
+
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// DutMsbXpn returns a uint32
+func (obj *macsecRxSc) HasDutMsbXpn() bool {
+	return obj.obj.DutMsbXpn != nil
+}
+
+// DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to construct the 64 bits XPN value when test starts.
+// SetDutMsbXpn sets the uint32 value in the MacsecRxSc object
+func (obj *macsecRxSc) SetDutMsbXpn(value uint32) MacsecRxSc {
+
+	obj.obj.DutMsbXpn = &value
+	return obj
+}
+
+// Rx SAK pool.
+// SakPool returns a MacsecStaticKeySakPool
+func (obj *macsecRxSc) SakPool() MacsecStaticKeySakPool {
+	if obj.obj.SakPool == nil {
+		obj.obj.SakPool = NewMacsecStaticKeySakPool().msg()
+	}
+	if obj.sakPoolHolder == nil {
+		obj.sakPoolHolder = &macsecStaticKeySakPool{obj: obj.obj.SakPool}
+	}
+	return obj.sakPoolHolder
+}
+
+// Rx SAK pool.
+// SakPool returns a MacsecStaticKeySakPool
+func (obj *macsecRxSc) HasSakPool() bool {
+	return obj.obj.SakPool != nil
+}
+
+// Rx SAK pool.
+// SetSakPool sets the MacsecStaticKeySakPool value in the MacsecRxSc object
+func (obj *macsecRxSc) SetSakPool(value MacsecStaticKeySakPool) MacsecRxSc {
+
+	obj.sakPoolHolder = nil
+	obj.obj.SakPool = value.msg()
 
 	return obj
 }
@@ -316,13 +400,48 @@ func (obj *macsecRxSc) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.StaticKey != nil {
+	if obj.obj.DutSystemId != nil {
 
-		obj.StaticKey().validateObj(vObj, set_default)
+		err := obj.validateMac(obj.DutSystemId())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on MacsecRxSc.DutSystemId"))
+		}
+
+	}
+
+	if obj.obj.DutPortId != nil {
+
+		if *obj.obj.DutPortId < 1 || *obj.obj.DutPortId > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecRxSc.DutPortId <= 65535 but Got %d", *obj.obj.DutPortId))
+		}
+
+	}
+
+	if obj.obj.DutMsbXpn != nil {
+
+		if *obj.obj.DutMsbXpn > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= MacsecRxSc.DutMsbXpn <= 4294967295 but Got %d", *obj.obj.DutMsbXpn))
+		}
+
+	}
+
+	if obj.obj.SakPool != nil {
+
+		obj.SakPool().validateObj(vObj, set_default)
 	}
 
 }
 
 func (obj *macsecRxSc) setDefault() {
+	if obj.obj.DutPortId == nil {
+		obj.SetDutPortId(1)
+	}
+	if obj.obj.DutMsbXpn == nil {
+		obj.SetDutMsbXpn(0)
+	}
 
 }

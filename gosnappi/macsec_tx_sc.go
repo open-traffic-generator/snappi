@@ -272,14 +272,6 @@ type MacsecTxSc interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// StaticKey returns MacsecTxScStaticKey, set in MacsecTxSc.
-	// MacsecTxScStaticKey is tx SC setting for static key.
-	StaticKey() MacsecTxScStaticKey
-	// SetStaticKey assigns MacsecTxScStaticKey provided by user to MacsecTxSc.
-	// MacsecTxScStaticKey is tx SC setting for static key.
-	SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc
-	// HasStaticKey checks if StaticKey has been set in MacsecTxSc
-	HasStaticKey() bool
 	// EndStation returns bool, set in MacsecTxSc.
 	EndStation() bool
 	// SetEndStation assigns bool provided by user to MacsecTxSc
@@ -292,35 +284,15 @@ type MacsecTxSc interface {
 	SetIncludeSci(value bool) MacsecTxSc
 	// HasIncludeSci checks if IncludeSci has been set in MacsecTxSc
 	HasIncludeSci() bool
+	// StaticKey returns MacsecTxScStaticKey, set in MacsecTxSc.
+	// MacsecTxScStaticKey is tx SC setting for static key.
+	StaticKey() MacsecTxScStaticKey
+	// SetStaticKey assigns MacsecTxScStaticKey provided by user to MacsecTxSc.
+	// MacsecTxScStaticKey is tx SC setting for static key.
+	SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc
+	// HasStaticKey checks if StaticKey has been set in MacsecTxSc
+	HasStaticKey() bool
 	setNil()
-}
-
-// description is TBD
-// StaticKey returns a MacsecTxScStaticKey
-func (obj *macsecTxSc) StaticKey() MacsecTxScStaticKey {
-	if obj.obj.StaticKey == nil {
-		obj.obj.StaticKey = NewMacsecTxScStaticKey().msg()
-	}
-	if obj.staticKeyHolder == nil {
-		obj.staticKeyHolder = &macsecTxScStaticKey{obj: obj.obj.StaticKey}
-	}
-	return obj.staticKeyHolder
-}
-
-// description is TBD
-// StaticKey returns a MacsecTxScStaticKey
-func (obj *macsecTxSc) HasStaticKey() bool {
-	return obj.obj.StaticKey != nil
-}
-
-// description is TBD
-// SetStaticKey sets the MacsecTxScStaticKey value in the MacsecTxSc object
-func (obj *macsecTxSc) SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc {
-
-	obj.staticKeyHolder = nil
-	obj.obj.StaticKey = value.msg()
-
-	return obj
 }
 
 // End station on not.
@@ -364,6 +336,34 @@ func (obj *macsecTxSc) HasIncludeSci() bool {
 func (obj *macsecTxSc) SetIncludeSci(value bool) MacsecTxSc {
 
 	obj.obj.IncludeSci = &value
+	return obj
+}
+
+// description is TBD
+// StaticKey returns a MacsecTxScStaticKey
+func (obj *macsecTxSc) StaticKey() MacsecTxScStaticKey {
+	if obj.obj.StaticKey == nil {
+		obj.obj.StaticKey = NewMacsecTxScStaticKey().msg()
+	}
+	if obj.staticKeyHolder == nil {
+		obj.staticKeyHolder = &macsecTxScStaticKey{obj: obj.obj.StaticKey}
+	}
+	return obj.staticKeyHolder
+}
+
+// description is TBD
+// StaticKey returns a MacsecTxScStaticKey
+func (obj *macsecTxSc) HasStaticKey() bool {
+	return obj.obj.StaticKey != nil
+}
+
+// description is TBD
+// SetStaticKey sets the MacsecTxScStaticKey value in the MacsecTxSc object
+func (obj *macsecTxSc) SetStaticKey(value MacsecTxScStaticKey) MacsecTxSc {
+
+	obj.staticKeyHolder = nil
+	obj.obj.StaticKey = value.msg()
+
 	return obj
 }
 

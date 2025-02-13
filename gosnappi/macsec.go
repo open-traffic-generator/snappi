@@ -16,11 +16,10 @@ type macsec struct {
 	obj                *otg.Macsec
 	marshaller         marshalMacsec
 	unMarshaller       unMarshalMacsec
-	basicHolder        MacsecBasic
-	txscsHolder        MacsecMacsecTxScIter
-	rxscsHolder        MacsecMacsecRxScIter
+	staticKeyHolder    MacsecStaticKey
+	txHolder           MacsecTx
+	rxHolder           MacsecRx
 	cryptoEngineHolder MacsecCryptoEngine
-	advanceHolder      MacsecAdvance
 }
 
 func NewMacsec() Macsec {
@@ -248,11 +247,10 @@ func (obj *macsec) Clone() (Macsec, error) {
 }
 
 func (obj *macsec) setNil() {
-	obj.basicHolder = nil
-	obj.txscsHolder = nil
-	obj.rxscsHolder = nil
+	obj.staticKeyHolder = nil
+	obj.txHolder = nil
+	obj.rxHolder = nil
 	obj.cryptoEngineHolder = nil
-	obj.advanceHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -284,16 +282,30 @@ type Macsec interface {
 	Name() string
 	// SetName assigns string provided by user to Macsec
 	SetName(value string) Macsec
-	// Basic returns MacsecBasic, set in Macsec.
-	// MacsecBasic is a container of basic properties for a SecY.
-	Basic() MacsecBasic
-	// SetBasic assigns MacsecBasic provided by user to Macsec.
-	// MacsecBasic is a container of basic properties for a SecY.
-	SetBasic(value MacsecBasic) Macsec
-	// Txscs returns MacsecMacsecTxScIterIter, set in Macsec
-	Txscs() MacsecMacsecTxScIter
-	// Rxscs returns MacsecMacsecRxScIterIter, set in Macsec
-	Rxscs() MacsecMacsecRxScIter
+	// StaticKey returns MacsecStaticKey, set in Macsec.
+	// MacsecStaticKey is a container of static key properties for a SecY.
+	StaticKey() MacsecStaticKey
+	// SetStaticKey assigns MacsecStaticKey provided by user to Macsec.
+	// MacsecStaticKey is a container of static key properties for a SecY.
+	SetStaticKey(value MacsecStaticKey) Macsec
+	// HasStaticKey checks if StaticKey has been set in Macsec
+	HasStaticKey() bool
+	// Tx returns MacsecTx, set in Macsec.
+	// MacsecTx is a container of Tx properties of SecY.
+	Tx() MacsecTx
+	// SetTx assigns MacsecTx provided by user to Macsec.
+	// MacsecTx is a container of Tx properties of SecY.
+	SetTx(value MacsecTx) Macsec
+	// HasTx checks if Tx has been set in Macsec
+	HasTx() bool
+	// Rx returns MacsecRx, set in Macsec.
+	// MacsecRx is the container for Rx settings of SecY.
+	Rx() MacsecRx
+	// SetRx assigns MacsecRx provided by user to Macsec.
+	// MacsecRx is the container for Rx settings of SecY.
+	SetRx(value MacsecRx) Macsec
+	// HasRx checks if Rx has been set in Macsec
+	HasRx() bool
 	// CryptoEngine returns MacsecCryptoEngine, set in Macsec.
 	// MacsecCryptoEngine is a container of crypto engine properties of a SecY.
 	CryptoEngine() MacsecCryptoEngine
@@ -302,14 +314,6 @@ type Macsec interface {
 	SetCryptoEngine(value MacsecCryptoEngine) Macsec
 	// HasCryptoEngine checks if CryptoEngine has been set in Macsec
 	HasCryptoEngine() bool
-	// Advance returns MacsecAdvance, set in Macsec.
-	// MacsecAdvance is a container of advance properties SecY.
-	Advance() MacsecAdvance
-	// SetAdvance assigns MacsecAdvance provided by user to Macsec.
-	// MacsecAdvance is a container of advance properties SecY.
-	SetAdvance(value MacsecAdvance) Macsec
-	// HasAdvance checks if Advance has been set in Macsec
-	HasAdvance() bool
 	setNil()
 }
 
@@ -329,203 +333,91 @@ func (obj *macsec) SetName(value string) Macsec {
 	return obj
 }
 
-// This contains the basic properties of SecY.
-// Basic returns a MacsecBasic
-func (obj *macsec) Basic() MacsecBasic {
-	if obj.obj.Basic == nil {
-		obj.obj.Basic = NewMacsecBasic().msg()
+// Static key properties properties of SecY. Static key is used in absence MKA.
+// StaticKey returns a MacsecStaticKey
+func (obj *macsec) StaticKey() MacsecStaticKey {
+	if obj.obj.StaticKey == nil {
+		obj.obj.StaticKey = NewMacsecStaticKey().msg()
 	}
-	if obj.basicHolder == nil {
-		obj.basicHolder = &macsecBasic{obj: obj.obj.Basic}
+	if obj.staticKeyHolder == nil {
+		obj.staticKeyHolder = &macsecStaticKey{obj: obj.obj.StaticKey}
 	}
-	return obj.basicHolder
+	return obj.staticKeyHolder
 }
 
-// This contains the basic properties of SecY.
-// SetBasic sets the MacsecBasic value in the Macsec object
-func (obj *macsec) SetBasic(value MacsecBasic) Macsec {
+// Static key properties properties of SecY. Static key is used in absence MKA.
+// StaticKey returns a MacsecStaticKey
+func (obj *macsec) HasStaticKey() bool {
+	return obj.obj.StaticKey != nil
+}
 
-	obj.basicHolder = nil
-	obj.obj.Basic = value.msg()
+// Static key properties properties of SecY. Static key is used in absence MKA.
+// SetStaticKey sets the MacsecStaticKey value in the Macsec object
+func (obj *macsec) SetStaticKey(value MacsecStaticKey) Macsec {
+
+	obj.staticKeyHolder = nil
+	obj.obj.StaticKey = value.msg()
 
 	return obj
 }
 
-// Tx secure channels.
-// Txscs returns a []MacsecTxSc
-func (obj *macsec) Txscs() MacsecMacsecTxScIter {
-	if len(obj.obj.Txscs) == 0 {
-		obj.obj.Txscs = []*otg.MacsecTxSc{}
+// Tx properties of SecY.
+// Tx returns a MacsecTx
+func (obj *macsec) Tx() MacsecTx {
+	if obj.obj.Tx == nil {
+		obj.obj.Tx = NewMacsecTx().msg()
 	}
-	if obj.txscsHolder == nil {
-		obj.txscsHolder = newMacsecMacsecTxScIter(&obj.obj.Txscs).setMsg(obj)
+	if obj.txHolder == nil {
+		obj.txHolder = &macsecTx{obj: obj.obj.Tx}
 	}
-	return obj.txscsHolder
+	return obj.txHolder
 }
 
-type macsecMacsecTxScIter struct {
-	obj             *macsec
-	macsecTxScSlice []MacsecTxSc
-	fieldPtr        *[]*otg.MacsecTxSc
+// Tx properties of SecY.
+// Tx returns a MacsecTx
+func (obj *macsec) HasTx() bool {
+	return obj.obj.Tx != nil
 }
 
-func newMacsecMacsecTxScIter(ptr *[]*otg.MacsecTxSc) MacsecMacsecTxScIter {
-	return &macsecMacsecTxScIter{fieldPtr: ptr}
-}
+// Tx properties of SecY.
+// SetTx sets the MacsecTx value in the Macsec object
+func (obj *macsec) SetTx(value MacsecTx) Macsec {
 
-type MacsecMacsecTxScIter interface {
-	setMsg(*macsec) MacsecMacsecTxScIter
-	Items() []MacsecTxSc
-	Add() MacsecTxSc
-	Append(items ...MacsecTxSc) MacsecMacsecTxScIter
-	Set(index int, newObj MacsecTxSc) MacsecMacsecTxScIter
-	Clear() MacsecMacsecTxScIter
-	clearHolderSlice() MacsecMacsecTxScIter
-	appendHolderSlice(item MacsecTxSc) MacsecMacsecTxScIter
-}
+	obj.txHolder = nil
+	obj.obj.Tx = value.msg()
 
-func (obj *macsecMacsecTxScIter) setMsg(msg *macsec) MacsecMacsecTxScIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&macsecTxSc{obj: val})
-	}
-	obj.obj = msg
 	return obj
 }
 
-func (obj *macsecMacsecTxScIter) Items() []MacsecTxSc {
-	return obj.macsecTxScSlice
-}
-
-func (obj *macsecMacsecTxScIter) Add() MacsecTxSc {
-	newObj := &otg.MacsecTxSc{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &macsecTxSc{obj: newObj}
-	newLibObj.setDefault()
-	obj.macsecTxScSlice = append(obj.macsecTxScSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *macsecMacsecTxScIter) Append(items ...MacsecTxSc) MacsecMacsecTxScIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
+// Rx properties of SecY.
+// Rx returns a MacsecRx
+func (obj *macsec) Rx() MacsecRx {
+	if obj.obj.Rx == nil {
+		obj.obj.Rx = NewMacsecRx().msg()
 	}
-	return obj
-}
-
-func (obj *macsecMacsecTxScIter) Set(index int, newObj MacsecTxSc) MacsecMacsecTxScIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.macsecTxScSlice[index] = newObj
-	return obj
-}
-func (obj *macsecMacsecTxScIter) Clear() MacsecMacsecTxScIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MacsecTxSc{}
-		obj.macsecTxScSlice = []MacsecTxSc{}
+	if obj.rxHolder == nil {
+		obj.rxHolder = &macsecRx{obj: obj.obj.Rx}
 	}
-	return obj
-}
-func (obj *macsecMacsecTxScIter) clearHolderSlice() MacsecMacsecTxScIter {
-	if len(obj.macsecTxScSlice) > 0 {
-		obj.macsecTxScSlice = []MacsecTxSc{}
-	}
-	return obj
-}
-func (obj *macsecMacsecTxScIter) appendHolderSlice(item MacsecTxSc) MacsecMacsecTxScIter {
-	obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
-	return obj
+	return obj.rxHolder
 }
 
-// Rx secure channels.
-// Rxscs returns a []MacsecRxSc
-func (obj *macsec) Rxscs() MacsecMacsecRxScIter {
-	if len(obj.obj.Rxscs) == 0 {
-		obj.obj.Rxscs = []*otg.MacsecRxSc{}
-	}
-	if obj.rxscsHolder == nil {
-		obj.rxscsHolder = newMacsecMacsecRxScIter(&obj.obj.Rxscs).setMsg(obj)
-	}
-	return obj.rxscsHolder
+// Rx properties of SecY.
+// Rx returns a MacsecRx
+func (obj *macsec) HasRx() bool {
+	return obj.obj.Rx != nil
 }
 
-type macsecMacsecRxScIter struct {
-	obj             *macsec
-	macsecRxScSlice []MacsecRxSc
-	fieldPtr        *[]*otg.MacsecRxSc
-}
+// Rx properties of SecY.
+// SetRx sets the MacsecRx value in the Macsec object
+func (obj *macsec) SetRx(value MacsecRx) Macsec {
 
-func newMacsecMacsecRxScIter(ptr *[]*otg.MacsecRxSc) MacsecMacsecRxScIter {
-	return &macsecMacsecRxScIter{fieldPtr: ptr}
-}
+	obj.rxHolder = nil
+	obj.obj.Rx = value.msg()
 
-type MacsecMacsecRxScIter interface {
-	setMsg(*macsec) MacsecMacsecRxScIter
-	Items() []MacsecRxSc
-	Add() MacsecRxSc
-	Append(items ...MacsecRxSc) MacsecMacsecRxScIter
-	Set(index int, newObj MacsecRxSc) MacsecMacsecRxScIter
-	Clear() MacsecMacsecRxScIter
-	clearHolderSlice() MacsecMacsecRxScIter
-	appendHolderSlice(item MacsecRxSc) MacsecMacsecRxScIter
-}
-
-func (obj *macsecMacsecRxScIter) setMsg(msg *macsec) MacsecMacsecRxScIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&macsecRxSc{obj: val})
-	}
-	obj.obj = msg
 	return obj
 }
 
-func (obj *macsecMacsecRxScIter) Items() []MacsecRxSc {
-	return obj.macsecRxScSlice
-}
-
-func (obj *macsecMacsecRxScIter) Add() MacsecRxSc {
-	newObj := &otg.MacsecRxSc{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &macsecRxSc{obj: newObj}
-	newLibObj.setDefault()
-	obj.macsecRxScSlice = append(obj.macsecRxScSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *macsecMacsecRxScIter) Append(items ...MacsecRxSc) MacsecMacsecRxScIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
-	}
-	return obj
-}
-
-func (obj *macsecMacsecRxScIter) Set(index int, newObj MacsecRxSc) MacsecMacsecRxScIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.macsecRxScSlice[index] = newObj
-	return obj
-}
-func (obj *macsecMacsecRxScIter) Clear() MacsecMacsecRxScIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.MacsecRxSc{}
-		obj.macsecRxScSlice = []MacsecRxSc{}
-	}
-	return obj
-}
-func (obj *macsecMacsecRxScIter) clearHolderSlice() MacsecMacsecRxScIter {
-	if len(obj.macsecRxScSlice) > 0 {
-		obj.macsecRxScSlice = []MacsecRxSc{}
-	}
-	return obj
-}
-func (obj *macsecMacsecRxScIter) appendHolderSlice(item MacsecRxSc) MacsecMacsecRxScIter {
-	obj.macsecRxScSlice = append(obj.macsecRxScSlice, item)
-	return obj
-}
-
-// This contains crypto engine properties of SecY.
+// Crypto engine properties of SecY.
 // CryptoEngine returns a MacsecCryptoEngine
 func (obj *macsec) CryptoEngine() MacsecCryptoEngine {
 	if obj.obj.CryptoEngine == nil {
@@ -537,46 +429,18 @@ func (obj *macsec) CryptoEngine() MacsecCryptoEngine {
 	return obj.cryptoEngineHolder
 }
 
-// This contains crypto engine properties of SecY.
+// Crypto engine properties of SecY.
 // CryptoEngine returns a MacsecCryptoEngine
 func (obj *macsec) HasCryptoEngine() bool {
 	return obj.obj.CryptoEngine != nil
 }
 
-// This contains crypto engine properties of SecY.
+// Crypto engine properties of SecY.
 // SetCryptoEngine sets the MacsecCryptoEngine value in the Macsec object
 func (obj *macsec) SetCryptoEngine(value MacsecCryptoEngine) Macsec {
 
 	obj.cryptoEngineHolder = nil
 	obj.obj.CryptoEngine = value.msg()
-
-	return obj
-}
-
-// This contains advance properties of SecY.
-// Advance returns a MacsecAdvance
-func (obj *macsec) Advance() MacsecAdvance {
-	if obj.obj.Advance == nil {
-		obj.obj.Advance = NewMacsecAdvance().msg()
-	}
-	if obj.advanceHolder == nil {
-		obj.advanceHolder = &macsecAdvance{obj: obj.obj.Advance}
-	}
-	return obj.advanceHolder
-}
-
-// This contains advance properties of SecY.
-// Advance returns a MacsecAdvance
-func (obj *macsec) HasAdvance() bool {
-	return obj.obj.Advance != nil
-}
-
-// This contains advance properties of SecY.
-// SetAdvance sets the MacsecAdvance value in the Macsec object
-func (obj *macsec) SetAdvance(value MacsecAdvance) Macsec {
-
-	obj.advanceHolder = nil
-	obj.obj.Advance = value.msg()
 
 	return obj
 }
@@ -591,52 +455,24 @@ func (obj *macsec) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Macsec")
 	}
 
-	// Basic is required
-	if obj.obj.Basic == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Basic is required field on interface Macsec")
+	if obj.obj.StaticKey != nil {
+
+		obj.StaticKey().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Basic != nil {
+	if obj.obj.Tx != nil {
 
-		obj.Basic().validateObj(vObj, set_default)
+		obj.Tx().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Txscs) != 0 {
+	if obj.obj.Rx != nil {
 
-		if set_default {
-			obj.Txscs().clearHolderSlice()
-			for _, item := range obj.obj.Txscs {
-				obj.Txscs().appendHolderSlice(&macsecTxSc{obj: item})
-			}
-		}
-		for _, item := range obj.Txscs().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
-	}
-
-	if len(obj.obj.Rxscs) != 0 {
-
-		if set_default {
-			obj.Rxscs().clearHolderSlice()
-			for _, item := range obj.obj.Rxscs {
-				obj.Rxscs().appendHolderSlice(&macsecRxSc{obj: item})
-			}
-		}
-		for _, item := range obj.Rxscs().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
+		obj.Rx().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.CryptoEngine != nil {
 
 		obj.CryptoEngine().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Advance != nil {
-
-		obj.Advance().validateObj(vObj, set_default)
 	}
 
 }

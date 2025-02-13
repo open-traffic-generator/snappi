@@ -16,6 +16,7 @@ type macsecTx struct {
 	obj             *otg.MacsecTx
 	marshaller      marshalMacsecTx
 	unMarshaller    unMarshalMacsecTx
+	scsHolder       MacsecTxMacsecTxScIter
 	staticKeyHolder MacsecTxStaticKey
 }
 
@@ -244,13 +245,14 @@ func (obj *macsecTx) Clone() (MacsecTx, error) {
 }
 
 func (obj *macsecTx) setNil() {
+	obj.scsHolder = nil
 	obj.staticKeyHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecTx is the container for Tx settings.
+// MacsecTx is a container of Tx properties of SecY.
 type MacsecTx interface {
 	Validation
 	// msg marshals MacsecTx to protobuf object *otg.MacsecTx
@@ -272,15 +274,104 @@ type MacsecTx interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// Scs returns MacsecTxMacsecTxScIterIter, set in MacsecTx
+	Scs() MacsecTxMacsecTxScIter
 	// StaticKey returns MacsecTxStaticKey, set in MacsecTx.
-	// MacsecTxStaticKey is static key Tx settings.
+	// MacsecTxStaticKey is tx setting for static key.
 	StaticKey() MacsecTxStaticKey
 	// SetStaticKey assigns MacsecTxStaticKey provided by user to MacsecTx.
-	// MacsecTxStaticKey is static key Tx settings.
+	// MacsecTxStaticKey is tx setting for static key.
 	SetStaticKey(value MacsecTxStaticKey) MacsecTx
 	// HasStaticKey checks if StaticKey has been set in MacsecTx
 	HasStaticKey() bool
 	setNil()
+}
+
+// Tx secure channels.
+// Scs returns a []MacsecTxSc
+func (obj *macsecTx) Scs() MacsecTxMacsecTxScIter {
+	if len(obj.obj.Scs) == 0 {
+		obj.obj.Scs = []*otg.MacsecTxSc{}
+	}
+	if obj.scsHolder == nil {
+		obj.scsHolder = newMacsecTxMacsecTxScIter(&obj.obj.Scs).setMsg(obj)
+	}
+	return obj.scsHolder
+}
+
+type macsecTxMacsecTxScIter struct {
+	obj             *macsecTx
+	macsecTxScSlice []MacsecTxSc
+	fieldPtr        *[]*otg.MacsecTxSc
+}
+
+func newMacsecTxMacsecTxScIter(ptr *[]*otg.MacsecTxSc) MacsecTxMacsecTxScIter {
+	return &macsecTxMacsecTxScIter{fieldPtr: ptr}
+}
+
+type MacsecTxMacsecTxScIter interface {
+	setMsg(*macsecTx) MacsecTxMacsecTxScIter
+	Items() []MacsecTxSc
+	Add() MacsecTxSc
+	Append(items ...MacsecTxSc) MacsecTxMacsecTxScIter
+	Set(index int, newObj MacsecTxSc) MacsecTxMacsecTxScIter
+	Clear() MacsecTxMacsecTxScIter
+	clearHolderSlice() MacsecTxMacsecTxScIter
+	appendHolderSlice(item MacsecTxSc) MacsecTxMacsecTxScIter
+}
+
+func (obj *macsecTxMacsecTxScIter) setMsg(msg *macsecTx) MacsecTxMacsecTxScIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&macsecTxSc{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *macsecTxMacsecTxScIter) Items() []MacsecTxSc {
+	return obj.macsecTxScSlice
+}
+
+func (obj *macsecTxMacsecTxScIter) Add() MacsecTxSc {
+	newObj := &otg.MacsecTxSc{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &macsecTxSc{obj: newObj}
+	newLibObj.setDefault()
+	obj.macsecTxScSlice = append(obj.macsecTxScSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *macsecTxMacsecTxScIter) Append(items ...MacsecTxSc) MacsecTxMacsecTxScIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
+	}
+	return obj
+}
+
+func (obj *macsecTxMacsecTxScIter) Set(index int, newObj MacsecTxSc) MacsecTxMacsecTxScIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.macsecTxScSlice[index] = newObj
+	return obj
+}
+func (obj *macsecTxMacsecTxScIter) Clear() MacsecTxMacsecTxScIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MacsecTxSc{}
+		obj.macsecTxScSlice = []MacsecTxSc{}
+	}
+	return obj
+}
+func (obj *macsecTxMacsecTxScIter) clearHolderSlice() MacsecTxMacsecTxScIter {
+	if len(obj.macsecTxScSlice) > 0 {
+		obj.macsecTxScSlice = []MacsecTxSc{}
+	}
+	return obj
+}
+func (obj *macsecTxMacsecTxScIter) appendHolderSlice(item MacsecTxSc) MacsecTxMacsecTxScIter {
+	obj.macsecTxScSlice = append(obj.macsecTxScSlice, item)
+	return obj
 }
 
 // description is TBD
@@ -314,6 +405,20 @@ func (obj *macsecTx) SetStaticKey(value MacsecTxStaticKey) MacsecTx {
 func (obj *macsecTx) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if len(obj.obj.Scs) != 0 {
+
+		if set_default {
+			obj.Scs().clearHolderSlice()
+			for _, item := range obj.obj.Scs {
+				obj.Scs().appendHolderSlice(&macsecTxSc{obj: item})
+			}
+		}
+		for _, item := range obj.Scs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 	if obj.obj.StaticKey != nil {
