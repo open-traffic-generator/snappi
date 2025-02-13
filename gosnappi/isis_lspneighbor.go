@@ -13,10 +13,9 @@ import (
 // ***** IsisLspneighbor *****
 type isisLspneighbor struct {
 	validation
-	obj                 *otg.IsisLspneighbor
-	marshaller          marshalIsisLspneighbor
-	unMarshaller        unMarshalIsisLspneighbor
-	adjacencySidsHolder IsisLspneighborIsisLspAdjacencySIDIter
+	obj          *otg.IsisLspneighbor
+	marshaller   marshalIsisLspneighbor
+	unMarshaller unMarshalIsisLspneighbor
 }
 
 func NewIsisLspneighbor() IsisLspneighbor {
@@ -30,7 +29,7 @@ func (obj *isisLspneighbor) msg() *otg.IsisLspneighbor {
 }
 
 func (obj *isisLspneighbor) setMsg(msg *otg.IsisLspneighbor) IsisLspneighbor {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalisisLspneighbor) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalisisLspneighbor) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalisisLspneighbor) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -243,13 +242,6 @@ func (obj *isisLspneighbor) Clone() (IsisLspneighbor, error) {
 	return newObj, nil
 }
 
-func (obj *isisLspneighbor) setNil() {
-	obj.adjacencySidsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // IsisLspneighbor is this contains IS neighbors.
 type IsisLspneighbor interface {
 	Validation
@@ -278,9 +270,6 @@ type IsisLspneighbor interface {
 	SetSystemId(value string) IsisLspneighbor
 	// HasSystemId checks if SystemId has been set in IsisLspneighbor
 	HasSystemId() bool
-	// AdjacencySids returns IsisLspneighborIsisLspAdjacencySIDIterIter, set in IsisLspneighbor
-	AdjacencySids() IsisLspneighborIsisLspAdjacencySIDIter
-	setNil()
 }
 
 // The System ID for this emulated ISIS router, e.g. "640100010000".
@@ -305,93 +294,6 @@ func (obj *isisLspneighbor) SetSystemId(value string) IsisLspneighbor {
 	return obj
 }
 
-// List of segment routing adjacency SIDs.
-// AdjacencySids returns a []IsisLspAdjacencySID
-func (obj *isisLspneighbor) AdjacencySids() IsisLspneighborIsisLspAdjacencySIDIter {
-	if len(obj.obj.AdjacencySids) == 0 {
-		obj.obj.AdjacencySids = []*otg.IsisLspAdjacencySID{}
-	}
-	if obj.adjacencySidsHolder == nil {
-		obj.adjacencySidsHolder = newIsisLspneighborIsisLspAdjacencySIDIter(&obj.obj.AdjacencySids).setMsg(obj)
-	}
-	return obj.adjacencySidsHolder
-}
-
-type isisLspneighborIsisLspAdjacencySIDIter struct {
-	obj                      *isisLspneighbor
-	isisLspAdjacencySIDSlice []IsisLspAdjacencySID
-	fieldPtr                 *[]*otg.IsisLspAdjacencySID
-}
-
-func newIsisLspneighborIsisLspAdjacencySIDIter(ptr *[]*otg.IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter {
-	return &isisLspneighborIsisLspAdjacencySIDIter{fieldPtr: ptr}
-}
-
-type IsisLspneighborIsisLspAdjacencySIDIter interface {
-	setMsg(*isisLspneighbor) IsisLspneighborIsisLspAdjacencySIDIter
-	Items() []IsisLspAdjacencySID
-	Add() IsisLspAdjacencySID
-	Append(items ...IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter
-	Set(index int, newObj IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter
-	Clear() IsisLspneighborIsisLspAdjacencySIDIter
-	clearHolderSlice() IsisLspneighborIsisLspAdjacencySIDIter
-	appendHolderSlice(item IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter
-}
-
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) setMsg(msg *isisLspneighbor) IsisLspneighborIsisLspAdjacencySIDIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisLspAdjacencySID{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) Items() []IsisLspAdjacencySID {
-	return obj.isisLspAdjacencySIDSlice
-}
-
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) Add() IsisLspAdjacencySID {
-	newObj := &otg.IsisLspAdjacencySID{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisLspAdjacencySID{obj: newObj}
-	newLibObj.setDefault()
-	obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) Append(items ...IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, item)
-	}
-	return obj
-}
-
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) Set(index int, newObj IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisLspAdjacencySIDSlice[index] = newObj
-	return obj
-}
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) Clear() IsisLspneighborIsisLspAdjacencySIDIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisLspAdjacencySID{}
-		obj.isisLspAdjacencySIDSlice = []IsisLspAdjacencySID{}
-	}
-	return obj
-}
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) clearHolderSlice() IsisLspneighborIsisLspAdjacencySIDIter {
-	if len(obj.isisLspAdjacencySIDSlice) > 0 {
-		obj.isisLspAdjacencySIDSlice = []IsisLspAdjacencySID{}
-	}
-	return obj
-}
-func (obj *isisLspneighborIsisLspAdjacencySIDIter) appendHolderSlice(item IsisLspAdjacencySID) IsisLspneighborIsisLspAdjacencySIDIter {
-	obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, item)
-	return obj
-}
-
 func (obj *isisLspneighbor) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -402,20 +304,6 @@ func (obj *isisLspneighbor) validateObj(vObj *validation, set_default bool) {
 		err := obj.validateHex(obj.SystemId())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on IsisLspneighbor.SystemId"))
-		}
-
-	}
-
-	if len(obj.obj.AdjacencySids) != 0 {
-
-		if set_default {
-			obj.AdjacencySids().clearHolderSlice()
-			for _, item := range obj.obj.AdjacencySids {
-				obj.AdjacencySids().appendHolderSlice(&isisLspAdjacencySID{obj: item})
-			}
-		}
-		for _, item := range obj.AdjacencySids().Items() {
-			item.validateObj(vObj, set_default)
 		}
 
 	}

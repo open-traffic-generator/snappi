@@ -14825,11 +14825,18 @@ message IsisLspIsReachabilityTlv {
 message IsisLspExtendedIsReachabilityTlv {
 
   // This container describes IS neighbors.
-  repeated IsisLspneighbor neighbors = 1;
+  repeated IsisLspextdNeighbor neighbors = 1;
 }
 
 // This contains IS neighbors.
 message IsisLspneighbor {
+
+  // The System ID for this emulated ISIS router, e.g. 640100010000.
+  optional string system_id = 1;
+}
+
+// This contains IS neighbors.
+message IsisLspextdNeighbor {
 
   // The System ID for this emulated ISIS router, e.g. 640100010000.
   optional string system_id = 1;

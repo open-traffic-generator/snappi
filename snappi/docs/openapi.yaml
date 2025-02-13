@@ -20198,9 +20198,20 @@ components:
             This container describes IS neighbors.
           type: array
           items:
-            $ref: '#/components/schemas/IsisLsp.neighbor'
+            $ref: '#/components/schemas/IsisLsp.extdNeighbor'
           x-field-uid: 1
     IsisLsp.neighbor:
+      description: |-
+        This contains IS neighbors.
+      type: object
+      properties:
+        system_id:
+          description: |-
+            The System ID for this emulated ISIS router, e.g. "640100010000".
+          type: string
+          format: hex
+          x-field-uid: 1
+    IsisLsp.extdNeighbor:
       description: |-
         This contains IS neighbors.
       type: object
