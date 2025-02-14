@@ -46,7 +46,7 @@ setuptools.setup(
     python_requires=">=2.7, <4",
     install_requires=install_requires,
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==1.19.0"],
+        "ixnetwork": ["snappi_ixnetwork==1.20.0"],
         "trex": ["snappi_trex"],
         "testing": ["pytest", "flask"],
     },
