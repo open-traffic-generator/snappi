@@ -10,75 +10,76 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// ***** IsisLspAdjacencySID *****
-type isisLspAdjacencySID struct {
+// ***** IsisLspAdjacencySid *****
+type isisLspAdjacencySid struct {
 	validation
-	obj          *otg.IsisLspAdjacencySID
-	marshaller   marshalIsisLspAdjacencySID
-	unMarshaller unMarshalIsisLspAdjacencySID
+	obj          *otg.IsisLspAdjacencySid
+	marshaller   marshalIsisLspAdjacencySid
+	unMarshaller unMarshalIsisLspAdjacencySid
+	flagsHolder  IsisLspAdjSidFlags
 }
 
-func NewIsisLspAdjacencySID() IsisLspAdjacencySID {
-	obj := isisLspAdjacencySID{obj: &otg.IsisLspAdjacencySID{}}
+func NewIsisLspAdjacencySid() IsisLspAdjacencySid {
+	obj := isisLspAdjacencySid{obj: &otg.IsisLspAdjacencySid{}}
 	obj.setDefault()
 	return &obj
 }
 
-func (obj *isisLspAdjacencySID) msg() *otg.IsisLspAdjacencySID {
+func (obj *isisLspAdjacencySid) msg() *otg.IsisLspAdjacencySid {
 	return obj.obj
 }
 
-func (obj *isisLspAdjacencySID) setMsg(msg *otg.IsisLspAdjacencySID) IsisLspAdjacencySID {
-
+func (obj *isisLspAdjacencySid) setMsg(msg *otg.IsisLspAdjacencySid) IsisLspAdjacencySid {
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
 
-type marshalisisLspAdjacencySID struct {
-	obj *isisLspAdjacencySID
+type marshalisisLspAdjacencySid struct {
+	obj *isisLspAdjacencySid
 }
 
-type marshalIsisLspAdjacencySID interface {
-	// ToProto marshals IsisLspAdjacencySID to protobuf object *otg.IsisLspAdjacencySID
-	ToProto() (*otg.IsisLspAdjacencySID, error)
-	// ToPbText marshals IsisLspAdjacencySID to protobuf text
+type marshalIsisLspAdjacencySid interface {
+	// ToProto marshals IsisLspAdjacencySid to protobuf object *otg.IsisLspAdjacencySid
+	ToProto() (*otg.IsisLspAdjacencySid, error)
+	// ToPbText marshals IsisLspAdjacencySid to protobuf text
 	ToPbText() (string, error)
-	// ToYaml marshals IsisLspAdjacencySID to YAML text
+	// ToYaml marshals IsisLspAdjacencySid to YAML text
 	ToYaml() (string, error)
-	// ToJson marshals IsisLspAdjacencySID to JSON text
+	// ToJson marshals IsisLspAdjacencySid to JSON text
 	ToJson() (string, error)
 }
 
-type unMarshalisisLspAdjacencySID struct {
-	obj *isisLspAdjacencySID
+type unMarshalisisLspAdjacencySid struct {
+	obj *isisLspAdjacencySid
 }
 
-type unMarshalIsisLspAdjacencySID interface {
-	// FromProto unmarshals IsisLspAdjacencySID from protobuf object *otg.IsisLspAdjacencySID
-	FromProto(msg *otg.IsisLspAdjacencySID) (IsisLspAdjacencySID, error)
-	// FromPbText unmarshals IsisLspAdjacencySID from protobuf text
+type unMarshalIsisLspAdjacencySid interface {
+	// FromProto unmarshals IsisLspAdjacencySid from protobuf object *otg.IsisLspAdjacencySid
+	FromProto(msg *otg.IsisLspAdjacencySid) (IsisLspAdjacencySid, error)
+	// FromPbText unmarshals IsisLspAdjacencySid from protobuf text
 	FromPbText(value string) error
-	// FromYaml unmarshals IsisLspAdjacencySID from YAML text
+	// FromYaml unmarshals IsisLspAdjacencySid from YAML text
 	FromYaml(value string) error
-	// FromJson unmarshals IsisLspAdjacencySID from JSON text
+	// FromJson unmarshals IsisLspAdjacencySid from JSON text
 	FromJson(value string) error
 }
 
-func (obj *isisLspAdjacencySID) Marshal() marshalIsisLspAdjacencySID {
+func (obj *isisLspAdjacencySid) Marshal() marshalIsisLspAdjacencySid {
 	if obj.marshaller == nil {
-		obj.marshaller = &marshalisisLspAdjacencySID{obj: obj}
+		obj.marshaller = &marshalisisLspAdjacencySid{obj: obj}
 	}
 	return obj.marshaller
 }
 
-func (obj *isisLspAdjacencySID) Unmarshal() unMarshalIsisLspAdjacencySID {
+func (obj *isisLspAdjacencySid) Unmarshal() unMarshalIsisLspAdjacencySid {
 	if obj.unMarshaller == nil {
-		obj.unMarshaller = &unMarshalisisLspAdjacencySID{obj: obj}
+		obj.unMarshaller = &unMarshalisisLspAdjacencySid{obj: obj}
 	}
 	return obj.unMarshaller
 }
 
-func (m *marshalisisLspAdjacencySID) ToProto() (*otg.IsisLspAdjacencySID, error) {
+func (m *marshalisisLspAdjacencySid) ToProto() (*otg.IsisLspAdjacencySid, error) {
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return nil, err
@@ -86,7 +87,7 @@ func (m *marshalisisLspAdjacencySID) ToProto() (*otg.IsisLspAdjacencySID, error)
 	return m.obj.msg(), nil
 }
 
-func (m *unMarshalisisLspAdjacencySID) FromProto(msg *otg.IsisLspAdjacencySID) (IsisLspAdjacencySID, error) {
+func (m *unMarshalisisLspAdjacencySid) FromProto(msg *otg.IsisLspAdjacencySid) (IsisLspAdjacencySid, error) {
 	newObj := m.obj.setMsg(msg)
 	err := newObj.validateToAndFrom()
 	if err != nil {
@@ -95,7 +96,7 @@ func (m *unMarshalisisLspAdjacencySID) FromProto(msg *otg.IsisLspAdjacencySID) (
 	return newObj, nil
 }
 
-func (m *marshalisisLspAdjacencySID) ToPbText() (string, error) {
+func (m *marshalisisLspAdjacencySid) ToPbText() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -107,12 +108,12 @@ func (m *marshalisisLspAdjacencySID) ToPbText() (string, error) {
 	return string(protoMarshal), nil
 }
 
-func (m *unMarshalisisLspAdjacencySID) FromPbText(value string) error {
+func (m *unMarshalisisLspAdjacencySid) FromPbText(value string) error {
 	retObj := proto.Unmarshal([]byte(value), m.obj.msg())
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -120,7 +121,7 @@ func (m *unMarshalisisLspAdjacencySID) FromPbText(value string) error {
 	return retObj
 }
 
-func (m *marshalisisLspAdjacencySID) ToYaml() (string, error) {
+func (m *marshalisisLspAdjacencySid) ToYaml() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -141,7 +142,7 @@ func (m *marshalisisLspAdjacencySID) ToYaml() (string, error) {
 	return string(data), nil
 }
 
-func (m *unMarshalisisLspAdjacencySID) FromYaml(value string) error {
+func (m *unMarshalisisLspAdjacencySid) FromYaml(value string) error {
 	if value == "" {
 		value = "{}"
 	}
@@ -158,7 +159,7 @@ func (m *unMarshalisisLspAdjacencySID) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -166,7 +167,7 @@ func (m *unMarshalisisLspAdjacencySID) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalisisLspAdjacencySID) ToJson() (string, error) {
+func (m *marshalisisLspAdjacencySid) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -184,7 +185,7 @@ func (m *marshalisisLspAdjacencySID) ToJson() (string, error) {
 	return string(data), nil
 }
 
-func (m *unMarshalisisLspAdjacencySID) FromJson(value string) error {
+func (m *unMarshalisisLspAdjacencySid) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
 		DiscardUnknown: false,
@@ -197,7 +198,7 @@ func (m *unMarshalisisLspAdjacencySID) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -205,19 +206,19 @@ func (m *unMarshalisisLspAdjacencySID) FromJson(value string) error {
 	return nil
 }
 
-func (obj *isisLspAdjacencySID) validateToAndFrom() error {
+func (obj *isisLspAdjacencySid) validateToAndFrom() error {
 	// emptyVars()
 	obj.validateObj(&obj.validation, true)
 	return obj.validationResult()
 }
 
-func (obj *isisLspAdjacencySID) validate() error {
+func (obj *isisLspAdjacencySid) validate() error {
 	// emptyVars()
 	obj.validateObj(&obj.validation, false)
 	return obj.validationResult()
 }
 
-func (obj *isisLspAdjacencySID) String() string {
+func (obj *isisLspAdjacencySid) String() string {
 	str, err := obj.Marshal().ToYaml()
 	if err != nil {
 		return err.Error()
@@ -225,12 +226,12 @@ func (obj *isisLspAdjacencySID) String() string {
 	return str
 }
 
-func (obj *isisLspAdjacencySID) Clone() (IsisLspAdjacencySID, error) {
+func (obj *isisLspAdjacencySid) Clone() (IsisLspAdjacencySid, error) {
 	vErr := obj.validate()
 	if vErr != nil {
 		return nil, vErr
 	}
-	newObj := NewIsisLspAdjacencySID()
+	newObj := NewIsisLspAdjacencySid()
 	data, err := proto.Marshal(obj.msg())
 	if err != nil {
 		return nil, err
@@ -242,87 +243,67 @@ func (obj *isisLspAdjacencySID) Clone() (IsisLspAdjacencySID, error) {
 	return newObj, nil
 }
 
-// IsisLspAdjacencySID is this container defines segment routing adjacency SIDs.
-type IsisLspAdjacencySID interface {
+func (obj *isisLspAdjacencySid) setNil() {
+	obj.flagsHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// IsisLspAdjacencySid is this container defines segment routing adjacency SIDs.
+type IsisLspAdjacencySid interface {
 	Validation
-	// msg marshals IsisLspAdjacencySID to protobuf object *otg.IsisLspAdjacencySID
+	// msg marshals IsisLspAdjacencySid to protobuf object *otg.IsisLspAdjacencySid
 	// and doesn't set defaults
-	msg() *otg.IsisLspAdjacencySID
-	// setMsg unmarshals IsisLspAdjacencySID from protobuf object *otg.IsisLspAdjacencySID
+	msg() *otg.IsisLspAdjacencySid
+	// setMsg unmarshals IsisLspAdjacencySid from protobuf object *otg.IsisLspAdjacencySid
 	// and doesn't set defaults
-	setMsg(*otg.IsisLspAdjacencySID) IsisLspAdjacencySID
+	setMsg(*otg.IsisLspAdjacencySid) IsisLspAdjacencySid
 	// provides marshal interface
-	Marshal() marshalIsisLspAdjacencySID
+	Marshal() marshalIsisLspAdjacencySid
 	// provides unmarshal interface
-	Unmarshal() unMarshalIsisLspAdjacencySID
-	// validate validates IsisLspAdjacencySID
+	Unmarshal() unMarshalIsisLspAdjacencySid
+	// validate validates IsisLspAdjacencySid
 	validate() error
 	// A stringer function
 	String() string
 	// Clones the object
-	Clone() (IsisLspAdjacencySID, error)
+	Clone() (IsisLspAdjacencySid, error)
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// TlvType returns uint32, set in IsisLspAdjacencySID.
+	// TlvType returns uint32, set in IsisLspAdjacencySid.
 	TlvType() uint32
-	// SetTlvType assigns uint32 provided by user to IsisLspAdjacencySID
-	SetTlvType(value uint32) IsisLspAdjacencySID
-	// HasTlvType checks if TlvType has been set in IsisLspAdjacencySID
+	// SetTlvType assigns uint32 provided by user to IsisLspAdjacencySid
+	SetTlvType(value uint32) IsisLspAdjacencySid
+	// HasTlvType checks if TlvType has been set in IsisLspAdjacencySid
 	HasTlvType() bool
-	// Sid returns uint32, set in IsisLspAdjacencySID.
+	// Sid returns uint32, set in IsisLspAdjacencySid.
 	Sid() uint32
-	// SetSid assigns uint32 provided by user to IsisLspAdjacencySID
-	SetSid(value uint32) IsisLspAdjacencySID
-	// HasSid checks if Sid has been set in IsisLspAdjacencySID
+	// SetSid assigns uint32 provided by user to IsisLspAdjacencySid
+	SetSid(value uint32) IsisLspAdjacencySid
+	// HasSid checks if Sid has been set in IsisLspAdjacencySid
 	HasSid() bool
-	// FFlag returns bool, set in IsisLspAdjacencySID.
-	FFlag() bool
-	// SetFFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetFFlag(value bool) IsisLspAdjacencySID
-	// HasFFlag checks if FFlag has been set in IsisLspAdjacencySID
-	HasFFlag() bool
-	// BFlag returns bool, set in IsisLspAdjacencySID.
-	BFlag() bool
-	// SetBFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetBFlag(value bool) IsisLspAdjacencySID
-	// HasBFlag checks if BFlag has been set in IsisLspAdjacencySID
-	HasBFlag() bool
-	// VFlag returns bool, set in IsisLspAdjacencySID.
-	VFlag() bool
-	// SetVFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetVFlag(value bool) IsisLspAdjacencySID
-	// HasVFlag checks if VFlag has been set in IsisLspAdjacencySID
-	HasVFlag() bool
-	// LFlag returns bool, set in IsisLspAdjacencySID.
-	LFlag() bool
-	// SetLFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetLFlag(value bool) IsisLspAdjacencySID
-	// HasLFlag checks if LFlag has been set in IsisLspAdjacencySID
-	HasLFlag() bool
-	// SFlag returns bool, set in IsisLspAdjacencySID.
-	SFlag() bool
-	// SetSFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetSFlag(value bool) IsisLspAdjacencySID
-	// HasSFlag checks if SFlag has been set in IsisLspAdjacencySID
-	HasSFlag() bool
-	// PFlag returns bool, set in IsisLspAdjacencySID.
-	PFlag() bool
-	// SetPFlag assigns bool provided by user to IsisLspAdjacencySID
-	SetPFlag(value bool) IsisLspAdjacencySID
-	// HasPFlag checks if PFlag has been set in IsisLspAdjacencySID
-	HasPFlag() bool
-	// Weight returns uint32, set in IsisLspAdjacencySID.
+	// Flags returns IsisLspAdjSidFlags, set in IsisLspAdjacencySid.
+	// IsisLspAdjSidFlags is conatiner of 1-octet Flags associated with Adjacency Segment-ID.
+	Flags() IsisLspAdjSidFlags
+	// SetFlags assigns IsisLspAdjSidFlags provided by user to IsisLspAdjacencySid.
+	// IsisLspAdjSidFlags is conatiner of 1-octet Flags associated with Adjacency Segment-ID.
+	SetFlags(value IsisLspAdjSidFlags) IsisLspAdjacencySid
+	// HasFlags checks if Flags has been set in IsisLspAdjacencySid
+	HasFlags() bool
+	// Weight returns uint32, set in IsisLspAdjacencySid.
 	Weight() uint32
-	// SetWeight assigns uint32 provided by user to IsisLspAdjacencySID
-	SetWeight(value uint32) IsisLspAdjacencySID
-	// HasWeight checks if Weight has been set in IsisLspAdjacencySID
+	// SetWeight assigns uint32 provided by user to IsisLspAdjacencySid
+	SetWeight(value uint32) IsisLspAdjacencySid
+	// HasWeight checks if Weight has been set in IsisLspAdjacencySid
 	HasWeight() bool
+	setNil()
 }
 
 // The corresponding adjacency SID type.
 // TlvType returns a uint32
-func (obj *isisLspAdjacencySID) TlvType() uint32 {
+func (obj *isisLspAdjacencySid) TlvType() uint32 {
 
 	return *obj.obj.TlvType
 
@@ -330,13 +311,13 @@ func (obj *isisLspAdjacencySID) TlvType() uint32 {
 
 // The corresponding adjacency SID type.
 // TlvType returns a uint32
-func (obj *isisLspAdjacencySID) HasTlvType() bool {
+func (obj *isisLspAdjacencySid) HasTlvType() bool {
 	return obj.obj.TlvType != nil
 }
 
 // The corresponding adjacency SID type.
-// SetTlvType sets the uint32 value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetTlvType(value uint32) IsisLspAdjacencySID {
+// SetTlvType sets the uint32 value in the IsisLspAdjacencySid object
+func (obj *isisLspAdjacencySid) SetTlvType(value uint32) IsisLspAdjacencySid {
 
 	obj.obj.TlvType = &value
 	return obj
@@ -344,7 +325,7 @@ func (obj *isisLspAdjacencySID) SetTlvType(value uint32) IsisLspAdjacencySID {
 
 // SID/Index is the SID/Label value associated with the IGP adjacency SID.
 // Sid returns a uint32
-func (obj *isisLspAdjacencySID) Sid() uint32 {
+func (obj *isisLspAdjacencySid) Sid() uint32 {
 
 	return *obj.obj.Sid
 
@@ -352,177 +333,49 @@ func (obj *isisLspAdjacencySID) Sid() uint32 {
 
 // SID/Index is the SID/Label value associated with the IGP adjacency SID.
 // Sid returns a uint32
-func (obj *isisLspAdjacencySID) HasSid() bool {
+func (obj *isisLspAdjacencySid) HasSid() bool {
 	return obj.obj.Sid != nil
 }
 
 // SID/Index is the SID/Label value associated with the IGP adjacency SID.
-// SetSid sets the uint32 value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetSid(value uint32) IsisLspAdjacencySID {
+// SetSid sets the uint32 value in the IsisLspAdjacencySid object
+func (obj *isisLspAdjacencySid) SetSid(value uint32) IsisLspAdjacencySid {
 
 	obj.obj.Sid = &value
 	return obj
 }
 
-// The address family flag. If unset, then the Adj-SID refers
-// to an adjacency with outgoing IPv4 encapsulation.  If set then
-// the Adj-SID refers to an adjacency with outgoing IPv6
-// encapsulation.
-// FFlag returns a bool
-func (obj *isisLspAdjacencySID) FFlag() bool {
-
-	return *obj.obj.FFlag
-
+// Flags associated with Adjacency Segment-ID.
+// Flags returns a IsisLspAdjSidFlags
+func (obj *isisLspAdjacencySid) Flags() IsisLspAdjSidFlags {
+	if obj.obj.Flags == nil {
+		obj.obj.Flags = NewIsisLspAdjSidFlags().msg()
+	}
+	if obj.flagsHolder == nil {
+		obj.flagsHolder = &isisLspAdjSidFlags{obj: obj.obj.Flags}
+	}
+	return obj.flagsHolder
 }
 
-// The address family flag. If unset, then the Adj-SID refers
-// to an adjacency with outgoing IPv4 encapsulation.  If set then
-// the Adj-SID refers to an adjacency with outgoing IPv6
-// encapsulation.
-// FFlag returns a bool
-func (obj *isisLspAdjacencySID) HasFFlag() bool {
-	return obj.obj.FFlag != nil
+// Flags associated with Adjacency Segment-ID.
+// Flags returns a IsisLspAdjSidFlags
+func (obj *isisLspAdjacencySid) HasFlags() bool {
+	return obj.obj.Flags != nil
 }
 
-// The address family flag. If unset, then the Adj-SID refers
-// to an adjacency with outgoing IPv4 encapsulation.  If set then
-// the Adj-SID refers to an adjacency with outgoing IPv6
-// encapsulation.
-// SetFFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetFFlag(value bool) IsisLspAdjacencySID {
+// Flags associated with Adjacency Segment-ID.
+// SetFlags sets the IsisLspAdjSidFlags value in the IsisLspAdjacencySid object
+func (obj *isisLspAdjacencySid) SetFlags(value IsisLspAdjSidFlags) IsisLspAdjacencySid {
 
-	obj.obj.FFlag = &value
-	return obj
-}
+	obj.flagsHolder = nil
+	obj.obj.Flags = value.msg()
 
-// The backup flag. If set, the Adj-SID is eligible for protection.
-// BFlag returns a bool
-func (obj *isisLspAdjacencySID) BFlag() bool {
-
-	return *obj.obj.BFlag
-
-}
-
-// The backup flag. If set, the Adj-SID is eligible for protection.
-// BFlag returns a bool
-func (obj *isisLspAdjacencySID) HasBFlag() bool {
-	return obj.obj.BFlag != nil
-}
-
-// The backup flag. If set, the Adj-SID is eligible for protection.
-// SetBFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetBFlag(value bool) IsisLspAdjacencySID {
-
-	obj.obj.BFlag = &value
-	return obj
-}
-
-// The value flag. If set, then the Adj-SID carries a value.
-// VFlag returns a bool
-func (obj *isisLspAdjacencySID) VFlag() bool {
-
-	return *obj.obj.VFlag
-
-}
-
-// The value flag. If set, then the Adj-SID carries a value.
-// VFlag returns a bool
-func (obj *isisLspAdjacencySID) HasVFlag() bool {
-	return obj.obj.VFlag != nil
-}
-
-// The value flag. If set, then the Adj-SID carries a value.
-// SetVFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetVFlag(value bool) IsisLspAdjacencySID {
-
-	obj.obj.VFlag = &value
-	return obj
-}
-
-// The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
-// LFlag returns a bool
-func (obj *isisLspAdjacencySID) LFlag() bool {
-
-	return *obj.obj.LFlag
-
-}
-
-// The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
-// LFlag returns a bool
-func (obj *isisLspAdjacencySID) HasLFlag() bool {
-	return obj.obj.LFlag != nil
-}
-
-// The local flag.  If set, then the value/index carried by
-// the Adj-SID has local significance.
-// SetLFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetLFlag(value bool) IsisLspAdjacencySID {
-
-	obj.obj.LFlag = &value
-	return obj
-}
-
-// The set flag. When set, the S-Flag indicates that the
-// Adj-SID refers to a set of adjacencies (and therefore MAY be
-// assigned to other adjacencies as well).
-// SFlag returns a bool
-func (obj *isisLspAdjacencySID) SFlag() bool {
-
-	return *obj.obj.SFlag
-
-}
-
-// The set flag. When set, the S-Flag indicates that the
-// Adj-SID refers to a set of adjacencies (and therefore MAY be
-// assigned to other adjacencies as well).
-// SFlag returns a bool
-func (obj *isisLspAdjacencySID) HasSFlag() bool {
-	return obj.obj.SFlag != nil
-}
-
-// The set flag. When set, the S-Flag indicates that the
-// Adj-SID refers to a set of adjacencies (and therefore MAY be
-// assigned to other adjacencies as well).
-// SetSFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetSFlag(value bool) IsisLspAdjacencySID {
-
-	obj.obj.SFlag = &value
-	return obj
-}
-
-// The persistent flag. When set, the P-Flag indicates that
-// the Adj-SID is persistently allocated, i.e., the Adj-SID value
-// remains consistent across router restart and/or interface flap.
-// PFlag returns a bool
-func (obj *isisLspAdjacencySID) PFlag() bool {
-
-	return *obj.obj.PFlag
-
-}
-
-// The persistent flag. When set, the P-Flag indicates that
-// the Adj-SID is persistently allocated, i.e., the Adj-SID value
-// remains consistent across router restart and/or interface flap.
-// PFlag returns a bool
-func (obj *isisLspAdjacencySID) HasPFlag() bool {
-	return obj.obj.PFlag != nil
-}
-
-// The persistent flag. When set, the P-Flag indicates that
-// the Adj-SID is persistently allocated, i.e., the Adj-SID value
-// remains consistent across router restart and/or interface flap.
-// SetPFlag sets the bool value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetPFlag(value bool) IsisLspAdjacencySID {
-
-	obj.obj.PFlag = &value
 	return obj
 }
 
 // The value represents the weight of the Adj-SID for the purpose of load balancing.
 // Weight returns a uint32
-func (obj *isisLspAdjacencySID) Weight() uint32 {
+func (obj *isisLspAdjacencySid) Weight() uint32 {
 
 	return *obj.obj.Weight
 
@@ -530,25 +383,30 @@ func (obj *isisLspAdjacencySID) Weight() uint32 {
 
 // The value represents the weight of the Adj-SID for the purpose of load balancing.
 // Weight returns a uint32
-func (obj *isisLspAdjacencySID) HasWeight() bool {
+func (obj *isisLspAdjacencySid) HasWeight() bool {
 	return obj.obj.Weight != nil
 }
 
 // The value represents the weight of the Adj-SID for the purpose of load balancing.
-// SetWeight sets the uint32 value in the IsisLspAdjacencySID object
-func (obj *isisLspAdjacencySID) SetWeight(value uint32) IsisLspAdjacencySID {
+// SetWeight sets the uint32 value in the IsisLspAdjacencySid object
+func (obj *isisLspAdjacencySid) SetWeight(value uint32) IsisLspAdjacencySid {
 
 	obj.obj.Weight = &value
 	return obj
 }
 
-func (obj *isisLspAdjacencySID) validateObj(vObj *validation, set_default bool) {
+func (obj *isisLspAdjacencySid) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
 
+	if obj.obj.Flags != nil {
+
+		obj.Flags().validateObj(vObj, set_default)
+	}
+
 }
 
-func (obj *isisLspAdjacencySID) setDefault() {
+func (obj *isisLspAdjacencySid) setDefault() {
 
 }

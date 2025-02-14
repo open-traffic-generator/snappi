@@ -16,7 +16,7 @@ type isisLspextdNeighbor struct {
 	obj                 *otg.IsisLspextdNeighbor
 	marshaller          marshalIsisLspextdNeighbor
 	unMarshaller        unMarshalIsisLspextdNeighbor
-	adjacencySidsHolder IsisLspextdNeighborIsisLspAdjacencySIDIter
+	adjacencySidsHolder IsisLspextdNeighborIsisLspAdjacencySidIter
 }
 
 func NewIsisLspextdNeighbor() IsisLspextdNeighbor {
@@ -278,8 +278,8 @@ type IsisLspextdNeighbor interface {
 	SetSystemId(value string) IsisLspextdNeighbor
 	// HasSystemId checks if SystemId has been set in IsisLspextdNeighbor
 	HasSystemId() bool
-	// AdjacencySids returns IsisLspextdNeighborIsisLspAdjacencySIDIterIter, set in IsisLspextdNeighbor
-	AdjacencySids() IsisLspextdNeighborIsisLspAdjacencySIDIter
+	// AdjacencySids returns IsisLspextdNeighborIsisLspAdjacencySidIterIter, set in IsisLspextdNeighbor
+	AdjacencySids() IsisLspextdNeighborIsisLspAdjacencySidIter
 	setNil()
 }
 
@@ -306,89 +306,89 @@ func (obj *isisLspextdNeighbor) SetSystemId(value string) IsisLspextdNeighbor {
 }
 
 // List of segment routing adjacency SIDs.
-// AdjacencySids returns a []IsisLspAdjacencySID
-func (obj *isisLspextdNeighbor) AdjacencySids() IsisLspextdNeighborIsisLspAdjacencySIDIter {
+// AdjacencySids returns a []IsisLspAdjacencySid
+func (obj *isisLspextdNeighbor) AdjacencySids() IsisLspextdNeighborIsisLspAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {
-		obj.obj.AdjacencySids = []*otg.IsisLspAdjacencySID{}
+		obj.obj.AdjacencySids = []*otg.IsisLspAdjacencySid{}
 	}
 	if obj.adjacencySidsHolder == nil {
-		obj.adjacencySidsHolder = newIsisLspextdNeighborIsisLspAdjacencySIDIter(&obj.obj.AdjacencySids).setMsg(obj)
+		obj.adjacencySidsHolder = newIsisLspextdNeighborIsisLspAdjacencySidIter(&obj.obj.AdjacencySids).setMsg(obj)
 	}
 	return obj.adjacencySidsHolder
 }
 
-type isisLspextdNeighborIsisLspAdjacencySIDIter struct {
+type isisLspextdNeighborIsisLspAdjacencySidIter struct {
 	obj                      *isisLspextdNeighbor
-	isisLspAdjacencySIDSlice []IsisLspAdjacencySID
-	fieldPtr                 *[]*otg.IsisLspAdjacencySID
+	isisLspAdjacencySidSlice []IsisLspAdjacencySid
+	fieldPtr                 *[]*otg.IsisLspAdjacencySid
 }
 
-func newIsisLspextdNeighborIsisLspAdjacencySIDIter(ptr *[]*otg.IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter {
-	return &isisLspextdNeighborIsisLspAdjacencySIDIter{fieldPtr: ptr}
+func newIsisLspextdNeighborIsisLspAdjacencySidIter(ptr *[]*otg.IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter {
+	return &isisLspextdNeighborIsisLspAdjacencySidIter{fieldPtr: ptr}
 }
 
-type IsisLspextdNeighborIsisLspAdjacencySIDIter interface {
-	setMsg(*isisLspextdNeighbor) IsisLspextdNeighborIsisLspAdjacencySIDIter
-	Items() []IsisLspAdjacencySID
-	Add() IsisLspAdjacencySID
-	Append(items ...IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter
-	Set(index int, newObj IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter
-	Clear() IsisLspextdNeighborIsisLspAdjacencySIDIter
-	clearHolderSlice() IsisLspextdNeighborIsisLspAdjacencySIDIter
-	appendHolderSlice(item IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter
+type IsisLspextdNeighborIsisLspAdjacencySidIter interface {
+	setMsg(*isisLspextdNeighbor) IsisLspextdNeighborIsisLspAdjacencySidIter
+	Items() []IsisLspAdjacencySid
+	Add() IsisLspAdjacencySid
+	Append(items ...IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter
+	Set(index int, newObj IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter
+	Clear() IsisLspextdNeighborIsisLspAdjacencySidIter
+	clearHolderSlice() IsisLspextdNeighborIsisLspAdjacencySidIter
+	appendHolderSlice(item IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter
 }
 
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) setMsg(msg *isisLspextdNeighbor) IsisLspextdNeighborIsisLspAdjacencySIDIter {
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) setMsg(msg *isisLspextdNeighbor) IsisLspextdNeighborIsisLspAdjacencySidIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisLspAdjacencySID{obj: val})
+		obj.appendHolderSlice(&isisLspAdjacencySid{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) Items() []IsisLspAdjacencySID {
-	return obj.isisLspAdjacencySIDSlice
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) Items() []IsisLspAdjacencySid {
+	return obj.isisLspAdjacencySidSlice
 }
 
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) Add() IsisLspAdjacencySID {
-	newObj := &otg.IsisLspAdjacencySID{}
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) Add() IsisLspAdjacencySid {
+	newObj := &otg.IsisLspAdjacencySid{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisLspAdjacencySID{obj: newObj}
+	newLibObj := &isisLspAdjacencySid{obj: newObj}
 	newLibObj.setDefault()
-	obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, newLibObj)
+	obj.isisLspAdjacencySidSlice = append(obj.isisLspAdjacencySidSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) Append(items ...IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter {
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) Append(items ...IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, item)
+		obj.isisLspAdjacencySidSlice = append(obj.isisLspAdjacencySidSlice, item)
 	}
 	return obj
 }
 
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) Set(index int, newObj IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter {
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) Set(index int, newObj IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisLspAdjacencySIDSlice[index] = newObj
+	obj.isisLspAdjacencySidSlice[index] = newObj
 	return obj
 }
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) Clear() IsisLspextdNeighborIsisLspAdjacencySIDIter {
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) Clear() IsisLspextdNeighborIsisLspAdjacencySidIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisLspAdjacencySID{}
-		obj.isisLspAdjacencySIDSlice = []IsisLspAdjacencySID{}
+		*obj.fieldPtr = []*otg.IsisLspAdjacencySid{}
+		obj.isisLspAdjacencySidSlice = []IsisLspAdjacencySid{}
 	}
 	return obj
 }
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) clearHolderSlice() IsisLspextdNeighborIsisLspAdjacencySIDIter {
-	if len(obj.isisLspAdjacencySIDSlice) > 0 {
-		obj.isisLspAdjacencySIDSlice = []IsisLspAdjacencySID{}
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) clearHolderSlice() IsisLspextdNeighborIsisLspAdjacencySidIter {
+	if len(obj.isisLspAdjacencySidSlice) > 0 {
+		obj.isisLspAdjacencySidSlice = []IsisLspAdjacencySid{}
 	}
 	return obj
 }
-func (obj *isisLspextdNeighborIsisLspAdjacencySIDIter) appendHolderSlice(item IsisLspAdjacencySID) IsisLspextdNeighborIsisLspAdjacencySIDIter {
-	obj.isisLspAdjacencySIDSlice = append(obj.isisLspAdjacencySIDSlice, item)
+func (obj *isisLspextdNeighborIsisLspAdjacencySidIter) appendHolderSlice(item IsisLspAdjacencySid) IsisLspextdNeighborIsisLspAdjacencySidIter {
+	obj.isisLspAdjacencySidSlice = append(obj.isisLspAdjacencySidSlice, item)
 	return obj
 }
 
@@ -411,7 +411,7 @@ func (obj *isisLspextdNeighbor) validateObj(vObj *validation, set_default bool) 
 		if set_default {
 			obj.AdjacencySids().clearHolderSlice()
 			for _, item := range obj.obj.AdjacencySids {
-				obj.AdjacencySids().appendHolderSlice(&isisLspAdjacencySID{obj: item})
+				obj.AdjacencySids().appendHolderSlice(&isisLspAdjacencySid{obj: item})
 			}
 		}
 		for _, item := range obj.AdjacencySids().Items() {

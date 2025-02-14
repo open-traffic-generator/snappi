@@ -1816,7 +1816,7 @@ message IsisInterface {
   optional string name = 13;
 
   // List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
-  repeated IsisInterfaceAdjacencySID adjacency_sids = 14;
+  repeated IsisInterfaceAdjacencySid adjacency_sids = 14;
 }
 
 // Configuration for the properties of Level 1 Hello.
@@ -2022,7 +2022,7 @@ message IsisInterfaceLinkProtection {
 // If the container exists then the adjacency SID (segment identifier)
 // sub TLV will be part of the packet.
 // Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
-message IsisInterfaceAdjacencySID {
+message IsisInterfaceAdjacencySid {
 
   message Choice {
     enum Enum {
@@ -2050,38 +2050,45 @@ message IsisInterfaceAdjacencySID {
   // default = 1
   optional uint32 sid_index = 3;
 
+  // Flags associated with Adjacency Segment-ID.
+  IsisInterfaceAdjSidFlags flags = 4;
+
+  // The value represents the weight of the Adj-SID for the purpose of load balancing.
+  // 
+  // default = 0
+  optional uint32 weight = 5;
+}
+
+// Conatiner of 1-octet Flags associated with Adjacency Segment-ID.
+message IsisInterfaceAdjSidFlags {
+
   // The address family flag. If unset, then the Adj-SID refers
   // to an adjacency with outgoing IPv4 encapsulation.  If set then
   // the Adj-SID refers to an adjacency with outgoing IPv6
   // encapsulation.
   // default = True
-  optional bool f_flag = 4;
+  optional bool f_flag = 1;
 
   // The backup flag. If set, the Adj-SID is eligible for protection.
   // default = False
-  optional bool b_flag = 5;
+  optional bool b_flag = 2;
 
   // The local flag.  If set, then the value/index carried by
   // the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
   // default = True
-  optional bool l_flag = 6;
+  optional bool l_flag = 3;
 
   // The set flag. When set, the S-Flag indicates that the
   // Adj-SID refers to a set of adjacencies (and therefore MAY be
   // assigned to other adjacencies as well).
   // default = False
-  optional bool s_flag = 7;
+  optional bool s_flag = 4;
 
   // The persistent flag. When set, the P-Flag indicates that
   // the Adj-SID is persistently allocated, i.e., the Adj-SID value
   // remains consistent across router restart and/or interface flap.
   // default = False
-  optional bool p_flag = 8;
-
-  // The value represents the weight of the Adj-SID for the purpose of load balancing.
-  // 
-  // default = 0
-  optional uint32 weight = 9;
+  optional bool p_flag = 5;
 }
 
 // This contains ISIS router basic properties.
@@ -2264,7 +2271,7 @@ message IsisV4RouteRange {
   optional bool n_flag = 9;
 
   // A list of SID paramters for a group of IPv4 route addresses.
-  repeated IsisSRPrefixSID prefix_sids = 10;
+  repeated IsisSRPrefixSid prefix_sids = 10;
 }
 
 // A container for IPv4 route addresses.
@@ -2332,7 +2339,7 @@ message MACRouteAddress {
 
 // This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
 // Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
-message IsisSRPrefixSID {
+message IsisSRPrefixSid {
 
   message Choice {
     enum Enum {
@@ -2362,13 +2369,26 @@ message IsisSRPrefixSID {
   // default = 1
   optional uint32 sid_index = 3;
 
+  // Flags associated with Prefix Segment-ID.
+  IsisSRPrefixSidFlags flags = 4;
+
+  // The Isis may use various algorithms when calculating reachability to other nodes
+  // or to prefixes attached to these nodes.
+  // Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
+  // default = 0
+  optional uint32 algorithm = 5;
+}
+
+// Conatiner of 1-octet Flags associated with Prefix Segment-ID.
+message IsisSRPrefixSidFlags {
+
   // R-Flag: Re-advertisement Flag.
   // If set, then the prefix to which this Prefix-SID is attached has been propagated
   // by the router
   // from either another level (i.e., from Level-1 to Level-2 or the opposite) or redistribution
   // (e.g., from another protocol).
   // default = False
-  optional bool r_flag = 4;
+  optional bool r_flag = 1;
 
   // N-Flag: Node-SID flag.
   // If set, then the Prefix-SID refers to the router identified by the prefix.
@@ -2376,13 +2396,13 @@ message IsisSRPrefixSID {
   // address.
   // The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
   // default = False
-  optional bool n_flag = 5;
+  optional bool n_flag = 2;
 
   // P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
   // If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
   // packet to the node that advertised the Prefix-SID.
   // default = False
-  optional bool p_flag = 6;
+  optional bool p_flag = 3;
 
   // E-Flag: Explicit-Null Flag.
   // If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
@@ -2390,19 +2410,13 @@ message IsisSRPrefixSID {
   // that has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before forwarding the
   // packet.
   // default = False
-  optional bool e_flag = 7;
+  optional bool e_flag = 4;
 
   // The local flag. If set, then the value/index carried by
   // the Prefix-SID has local significance and the Prefix SID is from Please refer to
   // device.isis.segment_routing.router_capability.srlb_ranges.
   // default = False
-  optional bool l_flag = 8;
-
-  // The Isis may use various algorithms when calculating reachability to other nodes
-  // or to prefixes attached to these nodes.
-  // Refernce: https://datatracker.ietf.org/doc/html/rfc8667#SRALGOSUBTLV
-  // default = 0
-  optional uint32 algorithm = 9;
+  optional bool l_flag = 5;
 }
 
 // Emulated ISIS IPv6 routes.
@@ -2473,7 +2487,7 @@ message IsisV6RouteRange {
   optional bool n_flag = 9;
 
   // A list of SID parameters for a group of IPv6 route addresses.
-  repeated IsisSRPrefixSID prefix_sids = 10;
+  repeated IsisSRPrefixSid prefix_sids = 10;
 }
 
 // Segment Routing (SR) allows for a flexible definition of end-to-end paths within
@@ -14842,7 +14856,7 @@ message IsisLspextdNeighbor {
   optional string system_id = 1;
 
   // List of segment routing adjacency SIDs.
-  repeated IsisLspAdjacencySID adjacency_sids = 2;
+  repeated IsisLspAdjacencySid adjacency_sids = 2;
 }
 
 // This container defines list of IPv4 internal reachability information in one IPv4
@@ -15144,7 +15158,7 @@ message IsisLspAlgorithm {
 }
 
 // This container defines segment routing adjacency SIDs.
-message IsisLspAdjacencySID {
+message IsisLspAdjacencySid {
 
   // The corresponding adjacency SID type.
   optional uint32 tlv_type = 1;
@@ -15152,35 +15166,12 @@ message IsisLspAdjacencySID {
   // SID/Index is the SID/Label value associated with the IGP adjacency SID.
   optional uint32 sid = 2;
 
-  // The address family flag. If unset, then the Adj-SID refers
-  // to an adjacency with outgoing IPv4 encapsulation.  If set then
-  // the Adj-SID refers to an adjacency with outgoing IPv6
-  // encapsulation.
-  optional bool f_flag = 3;
-
-  // The backup flag. If set, the Adj-SID is eligible for protection.
-  optional bool b_flag = 4;
-
-  // The value flag. If set, then the Adj-SID carries a value.
-  optional bool v_flag = 5;
-
-  // The local flag.  If set, then the value/index carried by
-  // the Adj-SID has local significance.
-  optional bool l_flag = 6;
-
-  // The set flag. When set, the S-Flag indicates that the
-  // Adj-SID refers to a set of adjacencies (and therefore MAY be
-  // assigned to other adjacencies as well).
-  optional bool s_flag = 7;
-
-  // The persistent flag. When set, the P-Flag indicates that
-  // the Adj-SID is persistently allocated, i.e., the Adj-SID value
-  // remains consistent across router restart and/or interface flap.
-  optional bool p_flag = 8;
+  // Flags associated with Adjacency Segment-ID.
+  IsisLspAdjSidFlags flags = 3;
 
   // The value represents the weight of the Adj-SID for the purpose of load balancing.
   // 
-  optional uint32 weight = 9;
+  optional uint32 weight = 4;
 }
 
 // Conatiner of 1-octet Flags associated with Prefix Segment-ID.
@@ -15213,6 +15204,36 @@ message IsisLspPrefixSidFlags {
 
   // Local flag. When set, the value/index carried by the Prefix-SID has local significance.
   optional bool l_flag = 6;
+}
+
+// Conatiner of 1-octet Flags associated with Adjacency Segment-ID.
+message IsisLspAdjSidFlags {
+
+  // The address family flag. If unset, then the Adj-SID refers
+  // to an adjacency with outgoing IPv4 encapsulation.  If set then
+  // the Adj-SID refers to an adjacency with outgoing IPv6
+  // encapsulation.
+  optional bool f_flag = 1;
+
+  // The backup flag. If set, the Adj-SID is eligible for protection.
+  optional bool b_flag = 2;
+
+  // The value flag. If set, then the Adj-SID carries a value.
+  optional bool v_flag = 3;
+
+  // The local flag.  If set, then the value/index carried by
+  // the Adj-SID has local significance.
+  optional bool l_flag = 4;
+
+  // The set flag. When set, the S-Flag indicates that the
+  // Adj-SID refers to a set of adjacencies (and therefore MAY be
+  // assigned to other adjacencies as well).
+  optional bool s_flag = 5;
+
+  // The persistent flag. When set, the P-Flag indicates that
+  // the Adj-SID is persistently allocated, i.e., the Adj-SID value
+  // remains consistent across router restart and/or interface flap.
+  optional bool p_flag = 6;
 }
 
 // The request to retrieve LLDP neighbor information for a given instance.

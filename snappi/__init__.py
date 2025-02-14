@@ -86,8 +86,9 @@ from .snappi import LinkStateTEIter
 from .snappi import IsisInterfaceAuthentication
 from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
-from .snappi import IsisInterfaceAdjacencySID
-from .snappi import IsisInterfaceAdjacencySIDIter
+from .snappi import IsisInterfaceAdjacencySid
+from .snappi import IsisInterfaceAdjSidFlags
+from .snappi import IsisInterfaceAdjacencySidIter
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -96,8 +97,9 @@ from .snappi import IsisAuthenticationBase
 from .snappi import IsisV4RouteRange
 from .snappi import V4RouteAddress
 from .snappi import V4RouteAddressIter
-from .snappi import IsisSRPrefixSID
-from .snappi import IsisSRPrefixSIDIter
+from .snappi import IsisSRPrefixSid
+from .snappi import IsisSRPrefixSidFlags
+from .snappi import IsisSRPrefixSidIter
 from .snappi import IsisV4RouteRangeIter
 from .snappi import IsisV6RouteRange
 from .snappi import V6RouteAddress
@@ -1328,8 +1330,9 @@ from .snappi import IsisLspneighborIter
 from .snappi import IsisLspIsReachabilityTlvIter
 from .snappi import IsisLspExtendedIsReachabilityTlv
 from .snappi import IsisLspextdNeighbor
-from .snappi import IsisLspAdjacencySID
-from .snappi import IsisLspAdjacencySIDIter
+from .snappi import IsisLspAdjacencySid
+from .snappi import IsisLspAdjSidFlags
+from .snappi import IsisLspAdjacencySidIter
 from .snappi import IsisLspextdNeighborIter
 from .snappi import IsisLspExtendedIsReachabilityTlvIter
 from .snappi import IsisLspIpv4InternalReachabilityTlv
