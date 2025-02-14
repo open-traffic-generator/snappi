@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.19.0
+/* Open Traffic Generator API 1.20.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -11226,55 +11226,48 @@ message FlowRxTxRatio {
 message FlowRxTxRatioRxCount {
 }
 
+// Under Review: Event configuration is currently under review for pending exploration
+// on use cases.
+// 
 // The optional container for event configuration.
+// Both cp_events.enable and dp_events.enable must be explicitly set to true to get
+// 
+// control_plane_data_plane_convergence_us metric values for convergence metrics.
 message Event {
 
-  // True to enable all events.
+  // Container for control plane(cp) event configuration.
+  EventCPEvents cp_events = 1;
+
+  // Container for data plane(dp) event configuration.
   // Enabling this option may affect the resultant packet payload due to
   // additional instrumentation data.
-  // default = False
-  optional bool enable = 1;
-
-  // Description missing in models
-  EventLink link = 2;
-
-  // Description missing in models
-  EventRxRateThreshold rx_rate_threshold = 3;
-
-  // Description missing in models
-  EventRouteAdvertiseWithdraw route_advertise_withdraw = 4;
+  EventDPEvents dp_events = 2;
 }
 
-// The optional container for rx rate threshold event configuration.
-message EventRxRateThreshold {
+// The optional container for control plane event configuration.
+message EventCPEvents {
 
-  // True to enable the rx_rate_threshold event.
-  // Enabling this option may affect the resultant packet payload due to
-  // additional instrumentation data.
+  // Setting to true enables start and end time for control_plane events
+  // associated with started flows to be recorded.
+  // default = False
+  optional bool enable = 1;
+}
+
+// The optional container for data plane event configuration.
+message EventDPEvents {
+
+  // Setting to true enables flow_rx_rate_above_threshold and flow_rx_rate_below_threshold
+  // 
+  // timestamps to be recorded when data packets switch between multiple rx_ports on the
+  // receive ports for affected flows.
   // default = False
   optional bool enable = 1;
 
-  // True to enable notifications when the rx rate of a flow passes above
+  // Setting to true enables timestamps to be recorded when the rx rate of a flow goes
+  // above
   // or below the threshold value.
   // default = 95
-  optional float threshold = 2;
-}
-
-// The optional container for link up/down event configuration.
-message EventLink {
-
-  // True to enable notifications when a link up/down event occurs.
-  // default = False
-  optional bool enable = 1;
-}
-
-// The optional container for route advertise/withdraw event configuration.
-message EventRouteAdvertiseWithdraw {
-
-  // True to enable notifications when a route advertise/withdraw
-  // event occurs.
-  // default = False
-  optional bool enable = 1;
+  optional float rx_rate_threshold = 2;
 }
 
 // Description missing in models
@@ -12517,6 +12510,7 @@ message MetricsRequest {
       ospfv2 = 14;
       macsec = 15;
       mka = 16;
+      convergence = 17;
     }
   }
   // Description missing in models
@@ -12570,6 +12564,9 @@ message MetricsRequest {
 
   // Description missing in models
   MkaMetricsRequest mka = 17;
+
+  // Description missing in models
+  ConvergenceRequest convergence = 18;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -12594,6 +12591,7 @@ message MetricsResponse {
       ospfv2_metrics = 14;
       macsec_metrics = 15;
       mka_metrics = 16;
+      convergence_metrics = 17;
     }
   }
   // Description missing in models
@@ -12647,6 +12645,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated MkaMetric mka_metrics = 17;
+
+  // Description missing in models
+  repeated ConvergenceMetric convergence_metrics = 18;
 }
 
 // The port result request to the traffic generator
@@ -14432,6 +14433,90 @@ message MkaMetric {
 
   // ICV Mismatch.
   optional uint64 icv_mismatch = 11;
+}
+
+// Under Review: Convergence metrics is currently under review for pending exploration
+// on use cases.
+// 
+// Container for requesting control-plane and data-plane convergence time metrics for
+// flows.
+message ConvergenceRequest {
+
+  // Convergence metrics will be retrieved for these flow names.
+  // If no flow names are specified then convergence metrics for all flows will be returned.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flow_names = 1;
+}
+
+// Under Review: Convergence metrics is currently under review for pending exploration
+// on use cases.
+// 
+// The container for convergence metrics.
+message ConvergenceMetric {
+
+  // The name of a flow.
+  optional string name = 1;
+
+  // The convergence time(microseconds) measured from the data plane perspective only.
+  // 
+  // It measures the time w.r.t. last start of the traffic of the affected flow from Below
+  // Threshold Timestamp,
+  // when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable amount
+  // of traffic was
+  // received at time Above Threshold Timestamp, when the rate crosses above the configured
+  // 
+  // rx_rate_threshold.
+  optional double data_plane_convergence_us = 2;
+
+  // The total convergence time(microseconds), between the event that caused the
+  // switchover until an acceptable amount of traffic was
+  // received at time Above Threshold Timestamp, when the rate crosses above the configured
+  // 
+  // rx_rate_threshold.
+  optional double control_plane_data_plane_convergence_us = 3;
+
+  // The events that were used to determine the convergence analytics.
+  repeated ConvergenceEvent events = 4;
+}
+
+// A container for an event that has occurred in the system affecting the convergence
+// time recorded for the flow.
+message ConvergenceEvent {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      link_down = 1;
+      link_up = 2;
+      route_withdraw = 3;
+      route_advertise = 4;
+      flow_rx_rate_above_threshold = 5;
+      flow_rx_rate_below_threshold = 6;
+    }
+  }
+  // The type of control plane or data plane event that occurred.
+  optional Type.Enum type = 1;
+
+  // The source of the event.
+  // The source MUST be the value of one of the x-constraint paths,
+  // which means the source MUST be a unique name in the configuration.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Flow/properties/name
+  // - /components/schemas/Device.Bgpv4Route/properties/name
+  // - /components/schemas/Device.Bgpv6Route/properties/name
+  // 
+  optional string source = 2;
+
+  // The timestamp(nanoseconds) of the starting event that triggers convergence.
+  optional double begin_timestamp_ns = 3;
+
+  // The timestamp(nanoseconds) of the end event that triggers convergence.
+  optional double end_timestamp_ns = 4;
 }
 
 // Request to traffic generator for states of choice

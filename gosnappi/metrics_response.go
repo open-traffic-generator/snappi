@@ -32,6 +32,7 @@ type metricsResponse struct {
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
 	macsecMetricsHolder       MetricsResponseMacsecMetricIter
 	mkaMetricsHolder          MetricsResponseMkaMetricIter
+	convergenceMetricsHolder  MetricsResponseConvergenceMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -275,6 +276,7 @@ func (obj *metricsResponse) setNil() {
 	obj.ospfv2MetricsHolder = nil
 	obj.macsecMetricsHolder = nil
 	obj.mkaMetricsHolder = nil
+	obj.convergenceMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -348,6 +350,8 @@ type MetricsResponse interface {
 	MacsecMetrics() MetricsResponseMacsecMetricIter
 	// MkaMetrics returns MetricsResponseMkaMetricIterIter, set in MetricsResponse
 	MkaMetrics() MetricsResponseMkaMetricIter
+	// ConvergenceMetrics returns MetricsResponseConvergenceMetricIterIter, set in MetricsResponse
+	ConvergenceMetrics() MetricsResponseConvergenceMetricIter
 	setNil()
 }
 
@@ -355,39 +359,41 @@ type MetricsResponseChoiceEnum string
 
 // Enum of Choice on MetricsResponse
 var MetricsResponseChoice = struct {
-	FLOW_METRICS   MetricsResponseChoiceEnum
-	PORT_METRICS   MetricsResponseChoiceEnum
-	BGPV4_METRICS  MetricsResponseChoiceEnum
-	BGPV6_METRICS  MetricsResponseChoiceEnum
-	ISIS_METRICS   MetricsResponseChoiceEnum
-	LAG_METRICS    MetricsResponseChoiceEnum
-	LACP_METRICS   MetricsResponseChoiceEnum
-	LLDP_METRICS   MetricsResponseChoiceEnum
-	RSVP_METRICS   MetricsResponseChoiceEnum
-	DHCPV4_CLIENT  MetricsResponseChoiceEnum
-	DHCPV4_SERVER  MetricsResponseChoiceEnum
-	DHCPV6_CLIENT  MetricsResponseChoiceEnum
-	DHCPV6_SERVER  MetricsResponseChoiceEnum
-	OSPFV2_METRICS MetricsResponseChoiceEnum
-	MACSEC_METRICS MetricsResponseChoiceEnum
-	MKA_METRICS    MetricsResponseChoiceEnum
+	FLOW_METRICS        MetricsResponseChoiceEnum
+	PORT_METRICS        MetricsResponseChoiceEnum
+	BGPV4_METRICS       MetricsResponseChoiceEnum
+	BGPV6_METRICS       MetricsResponseChoiceEnum
+	ISIS_METRICS        MetricsResponseChoiceEnum
+	LAG_METRICS         MetricsResponseChoiceEnum
+	LACP_METRICS        MetricsResponseChoiceEnum
+	LLDP_METRICS        MetricsResponseChoiceEnum
+	RSVP_METRICS        MetricsResponseChoiceEnum
+	DHCPV4_CLIENT       MetricsResponseChoiceEnum
+	DHCPV4_SERVER       MetricsResponseChoiceEnum
+	DHCPV6_CLIENT       MetricsResponseChoiceEnum
+	DHCPV6_SERVER       MetricsResponseChoiceEnum
+	OSPFV2_METRICS      MetricsResponseChoiceEnum
+	MACSEC_METRICS      MetricsResponseChoiceEnum
+	MKA_METRICS         MetricsResponseChoiceEnum
+	CONVERGENCE_METRICS MetricsResponseChoiceEnum
 }{
-	FLOW_METRICS:   MetricsResponseChoiceEnum("flow_metrics"),
-	PORT_METRICS:   MetricsResponseChoiceEnum("port_metrics"),
-	BGPV4_METRICS:  MetricsResponseChoiceEnum("bgpv4_metrics"),
-	BGPV6_METRICS:  MetricsResponseChoiceEnum("bgpv6_metrics"),
-	ISIS_METRICS:   MetricsResponseChoiceEnum("isis_metrics"),
-	LAG_METRICS:    MetricsResponseChoiceEnum("lag_metrics"),
-	LACP_METRICS:   MetricsResponseChoiceEnum("lacp_metrics"),
-	LLDP_METRICS:   MetricsResponseChoiceEnum("lldp_metrics"),
-	RSVP_METRICS:   MetricsResponseChoiceEnum("rsvp_metrics"),
-	DHCPV4_CLIENT:  MetricsResponseChoiceEnum("dhcpv4_client"),
-	DHCPV4_SERVER:  MetricsResponseChoiceEnum("dhcpv4_server"),
-	DHCPV6_CLIENT:  MetricsResponseChoiceEnum("dhcpv6_client"),
-	DHCPV6_SERVER:  MetricsResponseChoiceEnum("dhcpv6_server"),
-	OSPFV2_METRICS: MetricsResponseChoiceEnum("ospfv2_metrics"),
-	MACSEC_METRICS: MetricsResponseChoiceEnum("macsec_metrics"),
-	MKA_METRICS:    MetricsResponseChoiceEnum("mka_metrics"),
+	FLOW_METRICS:        MetricsResponseChoiceEnum("flow_metrics"),
+	PORT_METRICS:        MetricsResponseChoiceEnum("port_metrics"),
+	BGPV4_METRICS:       MetricsResponseChoiceEnum("bgpv4_metrics"),
+	BGPV6_METRICS:       MetricsResponseChoiceEnum("bgpv6_metrics"),
+	ISIS_METRICS:        MetricsResponseChoiceEnum("isis_metrics"),
+	LAG_METRICS:         MetricsResponseChoiceEnum("lag_metrics"),
+	LACP_METRICS:        MetricsResponseChoiceEnum("lacp_metrics"),
+	LLDP_METRICS:        MetricsResponseChoiceEnum("lldp_metrics"),
+	RSVP_METRICS:        MetricsResponseChoiceEnum("rsvp_metrics"),
+	DHCPV4_CLIENT:       MetricsResponseChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER:       MetricsResponseChoiceEnum("dhcpv4_server"),
+	DHCPV6_CLIENT:       MetricsResponseChoiceEnum("dhcpv6_client"),
+	DHCPV6_SERVER:       MetricsResponseChoiceEnum("dhcpv6_server"),
+	OSPFV2_METRICS:      MetricsResponseChoiceEnum("ospfv2_metrics"),
+	MACSEC_METRICS:      MetricsResponseChoiceEnum("macsec_metrics"),
+	MKA_METRICS:         MetricsResponseChoiceEnum("mka_metrics"),
+	CONVERGENCE_METRICS: MetricsResponseChoiceEnum("convergence_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
@@ -429,6 +435,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.ConvergenceMetrics = nil
+	obj.convergenceMetricsHolder = nil
 	obj.obj.MkaMetrics = nil
 	obj.mkaMetricsHolder = nil
 	obj.obj.MacsecMetrics = nil
@@ -500,6 +508,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.MKA_METRICS {
 		obj.obj.MkaMetrics = []*otg.MkaMetric{}
+	}
+
+	if value == MetricsResponseChoice.CONVERGENCE_METRICS {
+		obj.obj.ConvergenceMetrics = []*otg.ConvergenceMetric{}
 	}
 
 	return obj
@@ -1897,6 +1909,93 @@ func (obj *metricsResponseMkaMetricIter) appendHolderSlice(item MkaMetric) Metri
 	return obj
 }
 
+// description is TBD
+// ConvergenceMetrics returns a []ConvergenceMetric
+func (obj *metricsResponse) ConvergenceMetrics() MetricsResponseConvergenceMetricIter {
+	if len(obj.obj.ConvergenceMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.CONVERGENCE_METRICS)
+	}
+	if obj.convergenceMetricsHolder == nil {
+		obj.convergenceMetricsHolder = newMetricsResponseConvergenceMetricIter(&obj.obj.ConvergenceMetrics).setMsg(obj)
+	}
+	return obj.convergenceMetricsHolder
+}
+
+type metricsResponseConvergenceMetricIter struct {
+	obj                    *metricsResponse
+	convergenceMetricSlice []ConvergenceMetric
+	fieldPtr               *[]*otg.ConvergenceMetric
+}
+
+func newMetricsResponseConvergenceMetricIter(ptr *[]*otg.ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	return &metricsResponseConvergenceMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseConvergenceMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseConvergenceMetricIter
+	Items() []ConvergenceMetric
+	Add() ConvergenceMetric
+	Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter
+	Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter
+	Clear() MetricsResponseConvergenceMetricIter
+	clearHolderSlice() MetricsResponseConvergenceMetricIter
+	appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter
+}
+
+func (obj *metricsResponseConvergenceMetricIter) setMsg(msg *metricsResponse) MetricsResponseConvergenceMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&convergenceMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Items() []ConvergenceMetric {
+	return obj.convergenceMetricSlice
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Add() ConvergenceMetric {
+	newObj := &otg.ConvergenceMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &convergenceMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.convergenceMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) Clear() MetricsResponseConvergenceMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.ConvergenceMetric{}
+		obj.convergenceMetricSlice = []ConvergenceMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) clearHolderSlice() MetricsResponseConvergenceMetricIter {
+	if len(obj.convergenceMetricSlice) > 0 {
+		obj.convergenceMetricSlice = []ConvergenceMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2126,6 +2225,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.ConvergenceMetrics) != 0 {
+
+		if set_default {
+			obj.ConvergenceMetrics().clearHolderSlice()
+			for _, item := range obj.obj.ConvergenceMetrics {
+				obj.ConvergenceMetrics().appendHolderSlice(&convergenceMetric{obj: item})
+			}
+		}
+		for _, item := range obj.ConvergenceMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -2190,6 +2303,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.MkaMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.MKA_METRICS
+	}
+
+	if len(obj.obj.ConvergenceMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.CONVERGENCE_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

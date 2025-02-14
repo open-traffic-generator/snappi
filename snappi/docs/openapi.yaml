@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.19.0
+  version: 1.20.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -14864,67 +14864,60 @@ components:
         This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
-      description: |-
-        The optional container for event configuration.
+      description: "Under Review: Event configuration is currently under review for\
+        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
+        Both cp_events.enable and dp_events.enable must be explicitly set to true\
+        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
+        \ metrics."
+      x-status:
+        status: under_review
+        information: Event configuration is currently under review for pending exploration
+          on use cases.
       type: object
       properties:
-        enable:
-          description: "True to enable all events. \nEnabling this option may affect\
-            \ the resultant packet payload due to \nadditional instrumentation data."
-          type: boolean
-          default: false
+        cp_events:
+          description: |-
+            Container for control plane(cp) event configuration.
+          $ref: '#/components/schemas/Event.CPEvents'
           x-field-uid: 1
-        link:
-          $ref: '#/components/schemas/Event.Link'
+        dp_events:
+          description: "Container for data plane(dp) event configuration.\nEnabling\
+            \ this option may affect the resultant packet payload due to \nadditional\
+            \ instrumentation data."
+          $ref: '#/components/schemas/Event.DPEvents'
           x-field-uid: 2
-        rx_rate_threshold:
-          $ref: '#/components/schemas/Event.RxRateThreshold'
-          x-field-uid: 3
-        route_advertise_withdraw:
-          $ref: '#/components/schemas/Event.RouteAdvertiseWithdraw'
-          x-field-uid: 4
-    Event.RxRateThreshold:
+    Event.CPEvents:
       description: |-
-        The optional container for rx rate threshold event configuration.
+        The optional container for control plane event configuration.
       type: object
       properties:
         enable:
-          description: "True to enable the rx_rate_threshold event. \nEnabling this\
-            \ option may affect the resultant packet payload due to \nadditional instrumentation\
-            \ data."
+          description: "Setting to true enables start and end time for control_plane\
+            \ events \nassociated with started flows to be recorded."
           type: boolean
           default: false
           x-field-uid: 1
-        threshold:
-          description: "True to enable notifications when the rx rate of a flow passes\
-            \ above \nor below the threshold value. "
+    Event.DPEvents:
+      description: |-
+        The optional container for data plane event configuration.
+      type: object
+      properties:
+        enable:
+          description: "Setting to true enables flow_rx_rate_above_threshold and flow_rx_rate_below_threshold\
+            \ \ntimestamps to be recorded when data packets switch between multiple\
+            \ rx_ports on the receive ports for affected flows."
+          type: boolean
+          default: false
+          x-field-uid: 1
+        rx_rate_threshold:
+          description: "Setting to true enables timestamps to be recorded when the\
+            \ rx rate of a flow goes above \nor below the threshold value. "
           type: number
           format: float
           maximum: 100
           minimum: 0
           default: 95
           x-field-uid: 2
-    Event.Link:
-      description: |-
-        The optional container for link up/down event configuration.
-      type: object
-      properties:
-        enable:
-          description: "True to enable notifications when a link up/down event occurs. "
-          type: boolean
-          default: false
-          x-field-uid: 1
-    Event.RouteAdvertiseWithdraw:
-      description: |-
-        The optional container for route advertise/withdraw event configuration.
-      type: object
-      properties:
-        enable:
-          description: "True to enable notifications when a route advertise/withdraw\
-            \ \nevent occurs. "
-          type: boolean
-          default: false
-          x-field-uid: 1
     Event.Request:
       type: object
       properties:
@@ -16496,6 +16489,8 @@ components:
               x-field-uid: 15
             mka:
               x-field-uid: 16
+            convergence:
+              x-field-uid: 17
           enum:
           - port
           - flow
@@ -16513,6 +16508,7 @@ components:
           - ospfv2
           - macsec
           - mka
+          - convergence
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -16561,6 +16557,9 @@ components:
         mka:
           $ref: '#/components/schemas/Mka.Metrics.Request'
           x-field-uid: 17
+        convergence:
+          $ref: '#/components/schemas/Convergence.Request'
+          x-field-uid: 18
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -16603,6 +16602,8 @@ components:
               x-field-uid: 15
             mka_metrics:
               x-field-uid: 16
+            convergence_metrics:
+              x-field-uid: 17
           enum:
           - flow_metrics
           - port_metrics
@@ -16620,6 +16621,7 @@ components:
           - ospfv2_metrics
           - macsec_metrics
           - mka_metrics
+          - convergence_metrics
         port_metrics:
           type: array
           items:
@@ -16700,6 +16702,11 @@ components:
           items:
             $ref: '#/components/schemas/Mka.Metric'
           x-field-uid: 17
+        convergence_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Convergence.Metric'
+          x-field-uid: 18
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -19844,6 +19851,125 @@ components:
           type: integer
           format: uint64
           x-field-uid: 11
+    Convergence.Request:
+      description: |-
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+
+        Container for requesting control-plane and data-plane convergence time metrics for flows.
+      x-status:
+        status: under_review
+        information: Convergence metrics is currently under review for pending exploration
+          on use cases.
+      type: object
+      properties:
+        flow_names:
+          description: |
+            Convergence metrics will be retrieved for these flow names.
+            If no flow names are specified then convergence metrics for all flows will be returned.
+
+            x-constraint:
+            - /components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 1
+    Convergence.Metric:
+      description: |-
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+
+        The container for convergence metrics.
+      x-status:
+        status: under_review
+        information: Convergence metrics is currently under review for pending exploration
+          on use cases.
+      type: object
+      properties:
+        name:
+          description: "The name of a flow. "
+          type: string
+          x-field-uid: 1
+        data_plane_convergence_us:
+          description: "The convergence time(microseconds) measured from the data\
+            \ plane perspective only. \nIt measures the time w.r.t. last start of\
+            \ the traffic of the affected flow from Below Threshold Timestamp, \n\
+            when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable\
+            \ amount of traffic was \nreceived at time Above Threshold Timestamp,\
+            \ when the rate crosses above the configured \nrx_rate_threshold."
+          type: number
+          format: double
+          x-field-uid: 2
+        control_plane_data_plane_convergence_us:
+          description: "The total convergence time(microseconds), between the event\
+            \ that caused the\nswitchover until an acceptable amount of traffic was\
+            \ \nreceived at time Above Threshold Timestamp, when the rate crosses\
+            \ above the configured \nrx_rate_threshold."
+          type: number
+          format: double
+          x-field-uid: 3
+        events:
+          description: |-
+            The events that were used to determine the convergence analytics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Convergence.Event'
+          x-field-uid: 4
+    Convergence.Event:
+      description: |-
+        A container for an event that has occurred in the system affecting the convergence time recorded for the flow.
+      type: object
+      properties:
+        type:
+          description: |-
+            The type of control plane or data plane event that occurred.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            link_down:
+              x-field-uid: 1
+            link_up:
+              x-field-uid: 2
+            route_withdraw:
+              x-field-uid: 3
+            route_advertise:
+              x-field-uid: 4
+            flow_rx_rate_above_threshold:
+              x-field-uid: 5
+            flow_rx_rate_below_threshold:
+              x-field-uid: 6
+          enum:
+          - link_down
+          - link_up
+          - route_withdraw
+          - route_advertise
+          - flow_rx_rate_above_threshold
+          - flow_rx_rate_below_threshold
+        source:
+          description: "The source of the event. \nThe source MUST be the value of\
+            \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
+            \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
+            - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
+          type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          - /components/schemas/Flow/properties/name
+          - /components/schemas/Device.Bgpv4Route/properties/name
+          - /components/schemas/Device.Bgpv6Route/properties/name
+          x-field-uid: 2
+        begin_timestamp_ns:
+          description: |-
+            The timestamp(nanoseconds) of the starting event that triggers convergence.
+          type: number
+          format: double
+          x-field-uid: 3
+        end_timestamp_ns:
+          description: |-
+            The timestamp(nanoseconds) of the end event that triggers convergence.
+          type: number
+          format: double
+          x-field-uid: 4
     States.Request:
       description: |-
         Request to traffic generator for states of choice
