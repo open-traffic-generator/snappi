@@ -16,7 +16,6 @@ type isisInterfaceAdjacencySid struct {
 	obj          *otg.IsisInterfaceAdjacencySid
 	marshaller   marshalIsisInterfaceAdjacencySid
 	unMarshaller unMarshalIsisInterfaceAdjacencySid
-	flagsHolder  IsisInterfaceAdjSidFlags
 }
 
 func NewIsisInterfaceAdjacencySid() IsisInterfaceAdjacencySid {
@@ -30,7 +29,7 @@ func (obj *isisInterfaceAdjacencySid) msg() *otg.IsisInterfaceAdjacencySid {
 }
 
 func (obj *isisInterfaceAdjacencySid) setMsg(msg *otg.IsisInterfaceAdjacencySid) IsisInterfaceAdjacencySid {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalisisInterfaceAdjacencySid) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalisisInterfaceAdjacencySid) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalisisInterfaceAdjacencySid) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -241,13 +240,6 @@ func (obj *isisInterfaceAdjacencySid) Clone() (IsisInterfaceAdjacencySid, error)
 		return nil, pbErr
 	}
 	return newObj, nil
-}
-
-func (obj *isisInterfaceAdjacencySid) setNil() {
-	obj.flagsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // IsisInterfaceAdjacencySid is optional container for segment routing MPLS settings.
@@ -293,21 +285,42 @@ type IsisInterfaceAdjacencySid interface {
 	SetSidIndex(value uint32) IsisInterfaceAdjacencySid
 	// HasSidIndex checks if SidIndex has been set in IsisInterfaceAdjacencySid
 	HasSidIndex() bool
-	// Flags returns IsisInterfaceAdjSidFlags, set in IsisInterfaceAdjacencySid.
-	// IsisInterfaceAdjSidFlags is conatiner of 1-octet Flags associated with Adjacency Segment-ID.
-	Flags() IsisInterfaceAdjSidFlags
-	// SetFlags assigns IsisInterfaceAdjSidFlags provided by user to IsisInterfaceAdjacencySid.
-	// IsisInterfaceAdjSidFlags is conatiner of 1-octet Flags associated with Adjacency Segment-ID.
-	SetFlags(value IsisInterfaceAdjSidFlags) IsisInterfaceAdjacencySid
-	// HasFlags checks if Flags has been set in IsisInterfaceAdjacencySid
-	HasFlags() bool
+	// FFlag returns bool, set in IsisInterfaceAdjacencySid.
+	FFlag() bool
+	// SetFFlag assigns bool provided by user to IsisInterfaceAdjacencySid
+	SetFFlag(value bool) IsisInterfaceAdjacencySid
+	// HasFFlag checks if FFlag has been set in IsisInterfaceAdjacencySid
+	HasFFlag() bool
+	// BFlag returns bool, set in IsisInterfaceAdjacencySid.
+	BFlag() bool
+	// SetBFlag assigns bool provided by user to IsisInterfaceAdjacencySid
+	SetBFlag(value bool) IsisInterfaceAdjacencySid
+	// HasBFlag checks if BFlag has been set in IsisInterfaceAdjacencySid
+	HasBFlag() bool
+	// LFlag returns bool, set in IsisInterfaceAdjacencySid.
+	LFlag() bool
+	// SetLFlag assigns bool provided by user to IsisInterfaceAdjacencySid
+	SetLFlag(value bool) IsisInterfaceAdjacencySid
+	// HasLFlag checks if LFlag has been set in IsisInterfaceAdjacencySid
+	HasLFlag() bool
+	// SFlag returns bool, set in IsisInterfaceAdjacencySid.
+	SFlag() bool
+	// SetSFlag assigns bool provided by user to IsisInterfaceAdjacencySid
+	SetSFlag(value bool) IsisInterfaceAdjacencySid
+	// HasSFlag checks if SFlag has been set in IsisInterfaceAdjacencySid
+	HasSFlag() bool
+	// PFlag returns bool, set in IsisInterfaceAdjacencySid.
+	PFlag() bool
+	// SetPFlag assigns bool provided by user to IsisInterfaceAdjacencySid
+	SetPFlag(value bool) IsisInterfaceAdjacencySid
+	// HasPFlag checks if PFlag has been set in IsisInterfaceAdjacencySid
+	HasPFlag() bool
 	// Weight returns uint32, set in IsisInterfaceAdjacencySid.
 	Weight() uint32
 	// SetWeight assigns uint32 provided by user to IsisInterfaceAdjacencySid
 	SetWeight(value uint32) IsisInterfaceAdjacencySid
 	// HasWeight checks if Weight has been set in IsisInterfaceAdjacencySid
 	HasWeight() bool
-	setNil()
 }
 
 type IsisInterfaceAdjacencySidChoiceEnum string
@@ -412,31 +425,137 @@ func (obj *isisInterfaceAdjacencySid) SetSidIndex(value uint32) IsisInterfaceAdj
 	return obj
 }
 
-// Flags associated with Adjacency Segment-ID.
-// Flags returns a IsisInterfaceAdjSidFlags
-func (obj *isisInterfaceAdjacencySid) Flags() IsisInterfaceAdjSidFlags {
-	if obj.obj.Flags == nil {
-		obj.obj.Flags = NewIsisInterfaceAdjSidFlags().msg()
-	}
-	if obj.flagsHolder == nil {
-		obj.flagsHolder = &isisInterfaceAdjSidFlags{obj: obj.obj.Flags}
-	}
-	return obj.flagsHolder
+// The address family flag. If unset, then the Adj-SID refers
+// to an adjacency with outgoing IPv4 encapsulation.  If set then
+// the Adj-SID refers to an adjacency with outgoing IPv6
+// encapsulation.
+// FFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) FFlag() bool {
+
+	return *obj.obj.FFlag
+
 }
 
-// Flags associated with Adjacency Segment-ID.
-// Flags returns a IsisInterfaceAdjSidFlags
-func (obj *isisInterfaceAdjacencySid) HasFlags() bool {
-	return obj.obj.Flags != nil
+// The address family flag. If unset, then the Adj-SID refers
+// to an adjacency with outgoing IPv4 encapsulation.  If set then
+// the Adj-SID refers to an adjacency with outgoing IPv6
+// encapsulation.
+// FFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) HasFFlag() bool {
+	return obj.obj.FFlag != nil
 }
 
-// Flags associated with Adjacency Segment-ID.
-// SetFlags sets the IsisInterfaceAdjSidFlags value in the IsisInterfaceAdjacencySid object
-func (obj *isisInterfaceAdjacencySid) SetFlags(value IsisInterfaceAdjSidFlags) IsisInterfaceAdjacencySid {
+// The address family flag. If unset, then the Adj-SID refers
+// to an adjacency with outgoing IPv4 encapsulation.  If set then
+// the Adj-SID refers to an adjacency with outgoing IPv6
+// encapsulation.
+// SetFFlag sets the bool value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetFFlag(value bool) IsisInterfaceAdjacencySid {
 
-	obj.flagsHolder = nil
-	obj.obj.Flags = value.msg()
+	obj.obj.FFlag = &value
+	return obj
+}
 
+// The backup flag. If set, the Adj-SID is eligible for protection.
+// BFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) BFlag() bool {
+
+	return *obj.obj.BFlag
+
+}
+
+// The backup flag. If set, the Adj-SID is eligible for protection.
+// BFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) HasBFlag() bool {
+	return obj.obj.BFlag != nil
+}
+
+// The backup flag. If set, the Adj-SID is eligible for protection.
+// SetBFlag sets the bool value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetBFlag(value bool) IsisInterfaceAdjacencySid {
+
+	obj.obj.BFlag = &value
+	return obj
+}
+
+// The local flag.  If set, then the value/index carried by
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
+// LFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) LFlag() bool {
+
+	return *obj.obj.LFlag
+
+}
+
+// The local flag.  If set, then the value/index carried by
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
+// LFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) HasLFlag() bool {
+	return obj.obj.LFlag != nil
+}
+
+// The local flag.  If set, then the value/index carried by
+// the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
+// SetLFlag sets the bool value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetLFlag(value bool) IsisInterfaceAdjacencySid {
+
+	obj.obj.LFlag = &value
+	return obj
+}
+
+// The set flag. When set, the S-Flag indicates that the
+// Adj-SID refers to a set of adjacencies (and therefore MAY be
+// assigned to other adjacencies as well).
+// SFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) SFlag() bool {
+
+	return *obj.obj.SFlag
+
+}
+
+// The set flag. When set, the S-Flag indicates that the
+// Adj-SID refers to a set of adjacencies (and therefore MAY be
+// assigned to other adjacencies as well).
+// SFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) HasSFlag() bool {
+	return obj.obj.SFlag != nil
+}
+
+// The set flag. When set, the S-Flag indicates that the
+// Adj-SID refers to a set of adjacencies (and therefore MAY be
+// assigned to other adjacencies as well).
+// SetSFlag sets the bool value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetSFlag(value bool) IsisInterfaceAdjacencySid {
+
+	obj.obj.SFlag = &value
+	return obj
+}
+
+// The persistent flag. When set, the P-Flag indicates that
+// the Adj-SID is persistently allocated, i.e., the Adj-SID value
+// remains consistent across router restart and/or interface flap.
+// PFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) PFlag() bool {
+
+	return *obj.obj.PFlag
+
+}
+
+// The persistent flag. When set, the P-Flag indicates that
+// the Adj-SID is persistently allocated, i.e., the Adj-SID value
+// remains consistent across router restart and/or interface flap.
+// PFlag returns a bool
+func (obj *isisInterfaceAdjacencySid) HasPFlag() bool {
+	return obj.obj.PFlag != nil
+}
+
+// The persistent flag. When set, the P-Flag indicates that
+// the Adj-SID is persistently allocated, i.e., the Adj-SID value
+// remains consistent across router restart and/or interface flap.
+// SetPFlag sets the bool value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetPFlag(value bool) IsisInterfaceAdjacencySid {
+
+	obj.obj.PFlag = &value
 	return obj
 }
 
@@ -487,11 +606,6 @@ func (obj *isisInterfaceAdjacencySid) validateObj(vObj *validation, set_default 
 
 	}
 
-	if obj.obj.Flags != nil {
-
-		obj.Flags().validateObj(vObj, set_default)
-	}
-
 	if obj.obj.Weight != nil {
 
 		if *obj.obj.Weight > 255 {
@@ -535,6 +649,21 @@ func (obj *isisInterfaceAdjacencySid) setDefault() {
 		}
 	}
 
+	if obj.obj.FFlag == nil {
+		obj.SetFFlag(true)
+	}
+	if obj.obj.BFlag == nil {
+		obj.SetBFlag(false)
+	}
+	if obj.obj.LFlag == nil {
+		obj.SetLFlag(true)
+	}
+	if obj.obj.SFlag == nil {
+		obj.SetSFlag(false)
+	}
+	if obj.obj.PFlag == nil {
+		obj.SetPFlag(false)
+	}
 	if obj.obj.Weight == nil {
 		obj.SetWeight(0)
 	}

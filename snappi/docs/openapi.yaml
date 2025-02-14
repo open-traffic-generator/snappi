@@ -3010,25 +3010,6 @@ components:
           minimum: 0
           maximum: 1048575
           x-field-uid: 3
-        flags:
-          description: |-
-            Flags associated with Adjacency Segment-ID.
-          $ref: '#/components/schemas/IsisInterface.AdjSidFlags'
-          x-field-uid: 4
-        weight:
-          description: "The value represents the weight of the Adj-SID for the purpose\
-            \ of load balancing. "
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 255
-          x-field-uid: 5
-    IsisInterface.AdjSidFlags:
-      description: |-
-        Conatiner of 1-octet Flags associated with Adjacency Segment-ID.
-      type: object
-      properties:
         f_flag:
           description: |-
             The address family flag. If unset, then the Adj-SID refers
@@ -3037,20 +3018,20 @@ components:
             encapsulation.
           type: boolean
           default: true
-          x-field-uid: 1
+          x-field-uid: 4
         b_flag:
           description: |-
             The backup flag. If set, the Adj-SID is eligible for protection.
           type: boolean
           default: false
-          x-field-uid: 2
+          x-field-uid: 5
         l_flag:
           description: |-
             The local flag.  If set, then the value/index carried by
             the Adj-SID has local significance. In this case, Adjacency_sid is from device.isis.segment_routing.router_capability.srlb_ranges.
           type: boolean
           default: true
-          x-field-uid: 3
+          x-field-uid: 6
         s_flag:
           description: |-
             The set flag. When set, the S-Flag indicates that the
@@ -3058,7 +3039,7 @@ components:
             assigned to other adjacencies as well).
           type: boolean
           default: false
-          x-field-uid: 4
+          x-field-uid: 7
         p_flag:
           description: |-
             The persistent flag. When set, the P-Flag indicates that
@@ -3066,7 +3047,16 @@ components:
             remains consistent across router restart and/or interface flap.
           type: boolean
           default: false
-          x-field-uid: 5
+          x-field-uid: 8
+        weight:
+          description: "The value represents the weight of the Adj-SID for the purpose\
+            \ of load balancing. "
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 255
+          x-field-uid: 9
     Isis.Basic:
       description: |-
         This contains ISIS router basic properties.
@@ -3484,11 +3474,44 @@ components:
           minimum: 1
           maximum: 1048575
           x-field-uid: 3
-        flags:
-          description: |-
-            Flags associated with Prefix Segment-ID.
-          $ref: '#/components/schemas/IsisSR.PrefixSidFlags'
+        r_flag:
+          description: "R-Flag: Re-advertisement Flag. \nIf set, then the prefix to\
+            \ which this Prefix-SID is attached has been propagated by the router\
+            \ \nfrom either another level (i.e., from Level-1 to Level-2 or the opposite)\
+            \ or redistribution (e.g., from another protocol)."
+          type: boolean
+          default: false
           x-field-uid: 4
+        n_flag:
+          description: "N-Flag: Node-SID flag.  \nIf set, then the Prefix-SID refers\
+            \ to the router identified by the prefix. \nTypically, the N-Flag is set\
+            \ on Prefix-SIDs that are attached to a router loopback address. \nThe\
+            \ N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402]."
+          type: boolean
+          default: false
+          x-field-uid: 5
+        p_flag:
+          description: |-
+            P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+            If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the node that advertised the Prefix-SID.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        e_flag:
+          description: "E-Flag: Explicit-Null Flag.\nIf set, any upstream neighbor\
+            \ of the Prefix-SID originator MUST replace the Prefix-SID with a Prefix-SID\
+            \ \nthat has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before\
+            \ forwarding the packet."
+          type: boolean
+          default: false
+          x-field-uid: 7
+        l_flag:
+          description: |-
+            The local flag. If set, then the value/index carried by
+            the Prefix-SID has local significance and the Prefix SID is from Please refer to device.isis.segment_routing.router_capability.srlb_ranges.
+          type: boolean
+          default: false
+          x-field-uid: 8
         algorithm:
           description: |-
             The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these nodes.
@@ -3498,50 +3521,7 @@ components:
           default: 0
           minimum: 0
           maximum: 255
-          x-field-uid: 5
-    IsisSR.PrefixSidFlags:
-      description: |-
-        Conatiner of 1-octet Flags associated with Prefix Segment-ID.
-      type: object
-      properties:
-        r_flag:
-          description: "R-Flag: Re-advertisement Flag. \nIf set, then the prefix to\
-            \ which this Prefix-SID is attached has been propagated by the router\
-            \ \nfrom either another level (i.e., from Level-1 to Level-2 or the opposite)\
-            \ or redistribution (e.g., from another protocol)."
-          type: boolean
-          default: false
-          x-field-uid: 1
-        n_flag:
-          description: "N-Flag: Node-SID flag.  \nIf set, then the Prefix-SID refers\
-            \ to the router identified by the prefix. \nTypically, the N-Flag is set\
-            \ on Prefix-SIDs that are attached to a router loopback address. \nThe\
-            \ N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402]."
-          type: boolean
-          default: false
-          x-field-uid: 2
-        p_flag:
-          description: |-
-            P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
-            If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the node that advertised the Prefix-SID.
-          type: boolean
-          default: false
-          x-field-uid: 3
-        e_flag:
-          description: "E-Flag: Explicit-Null Flag.\nIf set, any upstream neighbor\
-            \ of the Prefix-SID originator MUST replace the Prefix-SID with a Prefix-SID\
-            \ \nthat has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before\
-            \ forwarding the packet."
-          type: boolean
-          default: false
-          x-field-uid: 4
-        l_flag:
-          description: |-
-            The local flag. If set, then the value/index carried by
-            the Prefix-SID has local significance and the Prefix SID is from Please refer to device.isis.segment_routing.router_capability.srlb_ranges.
-          type: boolean
-          default: false
-          x-field-uid: 5
+          x-field-uid: 9
     Isis.V6RouteRange:
       description: |-
         Emulated ISIS IPv6 routes.

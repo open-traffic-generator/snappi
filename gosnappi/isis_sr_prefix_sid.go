@@ -16,7 +16,6 @@ type isisSRPrefixSid struct {
 	obj          *otg.IsisSRPrefixSid
 	marshaller   marshalIsisSRPrefixSid
 	unMarshaller unMarshalIsisSRPrefixSid
-	flagsHolder  IsisSRPrefixSidFlags
 }
 
 func NewIsisSRPrefixSid() IsisSRPrefixSid {
@@ -30,7 +29,7 @@ func (obj *isisSRPrefixSid) msg() *otg.IsisSRPrefixSid {
 }
 
 func (obj *isisSRPrefixSid) setMsg(msg *otg.IsisSRPrefixSid) IsisSRPrefixSid {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalisisSRPrefixSid) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalisisSRPrefixSid) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalisisSRPrefixSid) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -243,13 +242,6 @@ func (obj *isisSRPrefixSid) Clone() (IsisSRPrefixSid, error) {
 	return newObj, nil
 }
 
-func (obj *isisSRPrefixSid) setNil() {
-	obj.flagsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // IsisSRPrefixSid is this contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
 type IsisSRPrefixSid interface {
 	Validation
@@ -290,21 +282,42 @@ type IsisSRPrefixSid interface {
 	SetSidIndex(value uint32) IsisSRPrefixSid
 	// HasSidIndex checks if SidIndex has been set in IsisSRPrefixSid
 	HasSidIndex() bool
-	// Flags returns IsisSRPrefixSidFlags, set in IsisSRPrefixSid.
-	// IsisSRPrefixSidFlags is conatiner of 1-octet Flags associated with Prefix Segment-ID.
-	Flags() IsisSRPrefixSidFlags
-	// SetFlags assigns IsisSRPrefixSidFlags provided by user to IsisSRPrefixSid.
-	// IsisSRPrefixSidFlags is conatiner of 1-octet Flags associated with Prefix Segment-ID.
-	SetFlags(value IsisSRPrefixSidFlags) IsisSRPrefixSid
-	// HasFlags checks if Flags has been set in IsisSRPrefixSid
-	HasFlags() bool
+	// RFlag returns bool, set in IsisSRPrefixSid.
+	RFlag() bool
+	// SetRFlag assigns bool provided by user to IsisSRPrefixSid
+	SetRFlag(value bool) IsisSRPrefixSid
+	// HasRFlag checks if RFlag has been set in IsisSRPrefixSid
+	HasRFlag() bool
+	// NFlag returns bool, set in IsisSRPrefixSid.
+	NFlag() bool
+	// SetNFlag assigns bool provided by user to IsisSRPrefixSid
+	SetNFlag(value bool) IsisSRPrefixSid
+	// HasNFlag checks if NFlag has been set in IsisSRPrefixSid
+	HasNFlag() bool
+	// PFlag returns bool, set in IsisSRPrefixSid.
+	PFlag() bool
+	// SetPFlag assigns bool provided by user to IsisSRPrefixSid
+	SetPFlag(value bool) IsisSRPrefixSid
+	// HasPFlag checks if PFlag has been set in IsisSRPrefixSid
+	HasPFlag() bool
+	// EFlag returns bool, set in IsisSRPrefixSid.
+	EFlag() bool
+	// SetEFlag assigns bool provided by user to IsisSRPrefixSid
+	SetEFlag(value bool) IsisSRPrefixSid
+	// HasEFlag checks if EFlag has been set in IsisSRPrefixSid
+	HasEFlag() bool
+	// LFlag returns bool, set in IsisSRPrefixSid.
+	LFlag() bool
+	// SetLFlag assigns bool provided by user to IsisSRPrefixSid
+	SetLFlag(value bool) IsisSRPrefixSid
+	// HasLFlag checks if LFlag has been set in IsisSRPrefixSid
+	HasLFlag() bool
 	// Algorithm returns uint32, set in IsisSRPrefixSid.
 	Algorithm() uint32
 	// SetAlgorithm assigns uint32 provided by user to IsisSRPrefixSid
 	SetAlgorithm(value uint32) IsisSRPrefixSid
 	// HasAlgorithm checks if Algorithm has been set in IsisSRPrefixSid
 	HasAlgorithm() bool
-	setNil()
 }
 
 type IsisSRPrefixSidChoiceEnum string
@@ -409,31 +422,140 @@ func (obj *isisSRPrefixSid) SetSidIndex(value uint32) IsisSRPrefixSid {
 	return obj
 }
 
-// Flags associated with Prefix Segment-ID.
-// Flags returns a IsisSRPrefixSidFlags
-func (obj *isisSRPrefixSid) Flags() IsisSRPrefixSidFlags {
-	if obj.obj.Flags == nil {
-		obj.obj.Flags = NewIsisSRPrefixSidFlags().msg()
-	}
-	if obj.flagsHolder == nil {
-		obj.flagsHolder = &isisSRPrefixSidFlags{obj: obj.obj.Flags}
-	}
-	return obj.flagsHolder
+// R-Flag: Re-advertisement Flag.
+// If set, then the prefix to which this Prefix-SID is attached has been propagated by the router
+// from either another level (i.e., from Level-1 to Level-2 or the opposite) or redistribution (e.g., from another protocol).
+// RFlag returns a bool
+func (obj *isisSRPrefixSid) RFlag() bool {
+
+	return *obj.obj.RFlag
+
 }
 
-// Flags associated with Prefix Segment-ID.
-// Flags returns a IsisSRPrefixSidFlags
-func (obj *isisSRPrefixSid) HasFlags() bool {
-	return obj.obj.Flags != nil
+// R-Flag: Re-advertisement Flag.
+// If set, then the prefix to which this Prefix-SID is attached has been propagated by the router
+// from either another level (i.e., from Level-1 to Level-2 or the opposite) or redistribution (e.g., from another protocol).
+// RFlag returns a bool
+func (obj *isisSRPrefixSid) HasRFlag() bool {
+	return obj.obj.RFlag != nil
 }
 
-// Flags associated with Prefix Segment-ID.
-// SetFlags sets the IsisSRPrefixSidFlags value in the IsisSRPrefixSid object
-func (obj *isisSRPrefixSid) SetFlags(value IsisSRPrefixSidFlags) IsisSRPrefixSid {
+// R-Flag: Re-advertisement Flag.
+// If set, then the prefix to which this Prefix-SID is attached has been propagated by the router
+// from either another level (i.e., from Level-1 to Level-2 or the opposite) or redistribution (e.g., from another protocol).
+// SetRFlag sets the bool value in the IsisSRPrefixSid object
+func (obj *isisSRPrefixSid) SetRFlag(value bool) IsisSRPrefixSid {
 
-	obj.flagsHolder = nil
-	obj.obj.Flags = value.msg()
+	obj.obj.RFlag = &value
+	return obj
+}
 
+// N-Flag: Node-SID flag.
+// If set, then the Prefix-SID refers to the router identified by the prefix.
+// Typically, the N-Flag is set on Prefix-SIDs that are attached to a router loopback address.
+// The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
+// NFlag returns a bool
+func (obj *isisSRPrefixSid) NFlag() bool {
+
+	return *obj.obj.NFlag
+
+}
+
+// N-Flag: Node-SID flag.
+// If set, then the Prefix-SID refers to the router identified by the prefix.
+// Typically, the N-Flag is set on Prefix-SIDs that are attached to a router loopback address.
+// The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
+// NFlag returns a bool
+func (obj *isisSRPrefixSid) HasNFlag() bool {
+	return obj.obj.NFlag != nil
+}
+
+// N-Flag: Node-SID flag.
+// If set, then the Prefix-SID refers to the router identified by the prefix.
+// Typically, the N-Flag is set on Prefix-SIDs that are attached to a router loopback address.
+// The N-Flag is set when the Prefix-SID is a Node-SID as described in [RFC8402].
+// SetNFlag sets the bool value in the IsisSRPrefixSid object
+func (obj *isisSRPrefixSid) SetNFlag(value bool) IsisSRPrefixSid {
+
+	obj.obj.NFlag = &value
+	return obj
+}
+
+// P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+// If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the node that advertised the Prefix-SID.
+// PFlag returns a bool
+func (obj *isisSRPrefixSid) PFlag() bool {
+
+	return *obj.obj.PFlag
+
+}
+
+// P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+// If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the node that advertised the Prefix-SID.
+// PFlag returns a bool
+func (obj *isisSRPrefixSid) HasPFlag() bool {
+	return obj.obj.PFlag != nil
+}
+
+// P-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+// If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the node that advertised the Prefix-SID.
+// SetPFlag sets the bool value in the IsisSRPrefixSid object
+func (obj *isisSRPrefixSid) SetPFlag(value bool) IsisSRPrefixSid {
+
+	obj.obj.PFlag = &value
+	return obj
+}
+
+// E-Flag: Explicit-Null Flag.
+// If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID with a Prefix-SID
+// that has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before forwarding the packet.
+// EFlag returns a bool
+func (obj *isisSRPrefixSid) EFlag() bool {
+
+	return *obj.obj.EFlag
+
+}
+
+// E-Flag: Explicit-Null Flag.
+// If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID with a Prefix-SID
+// that has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before forwarding the packet.
+// EFlag returns a bool
+func (obj *isisSRPrefixSid) HasEFlag() bool {
+	return obj.obj.EFlag != nil
+}
+
+// E-Flag: Explicit-Null Flag.
+// If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID with a Prefix-SID
+// that has an Explicit NULL value (0 for IPv4 and 2 for IPv6) before forwarding the packet.
+// SetEFlag sets the bool value in the IsisSRPrefixSid object
+func (obj *isisSRPrefixSid) SetEFlag(value bool) IsisSRPrefixSid {
+
+	obj.obj.EFlag = &value
+	return obj
+}
+
+// The local flag. If set, then the value/index carried by
+// the Prefix-SID has local significance and the Prefix SID is from Please refer to device.isis.segment_routing.router_capability.srlb_ranges.
+// LFlag returns a bool
+func (obj *isisSRPrefixSid) LFlag() bool {
+
+	return *obj.obj.LFlag
+
+}
+
+// The local flag. If set, then the value/index carried by
+// the Prefix-SID has local significance and the Prefix SID is from Please refer to device.isis.segment_routing.router_capability.srlb_ranges.
+// LFlag returns a bool
+func (obj *isisSRPrefixSid) HasLFlag() bool {
+	return obj.obj.LFlag != nil
+}
+
+// The local flag. If set, then the value/index carried by
+// the Prefix-SID has local significance and the Prefix SID is from Please refer to device.isis.segment_routing.router_capability.srlb_ranges.
+// SetLFlag sets the bool value in the IsisSRPrefixSid object
+func (obj *isisSRPrefixSid) SetLFlag(value bool) IsisSRPrefixSid {
+
+	obj.obj.LFlag = &value
 	return obj
 }
 
@@ -487,11 +609,6 @@ func (obj *isisSRPrefixSid) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.Flags != nil {
-
-		obj.Flags().validateObj(vObj, set_default)
-	}
-
 	if obj.obj.Algorithm != nil {
 
 		if *obj.obj.Algorithm > 255 {
@@ -535,6 +652,21 @@ func (obj *isisSRPrefixSid) setDefault() {
 		}
 	}
 
+	if obj.obj.RFlag == nil {
+		obj.SetRFlag(false)
+	}
+	if obj.obj.NFlag == nil {
+		obj.SetNFlag(false)
+	}
+	if obj.obj.PFlag == nil {
+		obj.SetPFlag(false)
+	}
+	if obj.obj.EFlag == nil {
+		obj.SetEFlag(false)
+	}
+	if obj.obj.LFlag == nil {
+		obj.SetLFlag(false)
+	}
 	if obj.obj.Algorithm == nil {
 		obj.SetAlgorithm(0)
 	}
