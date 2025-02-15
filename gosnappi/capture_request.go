@@ -275,9 +275,6 @@ type CaptureRequest interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *captureRequest) PortName() string {
 
@@ -286,9 +283,6 @@ func (obj *captureRequest) PortName() string {
 }
 
 // The name of a port a capture is started on.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
