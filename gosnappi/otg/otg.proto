@@ -14825,7 +14825,7 @@ message IsisLspIsReachabilityTlv {
 message IsisLspExtendedIsReachabilityTlv {
 
   // This container describes IS neighbors.
-  repeated IsisLspextdNeighbor neighbors = 1;
+  repeated IsisLspExtendedNeighbor neighbors = 1;
 }
 
 // This contains IS neighbors.
@@ -14836,7 +14836,7 @@ message IsisLspneighbor {
 }
 
 // This contains IS neighbors.
-message IsisLspextdNeighbor {
+message IsisLspExtendedNeighbor {
 
   // The System ID for this emulated ISIS router, e.g. 640100010000.
   optional string system_id = 1;
@@ -15085,7 +15085,7 @@ message IsisLspCapability {
   repeated IsisLspAlgorithm algorithms = 5;
 
   // This contains the list of SR Local Block (SRLB)
-  repeated IsisLspSrlb srlbs = 6;
+  repeated IsisLspSrlb srlb_ranges = 6;
 }
 
 // Container of IS-IS SR-CAPABILITY Sub-Tlv.

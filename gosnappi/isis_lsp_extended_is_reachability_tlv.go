@@ -16,7 +16,7 @@ type isisLspExtendedIsReachabilityTlv struct {
 	obj             *otg.IsisLspExtendedIsReachabilityTlv
 	marshaller      marshalIsisLspExtendedIsReachabilityTlv
 	unMarshaller    unMarshalIsisLspExtendedIsReachabilityTlv
-	neighborsHolder IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
+	neighborsHolder IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
 }
 
 func NewIsisLspExtendedIsReachabilityTlv() IsisLspExtendedIsReachabilityTlv {
@@ -272,95 +272,95 @@ type IsisLspExtendedIsReachabilityTlv interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Neighbors returns IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIterIter, set in IsisLspExtendedIsReachabilityTlv
-	Neighbors() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
+	// Neighbors returns IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIterIter, set in IsisLspExtendedIsReachabilityTlv
+	Neighbors() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
 	setNil()
 }
 
 // This container describes IS neighbors.
-// Neighbors returns a []IsisLspextdNeighbor
-func (obj *isisLspExtendedIsReachabilityTlv) Neighbors() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
+// Neighbors returns a []IsisLspExtendedNeighbor
+func (obj *isisLspExtendedIsReachabilityTlv) Neighbors() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
 	if len(obj.obj.Neighbors) == 0 {
-		obj.obj.Neighbors = []*otg.IsisLspextdNeighbor{}
+		obj.obj.Neighbors = []*otg.IsisLspExtendedNeighbor{}
 	}
 	if obj.neighborsHolder == nil {
-		obj.neighborsHolder = newIsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter(&obj.obj.Neighbors).setMsg(obj)
+		obj.neighborsHolder = newIsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter(&obj.obj.Neighbors).setMsg(obj)
 	}
 	return obj.neighborsHolder
 }
 
-type isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter struct {
-	obj                      *isisLspExtendedIsReachabilityTlv
-	isisLspextdNeighborSlice []IsisLspextdNeighbor
-	fieldPtr                 *[]*otg.IsisLspextdNeighbor
+type isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter struct {
+	obj                          *isisLspExtendedIsReachabilityTlv
+	isisLspExtendedNeighborSlice []IsisLspExtendedNeighbor
+	fieldPtr                     *[]*otg.IsisLspExtendedNeighbor
 }
 
-func newIsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter(ptr *[]*otg.IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
-	return &isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter{fieldPtr: ptr}
+func newIsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter(ptr *[]*otg.IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
+	return &isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter{fieldPtr: ptr}
 }
 
-type IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter interface {
-	setMsg(*isisLspExtendedIsReachabilityTlv) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
-	Items() []IsisLspextdNeighbor
-	Add() IsisLspextdNeighbor
-	Append(items ...IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
-	Set(index int, newObj IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
-	Clear() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
-	clearHolderSlice() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
-	appendHolderSlice(item IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter
+type IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter interface {
+	setMsg(*isisLspExtendedIsReachabilityTlv) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
+	Items() []IsisLspExtendedNeighbor
+	Add() IsisLspExtendedNeighbor
+	Append(items ...IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
+	Set(index int, newObj IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
+	Clear() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
+	clearHolderSlice() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
+	appendHolderSlice(item IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter
 }
 
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) setMsg(msg *isisLspExtendedIsReachabilityTlv) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) setMsg(msg *isisLspExtendedIsReachabilityTlv) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisLspextdNeighbor{obj: val})
+		obj.appendHolderSlice(&isisLspExtendedNeighbor{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) Items() []IsisLspextdNeighbor {
-	return obj.isisLspextdNeighborSlice
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) Items() []IsisLspExtendedNeighbor {
+	return obj.isisLspExtendedNeighborSlice
 }
 
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) Add() IsisLspextdNeighbor {
-	newObj := &otg.IsisLspextdNeighbor{}
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) Add() IsisLspExtendedNeighbor {
+	newObj := &otg.IsisLspExtendedNeighbor{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisLspextdNeighbor{obj: newObj}
+	newLibObj := &isisLspExtendedNeighbor{obj: newObj}
 	newLibObj.setDefault()
-	obj.isisLspextdNeighborSlice = append(obj.isisLspextdNeighborSlice, newLibObj)
+	obj.isisLspExtendedNeighborSlice = append(obj.isisLspExtendedNeighborSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) Append(items ...IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) Append(items ...IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisLspextdNeighborSlice = append(obj.isisLspextdNeighborSlice, item)
+		obj.isisLspExtendedNeighborSlice = append(obj.isisLspExtendedNeighborSlice, item)
 	}
 	return obj
 }
 
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) Set(index int, newObj IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) Set(index int, newObj IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisLspextdNeighborSlice[index] = newObj
+	obj.isisLspExtendedNeighborSlice[index] = newObj
 	return obj
 }
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) Clear() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) Clear() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisLspextdNeighbor{}
-		obj.isisLspextdNeighborSlice = []IsisLspextdNeighbor{}
+		*obj.fieldPtr = []*otg.IsisLspExtendedNeighbor{}
+		obj.isisLspExtendedNeighborSlice = []IsisLspExtendedNeighbor{}
 	}
 	return obj
 }
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) clearHolderSlice() IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
-	if len(obj.isisLspextdNeighborSlice) > 0 {
-		obj.isisLspextdNeighborSlice = []IsisLspextdNeighbor{}
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) clearHolderSlice() IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
+	if len(obj.isisLspExtendedNeighborSlice) > 0 {
+		obj.isisLspExtendedNeighborSlice = []IsisLspExtendedNeighbor{}
 	}
 	return obj
 }
-func (obj *isisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter) appendHolderSlice(item IsisLspextdNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspextdNeighborIter {
-	obj.isisLspextdNeighborSlice = append(obj.isisLspextdNeighborSlice, item)
+func (obj *isisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter) appendHolderSlice(item IsisLspExtendedNeighbor) IsisLspExtendedIsReachabilityTlvIsisLspExtendedNeighborIter {
+	obj.isisLspExtendedNeighborSlice = append(obj.isisLspExtendedNeighborSlice, item)
 	return obj
 }
 
@@ -374,7 +374,7 @@ func (obj *isisLspExtendedIsReachabilityTlv) validateObj(vObj *validation, set_d
 		if set_default {
 			obj.Neighbors().clearHolderSlice()
 			for _, item := range obj.obj.Neighbors {
-				obj.Neighbors().appendHolderSlice(&isisLspextdNeighbor{obj: item})
+				obj.Neighbors().appendHolderSlice(&isisLspExtendedNeighbor{obj: item})
 			}
 		}
 		for _, item := range obj.Neighbors().Items() {

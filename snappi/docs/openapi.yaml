@@ -20198,7 +20198,7 @@ components:
             This container describes IS neighbors.
           type: array
           items:
-            $ref: '#/components/schemas/IsisLsp.extdNeighbor'
+            $ref: '#/components/schemas/IsisLsp.ExtendedNeighbor'
           x-field-uid: 1
     IsisLsp.neighbor:
       description: |-
@@ -20211,7 +20211,7 @@ components:
           type: string
           format: hex
           x-field-uid: 1
-    IsisLsp.extdNeighbor:
+    IsisLsp.ExtendedNeighbor:
       description: |-
         This contains IS neighbors.
       type: object
@@ -20563,7 +20563,7 @@ components:
           items:
             $ref: '#/components/schemas/IsisLsp.Algorithm'
           x-field-uid: 5
-        srlbs:
+        srlb_ranges:
           description: |-
             This contains the list of SR Local Block (SRLB)
           type: array

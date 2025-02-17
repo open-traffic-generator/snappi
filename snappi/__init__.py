@@ -1327,11 +1327,11 @@ from .snappi import IsisLspneighbor
 from .snappi import IsisLspneighborIter
 from .snappi import IsisLspIsReachabilityTlvIter
 from .snappi import IsisLspExtendedIsReachabilityTlv
-from .snappi import IsisLspextdNeighbor
+from .snappi import IsisLspExtendedNeighbor
 from .snappi import IsisLspAdjacencySid
 from .snappi import IsisLspAdjSidFlags
 from .snappi import IsisLspAdjacencySidIter
-from .snappi import IsisLspextdNeighborIter
+from .snappi import IsisLspExtendedNeighborIter
 from .snappi import IsisLspExtendedIsReachabilityTlvIter
 from .snappi import IsisLspIpv4InternalReachabilityTlv
 from .snappi import IsisLspV4Prefix

@@ -18,7 +18,7 @@ type isisLspCapability struct {
 	unMarshaller       unMarshalIsisLspCapability
 	srCapabilityHolder IsisLspSRCapability
 	algorithmsHolder   IsisLspCapabilityIsisLspAlgorithmIter
-	srlbsHolder        IsisLspCapabilityIsisLspSrlbIter
+	srlbRangesHolder   IsisLspCapabilityIsisLspSrlbIter
 }
 
 func NewIsisLspCapability() IsisLspCapability {
@@ -248,7 +248,7 @@ func (obj *isisLspCapability) Clone() (IsisLspCapability, error) {
 func (obj *isisLspCapability) setNil() {
 	obj.srCapabilityHolder = nil
 	obj.algorithmsHolder = nil
-	obj.srlbsHolder = nil
+	obj.srlbRangesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -304,8 +304,8 @@ type IsisLspCapability interface {
 	HasSrCapability() bool
 	// Algorithms returns IsisLspCapabilityIsisLspAlgorithmIterIter, set in IsisLspCapability
 	Algorithms() IsisLspCapabilityIsisLspAlgorithmIter
-	// Srlbs returns IsisLspCapabilityIsisLspSrlbIterIter, set in IsisLspCapability
-	Srlbs() IsisLspCapabilityIsisLspSrlbIter
+	// SrlbRanges returns IsisLspCapabilityIsisLspSrlbIterIter, set in IsisLspCapability
+	SrlbRanges() IsisLspCapabilityIsisLspSrlbIter
 	setNil()
 }
 
@@ -521,15 +521,15 @@ func (obj *isisLspCapabilityIsisLspAlgorithmIter) appendHolderSlice(item IsisLsp
 }
 
 // This contains the list of SR Local Block (SRLB)
-// Srlbs returns a []IsisLspSrlb
-func (obj *isisLspCapability) Srlbs() IsisLspCapabilityIsisLspSrlbIter {
-	if len(obj.obj.Srlbs) == 0 {
-		obj.obj.Srlbs = []*otg.IsisLspSrlb{}
+// SrlbRanges returns a []IsisLspSrlb
+func (obj *isisLspCapability) SrlbRanges() IsisLspCapabilityIsisLspSrlbIter {
+	if len(obj.obj.SrlbRanges) == 0 {
+		obj.obj.SrlbRanges = []*otg.IsisLspSrlb{}
 	}
-	if obj.srlbsHolder == nil {
-		obj.srlbsHolder = newIsisLspCapabilityIsisLspSrlbIter(&obj.obj.Srlbs).setMsg(obj)
+	if obj.srlbRangesHolder == nil {
+		obj.srlbRangesHolder = newIsisLspCapabilityIsisLspSrlbIter(&obj.obj.SrlbRanges).setMsg(obj)
 	}
-	return obj.srlbsHolder
+	return obj.srlbRangesHolder
 }
 
 type isisLspCapabilityIsisLspSrlbIter struct {
@@ -640,15 +640,15 @@ func (obj *isisLspCapability) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.Srlbs) != 0 {
+	if len(obj.obj.SrlbRanges) != 0 {
 
 		if set_default {
-			obj.Srlbs().clearHolderSlice()
-			for _, item := range obj.obj.Srlbs {
-				obj.Srlbs().appendHolderSlice(&isisLspSrlb{obj: item})
+			obj.SrlbRanges().clearHolderSlice()
+			for _, item := range obj.obj.SrlbRanges {
+				obj.SrlbRanges().appendHolderSlice(&isisLspSrlb{obj: item})
 			}
 		}
-		for _, item := range obj.Srlbs().Items() {
+		for _, item := range obj.SrlbRanges().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
