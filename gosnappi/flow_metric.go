@@ -373,6 +373,66 @@ type FlowMetric interface {
 	HasLatency() bool
 	// TaggedMetrics returns FlowMetricFlowTaggedMetricIterIter, set in FlowMetric
 	TaggedMetrics() FlowMetricFlowTaggedMetricIter
+	// TxL1RateBps returns float32, set in FlowMetric.
+	TxL1RateBps() float32
+	// SetTxL1RateBps assigns float32 provided by user to FlowMetric
+	SetTxL1RateBps(value float32) FlowMetric
+	// HasTxL1RateBps checks if TxL1RateBps has been set in FlowMetric
+	HasTxL1RateBps() bool
+	// RxL1RateBps returns float32, set in FlowMetric.
+	RxL1RateBps() float32
+	// SetRxL1RateBps assigns float32 provided by user to FlowMetric
+	SetRxL1RateBps(value float32) FlowMetric
+	// HasRxL1RateBps checks if RxL1RateBps has been set in FlowMetric
+	HasRxL1RateBps() bool
+	// TxRateBytesPerSecond returns float32, set in FlowMetric.
+	TxRateBytesPerSecond() float32
+	// SetTxRateBytesPerSecond assigns float32 provided by user to FlowMetric
+	SetTxRateBytesPerSecond(value float32) FlowMetric
+	// HasTxRateBytesPerSecond checks if TxRateBytesPerSecond has been set in FlowMetric
+	HasTxRateBytesPerSecond() bool
+	// RxRateBytesPerSecond returns float32, set in FlowMetric.
+	RxRateBytesPerSecond() float32
+	// SetRxRateBytesPerSecond assigns float32 provided by user to FlowMetric
+	SetRxRateBytesPerSecond(value float32) FlowMetric
+	// HasRxRateBytesPerSecond checks if RxRateBytesPerSecond has been set in FlowMetric
+	HasRxRateBytesPerSecond() bool
+	// TxRateBps returns float32, set in FlowMetric.
+	TxRateBps() float32
+	// SetTxRateBps assigns float32 provided by user to FlowMetric
+	SetTxRateBps(value float32) FlowMetric
+	// HasTxRateBps checks if TxRateBps has been set in FlowMetric
+	HasTxRateBps() bool
+	// RxRateBps returns float32, set in FlowMetric.
+	RxRateBps() float32
+	// SetRxRateBps assigns float32 provided by user to FlowMetric
+	SetRxRateBps(value float32) FlowMetric
+	// HasRxRateBps checks if RxRateBps has been set in FlowMetric
+	HasRxRateBps() bool
+	// TxRateKbps returns float32, set in FlowMetric.
+	TxRateKbps() float32
+	// SetTxRateKbps assigns float32 provided by user to FlowMetric
+	SetTxRateKbps(value float32) FlowMetric
+	// HasTxRateKbps checks if TxRateKbps has been set in FlowMetric
+	HasTxRateKbps() bool
+	// RxRateKbps returns float32, set in FlowMetric.
+	RxRateKbps() float32
+	// SetRxRateKbps assigns float32 provided by user to FlowMetric
+	SetRxRateKbps(value float32) FlowMetric
+	// HasRxRateKbps checks if RxRateKbps has been set in FlowMetric
+	HasRxRateKbps() bool
+	// TxRateMbps returns float32, set in FlowMetric.
+	TxRateMbps() float32
+	// SetTxRateMbps assigns float32 provided by user to FlowMetric
+	SetTxRateMbps(value float32) FlowMetric
+	// HasTxRateMbps checks if TxRateMbps has been set in FlowMetric
+	HasTxRateMbps() bool
+	// RxRateMbps returns float32, set in FlowMetric.
+	RxRateMbps() float32
+	// SetRxRateMbps assigns float32 provided by user to FlowMetric
+	SetRxRateMbps(value float32) FlowMetric
+	// HasRxRateMbps checks if RxRateMbps has been set in FlowMetric
+	HasRxRateMbps() bool
 	setNil()
 }
 
@@ -774,6 +834,226 @@ func (obj *flowMetricFlowTaggedMetricIter) clearHolderSlice() FlowMetricFlowTagg
 }
 func (obj *flowMetricFlowTaggedMetricIter) appendHolderSlice(item FlowTaggedMetric) FlowMetricFlowTaggedMetricIter {
 	obj.flowTaggedMetricSlice = append(obj.flowTaggedMetricSlice, item)
+	return obj
+}
+
+// Layer1 Tx frame rate in bits per second.
+// TxL1RateBps returns a float32
+func (obj *flowMetric) TxL1RateBps() float32 {
+
+	return *obj.obj.TxL1RateBps
+
+}
+
+// Layer1 Tx frame rate in bits per second.
+// TxL1RateBps returns a float32
+func (obj *flowMetric) HasTxL1RateBps() bool {
+	return obj.obj.TxL1RateBps != nil
+}
+
+// Layer1 Tx frame rate in bits per second.
+// SetTxL1RateBps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetTxL1RateBps(value float32) FlowMetric {
+
+	obj.obj.TxL1RateBps = &value
+	return obj
+}
+
+// Layer1 Rx frame rate in bits per second.
+// RxL1RateBps returns a float32
+func (obj *flowMetric) RxL1RateBps() float32 {
+
+	return *obj.obj.RxL1RateBps
+
+}
+
+// Layer1 Rx frame rate in bits per second.
+// RxL1RateBps returns a float32
+func (obj *flowMetric) HasRxL1RateBps() bool {
+	return obj.obj.RxL1RateBps != nil
+}
+
+// Layer1 Rx frame rate in bits per second.
+// SetRxL1RateBps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetRxL1RateBps(value float32) FlowMetric {
+
+	obj.obj.RxL1RateBps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// TxRateBytesPerSecond returns a float32
+func (obj *flowMetric) TxRateBytesPerSecond() float32 {
+
+	return *obj.obj.TxRateBytesPerSecond
+
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// TxRateBytesPerSecond returns a float32
+func (obj *flowMetric) HasTxRateBytesPerSecond() bool {
+	return obj.obj.TxRateBytesPerSecond != nil
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// SetTxRateBytesPerSecond sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetTxRateBytesPerSecond(value float32) FlowMetric {
+
+	obj.obj.TxRateBytesPerSecond = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// RxRateBytesPerSecond returns a float32
+func (obj *flowMetric) RxRateBytesPerSecond() float32 {
+
+	return *obj.obj.RxRateBytesPerSecond
+
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// RxRateBytesPerSecond returns a float32
+func (obj *flowMetric) HasRxRateBytesPerSecond() bool {
+	return obj.obj.RxRateBytesPerSecond != nil
+}
+
+// Layer1 Tx frame rate in bytes per second.
+// SetRxRateBytesPerSecond sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetRxRateBytesPerSecond(value float32) FlowMetric {
+
+	obj.obj.RxRateBytesPerSecond = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in bits per second.
+// TxRateBps returns a float32
+func (obj *flowMetric) TxRateBps() float32 {
+
+	return *obj.obj.TxRateBps
+
+}
+
+// Layer1 Tx frame rate in bits per second.
+// TxRateBps returns a float32
+func (obj *flowMetric) HasTxRateBps() bool {
+	return obj.obj.TxRateBps != nil
+}
+
+// Layer1 Tx frame rate in bits per second.
+// SetTxRateBps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetTxRateBps(value float32) FlowMetric {
+
+	obj.obj.TxRateBps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in bits per second.
+// RxRateBps returns a float32
+func (obj *flowMetric) RxRateBps() float32 {
+
+	return *obj.obj.RxRateBps
+
+}
+
+// Layer1 Tx frame rate in bits per second.
+// RxRateBps returns a float32
+func (obj *flowMetric) HasRxRateBps() bool {
+	return obj.obj.RxRateBps != nil
+}
+
+// Layer1 Tx frame rate in bits per second.
+// SetRxRateBps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetRxRateBps(value float32) FlowMetric {
+
+	obj.obj.RxRateBps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// TxRateKbps returns a float32
+func (obj *flowMetric) TxRateKbps() float32 {
+
+	return *obj.obj.TxRateKbps
+
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// TxRateKbps returns a float32
+func (obj *flowMetric) HasTxRateKbps() bool {
+	return obj.obj.TxRateKbps != nil
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// SetTxRateKbps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetTxRateKbps(value float32) FlowMetric {
+
+	obj.obj.TxRateKbps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// RxRateKbps returns a float32
+func (obj *flowMetric) RxRateKbps() float32 {
+
+	return *obj.obj.RxRateKbps
+
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// RxRateKbps returns a float32
+func (obj *flowMetric) HasRxRateKbps() bool {
+	return obj.obj.RxRateKbps != nil
+}
+
+// Layer1 Tx frame rate in kilobits per second.
+// SetRxRateKbps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetRxRateKbps(value float32) FlowMetric {
+
+	obj.obj.RxRateKbps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// TxRateMbps returns a float32
+func (obj *flowMetric) TxRateMbps() float32 {
+
+	return *obj.obj.TxRateMbps
+
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// TxRateMbps returns a float32
+func (obj *flowMetric) HasTxRateMbps() bool {
+	return obj.obj.TxRateMbps != nil
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// SetTxRateMbps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetTxRateMbps(value float32) FlowMetric {
+
+	obj.obj.TxRateMbps = &value
+	return obj
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// RxRateMbps returns a float32
+func (obj *flowMetric) RxRateMbps() float32 {
+
+	return *obj.obj.RxRateMbps
+
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// RxRateMbps returns a float32
+func (obj *flowMetric) HasRxRateMbps() bool {
+	return obj.obj.RxRateMbps != nil
+}
+
+// Layer1 Tx frame rate in megabits per second.
+// SetRxRateMbps sets the float32 value in the FlowMetric object
+func (obj *flowMetric) SetRxRateMbps(value float32) FlowMetric {
+
+	obj.obj.RxRateMbps = &value
 	return obj
 }
 
