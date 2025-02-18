@@ -12200,10 +12200,10 @@ message FlowMetric {
   optional float rx_l1_rate_bps = 17;
 
   // Layer1 Tx frame rate in bytes per second.
-  optional float tx_rate_bytes_per_second = 18;
+  optional float tx_rate_bytes = 18;
 
   // Layer1 Tx frame rate in bytes per second.
-  optional float rx_rate_bytes_per_second = 19;
+  optional float rx_rate_bytes = 19;
 
   // Layer1 Tx frame rate in bits per second.
   optional float tx_rate_bps = 20;

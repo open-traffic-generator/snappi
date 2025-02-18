@@ -16028,12 +16028,12 @@ components:
             Layer1 Rx frame rate in bits per second.
           type: number
           x-field-uid: 17
-        tx_rate_bytes_per_second:
+        tx_rate_bytes:
           description: |-
             Layer1 Tx frame rate in bytes per second.
           type: number
           x-field-uid: 18
-        rx_rate_bytes_per_second:
+        rx_rate_bytes:
           description: |-
             Layer1 Tx frame rate in bytes per second.
           type: number
