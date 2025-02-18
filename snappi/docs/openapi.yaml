@@ -10569,7 +10569,7 @@ components:
       type: object
       required:
       - num_of_qps
-      - remote_end_point_ip_address
+      - destination_ip_address
       - ib_mtu
       properties:
         num_of_qps:
@@ -10577,10 +10577,10 @@ components:
           description: |-
             Maximum number of QP per Endpoint.
           type: integer
-        remote_end_point_ip_address:
+        destination_ip_address:
           x-field-uid: 2
           description: |-
-            Specify the IP address of External NIC i.e Remote End Point IP Address.
+            Specify the IP address of External NIC i.e Destination Point IP Address.
           type: string
         ib_mtu:
           x-field-uid: 3
@@ -10590,8 +10590,36 @@ components:
           format: uint32
           minimum: 0
           maximum: 14000
-        traffic_burst_mode:
+        connection_type:
           x-field-uid: 4
+          description: |-
+            There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+          type: string
+          x-enum:
+            reliable_connection:
+              x-field-uid: 1
+            reliable_datagram:
+              x-field-uid: 2
+            extended_reliable_connection:
+              x-field-uid: 3
+            unreliable_datagram:
+              x-field-uid: 4
+            unreliable_connection:
+              x-field-uid: 5
+            raw_ipv6_datagram:
+              x-field-uid: 6
+            raw_ethernet_datagram:
+              x-field-uid: 7
+          enum:
+          - reliable_connection
+          - reliable_datagram
+          - extended_reliable_connection
+          - unreliable_datagram
+          - unreliable_connection
+          - raw_ipv6_datagram
+          - raw_ethernet_datagram
+        traffic_burst_mode:
+          x-field-uid: 5
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10604,7 +10632,7 @@ components:
           - Continuous
           - Fixed
         traffic_burst_count:
-          x-field-uid: 5
+          x-field-uid: 6
           description: |-
             Burst Count to applied in RoCEv2 Traffic item.
           type: integer
@@ -10612,15 +10640,15 @@ components:
           minimum: 0
           maximum: 16777216
         name:
-          x-field-uid: 6
+          x-field-uid: 7
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 7
+          x-field-uid: 8
           type: array
           description: |-
-            This section has two views, Local End and Remote End. Both views have same configurations. However, the remote and local peer IP addresses are interchanged. This configuration allows you to configure RDMA flow over the same QP number from same source and destination. Default value for commands at Remote peer is set to None. So that by default, this remote peer does not initiate any traffic flow.
+            This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
           items:
             $ref: '#/components/schemas/RoCEv2.FlowSettings'
     RoCEv2.V4Interface:
@@ -10649,20 +10677,10 @@ components:
           x-field-uid: 2
     RoCEv2.FlowSettings:
       description: |-
-        This section has two views, Local End and Remote End.
-         Both views have same configurations. However, the remote and local peer IP addresses are interchanged.
-          This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
-           Default value for commands at Remote peer is set to None.
-            So that by default, this remote peer does not initiate any traffic flow.
+        This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
       type: object
       properties:
-        custom_qp:
-          description: |-
-            Turn on to define QP number.
-          type: boolean
-          default: false
-          x-field-uid: 1
-        custom_qp_number:
+        source_qp_number:
           description: |-
             Configure the QP range.
           type: integer
@@ -10670,7 +10688,7 @@ components:
           default: 2
           minimum: 2
           maximum: 33554431
-          x-field-uid: 2
+          x-field-uid: 1
         dscp:
           description: |-
             DSCP value for this flow
@@ -10679,7 +10697,7 @@ components:
           default: 24
           minimum: 0
           maximum: 63
-          x-field-uid: 3
+          x-field-uid: 2
         ecn:
           description: |-
             This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
@@ -10688,7 +10706,7 @@ components:
           default: 1
           minimum: 0
           maximum: 3
-          x-field-uid: 4
+          x-field-uid: 3
         udp_source_port:
           description: |-
             UDP source port number for this flow.
@@ -10697,10 +10715,10 @@ components:
           default: 49152
           minimum: 0
           maximum: 65535
-          x-field-uid: 5
+          x-field-uid: 4
         rocev2_verb:
           description: |-
-            RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will not take part in traffic..
+            RoCEv2 Verb, Available options are: none, write, wrtie_with_immediate, send, send_with_immediate and read: The corresponding flow will not take part in traffic.
           type: string
           default: write
           x-enum:
@@ -10714,29 +10732,32 @@ components:
               x-field-uid: 4
             send_with_immediate:
               x-field-uid: 5
-          x-field-uid: 6
+            read:
+              x-field-uid: 6
+          x-field-uid: 5
           enum:
           - none
           - write
           - write_with_immediate
           - send
           - send_with_immediate
+          - read
         immediate_data:
           description: |-
             Immediate Data field required for SEND/WRITE with immediate verb.
           type: string
           format: hex
           default: '00000000'
-          x-field-uid: 7
+          x-field-uid: 6
         message_size:
           description: |-
-            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
           type: integer
           format: uint32
           default: 1
           minimum: 0
           maximum: 65535
-          x-field-uid: 8
+          x-field-uid: 7
         message_size_unit:
           description: |-
             Unit of the transfer message size. Available options are Bytes, KB, MB.
@@ -10749,18 +10770,21 @@ components:
               x-field-uid: 2
             MB:
               x-field-uid: 3
-          x-field-uid: 9
+            GB:
+              x-field-uid: 4
+          x-field-uid: 8
           enum:
           - Byte
           - KB
           - MB
+          - GB
     RoCEv2.V6Peer:
       description: |-
         Configuration for RoCEv2 IPv6 peer settings.
       type: object
       required:
       - num_of_qps
-      - remote_end_point_ip_address
+      - destination_ip_address
       - ib_mtu
       properties:
         num_of_qps:
@@ -10768,10 +10792,10 @@ components:
           description: |-
             Maximum number of QP per Endpoint.
           type: integer
-        remote_end_point_ip_address:
+        destination_ip_address:
           x-field-uid: 2
           description: |-
-            Specify the IP address of External NIC i.e Remote End Point IP Address.
+            Specify the IP address of External NIC i.e Destination Point IP Address.
           type: string
         ib_mtu:
           x-field-uid: 3
@@ -10781,8 +10805,36 @@ components:
           format: uint32
           minimum: 0
           maximum: 14000
-        traffic_burst_mode:
+        connection_type:
           x-field-uid: 4
+          description: |-
+            There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+          type: string
+          x-enum:
+            reliable_connection:
+              x-field-uid: 1
+            reliable_datagram:
+              x-field-uid: 2
+            extended_reliable_connection:
+              x-field-uid: 3
+            unreliable_datagram:
+              x-field-uid: 4
+            unreliable_connection:
+              x-field-uid: 5
+            raw_ipv6_datagram:
+              x-field-uid: 6
+            raw_ethernet_datagram:
+              x-field-uid: 7
+          enum:
+          - reliable_connection
+          - reliable_datagram
+          - extended_reliable_connection
+          - unreliable_datagram
+          - unreliable_connection
+          - raw_ipv6_datagram
+          - raw_ethernet_datagram
+        traffic_burst_mode:
+          x-field-uid: 5
           description: |-
             Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
           type: string
@@ -10795,7 +10847,7 @@ components:
           - Continuous
           - Fixed
         traffic_burst_count:
-          x-field-uid: 5
+          x-field-uid: 6
           description: |-
             Burst Count to applied in RoCEv2 Traffic item.
           type: integer
@@ -10803,15 +10855,15 @@ components:
           minimum: 0
           maximum: 16777216
         name:
-          x-field-uid: 6
+          x-field-uid: 7
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 7
+          x-field-uid: 8
           type: array
           description: |-
-            This section has two views, Local End and Remote End. Both views have same configurations. However, the remote and local peer IP addresses are interchanged. This configuration allows you to configure RDMA flow over the same QP number from same source and destination. Default value for commands at Remote peer is set to None. So that by default, this remote peer does not initiate any traffic flow.
+            This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
           items:
             $ref: '#/components/schemas/RoCEv2.FlowSettings'
     RoCEv2.V6Interface:

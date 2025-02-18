@@ -242,11 +242,7 @@ func (obj *roCEv2FlowSettings) Clone() (RoCEv2FlowSettings, error) {
 	return newObj, nil
 }
 
-// RoCEv2FlowSettings is this section has two views, Local End and Remote End.
-// Both views have same configurations. However, the remote and local peer IP addresses are interchanged.
-// This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
-// Default value for commands at Remote peer is set to None.
-// So that by default, this remote peer does not initiate any traffic flow.
+// RoCEv2FlowSettings is this configuration allows you to configure RDMA flow over the same QP number from same source and destination.
 type RoCEv2FlowSettings interface {
 	Validation
 	// msg marshals RoCEv2FlowSettings to protobuf object *otg.RoCEv2FlowSettings
@@ -268,18 +264,12 @@ type RoCEv2FlowSettings interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// CustomQp returns bool, set in RoCEv2FlowSettings.
-	CustomQp() bool
-	// SetCustomQp assigns bool provided by user to RoCEv2FlowSettings
-	SetCustomQp(value bool) RoCEv2FlowSettings
-	// HasCustomQp checks if CustomQp has been set in RoCEv2FlowSettings
-	HasCustomQp() bool
-	// CustomQpNumber returns uint32, set in RoCEv2FlowSettings.
-	CustomQpNumber() uint32
-	// SetCustomQpNumber assigns uint32 provided by user to RoCEv2FlowSettings
-	SetCustomQpNumber(value uint32) RoCEv2FlowSettings
-	// HasCustomQpNumber checks if CustomQpNumber has been set in RoCEv2FlowSettings
-	HasCustomQpNumber() bool
+	// SourceQpNumber returns uint32, set in RoCEv2FlowSettings.
+	SourceQpNumber() uint32
+	// SetSourceQpNumber assigns uint32 provided by user to RoCEv2FlowSettings
+	SetSourceQpNumber(value uint32) RoCEv2FlowSettings
+	// HasSourceQpNumber checks if SourceQpNumber has been set in RoCEv2FlowSettings
+	HasSourceQpNumber() bool
 	// Dscp returns uint32, set in RoCEv2FlowSettings.
 	Dscp() uint32
 	// SetDscp assigns uint32 provided by user to RoCEv2FlowSettings
@@ -324,47 +314,25 @@ type RoCEv2FlowSettings interface {
 	HasMessageSizeUnit() bool
 }
 
-// Turn on to define QP number.
-// CustomQp returns a bool
-func (obj *roCEv2FlowSettings) CustomQp() bool {
-
-	return *obj.obj.CustomQp
-
-}
-
-// Turn on to define QP number.
-// CustomQp returns a bool
-func (obj *roCEv2FlowSettings) HasCustomQp() bool {
-	return obj.obj.CustomQp != nil
-}
-
-// Turn on to define QP number.
-// SetCustomQp sets the bool value in the RoCEv2FlowSettings object
-func (obj *roCEv2FlowSettings) SetCustomQp(value bool) RoCEv2FlowSettings {
-
-	obj.obj.CustomQp = &value
-	return obj
-}
-
 // Configure the QP range.
-// CustomQpNumber returns a uint32
-func (obj *roCEv2FlowSettings) CustomQpNumber() uint32 {
+// SourceQpNumber returns a uint32
+func (obj *roCEv2FlowSettings) SourceQpNumber() uint32 {
 
-	return *obj.obj.CustomQpNumber
+	return *obj.obj.SourceQpNumber
 
 }
 
 // Configure the QP range.
-// CustomQpNumber returns a uint32
-func (obj *roCEv2FlowSettings) HasCustomQpNumber() bool {
-	return obj.obj.CustomQpNumber != nil
+// SourceQpNumber returns a uint32
+func (obj *roCEv2FlowSettings) HasSourceQpNumber() bool {
+	return obj.obj.SourceQpNumber != nil
 }
 
 // Configure the QP range.
-// SetCustomQpNumber sets the uint32 value in the RoCEv2FlowSettings object
-func (obj *roCEv2FlowSettings) SetCustomQpNumber(value uint32) RoCEv2FlowSettings {
+// SetSourceQpNumber sets the uint32 value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetSourceQpNumber(value uint32) RoCEv2FlowSettings {
 
-	obj.obj.CustomQpNumber = &value
+	obj.obj.SourceQpNumber = &value
 	return obj
 }
 
@@ -443,19 +411,21 @@ var RoCEv2FlowSettingsRocev2Verb = struct {
 	WRITE_WITH_IMMEDIATE RoCEv2FlowSettingsRocev2VerbEnum
 	SEND                 RoCEv2FlowSettingsRocev2VerbEnum
 	SEND_WITH_IMMEDIATE  RoCEv2FlowSettingsRocev2VerbEnum
+	READ                 RoCEv2FlowSettingsRocev2VerbEnum
 }{
 	NONE:                 RoCEv2FlowSettingsRocev2VerbEnum("none"),
 	WRITE:                RoCEv2FlowSettingsRocev2VerbEnum("write"),
 	WRITE_WITH_IMMEDIATE: RoCEv2FlowSettingsRocev2VerbEnum("write_with_immediate"),
 	SEND:                 RoCEv2FlowSettingsRocev2VerbEnum("send"),
 	SEND_WITH_IMMEDIATE:  RoCEv2FlowSettingsRocev2VerbEnum("send_with_immediate"),
+	READ:                 RoCEv2FlowSettingsRocev2VerbEnum("read"),
 }
 
 func (obj *roCEv2FlowSettings) Rocev2Verb() RoCEv2FlowSettingsRocev2VerbEnum {
 	return RoCEv2FlowSettingsRocev2VerbEnum(obj.obj.Rocev2Verb.Enum().String())
 }
 
-// RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will not take part in traffic..
+// RoCEv2 Verb, Available options are: none, write, wrtie_with_immediate, send, send_with_immediate and read: The corresponding flow will not take part in traffic.
 // Rocev2Verb returns a string
 func (obj *roCEv2FlowSettings) HasRocev2Verb() bool {
 	return obj.obj.Rocev2Verb != nil
@@ -496,7 +466,7 @@ func (obj *roCEv2FlowSettings) SetImmediateData(value string) RoCEv2FlowSettings
 	return obj
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
 // MessageSize returns a uint32
 func (obj *roCEv2FlowSettings) MessageSize() uint32 {
 
@@ -504,13 +474,13 @@ func (obj *roCEv2FlowSettings) MessageSize() uint32 {
 
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
 // MessageSize returns a uint32
 func (obj *roCEv2FlowSettings) HasMessageSize() bool {
 	return obj.obj.MessageSize != nil
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces. For any MTU, the maximum number of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE MIDDLE messages. The maximum message size that is allowed to be transferred for a given MTU is constrained by the above conditions. For example, for an MTU size of 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size. This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500 - 62) = 94239314 bytes or 89 MB.
+// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
 // SetMessageSize sets the uint32 value in the RoCEv2FlowSettings object
 func (obj *roCEv2FlowSettings) SetMessageSize(value uint32) RoCEv2FlowSettings {
 
@@ -525,10 +495,12 @@ var RoCEv2FlowSettingsMessageSizeUnit = struct {
 	BYTE RoCEv2FlowSettingsMessageSizeUnitEnum
 	KB   RoCEv2FlowSettingsMessageSizeUnitEnum
 	MB   RoCEv2FlowSettingsMessageSizeUnitEnum
+	GB   RoCEv2FlowSettingsMessageSizeUnitEnum
 }{
 	BYTE: RoCEv2FlowSettingsMessageSizeUnitEnum("Byte"),
 	KB:   RoCEv2FlowSettingsMessageSizeUnitEnum("KB"),
 	MB:   RoCEv2FlowSettingsMessageSizeUnitEnum("MB"),
+	GB:   RoCEv2FlowSettingsMessageSizeUnitEnum("GB"),
 }
 
 func (obj *roCEv2FlowSettings) MessageSizeUnit() RoCEv2FlowSettingsMessageSizeUnitEnum {
@@ -559,12 +531,12 @@ func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.CustomQpNumber != nil {
+	if obj.obj.SourceQpNumber != nil {
 
-		if *obj.obj.CustomQpNumber < 2 || *obj.obj.CustomQpNumber > 33554431 {
+		if *obj.obj.SourceQpNumber < 2 || *obj.obj.SourceQpNumber > 33554431 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("2 <= RoCEv2FlowSettings.CustomQpNumber <= 33554431 but Got %d", *obj.obj.CustomQpNumber))
+				fmt.Sprintf("2 <= RoCEv2FlowSettings.SourceQpNumber <= 33554431 but Got %d", *obj.obj.SourceQpNumber))
 		}
 
 	}
@@ -621,11 +593,8 @@ func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *roCEv2FlowSettings) setDefault() {
-	if obj.obj.CustomQp == nil {
-		obj.SetCustomQp(false)
-	}
-	if obj.obj.CustomQpNumber == nil {
-		obj.SetCustomQpNumber(2)
+	if obj.obj.SourceQpNumber == nil {
+		obj.SetSourceQpNumber(2)
 	}
 	if obj.obj.Dscp == nil {
 		obj.SetDscp(24)

@@ -276,14 +276,20 @@ type RoCEv2V4Peer interface {
 	NumOfQps() int32
 	// SetNumOfQps assigns int32 provided by user to RoCEv2V4Peer
 	SetNumOfQps(value int32) RoCEv2V4Peer
-	// RemoteEndPointIpAddress returns string, set in RoCEv2V4Peer.
-	RemoteEndPointIpAddress() string
-	// SetRemoteEndPointIpAddress assigns string provided by user to RoCEv2V4Peer
-	SetRemoteEndPointIpAddress(value string) RoCEv2V4Peer
+	// DestinationIpAddress returns string, set in RoCEv2V4Peer.
+	DestinationIpAddress() string
+	// SetDestinationIpAddress assigns string provided by user to RoCEv2V4Peer
+	SetDestinationIpAddress(value string) RoCEv2V4Peer
 	// IbMtu returns uint32, set in RoCEv2V4Peer.
 	IbMtu() uint32
 	// SetIbMtu assigns uint32 provided by user to RoCEv2V4Peer
 	SetIbMtu(value uint32) RoCEv2V4Peer
+	// ConnectionType returns RoCEv2V4PeerConnectionTypeEnum, set in RoCEv2V4Peer
+	ConnectionType() RoCEv2V4PeerConnectionTypeEnum
+	// SetConnectionType assigns RoCEv2V4PeerConnectionTypeEnum provided by user to RoCEv2V4Peer
+	SetConnectionType(value RoCEv2V4PeerConnectionTypeEnum) RoCEv2V4Peer
+	// HasConnectionType checks if ConnectionType has been set in RoCEv2V4Peer
+	HasConnectionType() bool
 	// TrafficBurstMode returns RoCEv2V4PeerTrafficBurstModeEnum, set in RoCEv2V4Peer
 	TrafficBurstMode() RoCEv2V4PeerTrafficBurstModeEnum
 	// SetTrafficBurstMode assigns RoCEv2V4PeerTrafficBurstModeEnum provided by user to RoCEv2V4Peer
@@ -323,19 +329,19 @@ func (obj *roCEv2V4Peer) SetNumOfQps(value int32) RoCEv2V4Peer {
 	return obj
 }
 
-// Specify the IP address of External NIC i.e Remote End Point IP Address.
-// RemoteEndPointIpAddress returns a string
-func (obj *roCEv2V4Peer) RemoteEndPointIpAddress() string {
+// Specify the IP address of External NIC i.e Destination Point IP Address.
+// DestinationIpAddress returns a string
+func (obj *roCEv2V4Peer) DestinationIpAddress() string {
 
-	return *obj.obj.RemoteEndPointIpAddress
+	return *obj.obj.DestinationIpAddress
 
 }
 
-// Specify the IP address of External NIC i.e Remote End Point IP Address.
-// SetRemoteEndPointIpAddress sets the string value in the RoCEv2V4Peer object
-func (obj *roCEv2V4Peer) SetRemoteEndPointIpAddress(value string) RoCEv2V4Peer {
+// Specify the IP address of External NIC i.e Destination Point IP Address.
+// SetDestinationIpAddress sets the string value in the RoCEv2V4Peer object
+func (obj *roCEv2V4Peer) SetDestinationIpAddress(value string) RoCEv2V4Peer {
 
-	obj.obj.RemoteEndPointIpAddress = &value
+	obj.obj.DestinationIpAddress = &value
 	return obj
 }
 
@@ -352,6 +358,50 @@ func (obj *roCEv2V4Peer) IbMtu() uint32 {
 func (obj *roCEv2V4Peer) SetIbMtu(value uint32) RoCEv2V4Peer {
 
 	obj.obj.IbMtu = &value
+	return obj
+}
+
+type RoCEv2V4PeerConnectionTypeEnum string
+
+// Enum of ConnectionType on RoCEv2V4Peer
+var RoCEv2V4PeerConnectionType = struct {
+	RELIABLE_CONNECTION          RoCEv2V4PeerConnectionTypeEnum
+	RELIABLE_DATAGRAM            RoCEv2V4PeerConnectionTypeEnum
+	EXTENDED_RELIABLE_CONNECTION RoCEv2V4PeerConnectionTypeEnum
+	UNRELIABLE_DATAGRAM          RoCEv2V4PeerConnectionTypeEnum
+	UNRELIABLE_CONNECTION        RoCEv2V4PeerConnectionTypeEnum
+	RAW_IPV6_DATAGRAM            RoCEv2V4PeerConnectionTypeEnum
+	RAW_ETHERNET_DATAGRAM        RoCEv2V4PeerConnectionTypeEnum
+}{
+	RELIABLE_CONNECTION:          RoCEv2V4PeerConnectionTypeEnum("reliable_connection"),
+	RELIABLE_DATAGRAM:            RoCEv2V4PeerConnectionTypeEnum("reliable_datagram"),
+	EXTENDED_RELIABLE_CONNECTION: RoCEv2V4PeerConnectionTypeEnum("extended_reliable_connection"),
+	UNRELIABLE_DATAGRAM:          RoCEv2V4PeerConnectionTypeEnum("unreliable_datagram"),
+	UNRELIABLE_CONNECTION:        RoCEv2V4PeerConnectionTypeEnum("unreliable_connection"),
+	RAW_IPV6_DATAGRAM:            RoCEv2V4PeerConnectionTypeEnum("raw_ipv6_datagram"),
+	RAW_ETHERNET_DATAGRAM:        RoCEv2V4PeerConnectionTypeEnum("raw_ethernet_datagram"),
+}
+
+func (obj *roCEv2V4Peer) ConnectionType() RoCEv2V4PeerConnectionTypeEnum {
+	return RoCEv2V4PeerConnectionTypeEnum(obj.obj.ConnectionType.Enum().String())
+}
+
+// There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+// ConnectionType returns a string
+func (obj *roCEv2V4Peer) HasConnectionType() bool {
+	return obj.obj.ConnectionType != nil
+}
+
+func (obj *roCEv2V4Peer) SetConnectionType(value RoCEv2V4PeerConnectionTypeEnum) RoCEv2V4Peer {
+	intValue, ok := otg.RoCEv2V4Peer_ConnectionType_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2V4PeerConnectionTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.RoCEv2V4Peer_ConnectionType_Enum(intValue)
+	obj.obj.ConnectionType = &enumValue
+
 	return obj
 }
 
@@ -433,7 +483,7 @@ func (obj *roCEv2V4Peer) SetName(value string) RoCEv2V4Peer {
 	return obj
 }
 
-// This section has two views, Local End and Remote End. Both views have same configurations. However, the remote and local peer IP addresses are interchanged. This configuration allows you to configure RDMA flow over the same QP number from same source and destination. Default value for commands at Remote peer is set to None. So that by default, this remote peer does not initiate any traffic flow.
+// This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
 // FlowSettings returns a []RoCEv2FlowSettings
 func (obj *roCEv2V4Peer) FlowSettings() RoCEv2V4PeerRoCEv2FlowSettingsIter {
 	if len(obj.obj.FlowSettings) == 0 {
@@ -530,9 +580,9 @@ func (obj *roCEv2V4Peer) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "NumOfQps is required field on interface RoCEv2V4Peer")
 	}
 
-	// RemoteEndPointIpAddress is required
-	if obj.obj.RemoteEndPointIpAddress == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "RemoteEndPointIpAddress is required field on interface RoCEv2V4Peer")
+	// DestinationIpAddress is required
+	if obj.obj.DestinationIpAddress == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "DestinationIpAddress is required field on interface RoCEv2V4Peer")
 	}
 
 	// IbMtu is required

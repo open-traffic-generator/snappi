@@ -7868,15 +7868,32 @@ message RoCEv2V4Peer {
   // required = true
   optional int32 num_of_qps = 1;
 
-  // Specify the IP address of External NIC i.e Remote End Point IP Address.
+  // Specify the IP address of External NIC i.e Destination Point IP Address.
   // required = true
-  optional string remote_end_point_ip_address = 2;
+  optional string destination_ip_address = 2;
 
   // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
   // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
   // as configured IB MTU. You can configure custom size also.
   // required = true
   optional uint32 ib_mtu = 3;
+
+  message ConnectionType {
+    enum Enum {
+      unspecified = 0;
+      reliable_connection = 1;
+      reliable_datagram = 2;
+      extended_reliable_connection = 3;
+      unreliable_datagram = 4;
+      unreliable_connection = 5;
+      raw_ipv6_datagram = 6;
+      raw_ethernet_datagram = 7;
+    }
+  }
+  // There are multiple connection types. Valid values are :  Reliable Connection (RC),
+  // Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),
+  // Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+  optional ConnectionType.Enum connection_type = 4;
 
   message TrafficBurstMode {
     enum Enum {
@@ -7886,20 +7903,17 @@ message RoCEv2V4Peer {
     }
   }
   // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-  optional TrafficBurstMode.Enum traffic_burst_mode = 4;
+  optional TrafficBurstMode.Enum traffic_burst_mode = 5;
 
   // Burst Count to applied in RoCEv2 Traffic item.
-  optional uint32 traffic_burst_count = 5;
+  optional uint32 traffic_burst_count = 6;
 
   // The name of RoCEv2 Peer
-  optional string name = 6;
+  optional string name = 7;
 
-  // This section has two views, Local End and Remote End. Both views have same configurations.
-  // However, the remote and local peer IP addresses are interchanged. This configuration
-  // allows you to configure RDMA flow over the same QP number from same source and destination.
-  // Default value for commands at Remote peer is set to None. So that by default, this
-  // remote peer does not initiate any traffic flow.
-  repeated RoCEv2FlowSettings flow_settings = 7;
+  // This configuration allows you to configure RDMA flow over the same QP number from
+  // same source and destination.
+  repeated RoCEv2FlowSettings flow_settings = 8;
 }
 
 // Configuration for RoCEv2 IPv4 peers.
@@ -7917,35 +7931,26 @@ message RoCEv2V4Interface {
   repeated RoCEv2V4Peer peers = 2;
 }
 
-// This section has two views, Local End and Remote End.
-// Both views have same configurations. However, the remote and local peer IP addresses
-// are interchanged.
 // This configuration allows you to configure RDMA flow over the same QP number from
 // same source and destination.
-// Default value for commands at Remote peer is set to None.
-// So that by default, this remote peer does not initiate any traffic flow.
 message RoCEv2FlowSettings {
-
-  // Turn on to define QP number.
-  // default = False
-  optional bool custom_qp = 1;
 
   // Configure the QP range.
   // default = 2
-  optional uint32 custom_qp_number = 2;
+  optional uint32 source_qp_number = 1;
 
   // DSCP value for this flow
   // default = 24
-  optional uint32 dscp = 3;
+  optional uint32 dscp = 2;
 
   // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
   // header to encode four different code points.
   // default = 1
-  optional uint32 ecn = 4;
+  optional uint32 ecn = 3;
 
   // UDP source port number for this flow.
   // default = 49152
-  optional uint32 udp_source_port = 5;
+  optional uint32 udp_source_port = 4;
 
   message Rocev2Verb {
     enum Enum {
@@ -7955,32 +7960,22 @@ message RoCEv2FlowSettings {
       write_with_immediate = 3;
       send = 4;
       send_with_immediate = 5;
+      read = 6;
     }
   }
-  // RoCEv2 Verb, Available options are: RDMA WRITE None: The corresponding flow will
-  // not take part in traffic..
+  // RoCEv2 Verb, Available options are: none, write, wrtie_with_immediate, send, send_with_immediate
+  // and read: The corresponding flow will not take part in traffic.
   // default = Rocev2Verb.Enum.write
-  optional Rocev2Verb.Enum rocev2_verb = 6;
+  optional Rocev2Verb.Enum rocev2_verb = 5;
 
   // Immediate Data field required for SEND/WRITE with immediate verb.
   // default = 00000000
-  optional string immediate_data = 7;
+  optional string immediate_data = 6;
 
   // The Maximum message size that is allowed to transfer depends on the MTU size and
-  // the number of VLANs configured on the interfaces. For any MTU, the maximum number
-  // of segmented RDMA WRITE packets for a single WRITE MESSAGE is 65535. That is, a single
-  // RDMA WRITE message can be broken into 1 WRITE FIRST, 1 WRITE LAST and (65535-2) WRITE
-  // MIDDLE messages. The maximum message size that is allowed to be transferred for a
-  // given MTU is constrained by the above conditions. For example, for an MTU size of
-  // 1500 bytes, the common header of the RDMA WRITE MIDDLE/LAST will comprise of Ethernet
-  // Header + IP Header + UDP Header + BTH Header + iCRC size + Ethernet Trailer size.
-  // This works out to be 14+20+8+12+4+4 = 62 bytes. For RDMA WRITE FIRST, we need to
-  // add the RETH header size of 16 bytes to the above, which adds up to 78 bytes. Then
-  // the maximum message size for 1500 MTU without VLAN becomes: 1500 - WRITE FIRST common
-  // header + 65534 * (1500 - WRITE LAST/MIDDLE header size) = 1500 - 78 + 65534 * (1500
-  // - 62) = 94239314 bytes or 89 MB.
+  // the number of VLANs configured on the interfaces.
   // default = 1
-  optional uint32 message_size = 8;
+  optional uint32 message_size = 7;
 
   message MessageSizeUnit {
     enum Enum {
@@ -7988,11 +7983,12 @@ message RoCEv2FlowSettings {
       Byte = 1;
       KB = 2;
       MB = 3;
+      GB = 4;
     }
   }
   // Unit of the transfer message size. Available options are Bytes, KB, MB.
   // default = MessageSizeUnit.Enum.mb
-  optional MessageSizeUnit.Enum message_size_unit = 9;
+  optional MessageSizeUnit.Enum message_size_unit = 8;
 }
 
 // Configuration for RoCEv2 IPv6 peer settings.
@@ -8002,15 +7998,32 @@ message RoCEv2V6Peer {
   // required = true
   optional int32 num_of_qps = 1;
 
-  // Specify the IP address of External NIC i.e Remote End Point IP Address.
+  // Specify the IP address of External NIC i.e Destination Point IP Address.
   // required = true
-  optional string remote_end_point_ip_address = 2;
+  optional string destination_ip_address = 2;
 
   // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
   // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
   // as configured IB MTU. You can configure custom size also.
   // required = true
   optional uint32 ib_mtu = 3;
+
+  message ConnectionType {
+    enum Enum {
+      unspecified = 0;
+      reliable_connection = 1;
+      reliable_datagram = 2;
+      extended_reliable_connection = 3;
+      unreliable_datagram = 4;
+      unreliable_connection = 5;
+      raw_ipv6_datagram = 6;
+      raw_ethernet_datagram = 7;
+    }
+  }
+  // There are multiple connection types. Valid values are :  Reliable Connection (RC),
+  // Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),
+  // Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+  optional ConnectionType.Enum connection_type = 4;
 
   message TrafficBurstMode {
     enum Enum {
@@ -8020,20 +8033,17 @@ message RoCEv2V6Peer {
     }
   }
   // Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-  optional TrafficBurstMode.Enum traffic_burst_mode = 4;
+  optional TrafficBurstMode.Enum traffic_burst_mode = 5;
 
   // Burst Count to applied in RoCEv2 Traffic item.
-  optional uint32 traffic_burst_count = 5;
+  optional uint32 traffic_burst_count = 6;
 
   // The name of RoCEv2 Peer
-  optional string name = 6;
+  optional string name = 7;
 
-  // This section has two views, Local End and Remote End. Both views have same configurations.
-  // However, the remote and local peer IP addresses are interchanged. This configuration
-  // allows you to configure RDMA flow over the same QP number from same source and destination.
-  // Default value for commands at Remote peer is set to None. So that by default, this
-  // remote peer does not initiate any traffic flow.
-  repeated RoCEv2FlowSettings flow_settings = 7;
+  // This configuration allows you to configure RDMA flow over the same QP number from
+  // same source and destination.
+  repeated RoCEv2FlowSettings flow_settings = 8;
 }
 
 // Configuration for RoCEv2 IPv6 peers.
