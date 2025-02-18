@@ -250,7 +250,7 @@ func (obj *macsecRx) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecRx is the container for Rx settings of SecY.
+// MacsecRx is a container for Rx settings of SecY.
 type MacsecRx interface {
 	Validation
 	// msg marshals MacsecRx to protobuf object *otg.MacsecRx
@@ -339,7 +339,7 @@ func (obj *macsecRx) SetReplayWindow(value uint32) MacsecRx {
 	return obj
 }
 
-// Rx setting for static key.
+// Rx settings for static key.
 // StaticKey returns a MacsecRxStaticKey
 func (obj *macsecRx) StaticKey() MacsecRxStaticKey {
 	if obj.obj.StaticKey == nil {
@@ -351,13 +351,13 @@ func (obj *macsecRx) StaticKey() MacsecRxStaticKey {
 	return obj.staticKeyHolder
 }
 
-// Rx setting for static key.
+// Rx settings for static key.
 // StaticKey returns a MacsecRxStaticKey
 func (obj *macsecRx) HasStaticKey() bool {
 	return obj.obj.StaticKey != nil
 }
 
-// Rx setting for static key.
+// Rx settings for static key.
 // SetStaticKey sets the MacsecRxStaticKey value in the MacsecRx object
 func (obj *macsecRx) SetStaticKey(value MacsecRxStaticKey) MacsecRx {
 

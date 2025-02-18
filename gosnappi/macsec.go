@@ -299,10 +299,10 @@ type Macsec interface {
 	// HasTx checks if Tx has been set in Macsec
 	HasTx() bool
 	// Rx returns MacsecRx, set in Macsec.
-	// MacsecRx is the container for Rx settings of SecY.
+	// MacsecRx is a container for Rx settings of SecY.
 	Rx() MacsecRx
 	// SetRx assigns MacsecRx provided by user to Macsec.
-	// MacsecRx is the container for Rx settings of SecY.
+	// MacsecRx is a container for Rx settings of SecY.
 	SetRx(value MacsecRx) Macsec
 	// HasRx checks if Rx has been set in Macsec
 	HasRx() bool

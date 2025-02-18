@@ -10724,23 +10724,6 @@ components:
           maximum: 65535
           default: 300
           x-field-uid: 3
-    Macsec.StaticKey.SakPool:
-      description: |-
-        The container for Secure Association Key(SAK) Pool.
-      type: object
-      properties:
-        name:
-          description: |-
-            SAK pool name.
-          type: string
-          x-field-uid: 1
-        saks:
-          description: |-
-            Secure Association Keys.
-          type: array
-          x-field-uid: 2
-          items:
-            $ref: '#/components/schemas/Macsec.StaticKey.Sak'
     Macsec.StaticKey.Sak:
       description: |-
         The container for SAK.
@@ -10821,14 +10804,16 @@ components:
           type: boolean
           default: true
           x-field-uid: 3
-        sak_pool:
+        saks:
           description: |-
             Tx SAK pool.
-          $ref: '#/components/schemas/Macsec.StaticKey.SakPool'
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.StaticKey.Sak'
           x-field-uid: 4
     Macsec.Rx:
       description: |-
-        The container for Rx settings of SecY.
+        A container for Rx settings of SecY.
       type: object
       properties:
         replay_protection:
@@ -10845,7 +10830,7 @@ components:
           x-field-uid: 2
         static_key:
           description: |-
-            Rx setting for static key.
+            Rx settings for static key.
           $ref: '#/components/schemas/Macsec.Rx.StaticKey'
           x-field-uid: 3
     Macsec.Rx.StaticKey:
@@ -10886,12 +10871,14 @@ components:
           minimum: 0
           maximum: 4294967295
           default: 0
-          x-field-uid: 4
-        sak_pool:
+          x-field-uid: 3
+        saks:
           description: |-
             Rx SAK pool.
-          $ref: '#/components/schemas/Macsec.StaticKey.SakPool'
-          x-field-uid: 3
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.StaticKey.Sak'
+          x-field-uid: 4
     Macsec.CryptoEngine:
       description: |-
         A container of crypto engine properties of a SecY.
@@ -11346,24 +11333,9 @@ components:
           enum:
           - psk
           - msk
-        psk_chain:
-          description: |-
-            PSK chain.
-          $ref: '#/components/schemas/Mka.Basic.KeySource.PskChain'
-          x-field-uid: 2
-    Mka.Basic.KeySource.PskChain:
-      description: |-
-        The container for PSK chain settings.
-      type: object
-      properties:
-        name:
-          description: |-
-            PSK chain name.
-          type: string
-          x-field-uid: 1
         psks:
           description: |-
-            Pre-shared Keys.
+            PSK chain.
           type: array
           items:
             $ref: '#/components/schemas/Mka.Basic.KeySource.Psk'

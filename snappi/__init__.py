@@ -357,7 +357,6 @@ from .snappi import MacsecStaticKey
 from .snappi import MacsecTx
 from .snappi import MacsecTxSc
 from .snappi import MacsecTxScStaticKey
-from .snappi import MacsecStaticKeySakPool
 from .snappi import MacsecStaticKeySak
 from .snappi import MacsecStaticKeySakIter
 from .snappi import MacsecTxScIter
@@ -384,7 +383,6 @@ from .snappi import DeviceMkaEthernetInterface
 from .snappi import Mka
 from .snappi import MkaBasic
 from .snappi import MkaBasicKeySource
-from .snappi import MkaBasicKeySourcePskChain
 from .snappi import MkaBasicKeySourcePsk
 from .snappi import MkaBasicKeySourcePskIter
 from .snappi import MkaBasicSupportedCipherSuites

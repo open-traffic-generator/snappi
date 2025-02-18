@@ -7972,16 +7972,6 @@ message MacsecStaticKeyRekeyModeTimerBased {
   optional uint32 interval = 3;
 }
 
-// The container for Secure Association Key(SAK) Pool.
-message MacsecStaticKeySakPool {
-
-  // SAK pool name.
-  optional string name = 1;
-
-  // Secure Association Keys.
-  repeated MacsecStaticKeySak saks = 2;
-}
-
 // The container for SAK.
 message MacsecStaticKeySak {
 
@@ -8038,10 +8028,10 @@ message MacsecTxScStaticKey {
   optional bool confidentiality = 3;
 
   // Tx SAK pool.
-  MacsecStaticKeySakPool sak_pool = 4;
+  repeated MacsecStaticKeySak saks = 4;
 }
 
-// The container for Rx settings of SecY.
+// A container for Rx settings of SecY.
 message MacsecRx {
 
   // Enable replay protection on not.
@@ -8052,7 +8042,7 @@ message MacsecRx {
   // default = 1
   optional uint32 replay_window = 2;
 
-  // Rx setting for static key.
+  // Rx settings for static key.
   MacsecRxStaticKey static_key = 3;
 }
 
@@ -8076,10 +8066,10 @@ message MacsecRxSc {
   // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
   // construct the 64 bits XPN value when test starts.
   // default = 0
-  optional uint32 dut_msb_xpn = 4;
+  optional uint32 dut_msb_xpn = 3;
 
   // Rx SAK pool.
-  MacsecStaticKeySakPool sak_pool = 3;
+  repeated MacsecStaticKeySak saks = 4;
 }
 
 // A container of crypto engine properties of a SecY.
@@ -8392,16 +8382,6 @@ message MkaBasicKeySource {
   optional Choice.Enum choice = 1;
 
   // PSK chain.
-  MkaBasicKeySourcePskChain psk_chain = 2;
-}
-
-// The container for PSK chain settings.
-message MkaBasicKeySourcePskChain {
-
-  // PSK chain name.
-  optional string name = 1;
-
-  // Pre-shared Keys.
   repeated MkaBasicKeySourcePsk psks = 2;
 }
 
