@@ -7774,9 +7774,9 @@ message Ospfv2V4RRRouteOrigin {
     }
   }
   // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
-  // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
-  // - external_type_2: for Autonomous System (AS) External with internal and external
-  // AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+  // - external_type_1: for Autonomous System (AS) External with internal AS metric. -
+  // external_type_2: for Autonomous System (AS) External with internal and external AS
+  // metric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
   // default = Choice.Enum.inter_area
   optional Choice.Enum choice = 1;
 
@@ -7864,8 +7864,7 @@ message DeviceOspfv3Router {
   optional string name = 1;
 
   // OSPFv3 Router Id.
-  // required = true
-  optional string router_id = 2;
+  Ospfv3RouterId router_id = 2;
 
   // The time in seconds for LSA retransmission.
   // default = 5
@@ -7894,6 +7893,28 @@ message DeviceOspfv3Router {
 
   // Emulated OSPFv4 IPv6 routes.
   repeated Ospfv3V6RouteRange v6_routes = 10;
+}
+
+// Container for OSPFv3 Router ID configuration.
+message Ospfv3RouterId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      custom = 2;
+    }
+  }
+  // IP address of Router ID for this emulated OSPFv3 router.
+  // - auto: When first IPv4 address of the router is attempted to be assigned as Router
+  // ID.
+  // - custom: When, Router ID needs to be configured different from first IPv4 address
+  // of the router.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Router ID in IPv4 address format.
+  optional string custom = 2;
 }
 
 // The OSPFv3 router optional attributes.
@@ -8090,9 +8111,9 @@ message Ospfv3V6RRRouteOrigin {
     }
   }
   // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
-  // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
-  // - external_type_2: for Autonomous System (AS) External with internal and external
-  // AS meteric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
+  // - external_type_1: for Autonomous System (AS) External with internal AS metric. -
+  // external_type_2: for Autonomous System (AS) External with internal and external AS
+  // metric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
   // default = Choice.Enum.inter_area
   optional Choice.Enum choice = 1;
 

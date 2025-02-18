@@ -16,6 +16,7 @@ type deviceOspfv3Router struct {
 	obj                   *otg.DeviceOspfv3Router
 	marshaller            marshalDeviceOspfv3Router
 	unMarshaller          unMarshalDeviceOspfv3Router
+	routerIdHolder        Ospfv3RouterId
 	gracefulRestartHolder Ospfv3GracefulRestart
 	capabilitiesHolder    Ospfv3Capabilities
 	interfacesHolder      DeviceOspfv3RouterOspfv3InterfaceIter
@@ -247,6 +248,7 @@ func (obj *deviceOspfv3Router) Clone() (DeviceOspfv3Router, error) {
 }
 
 func (obj *deviceOspfv3Router) setNil() {
+	obj.routerIdHolder = nil
 	obj.gracefulRestartHolder = nil
 	obj.capabilitiesHolder = nil
 	obj.interfacesHolder = nil
@@ -284,10 +286,14 @@ type DeviceOspfv3Router interface {
 	Name() string
 	// SetName assigns string provided by user to DeviceOspfv3Router
 	SetName(value string) DeviceOspfv3Router
-	// RouterId returns string, set in DeviceOspfv3Router.
-	RouterId() string
-	// SetRouterId assigns string provided by user to DeviceOspfv3Router
-	SetRouterId(value string) DeviceOspfv3Router
+	// RouterId returns Ospfv3RouterId, set in DeviceOspfv3Router.
+	// Ospfv3RouterId is container for OSPFv3 Router ID configuration.
+	RouterId() Ospfv3RouterId
+	// SetRouterId assigns Ospfv3RouterId provided by user to DeviceOspfv3Router.
+	// Ospfv3RouterId is container for OSPFv3 Router ID configuration.
+	SetRouterId(value Ospfv3RouterId) DeviceOspfv3Router
+	// HasRouterId checks if RouterId has been set in DeviceOspfv3Router
+	HasRouterId() bool
 	// LsaRetransmitTime returns uint32, set in DeviceOspfv3Router.
 	LsaRetransmitTime() uint32
 	// SetLsaRetransmitTime assigns uint32 provided by user to DeviceOspfv3Router
@@ -352,18 +358,30 @@ func (obj *deviceOspfv3Router) SetName(value string) DeviceOspfv3Router {
 }
 
 // OSPFv3 Router Id.
-// RouterId returns a string
-func (obj *deviceOspfv3Router) RouterId() string {
-
-	return *obj.obj.RouterId
-
+// RouterId returns a Ospfv3RouterId
+func (obj *deviceOspfv3Router) RouterId() Ospfv3RouterId {
+	if obj.obj.RouterId == nil {
+		obj.obj.RouterId = NewOspfv3RouterId().msg()
+	}
+	if obj.routerIdHolder == nil {
+		obj.routerIdHolder = &ospfv3RouterId{obj: obj.obj.RouterId}
+	}
+	return obj.routerIdHolder
 }
 
 // OSPFv3 Router Id.
-// SetRouterId sets the string value in the DeviceOspfv3Router object
-func (obj *deviceOspfv3Router) SetRouterId(value string) DeviceOspfv3Router {
+// RouterId returns a Ospfv3RouterId
+func (obj *deviceOspfv3Router) HasRouterId() bool {
+	return obj.obj.RouterId != nil
+}
 
-	obj.obj.RouterId = &value
+// OSPFv3 Router Id.
+// SetRouterId sets the Ospfv3RouterId value in the DeviceOspfv3Router object
+func (obj *deviceOspfv3Router) SetRouterId(value Ospfv3RouterId) DeviceOspfv3Router {
+
+	obj.routerIdHolder = nil
+	obj.obj.RouterId = value.msg()
+
 	return obj
 }
 
@@ -697,17 +715,9 @@ func (obj *deviceOspfv3Router) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceOspfv3Router")
 	}
 
-	// RouterId is required
-	if obj.obj.RouterId == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "RouterId is required field on interface DeviceOspfv3Router")
-	}
 	if obj.obj.RouterId != nil {
 
-		err := obj.validateIpv4(obj.RouterId())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on DeviceOspfv3Router.RouterId"))
-		}
-
+		obj.RouterId().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.LsaRetransmitTime != nil {

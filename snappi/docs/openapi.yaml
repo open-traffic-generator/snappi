@@ -10417,7 +10417,7 @@ components:
       properties:
         choice:
           description: |-
-            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS meteric. - external_type_2: for Autonomous System (AS) External with internal and external AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS metric. - external_type_2: for Autonomous System (AS) External with internal and external AS metric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
           type: string
           default: inter_area
           x-field-uid: 1
@@ -10554,7 +10554,6 @@ components:
       type: object
       required:
       - name
-      - router_id
       - interfaces
       properties:
         name:
@@ -10567,8 +10566,7 @@ components:
         router_id:
           description: |-
             OSPFv3 Router Id.
-          type: string
-          format: ipv4
+          $ref: '#/components/schemas/Ospfv3.RouterId'
           x-field-uid: 2
         lsa_retransmit_time:
           description: |-
@@ -10622,6 +10620,33 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv3.V6RouteRange'
           x-field-uid: 10
+    Ospfv3.RouterId:
+      description: |-
+        Container for OSPFv3 Router ID configuration.
+      type: object
+      properties:
+        choice:
+          description: |-
+            IP address of Router ID for this emulated OSPFv3 router.
+            - auto: When first IPv4 address of the router is attempted to be assigned as Router ID.
+            - custom: When, Router ID needs to be configured different from first IPv4 address of the router.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            custom:
+              x-field-uid: 2
+          enum:
+          - auto
+          - custom
+        custom:
+          description: |-
+            Router ID in IPv4 address format.
+          type: string
+          format: ipv4
+          x-field-uid: 2
     Ospfv3.Capabilities:
       description: |-
         The OSPFv3 router optional attributes.
@@ -10874,7 +10899,7 @@ components:
       properties:
         choice:
           description: |-
-            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS meteric. - external_type_2: for Autonomous System (AS) External with internal and external AS meteric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
+            Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS metric. - external_type_2: for Autonomous System (AS) External with internal and external AS metric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
           type: string
           default: inter_area
           x-field-uid: 1

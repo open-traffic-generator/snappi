@@ -351,6 +351,7 @@ from .snappi import Ospfv2V4RRExternalType2
 from .snappi import Ospfv2V4RRNssaExternal
 from .snappi import Ospfv2V4RouteRangeIter
 from .snappi import DeviceOspfv3Router
+from .snappi import Ospfv3RouterId
 from .snappi import Ospfv3GracefulRestart
 from .snappi import Ospfv3Capabilities
 from .snappi import Ospfv3Interface
