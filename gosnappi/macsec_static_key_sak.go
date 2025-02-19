@@ -270,9 +270,21 @@ type MacsecStaticKeySak interface {
 	SetSak(value string) MacsecStaticKeySak
 	// HasSak checks if Sak has been set in MacsecStaticKeySak
 	HasSak() bool
+	// Ssci returns string, set in MacsecStaticKeySak.
+	Ssci() string
+	// SetSsci assigns string provided by user to MacsecStaticKeySak
+	SetSsci(value string) MacsecStaticKeySak
+	// HasSsci checks if Ssci has been set in MacsecStaticKeySak
+	HasSsci() bool
+	// Salt returns string, set in MacsecStaticKeySak.
+	Salt() string
+	// SetSalt assigns string provided by user to MacsecStaticKeySak
+	SetSalt(value string) MacsecStaticKeySak
+	// HasSalt checks if Salt has been set in MacsecStaticKeySak
+	HasSalt() bool
 }
 
-// SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
+// Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
 // Sak returns a string
 func (obj *macsecStaticKeySak) Sak() string {
 
@@ -280,17 +292,61 @@ func (obj *macsecStaticKeySak) Sak() string {
 
 }
 
-// SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
+// Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
 // Sak returns a string
 func (obj *macsecStaticKeySak) HasSak() bool {
 	return obj.obj.Sak != nil
 }
 
-// SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
+// Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending on the citpher suite chosen.
 // SetSak sets the string value in the MacsecStaticKeySak object
 func (obj *macsecStaticKeySak) SetSak(value string) MacsecStaticKeySak {
 
 	obj.obj.Sak = &value
+	return obj
+}
+
+// 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+// Ssci returns a string
+func (obj *macsecStaticKeySak) Ssci() string {
+
+	return *obj.obj.Ssci
+
+}
+
+// 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+// Ssci returns a string
+func (obj *macsecStaticKeySak) HasSsci() bool {
+	return obj.obj.Ssci != nil
+}
+
+// 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+// SetSsci sets the string value in the MacsecStaticKeySak object
+func (obj *macsecStaticKeySak) SetSsci(value string) MacsecStaticKeySak {
+
+	obj.obj.Ssci = &value
+	return obj
+}
+
+// 12 bytes salt used in case of XPN cipher suites.
+// Salt returns a string
+func (obj *macsecStaticKeySak) Salt() string {
+
+	return *obj.obj.Salt
+
+}
+
+// 12 bytes salt used in case of XPN cipher suites.
+// Salt returns a string
+func (obj *macsecStaticKeySak) HasSalt() bool {
+	return obj.obj.Salt != nil
+}
+
+// 12 bytes salt used in case of XPN cipher suites.
+// SetSalt sets the string value in the MacsecStaticKeySak object
+func (obj *macsecStaticKeySak) SetSalt(value string) MacsecStaticKeySak {
+
+	obj.obj.Salt = &value
 	return obj
 }
 
@@ -311,11 +367,41 @@ func (obj *macsecStaticKeySak) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.Ssci != nil {
+
+		if len(*obj.obj.Ssci) < 4 || len(*obj.obj.Ssci) > 4 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"4 <= length of MacsecStaticKeySak.Ssci <= 4 but Got %d",
+					len(*obj.obj.Ssci)))
+		}
+
+	}
+
+	if obj.obj.Salt != nil {
+
+		if len(*obj.obj.Salt) < 12 || len(*obj.obj.Salt) > 12 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"12 <= length of MacsecStaticKeySak.Salt <= 12 but Got %d",
+					len(*obj.obj.Salt)))
+		}
+
+	}
+
 }
 
 func (obj *macsecStaticKeySak) setDefault() {
 	if obj.obj.Sak == nil {
 		obj.SetSak("F123456789ABCDEF0123456789ABCDEF")
+	}
+	if obj.obj.Ssci == nil {
+		obj.SetSsci("00000001")
+	}
+	if obj.obj.Salt == nil {
+		obj.SetSalt("000000000000000000000001")
 	}
 
 }

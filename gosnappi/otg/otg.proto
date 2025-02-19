@@ -7975,10 +7975,18 @@ message MacsecStaticKeyRekeyModeTimerBased {
 // The container for SAK.
 message MacsecStaticKeySak {
 
-  // SAK bits as hex string. Either 128 bits or 256 bits depending on the citpher suite
-  // chosen.
+  // Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending
+  // on the citpher suite chosen.
   // default = F123456789ABCDEF0123456789ABCDEF
   optional string sak = 1;
+
+  // 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+  // default = 00000001
+  optional string ssci = 2;
+
+  // 12 bytes salt used in case of XPN cipher suites.
+  // default = 000000000000000000000001
+  optional string salt = 3;
 }
 
 // A container of Tx properties of SecY.
