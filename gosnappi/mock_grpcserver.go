@@ -162,7 +162,7 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 				ch := otg.MetricsResponse_Choice_Enum(int32(1))
 				resp = &otg.GetMetricsResponse{
 					MetricsResponse: &otg.MetricsResponse{
-						Choice:  &ch,
+						Choice:      &ch,
 						FlowMetrics: []*otg.FlowMetric{f},
 					},
 				}
