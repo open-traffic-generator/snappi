@@ -154,11 +154,11 @@ func TestHttpGetMetricsFlowResponse(t *testing.T) {
 	assert.NotNil(t, resp)
 	assert.Nil(t, err)
 	assert.Equal(t, resp.FlowMetrics().Items()[0].Name(), string("f1"))
-	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), int64(1000))
-	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), int64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesTx(), uint64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[0].BytesRx(), uint64(1000))
 	assert.Equal(t, resp.FlowMetrics().Items()[1].Name(), string("f2"))
-	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), int64(1000))
-	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), int64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesTx(), uint64(1000))
+	assert.Equal(t, resp.FlowMetrics().Items()[1].BytesRx(), uint64(1000))
 }
 
 func TestSetNewConfig(t *testing.T) {
@@ -1102,5 +1102,5 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 	req := gosnappi.NewControlState().Protocol().All()
 	err := req.Unmarshal().FromJson(input_str)
 	assert.NotNil(t, err)
-	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum type: "run"`)
+	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum field state: "run"`)
 }
