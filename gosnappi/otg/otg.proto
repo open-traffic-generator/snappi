@@ -8140,7 +8140,10 @@ message MacsecCryptoEngineStatelessEncryptionOnlyTxPn {
       incrementing_pn = 2;
     }
   }
-  // Types of Tx packet number(PN) series.
+  // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets
+  // will be sent out with the configured fixed PN or lower half of configured fixed XPN.
+  // 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing
+  // PN or XPN.
   // default = Choice.Enum.fixed_pn
   optional Choice.Enum choice = 1;
 

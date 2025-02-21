@@ -328,7 +328,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) IncrementingPn() {
 	obj.setChoice(MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoice.INCREMENTING_PN)
 }
 
-// Types of Tx packet number(PN) series.
+// Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets will be sent out with the configured fixed PN or lower half of configured fixed XPN. 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing PN or XPN.
 // Choice returns a string
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) HasChoice() bool {
 	return obj.obj.Choice != nil
