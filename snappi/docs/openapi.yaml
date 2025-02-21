@@ -11003,7 +11003,7 @@ components:
           type: integer
           format: uint32
           minimum: 2
-          maximum: 4294967295
+          maximum: 1000000
           default: 100
           x-field-uid: 1
         first_pn:
