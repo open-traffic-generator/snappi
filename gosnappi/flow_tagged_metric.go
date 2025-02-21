@@ -350,6 +350,66 @@ type FlowTaggedMetric interface {
 	SetLatency(value MetricLatency) FlowTaggedMetric
 	// HasLatency checks if Latency has been set in FlowTaggedMetric
 	HasLatency() bool
+	// TxL1RateBps returns float32, set in FlowTaggedMetric.
+	TxL1RateBps() float32
+	// SetTxL1RateBps assigns float32 provided by user to FlowTaggedMetric
+	SetTxL1RateBps(value float32) FlowTaggedMetric
+	// HasTxL1RateBps checks if TxL1RateBps has been set in FlowTaggedMetric
+	HasTxL1RateBps() bool
+	// RxL1RateBps returns float32, set in FlowTaggedMetric.
+	RxL1RateBps() float32
+	// SetRxL1RateBps assigns float32 provided by user to FlowTaggedMetric
+	SetRxL1RateBps(value float32) FlowTaggedMetric
+	// HasRxL1RateBps checks if RxL1RateBps has been set in FlowTaggedMetric
+	HasRxL1RateBps() bool
+	// TxRateBytes returns float32, set in FlowTaggedMetric.
+	TxRateBytes() float32
+	// SetTxRateBytes assigns float32 provided by user to FlowTaggedMetric
+	SetTxRateBytes(value float32) FlowTaggedMetric
+	// HasTxRateBytes checks if TxRateBytes has been set in FlowTaggedMetric
+	HasTxRateBytes() bool
+	// RxRateBytes returns float32, set in FlowTaggedMetric.
+	RxRateBytes() float32
+	// SetRxRateBytes assigns float32 provided by user to FlowTaggedMetric
+	SetRxRateBytes(value float32) FlowTaggedMetric
+	// HasRxRateBytes checks if RxRateBytes has been set in FlowTaggedMetric
+	HasRxRateBytes() bool
+	// TxRateBps returns float32, set in FlowTaggedMetric.
+	TxRateBps() float32
+	// SetTxRateBps assigns float32 provided by user to FlowTaggedMetric
+	SetTxRateBps(value float32) FlowTaggedMetric
+	// HasTxRateBps checks if TxRateBps has been set in FlowTaggedMetric
+	HasTxRateBps() bool
+	// RxRateBps returns float32, set in FlowTaggedMetric.
+	RxRateBps() float32
+	// SetRxRateBps assigns float32 provided by user to FlowTaggedMetric
+	SetRxRateBps(value float32) FlowTaggedMetric
+	// HasRxRateBps checks if RxRateBps has been set in FlowTaggedMetric
+	HasRxRateBps() bool
+	// TxRateKbps returns float32, set in FlowTaggedMetric.
+	TxRateKbps() float32
+	// SetTxRateKbps assigns float32 provided by user to FlowTaggedMetric
+	SetTxRateKbps(value float32) FlowTaggedMetric
+	// HasTxRateKbps checks if TxRateKbps has been set in FlowTaggedMetric
+	HasTxRateKbps() bool
+	// RxRateKbps returns float32, set in FlowTaggedMetric.
+	RxRateKbps() float32
+	// SetRxRateKbps assigns float32 provided by user to FlowTaggedMetric
+	SetRxRateKbps(value float32) FlowTaggedMetric
+	// HasRxRateKbps checks if RxRateKbps has been set in FlowTaggedMetric
+	HasRxRateKbps() bool
+	// TxRateMbps returns float32, set in FlowTaggedMetric.
+	TxRateMbps() float32
+	// SetTxRateMbps assigns float32 provided by user to FlowTaggedMetric
+	SetTxRateMbps(value float32) FlowTaggedMetric
+	// HasTxRateMbps checks if TxRateMbps has been set in FlowTaggedMetric
+	HasTxRateMbps() bool
+	// RxRateMbps returns float32, set in FlowTaggedMetric.
+	RxRateMbps() float32
+	// SetRxRateMbps assigns float32 provided by user to FlowTaggedMetric
+	SetRxRateMbps(value float32) FlowTaggedMetric
+	// HasRxRateMbps checks if RxRateMbps has been set in FlowTaggedMetric
+	HasRxRateMbps() bool
 	setNil()
 }
 
@@ -647,6 +707,226 @@ func (obj *flowTaggedMetric) SetLatency(value MetricLatency) FlowTaggedMetric {
 	obj.latencyHolder = nil
 	obj.obj.Latency = value.msg()
 
+	return obj
+}
+
+// The Layer 1 transmission rate in bits per second.
+// TxL1RateBps returns a float32
+func (obj *flowTaggedMetric) TxL1RateBps() float32 {
+
+	return *obj.obj.TxL1RateBps
+
+}
+
+// The Layer 1 transmission rate in bits per second.
+// TxL1RateBps returns a float32
+func (obj *flowTaggedMetric) HasTxL1RateBps() bool {
+	return obj.obj.TxL1RateBps != nil
+}
+
+// The Layer 1 transmission rate in bits per second.
+// SetTxL1RateBps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetTxL1RateBps(value float32) FlowTaggedMetric {
+
+	obj.obj.TxL1RateBps = &value
+	return obj
+}
+
+// The Layer 1 receive rate in bits per second.
+// RxL1RateBps returns a float32
+func (obj *flowTaggedMetric) RxL1RateBps() float32 {
+
+	return *obj.obj.RxL1RateBps
+
+}
+
+// The Layer 1 receive rate in bits per second.
+// RxL1RateBps returns a float32
+func (obj *flowTaggedMetric) HasRxL1RateBps() bool {
+	return obj.obj.RxL1RateBps != nil
+}
+
+// The Layer 1 receive rate in bits per second.
+// SetRxL1RateBps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetRxL1RateBps(value float32) FlowTaggedMetric {
+
+	obj.obj.RxL1RateBps = &value
+	return obj
+}
+
+// The transmission rate in bytes per second.
+// TxRateBytes returns a float32
+func (obj *flowTaggedMetric) TxRateBytes() float32 {
+
+	return *obj.obj.TxRateBytes
+
+}
+
+// The transmission rate in bytes per second.
+// TxRateBytes returns a float32
+func (obj *flowTaggedMetric) HasTxRateBytes() bool {
+	return obj.obj.TxRateBytes != nil
+}
+
+// The transmission rate in bytes per second.
+// SetTxRateBytes sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetTxRateBytes(value float32) FlowTaggedMetric {
+
+	obj.obj.TxRateBytes = &value
+	return obj
+}
+
+// The receive rate in bytes per second.
+// RxRateBytes returns a float32
+func (obj *flowTaggedMetric) RxRateBytes() float32 {
+
+	return *obj.obj.RxRateBytes
+
+}
+
+// The receive rate in bytes per second.
+// RxRateBytes returns a float32
+func (obj *flowTaggedMetric) HasRxRateBytes() bool {
+	return obj.obj.RxRateBytes != nil
+}
+
+// The receive rate in bytes per second.
+// SetRxRateBytes sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetRxRateBytes(value float32) FlowTaggedMetric {
+
+	obj.obj.RxRateBytes = &value
+	return obj
+}
+
+// The transmission rate in bits per second.
+// TxRateBps returns a float32
+func (obj *flowTaggedMetric) TxRateBps() float32 {
+
+	return *obj.obj.TxRateBps
+
+}
+
+// The transmission rate in bits per second.
+// TxRateBps returns a float32
+func (obj *flowTaggedMetric) HasTxRateBps() bool {
+	return obj.obj.TxRateBps != nil
+}
+
+// The transmission rate in bits per second.
+// SetTxRateBps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetTxRateBps(value float32) FlowTaggedMetric {
+
+	obj.obj.TxRateBps = &value
+	return obj
+}
+
+// The receive rate in bits per second.
+// RxRateBps returns a float32
+func (obj *flowTaggedMetric) RxRateBps() float32 {
+
+	return *obj.obj.RxRateBps
+
+}
+
+// The receive rate in bits per second.
+// RxRateBps returns a float32
+func (obj *flowTaggedMetric) HasRxRateBps() bool {
+	return obj.obj.RxRateBps != nil
+}
+
+// The receive rate in bits per second.
+// SetRxRateBps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetRxRateBps(value float32) FlowTaggedMetric {
+
+	obj.obj.RxRateBps = &value
+	return obj
+}
+
+// The transmission rate in Kilobits per second.
+// TxRateKbps returns a float32
+func (obj *flowTaggedMetric) TxRateKbps() float32 {
+
+	return *obj.obj.TxRateKbps
+
+}
+
+// The transmission rate in Kilobits per second.
+// TxRateKbps returns a float32
+func (obj *flowTaggedMetric) HasTxRateKbps() bool {
+	return obj.obj.TxRateKbps != nil
+}
+
+// The transmission rate in Kilobits per second.
+// SetTxRateKbps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetTxRateKbps(value float32) FlowTaggedMetric {
+
+	obj.obj.TxRateKbps = &value
+	return obj
+}
+
+// The receive rate in Kilobits per second.
+// RxRateKbps returns a float32
+func (obj *flowTaggedMetric) RxRateKbps() float32 {
+
+	return *obj.obj.RxRateKbps
+
+}
+
+// The receive rate in Kilobits per second.
+// RxRateKbps returns a float32
+func (obj *flowTaggedMetric) HasRxRateKbps() bool {
+	return obj.obj.RxRateKbps != nil
+}
+
+// The receive rate in Kilobits per second.
+// SetRxRateKbps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetRxRateKbps(value float32) FlowTaggedMetric {
+
+	obj.obj.RxRateKbps = &value
+	return obj
+}
+
+// The transmission rate in Megabits per second.
+// TxRateMbps returns a float32
+func (obj *flowTaggedMetric) TxRateMbps() float32 {
+
+	return *obj.obj.TxRateMbps
+
+}
+
+// The transmission rate in Megabits per second.
+// TxRateMbps returns a float32
+func (obj *flowTaggedMetric) HasTxRateMbps() bool {
+	return obj.obj.TxRateMbps != nil
+}
+
+// The transmission rate in Megabits per second.
+// SetTxRateMbps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetTxRateMbps(value float32) FlowTaggedMetric {
+
+	obj.obj.TxRateMbps = &value
+	return obj
+}
+
+// The receive rate in Megabits per second.
+// RxRateMbps returns a float32
+func (obj *flowTaggedMetric) RxRateMbps() float32 {
+
+	return *obj.obj.RxRateMbps
+
+}
+
+// The receive rate in Megabits per second.
+// RxRateMbps returns a float32
+func (obj *flowTaggedMetric) HasRxRateMbps() bool {
+	return obj.obj.RxRateMbps != nil
+}
+
+// The receive rate in Megabits per second.
+// SetRxRateMbps sets the float32 value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetRxRateMbps(value float32) FlowTaggedMetric {
+
+	obj.obj.RxRateMbps = &value
 	return obj
 }
 
