@@ -252,7 +252,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnly) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine settings.
+// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine configuration.
 type MacsecCryptoEngineStatelessEncryptionOnly interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatelessEncryptionOnly to protobuf object *otg.MacsecCryptoEngineStatelessEncryptionOnly
@@ -275,18 +275,18 @@ type MacsecCryptoEngineStatelessEncryptionOnly interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// TxPn returns MacsecCryptoEngineStatelessEncryptionOnlyTxPn, set in MacsecCryptoEngineStatelessEncryptionOnly.
-	// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx packet number(PN) configuration.
 	TxPn() MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	// SetTxPn assigns MacsecCryptoEngineStatelessEncryptionOnlyTxPn provided by user to MacsecCryptoEngineStatelessEncryptionOnly.
-	// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx packet number(PN) configuration.
 	SetTxPn(value MacsecCryptoEngineStatelessEncryptionOnlyTxPn) MacsecCryptoEngineStatelessEncryptionOnly
 	// HasTxPn checks if TxPn has been set in MacsecCryptoEngineStatelessEncryptionOnly
 	HasTxPn() bool
 	// Traffic returns MacsecCryptoEngineStatelessEncryptionOnlyTraffic, set in MacsecCryptoEngineStatelessEncryptionOnly.
-	// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic configuration.
 	Traffic() MacsecCryptoEngineStatelessEncryptionOnlyTraffic
 	// SetTraffic assigns MacsecCryptoEngineStatelessEncryptionOnlyTraffic provided by user to MacsecCryptoEngineStatelessEncryptionOnly.
-	// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic configuration.
 	SetTraffic(value MacsecCryptoEngineStatelessEncryptionOnlyTraffic) MacsecCryptoEngineStatelessEncryptionOnly
 	// HasTraffic checks if Traffic has been set in MacsecCryptoEngineStatelessEncryptionOnly
 	HasTraffic() bool

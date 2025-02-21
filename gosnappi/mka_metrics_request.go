@@ -242,7 +242,7 @@ func (obj *mkaMetricsRequest) Clone() (MkaMetricsRequest, error) {
 	return newObj, nil
 }
 
-// MkaMetricsRequest is the request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+// MkaMetricsRequest is the request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
 type MkaMetricsRequest interface {
 	Validation
 	// msg marshals MkaMetricsRequest to protobuf object *otg.MkaMetricsRequest

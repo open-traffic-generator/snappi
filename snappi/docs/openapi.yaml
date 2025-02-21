@@ -10620,7 +10620,7 @@ components:
           x-field-uid: 5
     Macsec.StaticKey:
       description: |-
-        A container of static key properties for a SecY.
+        A container of static key properties for a secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
       type: object
       properties:
         cipher_suite:
@@ -10904,7 +10904,7 @@ components:
       properties:
         choice:
           description: |-
-            Engine type based on encryption and/ or decryption capability..
+            Engine type based on encryption and/ or decryption capability. Supported types: 1) stateless_encryption_only - engine can only encrypt transmitted packets but such engine cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) stateful_encryption_decryption - engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ ddecryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
           type: string
           default: stateless_encryption_only
           x-field-uid: 1
@@ -10924,7 +10924,7 @@ components:
           x-field-uid: 3
     Macsec.CryptoEngine.StatelessEncryptionOnly:
       description: |-
-        The container for stateless encryption only engine settings.
+        The container for stateless encryption only engine configuration.
       type: object
       properties:
         tx_pn:
@@ -10935,7 +10935,7 @@ components:
           x-field-uid: 3
     Macsec.CryptoEngine.StatefulEncryptionDecryption:
       description: |-
-        The container for stateful encryption and decryption engine settings.
+        The container for stateful encryption and decryption engine configuration.
       type: object
       properties:
         initial_pn:
@@ -10946,12 +10946,12 @@ components:
           x-field-uid: 2
     Macsec.CryptoEngine.StatelessEncryptionOnly.TxPn:
       description: |-
-        Tx PN settings.
+        Tx packet number(PN) configuration.
       type: object
       properties:
         choice:
           description: |-
-            Types of Tx PN series.
+            Types of Tx packet number(PN) series.
           type: string
           default: fixed_pn
           x-field-uid: 1
@@ -10971,12 +10971,12 @@ components:
           x-field-uid: 3
     Macsec.CryptoEngine.StatelessEncryptionOnly.FixedPn:
       description: |-
-        Fixed PN settings.
+        Fixed packet number(PN) configuration.
       type: object
       properties:
         pn:
           description: |-
-            Fixed Tx PN. PN with which all packets will be sent out.
+            Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
           type: integer
           format: uint32
           minimum: 4294967295
@@ -10984,14 +10984,17 @@ components:
           x-field-uid: 1
         xpn:
           description: |-
-            Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-          type: integer
+            Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be sent out.
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
           minimum: 1
-          default: 6
+          default: '0x0000000000000006'
           x-field-uid: 2
     Macsec.CryptoEngine.StatelessEncryptionOnly.IncrementingPn:
       description: |-
-        Incrementing PN settings.
+        Incrementing packet number(PN) configuration.
       type: object
       properties:
         count:
@@ -11004,7 +11007,7 @@ components:
           x-field-uid: 1
         first_pn:
           description: |-
-            The first PN.
+            The first packet number(PN).
           type: integer
           format: uint32
           minimum: 1
@@ -11012,14 +11015,17 @@ components:
           x-field-uid: 2
         first_xpn:
           description: |-
-            The first XPN.
-          type: integer
+            The first extended packet number(XPN).
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 8
           minimum: 1
-          default: 65536
+          default: '0x0000000000010000'
           x-field-uid: 3
     Macsec.CryptoEngine.StatelessEncryptionOnly.Traffic:
       description: |-
-        Encryption only traffic settings.
+        Encryption only traffic configuration.
       type: object
       properties:
         send_gratarp:
@@ -11030,12 +11036,12 @@ components:
           x-field-uid: 1
     Macsec.CryptoEngine.StatefulEncryptionDecryption.InitialPn:
       description: |-
-        Initial PN settings.
+        Initial packet number(PN) configuration.
       type: object
       properties:
         pn:
           description: |-
-            Initial Tx PN.
+            Initial Tx packet number(PN).
           type: integer
           format: uint32
           minimum: 1
@@ -11043,7 +11049,7 @@ components:
           x-field-uid: 1
     Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration:
       description: |-
-        Hardware acceleration settings.
+        Hardware acceleration configuration for offloading MACsec processing to hardware.
       type: object
       properties:
         choice:
@@ -11065,7 +11071,7 @@ components:
           x-field-uid: 2
     Macsec.CryptoEngine.StatefulEncryptionDecryption.HardwareAcceleration.InlineCrypto:
       description: |-
-        Inline cryto engine settings.
+        Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
       type: object
       properties:
         rx_sectag_offset:
@@ -11077,7 +11083,7 @@ components:
           x-field-uid: 1
         type_of_ca:
           description: |-
-            Type of CA.
+            Type of connectivity association(CA).
           type: string
           x-field-uid: 2
           x-enum:
@@ -11093,28 +11099,31 @@ components:
           - group_ca_multipe_duts
         max_ca_count:
           description: |-
-            Maximum CA count.
+            The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
           type: integer
           format: uint32
+          minimum: 256
           default: 256
           x-field-uid: 3
         max_dut_tx_sc_per_ca:
           description: |-
-            Maximum DUT Tx SC per CA.
+            The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
           type: integer
           format: uint32
+          minimum: 256
           default: 1
           x-field-uid: 4
         max_device_per_ca:
           description: |-
-            Maximum devices per CA.
+            The maximum number of MACsec devices at test port that can be supported on each CA. This number is calculated automatically based on the values configured for Max CA Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured accordingly.
           type: integer
           format: uint32
+          minimum: 1
           default: 256
           x-field-uid: 5
         rx_sc_identifying_field:
           description: |-
-            Rx SC identifying_field.
+            The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
           type: string
           default: source_mac
           x-field-uid: 6
@@ -11365,7 +11374,7 @@ components:
       properties:
         cak_value:
           description: |-
-            CAK value.
+            Connectivity association key(CAK) value.
           type: string
           format: hex
           minLength: 16
@@ -11374,7 +11383,7 @@ components:
           x-field-uid: 1
         cak_name:
           description: |-
-            CAK name.
+            Connectivity association key(CAK) name.
           type: string
           format: hex
           minLength: 1
@@ -11383,13 +11392,13 @@ components:
           x-field-uid: 2
         start_time:
           description: |-
-            Key start time in HH:MM.
+            Key start time in HH:MM. This is relative to test start time.
           type: string
           default: 00:00
           x-field-uid: 3
         end_time:
           description: |-
-            Key end time in HH:MM.
+            Key end time in HH:MM. This is relative to test start time.
           type: string
           default: 00:00
           x-field-uid: 4
@@ -11524,8 +11533,8 @@ components:
             Determines the PN rekey threshold.
           type: string
           format: hex
-          minLength: 4
-          maxLength: 8
+          minLength: 1
+          maxLength: 4
           default: C0000000
           x-field-uid: 5
         rekey_threshold_xpn:
@@ -11533,8 +11542,8 @@ components:
             Determines the XPN rekey threshold.
           type: string
           format: hex
-          minLength: 8
-          maxLength: 16
+          minLength: 1
+          maxLength: 8
           default: C000000000000000
           x-field-uid: 6
     Mka.TxSc:
@@ -19608,109 +19617,109 @@ components:
           x-field-uid: 3
         out_pkts_protected:
           description: |-
-            OutPktsProtected.
+            OutPktsProtected, the number of protected packets transmitted.
           type: integer
           format: uint64
           x-field-uid: 4
         out_pkts_encrypted:
           description: |-
-            OutPktsEncrypted.
+            OutPktsEncrypted, the number of encrypted packets transmitted.
           type: integer
           format: uint64
           x-field-uid: 5
         in_pkts_ok:
           description: |-
-            InPktsOk.
+            InPktsOk, the number of valid packets received.
           type: integer
           format: uint64
           x-field-uid: 6
-        in_pkts_bad:
+        bad_pkts_rx:
           description: |-
-            InPktsBad.
+            The number of bad packets received.
           type: integer
           format: uint64
           x-field-uid: 7
         in_pkts_bad_tag:
           description: |-
-            InPktsBadTag.
+            InPktsBadTag, the number of packets discarded due to bad tag/ICV.
           type: integer
           format: uint64
           x-field-uid: 8
         in_pkts_late:
           description: |-
-            InPktsLate.
+            InPktsLate, the number of packets discarded out of window.
           type: integer
           format: uint64
           x-field-uid: 9
         in_pkts_no_sci:
           description: |-
-            InPktsNoSCI.
+            InPktsNoSCI,the number of packets discarded due to unknown SCI.
           type: integer
           format: uint64
           x-field-uid: 10
         in_pkts_not_using_sa:
           description: |-
-            InPktsNotUsingSA.
+            InPktsNotUsingSA, the number of packets discarded due to unused SA.
           type: integer
           format: uint64
           x-field-uid: 11
         in_pkts_not_valid:
           description: |-
-            InPktsNotValid.
+            InPktsNotValid, the number of packets discarded due to invalid ICV.
           type: integer
           format: uint64
           x-field-uid: 12
         in_pkts_unknown_sci:
           description: |-
-            InPktsUnknownSCI.
+            InPktsUnknownSCI, the number of packets received with unknown SCI.
           type: integer
           format: uint64
           x-field-uid: 13
         in_pkts_unused_sa:
           description: |-
-            InPktsUnusedSA.
+            InPktsUnusedSA, the number of packets received with unused SA.
           type: integer
           format: uint64
           x-field-uid: 14
         in_pkts_invalid:
           description: |-
-            InPktsInvalid.
+            InPktsInvalid, the number of packets received with invalid ICV.
           type: integer
           format: uint64
           x-field-uid: 15
         in_pkts_untagged:
           description: |-
-            InPktsUntagged.
+            InPktsUntagged, the number of non-MACsec packets received.
           type: integer
           format: uint64
           x-field-uid: 16
         out_octets_protected:
           description: |-
-            OutOctetsProtected.
+            OutOctetsProtected, the number of bytes transmitted as protected.
           type: integer
           format: uint64
           x-field-uid: 17
         out_octets_encrypted:
           description: |-
-            OutOctetsEncrypted.
+            OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
           type: integer
           format: uint64
           x-field-uid: 18
         in_octets_validated:
           description: |-
-            InOctetsValidated.
+            InOctetsValidated, the number of received bytes validated.
           type: integer
           format: uint64
           x-field-uid: 19
         in_octets_decrypted:
           description: |-
-            InOctetsDecrypted.
+            InOctetsDecrypted, the number of received bytes decrypted.
           type: integer
           format: uint64
           x-field-uid: 20
     Mka.Metrics.Request:
       description: |-
-        The request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+        The request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
       type: object
       properties:
         kay_names:

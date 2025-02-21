@@ -242,7 +242,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) Clone() (Mac
 	return newObj, nil
 }
 
-// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing PN settings.
+// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing packet number(PN) configuration.
 type MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn to protobuf object *otg.MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
@@ -276,10 +276,10 @@ type MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn interface {
 	SetFirstPn(value uint32) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
 	// HasFirstPn checks if FirstPn has been set in MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
 	HasFirstPn() bool
-	// FirstXpn returns int32, set in MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.
-	FirstXpn() int32
-	// SetFirstXpn assigns int32 provided by user to MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
-	SetFirstXpn(value int32) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
+	// FirstXpn returns string, set in MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.
+	FirstXpn() string
+	// SetFirstXpn assigns string provided by user to MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
+	SetFirstXpn(value string) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
 	// HasFirstXpn checks if FirstXpn has been set in MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
 	HasFirstXpn() bool
 }
@@ -306,7 +306,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) SetCount(val
 	return obj
 }
 
-// The first PN.
+// The first packet number(PN).
 // FirstPn returns a uint32
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) FirstPn() uint32 {
 
@@ -314,13 +314,13 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) FirstPn() ui
 
 }
 
-// The first PN.
+// The first packet number(PN).
 // FirstPn returns a uint32
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) HasFirstPn() bool {
 	return obj.obj.FirstPn != nil
 }
 
-// The first PN.
+// The first packet number(PN).
 // SetFirstPn sets the uint32 value in the MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn object
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) SetFirstPn(value uint32) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn {
 
@@ -328,23 +328,23 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) SetFirstPn(v
 	return obj
 }
 
-// The first XPN.
-// FirstXpn returns a int32
-func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) FirstXpn() int32 {
+// The first extended packet number(XPN).
+// FirstXpn returns a string
+func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) FirstXpn() string {
 
 	return *obj.obj.FirstXpn
 
 }
 
-// The first XPN.
-// FirstXpn returns a int32
+// The first extended packet number(XPN).
+// FirstXpn returns a string
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) HasFirstXpn() bool {
 	return obj.obj.FirstXpn != nil
 }
 
-// The first XPN.
-// SetFirstXpn sets the int32 value in the MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn object
-func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) SetFirstXpn(value int32) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn {
+// The first extended packet number(XPN).
+// SetFirstXpn sets the string value in the MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn object
+func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) SetFirstXpn(value string) MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn {
 
 	obj.obj.FirstXpn = &value
 	return obj
@@ -377,10 +377,12 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) validateObj(
 
 	if obj.obj.FirstXpn != nil {
 
-		if *obj.obj.FirstXpn < 1 || *obj.obj.FirstXpn > 2147483647 {
+		if len(*obj.obj.FirstXpn) < 1 || len(*obj.obj.FirstXpn) > 8 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.FirstXpn <= 2147483647 but Got %d", *obj.obj.FirstXpn))
+				fmt.Sprintf(
+					"1 <= length of MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.FirstXpn <= 8 but Got %d",
+					len(*obj.obj.FirstXpn)))
 		}
 
 	}
@@ -395,7 +397,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) setDefault()
 		obj.SetFirstPn(10000)
 	}
 	if obj.obj.FirstXpn == nil {
-		obj.SetFirstXpn(65536)
+		obj.SetFirstXpn("0x0000000000010000")
 	}
 
 }

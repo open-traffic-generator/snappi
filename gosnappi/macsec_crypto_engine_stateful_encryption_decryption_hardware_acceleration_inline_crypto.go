@@ -242,7 +242,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return newObj, nil
 }
 
-// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine settings.
+// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
 type MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto to protobuf object *otg.MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
@@ -341,7 +341,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCryptoTypeOfCaEnum(obj.obj.TypeOfCa.Enum().String())
 }
 
-// Type of CA.
+// Type of connectivity association(CA).
 // TypeOfCa returns a string
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasTypeOfCa() bool {
 	return obj.obj.TypeOfCa != nil
@@ -360,7 +360,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return obj
 }
 
-// Maximum CA count.
+// The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
 // MaxCaCount returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxCaCount() uint32 {
 
@@ -368,13 +368,13 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 
 }
 
-// Maximum CA count.
+// The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
 // MaxCaCount returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxCaCount() bool {
 	return obj.obj.MaxCaCount != nil
 }
 
-// Maximum CA count.
+// The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
 // SetMaxCaCount sets the uint32 value in the MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxCaCount(value uint32) MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
@@ -382,7 +382,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return obj
 }
 
-// Maximum DUT Tx SC per CA.
+// The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
 // MaxDutTxScPerCa returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDutTxScPerCa() uint32 {
 
@@ -390,13 +390,13 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 
 }
 
-// Maximum DUT Tx SC per CA.
+// The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
 // MaxDutTxScPerCa returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxDutTxScPerCa() bool {
 	return obj.obj.MaxDutTxScPerCa != nil
 }
 
-// Maximum DUT Tx SC per CA.
+// The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
 // SetMaxDutTxScPerCa sets the uint32 value in the MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDutTxScPerCa(value uint32) MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
@@ -404,7 +404,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return obj
 }
 
-// Maximum devices per CA.
+// The maximum number of MACsec devices at test port that can be supported on each CA. This number is calculated automatically based on the values configured for Max CA Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured accordingly.
 // MaxDevicePerCa returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MaxDevicePerCa() uint32 {
 
@@ -412,13 +412,13 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 
 }
 
-// Maximum devices per CA.
+// The maximum number of MACsec devices at test port that can be supported on each CA. This number is calculated automatically based on the values configured for Max CA Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured accordingly.
 // MaxDevicePerCa returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasMaxDevicePerCa() bool {
 	return obj.obj.MaxDevicePerCa != nil
 }
 
-// Maximum devices per CA.
+// The maximum number of MACsec devices at test port that can be supported on each CA. This number is calculated automatically based on the values configured for Max CA Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured accordingly.
 // SetMaxDevicePerCa sets the uint32 value in the MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto object
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) SetMaxDevicePerCa(value uint32) MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
@@ -443,7 +443,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 	return MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum(obj.obj.RxScIdentifyingField.Enum().String())
 }
 
-// Rx SC identifying_field.
+// The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
 // RxScIdentifyingField returns a string
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) HasRxScIdentifyingField() bool {
 	return obj.obj.RxScIdentifyingField != nil
@@ -465,6 +465,36 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.MaxCaCount != nil {
+
+		if *obj.obj.MaxCaCount < 256 || *obj.obj.MaxCaCount > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("256 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxCaCount <= 4294967295 but Got %d", *obj.obj.MaxCaCount))
+		}
+
+	}
+
+	if obj.obj.MaxDutTxScPerCa != nil {
+
+		if *obj.obj.MaxDutTxScPerCa < 256 || *obj.obj.MaxDutTxScPerCa > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("256 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxDutTxScPerCa <= 4294967295 but Got %d", *obj.obj.MaxDutTxScPerCa))
+		}
+
+	}
+
+	if obj.obj.MaxDevicePerCa != nil {
+
+		if *obj.obj.MaxDevicePerCa < 1 || *obj.obj.MaxDevicePerCa > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxDevicePerCa <= 4294967295 but Got %d", *obj.obj.MaxDevicePerCa))
+		}
+
 	}
 
 }

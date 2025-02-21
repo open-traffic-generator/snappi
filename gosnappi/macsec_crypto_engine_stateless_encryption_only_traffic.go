@@ -242,7 +242,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyTraffic) Clone() (MacsecCryp
 	return newObj, nil
 }
 
-// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic settings.
+// MacsecCryptoEngineStatelessEncryptionOnlyTraffic is encryption only traffic configuration.
 type MacsecCryptoEngineStatelessEncryptionOnlyTraffic interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatelessEncryptionOnlyTraffic to protobuf object *otg.MacsecCryptoEngineStatelessEncryptionOnlyTraffic

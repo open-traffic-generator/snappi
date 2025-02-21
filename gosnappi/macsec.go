@@ -283,10 +283,10 @@ type Macsec interface {
 	// SetName assigns string provided by user to Macsec
 	SetName(value string) Macsec
 	// StaticKey returns MacsecStaticKey, set in Macsec.
-	// MacsecStaticKey is a container of static key properties for a SecY.
+	// MacsecStaticKey is a container of static key properties for a secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
 	StaticKey() MacsecStaticKey
 	// SetStaticKey assigns MacsecStaticKey provided by user to Macsec.
-	// MacsecStaticKey is a container of static key properties for a SecY.
+	// MacsecStaticKey is a container of static key properties for a secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
 	SetStaticKey(value MacsecStaticKey) Macsec
 	// HasStaticKey checks if StaticKey has been set in Macsec
 	HasStaticKey() bool

@@ -252,7 +252,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryption) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine settings.
+// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine configuration.
 type MacsecCryptoEngineStatefulEncryptionDecryption interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatefulEncryptionDecryption to protobuf object *otg.MacsecCryptoEngineStatefulEncryptionDecryption
@@ -275,18 +275,18 @@ type MacsecCryptoEngineStatefulEncryptionDecryption interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// InitialPn returns MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn, set in MacsecCryptoEngineStatefulEncryptionDecryption.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial PN settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial packet number(PN) configuration.
 	InitialPn() MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn
 	// SetInitialPn assigns MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn provided by user to MacsecCryptoEngineStatefulEncryptionDecryption.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial PN settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial packet number(PN) configuration.
 	SetInitialPn(value MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn) MacsecCryptoEngineStatefulEncryptionDecryption
 	// HasInitialPn checks if InitialPn has been set in MacsecCryptoEngineStatefulEncryptionDecryption
 	HasInitialPn() bool
 	// HardwareAcceleration returns MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration, set in MacsecCryptoEngineStatefulEncryptionDecryption.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration configuration for offloading MACsec processing to hardware.
 	HardwareAcceleration() MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration
 	// SetHardwareAcceleration assigns MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration provided by user to MacsecCryptoEngineStatefulEncryptionDecryption.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration configuration for offloading MACsec processing to hardware.
 	SetHardwareAcceleration(value MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration) MacsecCryptoEngineStatefulEncryptionDecryption
 	// HasHardwareAcceleration checks if HardwareAcceleration has been set in MacsecCryptoEngineStatefulEncryptionDecryption
 	HasHardwareAcceleration() bool

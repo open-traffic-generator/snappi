@@ -7900,7 +7900,9 @@ message Macsec {
   MacsecCryptoEngine crypto_engine = 5;
 }
 
-// A container of static key properties for a SecY.
+// A container of static key properties for a secure entity(SecY). This configuration
+// is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA)
+// is configured. If MKA is configured, any static key configuration is not applicable.
 message MacsecStaticKey {
 
   message CipherSuite {
@@ -8090,7 +8092,14 @@ message MacsecCryptoEngine {
       stateful_encryption_decryption = 2;
     }
   }
-  // Engine type based on encryption and/ or decryption capability..
+  // Engine type based on encryption and/ or decryption capability. Supported types: 1)
+  // stateless_encryption_only - engine can only encrypt transmitted packets but such
+  // engine cannot decrypt packets upon arrival. As the packets cannot be decrypted on
+  // arrival, such packets cannot be delivered to the receiving device. Hence only stateless
+  // traffic can be sent. 2) stateful_encryption_decryption - engine can both encrypt
+  // transmitted packets and decrypt packets on arrival. Such engine can have hardware
+  // acceleration for faster encryption/ ddecryption. As both encryption and decryption
+  // are possible, stateful (e.g. TCP) traffic can be sent/ received.
   // default = Choice.Enum.stateless_encryption_only
   optional Choice.Enum choice = 1;
 
@@ -8101,7 +8110,7 @@ message MacsecCryptoEngine {
   MacsecCryptoEngineStatefulEncryptionDecryption stateful_encryption_decryption = 3;
 }
 
-// The container for stateless encryption only engine settings.
+// The container for stateless encryption only engine configuration.
 message MacsecCryptoEngineStatelessEncryptionOnly {
 
   // Description missing in models
@@ -8111,7 +8120,7 @@ message MacsecCryptoEngineStatelessEncryptionOnly {
   MacsecCryptoEngineStatelessEncryptionOnlyTraffic traffic = 3;
 }
 
-// The container for stateful encryption and decryption engine settings.
+// The container for stateful encryption and decryption engine configuration.
 message MacsecCryptoEngineStatefulEncryptionDecryption {
 
   // Description missing in models
@@ -8121,7 +8130,7 @@ message MacsecCryptoEngineStatefulEncryptionDecryption {
   MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration hardware_acceleration = 2;
 }
 
-// Tx PN settings.
+// Tx packet number(PN) configuration.
 message MacsecCryptoEngineStatelessEncryptionOnlyTxPn {
 
   message Choice {
@@ -8131,7 +8140,7 @@ message MacsecCryptoEngineStatelessEncryptionOnlyTxPn {
       incrementing_pn = 2;
     }
   }
-  // Types of Tx PN series.
+  // Types of Tx packet number(PN) series.
   // default = Choice.Enum.fixed_pn
   optional Choice.Enum choice = 1;
 
@@ -8142,35 +8151,36 @@ message MacsecCryptoEngineStatelessEncryptionOnlyTxPn {
   MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn incrementing = 3;
 }
 
-// Fixed PN settings.
+// Fixed packet number(PN) configuration.
 message MacsecCryptoEngineStatelessEncryptionOnlyFixedPn {
 
-  // Fixed Tx PN. PN with which all packets will be sent out.
+  // Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
   // default = 6
   optional uint32 pn = 1;
 
-  // Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-  // default = 6
-  optional int32 xpn = 2;
+  // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
+  // sent out.
+  // default = 0x0000000000000006
+  optional string xpn = 2;
 }
 
-// Incrementing PN settings.
+// Incrementing packet number(PN) configuration.
 message MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn {
 
   // Count of packet numbers in series.
   // default = 100
   optional uint32 count = 1;
 
-  // The first PN.
+  // The first packet number(PN).
   // default = 10000
   optional uint32 first_pn = 2;
 
-  // The first XPN.
-  // default = 65536
-  optional int32 first_xpn = 3;
+  // The first extended packet number(XPN).
+  // default = 0x0000000000010000
+  optional string first_xpn = 3;
 }
 
-// Encryption only traffic settings.
+// Encryption only traffic configuration.
 message MacsecCryptoEngineStatelessEncryptionOnlyTraffic {
 
   // Send gratuitous ARP or not.
@@ -8178,15 +8188,15 @@ message MacsecCryptoEngineStatelessEncryptionOnlyTraffic {
   optional bool send_gratarp = 1;
 }
 
-// Initial PN settings.
+// Initial packet number(PN) configuration.
 message MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn {
 
-  // Initial Tx PN.
+  // Initial Tx packet number(PN).
   // default = 1
   optional uint32 pn = 1;
 }
 
-// Hardware acceleration settings.
+// Hardware acceleration configuration for offloading MACsec processing to hardware.
 message MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration {
 
   message Choice {
@@ -8204,7 +8214,9 @@ message MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration {
   MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto inline_crypto = 2;
 }
 
-// Inline cryto engine settings.
+// Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware.
+// Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated
+// in MACsec header on transmit.
 message MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto {
 
   // Offset of Rx secTAG from the first byte in packet.
@@ -8219,18 +8231,24 @@ message MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInline
       group_ca_multipe_duts = 3;
     }
   }
-  // Type of CA.
+  // Type of connectivity association(CA).
   optional TypeOfCa.Enum type_of_ca = 2;
 
-  // Maximum CA count.
+  // The maximum number of CAs configured on the port. The maximum count supported per
+  // port is 256 for Pair-wise CA, each CA having one MACsec device.
   // default = 256
   optional uint32 max_ca_count = 3;
 
-  // Maximum DUT Tx SC per CA.
+  // The maximum number of DUT transmit SCs that can be supported per CA. The count should
+  // be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in
+  // the CA in case of group CA with multiple DUTs scenario.
   // default = 1
   optional uint32 max_dut_tx_sc_per_ca = 4;
 
-  // Maximum devices per CA.
+  // The maximum number of MACsec devices at test port that can be supported on each CA.
+  // This number is calculated automatically based on the values configured for Max CA
+  // Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured
+  // accordingly.
   // default = 256
   optional uint32 max_device_per_ca = 5;
 
@@ -8242,7 +8260,10 @@ message MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInline
       sci_port_id = 3;
     }
   }
-  // Rx SC identifying_field.
+  // The field based on which secure channel(SC) will be identified by the receiving port.
+  // Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2)
+  // SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify
+  // based on SCI port ID field.
   // default = RxScIdentifyingField.Enum.source_mac
   optional RxScIdentifyingField.Enum rx_sc_identifying_field = 6;
 }
@@ -8396,19 +8417,19 @@ message MkaBasicKeySource {
 // The container for Pre-shared key(PSK).
 message MkaBasicKeySourcePsk {
 
-  // CAK value.
+  // Connectivity association key(CAK) value.
   // default = F123456789ABCDEF0123456789ABCDEF
   optional string cak_value = 1;
 
-  // CAK name.
+  // Connectivity association key(CAK) name.
   // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
   optional string cak_name = 2;
 
-  // Key start time in HH:MM.
+  // Key start time in HH:MM. This is relative to test start time.
   // default = 00:00
   optional string start_time = 3;
 
-  // Key end time in HH:MM.
+  // Key end time in HH:MM. This is relative to test start time.
   // default = 00:00
   optional string end_time = 4;
 }
@@ -14294,59 +14315,59 @@ message MacsecMetric {
   // Number of times the session went from Up to Down state.
   optional uint64 session_flap_count = 3;
 
-  // OutPktsProtected.
+  // OutPktsProtected, the number of protected packets transmitted.
   optional uint64 out_pkts_protected = 4;
 
-  // OutPktsEncrypted.
+  // OutPktsEncrypted, the number of encrypted packets transmitted.
   optional uint64 out_pkts_encrypted = 5;
 
-  // InPktsOk.
+  // InPktsOk, the number of valid packets received.
   optional uint64 in_pkts_ok = 6;
 
-  // InPktsBad.
-  optional uint64 in_pkts_bad = 7;
+  // The number of bad packets received.
+  optional uint64 bad_pkts_rx = 7;
 
-  // InPktsBadTag.
+  // InPktsBadTag, the number of packets discarded due to bad tag/ICV.
   optional uint64 in_pkts_bad_tag = 8;
 
-  // InPktsLate.
+  // InPktsLate, the number of packets discarded out of window.
   optional uint64 in_pkts_late = 9;
 
-  // InPktsNoSCI.
+  // InPktsNoSCI,the number of packets discarded due to unknown SCI.
   optional uint64 in_pkts_no_sci = 10;
 
-  // InPktsNotUsingSA.
+  // InPktsNotUsingSA, the number of packets discarded due to unused SA.
   optional uint64 in_pkts_not_using_sa = 11;
 
-  // InPktsNotValid.
+  // InPktsNotValid, the number of packets discarded due to invalid ICV.
   optional uint64 in_pkts_not_valid = 12;
 
-  // InPktsUnknownSCI.
+  // InPktsUnknownSCI, the number of packets received with unknown SCI.
   optional uint64 in_pkts_unknown_sci = 13;
 
-  // InPktsUnusedSA.
+  // InPktsUnusedSA, the number of packets received with unused SA.
   optional uint64 in_pkts_unused_sa = 14;
 
-  // InPktsInvalid.
+  // InPktsInvalid, the number of packets received with invalid ICV.
   optional uint64 in_pkts_invalid = 15;
 
-  // InPktsUntagged.
+  // InPktsUntagged, the number of non-MACsec packets received.
   optional uint64 in_pkts_untagged = 16;
 
-  // OutOctetsProtected.
+  // OutOctetsProtected, the number of bytes transmitted as protected.
   optional uint64 out_octets_protected = 17;
 
-  // OutOctetsEncrypted.
+  // OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
   optional uint64 out_octets_encrypted = 18;
 
-  // InOctetsValidated.
+  // InOctetsValidated, the number of received bytes validated.
   optional uint64 in_octets_validated = 19;
 
-  // InOctetsDecrypted.
+  // InOctetsDecrypted, the number of received bytes decrypted.
   optional uint64 in_octets_decrypted = 20;
 }
 
-// The request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+// The request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
 message MkaMetricsRequest {
 
   // The names of key agreement entities (KaYs) to return results for. An empty list will

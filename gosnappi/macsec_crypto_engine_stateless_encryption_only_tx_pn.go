@@ -252,7 +252,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx PN settings.
+// MacsecCryptoEngineStatelessEncryptionOnlyTxPn is tx packet number(PN) configuration.
 type MacsecCryptoEngineStatelessEncryptionOnlyTxPn interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatelessEncryptionOnlyTxPn to protobuf object *otg.MacsecCryptoEngineStatelessEncryptionOnlyTxPn
@@ -280,23 +280,23 @@ type MacsecCryptoEngineStatelessEncryptionOnlyTxPn interface {
 	setChoice(value MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoiceEnum) MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	// HasChoice checks if Choice has been set in MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	HasChoice() bool
-	// getter for IncrementingPn to set choice.
-	IncrementingPn()
 	// getter for FixedPn to set choice.
 	FixedPn()
+	// getter for IncrementingPn to set choice.
+	IncrementingPn()
 	// Fixed returns MacsecCryptoEngineStatelessEncryptionOnlyFixedPn, set in MacsecCryptoEngineStatelessEncryptionOnlyTxPn.
-	// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed packet number(PN) configuration.
 	Fixed() MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
 	// SetFixed assigns MacsecCryptoEngineStatelessEncryptionOnlyFixedPn provided by user to MacsecCryptoEngineStatelessEncryptionOnlyTxPn.
-	// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed packet number(PN) configuration.
 	SetFixed(value MacsecCryptoEngineStatelessEncryptionOnlyFixedPn) MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	// HasFixed checks if Fixed has been set in MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	HasFixed() bool
 	// Incrementing returns MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn, set in MacsecCryptoEngineStatelessEncryptionOnlyTxPn.
-	// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing packet number(PN) configuration.
 	Incrementing() MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn
 	// SetIncrementing assigns MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn provided by user to MacsecCryptoEngineStatelessEncryptionOnlyTxPn.
-	// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing PN settings.
+	// MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn is incrementing packet number(PN) configuration.
 	SetIncrementing(value MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	// HasIncrementing checks if Incrementing has been set in MacsecCryptoEngineStatelessEncryptionOnlyTxPn
 	HasIncrementing() bool
@@ -318,17 +318,17 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) Choice() MacsecCryptoE
 	return MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IncrementingPn to set choice
-func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) IncrementingPn() {
-	obj.setChoice(MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoice.INCREMENTING_PN)
-}
-
 // getter for FixedPn to set choice
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) FixedPn() {
 	obj.setChoice(MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoice.FIXED_PN)
 }
 
-// Types of Tx PN series.
+// getter for IncrementingPn to set choice
+func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) IncrementingPn() {
+	obj.setChoice(MacsecCryptoEngineStatelessEncryptionOnlyTxPnChoice.INCREMENTING_PN)
+}
+
+// Types of Tx packet number(PN) series.
 // Choice returns a string
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyTxPn) HasChoice() bool {
 	return obj.obj.Choice != nil

@@ -290,7 +290,7 @@ type MkaBasicKeySourcePsk interface {
 	HasEndTime() bool
 }
 
-// CAK value.
+// Connectivity association key(CAK) value.
 // CakValue returns a string
 func (obj *mkaBasicKeySourcePsk) CakValue() string {
 
@@ -298,13 +298,13 @@ func (obj *mkaBasicKeySourcePsk) CakValue() string {
 
 }
 
-// CAK value.
+// Connectivity association key(CAK) value.
 // CakValue returns a string
 func (obj *mkaBasicKeySourcePsk) HasCakValue() bool {
 	return obj.obj.CakValue != nil
 }
 
-// CAK value.
+// Connectivity association key(CAK) value.
 // SetCakValue sets the string value in the MkaBasicKeySourcePsk object
 func (obj *mkaBasicKeySourcePsk) SetCakValue(value string) MkaBasicKeySourcePsk {
 
@@ -312,7 +312,7 @@ func (obj *mkaBasicKeySourcePsk) SetCakValue(value string) MkaBasicKeySourcePsk 
 	return obj
 }
 
-// CAK name.
+// Connectivity association key(CAK) name.
 // CakName returns a string
 func (obj *mkaBasicKeySourcePsk) CakName() string {
 
@@ -320,13 +320,13 @@ func (obj *mkaBasicKeySourcePsk) CakName() string {
 
 }
 
-// CAK name.
+// Connectivity association key(CAK) name.
 // CakName returns a string
 func (obj *mkaBasicKeySourcePsk) HasCakName() bool {
 	return obj.obj.CakName != nil
 }
 
-// CAK name.
+// Connectivity association key(CAK) name.
 // SetCakName sets the string value in the MkaBasicKeySourcePsk object
 func (obj *mkaBasicKeySourcePsk) SetCakName(value string) MkaBasicKeySourcePsk {
 
@@ -334,7 +334,7 @@ func (obj *mkaBasicKeySourcePsk) SetCakName(value string) MkaBasicKeySourcePsk {
 	return obj
 }
 
-// Key start time in HH:MM.
+// Key start time in HH:MM. This is relative to test start time.
 // StartTime returns a string
 func (obj *mkaBasicKeySourcePsk) StartTime() string {
 
@@ -342,13 +342,13 @@ func (obj *mkaBasicKeySourcePsk) StartTime() string {
 
 }
 
-// Key start time in HH:MM.
+// Key start time in HH:MM. This is relative to test start time.
 // StartTime returns a string
 func (obj *mkaBasicKeySourcePsk) HasStartTime() bool {
 	return obj.obj.StartTime != nil
 }
 
-// Key start time in HH:MM.
+// Key start time in HH:MM. This is relative to test start time.
 // SetStartTime sets the string value in the MkaBasicKeySourcePsk object
 func (obj *mkaBasicKeySourcePsk) SetStartTime(value string) MkaBasicKeySourcePsk {
 
@@ -356,7 +356,7 @@ func (obj *mkaBasicKeySourcePsk) SetStartTime(value string) MkaBasicKeySourcePsk
 	return obj
 }
 
-// Key end time in HH:MM.
+// Key end time in HH:MM. This is relative to test start time.
 // EndTime returns a string
 func (obj *mkaBasicKeySourcePsk) EndTime() string {
 
@@ -364,13 +364,13 @@ func (obj *mkaBasicKeySourcePsk) EndTime() string {
 
 }
 
-// Key end time in HH:MM.
+// Key end time in HH:MM. This is relative to test start time.
 // EndTime returns a string
 func (obj *mkaBasicKeySourcePsk) HasEndTime() bool {
 	return obj.obj.EndTime != nil
 }
 
-// Key end time in HH:MM.
+// Key end time in HH:MM. This is relative to test start time.
 // SetEndTime sets the string value in the MkaBasicKeySourcePsk object
 func (obj *mkaBasicKeySourcePsk) SetEndTime(value string) MkaBasicKeySourcePsk {
 

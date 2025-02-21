@@ -493,11 +493,11 @@ func (obj *mkaKeyServer) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.RekeyThresholdPn != nil {
 
-		if len(*obj.obj.RekeyThresholdPn) < 4 || len(*obj.obj.RekeyThresholdPn) > 8 {
+		if len(*obj.obj.RekeyThresholdPn) < 1 || len(*obj.obj.RekeyThresholdPn) > 4 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf(
-					"4 <= length of MkaKeyServer.RekeyThresholdPn <= 8 but Got %d",
+					"1 <= length of MkaKeyServer.RekeyThresholdPn <= 4 but Got %d",
 					len(*obj.obj.RekeyThresholdPn)))
 		}
 
@@ -505,11 +505,11 @@ func (obj *mkaKeyServer) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.RekeyThresholdXpn != nil {
 
-		if len(*obj.obj.RekeyThresholdXpn) < 8 || len(*obj.obj.RekeyThresholdXpn) > 16 {
+		if len(*obj.obj.RekeyThresholdXpn) < 1 || len(*obj.obj.RekeyThresholdXpn) > 8 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf(
-					"8 <= length of MkaKeyServer.RekeyThresholdXpn <= 16 but Got %d",
+					"1 <= length of MkaKeyServer.RekeyThresholdXpn <= 8 but Got %d",
 					len(*obj.obj.RekeyThresholdXpn)))
 		}
 

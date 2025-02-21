@@ -281,18 +281,18 @@ type MacsecCryptoEngine interface {
 	// HasChoice checks if Choice has been set in MacsecCryptoEngine
 	HasChoice() bool
 	// StatelessEncryptionOnly returns MacsecCryptoEngineStatelessEncryptionOnly, set in MacsecCryptoEngine.
-	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine settings.
+	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine configuration.
 	StatelessEncryptionOnly() MacsecCryptoEngineStatelessEncryptionOnly
 	// SetStatelessEncryptionOnly assigns MacsecCryptoEngineStatelessEncryptionOnly provided by user to MacsecCryptoEngine.
-	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine settings.
+	// MacsecCryptoEngineStatelessEncryptionOnly is the container for stateless encryption only engine configuration.
 	SetStatelessEncryptionOnly(value MacsecCryptoEngineStatelessEncryptionOnly) MacsecCryptoEngine
 	// HasStatelessEncryptionOnly checks if StatelessEncryptionOnly has been set in MacsecCryptoEngine
 	HasStatelessEncryptionOnly() bool
 	// StatefulEncryptionDecryption returns MacsecCryptoEngineStatefulEncryptionDecryption, set in MacsecCryptoEngine.
-	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine configuration.
 	StatefulEncryptionDecryption() MacsecCryptoEngineStatefulEncryptionDecryption
 	// SetStatefulEncryptionDecryption assigns MacsecCryptoEngineStatefulEncryptionDecryption provided by user to MacsecCryptoEngine.
-	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryption is the container for stateful encryption and decryption engine configuration.
 	SetStatefulEncryptionDecryption(value MacsecCryptoEngineStatefulEncryptionDecryption) MacsecCryptoEngine
 	// HasStatefulEncryptionDecryption checks if StatefulEncryptionDecryption has been set in MacsecCryptoEngine
 	HasStatefulEncryptionDecryption() bool
@@ -314,7 +314,7 @@ func (obj *macsecCryptoEngine) Choice() MacsecCryptoEngineChoiceEnum {
 	return MacsecCryptoEngineChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Engine type based on encryption and/ or decryption capability..
+// Engine type based on encryption and/ or decryption capability. Supported types: 1) stateless_encryption_only - engine can only encrypt transmitted packets but such engine cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) stateful_encryption_decryption - engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ ddecryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
 // Choice returns a string
 func (obj *macsecCryptoEngine) HasChoice() bool {
 	return obj.obj.Choice != nil

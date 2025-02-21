@@ -250,7 +250,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration) s
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration settings.
+// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration is hardware acceleration configuration for offloading MACsec processing to hardware.
 type MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration to protobuf object *otg.MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration
@@ -281,10 +281,10 @@ type MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration interfac
 	// getter for None to set choice.
 	None()
 	// InlineCrypto returns MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto, set in MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
 	InlineCrypto() MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto
 	// SetInlineCrypto assigns MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto provided by user to MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration.
-	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine settings.
+	// MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto is inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
 	SetInlineCrypto(value MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto) MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration
 	// HasInlineCrypto checks if InlineCrypto has been set in MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAcceleration
 	HasInlineCrypto() bool

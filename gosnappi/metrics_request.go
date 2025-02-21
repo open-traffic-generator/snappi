@@ -431,10 +431,10 @@ type MetricsRequest interface {
 	// HasMacsec checks if Macsec has been set in MetricsRequest
 	HasMacsec() bool
 	// Mka returns MkaMetricsRequest, set in MetricsRequest.
-	// MkaMetricsRequest is the request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+	// MkaMetricsRequest is the request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
 	Mka() MkaMetricsRequest
 	// SetMka assigns MkaMetricsRequest provided by user to MetricsRequest.
-	// MkaMetricsRequest is the request to retrieve MKA per key agreement enttity (KaY) metrics/statistics.
+	// MkaMetricsRequest is the request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
 	SetMka(value MkaMetricsRequest) MetricsRequest
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool

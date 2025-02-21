@@ -242,7 +242,7 @@ func (obj *macsecStaticKey) Clone() (MacsecStaticKey, error) {
 	return newObj, nil
 }
 
-// MacsecStaticKey is a container of static key properties for a SecY.
+// MacsecStaticKey is a container of static key properties for a secure entity(SecY). This configuration is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA) is configured. If MKA is configured, any static key configuration is not applicable.
 type MacsecStaticKey interface {
 	Validation
 	// msg marshals MacsecStaticKey to protobuf object *otg.MacsecStaticKey

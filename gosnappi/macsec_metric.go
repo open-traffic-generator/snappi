@@ -300,12 +300,12 @@ type MacsecMetric interface {
 	SetInPktsOk(value uint64) MacsecMetric
 	// HasInPktsOk checks if InPktsOk has been set in MacsecMetric
 	HasInPktsOk() bool
-	// InPktsBad returns uint64, set in MacsecMetric.
-	InPktsBad() uint64
-	// SetInPktsBad assigns uint64 provided by user to MacsecMetric
-	SetInPktsBad(value uint64) MacsecMetric
-	// HasInPktsBad checks if InPktsBad has been set in MacsecMetric
-	HasInPktsBad() bool
+	// BadPktsRx returns uint64, set in MacsecMetric.
+	BadPktsRx() uint64
+	// SetBadPktsRx assigns uint64 provided by user to MacsecMetric
+	SetBadPktsRx(value uint64) MacsecMetric
+	// HasBadPktsRx checks if BadPktsRx has been set in MacsecMetric
+	HasBadPktsRx() bool
 	// InPktsBadTag returns uint64, set in MacsecMetric.
 	InPktsBadTag() uint64
 	// SetInPktsBadTag assigns uint64 provided by user to MacsecMetric
@@ -464,7 +464,7 @@ func (obj *macsecMetric) SetSessionFlapCount(value uint64) MacsecMetric {
 	return obj
 }
 
-// OutPktsProtected.
+// OutPktsProtected, the number of protected packets transmitted.
 // OutPktsProtected returns a uint64
 func (obj *macsecMetric) OutPktsProtected() uint64 {
 
@@ -472,13 +472,13 @@ func (obj *macsecMetric) OutPktsProtected() uint64 {
 
 }
 
-// OutPktsProtected.
+// OutPktsProtected, the number of protected packets transmitted.
 // OutPktsProtected returns a uint64
 func (obj *macsecMetric) HasOutPktsProtected() bool {
 	return obj.obj.OutPktsProtected != nil
 }
 
-// OutPktsProtected.
+// OutPktsProtected, the number of protected packets transmitted.
 // SetOutPktsProtected sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetOutPktsProtected(value uint64) MacsecMetric {
 
@@ -486,7 +486,7 @@ func (obj *macsecMetric) SetOutPktsProtected(value uint64) MacsecMetric {
 	return obj
 }
 
-// OutPktsEncrypted.
+// OutPktsEncrypted, the number of encrypted packets transmitted.
 // OutPktsEncrypted returns a uint64
 func (obj *macsecMetric) OutPktsEncrypted() uint64 {
 
@@ -494,13 +494,13 @@ func (obj *macsecMetric) OutPktsEncrypted() uint64 {
 
 }
 
-// OutPktsEncrypted.
+// OutPktsEncrypted, the number of encrypted packets transmitted.
 // OutPktsEncrypted returns a uint64
 func (obj *macsecMetric) HasOutPktsEncrypted() bool {
 	return obj.obj.OutPktsEncrypted != nil
 }
 
-// OutPktsEncrypted.
+// OutPktsEncrypted, the number of encrypted packets transmitted.
 // SetOutPktsEncrypted sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetOutPktsEncrypted(value uint64) MacsecMetric {
 
@@ -508,7 +508,7 @@ func (obj *macsecMetric) SetOutPktsEncrypted(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsOk.
+// InPktsOk, the number of valid packets received.
 // InPktsOk returns a uint64
 func (obj *macsecMetric) InPktsOk() uint64 {
 
@@ -516,13 +516,13 @@ func (obj *macsecMetric) InPktsOk() uint64 {
 
 }
 
-// InPktsOk.
+// InPktsOk, the number of valid packets received.
 // InPktsOk returns a uint64
 func (obj *macsecMetric) HasInPktsOk() bool {
 	return obj.obj.InPktsOk != nil
 }
 
-// InPktsOk.
+// InPktsOk, the number of valid packets received.
 // SetInPktsOk sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsOk(value uint64) MacsecMetric {
 
@@ -530,29 +530,29 @@ func (obj *macsecMetric) SetInPktsOk(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsBad.
-// InPktsBad returns a uint64
-func (obj *macsecMetric) InPktsBad() uint64 {
+// The number of bad packets received.
+// BadPktsRx returns a uint64
+func (obj *macsecMetric) BadPktsRx() uint64 {
 
-	return *obj.obj.InPktsBad
+	return *obj.obj.BadPktsRx
 
 }
 
-// InPktsBad.
-// InPktsBad returns a uint64
-func (obj *macsecMetric) HasInPktsBad() bool {
-	return obj.obj.InPktsBad != nil
+// The number of bad packets received.
+// BadPktsRx returns a uint64
+func (obj *macsecMetric) HasBadPktsRx() bool {
+	return obj.obj.BadPktsRx != nil
 }
 
-// InPktsBad.
-// SetInPktsBad sets the uint64 value in the MacsecMetric object
-func (obj *macsecMetric) SetInPktsBad(value uint64) MacsecMetric {
+// The number of bad packets received.
+// SetBadPktsRx sets the uint64 value in the MacsecMetric object
+func (obj *macsecMetric) SetBadPktsRx(value uint64) MacsecMetric {
 
-	obj.obj.InPktsBad = &value
+	obj.obj.BadPktsRx = &value
 	return obj
 }
 
-// InPktsBadTag.
+// InPktsBadTag, the number of packets discarded due to bad tag/ICV.
 // InPktsBadTag returns a uint64
 func (obj *macsecMetric) InPktsBadTag() uint64 {
 
@@ -560,13 +560,13 @@ func (obj *macsecMetric) InPktsBadTag() uint64 {
 
 }
 
-// InPktsBadTag.
+// InPktsBadTag, the number of packets discarded due to bad tag/ICV.
 // InPktsBadTag returns a uint64
 func (obj *macsecMetric) HasInPktsBadTag() bool {
 	return obj.obj.InPktsBadTag != nil
 }
 
-// InPktsBadTag.
+// InPktsBadTag, the number of packets discarded due to bad tag/ICV.
 // SetInPktsBadTag sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsBadTag(value uint64) MacsecMetric {
 
@@ -574,7 +574,7 @@ func (obj *macsecMetric) SetInPktsBadTag(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsLate.
+// InPktsLate, the number of packets discarded out of window.
 // InPktsLate returns a uint64
 func (obj *macsecMetric) InPktsLate() uint64 {
 
@@ -582,13 +582,13 @@ func (obj *macsecMetric) InPktsLate() uint64 {
 
 }
 
-// InPktsLate.
+// InPktsLate, the number of packets discarded out of window.
 // InPktsLate returns a uint64
 func (obj *macsecMetric) HasInPktsLate() bool {
 	return obj.obj.InPktsLate != nil
 }
 
-// InPktsLate.
+// InPktsLate, the number of packets discarded out of window.
 // SetInPktsLate sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsLate(value uint64) MacsecMetric {
 
@@ -596,7 +596,7 @@ func (obj *macsecMetric) SetInPktsLate(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNoSCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI.
 // InPktsNoSci returns a uint64
 func (obj *macsecMetric) InPktsNoSci() uint64 {
 
@@ -604,13 +604,13 @@ func (obj *macsecMetric) InPktsNoSci() uint64 {
 
 }
 
-// InPktsNoSCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI.
 // InPktsNoSci returns a uint64
 func (obj *macsecMetric) HasInPktsNoSci() bool {
 	return obj.obj.InPktsNoSci != nil
 }
 
-// InPktsNoSCI.
+// InPktsNoSCI,the number of packets discarded due to unknown SCI.
 // SetInPktsNoSci sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNoSci(value uint64) MacsecMetric {
 
@@ -618,7 +618,7 @@ func (obj *macsecMetric) SetInPktsNoSci(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNotUsingSA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA.
 // InPktsNotUsingSa returns a uint64
 func (obj *macsecMetric) InPktsNotUsingSa() uint64 {
 
@@ -626,13 +626,13 @@ func (obj *macsecMetric) InPktsNotUsingSa() uint64 {
 
 }
 
-// InPktsNotUsingSA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA.
 // InPktsNotUsingSa returns a uint64
 func (obj *macsecMetric) HasInPktsNotUsingSa() bool {
 	return obj.obj.InPktsNotUsingSa != nil
 }
 
-// InPktsNotUsingSA.
+// InPktsNotUsingSA, the number of packets discarded due to unused SA.
 // SetInPktsNotUsingSa sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNotUsingSa(value uint64) MacsecMetric {
 
@@ -640,7 +640,7 @@ func (obj *macsecMetric) SetInPktsNotUsingSa(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsNotValid.
+// InPktsNotValid, the number of packets discarded due to invalid ICV.
 // InPktsNotValid returns a uint64
 func (obj *macsecMetric) InPktsNotValid() uint64 {
 
@@ -648,13 +648,13 @@ func (obj *macsecMetric) InPktsNotValid() uint64 {
 
 }
 
-// InPktsNotValid.
+// InPktsNotValid, the number of packets discarded due to invalid ICV.
 // InPktsNotValid returns a uint64
 func (obj *macsecMetric) HasInPktsNotValid() bool {
 	return obj.obj.InPktsNotValid != nil
 }
 
-// InPktsNotValid.
+// InPktsNotValid, the number of packets discarded due to invalid ICV.
 // SetInPktsNotValid sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsNotValid(value uint64) MacsecMetric {
 
@@ -662,7 +662,7 @@ func (obj *macsecMetric) SetInPktsNotValid(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsUnknownSCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI.
 // InPktsUnknownSci returns a uint64
 func (obj *macsecMetric) InPktsUnknownSci() uint64 {
 
@@ -670,13 +670,13 @@ func (obj *macsecMetric) InPktsUnknownSci() uint64 {
 
 }
 
-// InPktsUnknownSCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI.
 // InPktsUnknownSci returns a uint64
 func (obj *macsecMetric) HasInPktsUnknownSci() bool {
 	return obj.obj.InPktsUnknownSci != nil
 }
 
-// InPktsUnknownSCI.
+// InPktsUnknownSCI, the number of packets received with unknown SCI.
 // SetInPktsUnknownSci sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsUnknownSci(value uint64) MacsecMetric {
 
@@ -684,7 +684,7 @@ func (obj *macsecMetric) SetInPktsUnknownSci(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsUnusedSA.
+// InPktsUnusedSA, the number of packets received with unused SA.
 // InPktsUnusedSa returns a uint64
 func (obj *macsecMetric) InPktsUnusedSa() uint64 {
 
@@ -692,13 +692,13 @@ func (obj *macsecMetric) InPktsUnusedSa() uint64 {
 
 }
 
-// InPktsUnusedSA.
+// InPktsUnusedSA, the number of packets received with unused SA.
 // InPktsUnusedSa returns a uint64
 func (obj *macsecMetric) HasInPktsUnusedSa() bool {
 	return obj.obj.InPktsUnusedSa != nil
 }
 
-// InPktsUnusedSA.
+// InPktsUnusedSA, the number of packets received with unused SA.
 // SetInPktsUnusedSa sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsUnusedSa(value uint64) MacsecMetric {
 
@@ -706,7 +706,7 @@ func (obj *macsecMetric) SetInPktsUnusedSa(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsInvalid.
+// InPktsInvalid, the number of packets received with invalid ICV.
 // InPktsInvalid returns a uint64
 func (obj *macsecMetric) InPktsInvalid() uint64 {
 
@@ -714,13 +714,13 @@ func (obj *macsecMetric) InPktsInvalid() uint64 {
 
 }
 
-// InPktsInvalid.
+// InPktsInvalid, the number of packets received with invalid ICV.
 // InPktsInvalid returns a uint64
 func (obj *macsecMetric) HasInPktsInvalid() bool {
 	return obj.obj.InPktsInvalid != nil
 }
 
-// InPktsInvalid.
+// InPktsInvalid, the number of packets received with invalid ICV.
 // SetInPktsInvalid sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsInvalid(value uint64) MacsecMetric {
 
@@ -728,7 +728,7 @@ func (obj *macsecMetric) SetInPktsInvalid(value uint64) MacsecMetric {
 	return obj
 }
 
-// InPktsUntagged.
+// InPktsUntagged, the number of non-MACsec packets received.
 // InPktsUntagged returns a uint64
 func (obj *macsecMetric) InPktsUntagged() uint64 {
 
@@ -736,13 +736,13 @@ func (obj *macsecMetric) InPktsUntagged() uint64 {
 
 }
 
-// InPktsUntagged.
+// InPktsUntagged, the number of non-MACsec packets received.
 // InPktsUntagged returns a uint64
 func (obj *macsecMetric) HasInPktsUntagged() bool {
 	return obj.obj.InPktsUntagged != nil
 }
 
-// InPktsUntagged.
+// InPktsUntagged, the number of non-MACsec packets received.
 // SetInPktsUntagged sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsUntagged(value uint64) MacsecMetric {
 
@@ -750,7 +750,7 @@ func (obj *macsecMetric) SetInPktsUntagged(value uint64) MacsecMetric {
 	return obj
 }
 
-// OutOctetsProtected.
+// OutOctetsProtected, the number of bytes transmitted as protected.
 // OutOctetsProtected returns a uint64
 func (obj *macsecMetric) OutOctetsProtected() uint64 {
 
@@ -758,13 +758,13 @@ func (obj *macsecMetric) OutOctetsProtected() uint64 {
 
 }
 
-// OutOctetsProtected.
+// OutOctetsProtected, the number of bytes transmitted as protected.
 // OutOctetsProtected returns a uint64
 func (obj *macsecMetric) HasOutOctetsProtected() bool {
 	return obj.obj.OutOctetsProtected != nil
 }
 
-// OutOctetsProtected.
+// OutOctetsProtected, the number of bytes transmitted as protected.
 // SetOutOctetsProtected sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetOutOctetsProtected(value uint64) MacsecMetric {
 
@@ -772,7 +772,7 @@ func (obj *macsecMetric) SetOutOctetsProtected(value uint64) MacsecMetric {
 	return obj
 }
 
-// OutOctetsEncrypted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
 // OutOctetsEncrypted returns a uint64
 func (obj *macsecMetric) OutOctetsEncrypted() uint64 {
 
@@ -780,13 +780,13 @@ func (obj *macsecMetric) OutOctetsEncrypted() uint64 {
 
 }
 
-// OutOctetsEncrypted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
 // OutOctetsEncrypted returns a uint64
 func (obj *macsecMetric) HasOutOctetsEncrypted() bool {
 	return obj.obj.OutOctetsEncrypted != nil
 }
 
-// OutOctetsEncrypted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
 // SetOutOctetsEncrypted sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetOutOctetsEncrypted(value uint64) MacsecMetric {
 
@@ -794,7 +794,7 @@ func (obj *macsecMetric) SetOutOctetsEncrypted(value uint64) MacsecMetric {
 	return obj
 }
 
-// InOctetsValidated.
+// InOctetsValidated, the number of received bytes validated.
 // InOctetsValidated returns a uint64
 func (obj *macsecMetric) InOctetsValidated() uint64 {
 
@@ -802,13 +802,13 @@ func (obj *macsecMetric) InOctetsValidated() uint64 {
 
 }
 
-// InOctetsValidated.
+// InOctetsValidated, the number of received bytes validated.
 // InOctetsValidated returns a uint64
 func (obj *macsecMetric) HasInOctetsValidated() bool {
 	return obj.obj.InOctetsValidated != nil
 }
 
-// InOctetsValidated.
+// InOctetsValidated, the number of received bytes validated.
 // SetInOctetsValidated sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInOctetsValidated(value uint64) MacsecMetric {
 
@@ -816,7 +816,7 @@ func (obj *macsecMetric) SetInOctetsValidated(value uint64) MacsecMetric {
 	return obj
 }
 
-// InOctetsDecrypted.
+// InOctetsDecrypted, the number of received bytes decrypted.
 // InOctetsDecrypted returns a uint64
 func (obj *macsecMetric) InOctetsDecrypted() uint64 {
 
@@ -824,13 +824,13 @@ func (obj *macsecMetric) InOctetsDecrypted() uint64 {
 
 }
 
-// InOctetsDecrypted.
+// InOctetsDecrypted, the number of received bytes decrypted.
 // InOctetsDecrypted returns a uint64
 func (obj *macsecMetric) HasInOctetsDecrypted() bool {
 	return obj.obj.InOctetsDecrypted != nil
 }
 
-// InOctetsDecrypted.
+// InOctetsDecrypted, the number of received bytes decrypted.
 // SetInOctetsDecrypted sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInOctetsDecrypted(value uint64) MacsecMetric {
 

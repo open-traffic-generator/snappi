@@ -242,7 +242,7 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionInitialPn) Clone() (Mac
 	return newObj, nil
 }
 
-// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial PN settings.
+// MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn is initial packet number(PN) configuration.
 type MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn to protobuf object *otg.MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn
@@ -272,7 +272,7 @@ type MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn interface {
 	HasPn() bool
 }
 
-// Initial Tx PN.
+// Initial Tx packet number(PN).
 // Pn returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionInitialPn) Pn() uint32 {
 
@@ -280,13 +280,13 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionInitialPn) Pn() uint32 
 
 }
 
-// Initial Tx PN.
+// Initial Tx packet number(PN).
 // Pn returns a uint32
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionInitialPn) HasPn() bool {
 	return obj.obj.Pn != nil
 }
 
-// Initial Tx PN.
+// Initial Tx packet number(PN).
 // SetPn sets the uint32 value in the MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn object
 func (obj *macsecCryptoEngineStatefulEncryptionDecryptionInitialPn) SetPn(value uint32) MacsecCryptoEngineStatefulEncryptionDecryptionInitialPn {
 

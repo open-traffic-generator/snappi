@@ -242,7 +242,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) Clone() (MacsecCryp
 	return newObj, nil
 }
 
-// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed PN settings.
+// MacsecCryptoEngineStatelessEncryptionOnlyFixedPn is fixed packet number(PN) configuration.
 type MacsecCryptoEngineStatelessEncryptionOnlyFixedPn interface {
 	Validation
 	// msg marshals MacsecCryptoEngineStatelessEncryptionOnlyFixedPn to protobuf object *otg.MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
@@ -270,15 +270,15 @@ type MacsecCryptoEngineStatelessEncryptionOnlyFixedPn interface {
 	SetPn(value uint32) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
 	// HasPn checks if Pn has been set in MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
 	HasPn() bool
-	// Xpn returns int32, set in MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.
-	Xpn() int32
-	// SetXpn assigns int32 provided by user to MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
-	SetXpn(value int32) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
+	// Xpn returns string, set in MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.
+	Xpn() string
+	// SetXpn assigns string provided by user to MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
+	SetXpn(value string) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
 	// HasXpn checks if Xpn has been set in MacsecCryptoEngineStatelessEncryptionOnlyFixedPn
 	HasXpn() bool
 }
 
-// Fixed Tx PN. PN with which all packets will be sent out.
+// Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
 // Pn returns a uint32
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) Pn() uint32 {
 
@@ -286,13 +286,13 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) Pn() uint32 {
 
 }
 
-// Fixed Tx PN. PN with which all packets will be sent out.
+// Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
 // Pn returns a uint32
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) HasPn() bool {
 	return obj.obj.Pn != nil
 }
 
-// Fixed Tx PN. PN with which all packets will be sent out.
+// Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
 // SetPn sets the uint32 value in the MacsecCryptoEngineStatelessEncryptionOnlyFixedPn object
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) SetPn(value uint32) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn {
 
@@ -300,23 +300,23 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) SetPn(value uint32)
 	return obj
 }
 
-// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-// Xpn returns a int32
-func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) Xpn() int32 {
+// Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be sent out.
+// Xpn returns a string
+func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) Xpn() string {
 
 	return *obj.obj.Xpn
 
 }
 
-// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-// Xpn returns a int32
+// Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be sent out.
+// Xpn returns a string
 func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) HasXpn() bool {
 	return obj.obj.Xpn != nil
 }
 
-// Fixed Tx XPN. 8 bytes PN with which all packets will be sent out.
-// SetXpn sets the int32 value in the MacsecCryptoEngineStatelessEncryptionOnlyFixedPn object
-func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) SetXpn(value int32) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn {
+// Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be sent out.
+// SetXpn sets the string value in the MacsecCryptoEngineStatelessEncryptionOnlyFixedPn object
+func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) SetXpn(value string) MacsecCryptoEngineStatelessEncryptionOnlyFixedPn {
 
 	obj.obj.Xpn = &value
 	return obj
@@ -339,10 +339,12 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) validateObj(vObj *v
 
 	if obj.obj.Xpn != nil {
 
-		if *obj.obj.Xpn < 1 || *obj.obj.Xpn > 2147483647 {
+		if len(*obj.obj.Xpn) < 1 || len(*obj.obj.Xpn) > 8 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.Xpn <= 2147483647 but Got %d", *obj.obj.Xpn))
+				fmt.Sprintf(
+					"1 <= length of MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.Xpn <= 8 but Got %d",
+					len(*obj.obj.Xpn)))
 		}
 
 	}
@@ -354,7 +356,7 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) setDefault() {
 		obj.SetPn(6)
 	}
 	if obj.obj.Xpn == nil {
-		obj.SetXpn(6)
+		obj.SetXpn("0x0000000000000006")
 	}
 
 }
