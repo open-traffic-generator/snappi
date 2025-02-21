@@ -2048,8 +2048,7 @@ message IsisInterfaceAdjacencySid {
   repeated uint32 sid_values = 2;
 
   // One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
-  // default = 1
-  optional uint32 sid_indices = 3;
+  repeated uint32 sid_indices = 3;
 
   // The address family flag. If unset, then the Adj-SID refers
   // to an adjacency with outgoing IPv4 encapsulation.  If set then

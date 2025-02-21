@@ -571,10 +571,10 @@ func (obj *isisSRPrefixSid) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SidValues != nil {
 
 		for _, item := range obj.obj.SidValues {
-			if item < 1 || item > 1048575 {
+			if item < 1 || item > 16777215 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisSRPrefixSid.SidValues <= 1048575 but Got %d", item))
+					fmt.Sprintf("1 <= IsisSRPrefixSid.SidValues <= 16777215 but Got %d", item))
 			}
 
 		}
@@ -584,10 +584,10 @@ func (obj *isisSRPrefixSid) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SidIndices != nil {
 
 		for _, item := range obj.obj.SidIndices {
-			if item < 1 || item > 1048575 {
+			if item < 1 || item > 4294967295 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisSRPrefixSid.SidIndices <= 1048575 but Got %d", item))
+					fmt.Sprintf("1 <= IsisSRPrefixSid.SidIndices <= 4294967295 but Got %d", item))
 			}
 
 		}

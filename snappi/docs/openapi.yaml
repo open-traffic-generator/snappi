@@ -3001,16 +3001,18 @@ components:
             format: uint32
             default: 1
             minimum: 1
-            maximum: 1048575
+            maximum: 16777215
           x-field-uid: 2
         sid_indices:
           description: |-
             One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 1048575
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 1
+            minimum: 1
+            maximum: 4294967295
           x-field-uid: 3
         f_flag:
           description: |-
@@ -3467,7 +3469,7 @@ components:
             format: uint32
             default: 1
             minimum: 1
-            maximum: 1048575
+            maximum: 16777215
           x-field-uid: 2
         sid_indices:
           description: |-
@@ -3478,7 +3480,7 @@ components:
             format: uint32
             default: 1
             minimum: 1
-            maximum: 1048575
+            maximum: 4294967295
           x-field-uid: 3
         r_flag:
           description: "R-Flag: Re-advertisement Flag. \nIf set, then the prefix to\

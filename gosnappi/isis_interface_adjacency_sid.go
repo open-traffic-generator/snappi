@@ -277,12 +277,10 @@ type IsisInterfaceAdjacencySid interface {
 	SidValues() []uint32
 	// SetSidValues assigns []uint32 provided by user to IsisInterfaceAdjacencySid
 	SetSidValues(value []uint32) IsisInterfaceAdjacencySid
-	// SidIndices returns uint32, set in IsisInterfaceAdjacencySid.
-	SidIndices() uint32
-	// SetSidIndices assigns uint32 provided by user to IsisInterfaceAdjacencySid
-	SetSidIndices(value uint32) IsisInterfaceAdjacencySid
-	// HasSidIndices checks if SidIndices has been set in IsisInterfaceAdjacencySid
-	HasSidIndices() bool
+	// SidIndices returns []uint32, set in IsisInterfaceAdjacencySid.
+	SidIndices() []uint32
+	// SetSidIndices assigns []uint32 provided by user to IsisInterfaceAdjacencySid
+	SetSidIndices(value []uint32) IsisInterfaceAdjacencySid
 	// FFlag returns bool, set in IsisInterfaceAdjacencySid.
 	FFlag() bool
 	// SetFFlag assigns bool provided by user to IsisInterfaceAdjacencySid
@@ -357,12 +355,6 @@ func (obj *isisInterfaceAdjacencySid) setChoice(value IsisInterfaceAdjacencySidC
 	obj.obj.Choice = &enumValue
 	obj.obj.SidIndices = nil
 	obj.obj.SidValues = nil
-
-	if value == IsisInterfaceAdjacencySidChoice.SID_INDICES {
-		defaultValue := uint32(1)
-		obj.obj.SidIndices = &defaultValue
-	}
-
 	return obj
 }
 
@@ -390,28 +382,25 @@ func (obj *isisInterfaceAdjacencySid) SetSidValues(value []uint32) IsisInterface
 }
 
 // One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
-// SidIndices returns a uint32
-func (obj *isisInterfaceAdjacencySid) SidIndices() uint32 {
-
+// SidIndices returns a []uint32
+func (obj *isisInterfaceAdjacencySid) SidIndices() []uint32 {
 	if obj.obj.SidIndices == nil {
+
 		obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_INDICES)
+
 	}
-
-	return *obj.obj.SidIndices
-
+	return obj.obj.SidIndices
 }
 
 // One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
-// SidIndices returns a uint32
-func (obj *isisInterfaceAdjacencySid) HasSidIndices() bool {
-	return obj.obj.SidIndices != nil
-}
-
-// One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
-// SetSidIndices sets the uint32 value in the IsisInterfaceAdjacencySid object
-func (obj *isisInterfaceAdjacencySid) SetSidIndices(value uint32) IsisInterfaceAdjacencySid {
+// SetSidIndices sets the []uint32 value in the IsisInterfaceAdjacencySid object
+func (obj *isisInterfaceAdjacencySid) SetSidIndices(value []uint32) IsisInterfaceAdjacencySid {
 	obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_INDICES)
-	obj.obj.SidIndices = &value
+	if obj.obj.SidIndices == nil {
+		obj.obj.SidIndices = make([]uint32, 0)
+	}
+	obj.obj.SidIndices = value
+
 	return obj
 }
 
@@ -579,10 +568,10 @@ func (obj *isisInterfaceAdjacencySid) validateObj(vObj *validation, set_default 
 	if obj.obj.SidValues != nil {
 
 		for _, item := range obj.obj.SidValues {
-			if item < 1 || item > 1048575 {
+			if item < 1 || item > 16777215 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisInterfaceAdjacencySid.SidValues <= 1048575 but Got %d", item))
+					fmt.Sprintf("1 <= IsisInterfaceAdjacencySid.SidValues <= 16777215 but Got %d", item))
 			}
 
 		}
@@ -591,10 +580,13 @@ func (obj *isisInterfaceAdjacencySid) validateObj(vObj *validation, set_default 
 
 	if obj.obj.SidIndices != nil {
 
-		if *obj.obj.SidIndices > 1048575 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= IsisInterfaceAdjacencySid.SidIndices <= 1048575 but Got %d", *obj.obj.SidIndices))
+		for _, item := range obj.obj.SidIndices {
+			if item < 1 || item > 4294967295 {
+				vObj.validationErrors = append(
+					vObj.validationErrors,
+					fmt.Sprintf("1 <= IsisInterfaceAdjacencySid.SidIndices <= 4294967295 but Got %d", item))
+			}
+
 		}
 
 	}
@@ -620,7 +612,7 @@ func (obj *isisInterfaceAdjacencySid) setDefault() {
 		choice = IsisInterfaceAdjacencySidChoice.SID_VALUES
 	}
 
-	if obj.obj.SidIndices != nil {
+	if len(obj.obj.SidIndices) > 0 {
 		choices_set += 1
 		choice = IsisInterfaceAdjacencySidChoice.SID_INDICES
 	}
