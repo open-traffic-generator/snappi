@@ -469,20 +469,20 @@ func (obj *macsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInl
 
 	if obj.obj.MaxCaCount != nil {
 
-		if *obj.obj.MaxCaCount < 256 || *obj.obj.MaxCaCount > 4294967295 {
+		if *obj.obj.MaxCaCount < 1 || *obj.obj.MaxCaCount > 256 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("256 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxCaCount <= 4294967295 but Got %d", *obj.obj.MaxCaCount))
+				fmt.Sprintf("1 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxCaCount <= 256 but Got %d", *obj.obj.MaxCaCount))
 		}
 
 	}
 
 	if obj.obj.MaxDutTxScPerCa != nil {
 
-		if *obj.obj.MaxDutTxScPerCa < 256 || *obj.obj.MaxDutTxScPerCa > 4294967295 {
+		if *obj.obj.MaxDutTxScPerCa < 1 || *obj.obj.MaxDutTxScPerCa > 256 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("256 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxDutTxScPerCa <= 4294967295 but Got %d", *obj.obj.MaxDutTxScPerCa))
+				fmt.Sprintf("1 <= MacsecCryptoEngineStatefulEncryptionDecryptionHardwareAccelerationInlineCrypto.MaxDutTxScPerCa <= 256 but Got %d", *obj.obj.MaxDutTxScPerCa))
 		}
 
 	}

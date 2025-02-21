@@ -329,10 +329,10 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyFixedPn) validateObj(vObj *v
 
 	if obj.obj.Pn != nil {
 
-		if *obj.obj.Pn < 4294967295 || *obj.obj.Pn > 4294967295 {
+		if *obj.obj.Pn < 1 || *obj.obj.Pn > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("4294967295 <= MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
+				fmt.Sprintf("1 <= MacsecCryptoEngineStatelessEncryptionOnlyFixedPn.Pn <= 4294967295 but Got %d", *obj.obj.Pn))
 		}
 
 	}

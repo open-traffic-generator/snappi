@@ -10979,7 +10979,8 @@ components:
             Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
           type: integer
           format: uint32
-          minimum: 4294967295
+          minimum: 1
+          maximum: 4294967295
           default: 6
           x-field-uid: 1
         xpn:
@@ -11102,7 +11103,8 @@ components:
             The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
           type: integer
           format: uint32
-          minimum: 256
+          minimum: 1
+          maximum: 256
           default: 256
           x-field-uid: 3
         max_dut_tx_sc_per_ca:
@@ -11110,7 +11112,8 @@ components:
             The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
           type: integer
           format: uint32
-          minimum: 256
+          minimum: 1
+          maximum: 256
           default: 1
           x-field-uid: 4
         max_device_per_ca:
