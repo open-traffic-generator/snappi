@@ -3450,7 +3450,7 @@ components:
             - sid_values: Prefix-SID carries one or more values and then v_flag is set by the implementation.
             - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by the implementation.
           type: string
-          default: sid_value
+          default: sid_values
           x-field-uid: 1
           x-enum:
             sid_values:

@@ -2351,7 +2351,7 @@ message IsisSRPrefixSid {
   // implementation.
   // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by
   // the implementation.
-  // default = Choice.Enum.sid_value
+  // default = Choice.Enum.sid_values
   optional Choice.Enum choice = 1;
 
   // SID/Label as one or more absolute values that are associated with the IGP Prefix

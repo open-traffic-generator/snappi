@@ -621,7 +621,7 @@ func (obj *isisSRPrefixSid) setDefault() {
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(IsisSRPrefixSidChoice.SID_VALUE)
+			obj.setChoice(IsisSRPrefixSidChoice.SID_VALUES)
 
 		}
 
