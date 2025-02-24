@@ -47,6 +47,8 @@ type marshalDhcpv6ClientOptionsDuidUuidVariant interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6ClientOptionsDuidUuidVariant to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Dhcpv6ClientOptionsDuidUuidVariant to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6ClientOptionsDuidUuidVariant struct {
@@ -166,6 +168,23 @@ func (m *unMarshaldhcpv6ClientOptionsDuidUuidVariant) FromYaml(value string) err
 	return nil
 }
 
+func (m *marshaldhcpv6ClientOptionsDuidUuidVariant) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshaldhcpv6ClientOptionsDuidUuidVariant) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -270,14 +289,14 @@ type Dhcpv6ClientOptionsDuidUuidVariant interface {
 	setChoice(value Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum) Dhcpv6ClientOptionsDuidUuidVariant
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsDuidUuidVariant
 	HasChoice() bool
-	// getter for Dce to set choice.
-	Dce()
 	// getter for Guid to set choice.
 	Guid()
 	// getter for Ncs to set choice.
 	Ncs()
 	// getter for VarReserved to set choice.
 	VarReserved()
+	// getter for Dce to set choice.
+	Dce()
 }
 
 type Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum string
@@ -299,11 +318,6 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) Choice() Dhcpv6ClientOptionsDuidU
 	return Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dce to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) Dce() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.DCE)
-}
-
 // getter for Guid to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVariant) Guid() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.GUID)
@@ -317,6 +331,11 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) Ncs() {
 // getter for VarReserved to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
+}
+
+// getter for Dce to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) Dce() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.DCE)
 }
 
 // The current variants are ncs, dce,microsoft guid and reserved.

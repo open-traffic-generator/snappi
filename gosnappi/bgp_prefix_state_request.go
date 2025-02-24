@@ -49,6 +49,8 @@ type marshalBgpPrefixStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpPrefixStateRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpPrefixStateRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpPrefixStateRequest struct {
@@ -166,6 +168,23 @@ func (m *unMarshalbgpPrefixStateRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpPrefixStateRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpPrefixStateRequest) ToJson() (string, error) {

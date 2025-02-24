@@ -49,6 +49,8 @@ type marshalPatternFlowSnmpv2CPDUErrorIndex interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowSnmpv2CPDUErrorIndex to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowSnmpv2CPDUErrorIndex to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowSnmpv2CPDUErrorIndex struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowSnmpv2CPDUErrorIndex) FromYaml(value string) error 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowSnmpv2CPDUErrorIndex) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowSnmpv2CPDUErrorIndex) ToJson() (string, error) {

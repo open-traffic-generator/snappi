@@ -47,6 +47,8 @@ type marshalDeviceBgpHoldTimerExpired interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceBgpHoldTimerExpired to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals DeviceBgpHoldTimerExpired to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceBgpHoldTimerExpired struct {
@@ -164,6 +166,23 @@ func (m *unMarshaldeviceBgpHoldTimerExpired) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldeviceBgpHoldTimerExpired) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldeviceBgpHoldTimerExpired) ToJson() (string, error) {

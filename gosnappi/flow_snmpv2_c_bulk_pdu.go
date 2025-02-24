@@ -51,6 +51,8 @@ type marshalFlowSnmpv2CBulkPDU interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowSnmpv2CBulkPDU to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowSnmpv2CBulkPDU to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowSnmpv2CBulkPDU struct {
@@ -168,6 +170,23 @@ func (m *unMarshalflowSnmpv2CBulkPDU) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowSnmpv2CBulkPDU) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowSnmpv2CBulkPDU) ToJson() (string, error) {

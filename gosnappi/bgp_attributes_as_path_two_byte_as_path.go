@@ -48,6 +48,8 @@ type marshalBgpAttributesAsPathTwoByteAsPath interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesAsPathTwoByteAsPath to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpAttributesAsPathTwoByteAsPath to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesAsPathTwoByteAsPath struct {
@@ -165,6 +167,23 @@ func (m *unMarshalbgpAttributesAsPathTwoByteAsPath) FromYaml(value string) error
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpAttributesAsPathTwoByteAsPath) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpAttributesAsPathTwoByteAsPath) ToJson() (string, error) {

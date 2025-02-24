@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle) FromYaml
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathRsvpHopIpv4LogicalInterfaceHandle) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalPatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter) From
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathExplicitRouteType1ASNumberLBitCounter) ToJson() (string, error) {

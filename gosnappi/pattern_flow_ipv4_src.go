@@ -52,6 +52,8 @@ type marshalPatternFlowIpv4Src interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4Src to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIpv4Src to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4Src struct {
@@ -169,6 +171,23 @@ func (m *unMarshalpatternFlowIpv4Src) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIpv4Src) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4Src) ToJson() (string, error) {

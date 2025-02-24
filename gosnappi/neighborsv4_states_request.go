@@ -47,6 +47,8 @@ type marshalNeighborsv4StatesRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Neighborsv4StatesRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Neighborsv4StatesRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalneighborsv4StatesRequest struct {
@@ -164,6 +166,23 @@ func (m *unMarshalneighborsv4StatesRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalneighborsv4StatesRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalneighborsv4StatesRequest) ToJson() (string, error) {

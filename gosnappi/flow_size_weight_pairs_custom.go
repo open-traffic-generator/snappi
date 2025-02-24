@@ -47,6 +47,8 @@ type marshalFlowSizeWeightPairsCustom interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowSizeWeightPairsCustom to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowSizeWeightPairsCustom to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowSizeWeightPairsCustom struct {
@@ -164,6 +166,23 @@ func (m *unMarshalflowSizeWeightPairsCustom) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowSizeWeightPairsCustom) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowSizeWeightPairsCustom) ToJson() (string, error) {

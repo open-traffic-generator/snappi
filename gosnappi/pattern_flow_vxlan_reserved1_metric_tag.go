@@ -47,6 +47,8 @@ type marshalPatternFlowVxlanReserved1MetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowVxlanReserved1MetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowVxlanReserved1MetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowVxlanReserved1MetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowVxlanReserved1MetricTag) FromYaml(value string) err
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowVxlanReserved1MetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowVxlanReserved1MetricTag) ToJson() (string, error) {

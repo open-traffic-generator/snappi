@@ -48,6 +48,8 @@ type marshalActionResponseProtocolIpv6Ping interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionResponseProtocolIpv6Ping to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals ActionResponseProtocolIpv6Ping to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionResponseProtocolIpv6Ping struct {
@@ -165,6 +167,23 @@ func (m *unMarshalactionResponseProtocolIpv6Ping) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalactionResponseProtocolIpv6Ping) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalactionResponseProtocolIpv6Ping) ToJson() (string, error) {

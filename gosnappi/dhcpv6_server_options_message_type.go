@@ -47,6 +47,8 @@ type marshalDhcpv6ServerOptionsMessageType interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6ServerOptionsMessageType to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Dhcpv6ServerOptionsMessageType to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6ServerOptionsMessageType struct {
@@ -166,6 +168,23 @@ func (m *unMarshaldhcpv6ServerOptionsMessageType) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshaldhcpv6ServerOptionsMessageType) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshaldhcpv6ServerOptionsMessageType) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -272,6 +291,8 @@ type Dhcpv6ServerOptionsMessageType interface {
 	HasChoice() bool
 	// getter for Reply to set choice.
 	Reply()
+	// getter for Advertise to set choice.
+	Advertise()
 	// getter for ReConfigure to set choice.
 	ReConfigure()
 	// getter for Advertise to set choice.
@@ -298,6 +319,11 @@ func (obj *dhcpv6ServerOptionsMessageType) Choice() Dhcpv6ServerOptionsMessageTy
 // getter for Reply to set choice
 func (obj *dhcpv6ServerOptionsMessageType) Reply() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
+}
+
+// getter for Advertise to set choice
+func (obj *dhcpv6ServerOptionsMessageType) Advertise() {
+	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.ADVERTISE)
 }
 
 // getter for ReConfigure to set choice

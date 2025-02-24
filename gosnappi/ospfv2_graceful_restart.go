@@ -47,6 +47,8 @@ type marshalOspfv2GracefulRestart interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2GracefulRestart to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv2GracefulRestart to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2GracefulRestart struct {
@@ -164,6 +166,23 @@ func (m *unMarshalospfv2GracefulRestart) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv2GracefulRestart) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv2GracefulRestart) ToJson() (string, error) {
