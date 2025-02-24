@@ -2,7 +2,7 @@ module github.com/open-traffic-generator/snappi/gosnappi
 
 go 1.22.0
 
-toolchain go1.23.4
+toolchain go1.23.6
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
@@ -19,7 +19,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.34.0
 	go.opentelemetry.io/otel/trace v1.34.0
 	google.golang.org/grpc v1.70.0
-	google.golang.org/protobuf v1.36.4
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
