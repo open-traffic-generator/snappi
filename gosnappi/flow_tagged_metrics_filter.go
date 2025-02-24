@@ -366,6 +366,16 @@ var FlowTaggedMetricsFilterMetricNames = struct {
 	BYTES_RX       FlowTaggedMetricsFilterMetricNamesEnum
 	FRAMES_TX_RATE FlowTaggedMetricsFilterMetricNamesEnum
 	FRAMES_RX_RATE FlowTaggedMetricsFilterMetricNamesEnum
+	TX_L1_RATE_BPS FlowTaggedMetricsFilterMetricNamesEnum
+	RX_L1_RATE_BPS FlowTaggedMetricsFilterMetricNamesEnum
+	TX_RATE_BYTES  FlowTaggedMetricsFilterMetricNamesEnum
+	RX_RATE_BYTES  FlowTaggedMetricsFilterMetricNamesEnum
+	TX_RATE_BPS    FlowTaggedMetricsFilterMetricNamesEnum
+	RX_RATE_BPS    FlowTaggedMetricsFilterMetricNamesEnum
+	TX_RATE_KBPS   FlowTaggedMetricsFilterMetricNamesEnum
+	RX_RATE_KBPS   FlowTaggedMetricsFilterMetricNamesEnum
+	TX_RATE_MBPS   FlowTaggedMetricsFilterMetricNamesEnum
+	RX_RATE_MBPS   FlowTaggedMetricsFilterMetricNamesEnum
 }{
 	FRAMES_TX:      FlowTaggedMetricsFilterMetricNamesEnum("frames_tx"),
 	FRAMES_RX:      FlowTaggedMetricsFilterMetricNamesEnum("frames_rx"),
@@ -373,6 +383,16 @@ var FlowTaggedMetricsFilterMetricNames = struct {
 	BYTES_RX:       FlowTaggedMetricsFilterMetricNamesEnum("bytes_rx"),
 	FRAMES_TX_RATE: FlowTaggedMetricsFilterMetricNamesEnum("frames_tx_rate"),
 	FRAMES_RX_RATE: FlowTaggedMetricsFilterMetricNamesEnum("frames_rx_rate"),
+	TX_L1_RATE_BPS: FlowTaggedMetricsFilterMetricNamesEnum("tx_l1_rate_bps"),
+	RX_L1_RATE_BPS: FlowTaggedMetricsFilterMetricNamesEnum("rx_l1_rate_bps"),
+	TX_RATE_BYTES:  FlowTaggedMetricsFilterMetricNamesEnum("tx_rate_bytes"),
+	RX_RATE_BYTES:  FlowTaggedMetricsFilterMetricNamesEnum("rx_rate_bytes"),
+	TX_RATE_BPS:    FlowTaggedMetricsFilterMetricNamesEnum("tx_rate_bps"),
+	RX_RATE_BPS:    FlowTaggedMetricsFilterMetricNamesEnum("rx_rate_bps"),
+	TX_RATE_KBPS:   FlowTaggedMetricsFilterMetricNamesEnum("tx_rate_kbps"),
+	RX_RATE_KBPS:   FlowTaggedMetricsFilterMetricNamesEnum("rx_rate_kbps"),
+	TX_RATE_MBPS:   FlowTaggedMetricsFilterMetricNamesEnum("tx_rate_mbps"),
+	RX_RATE_MBPS:   FlowTaggedMetricsFilterMetricNamesEnum("rx_rate_mbps"),
 }
 
 func (obj *flowTaggedMetricsFilter) MetricNames() []FlowTaggedMetricsFilterMetricNamesEnum {

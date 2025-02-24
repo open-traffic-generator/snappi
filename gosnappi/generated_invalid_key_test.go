@@ -1082,7 +1082,7 @@ func TestEventLinkIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewEventLink()
+	object := gosnappi.NewEvent().CpEvents()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
@@ -1100,7 +1100,7 @@ func TestEventRxRateThresholdIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewEventRxRateThreshold()
+	object := gosnappi.NewEvent().DpEvents()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))
@@ -1118,7 +1118,7 @@ func TestEventRouteAdvertiseWithdrawIncorrectKey(t *testing.T) {
             }
         }`
 
-	object := gosnappi.NewEventRouteAdvertiseWithdraw()
+	object := gosnappi.NewEvent()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_key))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_key))

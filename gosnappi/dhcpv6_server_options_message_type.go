@@ -295,6 +295,8 @@ type Dhcpv6ServerOptionsMessageType interface {
 	Advertise()
 	// getter for ReConfigure to set choice.
 	ReConfigure()
+	// getter for Advertise to set choice.
+	Advertise()
 }
 
 type Dhcpv6ServerOptionsMessageTypeChoiceEnum string
@@ -327,6 +329,11 @@ func (obj *dhcpv6ServerOptionsMessageType) Advertise() {
 // getter for ReConfigure to set choice
 func (obj *dhcpv6ServerOptionsMessageType) ReConfigure() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.RE_CONFIGURE)
+}
+
+// getter for Advertise to set choice
+func (obj *dhcpv6ServerOptionsMessageType) Advertise() {
+	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.ADVERTISE)
 }
 
 // The server message name where the option is included, by default it is all.

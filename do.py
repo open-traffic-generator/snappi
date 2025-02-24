@@ -326,7 +326,7 @@ def testpy():
 
 
 def testgo():
-    go_coverage_threshold = 0
+    go_coverage_threshold = 15
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
@@ -341,17 +341,19 @@ def testgo():
 
     with open("gosnappi/coverage.out") as fp:
         out = fp.read()
-        result = re.findall(r"coverage:.*\s(\d+)", out)[0]
-        if int(result) < go_coverage_threshold:
+        result = re.findall(r"coverage:.*\s(\d+)", out)
+        result = [x for x in result if int(x) != 0 and int(x) < 100]
+        print(result)
+        if int(result[0]) < go_coverage_threshold:
             raise Exception(
                 "Go tests achieved {1}% which is less than Coverage thresold {0}%,".format(
-                    go_coverage_threshold, result
+                    go_coverage_threshold, result[0]
                 )
             )
         else:
             print(
                 "Go tests achieved {1}% ,Coverage thresold {0}%".format(
-                    go_coverage_threshold, result
+                    go_coverage_threshold, result[0]
                 )
             )
 
