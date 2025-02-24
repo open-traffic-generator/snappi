@@ -338,7 +338,8 @@ func (obj *isisInterfaceAdjacencySid) Choice() IsisInterfaceAdjacencySidChoiceEn
 // Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
 // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_values: Adjacency-SID carries one or more values and then v_flag is set by the implementation.
-// - sid_indices: Adjacency-SID carries pne ore more indices and then v_flag is unset by the implementation.
+// - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset by the implementation.
+// In any case, a user needs to configure at least one entry of SID value or SID index.
 // Choice returns a string
 func (obj *isisInterfaceAdjacencySid) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -568,10 +569,10 @@ func (obj *isisInterfaceAdjacencySid) validateObj(vObj *validation, set_default 
 	if obj.obj.SidValues != nil {
 
 		for _, item := range obj.obj.SidValues {
-			if item < 1 || item > 16777215 {
+			if item < 16 || item > 1048575 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisInterfaceAdjacencySid.SidValues <= 16777215 but Got %d", item))
+					fmt.Sprintf("16 <= IsisInterfaceAdjacencySid.SidValues <= 1048575 but Got %d", item))
 			}
 
 		}
@@ -581,10 +582,10 @@ func (obj *isisInterfaceAdjacencySid) validateObj(vObj *validation, set_default 
 	if obj.obj.SidIndices != nil {
 
 		for _, item := range obj.obj.SidIndices {
-			if item < 1 || item > 4294967295 {
+			if item > 4294967295 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisInterfaceAdjacencySid.SidIndices <= 4294967295 but Got %d", item))
+					fmt.Sprintf("0 <= IsisInterfaceAdjacencySid.SidIndices <= 4294967295 but Got %d", item))
 			}
 
 		}

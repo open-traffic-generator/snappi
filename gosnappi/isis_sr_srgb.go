@@ -339,10 +339,10 @@ func (obj *isisSRSrgb) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.Range != nil {
 
-		if *obj.obj.Range < 1 || *obj.obj.Range > 16777215 {
+		if *obj.obj.Range < 1 || *obj.obj.Range > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisSRSrgb.Range <= 16777215 but Got %d", *obj.obj.Range))
+				fmt.Sprintf("1 <= IsisSRSrgb.Range <= 4294967295 but Got %d", *obj.obj.Range))
 		}
 
 	}

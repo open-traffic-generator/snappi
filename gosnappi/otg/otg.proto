@@ -2039,8 +2039,9 @@ message IsisInterfaceAdjacencySid {
   // (SRLB).
   // - sid_values: Adjacency-SID carries one or more values and then v_flag is set by
   // the implementation.
-  // - sid_indices: Adjacency-SID carries pne ore more indices and then v_flag is unset
+  // - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset
   // by the implementation.
+  // In any case, a user needs to configure at least one entry of SID value or SID index.
   // default = Choice.Enum.sid_values
   optional Choice.Enum choice = 1;
 
@@ -2351,6 +2352,7 @@ message IsisSRPrefixSid {
   // implementation.
   // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by
   // the implementation.
+  // In any case, a user needs to configure at least one entry of SID value or SID index.
   // default = Choice.Enum.sid_values
   optional Choice.Enum choice = 1;
 
@@ -2497,7 +2499,10 @@ message IsisSegmentRouting {
   IsisRouterCapability router_capability = 1;
 }
 
-// Container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+// Container for the configuration of IS-IS Router CAPABILITY TLV.
+// https://datatracker.ietf.org/doc/html/rfc7981#section-2.
+// An implementation should set default values appropriately if any mandatory item is
+// not configured by a user.
 message IsisRouterCapability {
 
   message Choice {
@@ -2564,6 +2569,10 @@ message IsisRouterCapability {
   // This contains one or more Segment Routing Algorithm that a router may use various
   // algorithms when calculating
   // reachability to other nodes or to prefixes attached to these nodes.
+  // When the originating router does not advertise the SR-Algorithm sub-TLV, it implies
+  // that algorithm 0 is the only algorithm supported by the routers.
+  // When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm
+  // 0 MUST be present while non-zero algorithms MAY be present.
   repeated IsisSRAlgorithm algorithms = 6;
 
   // This contains the list of SR Local Block (SRLB)
@@ -2577,12 +2586,16 @@ message IsisRouterCapability {
 // it uses for Segment Routing in the case where global SIDs are allocated (i.e., global
 // indexes).
 // Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.
+// An implementation should set default values appropriately if any mandatory item is
+// not configured by a user.
 message IsisSRCapability {
 
   // 1 octet of flags.
   IsisSRCapabilityFlags flags = 1;
 
   // This contains the list of SRGB.
+  // If no SRGB range is configured, implementation should send one SRGB range with default
+  // values.
   repeated IsisSRSrgb srgb_ranges = 2;
 }
 
@@ -2637,7 +2650,7 @@ message IsisSRSrlb {
   // default = 16000
   optional uint32 starting_sid = 1;
 
-  // This represents the number of SIDs in a SRGB range.
+  // This represents the number of SIDs in a SRLB range.
   // default = 8000
   optional uint32 range = 2;
 }

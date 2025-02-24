@@ -2973,6 +2973,8 @@ components:
         sub TLV will be part of the packet.
         Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
       type: object
+      required:
+      - sid_values
       properties:
         choice:
           description: |-
@@ -2980,7 +2982,8 @@ components:
             Please refer to device.isis.segment_routing.router_capability.sr_capability.srgb_ranges for the Segment Routing Global Block (SRGB) Descriptor and
             device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
             - sid_values: Adjacency-SID carries one or more values and then v_flag is set by the implementation.
-            - sid_indices: Adjacency-SID carries pne ore more indices and then v_flag is unset by the implementation.
+            - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset by the implementation.
+            In any case, a user needs to configure at least one entry of SID value or SID index.
           type: string
           default: sid_values
           x-field-uid: 1
@@ -2999,9 +3002,9 @@ components:
           items:
             type: integer
             format: uint32
-            default: 1
-            minimum: 1
-            maximum: 16777215
+            default: 16
+            minimum: 16
+            maximum: 1048575
           x-field-uid: 2
         sid_indices:
           description: |-
@@ -3010,8 +3013,8 @@ components:
           items:
             type: integer
             format: uint32
-            default: 1
-            minimum: 1
+            default: 0
+            minimum: 0
             maximum: 4294967295
           x-field-uid: 3
         f_flag:
@@ -3441,6 +3444,8 @@ components:
       description: |-
         This contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
       type: object
+      required:
+      - sid_values
       properties:
         choice:
           description: |-
@@ -3449,6 +3454,7 @@ components:
             device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
             - sid_values: Prefix-SID carries one or more values and then v_flag is set by the implementation.
             - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by the implementation.
+            In any case, a user needs to configure at least one entry of SID value or SID index.
           type: string
           default: sid_values
           x-field-uid: 1
@@ -3467,9 +3473,9 @@ components:
           items:
             type: integer
             format: uint32
-            default: 1
-            minimum: 1
-            maximum: 16777215
+            default: 16
+            minimum: 16
+            maximum: 1048575
           x-field-uid: 2
         sid_indices:
           description: |-
@@ -3478,8 +3484,8 @@ components:
           items:
             type: integer
             format: uint32
-            default: 1
-            minimum: 1
+            default: 0
+            minimum: 0
             maximum: 4294967295
           x-field-uid: 3
         r_flag:
@@ -3647,11 +3653,10 @@ components:
           x-field-uid: 1
     Isis.RouterCapability:
       description: |-
-        Container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+        Container for the configuration of IS-IS Router CAPABILITY TLV.
+        https://datatracker.ietf.org/doc/html/rfc7981#section-2.
+        An implementation should set default values appropriately if any mandatory item is not configured by a user.
       type: object
-      required:
-      - algorithms
-      - srlb_ranges
       properties:
         choice:
           description: "The Router Capability ID SHOULD be identical to the value\
@@ -3729,7 +3734,11 @@ components:
         algorithms:
           description: "This contains one or more Segment Routing Algorithm that a\
             \ router may use various algorithms when calculating \nreachability to\
-            \ other nodes or to prefixes attached to these nodes."
+            \ other nodes or to prefixes attached to these nodes.\nWhen the originating\
+            \ router does not advertise the SR-Algorithm sub-TLV, it implies that\
+            \ algorithm 0 is the only algorithm supported by the routers.\nWhen the\
+            \ originating router does advertise the SR-Algorithm sub-TLV, then algorithm\
+            \ 0 MUST be present while non-zero algorithms MAY be present."
           type: array
           items:
             $ref: '#/components/schemas/IsisSR.Algorithm'
@@ -3746,10 +3755,10 @@ components:
         \ Segment Routing requires \neach router to advertise its SR data plane capability\
         \ and the range of MPLS label values \nit uses for Segment Routing in the\
         \ case where global SIDs are allocated (i.e., global indexes).\nReference:\
-        \ https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv."
+        \ https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.\n\
+        An implementation should set default values appropriately if any mandatory\
+        \ item is not configured by a user."
       type: object
-      required:
-      - srgb_ranges
       properties:
         flags:
           description: |-
@@ -3759,6 +3768,7 @@ components:
         srgb_ranges:
           description: |-
             This contains the list of SRGB.
+            If no SRGB range is configured, implementation should send one SRGB range with default values.
           type: array
           items:
             $ref: '#/components/schemas/IsisSR.Srgb'
@@ -3804,7 +3814,7 @@ components:
           format: uint32
           default: 8000
           minimum: 1
-          maximum: 16777215
+          maximum: 4294967295
           x-field-uid: 2
     IsisSR.Srlb:
       description: "The SR Local Block (SRLB) sub-TLV contains the range of labels\
@@ -3827,12 +3837,12 @@ components:
           default: 16000
           x-field-uid: 1
         range:
-          description: "This represents the number of SIDs in a SRGB range. "
+          description: "This represents the number of SIDs in a SRLB range. "
           type: integer
           format: uint32
           default: 8000
           minimum: 1
-          maximum: 16777215
+          maximum: 4294967295
           x-field-uid: 2
     IsisSR.Algorithm:
       description: |-

@@ -336,6 +336,7 @@ func (obj *isisSRPrefixSid) Choice() IsisSRPrefixSidChoiceEnum {
 // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_values: Prefix-SID carries one or more values and then v_flag is set by the implementation.
 // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by the implementation.
+// In any case, a user needs to configure at least one entry of SID value or SID index.
 // Choice returns a string
 func (obj *isisSRPrefixSid) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -571,10 +572,10 @@ func (obj *isisSRPrefixSid) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SidValues != nil {
 
 		for _, item := range obj.obj.SidValues {
-			if item < 1 || item > 16777215 {
+			if item < 16 || item > 1048575 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisSRPrefixSid.SidValues <= 16777215 but Got %d", item))
+					fmt.Sprintf("16 <= IsisSRPrefixSid.SidValues <= 1048575 but Got %d", item))
 			}
 
 		}
@@ -584,10 +585,10 @@ func (obj *isisSRPrefixSid) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SidIndices != nil {
 
 		for _, item := range obj.obj.SidIndices {
-			if item < 1 || item > 4294967295 {
+			if item > 4294967295 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("1 <= IsisSRPrefixSid.SidIndices <= 4294967295 but Got %d", item))
+					fmt.Sprintf("0 <= IsisSRPrefixSid.SidIndices <= 4294967295 but Got %d", item))
 			}
 
 		}

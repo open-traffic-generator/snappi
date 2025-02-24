@@ -279,10 +279,14 @@ type IsisSegmentRouting interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// RouterCapability returns IsisRouterCapability, set in IsisSegmentRouting.
-	// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+	// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV.
+	// https://datatracker.ietf.org/doc/html/rfc7981#section-2.
+	// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 	RouterCapability() IsisRouterCapability
 	// SetRouterCapability assigns IsisRouterCapability provided by user to IsisSegmentRouting.
-	// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+	// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV.
+	// https://datatracker.ietf.org/doc/html/rfc7981#section-2.
+	// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 	SetRouterCapability(value IsisRouterCapability) IsisSegmentRouting
 	// HasRouterCapability checks if RouterCapability has been set in IsisSegmentRouting
 	HasRouterCapability() bool

@@ -305,7 +305,7 @@ func (obj *isisSRSrlb) SetStartingSid(value uint32) IsisSRSrlb {
 	return obj
 }
 
-// This represents the number of SIDs in a SRGB range.
+// This represents the number of SIDs in a SRLB range.
 // Range returns a uint32
 func (obj *isisSRSrlb) Range() uint32 {
 
@@ -313,13 +313,13 @@ func (obj *isisSRSrlb) Range() uint32 {
 
 }
 
-// This represents the number of SIDs in a SRGB range.
+// This represents the number of SIDs in a SRLB range.
 // Range returns a uint32
 func (obj *isisSRSrlb) HasRange() bool {
 	return obj.obj.Range != nil
 }
 
-// This represents the number of SIDs in a SRGB range.
+// This represents the number of SIDs in a SRLB range.
 // SetRange sets the uint32 value in the IsisSRSrlb object
 func (obj *isisSRSrlb) SetRange(value uint32) IsisSRSrlb {
 
@@ -344,10 +344,10 @@ func (obj *isisSRSrlb) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.Range != nil {
 
-		if *obj.obj.Range < 1 || *obj.obj.Range > 16777215 {
+		if *obj.obj.Range < 1 || *obj.obj.Range > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= IsisSRSrlb.Range <= 16777215 but Got %d", *obj.obj.Range))
+				fmt.Sprintf("1 <= IsisSRSrlb.Range <= 4294967295 but Got %d", *obj.obj.Range))
 		}
 
 	}

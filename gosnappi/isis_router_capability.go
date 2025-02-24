@@ -254,7 +254,9 @@ func (obj *isisRouterCapability) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV. https://datatracker.ietf.org/doc/html/rfc7981#section-2
+// IsisRouterCapability is container for the configuration of IS-IS Router CAPABILITY TLV.
+// https://datatracker.ietf.org/doc/html/rfc7981#section-2.
+// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 type IsisRouterCapability interface {
 	Validation
 	// msg marshals IsisRouterCapability to protobuf object *otg.IsisRouterCapability
@@ -282,10 +284,10 @@ type IsisRouterCapability interface {
 	setChoice(value IsisRouterCapabilityChoiceEnum) IsisRouterCapability
 	// HasChoice checks if Choice has been set in IsisRouterCapability
 	HasChoice() bool
-	// getter for InterfaceIp to set choice.
-	InterfaceIp()
 	// getter for Ipv4TeRouterId to set choice.
 	Ipv4TeRouterId()
+	// getter for InterfaceIp to set choice.
+	InterfaceIp()
 	// CustomRouterCapId returns string, set in IsisRouterCapability.
 	CustomRouterCapId() string
 	// SetCustomRouterCapId assigns string provided by user to IsisRouterCapability
@@ -309,12 +311,14 @@ type IsisRouterCapability interface {
 	// each router to advertise its SR data plane capability and the range of MPLS label values
 	// it uses for Segment Routing in the case where global SIDs are allocated (i.e., global indexes).
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.
+	// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 	SrCapability() IsisSRCapability
 	// SetSrCapability assigns IsisSRCapability provided by user to IsisRouterCapability.
 	// IsisSRCapability is container for the configuration of IS-IS SR-CAPABILITY TLV that Segment Routing requires
 	// each router to advertise its SR data plane capability and the range of MPLS label values
 	// it uses for Segment Routing in the case where global SIDs are allocated (i.e., global indexes).
 	// Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.
+	// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 	SetSrCapability(value IsisSRCapability) IsisRouterCapability
 	// HasSrCapability checks if SrCapability has been set in IsisRouterCapability
 	HasSrCapability() bool
@@ -342,14 +346,14 @@ func (obj *isisRouterCapability) Choice() IsisRouterCapabilityChoiceEnum {
 	return IsisRouterCapabilityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for InterfaceIp to set choice
-func (obj *isisRouterCapability) InterfaceIp() {
-	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
-}
-
 // getter for Ipv4TeRouterId to set choice
 func (obj *isisRouterCapability) Ipv4TeRouterId() {
 	obj.setChoice(IsisRouterCapabilityChoice.IPV4_TE_ROUTER_ID)
+}
+
+// getter for InterfaceIp to set choice
+func (obj *isisRouterCapability) InterfaceIp() {
+	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
 }
 
 // The Router Capability ID SHOULD be identical to the value advertised in the Traffic Engineering Router ID TLV [RFC5305].
@@ -514,6 +518,8 @@ func (obj *isisRouterCapability) SetSrCapability(value IsisSRCapability) IsisRou
 
 // This contains one or more Segment Routing Algorithm that a router may use various algorithms when calculating
 // reachability to other nodes or to prefixes attached to these nodes.
+// When the originating router does not advertise the SR-Algorithm sub-TLV, it implies that algorithm 0 is the only algorithm supported by the routers.
+// When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm 0 MUST be present while non-zero algorithms MAY be present.
 // Algorithms returns a []IsisSRAlgorithm
 func (obj *isisRouterCapability) Algorithms() IsisRouterCapabilityIsisSRAlgorithmIter {
 	if len(obj.obj.Algorithms) == 0 {

@@ -256,6 +256,7 @@ func (obj *isisSRCapability) setNil() {
 // each router to advertise its SR data plane capability and the range of MPLS label values
 // it uses for Segment Routing in the case where global SIDs are allocated (i.e., global indexes).
 // Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-capabilities-sub-tlv.
+// An implementation should set default values appropriately if any mandatory item is not configured by a user.
 type IsisSRCapability interface {
 	Validation
 	// msg marshals IsisSRCapability to protobuf object *otg.IsisSRCapability
@@ -329,6 +330,7 @@ func (obj *isisSRCapability) SetFlags(value IsisSRCapabilityFlags) IsisSRCapabil
 }
 
 // This contains the list of SRGB.
+// If no SRGB range is configured, implementation should send one SRGB range with default values.
 // SrgbRanges returns a []IsisSRSrgb
 func (obj *isisSRCapability) SrgbRanges() IsisSRCapabilityIsisSRSrgbIter {
 	if len(obj.obj.SrgbRanges) == 0 {
