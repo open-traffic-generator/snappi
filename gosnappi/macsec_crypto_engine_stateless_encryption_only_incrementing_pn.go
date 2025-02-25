@@ -357,10 +357,10 @@ func (obj *macsecCryptoEngineStatelessEncryptionOnlyIncrementingPn) validateObj(
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count < 2 || *obj.obj.Count > 4294967295 {
+		if *obj.obj.Count < 2 || *obj.obj.Count > 1000000 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("2 <= MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.Count <= 4294967295 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("2 <= MacsecCryptoEngineStatelessEncryptionOnlyIncrementingPn.Count <= 1000000 but Got %d", *obj.obj.Count))
 		}
 
 	}
