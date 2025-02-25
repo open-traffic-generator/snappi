@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.20.0
+/* Open Traffic Generator API 1.21.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -12437,6 +12437,16 @@ message FlowMetricsRequest {
       bytes_rx = 5;
       frames_tx_rate = 6;
       frames_rx_rate = 7;
+      tx_l1_rate_bps = 8;
+      rx_l1_rate_bps = 9;
+      tx_rate_bytes = 10;
+      rx_rate_bytes = 11;
+      tx_rate_bps = 12;
+      rx_rate_bps = 13;
+      tx_rate_kbps = 14;
+      rx_rate_kbps = 15;
+      tx_rate_mbps = 16;
+      rx_rate_mbps = 17;
     }
   }
   // The list of metric names that the returned result set will contain. If the list is
@@ -12468,6 +12478,16 @@ message FlowTaggedMetricsFilter {
       bytes_rx = 4;
       frames_tx_rate = 5;
       frames_rx_rate = 6;
+      tx_l1_rate_bps = 7;
+      rx_l1_rate_bps = 8;
+      tx_rate_bytes = 9;
+      rx_rate_bytes = 10;
+      tx_rate_bps = 11;
+      rx_rate_bps = 12;
+      tx_rate_kbps = 13;
+      rx_rate_kbps = 14;
+      tx_rate_mbps = 15;
+      rx_rate_mbps = 16;
     }
   }
   // The list of metric names that the returned result set will contain. If the list is
@@ -12548,6 +12568,36 @@ message FlowMetric {
   // flow.
   // The container is keyed by list of tag-value pairs.
   repeated FlowTaggedMetric tagged_metrics = 15;
+
+  // The Layer 1 transmission rate in bits per second.
+  optional float tx_l1_rate_bps = 16;
+
+  // The Layer 1 receive rate in bits per second.
+  optional float rx_l1_rate_bps = 17;
+
+  // The transmission rate in bytes per second.
+  optional float tx_rate_bytes = 18;
+
+  // The receive rate in bytes per second.
+  optional float rx_rate_bytes = 19;
+
+  // The transmission rate in bits per second.
+  optional float tx_rate_bps = 20;
+
+  // The receive rate in bits per second.
+  optional float rx_rate_bps = 21;
+
+  // The transmission rate in Kilobits per second.
+  optional float tx_rate_kbps = 22;
+
+  // The receive rate in Kilobits per second.
+  optional float rx_rate_kbps = 23;
+
+  // The transmission rate in Megabits per second.
+  optional float tx_rate_mbps = 24;
+
+  // The receive rate in Megabits per second.
+  optional float rx_rate_mbps = 25;
 }
 
 // Metrics for each set of values applicable for configured
@@ -12584,6 +12634,36 @@ message FlowTaggedMetric {
 
   // Description missing in models
   MetricLatency latency = 10;
+
+  // The Layer 1 transmission rate in bits per second.
+  optional float tx_l1_rate_bps = 11;
+
+  // The Layer 1 receive rate in bits per second.
+  optional float rx_l1_rate_bps = 12;
+
+  // The transmission rate in bytes per second.
+  optional float tx_rate_bytes = 13;
+
+  // The receive rate in bytes per second.
+  optional float rx_rate_bytes = 14;
+
+  // The transmission rate in bits per second.
+  optional float tx_rate_bps = 15;
+
+  // The receive rate in bits per second.
+  optional float rx_rate_bps = 16;
+
+  // The transmission rate in Kilobits per second.
+  optional float tx_rate_kbps = 17;
+
+  // The receive rate in Kilobits per second.
+  optional float rx_rate_kbps = 18;
+
+  // The transmission rate in Megabits per second.
+  optional float tx_rate_mbps = 19;
+
+  // The receive rate in Megabits per second.
+  optional float rx_rate_mbps = 20;
 }
 
 // Description missing in models

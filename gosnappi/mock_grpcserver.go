@@ -159,8 +159,10 @@ func (s *server) GetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (*o
 				_ = errObj.SetErrors([]string{"metrics not enabled for all the flows"})
 				err = errObj
 			} else {
+				ch := otg.MetricsResponse_Choice_Enum(int32(1))
 				resp = &otg.GetMetricsResponse{
 					MetricsResponse: &otg.MetricsResponse{
+						Choice:      &ch,
 						FlowMetrics: []*otg.FlowMetric{f},
 					},
 				}

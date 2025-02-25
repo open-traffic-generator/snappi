@@ -333,6 +333,16 @@ var FlowMetricsRequestMetricNames = struct {
 	BYTES_RX       FlowMetricsRequestMetricNamesEnum
 	FRAMES_TX_RATE FlowMetricsRequestMetricNamesEnum
 	FRAMES_RX_RATE FlowMetricsRequestMetricNamesEnum
+	TX_L1_RATE_BPS FlowMetricsRequestMetricNamesEnum
+	RX_L1_RATE_BPS FlowMetricsRequestMetricNamesEnum
+	TX_RATE_BYTES  FlowMetricsRequestMetricNamesEnum
+	RX_RATE_BYTES  FlowMetricsRequestMetricNamesEnum
+	TX_RATE_BPS    FlowMetricsRequestMetricNamesEnum
+	RX_RATE_BPS    FlowMetricsRequestMetricNamesEnum
+	TX_RATE_KBPS   FlowMetricsRequestMetricNamesEnum
+	RX_RATE_KBPS   FlowMetricsRequestMetricNamesEnum
+	TX_RATE_MBPS   FlowMetricsRequestMetricNamesEnum
+	RX_RATE_MBPS   FlowMetricsRequestMetricNamesEnum
 }{
 	TRANSMIT:       FlowMetricsRequestMetricNamesEnum("transmit"),
 	FRAMES_TX:      FlowMetricsRequestMetricNamesEnum("frames_tx"),
@@ -341,6 +351,16 @@ var FlowMetricsRequestMetricNames = struct {
 	BYTES_RX:       FlowMetricsRequestMetricNamesEnum("bytes_rx"),
 	FRAMES_TX_RATE: FlowMetricsRequestMetricNamesEnum("frames_tx_rate"),
 	FRAMES_RX_RATE: FlowMetricsRequestMetricNamesEnum("frames_rx_rate"),
+	TX_L1_RATE_BPS: FlowMetricsRequestMetricNamesEnum("tx_l1_rate_bps"),
+	RX_L1_RATE_BPS: FlowMetricsRequestMetricNamesEnum("rx_l1_rate_bps"),
+	TX_RATE_BYTES:  FlowMetricsRequestMetricNamesEnum("tx_rate_bytes"),
+	RX_RATE_BYTES:  FlowMetricsRequestMetricNamesEnum("rx_rate_bytes"),
+	TX_RATE_BPS:    FlowMetricsRequestMetricNamesEnum("tx_rate_bps"),
+	RX_RATE_BPS:    FlowMetricsRequestMetricNamesEnum("rx_rate_bps"),
+	TX_RATE_KBPS:   FlowMetricsRequestMetricNamesEnum("tx_rate_kbps"),
+	RX_RATE_KBPS:   FlowMetricsRequestMetricNamesEnum("rx_rate_kbps"),
+	TX_RATE_MBPS:   FlowMetricsRequestMetricNamesEnum("tx_rate_mbps"),
+	RX_RATE_MBPS:   FlowMetricsRequestMetricNamesEnum("rx_rate_mbps"),
 }
 
 func (obj *flowMetricsRequest) MetricNames() []FlowMetricsRequestMetricNamesEnum {
