@@ -359,7 +359,7 @@ func (obj *isisInterfaceAdjacencySid) setChoice(value IsisInterfaceAdjacencySidC
 	return obj
 }
 
-// The corresponding Adjacency SID as one or more absolute Values for the link that.
+// The corresponding Adjacency SID as one or more absolute Values for the link.
 // SidValues returns a []uint32
 func (obj *isisInterfaceAdjacencySid) SidValues() []uint32 {
 	if obj.obj.SidValues == nil {
@@ -370,7 +370,7 @@ func (obj *isisInterfaceAdjacencySid) SidValues() []uint32 {
 	return obj.obj.SidValues
 }
 
-// The corresponding Adjacency SID as one or more absolute Values for the link that.
+// The corresponding Adjacency SID as one or more absolute Values for the link.
 // SetSidValues sets the []uint32 value in the IsisInterfaceAdjacencySid object
 func (obj *isisInterfaceAdjacencySid) SetSidValues(value []uint32) IsisInterfaceAdjacencySid {
 	obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_VALUES)
@@ -619,7 +619,7 @@ func (obj *isisInterfaceAdjacencySid) setDefault() {
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_VALUES)
+			obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_INDICES)
 
 		}
 

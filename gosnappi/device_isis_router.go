@@ -339,7 +339,9 @@ type DeviceIsisRouter interface {
 	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
 	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 	// These segments act as topological sub-paths that can be combined together to form the required path.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+	// An implementation may advertise Router Capability with default values if a user does not even set the properties
+	// of Router Capability and Segment Routing Capability.
 	SegmentRouting() IsisSegmentRouting
 	// SetSegmentRouting assigns IsisSegmentRouting provided by user to DeviceIsisRouter.
 	// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
@@ -348,7 +350,9 @@ type DeviceIsisRouter interface {
 	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
 	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 	// These segments act as topological sub-paths that can be combined together to form the required path.
-	// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+	// An implementation may advertise Router Capability with default values if a user does not even set the properties
+	// of Router Capability and Segment Routing Capability.
 	SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter
 	// HasSegmentRouting checks if SegmentRouting has been set in DeviceIsisRouter
 	HasSegmentRouting() bool

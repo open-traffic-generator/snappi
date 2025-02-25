@@ -2973,8 +2973,6 @@ components:
         sub TLV will be part of the packet.
         Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-adjacency-segment-identifie.
       type: object
-      required:
-      - sid_values
       properties:
         choice:
           description: |-
@@ -2985,7 +2983,7 @@ components:
             - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset by the implementation.
             In any case, a user needs to configure at least one entry of SID value or SID index.
           type: string
-          default: sid_values
+          default: sid_indices
           x-field-uid: 1
           x-enum:
             sid_values:
@@ -2997,7 +2995,7 @@ components:
           - sid_indices
         sid_values:
           description: |-
-            The corresponding Adjacency SID as one or more absolute Values for the link that.
+            The corresponding Adjacency SID as one or more absolute Values for the link.
           type: array
           items:
             type: integer
@@ -3005,6 +3003,7 @@ components:
             default: 16
             minimum: 16
             maximum: 1048575
+            minItems: 1
           x-field-uid: 2
         sid_indices:
           description: |-
@@ -3016,6 +3015,7 @@ components:
             default: 0
             minimum: 0
             maximum: 4294967295
+            minItems: 1
           x-field-uid: 3
         f_flag:
           description: |-
@@ -3444,8 +3444,6 @@ components:
       description: |-
         This contains the properties of IS-IS Prefix-SID and its attributes for  the extended Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
       type: object
-      required:
-      - sid_values
       properties:
         choice:
           description: |-
@@ -3456,7 +3454,7 @@ components:
             - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by the implementation.
             In any case, a user needs to configure at least one entry of SID value or SID index.
           type: string
-          default: sid_values
+          default: sid_indices
           x-field-uid: 1
           x-enum:
             sid_values:
@@ -3476,6 +3474,7 @@ components:
             default: 16
             minimum: 16
             maximum: 1048575
+            minItems: 1
           x-field-uid: 2
         sid_indices:
           description: |-
@@ -3487,6 +3486,7 @@ components:
             default: 0
             minimum: 0
             maximum: 4294967295
+            minItems: 1
           x-field-uid: 3
         r_flag:
           description: "R-Flag: Re-advertisement Flag. \nIf set, then the prefix to\
@@ -3642,7 +3642,10 @@ components:
         \ nodes in the IGP. \nA prefix segment is typically a multi-hop path while\
         \ an adjacency segment, in most of the cases, is a one-hop path. \nThese segments\
         \ act as topological sub-paths that can be combined together to form the required\
-        \ path.\nReference: https://datatracker.ietf.org/doc/html/rfc8667"
+        \ path.\nReference: https://datatracker.ietf.org/doc/html/rfc8667.:w\nAn implementation\
+        \ may advertise Router Capability with default values if a user does not even\
+        \ set the properties \nof Router Capability and Segment Routing Capability.\
+        \  "
       type: object
       properties:
         router_capability:

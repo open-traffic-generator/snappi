@@ -2042,10 +2042,10 @@ message IsisInterfaceAdjacencySid {
   // - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset
   // by the implementation.
   // In any case, a user needs to configure at least one entry of SID value or SID index.
-  // default = Choice.Enum.sid_values
+  // default = Choice.Enum.sid_indices
   optional Choice.Enum choice = 1;
 
-  // The corresponding Adjacency SID as one or more absolute Values for the link that.
+  // The corresponding Adjacency SID as one or more absolute Values for the link.
   repeated uint32 sid_values = 2;
 
   // One or more adjacency Indices are relative to ranges defined for SRGB or SRLB.
@@ -2353,7 +2353,7 @@ message IsisSRPrefixSid {
   // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by
   // the implementation.
   // In any case, a user needs to configure at least one entry of SID value or SID index.
-  // default = Choice.Enum.sid_values
+  // default = Choice.Enum.sid_indices
   optional Choice.Enum choice = 1;
 
   // SID/Label as one or more absolute values that are associated with the IGP Prefix
@@ -2490,7 +2490,10 @@ message IsisV6RouteRange {
 // of the cases, is a one-hop path.
 // These segments act as topological sub-paths that can be combined together to form
 // the required path.
-// Reference: https://datatracker.ietf.org/doc/html/rfc8667
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+// An implementation may advertise Router Capability with default values if a user does
+// not even set the properties
+// of Router Capability and Segment Routing Capability.
 message IsisSegmentRouting {
 
   // Optional IS-IS TLV named CAPABILITY, formed of multiple sub-TLVs, which allows a
