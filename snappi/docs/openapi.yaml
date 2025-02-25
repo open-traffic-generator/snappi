@@ -16487,11 +16487,11 @@ components:
               x-field-uid: 13
             ospfv2:
               x-field-uid: 14
-            macsec:
-              x-field-uid: 15
-            mka:
-              x-field-uid: 16
             convergence:
+              x-field-uid: 15
+            macsec:
+              x-field-uid: 16
+            mka:
               x-field-uid: 17
           enum:
           - port
@@ -16508,9 +16508,9 @@ components:
           - dhcpv6_client
           - dhcpv6_server
           - ospfv2
+          - convergence
           - macsec
           - mka
-          - convergence
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -16553,14 +16553,14 @@ components:
         ospfv2:
           $ref: '#/components/schemas/Ospfv2.Metrics.Request'
           x-field-uid: 15
-        macsec:
-          $ref: '#/components/schemas/Macsec.Metrics.Request'
-          x-field-uid: 16
-        mka:
-          $ref: '#/components/schemas/Mka.Metrics.Request'
-          x-field-uid: 17
         convergence:
           $ref: '#/components/schemas/Convergence.Request'
+          x-field-uid: 16
+        macsec:
+          $ref: '#/components/schemas/Macsec.Metrics.Request'
+          x-field-uid: 17
+        mka:
+          $ref: '#/components/schemas/Mka.Metrics.Request'
           x-field-uid: 18
     Metrics.Response:
       description: |-
@@ -16694,20 +16694,20 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Metric'
           x-field-uid: 15
-        macsec_metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/Macsec.Metric'
-          x-field-uid: 16
-        mka_metrics:
-          type: array
-          items:
-            $ref: '#/components/schemas/Mka.Metric'
-          x-field-uid: 17
         convergence_metrics:
           type: array
           items:
             $ref: '#/components/schemas/Convergence.Metric'
+          x-field-uid: 16
+        macsec_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Macsec.Metric'
+          x-field-uid: 17
+        mka_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Mka.Metric'
           x-field-uid: 18
     Port.Metrics.Request:
       description: |-
@@ -19506,6 +19506,125 @@ components:
           type: integer
           format: uint64
           x-field-uid: 34
+    Convergence.Request:
+      description: |-
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+
+        Container for requesting control-plane and data-plane convergence time metrics for flows.
+      x-status:
+        status: under_review
+        information: Convergence metrics is currently under review for pending exploration
+          on use cases.
+      type: object
+      properties:
+        flow_names:
+          description: |
+            Convergence metrics will be retrieved for these flow names.
+            If no flow names are specified then convergence metrics for all flows will be returned.
+
+            x-constraint:
+            - /components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 1
+    Convergence.Metric:
+      description: |-
+        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
+
+        The container for convergence metrics.
+      x-status:
+        status: under_review
+        information: Convergence metrics is currently under review for pending exploration
+          on use cases.
+      type: object
+      properties:
+        name:
+          description: "The name of a flow. "
+          type: string
+          x-field-uid: 1
+        data_plane_convergence_us:
+          description: "The convergence time(microseconds) measured from the data\
+            \ plane perspective only. \nIt measures the time w.r.t. last start of\
+            \ the traffic of the affected flow from Below Threshold Timestamp, \n\
+            when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable\
+            \ amount of traffic was \nreceived at time Above Threshold Timestamp,\
+            \ when the rate crosses above the configured \nrx_rate_threshold."
+          type: number
+          format: double
+          x-field-uid: 2
+        control_plane_data_plane_convergence_us:
+          description: "The total convergence time(microseconds), between the event\
+            \ that caused the\nswitchover until an acceptable amount of traffic was\
+            \ \nreceived at time Above Threshold Timestamp, when the rate crosses\
+            \ above the configured \nrx_rate_threshold."
+          type: number
+          format: double
+          x-field-uid: 3
+        events:
+          description: |-
+            The events that were used to determine the convergence analytics.
+          type: array
+          items:
+            $ref: '#/components/schemas/Convergence.Event'
+          x-field-uid: 4
+    Convergence.Event:
+      description: |-
+        A container for an event that has occurred in the system affecting the convergence time recorded for the flow.
+      type: object
+      properties:
+        type:
+          description: |-
+            The type of control plane or data plane event that occurred.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            link_down:
+              x-field-uid: 1
+            link_up:
+              x-field-uid: 2
+            route_withdraw:
+              x-field-uid: 3
+            route_advertise:
+              x-field-uid: 4
+            flow_rx_rate_above_threshold:
+              x-field-uid: 5
+            flow_rx_rate_below_threshold:
+              x-field-uid: 6
+          enum:
+          - link_down
+          - link_up
+          - route_withdraw
+          - route_advertise
+          - flow_rx_rate_above_threshold
+          - flow_rx_rate_below_threshold
+        source:
+          description: "The source of the event. \nThe source MUST be the value of\
+            \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
+            \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
+            - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
+          type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          - /components/schemas/Flow/properties/name
+          - /components/schemas/Device.Bgpv4Route/properties/name
+          - /components/schemas/Device.Bgpv6Route/properties/name
+          x-field-uid: 2
+        begin_timestamp_ns:
+          description: |-
+            The timestamp(nanoseconds) of the starting event that triggers convergence.
+          type: number
+          format: double
+          x-field-uid: 3
+        end_timestamp_ns:
+          description: |-
+            The timestamp(nanoseconds) of the end event that triggers convergence.
+          type: number
+          format: double
+          x-field-uid: 4
     Macsec.Metrics.Request:
       description: |-
         The request to retrieve MACsec per secure entity (secY) metrics/statistics.
@@ -19704,7 +19823,7 @@ components:
           x-field-uid: 17
         out_octets_encrypted:
           description: |-
-            OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
+            OutOctetsEncrypted, the number of bytes transmitted as encrypted.
           type: integer
           format: uint64
           x-field-uid: 18
@@ -19722,7 +19841,7 @@ components:
           x-field-uid: 20
     Mka.Metrics.Request:
       description: |-
-        The request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
+        The request to retrieve MKA per key agreement entity(KaY) metrics/statistics.
       type: object
       properties:
         kay_names:
@@ -19778,7 +19897,7 @@ components:
           x-field-uid: 2
     Mka.Metric:
       description: |-
-        MKA per KaY statistics information.
+        MKA per key agreement entity(KaY) statistics information.
       type: object
       properties:
         name:
@@ -19807,171 +19926,52 @@ components:
           x-field-uid: 3
         mkpdu_tx:
           description: |-
-            MKPDU Tx.
+            Number of MKA protocol data unit(MKPDU) frames Tx.
           type: integer
           format: uint64
           x-field-uid: 4
         mkpdu_rx:
           description: |-
-            MKPDU Rx.
+            Number of MKA protocol data unit(MKPDU) frames Rx.
           type: integer
           format: uint64
           x-field-uid: 5
         live_peer_count:
           description: |-
-            Live Peer Count.
+            Number of MKA live peers.
           type: integer
           format: uint64
           x-field-uid: 6
         potential_peer_count:
           description: |-
-            Potential Peer Count.
+            Number of MKA potential peers.
           type: integer
           format: uint64
           x-field-uid: 7
         latest_key_tx_peer_count:
           description: |-
-            Latest Key Tx Peer Count.
+            Number of MKA latest key Tx peers.
           type: integer
           format: uint64
           x-field-uid: 8
         latest_key_rx_peer_count:
           description: |-
-            Latest Key Rx Peer Count.
+            Number of MKA latest key Rx peers.
           type: integer
           format: uint64
           x-field-uid: 9
         malformed_mkpdu:
           description: |-
-            Malformed MKPDU.
+            Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
           type: integer
           format: uint64
           x-field-uid: 10
         icv_mismatch:
           description: |-
-            ICV Mismatch.
+            Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
           type: integer
           format: uint64
           x-field-uid: 11
-    Convergence.Request:
-      description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
-        Container for requesting control-plane and data-plane convergence time metrics for flows.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
-      type: object
-      properties:
-        flow_names:
-          description: |
-            Convergence metrics will be retrieved for these flow names.
-            If no flow names are specified then convergence metrics for all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-          type: array
-          items:
-            type: string
-          x-constraint:
-          - /components/schemas/Flow/properties/name
-          x-field-uid: 1
-    Convergence.Metric:
-      description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
-        The container for convergence metrics.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
-      type: object
-      properties:
-        name:
-          description: "The name of a flow. "
-          type: string
-          x-field-uid: 1
-        data_plane_convergence_us:
-          description: "The convergence time(microseconds) measured from the data\
-            \ plane perspective only. \nIt measures the time w.r.t. last start of\
-            \ the traffic of the affected flow from Below Threshold Timestamp, \n\
-            when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable\
-            \ amount of traffic was \nreceived at time Above Threshold Timestamp,\
-            \ when the rate crosses above the configured \nrx_rate_threshold."
-          type: number
-          format: double
-          x-field-uid: 2
-        control_plane_data_plane_convergence_us:
-          description: "The total convergence time(microseconds), between the event\
-            \ that caused the\nswitchover until an acceptable amount of traffic was\
-            \ \nreceived at time Above Threshold Timestamp, when the rate crosses\
-            \ above the configured \nrx_rate_threshold."
-          type: number
-          format: double
-          x-field-uid: 3
-        events:
-          description: |-
-            The events that were used to determine the convergence analytics.
-          type: array
-          items:
-            $ref: '#/components/schemas/Convergence.Event'
-          x-field-uid: 4
-    Convergence.Event:
-      description: |-
-        A container for an event that has occurred in the system affecting the convergence time recorded for the flow.
-      type: object
-      properties:
-        type:
-          description: |-
-            The type of control plane or data plane event that occurred.
-          type: string
-          x-field-uid: 1
-          x-enum:
-            link_down:
-              x-field-uid: 1
-            link_up:
-              x-field-uid: 2
-            route_withdraw:
-              x-field-uid: 3
-            route_advertise:
-              x-field-uid: 4
-            flow_rx_rate_above_threshold:
-              x-field-uid: 5
-            flow_rx_rate_below_threshold:
-              x-field-uid: 6
-          enum:
-          - link_down
-          - link_up
-          - route_withdraw
-          - route_advertise
-          - flow_rx_rate_above_threshold
-          - flow_rx_rate_below_threshold
-        source:
-          description: "The source of the event. \nThe source MUST be the value of\
-            \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
-            \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n"
-          type: string
-          x-constraint:
-          - /components/schemas/Port/properties/name
-          - /components/schemas/Flow/properties/name
-          - /components/schemas/Device.Bgpv4Route/properties/name
-          - /components/schemas/Device.Bgpv6Route/properties/name
-          x-field-uid: 2
-        begin_timestamp_ns:
-          description: |-
-            The timestamp(nanoseconds) of the starting event that triggers convergence.
-          type: number
-          format: double
-          x-field-uid: 3
-        end_timestamp_ns:
-          description: |-
-            The timestamp(nanoseconds) of the end event that triggers convergence.
-          type: number
-          format: double
-          x-field-uid: 4
     States.Request:
       description: |-
         Request to traffic generator for states of choice

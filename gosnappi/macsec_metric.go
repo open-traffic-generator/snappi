@@ -772,7 +772,7 @@ func (obj *macsecMetric) SetOutOctetsProtected(value uint64) MacsecMetric {
 	return obj
 }
 
-// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypted.
 // OutOctetsEncrypted returns a uint64
 func (obj *macsecMetric) OutOctetsEncrypted() uint64 {
 
@@ -780,13 +780,13 @@ func (obj *macsecMetric) OutOctetsEncrypted() uint64 {
 
 }
 
-// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypted.
 // OutOctetsEncrypted returns a uint64
 func (obj *macsecMetric) HasOutOctetsEncrypted() bool {
 	return obj.obj.OutOctetsEncrypted != nil
 }
 
-// OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
+// OutOctetsEncrypted, the number of bytes transmitted as encrypted.
 // SetOutOctetsEncrypted sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetOutOctetsEncrypted(value uint64) MacsecMetric {
 

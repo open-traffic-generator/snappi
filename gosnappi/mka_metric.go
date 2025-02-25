@@ -242,7 +242,7 @@ func (obj *mkaMetric) Clone() (MkaMetric, error) {
 	return newObj, nil
 }
 
-// MkaMetric is mKA per KaY statistics information.
+// MkaMetric is mKA per key agreement entity(KaY) statistics information.
 type MkaMetric interface {
 	Validation
 	// msg marshals MkaMetric to protobuf object *otg.MkaMetric
@@ -410,7 +410,7 @@ func (obj *mkaMetric) SetSessionFlapCount(value uint64) MkaMetric {
 	return obj
 }
 
-// MKPDU Tx.
+// Number of MKA protocol data unit(MKPDU) frames Tx.
 // MkpduTx returns a uint64
 func (obj *mkaMetric) MkpduTx() uint64 {
 
@@ -418,13 +418,13 @@ func (obj *mkaMetric) MkpduTx() uint64 {
 
 }
 
-// MKPDU Tx.
+// Number of MKA protocol data unit(MKPDU) frames Tx.
 // MkpduTx returns a uint64
 func (obj *mkaMetric) HasMkpduTx() bool {
 	return obj.obj.MkpduTx != nil
 }
 
-// MKPDU Tx.
+// Number of MKA protocol data unit(MKPDU) frames Tx.
 // SetMkpduTx sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetMkpduTx(value uint64) MkaMetric {
 
@@ -432,7 +432,7 @@ func (obj *mkaMetric) SetMkpduTx(value uint64) MkaMetric {
 	return obj
 }
 
-// MKPDU Rx.
+// Number of MKA protocol data unit(MKPDU) frames Rx.
 // MkpduRx returns a uint64
 func (obj *mkaMetric) MkpduRx() uint64 {
 
@@ -440,13 +440,13 @@ func (obj *mkaMetric) MkpduRx() uint64 {
 
 }
 
-// MKPDU Rx.
+// Number of MKA protocol data unit(MKPDU) frames Rx.
 // MkpduRx returns a uint64
 func (obj *mkaMetric) HasMkpduRx() bool {
 	return obj.obj.MkpduRx != nil
 }
 
-// MKPDU Rx.
+// Number of MKA protocol data unit(MKPDU) frames Rx.
 // SetMkpduRx sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetMkpduRx(value uint64) MkaMetric {
 
@@ -454,7 +454,7 @@ func (obj *mkaMetric) SetMkpduRx(value uint64) MkaMetric {
 	return obj
 }
 
-// Live Peer Count.
+// Number of MKA live peers.
 // LivePeerCount returns a uint64
 func (obj *mkaMetric) LivePeerCount() uint64 {
 
@@ -462,13 +462,13 @@ func (obj *mkaMetric) LivePeerCount() uint64 {
 
 }
 
-// Live Peer Count.
+// Number of MKA live peers.
 // LivePeerCount returns a uint64
 func (obj *mkaMetric) HasLivePeerCount() bool {
 	return obj.obj.LivePeerCount != nil
 }
 
-// Live Peer Count.
+// Number of MKA live peers.
 // SetLivePeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLivePeerCount(value uint64) MkaMetric {
 
@@ -476,7 +476,7 @@ func (obj *mkaMetric) SetLivePeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Potential Peer Count.
+// Number of MKA potential peers.
 // PotentialPeerCount returns a uint64
 func (obj *mkaMetric) PotentialPeerCount() uint64 {
 
@@ -484,13 +484,13 @@ func (obj *mkaMetric) PotentialPeerCount() uint64 {
 
 }
 
-// Potential Peer Count.
+// Number of MKA potential peers.
 // PotentialPeerCount returns a uint64
 func (obj *mkaMetric) HasPotentialPeerCount() bool {
 	return obj.obj.PotentialPeerCount != nil
 }
 
-// Potential Peer Count.
+// Number of MKA potential peers.
 // SetPotentialPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetPotentialPeerCount(value uint64) MkaMetric {
 
@@ -498,7 +498,7 @@ func (obj *mkaMetric) SetPotentialPeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Latest Key Tx Peer Count.
+// Number of MKA latest key Tx peers.
 // LatestKeyTxPeerCount returns a uint64
 func (obj *mkaMetric) LatestKeyTxPeerCount() uint64 {
 
@@ -506,13 +506,13 @@ func (obj *mkaMetric) LatestKeyTxPeerCount() uint64 {
 
 }
 
-// Latest Key Tx Peer Count.
+// Number of MKA latest key Tx peers.
 // LatestKeyTxPeerCount returns a uint64
 func (obj *mkaMetric) HasLatestKeyTxPeerCount() bool {
 	return obj.obj.LatestKeyTxPeerCount != nil
 }
 
-// Latest Key Tx Peer Count.
+// Number of MKA latest key Tx peers.
 // SetLatestKeyTxPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLatestKeyTxPeerCount(value uint64) MkaMetric {
 
@@ -520,7 +520,7 @@ func (obj *mkaMetric) SetLatestKeyTxPeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Latest Key Rx Peer Count.
+// Number of MKA latest key Rx peers.
 // LatestKeyRxPeerCount returns a uint64
 func (obj *mkaMetric) LatestKeyRxPeerCount() uint64 {
 
@@ -528,13 +528,13 @@ func (obj *mkaMetric) LatestKeyRxPeerCount() uint64 {
 
 }
 
-// Latest Key Rx Peer Count.
+// Number of MKA latest key Rx peers.
 // LatestKeyRxPeerCount returns a uint64
 func (obj *mkaMetric) HasLatestKeyRxPeerCount() bool {
 	return obj.obj.LatestKeyRxPeerCount != nil
 }
 
-// Latest Key Rx Peer Count.
+// Number of MKA latest key Rx peers.
 // SetLatestKeyRxPeerCount sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetLatestKeyRxPeerCount(value uint64) MkaMetric {
 
@@ -542,7 +542,7 @@ func (obj *mkaMetric) SetLatestKeyRxPeerCount(value uint64) MkaMetric {
 	return obj
 }
 
-// Malformed MKPDU.
+// Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
 // MalformedMkpdu returns a uint64
 func (obj *mkaMetric) MalformedMkpdu() uint64 {
 
@@ -550,13 +550,13 @@ func (obj *mkaMetric) MalformedMkpdu() uint64 {
 
 }
 
-// Malformed MKPDU.
+// Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
 // MalformedMkpdu returns a uint64
 func (obj *mkaMetric) HasMalformedMkpdu() bool {
 	return obj.obj.MalformedMkpdu != nil
 }
 
-// Malformed MKPDU.
+// Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
 // SetMalformedMkpdu sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetMalformedMkpdu(value uint64) MkaMetric {
 
@@ -564,7 +564,7 @@ func (obj *mkaMetric) SetMalformedMkpdu(value uint64) MkaMetric {
 	return obj
 }
 
-// ICV Mismatch.
+// Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
 // IcvMismatch returns a uint64
 func (obj *mkaMetric) IcvMismatch() uint64 {
 
@@ -572,13 +572,13 @@ func (obj *mkaMetric) IcvMismatch() uint64 {
 
 }
 
-// ICV Mismatch.
+// Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
 // IcvMismatch returns a uint64
 func (obj *mkaMetric) HasIcvMismatch() bool {
 	return obj.obj.IcvMismatch != nil
 }
 
-// ICV Mismatch.
+// Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
 // SetIcvMismatch sets the uint64 value in the MkaMetric object
 func (obj *mkaMetric) SetIcvMismatch(value uint64) MkaMetric {
 

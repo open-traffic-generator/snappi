@@ -30,9 +30,9 @@ type metricsResponse struct {
 	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
+	convergenceMetricsHolder  MetricsResponseConvergenceMetricIter
 	macsecMetricsHolder       MetricsResponseMacsecMetricIter
 	mkaMetricsHolder          MetricsResponseMkaMetricIter
-	convergenceMetricsHolder  MetricsResponseConvergenceMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -274,9 +274,9 @@ func (obj *metricsResponse) setNil() {
 	obj.dhcpv6ClientMetricsHolder = nil
 	obj.dhcpv6ServerMetricsHolder = nil
 	obj.ospfv2MetricsHolder = nil
+	obj.convergenceMetricsHolder = nil
 	obj.macsecMetricsHolder = nil
 	obj.mkaMetricsHolder = nil
-	obj.convergenceMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -310,10 +310,10 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Server to set choice.
-	Dhcpv4Server()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
 	// getter for Dhcpv4Client to set choice.
@@ -346,12 +346,12 @@ type MetricsResponse interface {
 	Dhcpv6ServerMetrics() MetricsResponseDhcpv6ServerMetricIter
 	// Ospfv2Metrics returns MetricsResponseOspfv2MetricIterIter, set in MetricsResponse
 	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
+	// ConvergenceMetrics returns MetricsResponseConvergenceMetricIterIter, set in MetricsResponse
+	ConvergenceMetrics() MetricsResponseConvergenceMetricIter
 	// MacsecMetrics returns MetricsResponseMacsecMetricIterIter, set in MetricsResponse
 	MacsecMetrics() MetricsResponseMacsecMetricIter
 	// MkaMetrics returns MetricsResponseMkaMetricIterIter, set in MetricsResponse
 	MkaMetrics() MetricsResponseMkaMetricIter
-	// ConvergenceMetrics returns MetricsResponseConvergenceMetricIterIter, set in MetricsResponse
-	ConvergenceMetrics() MetricsResponseConvergenceMetricIter
 	setNil()
 }
 
@@ -400,14 +400,14 @@ func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
-}
-
 // getter for Dhcpv6Client to set choice
 func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
+}
+
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // getter for Dhcpv6Server to set choice
@@ -435,12 +435,12 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.ConvergenceMetrics = nil
-	obj.convergenceMetricsHolder = nil
 	obj.obj.MkaMetrics = nil
 	obj.mkaMetricsHolder = nil
 	obj.obj.MacsecMetrics = nil
 	obj.macsecMetricsHolder = nil
+	obj.obj.ConvergenceMetrics = nil
+	obj.convergenceMetricsHolder = nil
 	obj.obj.Ospfv2Metrics = nil
 	obj.ospfv2MetricsHolder = nil
 	obj.obj.RsvpMetrics = nil
@@ -502,16 +502,16 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
 	}
 
+	if value == MetricsResponseChoice.CONVERGENCE_METRICS {
+		obj.obj.ConvergenceMetrics = []*otg.ConvergenceMetric{}
+	}
+
 	if value == MetricsResponseChoice.MACSEC_METRICS {
 		obj.obj.MacsecMetrics = []*otg.MacsecMetric{}
 	}
 
 	if value == MetricsResponseChoice.MKA_METRICS {
 		obj.obj.MkaMetrics = []*otg.MkaMetric{}
-	}
-
-	if value == MetricsResponseChoice.CONVERGENCE_METRICS {
-		obj.obj.ConvergenceMetrics = []*otg.ConvergenceMetric{}
 	}
 
 	return obj
@@ -1736,6 +1736,93 @@ func (obj *metricsResponseOspfv2MetricIter) appendHolderSlice(item Ospfv2Metric)
 }
 
 // description is TBD
+// ConvergenceMetrics returns a []ConvergenceMetric
+func (obj *metricsResponse) ConvergenceMetrics() MetricsResponseConvergenceMetricIter {
+	if len(obj.obj.ConvergenceMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.CONVERGENCE_METRICS)
+	}
+	if obj.convergenceMetricsHolder == nil {
+		obj.convergenceMetricsHolder = newMetricsResponseConvergenceMetricIter(&obj.obj.ConvergenceMetrics).setMsg(obj)
+	}
+	return obj.convergenceMetricsHolder
+}
+
+type metricsResponseConvergenceMetricIter struct {
+	obj                    *metricsResponse
+	convergenceMetricSlice []ConvergenceMetric
+	fieldPtr               *[]*otg.ConvergenceMetric
+}
+
+func newMetricsResponseConvergenceMetricIter(ptr *[]*otg.ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	return &metricsResponseConvergenceMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseConvergenceMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseConvergenceMetricIter
+	Items() []ConvergenceMetric
+	Add() ConvergenceMetric
+	Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter
+	Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter
+	Clear() MetricsResponseConvergenceMetricIter
+	clearHolderSlice() MetricsResponseConvergenceMetricIter
+	appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter
+}
+
+func (obj *metricsResponseConvergenceMetricIter) setMsg(msg *metricsResponse) MetricsResponseConvergenceMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&convergenceMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Items() []ConvergenceMetric {
+	return obj.convergenceMetricSlice
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Add() ConvergenceMetric {
+	newObj := &otg.ConvergenceMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &convergenceMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseConvergenceMetricIter) Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.convergenceMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) Clear() MetricsResponseConvergenceMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.ConvergenceMetric{}
+		obj.convergenceMetricSlice = []ConvergenceMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) clearHolderSlice() MetricsResponseConvergenceMetricIter {
+	if len(obj.convergenceMetricSlice) > 0 {
+		obj.convergenceMetricSlice = []ConvergenceMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseConvergenceMetricIter) appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter {
+	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
+	return obj
+}
+
+// description is TBD
 // MacsecMetrics returns a []MacsecMetric
 func (obj *metricsResponse) MacsecMetrics() MetricsResponseMacsecMetricIter {
 	if len(obj.obj.MacsecMetrics) == 0 {
@@ -1906,93 +1993,6 @@ func (obj *metricsResponseMkaMetricIter) clearHolderSlice() MetricsResponseMkaMe
 }
 func (obj *metricsResponseMkaMetricIter) appendHolderSlice(item MkaMetric) MetricsResponseMkaMetricIter {
 	obj.mkaMetricSlice = append(obj.mkaMetricSlice, item)
-	return obj
-}
-
-// description is TBD
-// ConvergenceMetrics returns a []ConvergenceMetric
-func (obj *metricsResponse) ConvergenceMetrics() MetricsResponseConvergenceMetricIter {
-	if len(obj.obj.ConvergenceMetrics) == 0 {
-		obj.setChoice(MetricsResponseChoice.CONVERGENCE_METRICS)
-	}
-	if obj.convergenceMetricsHolder == nil {
-		obj.convergenceMetricsHolder = newMetricsResponseConvergenceMetricIter(&obj.obj.ConvergenceMetrics).setMsg(obj)
-	}
-	return obj.convergenceMetricsHolder
-}
-
-type metricsResponseConvergenceMetricIter struct {
-	obj                    *metricsResponse
-	convergenceMetricSlice []ConvergenceMetric
-	fieldPtr               *[]*otg.ConvergenceMetric
-}
-
-func newMetricsResponseConvergenceMetricIter(ptr *[]*otg.ConvergenceMetric) MetricsResponseConvergenceMetricIter {
-	return &metricsResponseConvergenceMetricIter{fieldPtr: ptr}
-}
-
-type MetricsResponseConvergenceMetricIter interface {
-	setMsg(*metricsResponse) MetricsResponseConvergenceMetricIter
-	Items() []ConvergenceMetric
-	Add() ConvergenceMetric
-	Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter
-	Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter
-	Clear() MetricsResponseConvergenceMetricIter
-	clearHolderSlice() MetricsResponseConvergenceMetricIter
-	appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter
-}
-
-func (obj *metricsResponseConvergenceMetricIter) setMsg(msg *metricsResponse) MetricsResponseConvergenceMetricIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&convergenceMetric{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *metricsResponseConvergenceMetricIter) Items() []ConvergenceMetric {
-	return obj.convergenceMetricSlice
-}
-
-func (obj *metricsResponseConvergenceMetricIter) Add() ConvergenceMetric {
-	newObj := &otg.ConvergenceMetric{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &convergenceMetric{obj: newObj}
-	newLibObj.setDefault()
-	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *metricsResponseConvergenceMetricIter) Append(items ...ConvergenceMetric) MetricsResponseConvergenceMetricIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
-	}
-	return obj
-}
-
-func (obj *metricsResponseConvergenceMetricIter) Set(index int, newObj ConvergenceMetric) MetricsResponseConvergenceMetricIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.convergenceMetricSlice[index] = newObj
-	return obj
-}
-func (obj *metricsResponseConvergenceMetricIter) Clear() MetricsResponseConvergenceMetricIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.ConvergenceMetric{}
-		obj.convergenceMetricSlice = []ConvergenceMetric{}
-	}
-	return obj
-}
-func (obj *metricsResponseConvergenceMetricIter) clearHolderSlice() MetricsResponseConvergenceMetricIter {
-	if len(obj.convergenceMetricSlice) > 0 {
-		obj.convergenceMetricSlice = []ConvergenceMetric{}
-	}
-	return obj
-}
-func (obj *metricsResponseConvergenceMetricIter) appendHolderSlice(item ConvergenceMetric) MetricsResponseConvergenceMetricIter {
-	obj.convergenceMetricSlice = append(obj.convergenceMetricSlice, item)
 	return obj
 }
 
@@ -2197,6 +2197,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.ConvergenceMetrics) != 0 {
+
+		if set_default {
+			obj.ConvergenceMetrics().clearHolderSlice()
+			for _, item := range obj.obj.ConvergenceMetrics {
+				obj.ConvergenceMetrics().appendHolderSlice(&convergenceMetric{obj: item})
+			}
+		}
+		for _, item := range obj.ConvergenceMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 	if len(obj.obj.MacsecMetrics) != 0 {
 
 		if set_default {
@@ -2220,20 +2234,6 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.MkaMetrics().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
-	}
-
-	if len(obj.obj.ConvergenceMetrics) != 0 {
-
-		if set_default {
-			obj.ConvergenceMetrics().clearHolderSlice()
-			for _, item := range obj.obj.ConvergenceMetrics {
-				obj.ConvergenceMetrics().appendHolderSlice(&convergenceMetric{obj: item})
-			}
-		}
-		for _, item := range obj.ConvergenceMetrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

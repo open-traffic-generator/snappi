@@ -12520,9 +12520,9 @@ message MetricsRequest {
       dhcpv6_client = 12;
       dhcpv6_server = 13;
       ospfv2 = 14;
-      macsec = 15;
-      mka = 16;
-      convergence = 17;
+      convergence = 15;
+      macsec = 16;
+      mka = 17;
     }
   }
   // Description missing in models
@@ -12572,13 +12572,13 @@ message MetricsRequest {
   Ospfv2MetricsRequest ospfv2 = 15;
 
   // Description missing in models
-  MacsecMetricsRequest macsec = 16;
+  ConvergenceRequest convergence = 16;
 
   // Description missing in models
-  MkaMetricsRequest mka = 17;
+  MacsecMetricsRequest macsec = 17;
 
   // Description missing in models
-  ConvergenceRequest convergence = 18;
+  MkaMetricsRequest mka = 18;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -12653,13 +12653,13 @@ message MetricsResponse {
   repeated Ospfv2Metric ospfv2_metrics = 15;
 
   // Description missing in models
-  repeated MacsecMetric macsec_metrics = 16;
+  repeated ConvergenceMetric convergence_metrics = 16;
 
   // Description missing in models
-  repeated MkaMetric mka_metrics = 17;
+  repeated MacsecMetric macsec_metrics = 17;
 
   // Description missing in models
-  repeated ConvergenceMetric convergence_metrics = 18;
+  repeated MkaMetric mka_metrics = 18;
 }
 
 // The port result request to the traffic generator
@@ -14257,6 +14257,90 @@ message Ospfv2Metric {
   optional uint64 opaque_domain_received = 34;
 }
 
+// Under Review: Convergence metrics is currently under review for pending exploration
+// on use cases.
+// 
+// Container for requesting control-plane and data-plane convergence time metrics for
+// flows.
+message ConvergenceRequest {
+
+  // Convergence metrics will be retrieved for these flow names.
+  // If no flow names are specified then convergence metrics for all flows will be returned.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flow_names = 1;
+}
+
+// Under Review: Convergence metrics is currently under review for pending exploration
+// on use cases.
+// 
+// The container for convergence metrics.
+message ConvergenceMetric {
+
+  // The name of a flow.
+  optional string name = 1;
+
+  // The convergence time(microseconds) measured from the data plane perspective only.
+  // 
+  // It measures the time w.r.t. last start of the traffic of the affected flow from Below
+  // Threshold Timestamp,
+  // when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable amount
+  // of traffic was
+  // received at time Above Threshold Timestamp, when the rate crosses above the configured
+  // 
+  // rx_rate_threshold.
+  optional double data_plane_convergence_us = 2;
+
+  // The total convergence time(microseconds), between the event that caused the
+  // switchover until an acceptable amount of traffic was
+  // received at time Above Threshold Timestamp, when the rate crosses above the configured
+  // 
+  // rx_rate_threshold.
+  optional double control_plane_data_plane_convergence_us = 3;
+
+  // The events that were used to determine the convergence analytics.
+  repeated ConvergenceEvent events = 4;
+}
+
+// A container for an event that has occurred in the system affecting the convergence
+// time recorded for the flow.
+message ConvergenceEvent {
+
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      link_down = 1;
+      link_up = 2;
+      route_withdraw = 3;
+      route_advertise = 4;
+      flow_rx_rate_above_threshold = 5;
+      flow_rx_rate_below_threshold = 6;
+    }
+  }
+  // The type of control plane or data plane event that occurred.
+  optional Type.Enum type = 1;
+
+  // The source of the event.
+  // The source MUST be the value of one of the x-constraint paths,
+  // which means the source MUST be a unique name in the configuration.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Flow/properties/name
+  // - /components/schemas/Device.Bgpv4Route/properties/name
+  // - /components/schemas/Device.Bgpv6Route/properties/name
+  // 
+  optional string source = 2;
+
+  // The timestamp(nanoseconds) of the starting event that triggers convergence.
+  optional double begin_timestamp_ns = 3;
+
+  // The timestamp(nanoseconds) of the end event that triggers convergence.
+  optional double end_timestamp_ns = 4;
+}
+
 // The request to retrieve MACsec per secure entity (secY) metrics/statistics.
 message MacsecMetricsRequest {
 
@@ -14360,7 +14444,7 @@ message MacsecMetric {
   // OutOctetsProtected, the number of bytes transmitted as protected.
   optional uint64 out_octets_protected = 17;
 
-  // OutOctetsEncrypted, the number of bytes transmitted as encrypeted.
+  // OutOctetsEncrypted, the number of bytes transmitted as encrypted.
   optional uint64 out_octets_encrypted = 18;
 
   // InOctetsValidated, the number of received bytes validated.
@@ -14370,7 +14454,7 @@ message MacsecMetric {
   optional uint64 in_octets_decrypted = 20;
 }
 
-// The request to retrieve MKA per key agreement entity (KaY) metrics/statistics.
+// The request to retrieve MKA per key agreement entity(KaY) metrics/statistics.
 message MkaMetricsRequest {
 
   // The names of key agreement entities (KaYs) to return results for. An empty list will
@@ -14402,7 +14486,7 @@ message MkaMetricsRequest {
   repeated ColumnNames.Enum column_names = 2;
 }
 
-// MKA per KaY statistics information.
+// MKA per key agreement entity(KaY) statistics information.
 message MkaMetric {
 
   // The name of a configured MKA KaY.
@@ -14422,113 +14506,29 @@ message MkaMetric {
   // Number of times the session went from Up to Down state.
   optional uint64 session_flap_count = 3;
 
-  // MKPDU Tx.
+  // Number of MKA protocol data unit(MKPDU) frames Tx.
   optional uint64 mkpdu_tx = 4;
 
-  // MKPDU Rx.
+  // Number of MKA protocol data unit(MKPDU) frames Rx.
   optional uint64 mkpdu_rx = 5;
 
-  // Live Peer Count.
+  // Number of MKA live peers.
   optional uint64 live_peer_count = 6;
 
-  // Potential Peer Count.
+  // Number of MKA potential peers.
   optional uint64 potential_peer_count = 7;
 
-  // Latest Key Tx Peer Count.
+  // Number of MKA latest key Tx peers.
   optional uint64 latest_key_tx_peer_count = 8;
 
-  // Latest Key Rx Peer Count.
+  // Number of MKA latest key Rx peers.
   optional uint64 latest_key_rx_peer_count = 9;
 
-  // Malformed MKPDU.
+  // Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
   optional uint64 malformed_mkpdu = 10;
 
-  // ICV Mismatch.
+  // Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
   optional uint64 icv_mismatch = 11;
-}
-
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// Container for requesting control-plane and data-plane convergence time metrics for
-// flows.
-message ConvergenceRequest {
-
-  // Convergence metrics will be retrieved for these flow names.
-  // If no flow names are specified then convergence metrics for all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
-  repeated string flow_names = 1;
-}
-
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// The container for convergence metrics.
-message ConvergenceMetric {
-
-  // The name of a flow.
-  optional string name = 1;
-
-  // The convergence time(microseconds) measured from the data plane perspective only.
-  // 
-  // It measures the time w.r.t. last start of the traffic of the affected flow from Below
-  // Threshold Timestamp,
-  // when the rate on Test Port 2 crosses below the Rx Threshold until an acceptable amount
-  // of traffic was
-  // received at time Above Threshold Timestamp, when the rate crosses above the configured
-  // 
-  // rx_rate_threshold.
-  optional double data_plane_convergence_us = 2;
-
-  // The total convergence time(microseconds), between the event that caused the
-  // switchover until an acceptable amount of traffic was
-  // received at time Above Threshold Timestamp, when the rate crosses above the configured
-  // 
-  // rx_rate_threshold.
-  optional double control_plane_data_plane_convergence_us = 3;
-
-  // The events that were used to determine the convergence analytics.
-  repeated ConvergenceEvent events = 4;
-}
-
-// A container for an event that has occurred in the system affecting the convergence
-// time recorded for the flow.
-message ConvergenceEvent {
-
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      link_down = 1;
-      link_up = 2;
-      route_withdraw = 3;
-      route_advertise = 4;
-      flow_rx_rate_above_threshold = 5;
-      flow_rx_rate_below_threshold = 6;
-    }
-  }
-  // The type of control plane or data plane event that occurred.
-  optional Type.Enum type = 1;
-
-  // The source of the event.
-  // The source MUST be the value of one of the x-constraint paths,
-  // which means the source MUST be a unique name in the configuration.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
-  optional string source = 2;
-
-  // The timestamp(nanoseconds) of the starting event that triggers convergence.
-  optional double begin_timestamp_ns = 3;
-
-  // The timestamp(nanoseconds) of the end event that triggers convergence.
-  optional double end_timestamp_ns = 4;
 }
 
 // Request to traffic generator for states of choice
