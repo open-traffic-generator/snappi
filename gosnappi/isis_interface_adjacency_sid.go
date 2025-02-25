@@ -339,7 +339,8 @@ func (obj *isisInterfaceAdjacencySid) Choice() IsisInterfaceAdjacencySidChoiceEn
 // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_values: Adjacency-SID carries one or more values and then v_flag is set by the implementation.
 // - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset by the implementation.
-// In any case, a user needs to configure at least one entry of SID value or SID index.
+// In any case, a user needs to configure at least one entry of SID value or SID index. If one of them is not configured,
+// then an implementation may advertise appropriate default SID Value/Index based on the choice.
 // Choice returns a string
 func (obj *isisInterfaceAdjacencySid) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -619,7 +620,7 @@ func (obj *isisInterfaceAdjacencySid) setDefault() {
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_INDICES)
+			obj.setChoice(IsisInterfaceAdjacencySidChoice.SID_VALUES)
 
 		}
 

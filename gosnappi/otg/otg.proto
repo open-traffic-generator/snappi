@@ -2042,7 +2042,10 @@ message IsisInterfaceAdjacencySid {
   // - sid_indices: Adjacency-SID carries one or more indices and then v_flag is unset
   // by the implementation.
   // In any case, a user needs to configure at least one entry of SID value or SID index.
-  // default = Choice.Enum.sid_indices
+  // If one of them is not configured,
+  // then an implementation may advertise appropriate default SID Value/Index based on
+  // the choice.
+  // default = Choice.Enum.sid_values
   optional Choice.Enum choice = 1;
 
   // The corresponding Adjacency SID as one or more absolute Values for the link.
@@ -2353,6 +2356,9 @@ message IsisSRPrefixSid {
   // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by
   // the implementation.
   // In any case, a user needs to configure at least one entry of SID value or SID index.
+  // If one of them is not configured,
+  // then an implementation may advertise appropriate default SID Value/Index based on
+  // the choice.
   // default = Choice.Enum.sid_indices
   optional Choice.Enum choice = 1;
 

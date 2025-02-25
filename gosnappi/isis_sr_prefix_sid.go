@@ -336,7 +336,8 @@ func (obj *isisSRPrefixSid) Choice() IsisSRPrefixSidChoiceEnum {
 // device.isis.segment_routing.router_capability.srlb_ranges for the SR Local Block (SRLB).
 // - sid_values: Prefix-SID carries one or more values and then v_flag is set by the implementation.
 // - sid_indices: Prefix-SID carries one or more indices and then v_flag is unset by the implementation.
-// In any case, a user needs to configure at least one entry of SID value or SID index.
+// In any case, a user needs to configure at least one entry of SID value or SID index. If one of them is not configured,
+// then an implementation may advertise appropriate default SID Value/Index based on the choice.
 // Choice returns a string
 func (obj *isisSRPrefixSid) HasChoice() bool {
 	return obj.obj.Choice != nil
