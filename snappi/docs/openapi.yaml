@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.22.0
+  version: 1.23.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -781,7 +781,7 @@ components:
             Priority code point
           type: integer
           format: uint32
-          maximum: 3
+          maximum: 7
           default: 0
           x-field-uid: 2
         id:
