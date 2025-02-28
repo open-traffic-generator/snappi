@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.23.0
+/* Open Traffic Generator API 1.24.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -2627,11 +2627,18 @@ message IsisRouterCapability {
   // This contains one or more Segment Routing Algorithm that a router may use various
   // algorithms when calculating
   // reachability to other nodes or to prefixes attached to these nodes.
+  // The Isis may use various algorithms when calculating reachability to other nodes
+  // or to prefixes attached to these
+  // nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained
+  // SPF, etc.
+  // - 0: SPF algorithm based on link metric.
+  // - 1: Strict SPF algorithm based on link metric.
+  // Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
   // When the originating router does not advertise the SR-Algorithm sub-TLV, it implies
   // that algorithm 0 is the only algorithm supported by the routers.
   // When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm
   // 0 MUST be present while non-zero algorithms MAY be present.
-  repeated IsisSRAlgorithm algorithms = 6;
+  repeated uint32 algorithms = 6;
 
   // This contains the list of SR Local Block (SRLB)
   repeated IsisSRSrlb srlb_ranges = 7;
@@ -2711,20 +2718,6 @@ message IsisSRSrlb {
   // This represents the number of SIDs in a SRLB range.
   // default = 8000
   optional uint32 range = 2;
-}
-
-// Container for SR-Algorithms. The Isis may use various algorithms when calculating
-// reachability to other nodes or to prefixes attached to these
-// nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained
-// SPF, etc.
-// - 0: SPF algorithm based on link metric.
-// - 1: Strict SPF algorithm based on link metric.
-// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
-message IsisSRAlgorithm {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 algorithm = 1;
 }
 
 // Configuration for one or more IPv4 or IPv6 BGP peers.
@@ -15519,7 +15512,7 @@ message IsisLspCapability {
   IsisLspSRCapability sr_capability = 4;
 
   // This contains one or more SR-Algorithm.
-  repeated IsisLspAlgorithm algorithms = 5;
+  repeated uint32 algorithms = 5;
 
   // This contains the list of SR Local Block (SRLB)
   repeated IsisLspSrlb srlb_ranges = 6;
@@ -15572,19 +15565,18 @@ message IsisLspSrlb {
   optional uint32 range = 2;
 }
 
-// Container for SR-Algorithms. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-algorithm-sub-tlv.
-message IsisLspAlgorithm {
-
-  // The Isis may use various algorithms when calculating reachability to other nodes
-  // or to prefixes attached to these nodes.
-  optional uint32 algorithm = 1;
-}
-
 // This container defines segment routing adjacency SIDs.
 message IsisLspAdjacencySid {
 
-  // The corresponding adjacency SID type.
-  optional uint32 tlv_type = 1;
+  message Type {
+    enum Enum {
+      unspecified = 0;
+      adj_sid = 1;
+      lan_adj_sid = 2;
+    }
+  }
+  // Adjacency-SID type: Adjacency SIDs(31) or LAN adjacency SID (32).
+  optional Type.Enum type = 1;
 
   // One or more SID/Indices are the SID/Label values associated with the IGP adjacency
   // SID.

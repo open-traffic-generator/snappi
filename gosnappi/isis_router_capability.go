@@ -17,7 +17,6 @@ type isisRouterCapability struct {
 	marshaller         marshalIsisRouterCapability
 	unMarshaller       unMarshalIsisRouterCapability
 	srCapabilityHolder IsisSRCapability
-	algorithmsHolder   IsisRouterCapabilityIsisSRAlgorithmIter
 	srlbRangesHolder   IsisRouterCapabilityIsisSRSrlbIter
 }
 
@@ -247,7 +246,6 @@ func (obj *isisRouterCapability) Clone() (IsisRouterCapability, error) {
 
 func (obj *isisRouterCapability) setNil() {
 	obj.srCapabilityHolder = nil
-	obj.algorithmsHolder = nil
 	obj.srlbRangesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -322,8 +320,10 @@ type IsisRouterCapability interface {
 	SetSrCapability(value IsisSRCapability) IsisRouterCapability
 	// HasSrCapability checks if SrCapability has been set in IsisRouterCapability
 	HasSrCapability() bool
-	// Algorithms returns IsisRouterCapabilityIsisSRAlgorithmIterIter, set in IsisRouterCapability
-	Algorithms() IsisRouterCapabilityIsisSRAlgorithmIter
+	// Algorithms returns []uint32, set in IsisRouterCapability.
+	Algorithms() []uint32
+	// SetAlgorithms assigns []uint32 provided by user to IsisRouterCapability
+	SetAlgorithms(value []uint32) IsisRouterCapability
 	// SrlbRanges returns IsisRouterCapabilityIsisSRSrlbIterIter, set in IsisRouterCapability
 	SrlbRanges() IsisRouterCapabilityIsisSRSrlbIter
 	setNil()
@@ -518,91 +518,38 @@ func (obj *isisRouterCapability) SetSrCapability(value IsisSRCapability) IsisRou
 
 // This contains one or more Segment Routing Algorithm that a router may use various algorithms when calculating
 // reachability to other nodes or to prefixes attached to these nodes.
+// The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these
+// nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained SPF, etc.
+// - 0: SPF algorithm based on link metric.
+// - 1: Strict SPF algorithm based on link metric.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
 // When the originating router does not advertise the SR-Algorithm sub-TLV, it implies that algorithm 0 is the only algorithm supported by the routers.
 // When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm 0 MUST be present while non-zero algorithms MAY be present.
-// Algorithms returns a []IsisSRAlgorithm
-func (obj *isisRouterCapability) Algorithms() IsisRouterCapabilityIsisSRAlgorithmIter {
-	if len(obj.obj.Algorithms) == 0 {
-		obj.obj.Algorithms = []*otg.IsisSRAlgorithm{}
+// Algorithms returns a []uint32
+func (obj *isisRouterCapability) Algorithms() []uint32 {
+	if obj.obj.Algorithms == nil {
+		obj.obj.Algorithms = make([]uint32, 0)
 	}
-	if obj.algorithmsHolder == nil {
-		obj.algorithmsHolder = newIsisRouterCapabilityIsisSRAlgorithmIter(&obj.obj.Algorithms).setMsg(obj)
+	return obj.obj.Algorithms
+}
+
+// This contains one or more Segment Routing Algorithm that a router may use various algorithms when calculating
+// reachability to other nodes or to prefixes attached to these nodes.
+// The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these
+// nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained SPF, etc.
+// - 0: SPF algorithm based on link metric.
+// - 1: Strict SPF algorithm based on link metric.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
+// When the originating router does not advertise the SR-Algorithm sub-TLV, it implies that algorithm 0 is the only algorithm supported by the routers.
+// When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm 0 MUST be present while non-zero algorithms MAY be present.
+// SetAlgorithms sets the []uint32 value in the IsisRouterCapability object
+func (obj *isisRouterCapability) SetAlgorithms(value []uint32) IsisRouterCapability {
+
+	if obj.obj.Algorithms == nil {
+		obj.obj.Algorithms = make([]uint32, 0)
 	}
-	return obj.algorithmsHolder
-}
+	obj.obj.Algorithms = value
 
-type isisRouterCapabilityIsisSRAlgorithmIter struct {
-	obj                  *isisRouterCapability
-	isisSRAlgorithmSlice []IsisSRAlgorithm
-	fieldPtr             *[]*otg.IsisSRAlgorithm
-}
-
-func newIsisRouterCapabilityIsisSRAlgorithmIter(ptr *[]*otg.IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter {
-	return &isisRouterCapabilityIsisSRAlgorithmIter{fieldPtr: ptr}
-}
-
-type IsisRouterCapabilityIsisSRAlgorithmIter interface {
-	setMsg(*isisRouterCapability) IsisRouterCapabilityIsisSRAlgorithmIter
-	Items() []IsisSRAlgorithm
-	Add() IsisSRAlgorithm
-	Append(items ...IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter
-	Set(index int, newObj IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter
-	Clear() IsisRouterCapabilityIsisSRAlgorithmIter
-	clearHolderSlice() IsisRouterCapabilityIsisSRAlgorithmIter
-	appendHolderSlice(item IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter
-}
-
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) setMsg(msg *isisRouterCapability) IsisRouterCapabilityIsisSRAlgorithmIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisSRAlgorithm{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) Items() []IsisSRAlgorithm {
-	return obj.isisSRAlgorithmSlice
-}
-
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) Add() IsisSRAlgorithm {
-	newObj := &otg.IsisSRAlgorithm{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisSRAlgorithm{obj: newObj}
-	newLibObj.setDefault()
-	obj.isisSRAlgorithmSlice = append(obj.isisSRAlgorithmSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) Append(items ...IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisSRAlgorithmSlice = append(obj.isisSRAlgorithmSlice, item)
-	}
-	return obj
-}
-
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) Set(index int, newObj IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisSRAlgorithmSlice[index] = newObj
-	return obj
-}
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) Clear() IsisRouterCapabilityIsisSRAlgorithmIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisSRAlgorithm{}
-		obj.isisSRAlgorithmSlice = []IsisSRAlgorithm{}
-	}
-	return obj
-}
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) clearHolderSlice() IsisRouterCapabilityIsisSRAlgorithmIter {
-	if len(obj.isisSRAlgorithmSlice) > 0 {
-		obj.isisSRAlgorithmSlice = []IsisSRAlgorithm{}
-	}
-	return obj
-}
-func (obj *isisRouterCapabilityIsisSRAlgorithmIter) appendHolderSlice(item IsisSRAlgorithm) IsisRouterCapabilityIsisSRAlgorithmIter {
-	obj.isisSRAlgorithmSlice = append(obj.isisSRAlgorithmSlice, item)
 	return obj
 }
 
@@ -712,16 +659,15 @@ func (obj *isisRouterCapability) validateObj(vObj *validation, set_default bool)
 		obj.SrCapability().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Algorithms) != 0 {
+	if obj.obj.Algorithms != nil {
 
-		if set_default {
-			obj.Algorithms().clearHolderSlice()
-			for _, item := range obj.obj.Algorithms {
-				obj.Algorithms().appendHolderSlice(&isisSRAlgorithm{obj: item})
+		for _, item := range obj.obj.Algorithms {
+			if item > 255 {
+				vObj.validationErrors = append(
+					vObj.validationErrors,
+					fmt.Sprintf("0 <= IsisRouterCapability.Algorithms <= 255 but Got %d", item))
 			}
-		}
-		for _, item := range obj.Algorithms().Items() {
-			item.validateObj(vObj, set_default)
+
 		}
 
 	}

@@ -109,8 +109,6 @@ from .snappi import IsisSRCapability
 from .snappi import IsisSRCapabilityFlags
 from .snappi import IsisSRSrgb
 from .snappi import IsisSRSrgbIter
-from .snappi import IsisSRAlgorithm
-from .snappi import IsisSRAlgorithmIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
 from .snappi import DeviceBgpRouter
@@ -1356,8 +1354,6 @@ from .snappi import IsisLspSRCapability
 from .snappi import IsisLspCapasFlags
 from .snappi import IsisLspSrgb
 from .snappi import IsisLspSrgbIter
-from .snappi import IsisLspAlgorithm
-from .snappi import IsisLspAlgorithmIter
 from .snappi import IsisLspSrlb
 from .snappi import IsisLspSrlbIter
 from .snappi import IsisLspCapabilityIter

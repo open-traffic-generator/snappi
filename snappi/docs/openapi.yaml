@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.23.0
+  version: 1.24.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3772,14 +3772,23 @@ components:
         algorithms:
           description: "This contains one or more Segment Routing Algorithm that a\
             \ router may use various algorithms when calculating \nreachability to\
-            \ other nodes or to prefixes attached to these nodes.\nWhen the originating\
-            \ router does not advertise the SR-Algorithm sub-TLV, it implies that\
-            \ algorithm 0 is the only algorithm supported by the routers.\nWhen the\
-            \ originating router does advertise the SR-Algorithm sub-TLV, then algorithm\
-            \ 0 MUST be present while non-zero algorithms MAY be present."
+            \ other nodes or to prefixes attached to these nodes.\nThe Isis may use\
+            \ various algorithms when calculating reachability to other nodes or to\
+            \ prefixes attached to these\nnodes. Examples of these algorithms are\
+            \ metric-based SPF, various sorts of Constrained SPF, etc.\n- 0: SPF algorithm\
+            \ based on link metric.\n- 1: Strict SPF algorithm based on link metric.\n\
+            Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.\n\
+            When the originating router does not advertise the SR-Algorithm sub-TLV,\
+            \ it implies that algorithm 0 is the only algorithm supported by the routers.\n\
+            When the originating router does advertise the SR-Algorithm sub-TLV, then\
+            \ algorithm 0 MUST be present while non-zero algorithms MAY be present."
           type: array
           items:
-            $ref: '#/components/schemas/IsisSR.Algorithm'
+            type: integer
+            format: uint32
+            default: 0
+            minimum: 0
+            maximum: 255
           x-field-uid: 6
         srlb_ranges:
           description: |-
@@ -3882,22 +3891,6 @@ components:
           minimum: 1
           maximum: 4294967295
           x-field-uid: 2
-    IsisSR.Algorithm:
-      description: |-
-        Container for SR-Algorithms. The Isis may use various algorithms when calculating reachability to other nodes or to prefixes attached to these
-            nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained SPF, etc.
-            - 0: SPF algorithm based on link metric.
-            - 1: Strict SPF algorithm based on link metric.
-        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
-      type: object
-      properties:
-        algorithm:
-          type: integer
-          format: uint32
-          default: 0
-          minimum: 0
-          maximum: 255
-          x-field-uid: 1
     Device.BgpRouter:
       description: |-
         Configuration for one or more IPv4 or IPv6 BGP peers.
@@ -21044,7 +21037,8 @@ components:
             This contains one or more SR-Algorithm.
           type: array
           items:
-            $ref: '#/components/schemas/IsisLsp.Algorithm'
+            type: integer
+            format: uint32
           x-field-uid: 5
         srlb_ranges:
           description: |-
@@ -21117,28 +21111,24 @@ components:
           type: integer
           format: uint32
           x-field-uid: 2
-    IsisLsp.Algorithm:
-      description: |-
-        Container for SR-Algorithms. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-algorithm-sub-tlv.
-      type: object
-      properties:
-        algorithm:
-          description: "The Isis may use various algorithms when calculating reachability\
-            \ to other nodes or to prefixes attached to these nodes. "
-          type: integer
-          format: uint32
-          x-field-uid: 1
     IsisLsp.AdjacencySid:
       description: |-
         This container defines segment routing adjacency SIDs.
       type: object
       properties:
-        tlv_type:
+        type:
           description: |-
-            The corresponding adjacency SID type.
-          type: integer
-          format: uint32
+            Adjacency-SID type: Adjacency SIDs(31) or LAN adjacency SID (32).
+          type: string
           x-field-uid: 1
+          x-enum:
+            adj_sid:
+              x-field-uid: 1
+            lan_adj_sid:
+              x-field-uid: 2
+          enum:
+          - adj_sid
+          - lan_adj_sid
         sids:
           description: |-
             One or more SID/Indices are the SID/Label values associated with the IGP adjacency SID.
