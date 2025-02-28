@@ -2,8 +2,8 @@
 
 
 class Version:
-    models_version = "1.23.0"
-    version = "1.23.0"
+    models_version = "1.24.0"
+    version = "1.24.0"
     package_name = "snappi"
     protobuf_name = "otg"
     go_package_name = "gosnappi"
