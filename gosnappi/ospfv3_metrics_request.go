@@ -277,7 +277,7 @@ type Ospfv3MetricsRequest interface {
 // The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
 //
 // x-constraint:
-// - /components/schemas/Device.Ospfv3/properties/name
+// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // RouterNames returns a []string
 func (obj *ospfv3MetricsRequest) RouterNames() []string {
@@ -290,7 +290,7 @@ func (obj *ospfv3MetricsRequest) RouterNames() []string {
 // The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
 //
 // x-constraint:
-// - /components/schemas/Device.Ospfv3/properties/name
+// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // SetRouterNames sets the []string value in the Ospfv3MetricsRequest object
 func (obj *ospfv3MetricsRequest) SetRouterNames(value []string) Ospfv3MetricsRequest {

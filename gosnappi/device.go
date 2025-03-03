@@ -355,12 +355,12 @@ type Device interface {
 	// Ospfv3 returns DeviceOspfv3Router, set in Device.
 	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
 	//
-	// A container of properties for an OSPFv3 router and its interfaces & Route Ranges.
+	// A container of properties for an OSPFv3 router.
 	Ospfv3() DeviceOspfv3Router
 	// SetOspfv3 assigns DeviceOspfv3Router provided by user to Device.
 	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
 	//
-	// A container of properties for an OSPFv3 router and its interfaces & Route Ranges.
+	// A container of properties for an OSPFv3 router.
 	SetOspfv3(value DeviceOspfv3Router) Device
 	// HasOspfv3 checks if Ospfv3 has been set in Device
 	HasOspfv3() bool

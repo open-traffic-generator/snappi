@@ -13,9 +13,10 @@ import (
 // ***** Ospfv3InterfaceNetworkType *****
 type ospfv3InterfaceNetworkType struct {
 	validation
-	obj          *otg.Ospfv3InterfaceNetworkType
-	marshaller   marshalOspfv3InterfaceNetworkType
-	unMarshaller unMarshalOspfv3InterfaceNetworkType
+	obj             *otg.Ospfv3InterfaceNetworkType
+	marshaller      marshalOspfv3InterfaceNetworkType
+	unMarshaller    unMarshalOspfv3InterfaceNetworkType
+	broadcastHolder Ospfv3InterfaceBroadcast
 }
 
 func NewOspfv3InterfaceNetworkType() Ospfv3InterfaceNetworkType {
@@ -29,7 +30,7 @@ func (obj *ospfv3InterfaceNetworkType) msg() *otg.Ospfv3InterfaceNetworkType {
 }
 
 func (obj *ospfv3InterfaceNetworkType) setMsg(msg *otg.Ospfv3InterfaceNetworkType) Ospfv3InterfaceNetworkType {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalospfv3InterfaceNetworkType) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalospfv3InterfaceNetworkType) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalospfv3InterfaceNetworkType) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *ospfv3InterfaceNetworkType) Clone() (Ospfv3InterfaceNetworkType, erro
 	return newObj, nil
 }
 
+func (obj *ospfv3InterfaceNetworkType) setNil() {
+	obj.broadcastHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // Ospfv3InterfaceNetworkType is the OSPFv3 network link type options.
 // - Broadcast
 // - Point to Point
@@ -274,8 +282,15 @@ type Ospfv3InterfaceNetworkType interface {
 	HasChoice() bool
 	// getter for PointToPoint to set choice.
 	PointToPoint()
-	// getter for Broadcast to set choice.
-	Broadcast()
+	// Broadcast returns Ospfv3InterfaceBroadcast, set in Ospfv3InterfaceNetworkType.
+	// Ospfv3InterfaceBroadcast is container for capabilities associated with network type broadcast.
+	Broadcast() Ospfv3InterfaceBroadcast
+	// SetBroadcast assigns Ospfv3InterfaceBroadcast provided by user to Ospfv3InterfaceNetworkType.
+	// Ospfv3InterfaceBroadcast is container for capabilities associated with network type broadcast.
+	SetBroadcast(value Ospfv3InterfaceBroadcast) Ospfv3InterfaceNetworkType
+	// HasBroadcast checks if Broadcast has been set in Ospfv3InterfaceNetworkType
+	HasBroadcast() bool
+	setNil()
 }
 
 type Ospfv3InterfaceNetworkTypeChoiceEnum string
@@ -298,11 +313,6 @@ func (obj *ospfv3InterfaceNetworkType) PointToPoint() {
 	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.POINT_TO_POINT)
 }
 
-// getter for Broadcast to set choice
-func (obj *ospfv3InterfaceNetworkType) Broadcast() {
-	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)
-}
-
 // description is TBD
 // Choice returns a string
 func (obj *ospfv3InterfaceNetworkType) HasChoice() bool {
@@ -318,6 +328,40 @@ func (obj *ospfv3InterfaceNetworkType) setChoice(value Ospfv3InterfaceNetworkTyp
 	}
 	enumValue := otg.Ospfv3InterfaceNetworkType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Broadcast = nil
+	obj.broadcastHolder = nil
+
+	if value == Ospfv3InterfaceNetworkTypeChoice.BROADCAST {
+		obj.obj.Broadcast = NewOspfv3InterfaceBroadcast().msg()
+	}
+
+	return obj
+}
+
+// Capabilities associated with network type broadcast.
+// Broadcast returns a Ospfv3InterfaceBroadcast
+func (obj *ospfv3InterfaceNetworkType) Broadcast() Ospfv3InterfaceBroadcast {
+	if obj.obj.Broadcast == nil {
+		obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)
+	}
+	if obj.broadcastHolder == nil {
+		obj.broadcastHolder = &ospfv3InterfaceBroadcast{obj: obj.obj.Broadcast}
+	}
+	return obj.broadcastHolder
+}
+
+// Capabilities associated with network type broadcast.
+// Broadcast returns a Ospfv3InterfaceBroadcast
+func (obj *ospfv3InterfaceNetworkType) HasBroadcast() bool {
+	return obj.obj.Broadcast != nil
+}
+
+// Capabilities associated with network type broadcast.
+// SetBroadcast sets the Ospfv3InterfaceBroadcast value in the Ospfv3InterfaceNetworkType object
+func (obj *ospfv3InterfaceNetworkType) SetBroadcast(value Ospfv3InterfaceBroadcast) Ospfv3InterfaceNetworkType {
+	obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)
+	obj.broadcastHolder = nil
+	obj.obj.Broadcast = value.msg()
 
 	return obj
 }
@@ -327,11 +371,21 @@ func (obj *ospfv3InterfaceNetworkType) validateObj(vObj *validation, set_default
 		obj.setDefault()
 	}
 
+	if obj.obj.Broadcast != nil {
+
+		obj.Broadcast().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *ospfv3InterfaceNetworkType) setDefault() {
 	var choices_set int = 0
 	var choice Ospfv3InterfaceNetworkTypeChoiceEnum
+
+	if obj.obj.Broadcast != nil {
+		choices_set += 1
+		choice = Ospfv3InterfaceNetworkTypeChoice.BROADCAST
+	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
 			obj.setChoice(Ospfv3InterfaceNetworkTypeChoice.BROADCAST)

@@ -301,7 +301,8 @@ func (obj *ospfv3RouterId) Auto() {
 }
 
 // IP address of Router ID for this emulated OSPFv3 router.
-// - auto: When first IPv4 address of the router is attempted to be assigned as Router ID.
+// - auto: When first IPv4 address on the router is attempted to be assigned as Router ID.
+// If none are available for use, implementation should return an error.
 // - custom: When, Router ID needs to be configured different from first IPv4 address of the router.
 // Choice returns a string
 func (obj *ospfv3RouterId) HasChoice() bool {

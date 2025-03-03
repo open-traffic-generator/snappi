@@ -328,6 +328,12 @@ type Ospfv3Interface interface {
 	SetOptions(value Ospfv3InterfaceOptions) Ospfv3Interface
 	// HasOptions checks if Options has been set in Ospfv3Interface
 	HasOptions() bool
+	// InstanceId returns uint32, set in Ospfv3Interface.
+	InstanceId() uint32
+	// SetInstanceId assigns uint32 provided by user to Ospfv3Interface
+	SetInstanceId(value uint32) Ospfv3Interface
+	// HasInstanceId checks if InstanceId has been set in Ospfv3Interface
+	HasInstanceId() bool
 	setNil()
 }
 
@@ -489,6 +495,34 @@ func (obj *ospfv3Interface) SetOptions(value Ospfv3InterfaceOptions) Ospfv3Inter
 	return obj
 }
 
+// Enables multiple instances of OSPF to be run over a single link.
+// Each protocol instance should be assigned a separate Instance ID;
+// the Instance ID has link-local significance only.
+// InstanceId returns a uint32
+func (obj *ospfv3Interface) InstanceId() uint32 {
+
+	return *obj.obj.InstanceId
+
+}
+
+// Enables multiple instances of OSPF to be run over a single link.
+// Each protocol instance should be assigned a separate Instance ID;
+// the Instance ID has link-local significance only.
+// InstanceId returns a uint32
+func (obj *ospfv3Interface) HasInstanceId() bool {
+	return obj.obj.InstanceId != nil
+}
+
+// Enables multiple instances of OSPF to be run over a single link.
+// Each protocol instance should be assigned a separate Instance ID;
+// the Instance ID has link-local significance only.
+// SetInstanceId sets the uint32 value in the Ospfv3Interface object
+func (obj *ospfv3Interface) SetInstanceId(value uint32) Ospfv3Interface {
+
+	obj.obj.InstanceId = &value
+	return obj
+}
+
 func (obj *ospfv3Interface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -524,8 +558,21 @@ func (obj *ospfv3Interface) validateObj(vObj *validation, set_default bool) {
 		obj.Options().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.InstanceId != nil {
+
+		if *obj.obj.InstanceId > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv3Interface.InstanceId <= 255 but Got %d", *obj.obj.InstanceId))
+		}
+
+	}
+
 }
 
 func (obj *ospfv3Interface) setDefault() {
+	if obj.obj.InstanceId == nil {
+		obj.SetInstanceId(0)
+	}
 
 }

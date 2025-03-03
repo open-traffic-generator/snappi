@@ -282,12 +282,6 @@ type Ospfv3InterfaceCapabilities interface {
 	SetLinkMetric(value uint32) Ospfv3InterfaceCapabilities
 	// HasLinkMetric checks if LinkMetric has been set in Ospfv3InterfaceCapabilities
 	HasLinkMetric() bool
-	// Priority returns uint32, set in Ospfv3InterfaceCapabilities.
-	Priority() uint32
-	// SetPriority assigns uint32 provided by user to Ospfv3InterfaceCapabilities
-	SetPriority(value uint32) Ospfv3InterfaceCapabilities
-	// HasPriority checks if Priority has been set in Ospfv3InterfaceCapabilities
-	HasPriority() bool
 	// ValidateReceivedMtu returns bool, set in Ospfv3InterfaceCapabilities.
 	ValidateReceivedMtu() bool
 	// SetValidateReceivedMtu assigns bool provided by user to Ospfv3InterfaceCapabilities
@@ -374,34 +368,6 @@ func (obj *ospfv3InterfaceCapabilities) SetLinkMetric(value uint32) Ospfv3Interf
 	return obj
 }
 
-// The Priority for (Backup) Designated Router election.
-// This value is used in Hello packets for the Designated Router (DR) election process.
-// The default is 0, which indicates that the router will not participate in the DR election process.
-// Priority returns a uint32
-func (obj *ospfv3InterfaceCapabilities) Priority() uint32 {
-
-	return *obj.obj.Priority
-
-}
-
-// The Priority for (Backup) Designated Router election.
-// This value is used in Hello packets for the Designated Router (DR) election process.
-// The default is 0, which indicates that the router will not participate in the DR election process.
-// Priority returns a uint32
-func (obj *ospfv3InterfaceCapabilities) HasPriority() bool {
-	return obj.obj.Priority != nil
-}
-
-// The Priority for (Backup) Designated Router election.
-// This value is used in Hello packets for the Designated Router (DR) election process.
-// The default is 0, which indicates that the router will not participate in the DR election process.
-// SetPriority sets the uint32 value in the Ospfv3InterfaceCapabilities object
-func (obj *ospfv3InterfaceCapabilities) SetPriority(value uint32) Ospfv3InterfaceCapabilities {
-
-	obj.obj.Priority = &value
-	return obj
-}
-
 // If this is set to true, then the MTU received from the neighbor during Database (DB) Exchange
 // will be validated, otherwise it will be ignored.
 //
@@ -455,16 +421,6 @@ func (obj *ospfv3InterfaceCapabilities) validateObj(vObj *validation, set_defaul
 
 	}
 
-	if obj.obj.Priority != nil {
-
-		if *obj.obj.Priority > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Ospfv3InterfaceCapabilities.Priority <= 255 but Got %d", *obj.obj.Priority))
-		}
-
-	}
-
 }
 
 func (obj *ospfv3InterfaceCapabilities) setDefault() {
@@ -476,9 +432,6 @@ func (obj *ospfv3InterfaceCapabilities) setDefault() {
 	}
 	if obj.obj.LinkMetric == nil {
 		obj.SetLinkMetric(10)
-	}
-	if obj.obj.Priority == nil {
-		obj.SetPriority(0)
 	}
 	if obj.obj.ValidateReceivedMtu == nil {
 		obj.SetValidateReceivedMtu(true)

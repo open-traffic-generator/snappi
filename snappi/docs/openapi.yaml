@@ -10990,11 +10990,30 @@ components:
       description: |-
         Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 
-        A container of properties for an OSPFv3 router and its interfaces & Route Ranges.
+        A container of properties for an OSPFv3 router.
       x-status:
         status: under_review
         information: OSPFv3 is currently under review for pending exploration on use
           cases.
+      type: object
+      required:
+      - instances
+      properties:
+        router_id:
+          description: |-
+            OSPFv3 Router Id.
+          $ref: '#/components/schemas/Ospfv3.RouterId'
+          x-field-uid: 1
+        instances:
+          description: |-
+            List of OSPFv3 router instances for this router.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv3.RouterInstance'
+          x-field-uid: 2
+    Ospfv3.RouterInstance:
+      description: |-
+        A container of properties for an OSPFv3 router instance and its interfaces and route ranges.
       type: object
       required:
       - name
@@ -11007,11 +11026,6 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
-        router_id:
-          description: |-
-            OSPFv3 Router Id.
-          $ref: '#/components/schemas/Ospfv3.RouterId'
-          x-field-uid: 2
         lsa_retransmit_time:
           description: |-
             The time in seconds for LSA retransmission.
@@ -11019,7 +11033,7 @@ components:
           format: uint32
           default: 5
           minimum: 1
-          x-field-uid: 3
+          x-field-uid: 2
         lsa_refresh_time:
           description: |-
             The time in seconds required for LSA refresh.
@@ -11027,7 +11041,7 @@ components:
           format: uint32
           default: 1800
           minimum: 5
-          x-field-uid: 4
+          x-field-uid: 3
         inter_burst_lsu_interval:
           description: "The gap in miliseconds between each Flood Link State Update\
             \ burst. "
@@ -11035,35 +11049,35 @@ components:
           format: uint32
           default: 1000
           minimum: 1
-          x-field-uid: 5
+          x-field-uid: 4
         graceful_restart:
           $ref: '#/components/schemas/Ospfv3.GracefulRestart'
-          x-field-uid: 6
+          x-field-uid: 5
         store_lsa:
           description: |-
             Configuration for controlling storage of OSPFv3 learned LSAs received from the neighbors.
           type: boolean
           default: false
-          x-field-uid: 7
+          x-field-uid: 6
         capabilities:
           description: |-
             Optional container for OSPFv3 router capabilities.
           $ref: '#/components/schemas/Ospfv3.Capabilities'
-          x-field-uid: 8
+          x-field-uid: 7
         interfaces:
           description: |-
             List of OSPFv3 interfaces for this router.
           type: array
           items:
             $ref: '#/components/schemas/Ospfv3.Interface'
-          x-field-uid: 9
+          x-field-uid: 8
         v6_routes:
           description: |-
             Emulated OSPFv4 IPv6 routes.
           type: array
           items:
             $ref: '#/components/schemas/Ospfv3.V6RouteRange'
-          x-field-uid: 10
+          x-field-uid: 9
     Ospfv3.RouterId:
       description: |-
         Container for OSPFv3 Router ID configuration.
@@ -11072,7 +11086,8 @@ components:
         choice:
           description: |-
             IP address of Router ID for this emulated OSPFv3 router.
-            - auto: When first IPv4 address of the router is attempted to be assigned as Router ID.
+            - auto: When first IPv4 address on the router is attempted to be assigned as Router ID.
+                    If none are available for use, implementation should return an error.
             - custom: When, Router ID needs to be configured different from first IPv4 address of the router.
           type: string
           default: auto
@@ -11162,6 +11177,16 @@ components:
             Container for OSPFv3 optional interface properties.
           $ref: '#/components/schemas/Ospfv3Interface.Options'
           x-field-uid: 6
+        instance_id:
+          description: |-
+            Enables multiple instances of OSPF to be run over a single link.
+            Each protocol instance should be assigned a separate Instance ID;
+            the Instance ID has link-local significance only.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 255
+          x-field-uid: 7
     Ospfv3Interface.Area:
       description: "Container for OSPFv3 Area ID identifies the routing area to which\
         \ the host belongs.      "
@@ -11215,6 +11240,11 @@ components:
           enum:
           - broadcast
           - point_to_point
+        broadcast:
+          description: |-
+            Capabilities associated with network type broadcast.
+          $ref: '#/components/schemas/Ospfv3Interface.Broadcast'
+          x-field-uid: 2
     Ospfv3Interface.Capabilities:
       description: |-
         Contains OSPFv3 interface capabilities.
@@ -11247,23 +11277,13 @@ components:
           format: uint32
           default: 10
           x-field-uid: 3
-        priority:
-          description: "The Priority for (Backup) Designated Router election.    \
-            \      \t\nThis value is used in Hello packets for the Designated Router\
-            \ (DR) election process.\nThe default is 0, which indicates that the router\
-            \ will not participate in the DR election process."
-          type: integer
-          format: uint32
-          default: 0
-          maximum: 255
-          x-field-uid: 4
         validate_received_mtu:
           description: "If this is set to true, then the MTU received from the neighbor\
             \ during Database (DB) Exchange \nwill be validated, otherwise it will\
             \ be ignored.\n"
           type: boolean
           default: true
-          x-field-uid: 5
+          x-field-uid: 4
     Ospfv3Interface.Options:
       description: |-
         The Options field is present in OSPFv3 Hello packets, Database Description packets and all LSAs.
@@ -11302,6 +11322,21 @@ components:
           type: boolean
           default: true
           x-field-uid: 5
+    Ospfv3Interface.Broadcast:
+      description: |-
+        Container for capabilities associated with network type broadcast.
+      type: object
+      properties:
+        priority:
+          description: "The Priority for (Backup) Designated Router election.    \
+            \      \t\nThis value is used in Hello packets for the Designated Router\
+            \ (DR) election process.\nThe default is 0, which indicates that the router\
+            \ will not participate in the DR election process."
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 255
+          x-field-uid: 1
     Ospfv3.V6RouteRange:
       description: |-
         Emulated OSPFv3 IPv6 routes.
@@ -11374,11 +11409,27 @@ components:
         Container for the forwarding address of NSSA External route origin configuration.
       type: object
       properties:
+        capabilities:
+          description: |-
+            Configuration for capabilities associated with route origin.
+          $ref: '#/components/schemas/Ospfv3V6RR.Capabilities'
+          x-field-uid: 1
+    Ospfv3V6RR.Capabilities:
+      description: |-
+        Container for the capabilities associated with route origin.
+      type: object
+      properties:
+        propagation:
+          description: |-
+            If set, LSAs will be propagated between Areas.
+          type: boolean
+          default: false
+          x-field-uid: 1
         forwarding_address:
           description: |-
             Configuration for forwarding address of NSSA External route origin.
           $ref: '#/components/schemas/Ospfv3V6RR.ForwardingAddress'
-          x-field-uid: 1
+          x-field-uid: 2
     Ospfv3V6RR.ForwardingAddress:
       description: |-
         Container for the forwarding address of NSSA External route origin configuration.
@@ -15763,12 +15814,12 @@ components:
             The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
 
             x-constraint:
-            - /components/schemas/Device.Ospfv3/properties/name
+            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
           x-constraint:
-          - /components/schemas/Device.Ospfv3/properties/name
+          - /components/schemas/Ospfv3.RouterInstance/properties/name
           x-field-uid: 1
         state:
           description: "The desired state of OSPFv3 router. If the desired state is\
@@ -19662,12 +19713,12 @@ components:
             The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
 
             x-constraint:
-            - /components/schemas/Device.Ospfv3/properties/name
+            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
           x-constraint:
-          - /components/schemas/Device.Ospfv3/properties/name
+          - /components/schemas/Ospfv3.RouterInstance/properties/name
           x-field-uid: 1
         column_names:
           description: |-
@@ -22866,12 +22917,12 @@ components:
             The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
 
             x-constraint:
-            - /components/schemas/Device.Ospfv3Router/properties/name
+            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
           x-constraint:
-          - /components/schemas/Device.Ospfv3Router/properties/name
+          - /components/schemas/Ospfv3.RouterInstance/properties/name
           x-field-uid: 1
     Ospfv3Lsa.State:
       description: |-

@@ -13,10 +13,10 @@ import (
 // ***** Ospfv3V6RRNssaExternal *****
 type ospfv3V6RRNssaExternal struct {
 	validation
-	obj                     *otg.Ospfv3V6RRNssaExternal
-	marshaller              marshalOspfv3V6RRNssaExternal
-	unMarshaller            unMarshalOspfv3V6RRNssaExternal
-	forwardingAddressHolder Ospfv3V6RRForwardingAddress
+	obj                *otg.Ospfv3V6RRNssaExternal
+	marshaller         marshalOspfv3V6RRNssaExternal
+	unMarshaller       unMarshalOspfv3V6RRNssaExternal
+	capabilitiesHolder Ospfv3V6RRCapabilities
 }
 
 func NewOspfv3V6RRNssaExternal() Ospfv3V6RRNssaExternal {
@@ -244,7 +244,7 @@ func (obj *ospfv3V6RRNssaExternal) Clone() (Ospfv3V6RRNssaExternal, error) {
 }
 
 func (obj *ospfv3V6RRNssaExternal) setNil() {
-	obj.forwardingAddressHolder = nil
+	obj.capabilitiesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -272,41 +272,41 @@ type Ospfv3V6RRNssaExternal interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// ForwardingAddress returns Ospfv3V6RRForwardingAddress, set in Ospfv3V6RRNssaExternal.
-	// Ospfv3V6RRForwardingAddress is container for the forwarding address of NSSA External route origin configuration.
-	ForwardingAddress() Ospfv3V6RRForwardingAddress
-	// SetForwardingAddress assigns Ospfv3V6RRForwardingAddress provided by user to Ospfv3V6RRNssaExternal.
-	// Ospfv3V6RRForwardingAddress is container for the forwarding address of NSSA External route origin configuration.
-	SetForwardingAddress(value Ospfv3V6RRForwardingAddress) Ospfv3V6RRNssaExternal
-	// HasForwardingAddress checks if ForwardingAddress has been set in Ospfv3V6RRNssaExternal
-	HasForwardingAddress() bool
+	// Capabilities returns Ospfv3V6RRCapabilities, set in Ospfv3V6RRNssaExternal.
+	// Ospfv3V6RRCapabilities is container for the capabilities associated with route origin.
+	Capabilities() Ospfv3V6RRCapabilities
+	// SetCapabilities assigns Ospfv3V6RRCapabilities provided by user to Ospfv3V6RRNssaExternal.
+	// Ospfv3V6RRCapabilities is container for the capabilities associated with route origin.
+	SetCapabilities(value Ospfv3V6RRCapabilities) Ospfv3V6RRNssaExternal
+	// HasCapabilities checks if Capabilities has been set in Ospfv3V6RRNssaExternal
+	HasCapabilities() bool
 	setNil()
 }
 
-// Configuration for forwarding address of NSSA External route origin.
-// ForwardingAddress returns a Ospfv3V6RRForwardingAddress
-func (obj *ospfv3V6RRNssaExternal) ForwardingAddress() Ospfv3V6RRForwardingAddress {
-	if obj.obj.ForwardingAddress == nil {
-		obj.obj.ForwardingAddress = NewOspfv3V6RRForwardingAddress().msg()
+// Configuration for capabilities associated with route origin.
+// Capabilities returns a Ospfv3V6RRCapabilities
+func (obj *ospfv3V6RRNssaExternal) Capabilities() Ospfv3V6RRCapabilities {
+	if obj.obj.Capabilities == nil {
+		obj.obj.Capabilities = NewOspfv3V6RRCapabilities().msg()
 	}
-	if obj.forwardingAddressHolder == nil {
-		obj.forwardingAddressHolder = &ospfv3V6RRForwardingAddress{obj: obj.obj.ForwardingAddress}
+	if obj.capabilitiesHolder == nil {
+		obj.capabilitiesHolder = &ospfv3V6RRCapabilities{obj: obj.obj.Capabilities}
 	}
-	return obj.forwardingAddressHolder
+	return obj.capabilitiesHolder
 }
 
-// Configuration for forwarding address of NSSA External route origin.
-// ForwardingAddress returns a Ospfv3V6RRForwardingAddress
-func (obj *ospfv3V6RRNssaExternal) HasForwardingAddress() bool {
-	return obj.obj.ForwardingAddress != nil
+// Configuration for capabilities associated with route origin.
+// Capabilities returns a Ospfv3V6RRCapabilities
+func (obj *ospfv3V6RRNssaExternal) HasCapabilities() bool {
+	return obj.obj.Capabilities != nil
 }
 
-// Configuration for forwarding address of NSSA External route origin.
-// SetForwardingAddress sets the Ospfv3V6RRForwardingAddress value in the Ospfv3V6RRNssaExternal object
-func (obj *ospfv3V6RRNssaExternal) SetForwardingAddress(value Ospfv3V6RRForwardingAddress) Ospfv3V6RRNssaExternal {
+// Configuration for capabilities associated with route origin.
+// SetCapabilities sets the Ospfv3V6RRCapabilities value in the Ospfv3V6RRNssaExternal object
+func (obj *ospfv3V6RRNssaExternal) SetCapabilities(value Ospfv3V6RRCapabilities) Ospfv3V6RRNssaExternal {
 
-	obj.forwardingAddressHolder = nil
-	obj.obj.ForwardingAddress = value.msg()
+	obj.capabilitiesHolder = nil
+	obj.obj.Capabilities = value.msg()
 
 	return obj
 }
@@ -316,9 +316,9 @@ func (obj *ospfv3V6RRNssaExternal) validateObj(vObj *validation, set_default boo
 		obj.setDefault()
 	}
 
-	if obj.obj.ForwardingAddress != nil {
+	if obj.obj.Capabilities != nil {
 
-		obj.ForwardingAddress().validateObj(vObj, set_default)
+		obj.Capabilities().validateObj(vObj, set_default)
 	}
 
 }

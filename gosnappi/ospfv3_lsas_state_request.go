@@ -273,7 +273,7 @@ type Ospfv3LsasStateRequest interface {
 // The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
 //
 // x-constraint:
-// - /components/schemas/Device.Ospfv3Router/properties/name
+// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // RouterNames returns a []string
 func (obj *ospfv3LsasStateRequest) RouterNames() []string {
@@ -286,7 +286,7 @@ func (obj *ospfv3LsasStateRequest) RouterNames() []string {
 // The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
 //
 // x-constraint:
-// - /components/schemas/Device.Ospfv3Router/properties/name
+// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // SetRouterNames sets the []string value in the Ospfv3LsasStateRequest object
 func (obj *ospfv3LsasStateRequest) SetRouterNames(value []string) Ospfv3LsasStateRequest {

@@ -8203,44 +8203,52 @@ message Ospfv2V4RRExtdPrefixFlags {
 
 // Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 // 
-// A container of properties for an OSPFv3 router and its interfaces & Route Ranges.
+// A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
+
+  // OSPFv3 Router Id.
+  Ospfv3RouterId router_id = 1;
+
+  // List of OSPFv3 router instances for this router.
+  repeated Ospfv3RouterInstance instances = 2;
+}
+
+// A container of properties for an OSPFv3 router instance and its interfaces and route
+// ranges.
+message Ospfv3RouterInstance {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
   optional string name = 1;
 
-  // OSPFv3 Router Id.
-  Ospfv3RouterId router_id = 2;
-
   // The time in seconds for LSA retransmission.
   // default = 5
-  optional uint32 lsa_retransmit_time = 3;
+  optional uint32 lsa_retransmit_time = 2;
 
   // The time in seconds required for LSA refresh.
   // default = 1800
-  optional uint32 lsa_refresh_time = 4;
+  optional uint32 lsa_refresh_time = 3;
 
   // The gap in miliseconds between each Flood Link State Update burst.
   // default = 1000
-  optional uint32 inter_burst_lsu_interval = 5;
+  optional uint32 inter_burst_lsu_interval = 4;
 
   // Description missing in models
-  Ospfv3GracefulRestart graceful_restart = 6;
+  Ospfv3GracefulRestart graceful_restart = 5;
 
   // Configuration for controlling storage of OSPFv3 learned LSAs received from the neighbors.
   // default = False
-  optional bool store_lsa = 7;
+  optional bool store_lsa = 6;
 
   // Optional container for OSPFv3 router capabilities.
-  Ospfv3Capabilities capabilities = 8;
+  Ospfv3Capabilities capabilities = 7;
 
   // List of OSPFv3 interfaces for this router.
-  repeated Ospfv3Interface interfaces = 9;
+  repeated Ospfv3Interface interfaces = 8;
 
   // Emulated OSPFv4 IPv6 routes.
-  repeated Ospfv3V6RouteRange v6_routes = 10;
+  repeated Ospfv3V6RouteRange v6_routes = 9;
 }
 
 // Container for OSPFv3 Router ID configuration.
@@ -8254,8 +8262,9 @@ message Ospfv3RouterId {
     }
   }
   // IP address of Router ID for this emulated OSPFv3 router.
-  // - auto: When first IPv4 address of the router is attempted to be assigned as Router
+  // - auto: When first IPv4 address on the router is attempted to be assigned as Router
   // ID.
+  // If none are available for use, implementation should return an error.
   // - custom: When, Router ID needs to be configured different from first IPv4 address
   // of the router.
   // default = Choice.Enum.auto
@@ -8314,6 +8323,12 @@ message Ospfv3Interface {
 
   // Container for OSPFv3 optional interface properties.
   Ospfv3InterfaceOptions options = 6;
+
+  // Enables multiple instances of OSPF to be run over a single link.
+  // Each protocol instance should be assigned a separate Instance ID;
+  // the Instance ID has link-local significance only.
+  // default = 0
+  optional uint32 instance_id = 7;
 }
 
 // Container for OSPFv3 Area ID identifies the routing area to which the host belongs.
@@ -8357,6 +8372,9 @@ message Ospfv3InterfaceNetworkType {
   // Description missing in models
   // default = Choice.Enum.broadcast
   optional Choice.Enum choice = 1;
+
+  // Capabilities associated with network type broadcast.
+  Ospfv3InterfaceBroadcast broadcast = 2;
 }
 
 // Contains OSPFv3 interface capabilities.
@@ -8378,19 +8396,12 @@ message Ospfv3InterfaceCapabilities {
   // default = 10
   optional uint32 link_metric = 3;
 
-  // The Priority for (Backup) Designated Router election.
-  // This value is used in Hello packets for the Designated Router (DR) election process.
-  // The default is 0, which indicates that the router will not participate in the DR
-  // election process.
-  // default = 0
-  optional uint32 priority = 4;
-
   // If this is set to true, then the MTU received from the neighbor during Database (DB)
   // Exchange
   // will be validated, otherwise it will be ignored.
   // 
   // default = True
-  optional bool validate_received_mtu = 5;
+  optional bool validate_received_mtu = 4;
 }
 
 // The Options field is present in OSPFv3 Hello packets, Database Description packets
@@ -8423,6 +8434,17 @@ message Ospfv3InterfaceOptions {
   // V6: If set, the router/link should be included in IPv6 routing calculations.
   // default = True
   optional bool v6_bit = 5;
+}
+
+// Container for capabilities associated with network type broadcast.
+message Ospfv3InterfaceBroadcast {
+
+  // The Priority for (Backup) Designated Router election.
+  // This value is used in Hello packets for the Designated Router (DR) election process.
+  // The default is 0, which indicates that the router will not participate in the DR
+  // election process.
+  // default = 0
+  optional uint32 priority = 1;
 }
 
 // Emulated OSPFv3 IPv6 routes.
@@ -8472,8 +8494,19 @@ message Ospfv3V6RRRouteOrigin {
 // Container for the forwarding address of NSSA External route origin configuration.
 message Ospfv3V6RRNssaExternal {
 
+  // Configuration for capabilities associated with route origin.
+  Ospfv3V6RRCapabilities capabilities = 1;
+}
+
+// Container for the capabilities associated with route origin.
+message Ospfv3V6RRCapabilities {
+
+  // If set, LSAs will be propagated between Areas.
+  // default = False
+  optional bool propagation = 1;
+
   // Configuration for forwarding address of NSSA External route origin.
-  Ospfv3V6RRForwardingAddress forwarding_address = 1;
+  Ospfv3V6RRForwardingAddress forwarding_address = 2;
 }
 
 // Container for the forwarding address of NSSA External route origin configuration.
@@ -12042,7 +12075,7 @@ message StateProtocolOspfv3Routers {
   // list will control all OSPFv3 routers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ospfv3/properties/name
+  // - /components/schemas/Ospfv3.RouterInstance/properties/name
   // 
   repeated string router_names = 1;
 
@@ -14419,7 +14452,7 @@ message Ospfv3MetricsRequest {
   // for all OSPFv3 routers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ospfv3/properties/name
+  // - /components/schemas/Ospfv3.RouterInstance/properties/name
   // 
   repeated string router_names = 1;
 
@@ -16535,7 +16568,7 @@ message Ospfv3LsasStateRequest {
   // list will return results for all OSPFv3 routers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ospfv3Router/properties/name
+  // - /components/schemas/Ospfv3.RouterInstance/properties/name
   // 
   repeated string router_names = 1;
 }
