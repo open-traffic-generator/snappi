@@ -242,7 +242,7 @@ func (obj *isisLspPrefixAttributes) Clone() (IsisLspPrefixAttributes, error) {
 	return newObj, nil
 }
 
-// IsisLspPrefixAttributes is this contains the properties of ISIS Prefix attributes for  the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html
+// IsisLspPrefixAttributes is one bit value of ISIS Prefix attributes for the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html.
 type IsisLspPrefixAttributes interface {
 	Validation
 	// msg marshals IsisLspPrefixAttributes to protobuf object *otg.IsisLspPrefixAttributes
@@ -284,7 +284,11 @@ type IsisLspPrefixAttributes interface {
 	HasNFlag() bool
 }
 
-// External Prefix Flag (Bit 0)
+// External prefix flag (Bit 0). Set if the prefix has been
+// redistributed from another protocol. This includes
+// the case where multiple virtual routers are
+// supported and the source of the redistributed prefix
+// is another IS-IS instance.
 // XFlag returns a bool
 func (obj *isisLspPrefixAttributes) XFlag() bool {
 
@@ -292,13 +296,21 @@ func (obj *isisLspPrefixAttributes) XFlag() bool {
 
 }
 
-// External Prefix Flag (Bit 0)
+// External prefix flag (Bit 0). Set if the prefix has been
+// redistributed from another protocol. This includes
+// the case where multiple virtual routers are
+// supported and the source of the redistributed prefix
+// is another IS-IS instance.
 // XFlag returns a bool
 func (obj *isisLspPrefixAttributes) HasXFlag() bool {
 	return obj.obj.XFlag != nil
 }
 
-// External Prefix Flag (Bit 0)
+// External prefix flag (Bit 0). Set if the prefix has been
+// redistributed from another protocol. This includes
+// the case where multiple virtual routers are
+// supported and the source of the redistributed prefix
+// is another IS-IS instance.
 // SetXFlag sets the bool value in the IsisLspPrefixAttributes object
 func (obj *isisLspPrefixAttributes) SetXFlag(value bool) IsisLspPrefixAttributes {
 
@@ -306,7 +318,9 @@ func (obj *isisLspPrefixAttributes) SetXFlag(value bool) IsisLspPrefixAttributes
 	return obj
 }
 
-// Re-advertisement Flag (Bit 1)
+// Readvertisement flag (Bit 1). Set when the prefix has been
+// leaked from one level to another (upwards or
+// downwards).
 // RFlag returns a bool
 func (obj *isisLspPrefixAttributes) RFlag() bool {
 
@@ -314,13 +328,17 @@ func (obj *isisLspPrefixAttributes) RFlag() bool {
 
 }
 
-// Re-advertisement Flag (Bit 1)
+// Readvertisement flag (Bit 1). Set when the prefix has been
+// leaked from one level to another (upwards or
+// downwards).
 // RFlag returns a bool
 func (obj *isisLspPrefixAttributes) HasRFlag() bool {
 	return obj.obj.RFlag != nil
 }
 
-// Re-advertisement Flag (Bit 1)
+// Readvertisement flag (Bit 1). Set when the prefix has been
+// leaked from one level to another (upwards or
+// downwards).
 // SetRFlag sets the bool value in the IsisLspPrefixAttributes object
 func (obj *isisLspPrefixAttributes) SetRFlag(value bool) IsisLspPrefixAttributes {
 
@@ -328,7 +346,11 @@ func (obj *isisLspPrefixAttributes) SetRFlag(value bool) IsisLspPrefixAttributes
 	return obj
 }
 
-// Node Flag (Bit 2)
+// Node Flag (Bit 2).
+// Set when the prefix identifies the
+// advertising router, i.e., the prefix is a host
+// prefix advertising  a globally reachable address
+// typically associated with a loopback address.
 // NFlag returns a bool
 func (obj *isisLspPrefixAttributes) NFlag() bool {
 
@@ -336,13 +358,21 @@ func (obj *isisLspPrefixAttributes) NFlag() bool {
 
 }
 
-// Node Flag (Bit 2)
+// Node Flag (Bit 2).
+// Set when the prefix identifies the
+// advertising router, i.e., the prefix is a host
+// prefix advertising  a globally reachable address
+// typically associated with a loopback address.
 // NFlag returns a bool
 func (obj *isisLspPrefixAttributes) HasNFlag() bool {
 	return obj.obj.NFlag != nil
 }
 
-// Node Flag (Bit 2)
+// Node Flag (Bit 2).
+// Set when the prefix identifies the
+// advertising router, i.e., the prefix is a host
+// prefix advertising  a globally reachable address
+// typically associated with a loopback address.
 // SetNFlag sets the bool value in the IsisLspPrefixAttributes object
 func (obj *isisLspPrefixAttributes) SetNFlag(value bool) IsisLspPrefixAttributes {
 

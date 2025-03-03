@@ -13,16 +13,17 @@ import (
 // ***** DeviceIsisRouter *****
 type deviceIsisRouter struct {
 	validation
-	obj              *otg.DeviceIsisRouter
-	marshaller       marshalDeviceIsisRouter
-	unMarshaller     unMarshalDeviceIsisRouter
-	instanceHolder   DeviceIsisMultiInstance
-	interfacesHolder DeviceIsisRouterIsisInterfaceIter
-	basicHolder      IsisBasic
-	advancedHolder   IsisAdvanced
-	routerAuthHolder IsisAuthentication
-	v4RoutesHolder   DeviceIsisRouterIsisV4RouteRangeIter
-	v6RoutesHolder   DeviceIsisRouterIsisV6RouteRangeIter
+	obj                  *otg.DeviceIsisRouter
+	marshaller           marshalDeviceIsisRouter
+	unMarshaller         unMarshalDeviceIsisRouter
+	instanceHolder       DeviceIsisMultiInstance
+	interfacesHolder     DeviceIsisRouterIsisInterfaceIter
+	basicHolder          IsisBasic
+	advancedHolder       IsisAdvanced
+	routerAuthHolder     IsisAuthentication
+	v4RoutesHolder       DeviceIsisRouterIsisV4RouteRangeIter
+	v6RoutesHolder       DeviceIsisRouterIsisV6RouteRangeIter
+	segmentRoutingHolder IsisSegmentRouting
 }
 
 func NewDeviceIsisRouter() DeviceIsisRouter {
@@ -257,6 +258,7 @@ func (obj *deviceIsisRouter) setNil() {
 	obj.routerAuthHolder = nil
 	obj.v4RoutesHolder = nil
 	obj.v6RoutesHolder = nil
+	obj.segmentRoutingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -330,6 +332,30 @@ type DeviceIsisRouter interface {
 	Name() string
 	// SetName assigns string provided by user to DeviceIsisRouter
 	SetName(value string) DeviceIsisRouter
+	// SegmentRouting returns IsisSegmentRouting, set in DeviceIsisRouter.
+	// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
+	// called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).
+	// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as per the state of the IGP topology.
+	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
+	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
+	// These segments act as topological sub-paths that can be combined together to form the required path.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+	// An implementation may advertise Router Capability with default values if a user does not even set the properties
+	// of Router Capability and Segment Routing Capability.
+	SegmentRouting() IsisSegmentRouting
+	// SetSegmentRouting assigns IsisSegmentRouting provided by user to DeviceIsisRouter.
+	// IsisSegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP topologies by encoding paths as sequences of topological sub-paths,
+	// called "segments". These segments are advertised by the link-state routing protocols (IS-IS and OSPF).
+	// Prefix segments represent an ECMP-aware shortest path to a prefix (or a node), as per the state of the IGP topology.
+	// Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
+	// A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
+	// These segments act as topological sub-paths that can be combined together to form the required path.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+	// An implementation may advertise Router Capability with default values if a user does not even set the properties
+	// of Router Capability and Segment Routing Capability.
+	SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter
+	// HasSegmentRouting checks if SegmentRouting has been set in DeviceIsisRouter
+	HasSegmentRouting() bool
 	setNil()
 }
 
@@ -738,6 +764,34 @@ func (obj *deviceIsisRouter) SetName(value string) DeviceIsisRouter {
 	return obj
 }
 
+// Optional Segment Routing (SR).
+// SegmentRouting returns a IsisSegmentRouting
+func (obj *deviceIsisRouter) SegmentRouting() IsisSegmentRouting {
+	if obj.obj.SegmentRouting == nil {
+		obj.obj.SegmentRouting = NewIsisSegmentRouting().msg()
+	}
+	if obj.segmentRoutingHolder == nil {
+		obj.segmentRoutingHolder = &isisSegmentRouting{obj: obj.obj.SegmentRouting}
+	}
+	return obj.segmentRoutingHolder
+}
+
+// Optional Segment Routing (SR).
+// SegmentRouting returns a IsisSegmentRouting
+func (obj *deviceIsisRouter) HasSegmentRouting() bool {
+	return obj.obj.SegmentRouting != nil
+}
+
+// Optional Segment Routing (SR).
+// SetSegmentRouting sets the IsisSegmentRouting value in the DeviceIsisRouter object
+func (obj *deviceIsisRouter) SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter {
+
+	obj.segmentRoutingHolder = nil
+	obj.obj.SegmentRouting = value.msg()
+
+	return obj
+}
+
 func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -822,6 +876,12 @@ func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceIsisRouter")
 	}
+
+	if obj.obj.SegmentRouting != nil {
+
+		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *deviceIsisRouter) setDefault() {
