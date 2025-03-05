@@ -13,9 +13,10 @@ import (
 // ***** RoCEv2FlowSettings *****
 type roCEv2FlowSettings struct {
 	validation
-	obj          *otg.RoCEv2FlowSettings
-	marshaller   marshalRoCEv2FlowSettings
-	unMarshaller unMarshalRoCEv2FlowSettings
+	obj                 *otg.RoCEv2FlowSettings
+	marshaller          marshalRoCEv2FlowSettings
+	unMarshaller        unMarshalRoCEv2FlowSettings
+	dcqcnSettingaHolder RoCEv2DCQCN
 }
 
 func NewRoCEv2FlowSettings() RoCEv2FlowSettings {
@@ -29,7 +30,7 @@ func (obj *roCEv2FlowSettings) msg() *otg.RoCEv2FlowSettings {
 }
 
 func (obj *roCEv2FlowSettings) setMsg(msg *otg.RoCEv2FlowSettings) RoCEv2FlowSettings {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalroCEv2FlowSettings) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalroCEv2FlowSettings) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalroCEv2FlowSettings) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *roCEv2FlowSettings) Clone() (RoCEv2FlowSettings, error) {
 	return newObj, nil
 }
 
+func (obj *roCEv2FlowSettings) setNil() {
+	obj.dcqcnSettingaHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // RoCEv2FlowSettings is this configuration allows you to configure RDMA flow over the same QP number from same source and destination.
 type RoCEv2FlowSettings interface {
 	Validation
@@ -264,6 +272,12 @@ type RoCEv2FlowSettings interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// ConnectionType returns RoCEv2FlowSettingsConnectionTypeEnum, set in RoCEv2FlowSettings
+	ConnectionType() RoCEv2FlowSettingsConnectionTypeEnum
+	// SetConnectionType assigns RoCEv2FlowSettingsConnectionTypeEnum provided by user to RoCEv2FlowSettings
+	SetConnectionType(value RoCEv2FlowSettingsConnectionTypeEnum) RoCEv2FlowSettings
+	// HasConnectionType checks if ConnectionType has been set in RoCEv2FlowSettings
+	HasConnectionType() bool
 	// SourceQpNumber returns uint32, set in RoCEv2FlowSettings.
 	SourceQpNumber() uint32
 	// SetSourceQpNumber assigns uint32 provided by user to RoCEv2FlowSettings
@@ -312,6 +326,59 @@ type RoCEv2FlowSettings interface {
 	SetMessageSizeUnit(value RoCEv2FlowSettingsMessageSizeUnitEnum) RoCEv2FlowSettings
 	// HasMessageSizeUnit checks if MessageSizeUnit has been set in RoCEv2FlowSettings
 	HasMessageSizeUnit() bool
+	// DcqcnSettinga returns RoCEv2DCQCN, set in RoCEv2FlowSettings.
+	// RoCEv2DCQCN is roCEv2 DCQCN Settings.
+	DcqcnSettinga() RoCEv2DCQCN
+	// SetDcqcnSettinga assigns RoCEv2DCQCN provided by user to RoCEv2FlowSettings.
+	// RoCEv2DCQCN is roCEv2 DCQCN Settings.
+	SetDcqcnSettinga(value RoCEv2DCQCN) RoCEv2FlowSettings
+	// HasDcqcnSettinga checks if DcqcnSettinga has been set in RoCEv2FlowSettings
+	HasDcqcnSettinga() bool
+	setNil()
+}
+
+type RoCEv2FlowSettingsConnectionTypeEnum string
+
+// Enum of ConnectionType on RoCEv2FlowSettings
+var RoCEv2FlowSettingsConnectionType = struct {
+	RELIABLE_CONNECTION          RoCEv2FlowSettingsConnectionTypeEnum
+	RELIABLE_DATAGRAM            RoCEv2FlowSettingsConnectionTypeEnum
+	EXTENDED_RELIABLE_CONNECTION RoCEv2FlowSettingsConnectionTypeEnum
+	UNRELIABLE_DATAGRAM          RoCEv2FlowSettingsConnectionTypeEnum
+	UNRELIABLE_CONNECTION        RoCEv2FlowSettingsConnectionTypeEnum
+	RAW_IPV6_DATAGRAM            RoCEv2FlowSettingsConnectionTypeEnum
+	RAW_ETHERNET_DATAGRAM        RoCEv2FlowSettingsConnectionTypeEnum
+}{
+	RELIABLE_CONNECTION:          RoCEv2FlowSettingsConnectionTypeEnum("reliable_connection"),
+	RELIABLE_DATAGRAM:            RoCEv2FlowSettingsConnectionTypeEnum("reliable_datagram"),
+	EXTENDED_RELIABLE_CONNECTION: RoCEv2FlowSettingsConnectionTypeEnum("extended_reliable_connection"),
+	UNRELIABLE_DATAGRAM:          RoCEv2FlowSettingsConnectionTypeEnum("unreliable_datagram"),
+	UNRELIABLE_CONNECTION:        RoCEv2FlowSettingsConnectionTypeEnum("unreliable_connection"),
+	RAW_IPV6_DATAGRAM:            RoCEv2FlowSettingsConnectionTypeEnum("raw_ipv6_datagram"),
+	RAW_ETHERNET_DATAGRAM:        RoCEv2FlowSettingsConnectionTypeEnum("raw_ethernet_datagram"),
+}
+
+func (obj *roCEv2FlowSettings) ConnectionType() RoCEv2FlowSettingsConnectionTypeEnum {
+	return RoCEv2FlowSettingsConnectionTypeEnum(obj.obj.ConnectionType.Enum().String())
+}
+
+// There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
+// ConnectionType returns a string
+func (obj *roCEv2FlowSettings) HasConnectionType() bool {
+	return obj.obj.ConnectionType != nil
+}
+
+func (obj *roCEv2FlowSettings) SetConnectionType(value RoCEv2FlowSettingsConnectionTypeEnum) RoCEv2FlowSettings {
+	intValue, ok := otg.RoCEv2FlowSettings_ConnectionType_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on RoCEv2FlowSettingsConnectionTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.RoCEv2FlowSettings_ConnectionType_Enum(intValue)
+	obj.obj.ConnectionType = &enumValue
+
+	return obj
 }
 
 // Configure the QP range.
@@ -526,6 +593,34 @@ func (obj *roCEv2FlowSettings) SetMessageSizeUnit(value RoCEv2FlowSettingsMessag
 	return obj
 }
 
+// description is TBD
+// DcqcnSettinga returns a RoCEv2DCQCN
+func (obj *roCEv2FlowSettings) DcqcnSettinga() RoCEv2DCQCN {
+	if obj.obj.DcqcnSettinga == nil {
+		obj.obj.DcqcnSettinga = NewRoCEv2DCQCN().msg()
+	}
+	if obj.dcqcnSettingaHolder == nil {
+		obj.dcqcnSettingaHolder = &roCEv2DCQCN{obj: obj.obj.DcqcnSettinga}
+	}
+	return obj.dcqcnSettingaHolder
+}
+
+// description is TBD
+// DcqcnSettinga returns a RoCEv2DCQCN
+func (obj *roCEv2FlowSettings) HasDcqcnSettinga() bool {
+	return obj.obj.DcqcnSettinga != nil
+}
+
+// description is TBD
+// SetDcqcnSettinga sets the RoCEv2DCQCN value in the RoCEv2FlowSettings object
+func (obj *roCEv2FlowSettings) SetDcqcnSettinga(value RoCEv2DCQCN) RoCEv2FlowSettings {
+
+	obj.dcqcnSettingaHolder = nil
+	obj.obj.DcqcnSettinga = value.msg()
+
+	return obj
+}
+
 func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -588,6 +683,11 @@ func (obj *roCEv2FlowSettings) validateObj(vObj *validation, set_default bool) {
 				fmt.Sprintf("0 <= RoCEv2FlowSettings.MessageSize <= 65535 but Got %d", *obj.obj.MessageSize))
 		}
 
+	}
+
+	if obj.obj.DcqcnSettinga != nil {
+
+		obj.DcqcnSettinga().validateObj(vObj, set_default)
 	}
 
 }

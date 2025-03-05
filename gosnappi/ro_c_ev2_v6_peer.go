@@ -272,10 +272,10 @@ type RoCEv2V6Peer interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// NumOfQps returns int32, set in RoCEv2V6Peer.
-	NumOfQps() int32
-	// SetNumOfQps assigns int32 provided by user to RoCEv2V6Peer
-	SetNumOfQps(value int32) RoCEv2V6Peer
+	// NumOfQps returns uint32, set in RoCEv2V6Peer.
+	NumOfQps() uint32
+	// SetNumOfQps assigns uint32 provided by user to RoCEv2V6Peer
+	SetNumOfQps(value uint32) RoCEv2V6Peer
 	// DestinationIpAddress returns string, set in RoCEv2V6Peer.
 	DestinationIpAddress() string
 	// SetDestinationIpAddress assigns string provided by user to RoCEv2V6Peer
@@ -284,24 +284,6 @@ type RoCEv2V6Peer interface {
 	IbMtu() uint32
 	// SetIbMtu assigns uint32 provided by user to RoCEv2V6Peer
 	SetIbMtu(value uint32) RoCEv2V6Peer
-	// ConnectionType returns RoCEv2V6PeerConnectionTypeEnum, set in RoCEv2V6Peer
-	ConnectionType() RoCEv2V6PeerConnectionTypeEnum
-	// SetConnectionType assigns RoCEv2V6PeerConnectionTypeEnum provided by user to RoCEv2V6Peer
-	SetConnectionType(value RoCEv2V6PeerConnectionTypeEnum) RoCEv2V6Peer
-	// HasConnectionType checks if ConnectionType has been set in RoCEv2V6Peer
-	HasConnectionType() bool
-	// TrafficBurstMode returns RoCEv2V6PeerTrafficBurstModeEnum, set in RoCEv2V6Peer
-	TrafficBurstMode() RoCEv2V6PeerTrafficBurstModeEnum
-	// SetTrafficBurstMode assigns RoCEv2V6PeerTrafficBurstModeEnum provided by user to RoCEv2V6Peer
-	SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeEnum) RoCEv2V6Peer
-	// HasTrafficBurstMode checks if TrafficBurstMode has been set in RoCEv2V6Peer
-	HasTrafficBurstMode() bool
-	// TrafficBurstCount returns uint32, set in RoCEv2V6Peer.
-	TrafficBurstCount() uint32
-	// SetTrafficBurstCount assigns uint32 provided by user to RoCEv2V6Peer
-	SetTrafficBurstCount(value uint32) RoCEv2V6Peer
-	// HasTrafficBurstCount checks if TrafficBurstCount has been set in RoCEv2V6Peer
-	HasTrafficBurstCount() bool
 	// Name returns string, set in RoCEv2V6Peer.
 	Name() string
 	// SetName assigns string provided by user to RoCEv2V6Peer
@@ -314,16 +296,16 @@ type RoCEv2V6Peer interface {
 }
 
 // Maximum number of QP per Endpoint.
-// NumOfQps returns a int32
-func (obj *roCEv2V6Peer) NumOfQps() int32 {
+// NumOfQps returns a uint32
+func (obj *roCEv2V6Peer) NumOfQps() uint32 {
 
 	return *obj.obj.NumOfQps
 
 }
 
 // Maximum number of QP per Endpoint.
-// SetNumOfQps sets the int32 value in the RoCEv2V6Peer object
-func (obj *roCEv2V6Peer) SetNumOfQps(value int32) RoCEv2V6Peer {
+// SetNumOfQps sets the uint32 value in the RoCEv2V6Peer object
+func (obj *roCEv2V6Peer) SetNumOfQps(value uint32) RoCEv2V6Peer {
 
 	obj.obj.NumOfQps = &value
 	return obj
@@ -358,106 +340,6 @@ func (obj *roCEv2V6Peer) IbMtu() uint32 {
 func (obj *roCEv2V6Peer) SetIbMtu(value uint32) RoCEv2V6Peer {
 
 	obj.obj.IbMtu = &value
-	return obj
-}
-
-type RoCEv2V6PeerConnectionTypeEnum string
-
-// Enum of ConnectionType on RoCEv2V6Peer
-var RoCEv2V6PeerConnectionType = struct {
-	RELIABLE_CONNECTION          RoCEv2V6PeerConnectionTypeEnum
-	RELIABLE_DATAGRAM            RoCEv2V6PeerConnectionTypeEnum
-	EXTENDED_RELIABLE_CONNECTION RoCEv2V6PeerConnectionTypeEnum
-	UNRELIABLE_DATAGRAM          RoCEv2V6PeerConnectionTypeEnum
-	UNRELIABLE_CONNECTION        RoCEv2V6PeerConnectionTypeEnum
-	RAW_IPV6_DATAGRAM            RoCEv2V6PeerConnectionTypeEnum
-	RAW_ETHERNET_DATAGRAM        RoCEv2V6PeerConnectionTypeEnum
-}{
-	RELIABLE_CONNECTION:          RoCEv2V6PeerConnectionTypeEnum("reliable_connection"),
-	RELIABLE_DATAGRAM:            RoCEv2V6PeerConnectionTypeEnum("reliable_datagram"),
-	EXTENDED_RELIABLE_CONNECTION: RoCEv2V6PeerConnectionTypeEnum("extended_reliable_connection"),
-	UNRELIABLE_DATAGRAM:          RoCEv2V6PeerConnectionTypeEnum("unreliable_datagram"),
-	UNRELIABLE_CONNECTION:        RoCEv2V6PeerConnectionTypeEnum("unreliable_connection"),
-	RAW_IPV6_DATAGRAM:            RoCEv2V6PeerConnectionTypeEnum("raw_ipv6_datagram"),
-	RAW_ETHERNET_DATAGRAM:        RoCEv2V6PeerConnectionTypeEnum("raw_ethernet_datagram"),
-}
-
-func (obj *roCEv2V6Peer) ConnectionType() RoCEv2V6PeerConnectionTypeEnum {
-	return RoCEv2V6PeerConnectionTypeEnum(obj.obj.ConnectionType.Enum().String())
-}
-
-// There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
-// ConnectionType returns a string
-func (obj *roCEv2V6Peer) HasConnectionType() bool {
-	return obj.obj.ConnectionType != nil
-}
-
-func (obj *roCEv2V6Peer) SetConnectionType(value RoCEv2V6PeerConnectionTypeEnum) RoCEv2V6Peer {
-	intValue, ok := otg.RoCEv2V6Peer_ConnectionType_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on RoCEv2V6PeerConnectionTypeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.RoCEv2V6Peer_ConnectionType_Enum(intValue)
-	obj.obj.ConnectionType = &enumValue
-
-	return obj
-}
-
-type RoCEv2V6PeerTrafficBurstModeEnum string
-
-// Enum of TrafficBurstMode on RoCEv2V6Peer
-var RoCEv2V6PeerTrafficBurstMode = struct {
-	CONTINUOUS RoCEv2V6PeerTrafficBurstModeEnum
-	FIXED      RoCEv2V6PeerTrafficBurstModeEnum
-}{
-	CONTINUOUS: RoCEv2V6PeerTrafficBurstModeEnum("Continuous"),
-	FIXED:      RoCEv2V6PeerTrafficBurstModeEnum("Fixed"),
-}
-
-func (obj *roCEv2V6Peer) TrafficBurstMode() RoCEv2V6PeerTrafficBurstModeEnum {
-	return RoCEv2V6PeerTrafficBurstModeEnum(obj.obj.TrafficBurstMode.Enum().String())
-}
-
-// Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-// TrafficBurstMode returns a string
-func (obj *roCEv2V6Peer) HasTrafficBurstMode() bool {
-	return obj.obj.TrafficBurstMode != nil
-}
-
-func (obj *roCEv2V6Peer) SetTrafficBurstMode(value RoCEv2V6PeerTrafficBurstModeEnum) RoCEv2V6Peer {
-	intValue, ok := otg.RoCEv2V6Peer_TrafficBurstMode_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on RoCEv2V6PeerTrafficBurstModeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.RoCEv2V6Peer_TrafficBurstMode_Enum(intValue)
-	obj.obj.TrafficBurstMode = &enumValue
-
-	return obj
-}
-
-// Burst Count to applied in RoCEv2 Traffic item.
-// TrafficBurstCount returns a uint32
-func (obj *roCEv2V6Peer) TrafficBurstCount() uint32 {
-
-	return *obj.obj.TrafficBurstCount
-
-}
-
-// Burst Count to applied in RoCEv2 Traffic item.
-// TrafficBurstCount returns a uint32
-func (obj *roCEv2V6Peer) HasTrafficBurstCount() bool {
-	return obj.obj.TrafficBurstCount != nil
-}
-
-// Burst Count to applied in RoCEv2 Traffic item.
-// SetTrafficBurstCount sets the uint32 value in the RoCEv2V6Peer object
-func (obj *roCEv2V6Peer) SetTrafficBurstCount(value uint32) RoCEv2V6Peer {
-
-	obj.obj.TrafficBurstCount = &value
 	return obj
 }
 
@@ -595,16 +477,6 @@ func (obj *roCEv2V6Peer) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= RoCEv2V6Peer.IbMtu <= 14000 but Got %d", *obj.obj.IbMtu))
-		}
-
-	}
-
-	if obj.obj.TrafficBurstCount != nil {
-
-		if *obj.obj.TrafficBurstCount > 16777216 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= RoCEv2V6Peer.TrafficBurstCount <= 16777216 but Got %d", *obj.obj.TrafficBurstCount))
 		}
 
 	}

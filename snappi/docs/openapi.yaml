@@ -284,19 +284,26 @@ components:
           items:
             $ref: '#/components/schemas/Flow'
           x-field-uid: 6
+        stateful_flows:
+          description: |-
+            stateful flows currently on RoCEv2 present.
+          type: array
+          items:
+            $ref: '#/components/schemas/StatefulFlow'
+          x-field-uid: 7
         events:
           $ref: '#/components/schemas/Event'
-          x-field-uid: 7
+          x-field-uid: 8
         options:
           $ref: '#/components/schemas/Config.Options'
-          x-field-uid: 8
+          x-field-uid: 9
         lldp:
           description: |-
             LLDP protocol that will be configured on traffic generator.
           type: array
           items:
             $ref: '#/components/schemas/Lldp'
-          x-field-uid: 9
+          x-field-uid: 10
     Config.Options:
       description: |-
         Global configuration options.
@@ -10577,6 +10584,7 @@ components:
           description: |-
             Maximum number of QP per Endpoint.
           type: integer
+          format: uint32
         destination_ip_address:
           x-field-uid: 2
           description: |-
@@ -10590,62 +10598,13 @@ components:
           format: uint32
           minimum: 0
           maximum: 14000
-        connection_type:
-          x-field-uid: 4
-          description: |-
-            There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
-          type: string
-          x-enum:
-            reliable_connection:
-              x-field-uid: 1
-            reliable_datagram:
-              x-field-uid: 2
-            extended_reliable_connection:
-              x-field-uid: 3
-            unreliable_datagram:
-              x-field-uid: 4
-            unreliable_connection:
-              x-field-uid: 5
-            raw_ipv6_datagram:
-              x-field-uid: 6
-            raw_ethernet_datagram:
-              x-field-uid: 7
-          enum:
-          - reliable_connection
-          - reliable_datagram
-          - extended_reliable_connection
-          - unreliable_datagram
-          - unreliable_connection
-          - raw_ipv6_datagram
-          - raw_ethernet_datagram
-        traffic_burst_mode:
-          x-field-uid: 5
-          description: |-
-            Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
-          type: string
-          x-enum:
-            Continuous:
-              x-field-uid: 1
-            Fixed:
-              x-field-uid: 2
-          enum:
-          - Continuous
-          - Fixed
-        traffic_burst_count:
-          x-field-uid: 6
-          description: |-
-            Burst Count to applied in RoCEv2 Traffic item.
-          type: integer
-          format: uint32
-          minimum: 0
-          maximum: 16777216
         name:
-          x-field-uid: 7
+          x-field-uid: 4
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 8
+          x-field-uid: 5
           type: array
           description: |-
             This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
@@ -10680,133 +10639,7 @@ components:
         This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
       type: object
       properties:
-        source_qp_number:
-          description: |-
-            Configure the QP range.
-          type: integer
-          format: uint32
-          default: 2
-          minimum: 2
-          maximum: 33554431
-          x-field-uid: 1
-        dscp:
-          description: |-
-            DSCP value for this flow
-          type: integer
-          format: uint32
-          default: 24
-          minimum: 0
-          maximum: 63
-          x-field-uid: 2
-        ecn:
-          description: |-
-            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 3
-          x-field-uid: 3
-        udp_source_port:
-          description: |-
-            UDP source port number for this flow.
-          type: integer
-          format: uint32
-          default: 49152
-          minimum: 0
-          maximum: 65535
-          x-field-uid: 4
-        rocev2_verb:
-          description: |-
-            RoCEv2 Verb, Available options are: none, write, wrtie_with_immediate, send, send_with_immediate and read: The corresponding flow will not take part in traffic.
-          type: string
-          default: write
-          x-enum:
-            none:
-              x-field-uid: 1
-            write:
-              x-field-uid: 2
-            write_with_immediate:
-              x-field-uid: 3
-            send:
-              x-field-uid: 4
-            send_with_immediate:
-              x-field-uid: 5
-            read:
-              x-field-uid: 6
-          x-field-uid: 5
-          enum:
-          - none
-          - write
-          - write_with_immediate
-          - send
-          - send_with_immediate
-          - read
-        immediate_data:
-          description: |-
-            Immediate Data field required for SEND/WRITE with immediate verb.
-          type: string
-          format: hex
-          default: '00000000'
-          x-field-uid: 6
-        message_size:
-          description: |-
-            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 65535
-          x-field-uid: 7
-        message_size_unit:
-          description: |-
-            Unit of the transfer message size. Available options are Bytes, KB, MB.
-          type: string
-          default: MB
-          x-enum:
-            Byte:
-              x-field-uid: 1
-            KB:
-              x-field-uid: 2
-            MB:
-              x-field-uid: 3
-            GB:
-              x-field-uid: 4
-          x-field-uid: 8
-          enum:
-          - Byte
-          - KB
-          - MB
-          - GB
-    RoCEv2.V6Peer:
-      description: |-
-        Configuration for RoCEv2 IPv6 peer settings.
-      type: object
-      required:
-      - num_of_qps
-      - destination_ip_address
-      - ib_mtu
-      properties:
-        num_of_qps:
-          x-field-uid: 1
-          description: |-
-            Maximum number of QP per Endpoint.
-          type: integer
-        destination_ip_address:
-          x-field-uid: 2
-          description: |-
-            Specify the IP address of External NIC i.e Destination Point IP Address.
-          type: string
-        ib_mtu:
-          x-field-uid: 3
-          description: |-
-            InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
-          type: integer
-          format: uint32
-          minimum: 0
-          maximum: 14000
         connection_type:
-          x-field-uid: 4
           description: |-
             There are multiple connection types. Valid values are :  Reliable Connection (RC), Reliable Datagram (RD), Extended Reliable Connection (XRC), Unreliable Datagram (UD),  Unreliable Connection (UC), Raw IPv6 Datagram, Raw Ethertype Datagram.
           type: string
@@ -10825,6 +10658,7 @@ components:
               x-field-uid: 6
             raw_ethernet_datagram:
               x-field-uid: 7
+          x-field-uid: 1
           enum:
           - reliable_connection
           - reliable_datagram
@@ -10833,34 +10667,236 @@ components:
           - unreliable_connection
           - raw_ipv6_datagram
           - raw_ethernet_datagram
-        traffic_burst_mode:
+        source_qp_number:
+          description: |-
+            Configure the QP range.
+          type: integer
+          format: uint32
+          default: 2
+          minimum: 2
+          maximum: 33554431
+          x-field-uid: 2
+        dscp:
+          description: |-
+            DSCP value for this flow
+          type: integer
+          format: uint32
+          default: 24
+          minimum: 0
+          maximum: 63
+          x-field-uid: 3
+        ecn:
+          description: |-
+            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 0
+          maximum: 3
+          x-field-uid: 4
+        udp_source_port:
+          description: |-
+            UDP source port number for this flow.
+          type: integer
+          format: uint32
+          default: 49152
+          minimum: 0
+          maximum: 65535
           x-field-uid: 5
+        rocev2_verb:
           description: |-
-            Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+            RoCEv2 Verb, Available options are: none, write, wrtie_with_immediate, send, send_with_immediate and read: The corresponding flow will not take part in traffic.
           type: string
+          default: write
           x-enum:
-            Continuous:
+            none:
               x-field-uid: 1
-            Fixed:
+            write:
               x-field-uid: 2
-          enum:
-          - Continuous
-          - Fixed
-        traffic_burst_count:
+            write_with_immediate:
+              x-field-uid: 3
+            send:
+              x-field-uid: 4
+            send_with_immediate:
+              x-field-uid: 5
+            read:
+              x-field-uid: 6
           x-field-uid: 6
+          enum:
+          - none
+          - write
+          - write_with_immediate
+          - send
+          - send_with_immediate
+          - read
+        immediate_data:
           description: |-
-            Burst Count to applied in RoCEv2 Traffic item.
+            Immediate Data field required for SEND/WRITE with immediate verb.
+          type: string
+          format: hex
+          default: '00000000'
+          x-field-uid: 7
+        message_size:
+          description: |-
+            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 0
+          maximum: 65535
+          x-field-uid: 8
+        message_size_unit:
+          description: |-
+            Unit of the transfer message size. Available options are Bytes, KB, MB.
+          type: string
+          default: MB
+          x-enum:
+            Byte:
+              x-field-uid: 1
+            KB:
+              x-field-uid: 2
+            MB:
+              x-field-uid: 3
+            GB:
+              x-field-uid: 4
+          x-field-uid: 9
+          enum:
+          - Byte
+          - KB
+          - MB
+          - GB
+        dcqcn_settinga:
+          $ref: '#/components/schemas/RoCEv2.DCQCN'
+          x-field-uid: 10
+    RoCEv2.DCQCN:
+      description: |-
+        RoCEv2 DCQCN Settings.
+      type: object
+      properties:
+        alpha_g:
+          description: |-
+            Alpha G.
+          type: integer
+          format: uint64
+          x-field-uid: 1
+        initial_alpha:
+          description: |-
+            Initial Alpha.
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        alpha_update_period:
+          description: |-
+            Alpha Update period in microseconds.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        rate_reduction_time_period:
+          description: |-
+            Rate reduction time period in microseconds.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        initial_rate_after_first_cnp:
+          description: |-
+            initial rate after first CNP in Percentage.
           type: integer
           format: uint32
           minimum: 0
-          maximum: 16777216
-        name:
+          maximum: 100
+          x-field-uid: 5
+        minimum_rate_limmit:
+          description: |-
+            Minimum Rate Limit in Percentage.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 100
+          x-field-uid: 6
+        maximum_rate_decrement_at_time:
+          description: |-
+            Maximum rate decrement at time in Percentage.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 100
           x-field-uid: 7
+        clamp_target_rate:
+          description: |-
+            Clamp Target rate.
+          type: boolean
+          x-field-uid: 8
+        rate_increment_time:
+          description: |-
+            Rate increment time period in microseconds.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        rate_increment_byte_counter:
+          description: |-
+            Rate increment byte counter in uint 64 bytes.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        rate_increment_threshold:
+          description: |-
+            Rate increment threshold.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 31
+          x-field-uid: 11
+        additive_increment_rate:
+          description: |-
+            additive increment rate in Percentage.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 100
+          x-field-uid: 12
+        hyper_increment_rate:
+          description: |-
+            hyper increment rate in Percentage.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 100
+          x-field-uid: 13
+    RoCEv2.V6Peer:
+      description: |-
+        Configuration for RoCEv2 IPv6 peer settings.
+      type: object
+      required:
+      - num_of_qps
+      - destination_ip_address
+      - ib_mtu
+      properties:
+        num_of_qps:
+          x-field-uid: 1
+          description: |-
+            Maximum number of QP per Endpoint.
+          type: integer
+          format: uint32
+        destination_ip_address:
+          x-field-uid: 2
+          description: |-
+            Specify the IP address of External NIC i.e Destination Point IP Address.
+          type: string
+        ib_mtu:
+          x-field-uid: 3
+          description: |-
+            InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 14000
+        name:
+          x-field-uid: 4
           description: |-
             The name of RoCEv2 Peer
           type: string
         flow_settings:
-          x-field-uid: 8
+          x-field-uid: 5
           type: array
           description: |-
             This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
@@ -14167,6 +14203,137 @@ components:
       description: |-
         This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
         received across all Rx ports is a multiple of Rx port count and Tx packets.
+    StatefulFlow:
+      description: |-
+        A high level data plane traffic flow.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Stateful traffic configuration.
+          type: string
+          x-enum:
+            rocev2:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - rocev2
+        rocev2_flows:
+          description: |-
+            RoCEv2 Flow Groups.
+          type: array
+          items:
+            $ref: '#/components/schemas/RoCEv2.Flow'
+          x-field-uid: 2
+    RoCEv2.Flow:
+      description: |-
+        RoCEv2 traffic flow configuration.
+      type: object
+      properties:
+        flow_infos:
+          $ref: '#/components/schemas/RoCEv2.FlowInfo'
+          x-field-uid: 1
+        per_port_settings:
+          $ref: '#/components/schemas/RoCEv2.PerPortSettings'
+          x-field-uid: 2
+    RoCEv2.PerPortSettings:
+      description: |-
+        RoCEv2 traffic flow configuration.
+      type: object
+      properties:
+        target_line_rate:
+          description: |-
+            Target Line Rate in percentage.
+          type: integer
+          format: uint64
+          x-field-uid: 1
+        inter_batch:
+          $ref: '#/components/schemas/RoCEv2.InterBatch'
+          x-field-uid: 2
+    RoCEv2.FlowInfo:
+      description: |-
+        RoCEv2 Flow Info, per flow details.
+      type: object
+      properties:
+        name:
+          description: |-
+            Name of the flow group.
+          type: string
+          x-field-uid: 1
+        tx_endpoints:
+          description: |-
+            Tx Endpoint. Empty for RoCEv2.
+          type: string
+          x-field-uid: 2
+        rx_endpoints:
+          description: |-
+            Rx Endpoint. Empty for RoCEv2.
+          type: string
+          x-field-uid: 3
+        rate:
+          description: |-
+            Two valid choices are line_rate and burst_mode, if line_rate is selected, per_port_settings will be used to configure.
+          type: string
+          x-enum:
+            line_rate:
+              x-field-uid: 1
+            burst_mode:
+              x-field-uid: 2
+          x-field-uid: 4
+          enum:
+          - line_rate
+          - burst_mode
+        burst_mode:
+          description: |-
+            Traffic Burst Mode to applied in RoCEv2 Traffic , Continuous or Fixed.
+          type: string
+          x-enum:
+            Continuous:
+              x-field-uid: 1
+            Fixed:
+              x-field-uid: 2
+          x-field-uid: 5
+          enum:
+          - Continuous
+          - Fixed
+        burst_count:
+          description: |-
+            Burst Count to applied in RoCEv2 Traffic item.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 16777216
+          x-field-uid: 6
+    RoCEv2.InterBatch:
+      description: |-
+        RoCEv2 inter batch settigns applicable per port
+      type: object
+      properties:
+        inter_batch_period_unit:
+          description: |-
+            inter batch period units.
+          type: string
+          x-enum:
+            nanoseconds:
+              x-field-uid: 1
+            microsendons:
+              x-field-uid: 2
+            milliseconds:
+              x-field-uid: 3
+            seconds:
+              x-field-uid: 4
+          x-field-uid: 1
+          enum:
+          - nanoseconds
+          - microsendons
+          - milliseconds
+          - seconds
+        inter_batch_period:
+          description: |-
+            Inter batch Period.
+          type: integer
+          format: uint64
+          x-field-uid: 2
     Event:
       description: |-
         The optional container for event configuration.
@@ -15859,10 +16026,12 @@ components:
               x-field-uid: 13
             ospfv2:
               x-field-uid: 14
-            rocev2:
+            rocev2_ipv4:
               x-field-uid: 15
             rocev2_ipv6:
               x-field-uid: 16
+            rocev2_flow:
+              x-field-uid: 17
           enum:
           - port
           - flow
@@ -15878,8 +16047,9 @@ components:
           - dhcpv6_client
           - dhcpv6_server
           - ospfv2
-          - rocev2
+          - rocev2_ipv4
           - rocev2_ipv6
+          - rocev2_flow
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -15922,12 +16092,15 @@ components:
         ospfv2:
           $ref: '#/components/schemas/Ospfv2.Metrics.Request'
           x-field-uid: 15
-        rocev2:
+        rocev2_ipv4:
           $ref: '#/components/schemas/RoCEv2.Metrics.Request'
           x-field-uid: 16
         rocev2_ipv6:
           $ref: '#/components/schemas/RoCEv2IPv6.Metrics.Request'
           x-field-uid: 17
+        rocev2_flow:
+          $ref: '#/components/schemas/RoCEv2Flow.Metrics.Request'
+          x-field-uid: 18
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -15966,10 +16139,12 @@ components:
               x-field-uid: 13
             ospfv2_metrics:
               x-field-uid: 14
-            rocev2_metrics:
+            rocev2_ipv4_metrics:
               x-field-uid: 15
             rocev2_ipv6_metrics:
               x-field-uid: 16
+            rocev2_flow_metrics:
+              x-field-uid: 17
           enum:
           - flow_metrics
           - port_metrics
@@ -15985,8 +16160,9 @@ components:
           - dhcpv6_client
           - dhcpv6_server
           - ospfv2_metrics
-          - rocev2_metrics
+          - rocev2_ipv4_metrics
           - rocev2_ipv6_metrics
+          - rocev2_flow_metrics
         port_metrics:
           type: array
           items:
@@ -16057,7 +16233,7 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Metric'
           x-field-uid: 15
-        rocev2_metrics:
+        rocev2_ipv4_metrics:
           type: array
           items:
             $ref: '#/components/schemas/RoCEv2.Metric'
@@ -16067,6 +16243,11 @@ components:
           items:
             $ref: '#/components/schemas/RoCEv2IPv6.Metric'
           x-field-uid: 17
+        rocev2_flow_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoCEv2Flow.Metric'
+          x-field-uid: 18
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -19233,6 +19414,323 @@ components:
           type: integer
           format: uint64
           x-field-uid: 18
+    RoCEv2Flow.Metrics.Request:
+      description: |-
+        The request to retrieve RoCEv2 FLow statistics.
+      type: object
+      properties:
+        flow_names:
+          description: |-
+            The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
+          type: array
+          items:
+            type: string
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Flow cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              flow_name:
+                x-field-uid: 1
+              traffic_item:
+                x-field-uid: 2
+              port_tx:
+                x-field-uid: 3
+              port_rx:
+                x-field-uid: 4
+              src_qp:
+                x-field-uid: 5
+              dest_qp:
+                x-field-uid: 6
+              src_ipv4:
+                x-field-uid: 7
+              dest_ipv4:
+                x-field-uid: 8
+              data_frames_tx:
+                x-field-uid: 9
+              data_frame_rx:
+                x-field-uid: 10
+              frame_delta:
+                x-field-uid: 11
+              data_frames_retransmitted:
+                x-field-uid: 12
+              frame_sequence_error:
+                x-field-uid: 13
+              tx_bytes:
+                x-field-uid: 14
+              rx_bytes:
+                x-field-uid: 15
+              data_tx_rate:
+                x-field-uid: 16
+              data_rx_rate:
+                x-field-uid: 17
+              message_tx:
+                x-field-uid: 18
+              message_complete_rx:
+                x-field-uid: 19
+              message_fail:
+                x-field-uid: 20
+              flow_completion_time:
+                x-field-uid: 21
+              avg_latesncy:
+                x-field-uid: 22
+              min_latency:
+                x-field-uid: 23
+              max_latency:
+                x-field-uid: 24
+              ecn_ce_rx:
+                x-field-uid: 25
+              cnp_tx:
+                x-field-uid: 26
+              cnp_rx:
+                x-field-uid: 27
+              ack_tx:
+                x-field-uid: 28
+              ack_rx:
+                x-field-uid: 29
+              nak_tx:
+                x-field-uid: 30
+              nak_rx:
+                x-field-uid: 31
+              first_timestamp:
+                x-field-uid: 32
+              last_timestamp:
+                x-field-uid: 33
+            enum:
+            - flow_name
+            - traffic_item
+            - port_tx
+            - port_rx
+            - src_qp
+            - dest_qp
+            - src_ipv4
+            - dest_ipv4
+            - data_frames_tx
+            - data_frame_rx
+            - frame_delta
+            - data_frames_retransmitted
+            - frame_sequence_error
+            - tx_bytes
+            - rx_bytes
+            - data_tx_rate
+            - data_rx_rate
+            - message_tx
+            - message_complete_rx
+            - message_fail
+            - flow_completion_time
+            - avg_latesncy
+            - min_latency
+            - max_latency
+            - ecn_ce_rx
+            - cnp_tx
+            - cnp_rx
+            - ack_tx
+            - ack_rx
+            - nak_tx
+            - nak_rx
+            - first_timestamp
+            - last_timestamp
+          x-field-uid: 2
+    RoCEv2Flow.Metric:
+      description: |-
+        RoCEv2 Flow statistics information.
+      type: object
+      properties:
+        flow_name:
+          description: |-
+            Flow Name.
+          type: string
+          x-field-uid: 1
+        traffic_item:
+          description: |-
+            Traffic Item Name.
+          type: string
+          x-field-uid: 2
+        port_tx:
+          description: |-
+            The name of the transmit port
+          type: string
+          x-field-uid: 3
+        port_rx:
+          description: |-
+            The name of the receive port
+          type: string
+          x-field-uid: 4
+        src_qp:
+          description: |-
+            Current Source QP number.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        dest_qp:
+          description: |-
+            Current destination QP number.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        src_ipv4:
+          description: |-
+            Current source address.
+          type: string
+          format: ipv4
+          x-field-uid: 7
+        dest_ipv4:
+          description: |-
+            Current destination address.
+          type: string
+          format: ipv4
+          x-field-uid: 8
+        data_frame_tx:
+          description: |-
+            Current number of data frames transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        data_frames_rx:
+          description: |-
+            Current number of data frames received.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        frame_delta:
+          description: |-
+            Current differnece between tx and rx data frames
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        data_frames_retransmitted:
+          description: |-
+            Current number of data frames re-transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        frame_sequence_error:
+          description: |-
+            Current number of frame sequence errors.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        tx_bytes:
+          description: |-
+            Current number of bytes transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        rx_bytes:
+          description: |-
+            Current number of bytes received.
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        data_tx_rate:
+          description: |-
+            Current rate at which data is transmitted in Gbps.
+          type: integer
+          format: uint64
+          x-field-uid: 16
+        data_rx_rate:
+          description: |-
+            Current rate at which data is received in Gbps.
+          type: integer
+          format: uint64
+          x-field-uid: 17
+        message_tx:
+          description: |-
+            Current number of Message transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 18
+        message_complete_rx:
+          description: |-
+            Current number of Message Complete received.
+          type: integer
+          format: uint64
+          x-field-uid: 19
+        message_fail:
+          description: |-
+            Current number of Message Fail count.
+          type: integer
+          format: uint64
+          x-field-uid: 20
+        flow_completion_time:
+          description: |-
+            Current flow comletion time in ms.
+          type: integer
+          format: uint64
+          x-field-uid: 21
+        avg_latency:
+          description: |-
+            Current average latency measured in ns.
+          type: integer
+          format: uint64
+          x-field-uid: 22
+        min_latency:
+          description: |-
+            Current minimum latency measured in ns.
+          type: integer
+          format: uint64
+          x-field-uid: 23
+        max_latency:
+          description: |-
+            Current maximum latency measured in ns.
+          type: integer
+          format: uint64
+          x-field-uid: 24
+        ecn_ce_rx:
+          description: |-
+            Current number of ECN-CE Recevied.
+          type: integer
+          format: uint64
+          x-field-uid: 25
+        cnp_tx:
+          description: |-
+            Current number of CNP transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 26
+        cnp_rx:
+          description: |-
+            Current number of CNP received.
+          type: integer
+          format: uint64
+          x-field-uid: 27
+        ack_tx:
+          description: |-
+            Current number of ACK transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 28
+        ack_rx:
+          description: |-
+            Current number of ACK received.
+          type: integer
+          format: uint64
+          x-field-uid: 29
+        nak_tx:
+          description: |-
+            Current number of NAK transmitted.
+          type: integer
+          format: uint64
+          x-field-uid: 30
+        nak_rx:
+          description: |-
+            Current number of NAK received.
+          type: integer
+          format: uint64
+          x-field-uid: 31
+        first_timestamp:
+          description: |-
+            First Timestamp.
+          type: string
+          x-field-uid: 32
+        last_timestamp:
+          description: |-
+            Last Timestamp.
+          type: string
+          x-field-uid: 33
     States.Request:
       description: |-
         Request to traffic generator for states of choice

@@ -30,8 +30,9 @@ type metricsResponse struct {
 	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
-	rocev2MetricsHolder       MetricsResponseRoCEv2MetricIter
+	rocev2Ipv4MetricsHolder   MetricsResponseRoCEv2MetricIter
 	rocev2Ipv6MetricsHolder   MetricsResponseRoCEv2IPv6MetricIter
+	rocev2FlowMetricsHolder   MetricsResponseRoCEv2FlowMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -273,8 +274,9 @@ func (obj *metricsResponse) setNil() {
 	obj.dhcpv6ClientMetricsHolder = nil
 	obj.dhcpv6ServerMetricsHolder = nil
 	obj.ospfv2MetricsHolder = nil
-	obj.rocev2MetricsHolder = nil
+	obj.rocev2Ipv4MetricsHolder = nil
 	obj.rocev2Ipv6MetricsHolder = nil
+	obj.rocev2FlowMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -308,14 +310,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
-	// getter for Dhcpv6Server to set choice.
-	Dhcpv6Server()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
+	// getter for Dhcpv6Server to set choice.
+	Dhcpv6Server()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -344,10 +346,12 @@ type MetricsResponse interface {
 	Dhcpv6ServerMetrics() MetricsResponseDhcpv6ServerMetricIter
 	// Ospfv2Metrics returns MetricsResponseOspfv2MetricIterIter, set in MetricsResponse
 	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
-	// Rocev2Metrics returns MetricsResponseRoCEv2MetricIterIter, set in MetricsResponse
-	Rocev2Metrics() MetricsResponseRoCEv2MetricIter
+	// Rocev2Ipv4Metrics returns MetricsResponseRoCEv2MetricIterIter, set in MetricsResponse
+	Rocev2Ipv4Metrics() MetricsResponseRoCEv2MetricIter
 	// Rocev2Ipv6Metrics returns MetricsResponseRoCEv2IPv6MetricIterIter, set in MetricsResponse
 	Rocev2Ipv6Metrics() MetricsResponseRoCEv2IPv6MetricIter
+	// Rocev2FlowMetrics returns MetricsResponseRoCEv2FlowMetricIterIter, set in MetricsResponse
+	Rocev2FlowMetrics() MetricsResponseRoCEv2FlowMetricIter
 	setNil()
 }
 
@@ -369,8 +373,9 @@ var MetricsResponseChoice = struct {
 	DHCPV6_CLIENT       MetricsResponseChoiceEnum
 	DHCPV6_SERVER       MetricsResponseChoiceEnum
 	OSPFV2_METRICS      MetricsResponseChoiceEnum
-	ROCEV2_METRICS      MetricsResponseChoiceEnum
+	ROCEV2_IPV4_METRICS MetricsResponseChoiceEnum
 	ROCEV2_IPV6_METRICS MetricsResponseChoiceEnum
+	ROCEV2_FLOW_METRICS MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:        MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:        MetricsResponseChoiceEnum("port_metrics"),
@@ -386,17 +391,18 @@ var MetricsResponseChoice = struct {
 	DHCPV6_CLIENT:       MetricsResponseChoiceEnum("dhcpv6_client"),
 	DHCPV6_SERVER:       MetricsResponseChoiceEnum("dhcpv6_server"),
 	OSPFV2_METRICS:      MetricsResponseChoiceEnum("ospfv2_metrics"),
-	ROCEV2_METRICS:      MetricsResponseChoiceEnum("rocev2_metrics"),
+	ROCEV2_IPV4_METRICS: MetricsResponseChoiceEnum("rocev2_ipv4_metrics"),
 	ROCEV2_IPV6_METRICS: MetricsResponseChoiceEnum("rocev2_ipv6_metrics"),
+	ROCEV2_FLOW_METRICS: MetricsResponseChoiceEnum("rocev2_flow_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // getter for Dhcpv6Client to set choice
@@ -404,14 +410,14 @@ func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+}
+
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
-}
-
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // description is TBD
@@ -429,10 +435,12 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Rocev2FlowMetrics = nil
+	obj.rocev2FlowMetricsHolder = nil
 	obj.obj.Rocev2Ipv6Metrics = nil
 	obj.rocev2Ipv6MetricsHolder = nil
-	obj.obj.Rocev2Metrics = nil
-	obj.rocev2MetricsHolder = nil
+	obj.obj.Rocev2Ipv4Metrics = nil
+	obj.rocev2Ipv4MetricsHolder = nil
 	obj.obj.Ospfv2Metrics = nil
 	obj.ospfv2MetricsHolder = nil
 	obj.obj.RsvpMetrics = nil
@@ -494,12 +502,16 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 		obj.obj.Ospfv2Metrics = []*otg.Ospfv2Metric{}
 	}
 
-	if value == MetricsResponseChoice.ROCEV2_METRICS {
-		obj.obj.Rocev2Metrics = []*otg.RoCEv2Metric{}
+	if value == MetricsResponseChoice.ROCEV2_IPV4_METRICS {
+		obj.obj.Rocev2Ipv4Metrics = []*otg.RoCEv2Metric{}
 	}
 
 	if value == MetricsResponseChoice.ROCEV2_IPV6_METRICS {
 		obj.obj.Rocev2Ipv6Metrics = []*otg.RoCEv2IPv6Metric{}
+	}
+
+	if value == MetricsResponseChoice.ROCEV2_FLOW_METRICS {
+		obj.obj.Rocev2FlowMetrics = []*otg.RoCEv2FlowMetric{}
 	}
 
 	return obj
@@ -1724,15 +1736,15 @@ func (obj *metricsResponseOspfv2MetricIter) appendHolderSlice(item Ospfv2Metric)
 }
 
 // description is TBD
-// Rocev2Metrics returns a []RoCEv2Metric
-func (obj *metricsResponse) Rocev2Metrics() MetricsResponseRoCEv2MetricIter {
-	if len(obj.obj.Rocev2Metrics) == 0 {
-		obj.setChoice(MetricsResponseChoice.ROCEV2_METRICS)
+// Rocev2Ipv4Metrics returns a []RoCEv2Metric
+func (obj *metricsResponse) Rocev2Ipv4Metrics() MetricsResponseRoCEv2MetricIter {
+	if len(obj.obj.Rocev2Ipv4Metrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.ROCEV2_IPV4_METRICS)
 	}
-	if obj.rocev2MetricsHolder == nil {
-		obj.rocev2MetricsHolder = newMetricsResponseRoCEv2MetricIter(&obj.obj.Rocev2Metrics).setMsg(obj)
+	if obj.rocev2Ipv4MetricsHolder == nil {
+		obj.rocev2Ipv4MetricsHolder = newMetricsResponseRoCEv2MetricIter(&obj.obj.Rocev2Ipv4Metrics).setMsg(obj)
 	}
-	return obj.rocev2MetricsHolder
+	return obj.rocev2Ipv4MetricsHolder
 }
 
 type metricsResponseRoCEv2MetricIter struct {
@@ -1894,6 +1906,93 @@ func (obj *metricsResponseRoCEv2IPv6MetricIter) clearHolderSlice() MetricsRespon
 }
 func (obj *metricsResponseRoCEv2IPv6MetricIter) appendHolderSlice(item RoCEv2IPv6Metric) MetricsResponseRoCEv2IPv6MetricIter {
 	obj.roCEv2IPv6MetricSlice = append(obj.roCEv2IPv6MetricSlice, item)
+	return obj
+}
+
+// description is TBD
+// Rocev2FlowMetrics returns a []RoCEv2FlowMetric
+func (obj *metricsResponse) Rocev2FlowMetrics() MetricsResponseRoCEv2FlowMetricIter {
+	if len(obj.obj.Rocev2FlowMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.ROCEV2_FLOW_METRICS)
+	}
+	if obj.rocev2FlowMetricsHolder == nil {
+		obj.rocev2FlowMetricsHolder = newMetricsResponseRoCEv2FlowMetricIter(&obj.obj.Rocev2FlowMetrics).setMsg(obj)
+	}
+	return obj.rocev2FlowMetricsHolder
+}
+
+type metricsResponseRoCEv2FlowMetricIter struct {
+	obj                   *metricsResponse
+	roCEv2FlowMetricSlice []RoCEv2FlowMetric
+	fieldPtr              *[]*otg.RoCEv2FlowMetric
+}
+
+func newMetricsResponseRoCEv2FlowMetricIter(ptr *[]*otg.RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter {
+	return &metricsResponseRoCEv2FlowMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseRoCEv2FlowMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseRoCEv2FlowMetricIter
+	Items() []RoCEv2FlowMetric
+	Add() RoCEv2FlowMetric
+	Append(items ...RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter
+	Set(index int, newObj RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter
+	Clear() MetricsResponseRoCEv2FlowMetricIter
+	clearHolderSlice() MetricsResponseRoCEv2FlowMetricIter
+	appendHolderSlice(item RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter
+}
+
+func (obj *metricsResponseRoCEv2FlowMetricIter) setMsg(msg *metricsResponse) MetricsResponseRoCEv2FlowMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&roCEv2FlowMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseRoCEv2FlowMetricIter) Items() []RoCEv2FlowMetric {
+	return obj.roCEv2FlowMetricSlice
+}
+
+func (obj *metricsResponseRoCEv2FlowMetricIter) Add() RoCEv2FlowMetric {
+	newObj := &otg.RoCEv2FlowMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &roCEv2FlowMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.roCEv2FlowMetricSlice = append(obj.roCEv2FlowMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseRoCEv2FlowMetricIter) Append(items ...RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.roCEv2FlowMetricSlice = append(obj.roCEv2FlowMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseRoCEv2FlowMetricIter) Set(index int, newObj RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.roCEv2FlowMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseRoCEv2FlowMetricIter) Clear() MetricsResponseRoCEv2FlowMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.RoCEv2FlowMetric{}
+		obj.roCEv2FlowMetricSlice = []RoCEv2FlowMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseRoCEv2FlowMetricIter) clearHolderSlice() MetricsResponseRoCEv2FlowMetricIter {
+	if len(obj.roCEv2FlowMetricSlice) > 0 {
+		obj.roCEv2FlowMetricSlice = []RoCEv2FlowMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseRoCEv2FlowMetricIter) appendHolderSlice(item RoCEv2FlowMetric) MetricsResponseRoCEv2FlowMetricIter {
+	obj.roCEv2FlowMetricSlice = append(obj.roCEv2FlowMetricSlice, item)
 	return obj
 }
 
@@ -2098,15 +2197,15 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.Rocev2Metrics) != 0 {
+	if len(obj.obj.Rocev2Ipv4Metrics) != 0 {
 
 		if set_default {
-			obj.Rocev2Metrics().clearHolderSlice()
-			for _, item := range obj.obj.Rocev2Metrics {
-				obj.Rocev2Metrics().appendHolderSlice(&roCEv2Metric{obj: item})
+			obj.Rocev2Ipv4Metrics().clearHolderSlice()
+			for _, item := range obj.obj.Rocev2Ipv4Metrics {
+				obj.Rocev2Ipv4Metrics().appendHolderSlice(&roCEv2Metric{obj: item})
 			}
 		}
-		for _, item := range obj.Rocev2Metrics().Items() {
+		for _, item := range obj.Rocev2Ipv4Metrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
@@ -2121,6 +2220,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Rocev2Ipv6Metrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Rocev2FlowMetrics) != 0 {
+
+		if set_default {
+			obj.Rocev2FlowMetrics().clearHolderSlice()
+			for _, item := range obj.obj.Rocev2FlowMetrics {
+				obj.Rocev2FlowMetrics().appendHolderSlice(&roCEv2FlowMetric{obj: item})
+			}
+		}
+		for _, item := range obj.Rocev2FlowMetrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
@@ -2182,14 +2295,19 @@ func (obj *metricsResponse) setDefault() {
 		choice = MetricsResponseChoice.OSPFV2_METRICS
 	}
 
-	if len(obj.obj.Rocev2Metrics) > 0 {
+	if len(obj.obj.Rocev2Ipv4Metrics) > 0 {
 		choices_set += 1
-		choice = MetricsResponseChoice.ROCEV2_METRICS
+		choice = MetricsResponseChoice.ROCEV2_IPV4_METRICS
 	}
 
 	if len(obj.obj.Rocev2Ipv6Metrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.ROCEV2_IPV6_METRICS
+	}
+
+	if len(obj.obj.Rocev2FlowMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.ROCEV2_FLOW_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

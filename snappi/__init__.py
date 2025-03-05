@@ -354,6 +354,7 @@ from .snappi import DeviceRoCEv2Peer
 from .snappi import RoCEv2V4Interface
 from .snappi import RoCEv2V4Peer
 from .snappi import RoCEv2FlowSettings
+from .snappi import RoCEv2DCQCN
 from .snappi import RoCEv2FlowSettingsIter
 from .snappi import RoCEv2V4PeerIter
 from .snappi import RoCEv2V4InterfaceIter
@@ -1134,6 +1135,13 @@ from .snappi import FlowRxTxRatioRxCount
 from .snappi import FlowLatencyMetrics
 from .snappi import FlowPredefinedTags
 from .snappi import FlowIter
+from .snappi import StatefulFlow
+from .snappi import RoCEv2Flow
+from .snappi import RoCEv2FlowInfo
+from .snappi import RoCEv2PerPortSettings
+from .snappi import RoCEv2InterBatch
+from .snappi import RoCEv2FlowIter
+from .snappi import StatefulFlowIter
 from .snappi import Event
 from .snappi import EventLink
 from .snappi import EventRxRateThreshold
@@ -1228,6 +1236,7 @@ from .snappi import Dhcpv6ServerMetricsRequest
 from .snappi import Ospfv2MetricsRequest
 from .snappi import RoCEv2MetricsRequest
 from .snappi import RoCEv2IPv6MetricsRequest
+from .snappi import RoCEv2FlowMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1268,6 +1277,8 @@ from .snappi import RoCEv2Metric
 from .snappi import RoCEv2MetricIter
 from .snappi import RoCEv2IPv6Metric
 from .snappi import RoCEv2IPv6MetricIter
+from .snappi import RoCEv2FlowMetric
+from .snappi import RoCEv2FlowMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest

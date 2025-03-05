@@ -13,18 +13,19 @@ import (
 // ***** Config *****
 type config struct {
 	validation
-	obj            *otg.Config
-	marshaller     marshalConfig
-	unMarshaller   unMarshalConfig
-	portsHolder    ConfigPortIter
-	lagsHolder     ConfigLagIter
-	layer1Holder   ConfigLayer1Iter
-	capturesHolder ConfigCaptureIter
-	devicesHolder  ConfigDeviceIter
-	flowsHolder    ConfigFlowIter
-	eventsHolder   Event
-	optionsHolder  ConfigOptions
-	lldpHolder     ConfigLldpIter
+	obj                 *otg.Config
+	marshaller          marshalConfig
+	unMarshaller        unMarshalConfig
+	portsHolder         ConfigPortIter
+	lagsHolder          ConfigLagIter
+	layer1Holder        ConfigLayer1Iter
+	capturesHolder      ConfigCaptureIter
+	devicesHolder       ConfigDeviceIter
+	flowsHolder         ConfigFlowIter
+	statefulFlowsHolder ConfigStatefulFlowIter
+	eventsHolder        Event
+	optionsHolder       ConfigOptions
+	lldpHolder          ConfigLldpIter
 }
 
 func NewConfig() Config {
@@ -258,6 +259,7 @@ func (obj *config) setNil() {
 	obj.capturesHolder = nil
 	obj.devicesHolder = nil
 	obj.flowsHolder = nil
+	obj.statefulFlowsHolder = nil
 	obj.eventsHolder = nil
 	obj.optionsHolder = nil
 	obj.lldpHolder = nil
@@ -300,6 +302,8 @@ type Config interface {
 	Devices() ConfigDeviceIter
 	// Flows returns ConfigFlowIterIter, set in Config
 	Flows() ConfigFlowIter
+	// StatefulFlows returns ConfigStatefulFlowIterIter, set in Config
+	StatefulFlows() ConfigStatefulFlowIter
 	// Events returns Event, set in Config.
 	// Event is the optional container for event configuration.
 	Events() Event
@@ -847,6 +851,93 @@ func (obj *configFlowIter) appendHolderSlice(item Flow) ConfigFlowIter {
 	return obj
 }
 
+// stateful flows currently on RoCEv2 present.
+// StatefulFlows returns a []StatefulFlow
+func (obj *config) StatefulFlows() ConfigStatefulFlowIter {
+	if len(obj.obj.StatefulFlows) == 0 {
+		obj.obj.StatefulFlows = []*otg.StatefulFlow{}
+	}
+	if obj.statefulFlowsHolder == nil {
+		obj.statefulFlowsHolder = newConfigStatefulFlowIter(&obj.obj.StatefulFlows).setMsg(obj)
+	}
+	return obj.statefulFlowsHolder
+}
+
+type configStatefulFlowIter struct {
+	obj               *config
+	statefulFlowSlice []StatefulFlow
+	fieldPtr          *[]*otg.StatefulFlow
+}
+
+func newConfigStatefulFlowIter(ptr *[]*otg.StatefulFlow) ConfigStatefulFlowIter {
+	return &configStatefulFlowIter{fieldPtr: ptr}
+}
+
+type ConfigStatefulFlowIter interface {
+	setMsg(*config) ConfigStatefulFlowIter
+	Items() []StatefulFlow
+	Add() StatefulFlow
+	Append(items ...StatefulFlow) ConfigStatefulFlowIter
+	Set(index int, newObj StatefulFlow) ConfigStatefulFlowIter
+	Clear() ConfigStatefulFlowIter
+	clearHolderSlice() ConfigStatefulFlowIter
+	appendHolderSlice(item StatefulFlow) ConfigStatefulFlowIter
+}
+
+func (obj *configStatefulFlowIter) setMsg(msg *config) ConfigStatefulFlowIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&statefulFlow{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configStatefulFlowIter) Items() []StatefulFlow {
+	return obj.statefulFlowSlice
+}
+
+func (obj *configStatefulFlowIter) Add() StatefulFlow {
+	newObj := &otg.StatefulFlow{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &statefulFlow{obj: newObj}
+	newLibObj.setDefault()
+	obj.statefulFlowSlice = append(obj.statefulFlowSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configStatefulFlowIter) Append(items ...StatefulFlow) ConfigStatefulFlowIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.statefulFlowSlice = append(obj.statefulFlowSlice, item)
+	}
+	return obj
+}
+
+func (obj *configStatefulFlowIter) Set(index int, newObj StatefulFlow) ConfigStatefulFlowIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.statefulFlowSlice[index] = newObj
+	return obj
+}
+func (obj *configStatefulFlowIter) Clear() ConfigStatefulFlowIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.StatefulFlow{}
+		obj.statefulFlowSlice = []StatefulFlow{}
+	}
+	return obj
+}
+func (obj *configStatefulFlowIter) clearHolderSlice() ConfigStatefulFlowIter {
+	if len(obj.statefulFlowSlice) > 0 {
+		obj.statefulFlowSlice = []StatefulFlow{}
+	}
+	return obj
+}
+func (obj *configStatefulFlowIter) appendHolderSlice(item StatefulFlow) ConfigStatefulFlowIter {
+	obj.statefulFlowSlice = append(obj.statefulFlowSlice, item)
+	return obj
+}
+
 // description is TBD
 // Events returns a Event
 func (obj *config) Events() Event {
@@ -1074,6 +1165,20 @@ func (obj *config) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Flows().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.StatefulFlows) != 0 {
+
+		if set_default {
+			obj.StatefulFlows().clearHolderSlice()
+			for _, item := range obj.obj.StatefulFlows {
+				obj.StatefulFlows().appendHolderSlice(&statefulFlow{obj: item})
+			}
+		}
+		for _, item := range obj.StatefulFlows().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
