@@ -16093,7 +16093,7 @@ components:
           $ref: '#/components/schemas/Ospfv2.Metrics.Request'
           x-field-uid: 15
         rocev2_ipv4:
-          $ref: '#/components/schemas/RoCEv2.Metrics.Request'
+          $ref: '#/components/schemas/RoCEv2IPv4.Metrics.Request'
           x-field-uid: 16
         rocev2_ipv6:
           $ref: '#/components/schemas/RoCEv2IPv6.Metrics.Request'
@@ -16236,7 +16236,7 @@ components:
         rocev2_ipv4_metrics:
           type: array
           items:
-            $ref: '#/components/schemas/RoCEv2.Metric'
+            $ref: '#/components/schemas/RoCEv2IPv4.Metric'
           x-field-uid: 16
         rocev2_ipv6_metrics:
           type: array
@@ -19034,7 +19034,7 @@ components:
           type: integer
           format: uint64
           x-field-uid: 34
-    RoCEv2.Metrics.Request:
+    RoCEv2IPv4.Metrics.Request:
       description: |-
         The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
       type: object
@@ -19111,7 +19111,7 @@ components:
             - reject_rx
             - unknown_msg_rx
           x-field-uid: 2
-    RoCEv2.Metric:
+    RoCEv2IPv4.Metric:
       description: |-
         RoCEv2 per peer statistics information.
       type: object

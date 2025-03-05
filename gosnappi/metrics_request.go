@@ -30,7 +30,7 @@ type metricsRequest struct {
 	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
-	rocev2Ipv4Holder   RoCEv2MetricsRequest
+	rocev2Ipv4Holder   RoCEv2IPv4MetricsRequest
 	rocev2Ipv6Holder   RoCEv2IPv6MetricsRequest
 	rocev2FlowHolder   RoCEv2FlowMetricsRequest
 }
@@ -422,12 +422,12 @@ type MetricsRequest interface {
 	SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
-	// Rocev2Ipv4 returns RoCEv2MetricsRequest, set in MetricsRequest.
-	// RoCEv2MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
-	Rocev2Ipv4() RoCEv2MetricsRequest
-	// SetRocev2Ipv4 assigns RoCEv2MetricsRequest provided by user to MetricsRequest.
-	// RoCEv2MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
-	SetRocev2Ipv4(value RoCEv2MetricsRequest) MetricsRequest
+	// Rocev2Ipv4 returns RoCEv2IPv4MetricsRequest, set in MetricsRequest.
+	// RoCEv2IPv4MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	Rocev2Ipv4() RoCEv2IPv4MetricsRequest
+	// SetRocev2Ipv4 assigns RoCEv2IPv4MetricsRequest provided by user to MetricsRequest.
+	// RoCEv2IPv4MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	SetRocev2Ipv4(value RoCEv2IPv4MetricsRequest) MetricsRequest
 	// HasRocev2Ipv4 checks if Rocev2Ipv4 has been set in MetricsRequest
 	HasRocev2Ipv4() bool
 	// Rocev2Ipv6 returns RoCEv2IPv6MetricsRequest, set in MetricsRequest.
@@ -601,7 +601,7 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 
 	if value == MetricsRequestChoice.ROCEV2_IPV4 {
-		obj.obj.Rocev2Ipv4 = NewRoCEv2MetricsRequest().msg()
+		obj.obj.Rocev2Ipv4 = NewRoCEv2IPv4MetricsRequest().msg()
 	}
 
 	if value == MetricsRequestChoice.ROCEV2_IPV6 {
@@ -1008,26 +1008,26 @@ func (obj *metricsRequest) SetOspfv2(value Ospfv2MetricsRequest) MetricsRequest 
 }
 
 // description is TBD
-// Rocev2Ipv4 returns a RoCEv2MetricsRequest
-func (obj *metricsRequest) Rocev2Ipv4() RoCEv2MetricsRequest {
+// Rocev2Ipv4 returns a RoCEv2IPv4MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv4() RoCEv2IPv4MetricsRequest {
 	if obj.obj.Rocev2Ipv4 == nil {
 		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
 	}
 	if obj.rocev2Ipv4Holder == nil {
-		obj.rocev2Ipv4Holder = &roCEv2MetricsRequest{obj: obj.obj.Rocev2Ipv4}
+		obj.rocev2Ipv4Holder = &roCEv2IPv4MetricsRequest{obj: obj.obj.Rocev2Ipv4}
 	}
 	return obj.rocev2Ipv4Holder
 }
 
 // description is TBD
-// Rocev2Ipv4 returns a RoCEv2MetricsRequest
+// Rocev2Ipv4 returns a RoCEv2IPv4MetricsRequest
 func (obj *metricsRequest) HasRocev2Ipv4() bool {
 	return obj.obj.Rocev2Ipv4 != nil
 }
 
 // description is TBD
-// SetRocev2Ipv4 sets the RoCEv2MetricsRequest value in the MetricsRequest object
-func (obj *metricsRequest) SetRocev2Ipv4(value RoCEv2MetricsRequest) MetricsRequest {
+// SetRocev2Ipv4 sets the RoCEv2IPv4MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv4(value RoCEv2IPv4MetricsRequest) MetricsRequest {
 	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
 	obj.rocev2Ipv4Holder = nil
 	obj.obj.Rocev2Ipv4 = value.msg()

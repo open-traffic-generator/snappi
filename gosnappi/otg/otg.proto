@@ -12240,7 +12240,7 @@ message MetricsRequest {
   Ospfv2MetricsRequest ospfv2 = 15;
 
   // Description missing in models
-  RoCEv2MetricsRequest rocev2_ipv4 = 16;
+  RoCEv2IPv4MetricsRequest rocev2_ipv4 = 16;
 
   // Description missing in models
   RoCEv2IPv6MetricsRequest rocev2_ipv6 = 17;
@@ -12321,7 +12321,7 @@ message MetricsResponse {
   repeated Ospfv2Metric ospfv2_metrics = 15;
 
   // Description missing in models
-  repeated RoCEv2Metric rocev2_ipv4_metrics = 16;
+  repeated RoCEv2IPv4Metric rocev2_ipv4_metrics = 16;
 
   // Description missing in models
   repeated RoCEv2IPv6Metric rocev2_ipv6_metrics = 17;
@@ -13918,7 +13918,7 @@ message Ospfv2Metric {
 }
 
 // The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
-message RoCEv2MetricsRequest {
+message RoCEv2IPv4MetricsRequest {
 
   // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
   // results for all RoCEv2 peers.
@@ -13957,7 +13957,7 @@ message RoCEv2MetricsRequest {
 }
 
 // RoCEv2 per peer statistics information.
-message RoCEv2Metric {
+message RoCEv2IPv4Metric {
 
   // The name of a configured RoCEv2 peer.
   optional string name = 1;

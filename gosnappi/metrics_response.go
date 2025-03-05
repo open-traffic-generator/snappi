@@ -30,7 +30,7 @@ type metricsResponse struct {
 	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
-	rocev2Ipv4MetricsHolder   MetricsResponseRoCEv2MetricIter
+	rocev2Ipv4MetricsHolder   MetricsResponseRoCEv2IPv4MetricIter
 	rocev2Ipv6MetricsHolder   MetricsResponseRoCEv2IPv6MetricIter
 	rocev2FlowMetricsHolder   MetricsResponseRoCEv2FlowMetricIter
 }
@@ -310,14 +310,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Server to set choice.
-	Dhcpv4Server()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
+	// getter for Dhcpv4Server to set choice.
+	Dhcpv4Server()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -346,8 +346,8 @@ type MetricsResponse interface {
 	Dhcpv6ServerMetrics() MetricsResponseDhcpv6ServerMetricIter
 	// Ospfv2Metrics returns MetricsResponseOspfv2MetricIterIter, set in MetricsResponse
 	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
-	// Rocev2Ipv4Metrics returns MetricsResponseRoCEv2MetricIterIter, set in MetricsResponse
-	Rocev2Ipv4Metrics() MetricsResponseRoCEv2MetricIter
+	// Rocev2Ipv4Metrics returns MetricsResponseRoCEv2IPv4MetricIterIter, set in MetricsResponse
+	Rocev2Ipv4Metrics() MetricsResponseRoCEv2IPv4MetricIter
 	// Rocev2Ipv6Metrics returns MetricsResponseRoCEv2IPv6MetricIterIter, set in MetricsResponse
 	Rocev2Ipv6Metrics() MetricsResponseRoCEv2IPv6MetricIter
 	// Rocev2FlowMetrics returns MetricsResponseRoCEv2FlowMetricIterIter, set in MetricsResponse
@@ -400,14 +400,14 @@ func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
-}
-
 // getter for Dhcpv6Client to set choice
 func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
+}
+
+// getter for Dhcpv6Server to set choice
+func (obj *metricsResponse) Dhcpv6Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
 // getter for Dhcpv4Client to set choice
@@ -415,9 +415,9 @@ func (obj *metricsResponse) Dhcpv4Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
-// getter for Dhcpv6Server to set choice
-func (obj *metricsResponse) Dhcpv6Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // description is TBD
@@ -503,7 +503,7 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 
 	if value == MetricsResponseChoice.ROCEV2_IPV4_METRICS {
-		obj.obj.Rocev2Ipv4Metrics = []*otg.RoCEv2Metric{}
+		obj.obj.Rocev2Ipv4Metrics = []*otg.RoCEv2IPv4Metric{}
 	}
 
 	if value == MetricsResponseChoice.ROCEV2_IPV6_METRICS {
@@ -1736,89 +1736,89 @@ func (obj *metricsResponseOspfv2MetricIter) appendHolderSlice(item Ospfv2Metric)
 }
 
 // description is TBD
-// Rocev2Ipv4Metrics returns a []RoCEv2Metric
-func (obj *metricsResponse) Rocev2Ipv4Metrics() MetricsResponseRoCEv2MetricIter {
+// Rocev2Ipv4Metrics returns a []RoCEv2IPv4Metric
+func (obj *metricsResponse) Rocev2Ipv4Metrics() MetricsResponseRoCEv2IPv4MetricIter {
 	if len(obj.obj.Rocev2Ipv4Metrics) == 0 {
 		obj.setChoice(MetricsResponseChoice.ROCEV2_IPV4_METRICS)
 	}
 	if obj.rocev2Ipv4MetricsHolder == nil {
-		obj.rocev2Ipv4MetricsHolder = newMetricsResponseRoCEv2MetricIter(&obj.obj.Rocev2Ipv4Metrics).setMsg(obj)
+		obj.rocev2Ipv4MetricsHolder = newMetricsResponseRoCEv2IPv4MetricIter(&obj.obj.Rocev2Ipv4Metrics).setMsg(obj)
 	}
 	return obj.rocev2Ipv4MetricsHolder
 }
 
-type metricsResponseRoCEv2MetricIter struct {
-	obj               *metricsResponse
-	roCEv2MetricSlice []RoCEv2Metric
-	fieldPtr          *[]*otg.RoCEv2Metric
+type metricsResponseRoCEv2IPv4MetricIter struct {
+	obj                   *metricsResponse
+	roCEv2IPv4MetricSlice []RoCEv2IPv4Metric
+	fieldPtr              *[]*otg.RoCEv2IPv4Metric
 }
 
-func newMetricsResponseRoCEv2MetricIter(ptr *[]*otg.RoCEv2Metric) MetricsResponseRoCEv2MetricIter {
-	return &metricsResponseRoCEv2MetricIter{fieldPtr: ptr}
+func newMetricsResponseRoCEv2IPv4MetricIter(ptr *[]*otg.RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter {
+	return &metricsResponseRoCEv2IPv4MetricIter{fieldPtr: ptr}
 }
 
-type MetricsResponseRoCEv2MetricIter interface {
-	setMsg(*metricsResponse) MetricsResponseRoCEv2MetricIter
-	Items() []RoCEv2Metric
-	Add() RoCEv2Metric
-	Append(items ...RoCEv2Metric) MetricsResponseRoCEv2MetricIter
-	Set(index int, newObj RoCEv2Metric) MetricsResponseRoCEv2MetricIter
-	Clear() MetricsResponseRoCEv2MetricIter
-	clearHolderSlice() MetricsResponseRoCEv2MetricIter
-	appendHolderSlice(item RoCEv2Metric) MetricsResponseRoCEv2MetricIter
+type MetricsResponseRoCEv2IPv4MetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseRoCEv2IPv4MetricIter
+	Items() []RoCEv2IPv4Metric
+	Add() RoCEv2IPv4Metric
+	Append(items ...RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter
+	Set(index int, newObj RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter
+	Clear() MetricsResponseRoCEv2IPv4MetricIter
+	clearHolderSlice() MetricsResponseRoCEv2IPv4MetricIter
+	appendHolderSlice(item RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter
 }
 
-func (obj *metricsResponseRoCEv2MetricIter) setMsg(msg *metricsResponse) MetricsResponseRoCEv2MetricIter {
+func (obj *metricsResponseRoCEv2IPv4MetricIter) setMsg(msg *metricsResponse) MetricsResponseRoCEv2IPv4MetricIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&roCEv2Metric{obj: val})
+		obj.appendHolderSlice(&roCEv2IPv4Metric{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *metricsResponseRoCEv2MetricIter) Items() []RoCEv2Metric {
-	return obj.roCEv2MetricSlice
+func (obj *metricsResponseRoCEv2IPv4MetricIter) Items() []RoCEv2IPv4Metric {
+	return obj.roCEv2IPv4MetricSlice
 }
 
-func (obj *metricsResponseRoCEv2MetricIter) Add() RoCEv2Metric {
-	newObj := &otg.RoCEv2Metric{}
+func (obj *metricsResponseRoCEv2IPv4MetricIter) Add() RoCEv2IPv4Metric {
+	newObj := &otg.RoCEv2IPv4Metric{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &roCEv2Metric{obj: newObj}
+	newLibObj := &roCEv2IPv4Metric{obj: newObj}
 	newLibObj.setDefault()
-	obj.roCEv2MetricSlice = append(obj.roCEv2MetricSlice, newLibObj)
+	obj.roCEv2IPv4MetricSlice = append(obj.roCEv2IPv4MetricSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *metricsResponseRoCEv2MetricIter) Append(items ...RoCEv2Metric) MetricsResponseRoCEv2MetricIter {
+func (obj *metricsResponseRoCEv2IPv4MetricIter) Append(items ...RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.roCEv2MetricSlice = append(obj.roCEv2MetricSlice, item)
+		obj.roCEv2IPv4MetricSlice = append(obj.roCEv2IPv4MetricSlice, item)
 	}
 	return obj
 }
 
-func (obj *metricsResponseRoCEv2MetricIter) Set(index int, newObj RoCEv2Metric) MetricsResponseRoCEv2MetricIter {
+func (obj *metricsResponseRoCEv2IPv4MetricIter) Set(index int, newObj RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.roCEv2MetricSlice[index] = newObj
+	obj.roCEv2IPv4MetricSlice[index] = newObj
 	return obj
 }
-func (obj *metricsResponseRoCEv2MetricIter) Clear() MetricsResponseRoCEv2MetricIter {
+func (obj *metricsResponseRoCEv2IPv4MetricIter) Clear() MetricsResponseRoCEv2IPv4MetricIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.RoCEv2Metric{}
-		obj.roCEv2MetricSlice = []RoCEv2Metric{}
+		*obj.fieldPtr = []*otg.RoCEv2IPv4Metric{}
+		obj.roCEv2IPv4MetricSlice = []RoCEv2IPv4Metric{}
 	}
 	return obj
 }
-func (obj *metricsResponseRoCEv2MetricIter) clearHolderSlice() MetricsResponseRoCEv2MetricIter {
-	if len(obj.roCEv2MetricSlice) > 0 {
-		obj.roCEv2MetricSlice = []RoCEv2Metric{}
+func (obj *metricsResponseRoCEv2IPv4MetricIter) clearHolderSlice() MetricsResponseRoCEv2IPv4MetricIter {
+	if len(obj.roCEv2IPv4MetricSlice) > 0 {
+		obj.roCEv2IPv4MetricSlice = []RoCEv2IPv4Metric{}
 	}
 	return obj
 }
-func (obj *metricsResponseRoCEv2MetricIter) appendHolderSlice(item RoCEv2Metric) MetricsResponseRoCEv2MetricIter {
-	obj.roCEv2MetricSlice = append(obj.roCEv2MetricSlice, item)
+func (obj *metricsResponseRoCEv2IPv4MetricIter) appendHolderSlice(item RoCEv2IPv4Metric) MetricsResponseRoCEv2IPv4MetricIter {
+	obj.roCEv2IPv4MetricSlice = append(obj.roCEv2IPv4MetricSlice, item)
 	return obj
 }
 
@@ -2202,7 +2202,7 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.Rocev2Ipv4Metrics().clearHolderSlice()
 			for _, item := range obj.obj.Rocev2Ipv4Metrics {
-				obj.Rocev2Ipv4Metrics().appendHolderSlice(&roCEv2Metric{obj: item})
+				obj.Rocev2Ipv4Metrics().appendHolderSlice(&roCEv2IPv4Metric{obj: item})
 			}
 		}
 		for _, item := range obj.Rocev2Ipv4Metrics().Items() {

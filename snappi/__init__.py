@@ -1234,7 +1234,7 @@ from .snappi import Dhcpv4ServerMetricsRequest
 from .snappi import Dhcpv6ClientMetricsRequest
 from .snappi import Dhcpv6ServerMetricsRequest
 from .snappi import Ospfv2MetricsRequest
-from .snappi import RoCEv2MetricsRequest
+from .snappi import RoCEv2IPv4MetricsRequest
 from .snappi import RoCEv2IPv6MetricsRequest
 from .snappi import RoCEv2FlowMetricsRequest
 from .snappi import MetricsResponse
@@ -1273,8 +1273,8 @@ from .snappi import Dhcpv6ServerMetric
 from .snappi import Dhcpv6ServerMetricIter
 from .snappi import Ospfv2Metric
 from .snappi import Ospfv2MetricIter
-from .snappi import RoCEv2Metric
-from .snappi import RoCEv2MetricIter
+from .snappi import RoCEv2IPv4Metric
+from .snappi import RoCEv2IPv4MetricIter
 from .snappi import RoCEv2IPv6Metric
 from .snappi import RoCEv2IPv6MetricIter
 from .snappi import RoCEv2FlowMetric
