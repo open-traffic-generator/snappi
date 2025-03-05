@@ -19,7 +19,7 @@ type mkaBasic struct {
 	keySourceHolder             MkaBasicKeySource
 	supportedCipherSuitesHolder MkaBasicSupportedCipherSuites
 	rekeyModeHolder             MkaBasicRekeyMode
-	pskChainStartTimeHolder     MkaBasicTime
+	pskChainStartTimeHolder     MkaBasicPskChainStartTime
 }
 
 func NewMkaBasic() MkaBasic {
@@ -360,12 +360,12 @@ type MkaBasic interface {
 	SetRekeyMode(value MkaBasicRekeyMode) MkaBasic
 	// HasRekeyMode checks if RekeyMode has been set in MkaBasic
 	HasRekeyMode() bool
-	// PskChainStartTime returns MkaBasicTime, set in MkaBasic.
-	// MkaBasicTime is absolute time in a timezone.
-	PskChainStartTime() MkaBasicTime
-	// SetPskChainStartTime assigns MkaBasicTime provided by user to MkaBasic.
-	// MkaBasicTime is absolute time in a timezone.
-	SetPskChainStartTime(value MkaBasicTime) MkaBasic
+	// PskChainStartTime returns MkaBasicPskChainStartTime, set in MkaBasic.
+	// MkaBasicPskChainStartTime is pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.
+	PskChainStartTime() MkaBasicPskChainStartTime
+	// SetPskChainStartTime assigns MkaBasicPskChainStartTime provided by user to MkaBasic.
+	// MkaBasicPskChainStartTime is pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.
+	SetPskChainStartTime(value MkaBasicPskChainStartTime) MkaBasic
 	// HasPskChainStartTime checks if PskChainStartTime has been set in MkaBasic
 	HasPskChainStartTime() bool
 	setNil()
@@ -697,27 +697,27 @@ func (obj *mkaBasic) SetRekeyMode(value MkaBasicRekeyMode) MkaBasic {
 	return obj
 }
 
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. The key start time will be relative to this value.
-// PskChainStartTime returns a MkaBasicTime
-func (obj *mkaBasic) PskChainStartTime() MkaBasicTime {
+// description is TBD
+// PskChainStartTime returns a MkaBasicPskChainStartTime
+func (obj *mkaBasic) PskChainStartTime() MkaBasicPskChainStartTime {
 	if obj.obj.PskChainStartTime == nil {
-		obj.obj.PskChainStartTime = NewMkaBasicTime().msg()
+		obj.obj.PskChainStartTime = NewMkaBasicPskChainStartTime().msg()
 	}
 	if obj.pskChainStartTimeHolder == nil {
-		obj.pskChainStartTimeHolder = &mkaBasicTime{obj: obj.obj.PskChainStartTime}
+		obj.pskChainStartTimeHolder = &mkaBasicPskChainStartTime{obj: obj.obj.PskChainStartTime}
 	}
 	return obj.pskChainStartTimeHolder
 }
 
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. The key start time will be relative to this value.
-// PskChainStartTime returns a MkaBasicTime
+// description is TBD
+// PskChainStartTime returns a MkaBasicPskChainStartTime
 func (obj *mkaBasic) HasPskChainStartTime() bool {
 	return obj.obj.PskChainStartTime != nil
 }
 
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. The key start time will be relative to this value.
-// SetPskChainStartTime sets the MkaBasicTime value in the MkaBasic object
-func (obj *mkaBasic) SetPskChainStartTime(value MkaBasicTime) MkaBasic {
+// description is TBD
+// SetPskChainStartTime sets the MkaBasicPskChainStartTime value in the MkaBasic object
+func (obj *mkaBasic) SetPskChainStartTime(value MkaBasicPskChainStartTime) MkaBasic {
 
 	obj.pskChainStartTimeHolder = nil
 	obj.obj.PskChainStartTime = value.msg()

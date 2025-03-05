@@ -8615,9 +8615,8 @@ message MkaBasic {
   // Rekey Mode.
   MkaBasicRekeyMode rekey_mode = 13;
 
-  // Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. The
-  // key start time will be relative to this value.
-  MkaBasicTime psk_chain_start_time = 14;
+  // Description missing in models
+  MkaBasicPskChainStartTime psk_chain_start_time = 14;
 }
 
 // The container for supported cipher suites.
@@ -8689,8 +8688,10 @@ message MkaBasicOffsetTime {
   optional uint32 mm = 2;
 }
 
-// Absolute time in a timezone.
-message MkaBasicTime {
+// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this
+// time is set, the key start time will be relative to this value. Otherwise if this
+// value is not set, key start time will be relative to test start time.
+message MkaBasicPskChainStartTime {
 
   message Choice {
     enum Enum {

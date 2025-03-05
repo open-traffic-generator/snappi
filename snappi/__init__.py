@@ -375,7 +375,7 @@ from .snappi import MkaBasicKeySourcePskIter
 from .snappi import MkaBasicSupportedCipherSuites
 from .snappi import MkaBasicRekeyMode
 from .snappi import MkaBasicRekeyModeTimerBased
-from .snappi import MkaBasicTime
+from .snappi import MkaBasicPskChainStartTime
 from .snappi import MkaBasicTimeUtc
 from .snappi import MkaKeyServer
 from .snappi import MkaTx

@@ -11577,9 +11577,7 @@ components:
           $ref: '#/components/schemas/Mka.Basic.RekeyMode'
           x-field-uid: 13
         psk_chain_start_time:
-          description: |-
-            Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. The key start time will be relative to this value.
-          $ref: '#/components/schemas/Mka.Basic.Time'
+          $ref: '#/components/schemas/Mka.Basic.PskChainStartTime'
           x-field-uid: 14
     Mka.Basic.SupportedCipherSuites:
       description: |-
@@ -11690,9 +11688,9 @@ components:
           minimum: 0
           default: 0
           x-field-uid: 2
-    Mka.Basic.Time:
+    Mka.Basic.PskChainStartTime:
       description: |-
-        Absolute time in a timezone.
+        Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.
       type: object
       properties:
         choice:
