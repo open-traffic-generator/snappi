@@ -370,7 +370,8 @@ from .snappi import Mka
 from .snappi import MkaBasic
 from .snappi import MkaBasicKeySource
 from .snappi import MkaBasicKeySourcePsk
-from .snappi import MkaBasicOffsetTime
+from .snappi import MkaBasicStartOffsetTime
+from .snappi import MkaBasicEndOffsetTime
 from .snappi import MkaBasicKeySourcePskIter
 from .snappi import MkaBasicSupportedCipherSuites
 from .snappi import MkaBasicRekeyMode

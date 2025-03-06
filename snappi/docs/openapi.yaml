@@ -11658,18 +11658,37 @@ components:
           default: F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
           x-field-uid: 2
         start_offset_time:
-          description: |-
-            Key start offset time in HH:MM. This is relative to key chain start time.
-          $ref: '#/components/schemas/Mka.Basic.OffsetTime'
+          description: ""
+          $ref: '#/components/schemas/Mka.Basic.StartOffsetTime'
           x-field-uid: 3
         end_offset_time:
-          description: |-
-            Key end offset time in HH:MM. This is relative to key chain start time.
-          $ref: '#/components/schemas/Mka.Basic.OffsetTime'
+          description: ""
+          $ref: '#/components/schemas/Mka.Basic.EndOffsetTime'
           x-field-uid: 4
-    Mka.Basic.OffsetTime:
+    Mka.Basic.StartOffsetTime:
       description: |-
-        Offset time.
+        Key start offset time in HH:MM. This is relative to key chain start time.
+      type: object
+      properties:
+        hh:
+          description: |-
+            Hours in HH format.
+          type: integer
+          format: uint32
+          minimum: 0
+          default: 0
+          x-field-uid: 1
+        mm:
+          description: |-
+            Minutes in MM format.
+          type: integer
+          format: uint32
+          minimum: 0
+          default: 0
+          x-field-uid: 2
+    Mka.Basic.EndOffsetTime:
+      description: |-
+        Key end offset time in HH:MM. This is relative to key chain start time. A value of "00:00" makes the key valid for lifetime.
       type: object
       properties:
         hh:

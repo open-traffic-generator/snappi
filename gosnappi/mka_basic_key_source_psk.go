@@ -16,8 +16,8 @@ type mkaBasicKeySourcePsk struct {
 	obj                   *otg.MkaBasicKeySourcePsk
 	marshaller            marshalMkaBasicKeySourcePsk
 	unMarshaller          unMarshalMkaBasicKeySourcePsk
-	startOffsetTimeHolder MkaBasicOffsetTime
-	endOffsetTimeHolder   MkaBasicOffsetTime
+	startOffsetTimeHolder MkaBasicStartOffsetTime
+	endOffsetTimeHolder   MkaBasicEndOffsetTime
 }
 
 func NewMkaBasicKeySourcePsk() MkaBasicKeySourcePsk {
@@ -286,20 +286,20 @@ type MkaBasicKeySourcePsk interface {
 	SetCakName(value string) MkaBasicKeySourcePsk
 	// HasCakName checks if CakName has been set in MkaBasicKeySourcePsk
 	HasCakName() bool
-	// StartOffsetTime returns MkaBasicOffsetTime, set in MkaBasicKeySourcePsk.
-	// MkaBasicOffsetTime is offset time.
-	StartOffsetTime() MkaBasicOffsetTime
-	// SetStartOffsetTime assigns MkaBasicOffsetTime provided by user to MkaBasicKeySourcePsk.
-	// MkaBasicOffsetTime is offset time.
-	SetStartOffsetTime(value MkaBasicOffsetTime) MkaBasicKeySourcePsk
+	// StartOffsetTime returns MkaBasicStartOffsetTime, set in MkaBasicKeySourcePsk.
+	// MkaBasicStartOffsetTime is key start offset time in HH:MM. This is relative to key chain start time.
+	StartOffsetTime() MkaBasicStartOffsetTime
+	// SetStartOffsetTime assigns MkaBasicStartOffsetTime provided by user to MkaBasicKeySourcePsk.
+	// MkaBasicStartOffsetTime is key start offset time in HH:MM. This is relative to key chain start time.
+	SetStartOffsetTime(value MkaBasicStartOffsetTime) MkaBasicKeySourcePsk
 	// HasStartOffsetTime checks if StartOffsetTime has been set in MkaBasicKeySourcePsk
 	HasStartOffsetTime() bool
-	// EndOffsetTime returns MkaBasicOffsetTime, set in MkaBasicKeySourcePsk.
-	// MkaBasicOffsetTime is offset time.
-	EndOffsetTime() MkaBasicOffsetTime
-	// SetEndOffsetTime assigns MkaBasicOffsetTime provided by user to MkaBasicKeySourcePsk.
-	// MkaBasicOffsetTime is offset time.
-	SetEndOffsetTime(value MkaBasicOffsetTime) MkaBasicKeySourcePsk
+	// EndOffsetTime returns MkaBasicEndOffsetTime, set in MkaBasicKeySourcePsk.
+	// MkaBasicEndOffsetTime is key end offset time in HH:MM. This is relative to key chain start time. A value of "00:00" makes the key valid for lifetime.
+	EndOffsetTime() MkaBasicEndOffsetTime
+	// SetEndOffsetTime assigns MkaBasicEndOffsetTime provided by user to MkaBasicKeySourcePsk.
+	// MkaBasicEndOffsetTime is key end offset time in HH:MM. This is relative to key chain start time. A value of "00:00" makes the key valid for lifetime.
+	SetEndOffsetTime(value MkaBasicEndOffsetTime) MkaBasicKeySourcePsk
 	// HasEndOffsetTime checks if EndOffsetTime has been set in MkaBasicKeySourcePsk
 	HasEndOffsetTime() bool
 	setNil()
@@ -349,27 +349,24 @@ func (obj *mkaBasicKeySourcePsk) SetCakName(value string) MkaBasicKeySourcePsk {
 	return obj
 }
 
-// Key start offset time in HH:MM. This is relative to key chain start time.
-// StartOffsetTime returns a MkaBasicOffsetTime
-func (obj *mkaBasicKeySourcePsk) StartOffsetTime() MkaBasicOffsetTime {
+// StartOffsetTime returns a MkaBasicStartOffsetTime
+func (obj *mkaBasicKeySourcePsk) StartOffsetTime() MkaBasicStartOffsetTime {
 	if obj.obj.StartOffsetTime == nil {
-		obj.obj.StartOffsetTime = NewMkaBasicOffsetTime().msg()
+		obj.obj.StartOffsetTime = NewMkaBasicStartOffsetTime().msg()
 	}
 	if obj.startOffsetTimeHolder == nil {
-		obj.startOffsetTimeHolder = &mkaBasicOffsetTime{obj: obj.obj.StartOffsetTime}
+		obj.startOffsetTimeHolder = &mkaBasicStartOffsetTime{obj: obj.obj.StartOffsetTime}
 	}
 	return obj.startOffsetTimeHolder
 }
 
-// Key start offset time in HH:MM. This is relative to key chain start time.
-// StartOffsetTime returns a MkaBasicOffsetTime
+// StartOffsetTime returns a MkaBasicStartOffsetTime
 func (obj *mkaBasicKeySourcePsk) HasStartOffsetTime() bool {
 	return obj.obj.StartOffsetTime != nil
 }
 
-// Key start offset time in HH:MM. This is relative to key chain start time.
-// SetStartOffsetTime sets the MkaBasicOffsetTime value in the MkaBasicKeySourcePsk object
-func (obj *mkaBasicKeySourcePsk) SetStartOffsetTime(value MkaBasicOffsetTime) MkaBasicKeySourcePsk {
+// SetStartOffsetTime sets the MkaBasicStartOffsetTime value in the MkaBasicKeySourcePsk object
+func (obj *mkaBasicKeySourcePsk) SetStartOffsetTime(value MkaBasicStartOffsetTime) MkaBasicKeySourcePsk {
 
 	obj.startOffsetTimeHolder = nil
 	obj.obj.StartOffsetTime = value.msg()
@@ -377,27 +374,24 @@ func (obj *mkaBasicKeySourcePsk) SetStartOffsetTime(value MkaBasicOffsetTime) Mk
 	return obj
 }
 
-// Key end offset time in HH:MM. This is relative to key chain start time.
-// EndOffsetTime returns a MkaBasicOffsetTime
-func (obj *mkaBasicKeySourcePsk) EndOffsetTime() MkaBasicOffsetTime {
+// EndOffsetTime returns a MkaBasicEndOffsetTime
+func (obj *mkaBasicKeySourcePsk) EndOffsetTime() MkaBasicEndOffsetTime {
 	if obj.obj.EndOffsetTime == nil {
-		obj.obj.EndOffsetTime = NewMkaBasicOffsetTime().msg()
+		obj.obj.EndOffsetTime = NewMkaBasicEndOffsetTime().msg()
 	}
 	if obj.endOffsetTimeHolder == nil {
-		obj.endOffsetTimeHolder = &mkaBasicOffsetTime{obj: obj.obj.EndOffsetTime}
+		obj.endOffsetTimeHolder = &mkaBasicEndOffsetTime{obj: obj.obj.EndOffsetTime}
 	}
 	return obj.endOffsetTimeHolder
 }
 
-// Key end offset time in HH:MM. This is relative to key chain start time.
-// EndOffsetTime returns a MkaBasicOffsetTime
+// EndOffsetTime returns a MkaBasicEndOffsetTime
 func (obj *mkaBasicKeySourcePsk) HasEndOffsetTime() bool {
 	return obj.obj.EndOffsetTime != nil
 }
 
-// Key end offset time in HH:MM. This is relative to key chain start time.
-// SetEndOffsetTime sets the MkaBasicOffsetTime value in the MkaBasicKeySourcePsk object
-func (obj *mkaBasicKeySourcePsk) SetEndOffsetTime(value MkaBasicOffsetTime) MkaBasicKeySourcePsk {
+// SetEndOffsetTime sets the MkaBasicEndOffsetTime value in the MkaBasicKeySourcePsk object
+func (obj *mkaBasicKeySourcePsk) SetEndOffsetTime(value MkaBasicEndOffsetTime) MkaBasicKeySourcePsk {
 
 	obj.endOffsetTimeHolder = nil
 	obj.obj.EndOffsetTime = value.msg()

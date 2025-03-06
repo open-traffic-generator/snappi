@@ -8669,15 +8669,28 @@ message MkaBasicKeySourcePsk {
   // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
   optional string cak_name = 2;
 
-  // Key start offset time in HH:MM. This is relative to key chain start time.
-  MkaBasicOffsetTime start_offset_time = 3;
+  // 
+  MkaBasicStartOffsetTime start_offset_time = 3;
 
-  // Key end offset time in HH:MM. This is relative to key chain start time.
-  MkaBasicOffsetTime end_offset_time = 4;
+  // 
+  MkaBasicEndOffsetTime end_offset_time = 4;
 }
 
-// Offset time.
-message MkaBasicOffsetTime {
+// Key start offset time in HH:MM. This is relative to key chain start time.
+message MkaBasicStartOffsetTime {
+
+  // Hours in HH format.
+  // default = 0
+  optional uint32 hh = 1;
+
+  // Minutes in MM format.
+  // default = 0
+  optional uint32 mm = 2;
+}
+
+// Key end offset time in HH:MM. This is relative to key chain start time. A value of
+// 00:00 makes the key valid for lifetime.
+message MkaBasicEndOffsetTime {
 
   // Hours in HH format.
   // default = 0
