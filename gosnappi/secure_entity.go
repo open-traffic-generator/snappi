@@ -284,8 +284,6 @@ type SecureEntity interface {
 	// SetKeyGenerationProtocol assigns SecureEntityKeyGenerationProtocol provided by user to SecureEntity.
 	// SecureEntityKeyGenerationProtocol is container of Key generation protocol configuration.
 	SetKeyGenerationProtocol(value SecureEntityKeyGenerationProtocol) SecureEntity
-	// HasKeyGenerationProtocol checks if KeyGenerationProtocol has been set in SecureEntity
-	HasKeyGenerationProtocol() bool
 	// DataPlane returns SecureEntityDataPlane, set in SecureEntity.
 	// SecureEntityDataPlane is a container of data plane properties.
 	DataPlane() SecureEntityDataPlane
@@ -323,12 +321,6 @@ func (obj *secureEntity) KeyGenerationProtocol() SecureEntityKeyGenerationProtoc
 		obj.keyGenerationProtocolHolder = &secureEntityKeyGenerationProtocol{obj: obj.obj.KeyGenerationProtocol}
 	}
 	return obj.keyGenerationProtocolHolder
-}
-
-// This contains the properties of key generation protocol of Secure Entity (SecY).
-// KeyGenerationProtocol returns a SecureEntityKeyGenerationProtocol
-func (obj *secureEntity) HasKeyGenerationProtocol() bool {
-	return obj.obj.KeyGenerationProtocol != nil
 }
 
 // This contains the properties of key generation protocol of Secure Entity (SecY).
@@ -377,6 +369,11 @@ func (obj *secureEntity) validateObj(vObj *validation, set_default bool) {
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface SecureEntity")
+	}
+
+	// KeyGenerationProtocol is required
+	if obj.obj.KeyGenerationProtocol == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "KeyGenerationProtocol is required field on interface SecureEntity")
 	}
 
 	if obj.obj.KeyGenerationProtocol != nil {

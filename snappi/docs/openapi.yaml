@@ -11029,6 +11029,7 @@ components:
       type: object
       required:
       - name
+      - key_generation_protocol
       properties:
         name:
           x-field-uid: 1
@@ -11104,6 +11105,8 @@ components:
       description: |-
         A container of encapsulation properties for a secure entity(SecY).
       type: object
+      required:
+      - crypto_engine
       properties:
         tx:
           description: |-
@@ -11161,24 +11164,18 @@ components:
       properties:
         choice:
           description: |-
-            Engine type based on encryption and/ or decryption capability. Supported types: 1) encrypt_only - engine can only encrypt transmitted packets but such engine cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) encrypt_decrypt - engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ ddecryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can also be sent/ received.
+            Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only - engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent.
           type: string
           default: encrypt_only
           x-field-uid: 1
           x-enum:
             encrypt_only:
               x-field-uid: 1
-            encrypt_decrypt:
-              x-field-uid: 2
           enum:
           - encrypt_only
-          - encrypt_decrypt
         encrypt_only:
           $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptOnly'
           x-field-uid: 2
-        encrypt_decrypt:
-          $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptDecrypt'
-          x-field-uid: 3
     SecureEntity.CryptoEngine.EncryptOnly:
       description: |-
         The container for encrypt only engine configuration.
@@ -11191,19 +11188,6 @@ components:
           x-field-uid: 1
         traffic_options:
           $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptOnly.TrafficOptions'
-          x-field-uid: 2
-    SecureEntity.CryptoEngine.EncryptDecrypt:
-      description: |-
-        The container for encrypt and decrypt engine configuration.
-      type: object
-      properties:
-        secure_channels:
-          type: array
-          items:
-            $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptDecrypt.TxSc'
-          x-field-uid: 1
-        hardware_acceleration:
-          $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration'
           x-field-uid: 2
     SecureEntity.CryptoEngine.EncryptOnly.TxSc:
       description: |-
@@ -11304,130 +11288,6 @@ components:
           type: boolean
           default: true
           x-field-uid: 1
-    SecureEntity.CryptoEngine.EncryptDecrypt.TxSc:
-      description: |-
-        Secure channel configuration.
-      type: object
-      properties:
-        tx_pn:
-          $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptDecrypt.TxSc.TxPn'
-          x-field-uid: 1
-    SecureEntity.CryptoEngine.EncryptDecrypt.TxSc.TxPn:
-      description: |-
-        Starting packet number(PN) configuration.
-      type: object
-      properties:
-        starting_pn:
-          description: |-
-            Initial Tx packet number(PN).
-          type: integer
-          format: uint32
-          minimum: 1
-          default: 1
-          x-field-uid: 1
-        starting_xpn:
-          description: |-
-            The starting extended packet number(XPN).
-          type: string
-          format: hex
-          minLength: 1
-          maxLength: 16
-          minimum: 1
-          default: '0x0000000000000001'
-          x-field-uid: 3
-    SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration:
-      description: |-
-        Hardware acceleration configuration for offloading MACsec processing to hardware.
-      type: object
-      properties:
-        choice:
-          description: |-
-            Hardware acceleration types.
-          type: string
-          default: none
-          x-field-uid: 1
-          x-enum:
-            none:
-              x-field-uid: 1
-            inline_crypto:
-              x-field-uid: 2
-          enum:
-          - none
-          - inline_crypto
-        inline_crypto:
-          $ref: '#/components/schemas/SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration.InlineCrypto'
-          x-field-uid: 2
-    SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration.InlineCrypto:
-      description: |-
-        Inline crypto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
-      type: object
-      properties:
-        rx_sectag_offset:
-          description: |-
-            Offset of Rx secTAG from the first byte in packet.
-          type: integer
-          format: uint32
-          default: 12
-          x-field-uid: 1
-        type_of_ca:
-          description: |-
-            Type of connectivity association(CA).
-          type: string
-          x-field-uid: 2
-          x-enum:
-            pairwise_ca:
-              x-field-uid: 1
-            group_ca_single_dut:
-              x-field-uid: 2
-            group_ca_multipe_duts:
-              x-field-uid: 3
-          enum:
-          - pairwise_ca
-          - group_ca_single_dut
-          - group_ca_multipe_duts
-        max_ca_count:
-          description: |-
-            The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
-          type: integer
-          format: uint32
-          minimum: 1
-          maximum: 256
-          default: 256
-          x-field-uid: 3
-        max_dut_tx_sc_per_ca:
-          description: |-
-            The maximum number of DUT transmit SCs that can be supported per CA. The count should be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in the CA in case of group CA with multiple DUTs scenario.
-          type: integer
-          format: uint32
-          minimum: 1
-          maximum: 256
-          default: 1
-          x-field-uid: 4
-        max_device_per_ca:
-          description: |-
-            The maximum number of MACsec devices at test port that can be supported on each CA. This number is calculated automatically based on the values configured for Max CA Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured accordingly.
-          type: integer
-          format: uint32
-          minimum: 1
-          default: 256
-          x-field-uid: 5
-        rx_sc_identifying_field:
-          description: |-
-            The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
-          type: string
-          default: source_mac
-          x-field-uid: 6
-          x-enum:
-            source_mac:
-              x-field-uid: 1
-            sci_sytem_id:
-              x-field-uid: 2
-            sci_port_id:
-              x-field-uid: 3
-          enum:
-          - source_mac
-          - sci_sytem_id
-          - sci_port_id
     Mka:
       description: |-
         Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
@@ -11684,6 +11544,7 @@ components:
           type: integer
           format: uint32
           minimum: 0
+          maximum: 59
           default: 0
           x-field-uid: 2
     Mka.Basic.EndOffsetTime:
@@ -11705,6 +11566,7 @@ components:
           type: integer
           format: uint32
           minimum: 0
+          maximum: 59
           default: 0
           x-field-uid: 2
     Mka.Basic.PskChainStartTime:

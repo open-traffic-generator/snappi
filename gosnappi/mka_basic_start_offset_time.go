@@ -339,10 +339,10 @@ func (obj *mkaBasicStartOffsetTime) validateObj(vObj *validation, set_default bo
 
 	if obj.obj.Mm != nil {
 
-		if *obj.obj.Mm > 4294967295 {
+		if *obj.obj.Mm > 59 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= MkaBasicStartOffsetTime.Mm <= 4294967295 but Got %d", *obj.obj.Mm))
+				fmt.Sprintf("0 <= MkaBasicStartOffsetTime.Mm <= 59 but Got %d", *obj.obj.Mm))
 		}
 
 	}

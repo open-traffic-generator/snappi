@@ -405,12 +405,6 @@ from .snappi import SecureEntityCryptoEngineEncryptOnlyFixedPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyIncrementingPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxScIter
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTrafficOptions
-from .snappi import SecureEntityCryptoEngineEncryptDecrypt
-from .snappi import SecureEntityCryptoEngineEncryptDecryptTxSc
-from .snappi import SecureEntityCryptoEngineEncryptDecryptTxScTxPn
-from .snappi import SecureEntityCryptoEngineEncryptDecryptTxScIter
-from .snappi import SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-from .snappi import SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationInlineCrypto
 from .snappi import DeviceMacsecEthernetInterfaceIter
 from .snappi import DeviceIter
 from .snappi import Flow

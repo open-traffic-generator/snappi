@@ -298,8 +298,6 @@ type SecureEntityDataPlaneEncapsulation interface {
 	// SetCryptoEngine assigns SecureEntityCryptoEngine provided by user to SecureEntityDataPlaneEncapsulation.
 	// SecureEntityCryptoEngine is a container of crypto engine properties of a SecY.
 	SetCryptoEngine(value SecureEntityCryptoEngine) SecureEntityDataPlaneEncapsulation
-	// HasCryptoEngine checks if CryptoEngine has been set in SecureEntityDataPlaneEncapsulation
-	HasCryptoEngine() bool
 	setNil()
 }
 
@@ -372,12 +370,6 @@ func (obj *secureEntityDataPlaneEncapsulation) CryptoEngine() SecureEntityCrypto
 }
 
 // Crypto engine properties of SecY.
-// CryptoEngine returns a SecureEntityCryptoEngine
-func (obj *secureEntityDataPlaneEncapsulation) HasCryptoEngine() bool {
-	return obj.obj.CryptoEngine != nil
-}
-
-// Crypto engine properties of SecY.
 // SetCryptoEngine sets the SecureEntityCryptoEngine value in the SecureEntityDataPlaneEncapsulation object
 func (obj *secureEntityDataPlaneEncapsulation) SetCryptoEngine(value SecureEntityCryptoEngine) SecureEntityDataPlaneEncapsulation {
 
@@ -400,6 +392,11 @@ func (obj *secureEntityDataPlaneEncapsulation) validateObj(vObj *validation, set
 	if obj.obj.Rx != nil {
 
 		obj.Rx().validateObj(vObj, set_default)
+	}
+
+	// CryptoEngine is required
+	if obj.obj.CryptoEngine == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "CryptoEngine is required field on interface SecureEntityDataPlaneEncapsulation")
 	}
 
 	if obj.obj.CryptoEngine != nil {

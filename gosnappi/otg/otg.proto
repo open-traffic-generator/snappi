@@ -8233,6 +8233,7 @@ message SecureEntity {
   optional string name = 1;
 
   // This contains the properties of key generation protocol of Secure Entity (SecY).
+  // required = true
   SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
 
   // This contains the properties of data plane of Secure Entity (SecY).
@@ -8291,6 +8292,7 @@ message SecureEntityDataPlaneEncapsulation {
   SecureEntityDataPlaneRx rx = 2;
 
   // Crypto engine properties of SecY.
+  // required = true
   SecureEntityCryptoEngine crypto_engine = 3;
 }
 
@@ -8325,25 +8327,17 @@ message SecureEntityCryptoEngine {
     enum Enum {
       unspecified = 0;
       encrypt_only = 1;
-      encrypt_decrypt = 2;
     }
   }
-  // Engine type based on encryption and/ or decryption capability. Supported types: 1)
-  // encrypt_only - engine can only encrypt transmitted packets but such engine cannot
-  // decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such
-  // packets cannot be delivered to the receiving device. Hence only stateless traffic
-  // can be sent. 2) encrypt_decrypt - engine can both encrypt transmitted packets and
-  // decrypt packets on arrival. Such engine can have hardware acceleration for faster
-  // encryption/ ddecryption. As both encryption and decryption are possible, stateful
-  // (e.g. TCP) traffic can also be sent/ received.
+  // Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only
+  // - engine can only encrypt transmitted packets but it cannot decrypt packets upon
+  // arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered
+  // to the receiving device. Hence only stateless traffic can be sent.
   // default = Choice.Enum.encrypt_only
   optional Choice.Enum choice = 1;
 
   // Description missing in models
   SecureEntityCryptoEngineEncryptOnly encrypt_only = 2;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecrypt encrypt_decrypt = 3;
 }
 
 // The container for encrypt only engine configuration.
@@ -8354,16 +8348,6 @@ message SecureEntityCryptoEngineEncryptOnly {
 
   // Description missing in models
   SecureEntityCryptoEngineEncryptOnlyTrafficOptions traffic_options = 2;
-}
-
-// The container for encrypt and decrypt engine configuration.
-message SecureEntityCryptoEngineEncryptDecrypt {
-
-  // Description missing in models
-  repeated SecureEntityCryptoEngineEncryptDecryptTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration hardware_acceleration = 2;
 }
 
 // The container for Tx secure channel configuration.
@@ -8432,97 +8416,6 @@ message SecureEntityCryptoEngineEncryptOnlyTrafficOptions {
   // Send gratuitous ARP or not.
   // default = True
   optional bool send_gratuitous_arp = 1;
-}
-
-// Secure channel configuration.
-message SecureEntityCryptoEngineEncryptDecryptTxSc {
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecryptTxScTxPn tx_pn = 1;
-}
-
-// Starting packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptDecryptTxScTxPn {
-
-  // Initial Tx packet number(PN).
-  // default = 1
-  optional uint32 starting_pn = 1;
-
-  // The starting extended packet number(XPN).
-  // default = 0x0000000000000001
-  optional string starting_xpn = 3;
-}
-
-// Hardware acceleration configuration for offloading MACsec processing to hardware.
-message SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      none = 1;
-      inline_crypto = 2;
-    }
-  }
-  // Hardware acceleration types.
-  // default = Choice.Enum.none
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationInlineCrypto inline_crypto = 2;
-}
-
-// Inline crypto engine configuration. Encryption/ decryption are offloaded to hardware.
-// Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated
-// in MACsec header on transmit.
-message SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationInlineCrypto {
-
-  // Offset of Rx secTAG from the first byte in packet.
-  // default = 12
-  optional uint32 rx_sectag_offset = 1;
-
-  message TypeOfCa {
-    enum Enum {
-      unspecified = 0;
-      pairwise_ca = 1;
-      group_ca_single_dut = 2;
-      group_ca_multipe_duts = 3;
-    }
-  }
-  // Type of connectivity association(CA).
-  optional TypeOfCa.Enum type_of_ca = 2;
-
-  // The maximum number of CAs configured on the port. The maximum count supported per
-  // port is 256 for Pair-wise CA, each CA having one MACsec device.
-  // default = 256
-  optional uint32 max_ca_count = 3;
-
-  // The maximum number of DUT transmit SCs that can be supported per CA. The count should
-  // be number of Tx SCs supported by the DUT per CA, multiplied by number of DUTs in
-  // the CA in case of group CA with multiple DUTs scenario.
-  // default = 1
-  optional uint32 max_dut_tx_sc_per_ca = 4;
-
-  // The maximum number of MACsec devices at test port that can be supported on each CA.
-  // This number is calculated automatically based on the values configured for Max CA
-  // Count and Max DUT Tx SC Per CA. Number of MACsec devices at test port should be configured
-  // accordingly.
-  // default = 256
-  optional uint32 max_device_per_ca = 5;
-
-  message RxScIdentifyingField {
-    enum Enum {
-      unspecified = 0;
-      source_mac = 1;
-      sci_sytem_id = 2;
-      sci_port_id = 3;
-    }
-  }
-  // The field based on which secure channel(SC) will be identified by the receiving port.
-  // Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2)
-  // SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify
-  // based on SCI port ID field.
-  // default = RxScIdentifyingField.Enum.source_mac
-  optional RxScIdentifyingField.Enum rx_sc_identifying_field = 6;
 }
 
 // Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
