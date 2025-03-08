@@ -270,18 +270,14 @@ type Dhcpv6ClientOptionsDuidUuidVariant interface {
 	setChoice(value Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum) Dhcpv6ClientOptionsDuidUuidVariant
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsDuidUuidVariant
 	HasChoice() bool
-	// getter for Ncs to set choice.
-	Ncs()
-	// getter for VarReserved to set choice.
-	VarReserved()
 	// getter for Guid to set choice.
 	Guid()
-	// getter for VarReserved to set choice.
-	VarReserved()
-	// getter for Dce to set choice.
-	Dce()
 	// getter for Ncs to set choice.
 	Ncs()
+	// getter for Dce to set choice.
+	Dce()
+	// getter for VarReserved to set choice.
+	VarReserved()
 }
 
 type Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum string
@@ -303,24 +299,14 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) Choice() Dhcpv6ClientOptionsDuidU
 	return Dhcpv6ClientOptionsDuidUuidVariantChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Ncs to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) Ncs() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.NCS)
-}
-
-// getter for VarReserved to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
-}
-
 // getter for Guid to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVariant) Guid() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.GUID)
 }
 
-// getter for VarReserved to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
+// getter for Ncs to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) Ncs() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.NCS)
 }
 
 // getter for Dce to set choice
@@ -328,9 +314,9 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) Dce() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.DCE)
 }
 
-// getter for Ncs to set choice
-func (obj *dhcpv6ClientOptionsDuidUuidVariant) Ncs() {
-	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.NCS)
+// getter for VarReserved to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
 }
 
 // The current variants are ncs, dce,microsoft guid and reserved.

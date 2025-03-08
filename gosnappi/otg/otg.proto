@@ -1681,6 +1681,9 @@ message Device {
 
   // Configuration of MACsec device.
   DeviceMacsec macsec = 11;
+
+  // Configuration for OSPFv3 router.
+  DeviceOspfv3Router ospfv3 = 12;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -8216,10 +8219,6 @@ message DeviceMacsecEthernetInterface {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -8903,6 +8902,334 @@ message SecureEntityStaticKeyRxSc {
 
   // Rx SAK pool.
   repeated SecureEntityStaticKeySak saks = 4;
+}
+
+// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
+// 
+// A container of properties for an OSPFv3 router.
+message DeviceOspfv3Router {
+
+  // OSPFv3 Router Id.
+  Ospfv3RouterId router_id = 1;
+
+  // List of OSPFv3 router instances for this router.
+  repeated Ospfv3RouterInstance instances = 2;
+}
+
+// A container of properties for an OSPFv3 router instance and its interfaces and route
+// ranges.
+message Ospfv3RouterInstance {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The time in seconds for LSA retransmission.
+  // default = 5
+  optional uint32 lsa_retransmit_time = 2;
+
+  // The time in seconds required for LSA refresh.
+  // default = 1800
+  optional uint32 lsa_refresh_time = 3;
+
+  // The gap in miliseconds between each Flood Link State Update burst.
+  // default = 1000
+  optional uint32 inter_burst_lsu_interval = 4;
+
+  // Description missing in models
+  Ospfv3GracefulRestart graceful_restart = 5;
+
+  // Configuration for controlling storage of OSPFv3 learned LSAs received from the neighbors.
+  // default = False
+  optional bool store_lsa = 6;
+
+  // Optional container for OSPFv3 router capabilities.
+  Ospfv3Capabilities capabilities = 7;
+
+  // List of OSPFv3 interfaces for this router.
+  repeated Ospfv3Interface interfaces = 8;
+
+  // Emulated OSPFv4 IPv6 routes.
+  repeated Ospfv3V6RouteRange v6_routes = 9;
+}
+
+// Container for OSPFv3 Router ID configuration.
+message Ospfv3RouterId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      custom = 2;
+    }
+  }
+  // IP address of Router ID for this emulated OSPFv3 router.
+  // - auto: When first IPv4 address on the router is attempted to be assigned as Router
+  // ID.
+  // If none are available for use, implementation should return an error.
+  // - custom: When, Router ID needs to be configured different from first IPv4 address
+  // of the router.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Router ID in IPv4 address format.
+  optional string custom = 2;
+}
+
+// The OSPFv3 router optional attributes.
+message Ospfv3Capabilities {
+
+  // Set to indicate that the router acts as an Area Border Router.
+  // default = False
+  optional bool lsa_b_bit = 1;
+
+  // Set to indicate that the router acts as an AS Boundary Router.
+  // default = False
+  optional bool lsa_e_bit = 2;
+}
+
+// Container of properties of OSPFv3 Graceful Retstart.
+message Ospfv3GracefulRestart {
+
+  // Support of Graceful Restart in Helper Mode.
+  // default = False
+  optional bool helper_mode = 1;
+}
+
+// Configuration for single OSPFv3 interface.
+message Ospfv3Interface {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The globally unique name of the IPv6 interface connected to the DUT.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 2;
+
+  // The Area ID of the area to which the attached network belongs.
+  // All routing protocol packets originating from the interface are
+  // labelled with this Area ID.
+  Ospfv3InterfaceArea area = 3;
+
+  // The OSPF network link type.
+  Ospfv3InterfaceNetworkType network_type = 4;
+
+  // Container for OSPFv3 interface capabilities.
+  Ospfv3InterfaceCapabilities capabilities = 5;
+
+  // Container for OSPFv3 optional interface properties.
+  Ospfv3InterfaceOptions options = 6;
+
+  // Enables multiple instances of OSPF to be run over a single link.
+  // Each protocol instance should be assigned a separate Instance ID;
+  // the Instance ID has link-local significance only.
+  // default = 0
+  optional uint32 instance_id = 7;
+}
+
+// Container for OSPFv3 Area ID identifies the routing area to which the host belongs.
+// 
+message Ospfv3InterfaceArea {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      id = 1;
+      ip = 2;
+    }
+  }
+  // The OSPFv3 Area ID identifies the routing area to which the host belongs. Area ID
+  // type can be following format.
+  // - id: A 32-bit number identifying the area.
+  // - ip: The Area ID in IPv4 address format.
+  // default = Choice.Enum.id
+  optional Choice.Enum choice = 1;
+
+  // The Area ID.
+  // default = 0
+  optional uint32 id = 2;
+
+  // The Area ID in IPv4 address format.
+  optional string ip = 3;
+}
+
+// The OSPFv3 network link type options.
+// - Broadcast
+// - Point to Point
+message Ospfv3InterfaceNetworkType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      broadcast = 1;
+      point_to_point = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.broadcast
+  optional Choice.Enum choice = 1;
+
+  // Capabilities associated with network type broadcast.
+  Ospfv3InterfaceBroadcast broadcast = 2;
+}
+
+// Contains OSPFv3 interface capabilities.
+message Ospfv3InterfaceCapabilities {
+
+  // The time interval, in seconds, between the Hello packets that
+  // the router sends on the interface. Advertised in Hello packets
+  // sent out this interface.
+  // default = 10
+  optional uint32 hello_interval = 1;
+
+  // The time interval in seconds before the router's neighbors will declare
+  // it down, when they stop hearing the router's Hello Packets.
+  // Advertised in Hello packets sent out this interface.
+  // default = 40
+  optional uint32 dead_interval = 2;
+
+  // The cost of transmitting data on this link.
+  // default = 10
+  optional uint32 link_metric = 3;
+
+  // If this is set to true, then the MTU received from the neighbor during Database (DB)
+  // Exchange
+  // will be validated, otherwise it will be ignored.
+  // 
+  // default = True
+  optional bool validate_received_mtu = 4;
+}
+
+// The Options field is present in OSPFv3 Hello packets, Database Description packets
+// and all LSAs.
+// The Options field enables OSPF routers to support (or not support) optional capabilities,
+// and to
+// communicate their capability level to other OSPF routers (https://datatracker.ietf.org/doc/html/rfc2740#appendix-A.2).
+// When used in Hello packets, the Options field allows a router to reject a neighbor
+// because of a capability mismatch.
+message Ospfv3InterfaceOptions {
+
+  // Demand Circuit: This bit describes the router's handling of demand circuits.
+  // default = False
+  optional bool dc_bit = 1;
+
+  // Router: This bit indicates if the originator is an active router.
+  // default = True
+  optional bool r_bit = 2;
+
+  // NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in
+  // [Ref8], rfc2740.
+  // default = False
+  optional bool n_bit = 3;
+
+  // External Capability: This bit describes the router's willingness to receive and forward
+  // External-Attributes-LSAs,  as specified in [Ref1], rfc2740.
+  // default = True
+  optional bool e_bit = 4;
+
+  // V6: If set, the router/link should be included in IPv6 routing calculations.
+  // default = True
+  optional bool v6_bit = 5;
+}
+
+// Container for capabilities associated with network type broadcast.
+message Ospfv3InterfaceBroadcast {
+
+  // The Priority for (Backup) Designated Router election.
+  // This value is used in Hello packets for the Designated Router (DR) election process.
+  // The default is 0, which indicates that the router will not participate in the DR
+  // election process.
+  // default = 0
+  optional uint32 priority = 1;
+}
+
+// Emulated OSPFv3 IPv6 routes.
+message Ospfv3V6RouteRange {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // A list of group of IPv6 route addresses.
+  repeated V6RouteAddress addresses = 2;
+
+  // The user-defined metric associated with this route range.
+  // default = 0
+  optional uint32 metric = 3;
+
+  // The type of the OSPFv3 routes.
+  Ospfv3V6RRRouteOrigin route_origin = 4;
+}
+
+// Container of type of the OSPFv3 types correspond directly to the OSPFv3 LSAs types.
+// 
+message Ospfv3V6RRRouteOrigin {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      intra_area = 1;
+      inter_area = 2;
+      external_type_1 = 3;
+      external_type_2 = 4;
+      nssa_external = 5;
+    }
+  }
+  // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
+  // - external_type_1: for Autonomous System (AS) External with internal AS metric. -
+  // external_type_2: for Autonomous System (AS) External with internal and external AS
+  // metric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
+  // default = Choice.Enum.inter_area
+  optional Choice.Enum choice = 1;
+
+  // Configuration for the type 7 Not-So-Stubby Area (NSSA) External.
+  Ospfv3V6RRNssaExternal nssa_external = 2;
+}
+
+// Container for the forwarding address of NSSA External route origin configuration.
+message Ospfv3V6RRNssaExternal {
+
+  // Configuration for capabilities associated with route origin.
+  Ospfv3V6RRCapabilities capabilities = 1;
+}
+
+// Container for the capabilities associated with route origin.
+message Ospfv3V6RRCapabilities {
+
+  // If set, LSAs will be propagated between Areas.
+  // default = False
+  optional bool propagation = 1;
+
+  // Configuration for forwarding address of NSSA External route origin.
+  Ospfv3V6RRForwardingAddress forwarding_address = 2;
+}
+
+// Container for the forwarding address of NSSA External route origin configuration.
+message Ospfv3V6RRForwardingAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      interface_ip = 1;
+      custom = 2;
+    }
+  }
+  // IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
+  // - interface_ip: if set, forwarding address is set with Interface IP6 address.
+  // - custom: if set, forwarding address is set with a custom IPv6 address.
+  // default = Choice.Enum.interface_ip
+  optional Choice.Enum choice = 1;
+
+  // Forwarding address in IPv6 format.
+  optional string custom = 2;
 }
 
 // A high level data plane traffic flow.
@@ -12931,6 +13258,7 @@ message MetricsRequest {
       convergence = 15;
       macsec = 16;
       mka = 17;
+      ospfv3 = 18;
     }
   }
   // Description missing in models
@@ -12987,6 +13315,9 @@ message MetricsRequest {
 
   // Description missing in models
   MkaMetricsRequest mka = 18;
+
+  // Description missing in models
+  Ospfv3MetricsRequest ospfv3 = 19;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -13012,6 +13343,7 @@ message MetricsResponse {
       convergence_metrics = 15;
       macsec_metrics = 16;
       mka_metrics = 17;
+      ospfv3_metrics = 18;
     }
   }
   // Description missing in models
@@ -13068,6 +13400,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated MkaMetric mka_metrics = 18;
+
+  // Description missing in models
+  repeated Ospfv3Metric ospfv3_metrics = 19;
 }
 
 // The port result request to the traffic generator
@@ -14838,10 +15173,6 @@ message MacsecMetricsRequest {
   // x-constraint:
   // - /components/schemas/Macsec/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
   repeated string secure_entity_names = 1;
 
   message ColumnNames {
@@ -14955,10 +15286,6 @@ message MkaMetricsRequest {
   // x-constraint:
   // - /components/schemas/Mka/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -15025,6 +15352,160 @@ message MkaMetric {
 
   // Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
   optional uint64 icv_mismatch = 11;
+}
+
+// The request to retrieve OSPFv3 per router metrics/statistics.
+message Ospfv3MetricsRequest {
+
+  // The names of OSPFv3 routers to return results for. An empty list will return results
+  // for all OSPFv3 routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Ospfv3.RouterInstance/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      full_state_count = 1;
+      down_state_count = 2;
+      sessions_flap = 3;
+      hellos_sent = 4;
+      hellos_received = 5;
+      dbd_sent = 6;
+      dbd_received = 7;
+      ls_request_sent = 8;
+      ls_request_received = 9;
+      ls_update_sent = 10;
+      ls_update_received = 11;
+      ls_ack_sent = 12;
+      ls_ack_received = 13;
+      lsa_sent = 14;
+      lsa_received = 15;
+      router_lsa_sent = 16;
+      router_lsa_received = 17;
+      network_lsa_sent = 18;
+      network_lsa_received = 19;
+      inter_area_prefix_lsa_sent = 20;
+      inter_area_prefix_lsa_received = 21;
+      inter_area_router_lsa_sent = 22;
+      inter_area_router_lsa_received = 23;
+      external_lsa_sent = 24;
+      external_lsa_received = 25;
+      nssa_lsa_sent = 26;
+      nssa_lsa_received = 27;
+      link_lsa_sent = 28;
+      link_lsa_received = 29;
+      intra_area_prefix_lsa_sent = 30;
+      intra_area_prefix_lsa_received = 31;
+    }
+  }
+  // The list of column names that the returned result set will contain.
+  // If the list is empty then all columns will be returned except for
+  // any result_groups.
+  // The name of the OSPFv3 Router cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// OSPFv3 per router statistics information.
+message Ospfv3Metric {
+
+  // The name of a configured OSPFv3 router.
+  optional string name = 1;
+
+  // The number of OSPFv3 sessions in up state.
+  optional uint64 full_state_count = 2;
+
+  // The number of OSPFv3 sessions in down state.
+  optional uint64 down_state_count = 3;
+
+  // The number of change of OSPFv3 sessions from up to down state.
+  optional uint64 sessions_flap = 4;
+
+  // The number of OSPFv3 Hello messages transmitted.
+  optional uint64 hellos_sent = 5;
+
+  // The number of OSPFv3 Hello messages received.
+  optional uint64 hellos_received = 6;
+
+  // The number of OSPFv3 Database Description (DBD) messages transmitted.
+  optional uint64 dbd_sent = 7;
+
+  // The number of OSPFv3 Database Description (DBD) messages received.
+  optional uint64 dbd_received = 8;
+
+  // The number of OSPFv3 LinkState (LS) Request messages transmitted.
+  optional uint64 ls_request_sent = 9;
+
+  // The number of OSPFv3 LinkState (LS) Request messages received.
+  optional uint64 ls_request_received = 10;
+
+  // The number of OSPFv3 LinkState (LS) Update messages transmitted.
+  optional uint64 ls_update_sent = 11;
+
+  // The number of OSPFv3 LinkState (LS) Update messages received.
+  optional uint64 ls_update_received = 12;
+
+  // The number of OSPFv3 LinkState (LS) Acknowledgement messages transmitted.
+  optional uint64 ls_ack_sent = 13;
+
+  // The number of OSPFv3 LinkState (LS) Acknowledgement messages received.
+  optional uint64 ls_ack_received = 14;
+
+  // The total number of OSPFv3 LinkState Advertisement (LSA) messages transmitted.
+  optional uint64 lsa_sent = 15;
+
+  // The total number of OSPFv3 LinkState Advertisement (LSA) messages received.
+  optional uint64 lsa_received = 16;
+
+  // The number of OSPFv3 Router (Type 1) LSAs transmitted.
+  optional uint64 router_lsa_sent = 17;
+
+  // The number of OSPFv3 Router (Type 1) LSAs received.
+  optional uint64 router_lsa_received = 18;
+
+  // The number of OSPFv3 Network (Type 2) LSAs transmitted.
+  optional uint64 network_lsa_sent = 19;
+
+  // The number of OSPFv3 Network (Type 2) LSAs received.
+  optional uint64 network_lsa_received = 20;
+
+  // The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs transmitted.
+  optional uint64 inter_area_prefix_lsa_sent = 21;
+
+  // The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs received.
+  optional uint64 inter_area_prefix_lsa_received = 22;
+
+  // The number of OSPFv3 Inter-Area-Router (Type 4) LSAs transmitted.
+  optional uint64 inter_area_router_lsa_sent = 23;
+
+  // The number of OSPFv3 Inter-Area-Router (Type 4) LSAs received.
+  optional uint64 inter_area_router_lsa_received = 24;
+
+  // The number of OSPFv3 External (Type 5) LSAs transmitted.
+  optional uint64 external_lsa_sent = 25;
+
+  // The number of OSPFv3 External (Type 5) LSAs received.
+  optional uint64 external_lsa_received = 26;
+
+  // The number of OSPFv3 NSSA (Type 7) LSAs transmitted.
+  optional uint64 nssa_lsa_sent = 27;
+
+  // The number of OSPFv3 NSSA (Type 7) LSAs received.
+  optional uint64 nssa_lsa_received = 28;
+
+  // The number of OSPFv3 Link (Type 8) LSAs transmitted.
+  optional uint64 link_lsa_sent = 29;
+
+  // The number of OSPFv3 Link (Type 8) LSAs received.
+  optional uint64 link_lsa_received = 30;
+
+  // The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs transmitted.
+  optional uint64 intra_area_prefix_lsa_sent = 31;
+
+  // The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs received.
+  optional uint64 intra_area_prefix_lsa_received = 32;
 }
 
 // Request to traffic generator for states of choice
