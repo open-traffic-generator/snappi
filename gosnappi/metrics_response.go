@@ -31,7 +31,8 @@ type metricsResponse struct {
 	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
 	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
 	convergenceMetricsHolder  MetricsResponseConvergenceMetricIter
-	ospfv3MetricsHolder       MetricsResponseOspfv3MetricIter
+	macsecMetricsHolder       MetricsResponseMacsecMetricIter
+	mkaMetricsHolder          MetricsResponseMkaMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -274,7 +275,8 @@ func (obj *metricsResponse) setNil() {
 	obj.dhcpv6ServerMetricsHolder = nil
 	obj.ospfv2MetricsHolder = nil
 	obj.convergenceMetricsHolder = nil
-	obj.ospfv3MetricsHolder = nil
+	obj.macsecMetricsHolder = nil
+	obj.mkaMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -308,6 +310,8 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
+	// getter for Dhcpv6Server to set choice.
+	Dhcpv6Server()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
 	// getter for Dhcpv6Server to set choice.
@@ -346,8 +350,10 @@ type MetricsResponse interface {
 	Ospfv2Metrics() MetricsResponseOspfv2MetricIter
 	// ConvergenceMetrics returns MetricsResponseConvergenceMetricIterIter, set in MetricsResponse
 	ConvergenceMetrics() MetricsResponseConvergenceMetricIter
-	// Ospfv3Metrics returns MetricsResponseOspfv3MetricIterIter, set in MetricsResponse
-	Ospfv3Metrics() MetricsResponseOspfv3MetricIter
+	// MacsecMetrics returns MetricsResponseMacsecMetricIterIter, set in MetricsResponse
+	MacsecMetrics() MetricsResponseMacsecMetricIter
+	// MkaMetrics returns MetricsResponseMkaMetricIterIter, set in MetricsResponse
+	MkaMetrics() MetricsResponseMkaMetricIter
 	setNil()
 }
 
@@ -370,7 +376,8 @@ var MetricsResponseChoice = struct {
 	DHCPV6_SERVER       MetricsResponseChoiceEnum
 	OSPFV2_METRICS      MetricsResponseChoiceEnum
 	CONVERGENCE_METRICS MetricsResponseChoiceEnum
-	OSPFV3_METRICS      MetricsResponseChoiceEnum
+	MACSEC_METRICS      MetricsResponseChoiceEnum
+	MKA_METRICS         MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:        MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:        MetricsResponseChoiceEnum("port_metrics"),
@@ -387,11 +394,17 @@ var MetricsResponseChoice = struct {
 	DHCPV6_SERVER:       MetricsResponseChoiceEnum("dhcpv6_server"),
 	OSPFV2_METRICS:      MetricsResponseChoiceEnum("ospfv2_metrics"),
 	CONVERGENCE_METRICS: MetricsResponseChoiceEnum("convergence_metrics"),
-	OSPFV3_METRICS:      MetricsResponseChoiceEnum("ospfv3_metrics"),
+	MACSEC_METRICS:      MetricsResponseChoiceEnum("macsec_metrics"),
+	MKA_METRICS:         MetricsResponseChoiceEnum("mka_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Dhcpv6Server to set choice
+func (obj *metricsResponse) Dhcpv6Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
 // getter for Dhcpv4Server to set choice
@@ -429,8 +442,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.Ospfv3Metrics = nil
-	obj.ospfv3MetricsHolder = nil
+	obj.obj.MkaMetrics = nil
+	obj.mkaMetricsHolder = nil
+	obj.obj.MacsecMetrics = nil
+	obj.macsecMetricsHolder = nil
 	obj.obj.ConvergenceMetrics = nil
 	obj.convergenceMetricsHolder = nil
 	obj.obj.Ospfv2Metrics = nil
@@ -498,8 +513,12 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 		obj.obj.ConvergenceMetrics = []*otg.ConvergenceMetric{}
 	}
 
-	if value == MetricsResponseChoice.OSPFV3_METRICS {
-		obj.obj.Ospfv3Metrics = []*otg.Ospfv3Metric{}
+	if value == MetricsResponseChoice.MACSEC_METRICS {
+		obj.obj.MacsecMetrics = []*otg.MacsecMetric{}
+	}
+
+	if value == MetricsResponseChoice.MKA_METRICS {
+		obj.obj.MkaMetrics = []*otg.MkaMetric{}
 	}
 
 	return obj
@@ -1811,89 +1830,176 @@ func (obj *metricsResponseConvergenceMetricIter) appendHolderSlice(item Converge
 }
 
 // description is TBD
-// Ospfv3Metrics returns a []Ospfv3Metric
-func (obj *metricsResponse) Ospfv3Metrics() MetricsResponseOspfv3MetricIter {
-	if len(obj.obj.Ospfv3Metrics) == 0 {
-		obj.setChoice(MetricsResponseChoice.OSPFV3_METRICS)
+// MacsecMetrics returns a []MacsecMetric
+func (obj *metricsResponse) MacsecMetrics() MetricsResponseMacsecMetricIter {
+	if len(obj.obj.MacsecMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.MACSEC_METRICS)
 	}
-	if obj.ospfv3MetricsHolder == nil {
-		obj.ospfv3MetricsHolder = newMetricsResponseOspfv3MetricIter(&obj.obj.Ospfv3Metrics).setMsg(obj)
+	if obj.macsecMetricsHolder == nil {
+		obj.macsecMetricsHolder = newMetricsResponseMacsecMetricIter(&obj.obj.MacsecMetrics).setMsg(obj)
 	}
-	return obj.ospfv3MetricsHolder
+	return obj.macsecMetricsHolder
 }
 
-type metricsResponseOspfv3MetricIter struct {
+type metricsResponseMacsecMetricIter struct {
 	obj               *metricsResponse
-	ospfv3MetricSlice []Ospfv3Metric
-	fieldPtr          *[]*otg.Ospfv3Metric
+	macsecMetricSlice []MacsecMetric
+	fieldPtr          *[]*otg.MacsecMetric
 }
 
-func newMetricsResponseOspfv3MetricIter(ptr *[]*otg.Ospfv3Metric) MetricsResponseOspfv3MetricIter {
-	return &metricsResponseOspfv3MetricIter{fieldPtr: ptr}
+func newMetricsResponseMacsecMetricIter(ptr *[]*otg.MacsecMetric) MetricsResponseMacsecMetricIter {
+	return &metricsResponseMacsecMetricIter{fieldPtr: ptr}
 }
 
-type MetricsResponseOspfv3MetricIter interface {
-	setMsg(*metricsResponse) MetricsResponseOspfv3MetricIter
-	Items() []Ospfv3Metric
-	Add() Ospfv3Metric
-	Append(items ...Ospfv3Metric) MetricsResponseOspfv3MetricIter
-	Set(index int, newObj Ospfv3Metric) MetricsResponseOspfv3MetricIter
-	Clear() MetricsResponseOspfv3MetricIter
-	clearHolderSlice() MetricsResponseOspfv3MetricIter
-	appendHolderSlice(item Ospfv3Metric) MetricsResponseOspfv3MetricIter
+type MetricsResponseMacsecMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseMacsecMetricIter
+	Items() []MacsecMetric
+	Add() MacsecMetric
+	Append(items ...MacsecMetric) MetricsResponseMacsecMetricIter
+	Set(index int, newObj MacsecMetric) MetricsResponseMacsecMetricIter
+	Clear() MetricsResponseMacsecMetricIter
+	clearHolderSlice() MetricsResponseMacsecMetricIter
+	appendHolderSlice(item MacsecMetric) MetricsResponseMacsecMetricIter
 }
 
-func (obj *metricsResponseOspfv3MetricIter) setMsg(msg *metricsResponse) MetricsResponseOspfv3MetricIter {
+func (obj *metricsResponseMacsecMetricIter) setMsg(msg *metricsResponse) MetricsResponseMacsecMetricIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&ospfv3Metric{obj: val})
+		obj.appendHolderSlice(&macsecMetric{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *metricsResponseOspfv3MetricIter) Items() []Ospfv3Metric {
-	return obj.ospfv3MetricSlice
+func (obj *metricsResponseMacsecMetricIter) Items() []MacsecMetric {
+	return obj.macsecMetricSlice
 }
 
-func (obj *metricsResponseOspfv3MetricIter) Add() Ospfv3Metric {
-	newObj := &otg.Ospfv3Metric{}
+func (obj *metricsResponseMacsecMetricIter) Add() MacsecMetric {
+	newObj := &otg.MacsecMetric{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &ospfv3Metric{obj: newObj}
+	newLibObj := &macsecMetric{obj: newObj}
 	newLibObj.setDefault()
-	obj.ospfv3MetricSlice = append(obj.ospfv3MetricSlice, newLibObj)
+	obj.macsecMetricSlice = append(obj.macsecMetricSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *metricsResponseOspfv3MetricIter) Append(items ...Ospfv3Metric) MetricsResponseOspfv3MetricIter {
+func (obj *metricsResponseMacsecMetricIter) Append(items ...MacsecMetric) MetricsResponseMacsecMetricIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.ospfv3MetricSlice = append(obj.ospfv3MetricSlice, item)
+		obj.macsecMetricSlice = append(obj.macsecMetricSlice, item)
 	}
 	return obj
 }
 
-func (obj *metricsResponseOspfv3MetricIter) Set(index int, newObj Ospfv3Metric) MetricsResponseOspfv3MetricIter {
+func (obj *metricsResponseMacsecMetricIter) Set(index int, newObj MacsecMetric) MetricsResponseMacsecMetricIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.ospfv3MetricSlice[index] = newObj
+	obj.macsecMetricSlice[index] = newObj
 	return obj
 }
-func (obj *metricsResponseOspfv3MetricIter) Clear() MetricsResponseOspfv3MetricIter {
+func (obj *metricsResponseMacsecMetricIter) Clear() MetricsResponseMacsecMetricIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Ospfv3Metric{}
-		obj.ospfv3MetricSlice = []Ospfv3Metric{}
+		*obj.fieldPtr = []*otg.MacsecMetric{}
+		obj.macsecMetricSlice = []MacsecMetric{}
 	}
 	return obj
 }
-func (obj *metricsResponseOspfv3MetricIter) clearHolderSlice() MetricsResponseOspfv3MetricIter {
-	if len(obj.ospfv3MetricSlice) > 0 {
-		obj.ospfv3MetricSlice = []Ospfv3Metric{}
+func (obj *metricsResponseMacsecMetricIter) clearHolderSlice() MetricsResponseMacsecMetricIter {
+	if len(obj.macsecMetricSlice) > 0 {
+		obj.macsecMetricSlice = []MacsecMetric{}
 	}
 	return obj
 }
-func (obj *metricsResponseOspfv3MetricIter) appendHolderSlice(item Ospfv3Metric) MetricsResponseOspfv3MetricIter {
-	obj.ospfv3MetricSlice = append(obj.ospfv3MetricSlice, item)
+func (obj *metricsResponseMacsecMetricIter) appendHolderSlice(item MacsecMetric) MetricsResponseMacsecMetricIter {
+	obj.macsecMetricSlice = append(obj.macsecMetricSlice, item)
+	return obj
+}
+
+// description is TBD
+// MkaMetrics returns a []MkaMetric
+func (obj *metricsResponse) MkaMetrics() MetricsResponseMkaMetricIter {
+	if len(obj.obj.MkaMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.MKA_METRICS)
+	}
+	if obj.mkaMetricsHolder == nil {
+		obj.mkaMetricsHolder = newMetricsResponseMkaMetricIter(&obj.obj.MkaMetrics).setMsg(obj)
+	}
+	return obj.mkaMetricsHolder
+}
+
+type metricsResponseMkaMetricIter struct {
+	obj            *metricsResponse
+	mkaMetricSlice []MkaMetric
+	fieldPtr       *[]*otg.MkaMetric
+}
+
+func newMetricsResponseMkaMetricIter(ptr *[]*otg.MkaMetric) MetricsResponseMkaMetricIter {
+	return &metricsResponseMkaMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseMkaMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseMkaMetricIter
+	Items() []MkaMetric
+	Add() MkaMetric
+	Append(items ...MkaMetric) MetricsResponseMkaMetricIter
+	Set(index int, newObj MkaMetric) MetricsResponseMkaMetricIter
+	Clear() MetricsResponseMkaMetricIter
+	clearHolderSlice() MetricsResponseMkaMetricIter
+	appendHolderSlice(item MkaMetric) MetricsResponseMkaMetricIter
+}
+
+func (obj *metricsResponseMkaMetricIter) setMsg(msg *metricsResponse) MetricsResponseMkaMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&mkaMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseMkaMetricIter) Items() []MkaMetric {
+	return obj.mkaMetricSlice
+}
+
+func (obj *metricsResponseMkaMetricIter) Add() MkaMetric {
+	newObj := &otg.MkaMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &mkaMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.mkaMetricSlice = append(obj.mkaMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseMkaMetricIter) Append(items ...MkaMetric) MetricsResponseMkaMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.mkaMetricSlice = append(obj.mkaMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseMkaMetricIter) Set(index int, newObj MkaMetric) MetricsResponseMkaMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.mkaMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseMkaMetricIter) Clear() MetricsResponseMkaMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.MkaMetric{}
+		obj.mkaMetricSlice = []MkaMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseMkaMetricIter) clearHolderSlice() MetricsResponseMkaMetricIter {
+	if len(obj.mkaMetricSlice) > 0 {
+		obj.mkaMetricSlice = []MkaMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseMkaMetricIter) appendHolderSlice(item MkaMetric) MetricsResponseMkaMetricIter {
+	obj.mkaMetricSlice = append(obj.mkaMetricSlice, item)
 	return obj
 }
 
@@ -2112,15 +2218,29 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.Ospfv3Metrics) != 0 {
+	if len(obj.obj.MacsecMetrics) != 0 {
 
 		if set_default {
-			obj.Ospfv3Metrics().clearHolderSlice()
-			for _, item := range obj.obj.Ospfv3Metrics {
-				obj.Ospfv3Metrics().appendHolderSlice(&ospfv3Metric{obj: item})
+			obj.MacsecMetrics().clearHolderSlice()
+			for _, item := range obj.obj.MacsecMetrics {
+				obj.MacsecMetrics().appendHolderSlice(&macsecMetric{obj: item})
 			}
 		}
-		for _, item := range obj.Ospfv3Metrics().Items() {
+		for _, item := range obj.MacsecMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.MkaMetrics) != 0 {
+
+		if set_default {
+			obj.MkaMetrics().clearHolderSlice()
+			for _, item := range obj.obj.MkaMetrics {
+				obj.MkaMetrics().appendHolderSlice(&mkaMetric{obj: item})
+			}
+		}
+		for _, item := range obj.MkaMetrics().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
@@ -2187,9 +2307,14 @@ func (obj *metricsResponse) setDefault() {
 		choice = MetricsResponseChoice.CONVERGENCE_METRICS
 	}
 
-	if len(obj.obj.Ospfv3Metrics) > 0 {
+	if len(obj.obj.MacsecMetrics) > 0 {
 		choices_set += 1
-		choice = MetricsResponseChoice.OSPFV3_METRICS
+		choice = MetricsResponseChoice.MACSEC_METRICS
+	}
+
+	if len(obj.obj.MkaMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.MKA_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
