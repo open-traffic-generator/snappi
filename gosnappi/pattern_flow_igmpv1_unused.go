@@ -50,6 +50,8 @@ type marshalPatternFlowIgmpv1Unused interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIgmpv1Unused to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIgmpv1Unused to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIgmpv1Unused struct {
@@ -167,6 +169,23 @@ func (m *unMarshalpatternFlowIgmpv1Unused) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIgmpv1Unused) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIgmpv1Unused) ToJson() (string, error) {

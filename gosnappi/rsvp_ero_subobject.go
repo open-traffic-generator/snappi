@@ -47,6 +47,8 @@ type marshalRsvpEroSubobject interface {
 	ToYaml() (string, error)
 	// ToJson marshals RsvpEroSubobject to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals RsvpEroSubobject to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalrsvpEroSubobject struct {
@@ -164,6 +166,23 @@ func (m *unMarshalrsvpEroSubobject) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalrsvpEroSubobject) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalrsvpEroSubobject) ToJson() (string, error) {

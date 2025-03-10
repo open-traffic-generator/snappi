@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathObjectsCustomType interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathObjectsCustomType to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathObjectsCustomType to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathObjectsCustomType struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathObjectsCustomType) FromYaml(value string) e
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathObjectsCustomType) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathObjectsCustomType) ToJson() (string, error) {

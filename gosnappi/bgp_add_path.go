@@ -47,6 +47,8 @@ type marshalBgpAddPath interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAddPath to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpAddPath to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAddPath struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpAddPath) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpAddPath) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpAddPath) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalDhcpv4LeaseStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv4LeaseStateRequest to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Dhcpv4LeaseStateRequest to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv4LeaseStateRequest struct {
@@ -164,6 +166,23 @@ func (m *unMarshaldhcpv4LeaseStateRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldhcpv4LeaseStateRequest) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldhcpv4LeaseStateRequest) ToJson() (string, error) {

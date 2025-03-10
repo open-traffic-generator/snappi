@@ -49,6 +49,8 @@ type marshalFlowIpv4Dscp interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowIpv4Dscp to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowIpv4Dscp to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowIpv4Dscp struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowIpv4Dscp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowIpv4Dscp) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowIpv4Dscp) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalBgpSrtePolicyPrioritySubTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrtePolicyPrioritySubTlv to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpSrtePolicyPrioritySubTlv to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrtePolicyPrioritySubTlv struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpSrtePolicyPrioritySubTlv) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpSrtePolicyPrioritySubTlv) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpSrtePolicyPrioritySubTlv) ToJson() (string, error) {

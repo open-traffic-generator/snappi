@@ -47,6 +47,8 @@ type marshalBgpExtCommunity interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpExtCommunity to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpExtCommunity to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpExtCommunity struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpExtCommunity) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpExtCommunity) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpExtCommunity) ToJson() (string, error) {

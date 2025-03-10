@@ -47,6 +47,8 @@ type marshalBgpPrefixIpv4UnicastFilter interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpPrefixIpv4UnicastFilter to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpPrefixIpv4UnicastFilter to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpPrefixIpv4UnicastFilter struct {
@@ -164,6 +166,23 @@ func (m *unMarshalbgpPrefixIpv4UnicastFilter) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpPrefixIpv4UnicastFilter) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpPrefixIpv4UnicastFilter) ToJson() (string, error) {

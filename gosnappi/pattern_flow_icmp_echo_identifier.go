@@ -50,6 +50,8 @@ type marshalPatternFlowIcmpEchoIdentifier interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIcmpEchoIdentifier to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIcmpEchoIdentifier to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIcmpEchoIdentifier struct {
@@ -167,6 +169,23 @@ func (m *unMarshalpatternFlowIcmpEchoIdentifier) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIcmpEchoIdentifier) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIcmpEchoIdentifier) ToJson() (string, error) {

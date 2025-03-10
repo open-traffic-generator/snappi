@@ -50,6 +50,8 @@ type marshalBgpOneStructuredUpdateReplay interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpOneStructuredUpdateReplay to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpOneStructuredUpdateReplay to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpOneStructuredUpdateReplay struct {
@@ -167,6 +169,23 @@ func (m *unMarshalbgpOneStructuredUpdateReplay) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpOneStructuredUpdateReplay) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpOneStructuredUpdateReplay) ToJson() (string, error) {
