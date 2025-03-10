@@ -48,6 +48,8 @@ type marshalMkaBasicKeySource interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaBasicKeySource to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals MkaBasicKeySource to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaBasicKeySource struct {
@@ -165,6 +167,23 @@ func (m *unMarshalmkaBasicKeySource) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalmkaBasicKeySource) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalmkaBasicKeySource) ToJson() (string, error) {

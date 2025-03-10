@@ -48,6 +48,8 @@ type marshalSecureEntityStaticKeyRekeyMode interface {
 	ToYaml() (string, error)
 	// ToJson marshals SecureEntityStaticKeyRekeyMode to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals SecureEntityStaticKeyRekeyMode to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalsecureEntityStaticKeyRekeyMode struct {
@@ -167,6 +169,23 @@ func (m *unMarshalsecureEntityStaticKeyRekeyMode) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalsecureEntityStaticKeyRekeyMode) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalsecureEntityStaticKeyRekeyMode) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -278,10 +297,10 @@ type SecureEntityStaticKeyRekeyMode interface {
 	setChoice(value SecureEntityStaticKeyRekeyModeChoiceEnum) SecureEntityStaticKeyRekeyMode
 	// HasChoice checks if Choice has been set in SecureEntityStaticKeyRekeyMode
 	HasChoice() bool
-	// getter for PnBased to set choice.
-	PnBased()
 	// getter for DontRekey to set choice.
 	DontRekey()
+	// getter for PnBased to set choice.
+	PnBased()
 	// TimerBased returns SecureEntityStaticKeyRekeyModeTimerBased, set in SecureEntityStaticKeyRekeyMode.
 	// SecureEntityStaticKeyRekeyModeTimerBased is timer based periodic rekey properties.
 	TimerBased() SecureEntityStaticKeyRekeyModeTimerBased
@@ -310,14 +329,14 @@ func (obj *secureEntityStaticKeyRekeyMode) Choice() SecureEntityStaticKeyRekeyMo
 	return SecureEntityStaticKeyRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for PnBased to set choice
-func (obj *secureEntityStaticKeyRekeyMode) PnBased() {
-	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.PN_BASED)
-}
-
 // getter for DontRekey to set choice
 func (obj *secureEntityStaticKeyRekeyMode) DontRekey() {
 	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.DONT_REKEY)
+}
+
+// getter for PnBased to set choice
+func (obj *secureEntityStaticKeyRekeyMode) PnBased() {
+	obj.setChoice(SecureEntityStaticKeyRekeyModeChoice.PN_BASED)
 }
 
 // Rekey mode choices.

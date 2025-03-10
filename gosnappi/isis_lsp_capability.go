@@ -49,6 +49,8 @@ type marshalIsisLspCapability interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspCapability to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals IsisLspCapability to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspCapability struct {
@@ -166,6 +168,23 @@ func (m *unMarshalisisLspCapability) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalisisLspCapability) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalisisLspCapability) ToJson() (string, error) {

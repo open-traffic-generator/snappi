@@ -48,6 +48,8 @@ type marshalMkaBasicRekeyMode interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaBasicRekeyMode to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals MkaBasicRekeyMode to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaBasicRekeyMode struct {
@@ -167,6 +169,23 @@ func (m *unMarshalmkaBasicRekeyMode) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalmkaBasicRekeyMode) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalmkaBasicRekeyMode) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -278,10 +297,10 @@ type MkaBasicRekeyMode interface {
 	setChoice(value MkaBasicRekeyModeChoiceEnum) MkaBasicRekeyMode
 	// HasChoice checks if Choice has been set in MkaBasicRekeyMode
 	HasChoice() bool
-	// getter for PnBased to set choice.
-	PnBased()
 	// getter for DontRekey to set choice.
 	DontRekey()
+	// getter for PnBased to set choice.
+	PnBased()
 	// TimerBased returns MkaBasicRekeyModeTimerBased, set in MkaBasicRekeyMode.
 	// MkaBasicRekeyModeTimerBased is timer based periodic rekey properties.
 	TimerBased() MkaBasicRekeyModeTimerBased
@@ -310,14 +329,14 @@ func (obj *mkaBasicRekeyMode) Choice() MkaBasicRekeyModeChoiceEnum {
 	return MkaBasicRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for PnBased to set choice
-func (obj *mkaBasicRekeyMode) PnBased() {
-	obj.setChoice(MkaBasicRekeyModeChoice.PN_BASED)
-}
-
 // getter for DontRekey to set choice
 func (obj *mkaBasicRekeyMode) DontRekey() {
 	obj.setChoice(MkaBasicRekeyModeChoice.DONT_REKEY)
+}
+
+// getter for PnBased to set choice
+func (obj *mkaBasicRekeyMode) PnBased() {
+	obj.setChoice(MkaBasicRekeyModeChoice.PN_BASED)
 }
 
 // Mode choices.
