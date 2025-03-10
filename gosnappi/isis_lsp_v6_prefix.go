@@ -17,6 +17,7 @@ type isisLspV6Prefix struct {
 	marshaller             marshalIsisLspV6Prefix
 	unMarshaller           unMarshalIsisLspV6Prefix
 	prefixAttributesHolder IsisLspPrefixAttributes
+	prefixSidsHolder       IsisLspV6PrefixIsisLspPrefixSidIter
 }
 
 func NewIsisLspV6Prefix() IsisLspV6Prefix {
@@ -264,6 +265,7 @@ func (obj *isisLspV6Prefix) Clone() (IsisLspV6Prefix, error) {
 
 func (obj *isisLspV6Prefix) setNil() {
 	obj.prefixAttributesHolder = nil
+	obj.prefixSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -322,13 +324,15 @@ type IsisLspV6Prefix interface {
 	// HasOriginType checks if OriginType has been set in IsisLspV6Prefix
 	HasOriginType() bool
 	// PrefixAttributes returns IsisLspPrefixAttributes, set in IsisLspV6Prefix.
-	// IsisLspPrefixAttributes is this contains the properties of ISIS Prefix attributes for  the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html
+	// IsisLspPrefixAttributes is one bit value of ISIS Prefix attributes for the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html.
 	PrefixAttributes() IsisLspPrefixAttributes
 	// SetPrefixAttributes assigns IsisLspPrefixAttributes provided by user to IsisLspV6Prefix.
-	// IsisLspPrefixAttributes is this contains the properties of ISIS Prefix attributes for  the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html
+	// IsisLspPrefixAttributes is one bit value of ISIS Prefix attributes for the extended IPv4 and IPv6 reachability. https://www.rfc-editor.org/rfc/rfc7794.html.
 	SetPrefixAttributes(value IsisLspPrefixAttributes) IsisLspV6Prefix
 	// HasPrefixAttributes checks if PrefixAttributes has been set in IsisLspV6Prefix
 	HasPrefixAttributes() bool
+	// PrefixSids returns IsisLspV6PrefixIsisLspPrefixSidIterIter, set in IsisLspV6Prefix
+	PrefixSids() IsisLspV6PrefixIsisLspPrefixSidIter
 	setNil()
 }
 
@@ -472,7 +476,7 @@ func (obj *isisLspV6Prefix) SetOriginType(value IsisLspV6PrefixOriginTypeEnum) I
 	return obj
 }
 
-// description is TBD
+// Extended Prefix Attribute flags container sub-TLV is type 4.
 // PrefixAttributes returns a IsisLspPrefixAttributes
 func (obj *isisLspV6Prefix) PrefixAttributes() IsisLspPrefixAttributes {
 	if obj.obj.PrefixAttributes == nil {
@@ -484,19 +488,107 @@ func (obj *isisLspV6Prefix) PrefixAttributes() IsisLspPrefixAttributes {
 	return obj.prefixAttributesHolder
 }
 
-// description is TBD
+// Extended Prefix Attribute flags container sub-TLV is type 4.
 // PrefixAttributes returns a IsisLspPrefixAttributes
 func (obj *isisLspV6Prefix) HasPrefixAttributes() bool {
 	return obj.obj.PrefixAttributes != nil
 }
 
-// description is TBD
+// Extended Prefix Attribute flags container sub-TLV is type 4.
 // SetPrefixAttributes sets the IsisLspPrefixAttributes value in the IsisLspV6Prefix object
 func (obj *isisLspV6Prefix) SetPrefixAttributes(value IsisLspPrefixAttributes) IsisLspV6Prefix {
 
 	obj.prefixAttributesHolder = nil
 	obj.obj.PrefixAttributes = value.msg()
 
+	return obj
+}
+
+// Prefix Segment-ID list. IGP-Prefix Segment is an IGP segment attached to an IGP prefix. An IGP-Prefix Segment is global
+// (unless explicitly advertised otherwise) within the SR/IGP domain.
+// PrefixSids returns a []IsisLspPrefixSid
+func (obj *isisLspV6Prefix) PrefixSids() IsisLspV6PrefixIsisLspPrefixSidIter {
+	if len(obj.obj.PrefixSids) == 0 {
+		obj.obj.PrefixSids = []*otg.IsisLspPrefixSid{}
+	}
+	if obj.prefixSidsHolder == nil {
+		obj.prefixSidsHolder = newIsisLspV6PrefixIsisLspPrefixSidIter(&obj.obj.PrefixSids).setMsg(obj)
+	}
+	return obj.prefixSidsHolder
+}
+
+type isisLspV6PrefixIsisLspPrefixSidIter struct {
+	obj                   *isisLspV6Prefix
+	isisLspPrefixSidSlice []IsisLspPrefixSid
+	fieldPtr              *[]*otg.IsisLspPrefixSid
+}
+
+func newIsisLspV6PrefixIsisLspPrefixSidIter(ptr *[]*otg.IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter {
+	return &isisLspV6PrefixIsisLspPrefixSidIter{fieldPtr: ptr}
+}
+
+type IsisLspV6PrefixIsisLspPrefixSidIter interface {
+	setMsg(*isisLspV6Prefix) IsisLspV6PrefixIsisLspPrefixSidIter
+	Items() []IsisLspPrefixSid
+	Add() IsisLspPrefixSid
+	Append(items ...IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter
+	Set(index int, newObj IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter
+	Clear() IsisLspV6PrefixIsisLspPrefixSidIter
+	clearHolderSlice() IsisLspV6PrefixIsisLspPrefixSidIter
+	appendHolderSlice(item IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter
+}
+
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) setMsg(msg *isisLspV6Prefix) IsisLspV6PrefixIsisLspPrefixSidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisLspPrefixSid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) Items() []IsisLspPrefixSid {
+	return obj.isisLspPrefixSidSlice
+}
+
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) Add() IsisLspPrefixSid {
+	newObj := &otg.IsisLspPrefixSid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisLspPrefixSid{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisLspPrefixSidSlice = append(obj.isisLspPrefixSidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) Append(items ...IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisLspPrefixSidSlice = append(obj.isisLspPrefixSidSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) Set(index int, newObj IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisLspPrefixSidSlice[index] = newObj
+	return obj
+}
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) Clear() IsisLspV6PrefixIsisLspPrefixSidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisLspPrefixSid{}
+		obj.isisLspPrefixSidSlice = []IsisLspPrefixSid{}
+	}
+	return obj
+}
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) clearHolderSlice() IsisLspV6PrefixIsisLspPrefixSidIter {
+	if len(obj.isisLspPrefixSidSlice) > 0 {
+		obj.isisLspPrefixSidSlice = []IsisLspPrefixSid{}
+	}
+	return obj
+}
+func (obj *isisLspV6PrefixIsisLspPrefixSidIter) appendHolderSlice(item IsisLspPrefixSid) IsisLspV6PrefixIsisLspPrefixSidIter {
+	obj.isisLspPrefixSidSlice = append(obj.isisLspPrefixSidSlice, item)
 	return obj
 }
 
@@ -527,6 +619,20 @@ func (obj *isisLspV6Prefix) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.PrefixAttributes != nil {
 
 		obj.PrefixAttributes().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.PrefixSids) != 0 {
+
+		if set_default {
+			obj.PrefixSids().clearHolderSlice()
+			for _, item := range obj.obj.PrefixSids {
+				obj.PrefixSids().appendHolderSlice(&isisLspPrefixSid{obj: item})
+			}
+		}
+		for _, item := range obj.PrefixSids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

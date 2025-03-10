@@ -414,10 +414,10 @@ func (obj *deviceVlan) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.Priority != nil {
 
-		if *obj.obj.Priority > 3 {
+		if *obj.obj.Priority > 7 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= DeviceVlan.Priority <= 3 but Got %d", *obj.obj.Priority))
+				fmt.Sprintf("0 <= DeviceVlan.Priority <= 7 but Got %d", *obj.obj.Priority))
 		}
 
 	}

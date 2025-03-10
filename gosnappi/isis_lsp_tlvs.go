@@ -23,6 +23,7 @@ type isisLspTlvs struct {
 	ipv4ExternalReachabilityTlvsHolder IsisLspTlvsIsisLspIpv4ExternalReachabilityTlvIter
 	extendedIpv4ReachabilityTlvsHolder IsisLspTlvsIsisLspExtendedIpv4ReachabilityTlvIter
 	ipv6ReachabilityTlvsHolder         IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
+	routerCapabilitiesHolder           IsisLspTlvsIsisLspCapabilityIter
 }
 
 func NewIsisLspTlvs() IsisLspTlvs {
@@ -276,6 +277,7 @@ func (obj *isisLspTlvs) setNil() {
 	obj.ipv4ExternalReachabilityTlvsHolder = nil
 	obj.extendedIpv4ReachabilityTlvsHolder = nil
 	obj.ipv6ReachabilityTlvsHolder = nil
+	obj.routerCapabilitiesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -317,6 +319,8 @@ type IsisLspTlvs interface {
 	ExtendedIpv4ReachabilityTlvs() IsisLspTlvsIsisLspExtendedIpv4ReachabilityTlvIter
 	// Ipv6ReachabilityTlvs returns IsisLspTlvsIsisLspIpv6ReachabilityTlvIterIter, set in IsisLspTlvs
 	Ipv6ReachabilityTlvs() IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
+	// RouterCapabilities returns IsisLspTlvsIsisLspCapabilityIterIter, set in IsisLspTlvs
+	RouterCapabilities() IsisLspTlvsIsisLspCapabilityIter
 	setNil()
 }
 
@@ -929,6 +933,94 @@ func (obj *isisLspTlvsIsisLspIpv6ReachabilityTlvIter) appendHolderSlice(item Isi
 	return obj
 }
 
+// IS-IS Router Capabilities: TLV 242.
+// This container defines Router Capabilities.
+// RouterCapabilities returns a []IsisLspCapability
+func (obj *isisLspTlvs) RouterCapabilities() IsisLspTlvsIsisLspCapabilityIter {
+	if len(obj.obj.RouterCapabilities) == 0 {
+		obj.obj.RouterCapabilities = []*otg.IsisLspCapability{}
+	}
+	if obj.routerCapabilitiesHolder == nil {
+		obj.routerCapabilitiesHolder = newIsisLspTlvsIsisLspCapabilityIter(&obj.obj.RouterCapabilities).setMsg(obj)
+	}
+	return obj.routerCapabilitiesHolder
+}
+
+type isisLspTlvsIsisLspCapabilityIter struct {
+	obj                    *isisLspTlvs
+	isisLspCapabilitySlice []IsisLspCapability
+	fieldPtr               *[]*otg.IsisLspCapability
+}
+
+func newIsisLspTlvsIsisLspCapabilityIter(ptr *[]*otg.IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter {
+	return &isisLspTlvsIsisLspCapabilityIter{fieldPtr: ptr}
+}
+
+type IsisLspTlvsIsisLspCapabilityIter interface {
+	setMsg(*isisLspTlvs) IsisLspTlvsIsisLspCapabilityIter
+	Items() []IsisLspCapability
+	Add() IsisLspCapability
+	Append(items ...IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter
+	Set(index int, newObj IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter
+	Clear() IsisLspTlvsIsisLspCapabilityIter
+	clearHolderSlice() IsisLspTlvsIsisLspCapabilityIter
+	appendHolderSlice(item IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter
+}
+
+func (obj *isisLspTlvsIsisLspCapabilityIter) setMsg(msg *isisLspTlvs) IsisLspTlvsIsisLspCapabilityIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisLspCapability{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisLspTlvsIsisLspCapabilityIter) Items() []IsisLspCapability {
+	return obj.isisLspCapabilitySlice
+}
+
+func (obj *isisLspTlvsIsisLspCapabilityIter) Add() IsisLspCapability {
+	newObj := &otg.IsisLspCapability{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisLspCapability{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisLspCapabilitySlice = append(obj.isisLspCapabilitySlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisLspTlvsIsisLspCapabilityIter) Append(items ...IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisLspCapabilitySlice = append(obj.isisLspCapabilitySlice, item)
+	}
+	return obj
+}
+
+func (obj *isisLspTlvsIsisLspCapabilityIter) Set(index int, newObj IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisLspCapabilitySlice[index] = newObj
+	return obj
+}
+func (obj *isisLspTlvsIsisLspCapabilityIter) Clear() IsisLspTlvsIsisLspCapabilityIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisLspCapability{}
+		obj.isisLspCapabilitySlice = []IsisLspCapability{}
+	}
+	return obj
+}
+func (obj *isisLspTlvsIsisLspCapabilityIter) clearHolderSlice() IsisLspTlvsIsisLspCapabilityIter {
+	if len(obj.isisLspCapabilitySlice) > 0 {
+		obj.isisLspCapabilitySlice = []IsisLspCapability{}
+	}
+	return obj
+}
+func (obj *isisLspTlvsIsisLspCapabilityIter) appendHolderSlice(item IsisLspCapability) IsisLspTlvsIsisLspCapabilityIter {
+	obj.isisLspCapabilitySlice = append(obj.isisLspCapabilitySlice, item)
+	return obj
+}
+
 func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1027,6 +1119,20 @@ func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.Ipv6ReachabilityTlvs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.RouterCapabilities) != 0 {
+
+		if set_default {
+			obj.RouterCapabilities().clearHolderSlice()
+			for _, item := range obj.obj.RouterCapabilities {
+				obj.RouterCapabilities().appendHolderSlice(&isisLspCapability{obj: item})
+			}
+		}
+		for _, item := range obj.RouterCapabilities().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

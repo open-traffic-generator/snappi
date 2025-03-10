@@ -31,6 +31,8 @@ type metricsRequest struct {
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
 	convergenceHolder  ConvergenceRequest
+	macsecHolder       MacsecMetricsRequest
+	mkaHolder          MkaMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -292,6 +294,8 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv6ServerHolder = nil
 	obj.ospfv2Holder = nil
 	obj.convergenceHolder = nil
+	obj.macsecHolder = nil
+	obj.mkaHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -453,6 +457,22 @@ type MetricsRequest interface {
 	SetConvergence(value ConvergenceRequest) MetricsRequest
 	// HasConvergence checks if Convergence has been set in MetricsRequest
 	HasConvergence() bool
+	// Macsec returns MacsecMetricsRequest, set in MetricsRequest.
+	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity(secY) metrics/statistics.
+	Macsec() MacsecMetricsRequest
+	// SetMacsec assigns MacsecMetricsRequest provided by user to MetricsRequest.
+	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity(secY) metrics/statistics.
+	SetMacsec(value MacsecMetricsRequest) MetricsRequest
+	// HasMacsec checks if Macsec has been set in MetricsRequest
+	HasMacsec() bool
+	// Mka returns MkaMetricsRequest, set in MetricsRequest.
+	// MkaMetricsRequest is the request to retrieve MKA per peer metrics/statistics.
+	Mka() MkaMetricsRequest
+	// SetMka assigns MkaMetricsRequest provided by user to MetricsRequest.
+	// MkaMetricsRequest is the request to retrieve MKA per peer metrics/statistics.
+	SetMka(value MkaMetricsRequest) MetricsRequest
+	// HasMka checks if Mka has been set in MetricsRequest
+	HasMka() bool
 	setNil()
 }
 
@@ -475,6 +495,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 	OSPFV2        MetricsRequestChoiceEnum
 	CONVERGENCE   MetricsRequestChoiceEnum
+	MACSEC        MetricsRequestChoiceEnum
+	MKA           MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -491,6 +513,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
 	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
+	MACSEC:        MetricsRequestChoiceEnum("macsec"),
+	MKA:           MetricsRequestChoiceEnum("mka"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -512,6 +536,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Mka = nil
+	obj.mkaHolder = nil
+	obj.obj.Macsec = nil
+	obj.macsecHolder = nil
 	obj.obj.Convergence = nil
 	obj.convergenceHolder = nil
 	obj.obj.Ospfv2 = nil
@@ -601,6 +629,14 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.CONVERGENCE {
 		obj.obj.Convergence = NewConvergenceRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.MACSEC {
+		obj.obj.Macsec = NewMacsecMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.MKA {
+		obj.obj.Mka = NewMkaMetricsRequest().msg()
 	}
 
 	return obj
@@ -1026,6 +1062,62 @@ func (obj *metricsRequest) SetConvergence(value ConvergenceRequest) MetricsReque
 	return obj
 }
 
+// description is TBD
+// Macsec returns a MacsecMetricsRequest
+func (obj *metricsRequest) Macsec() MacsecMetricsRequest {
+	if obj.obj.Macsec == nil {
+		obj.setChoice(MetricsRequestChoice.MACSEC)
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &macsecMetricsRequest{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// description is TBD
+// Macsec returns a MacsecMetricsRequest
+func (obj *metricsRequest) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// description is TBD
+// SetMacsec sets the MacsecMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetMacsec(value MacsecMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.MACSEC)
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Mka returns a MkaMetricsRequest
+func (obj *metricsRequest) Mka() MkaMetricsRequest {
+	if obj.obj.Mka == nil {
+		obj.setChoice(MetricsRequestChoice.MKA)
+	}
+	if obj.mkaHolder == nil {
+		obj.mkaHolder = &mkaMetricsRequest{obj: obj.obj.Mka}
+	}
+	return obj.mkaHolder
+}
+
+// description is TBD
+// Mka returns a MkaMetricsRequest
+func (obj *metricsRequest) HasMka() bool {
+	return obj.obj.Mka != nil
+}
+
+// description is TBD
+// SetMka sets the MkaMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.MKA)
+	obj.mkaHolder = nil
+	obj.obj.Mka = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1104,6 +1196,16 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Convergence != nil {
 
 		obj.Convergence().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Mka != nil {
+
+		obj.Mka().validateObj(vObj, set_default)
 	}
 
 }
@@ -1185,6 +1287,16 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Convergence != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.CONVERGENCE
+	}
+
+	if obj.obj.Macsec != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.MACSEC
+	}
+
+	if obj.obj.Mka != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.MKA
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
