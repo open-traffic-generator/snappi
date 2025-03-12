@@ -25,6 +25,7 @@ type device struct {
 	rsvpHolder          DeviceRsvp
 	dhcpServerHolder    DeviceDhcpServer
 	ospfv2Holder        DeviceOspfv2Router
+	macsecHolder        DeviceMacsec
 	rocev2Holder        DeviceRocev2Peer
 }
 
@@ -262,6 +263,7 @@ func (obj *device) setNil() {
 	obj.rsvpHolder = nil
 	obj.dhcpServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.macsecHolder = nil
 	obj.rocev2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -352,6 +354,14 @@ type Device interface {
 	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
+	// Macsec returns DeviceMacsec, set in Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
+	Macsec() DeviceMacsec
+	// SetMacsec assigns DeviceMacsec provided by user to Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
+	SetMacsec(value DeviceMacsec) Device
+	// HasMacsec checks if Macsec has been set in Device
+	HasMacsec() bool
 	// Rocev2 returns DeviceRocev2Peer, set in Device.
 	// DeviceRocev2Peer is configuration for one or more IPv4 or IPv6 Rocev2 Peers.
 	Rocev2() DeviceRocev2Peer
@@ -808,6 +818,34 @@ func (obj *device) SetOspfv2(value DeviceOspfv2Router) Device {
 	return obj
 }
 
+// Configuration of MACsec device.
+// Macsec returns a DeviceMacsec
+func (obj *device) Macsec() DeviceMacsec {
+	if obj.obj.Macsec == nil {
+		obj.obj.Macsec = NewDeviceMacsec().msg()
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &deviceMacsec{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// Configuration of MACsec device.
+// Macsec returns a DeviceMacsec
+func (obj *device) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// Configuration of MACsec device.
+// SetMacsec sets the DeviceMacsec value in the Device object
+func (obj *device) SetMacsec(value DeviceMacsec) Device {
+
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
 // Configuration for Rocev2 .
 // Rocev2 returns a DeviceRocev2Peer
 func (obj *device) Rocev2() DeviceRocev2Peer {
@@ -916,6 +954,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Rocev2 != nil {
