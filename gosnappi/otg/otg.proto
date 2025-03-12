@@ -14845,8 +14845,8 @@ message MacsecMetric {
   // InPktsOk, the number of valid packets received.
   optional uint64 in_pkts_ok = 6;
 
-  // The number of bad packets received.
-  optional uint64 bad_pkts_rx = 7;
+  // Total number of received bad packets that failed atleast one validation check.
+  optional uint64 in_pkts_bad = 7;
 
   // InPktsBadTag, the number of packets discarded due to bad tag/ICV.
   optional uint64 in_pkts_bad_tag = 8;

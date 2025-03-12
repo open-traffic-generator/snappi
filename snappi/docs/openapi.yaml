@@ -20402,9 +20402,9 @@ components:
           type: integer
           format: uint64
           x-field-uid: 6
-        bad_pkts_rx:
+        in_pkts_bad:
           description: |-
-            The number of bad packets received.
+            Total number of received bad packets that failed atleast one validation check.
           type: integer
           format: uint64
           x-field-uid: 7
