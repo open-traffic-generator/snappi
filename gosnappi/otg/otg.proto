@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.26.0
+/* Open Traffic Generator API 1.24.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -51,6 +51,9 @@ message Config {
 
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
+
+  // Description missing in models
+  StatefulFlow stateful_flows = 10;
 }
 
 // Global configuration options.
@@ -61,6 +64,9 @@ message ConfigOptions {
 
   // Description missing in models
   ProtocolOptions protocol_options = 2;
+
+  // Description missing in models
+  PerPortOptions per_port_options = 3;
 }
 
 // An abstract test port.
@@ -121,10 +127,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -301,17 +303,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -320,11 +314,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -349,10 +338,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -458,10 +443,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -532,10 +513,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1249,10 +1226,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1304,16 +1277,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1454,17 +1421,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1724,8 +1685,8 @@ message Device {
   // Configuration for OSPFv2 router.
   DeviceOspfv2Router ospfv2 = 10;
 
-  // Configuration of MACsec device.
-  DeviceMacsec macsec = 11;
+  // Configuration for Rocev2 .
+  DeviceRocev2Peer rocev2 = 11;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1798,10 +1759,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -2971,12 +2928,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -3736,8 +3687,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -4197,8 +4146,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6562,12 +6509,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6829,11 +6770,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6857,11 +6793,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7025,10 +6956,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -7090,11 +7017,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7524,10 +7446,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7600,10 +7518,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7777,8 +7691,6 @@ message DhcpV6ServerSecondaryDns {
 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -7916,10 +7828,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8299,708 +8207,156 @@ message Ospfv2V4RRExtdPrefixFlags {
   optional bool n_flag = 2;
 }
 
-// A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
-message DeviceMacsec {
+// Configuration for one or more IPv4 or IPv6 Rocev2 Peers.
+message DeviceRocev2Peer {
 
-  // Ethernet Interfaces
-  repeated DeviceMacsecEthernetInterface ethernet_interfaces = 1;
+  // This contains an array of references to IPv4 interfaces,  each of which will have
+  // list of peers to different destinations.
+  repeated Rocev2V4Interface ipv4_interfaces = 1;
+
+  // This contains an array of references to IPv6 interfaces,  each of which will have
+  // list of peers to different destinations.
+  repeated Rocev2V6Interface ipv6_interfaces = 2;
 }
 
-// Configuration for single MACsec interface.
-message DeviceMacsecEthernetInterface {
+// Configuration for Rocev2 IPv4 peers.
+message Rocev2V4Interface {
 
-  // The unique name of the Ethernet interface on which MACsec is enabled.
+  // The unique name of the IPv4, used as the source IP for this list of Rocev2 peers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
+  // - /components/schemas/Device.Ipv4/properties/name
   // 
   // required = true
-  optional string eth_name = 1;
+  optional string ipv4_name = 1;
 
-  // This contains the properties of Secure Entity (SecY).
-  // required = true
-  SecureEntity secure_entity = 2;
+  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
+  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
+  // as configured IB MTU. You can configure custom size also.
+  // default = 1024
+  optional uint32 ib_mtu = 2;
+
+  // This contains the list of Rocev2 peers configured on this interface.
+  repeated Rocev2V4Peer peers = 3;
 }
 
-// Configuration of a Secure Entity (SecY).
-message SecureEntity {
+// Configuration for Rocev2 IPv4 peers.
+message Rocev2V4Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
   optional string name = 1;
 
-  // This contains the properties of key generation protocol of Secure Entity (SecY).
+  // Specify the IP address of External NIC i.e Destination Point IP Address.
   // required = true
-  SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
+  optional string destination_ip_address = 2;
 
-  // This contains the properties of data plane of Secure Entity (SecY).
-  SecureEntityDataPlane data_plane = 3;
+  // This configuration allows you to configure RDMA flow over the same QP number from
+  // same source and destination.
+  repeated Rocev2QPs qps = 3;
 }
 
-// Container of Key generation protocol configuration.
-message SecureEntityKeyGenerationProtocol {
+// This configuration allows you to configure RDMA flow over the same QP number from
+// same source and destination.
+message Rocev2QPs {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string qp_name = 1;
+
+  // Description missing in models
+  Rocev2ConnectionType connection_type = 2;
+}
+
+// It describes the degree of reliability and to what and how the QP transfers data.
+// There are different types.
+message Rocev2ConnectionType {
 
   message Choice {
     enum Enum {
       unspecified = 0;
-      mka = 1;
-      static_key = 2;
+      reliable_connection = 1;
     }
   }
-  // Key generation protocol choices. Choose mka for dynamic key distribution using MACsec
-  // key agreement(MKA) protocol. Choose static_key for static configuration of secure
-  // association key(SAK).
-  // default = Choice.Enum.mka
+  // Description missing in models
+  // default = Choice.Enum.reliable_connection
   optional Choice.Enum choice = 1;
 
-  // This contains the properties of Key Agreement Entity (KaY) in MKA supplicant.
-  Mka mka = 2;
-
-  // Static key properties properties of SecY. Static key is used in absence MKA.
-  SecureEntityStaticKey static_key = 3;
+  // Description missing in models
+  Rocev2FlowParameters reliable_connection = 2;
 }
 
-// A container of data plane properties.
-message SecureEntityDataPlane {
+// ****Description here****
+message Rocev2FlowParameters {
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encapsulation = 1;
-      no_encapsulation = 2;
-    }
-  }
-  // Choose encapsulation so that data packets are sent with MACsec encapsulation. Choose
-  // no_encapsulation so that data packets are sent without MACsec encapsulation.
-  // default = Choice.Enum.encapsulation
-  optional Choice.Enum choice = 1;
+  // Configure Source QP.
+  // default = 2
+  optional uint32 source_qp_number = 1;
 
-  // A container of encapsulation properties for a secure entity(SecY).
-  SecureEntityDataPlaneEncapsulation encapsulation = 2;
-}
+  // DSCP value for this flow
+  // default = 24
+  optional uint32 dscp = 2;
 
-// A container of encapsulation properties for a secure entity(SecY).
-message SecureEntityDataPlaneEncapsulation {
-
-  // Tx properties of SecY.
-  SecureEntityDataPlaneTx tx = 1;
-
-  // Rx properties of SecY.
-  SecureEntityDataPlaneRx rx = 2;
-
-  // Crypto engine properties of SecY.
-  // required = true
-  SecureEntityCryptoEngine crypto_engine = 3;
-}
-
-// A container of Tx properties of SecY.
-message SecureEntityDataPlaneTx {
-
-  // End station on not.
-  // default = False
-  optional bool end_station = 1;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 2;
-}
-
-// A container for Rx settings of SecY.
-message SecureEntityDataPlaneRx {
-
-  // Enable replay protection on not.
-  // default = False
-  optional bool replay_protection = 1;
-
-  // Replay window size.
+  // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
+  // header to encode four different code points.
   // default = 1
-  optional uint32 replay_window = 2;
+  optional uint32 ecn = 3;
+
+  // UDP source port number for this flow.
+  // default = 49152
+  optional uint32 udp_source_port = 4;
+
+  // Initial PSN.
+  // default = 0
+  optional uint64 initial_psn = 5;
+
+  // Virutal Address.
+  // default = 0000000000000000
+  optional string virtual_address = 6;
+
+  // Remote Key.
+  // default = 00000000
+  optional string remote_key = 7;
 }
 
-// A container of crypto engine properties of a SecY.
-message SecureEntityCryptoEngine {
+// Configuration for Rocev2 IPv6 peers.
+message Rocev2V6Interface {
 
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encrypt_only = 1;
-    }
-  }
-  // Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only
-  // - engine can only encrypt transmitted packets but it cannot decrypt packets upon
-  // arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered
-  // to the receiving device. Hence only stateless traffic can be sent.
-  // default = Choice.Enum.encrypt_only
-  optional Choice.Enum choice = 1;
+  // The unique name of IPv6 used as the source IP for this list of Rocev2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 1;
 
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnly encrypt_only = 2;
+  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
+  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
+  // as configured IB MTU. You can configure custom size also.
+  // default = 1024
+  optional uint32 ib_mtu = 2;
+
+  // This contains the list of Rocev2 IPv6 peers configured on this interface.
+  repeated Rocev2V6Peer peers = 3;
 }
 
-// The container for encrypt only engine configuration.
-message SecureEntityCryptoEngineEncryptOnly {
-
-  // Description missing in models
-  repeated SecureEntityCryptoEngineEncryptOnlyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTrafficOptions traffic_options = 2;
-}
-
-// The container for Tx secure channel configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxSc {
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTxScTxPn tx_pn = 1;
-}
-
-// Tx packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxScTxPn {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      fixed_pn = 1;
-      incrementing_pn = 2;
-    }
-  }
-  // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets
-  // will be sent out with the configured fixed PN or lower half of configured fixed XPN.
-  // 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing
-  // PN or XPN.
-  // default = Choice.Enum.fixed_pn
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyFixedPn fixed = 2;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyIncrementingPn incrementing = 3;
-}
-
-// Fixed packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyFixedPn {
-
-  // Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
-  // default = 6
-  optional uint32 pn = 1;
-
-  // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
-  // sent out.
-  // default = 0x0000000000000006
-  optional string xpn = 2;
-}
-
-// Incrementing packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
-
-  // Count of packet numbers in series.
-  // default = 100
-  optional uint32 count = 1;
-
-  // The starting packet number(PN).
-  // default = 10000
-  optional uint32 starting_pn = 2;
-
-  // The starting extended packet number(XPN).
-  // default = 0x0000000000010000
-  optional string starting_xpn = 3;
-}
-
-// Encrypt only traffic options.
-message SecureEntityCryptoEngineEncryptOnlyTrafficOptions {
-
-  // Send gratuitous ARP or not.
-  // default = True
-  optional bool send_gratuitous_arp = 1;
-}
-
-// Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
-message Mka {
+// Configuration for Rocev2 IPv6 peer settings.
+message Rocev2V6Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
   optional string name = 1;
 
-  // This contains the basic properties of KaY.
+  // Specify the IP address of External NIC i.e Destination Point IP Address.
   // required = true
-  MkaBasic basic = 2;
-
-  // Key server attributes.
-  MkaKeyServer key_server = 3;
-
-  // Tx Properties.
-  // required = true
-  MkaTx tx = 4;
-}
-
-// A container of basic properties for a KaY.
-message MkaBasic {
-
-  message KeyDerivationFunction {
-    enum Enum {
-      unspecified = 0;
-      aes_cmac_128 = 1;
-      aes_cmac_256 = 2;
-    }
-  }
-  // Key Derivation Function.
-  // default = KeyDerivationFunction.Enum.aes_cmac_128
-  optional KeyDerivationFunction.Enum key_derivation_function = 1;
-
-  // Key source.
-  // required = true
-  MkaBasicKeySource key_source = 2;
-
-  // Actor priority.
-  // default = 70
-  optional string actor_priority = 3;
-
-  // Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
-  // default = True
-  optional bool macsec_desired = 4;
-
-  message MacsecCapability {
-    enum Enum {
-      unspecified = 0;
-      macsec_not_implemented = 1;
-      macsec_integrity_without_confidentiality = 2;
-      macsec_integrity_with_no_confidentiality_offset = 3;
-      macsec_integrity_with_confidentiality_offset = 4;
-    }
-  }
-  // MACSec Capability.
-  // default = MacsecCapability.Enum.macsec_integrity_with_confidentiality_offset
-  optional MacsecCapability.Enum macsec_capability = 5;
-
-  // Supported Cipher Suites.
-  MkaBasicSupportedCipherSuites supported_cipher_suites = 6;
-
-  // EAPOL Ethernet type.
-  // default = 888E
-  optional string eapol_ethernet_type = 7;
-
-  // MKA Version.
-  // default = 3
-  optional uint32 mka_version = 8;
-
-  // MKA Hello Time (msec).
-  // default = 2000
-  optional uint32 mka_hello_time = 9;
-
-  // MKA Life Time (sec).
-  // default = 6
-  optional uint32 mka_life_time = 10;
-
-  // Send ICV Indicator in MKPDU.
-  // default = True
-  optional bool send_icv_indicatior_in_mkpdu = 11;
-
-  // Delay Protect or not. When delay protect is enabled, it guards against delaying the
-  // delivery of MACsec encrypted frames by an attacker to the recipient.
-  // default = True
-  optional bool delay_protect = 12;
-
-  // Rekey Mode.
-  MkaBasicRekeyMode rekey_mode = 13;
-
-  // Description missing in models
-  MkaBasicPskChainStartTime psk_chain_start_time = 14;
-}
-
-// The container for supported cipher suites.
-message MkaBasicSupportedCipherSuites {
-
-  // GCM-AES-128.
-  // default = True
-  optional bool gcm_aes_128 = 1;
-
-  // GCM-AES-256.
-  // default = True
-  optional bool gcm_aes_256 = 2;
-
-  // GCM-AES-XPN-128.
-  // default = True
-  optional bool gcm_aes_xpn_128 = 3;
-
-  // GCM-AES-XPN-256.
-  // default = True
-  optional bool gcm_aes_xpn_256 = 4;
-}
-
-// The container for key source settings.
-message MkaBasicKeySource {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      psk = 1;
-      msk = 2;
-    }
-  }
-  // Key source. Choose one from PSK or MSK.
-  // default = Choice.Enum.psk
-  optional Choice.Enum choice = 1;
-
-  // PSK chain.
-  repeated MkaBasicKeySourcePsk psks = 2;
-}
-
-// The container for Pre-shared key(PSK).
-message MkaBasicKeySourcePsk {
-
-  // Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending
-  // on the chosen MKA key derivation function.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string cak_value = 1;
-
-  // Connectivity association key(CAK) name.
-  // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
-  optional string cak_name = 2;
-
-  // 
-  MkaBasicStartOffsetTime start_offset_time = 3;
-
-  // 
-  MkaBasicEndOffsetTime end_offset_time = 4;
-}
-
-// Key start offset time in HH:MM. This is relative to key chain start time.
-message MkaBasicStartOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Key end offset time in HH:MM. This is relative to key chain start time. A value of
-// 00:00 makes the key valid for lifetime.
-message MkaBasicEndOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this
-// time is set, the key start time will be relative to this value. Otherwise if this
-// value is not set, key start time will be relative to test start time.
-message MkaBasicPskChainStartTime {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      utc = 1;
-    }
-  }
-  // Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
-  // default = Choice.Enum.utc
-  optional Choice.Enum choice = 1;
-
-  // Coordinated Universal Time(UTC) time.
-  MkaBasicTimeUtc utc = 2;
-}
-
-// Coordinated Universal Time(UTC).
-message MkaBasicTimeUtc {
-
-  // Day of the month in DD format.
-  optional uint32 day = 1;
-
-  // Month of the year in MM format.
-  optional uint32 month = 2;
-
-  // Year from the start of common era(CE) in YYYY format.
-  optional uint32 year = 3;
-
-  // Hour of the day in HH format.
-  optional uint32 hour = 4;
-
-  // Minute of the hour in MM format.
-  optional uint32 minute = 5;
-
-  // Second of the minute in SS format.
-  optional uint32 second = 6;
-}
-
-// Rekey mode.
-message MkaBasicRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  MkaBasicRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message MkaBasicRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic Rekey count.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// Key server attributes of a KaY.
-message MkaKeyServer {
-
-  message ConfidentialtyOffset {
-    enum Enum {
-      unspecified = 0;
-      no_confidentiality = 1;
-      no_confidentiality_offset = 2;
-      confidentiality_offset_30_octets = 3;
-      confidentiality_offset_50_octets = 4;
-    }
-  }
-  // Confidentiality Offset.
-  // default = ConfidentialtyOffset.Enum.no_confidentiality_offset
-  optional ConfidentialtyOffset.Enum confidentialty_offset = 1;
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 2;
-
-  // Starting Key Number.
-  // default = 1
-  optional uint32 starting_key_number = 3;
-
-  // Starting Distributed AN.
-  // default = 0
-  optional uint32 starting_distributed_an = 4;
-
-  // Determines the PN rekey threshold.
-  // default = C0000000
-  optional string rekey_threshold_pn = 5;
-
-  // Determines the XPN rekey threshold.
-  // default = C000000000000000
-  optional string rekey_threshold_xpn = 6;
-}
-
-// A container of Tx properties.
-message MkaTx {
-
-  // Tx secure channels.
-  repeated MkaTxSc secure_channels = 1;
-}
-
-// Tx secure channel(SC) properties.
-message MkaTxSc {
-
-  // Tx SC name.
-  // required = true
-  optional string name = 1;
-
-  // System ID.
-  // required = true
-  optional string system_id = 2;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 3;
-
-  // Starting Message Number.
-  // default = 1
-  optional uint64 starting_message_number = 4;
-}
-
-// A container of static key properties for a secure entity(SecY). This configuration
-// is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA)
-// is configured. If MKA is configured, any static key configuration is not applicable.
-message SecureEntityStaticKey {
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128
-  // GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 1;
-
-  // Encrypt or not.
-  // default = True
-  optional bool confidentiality = 2;
-
-  message ConfidentialityOffset {
-    enum Enum {
-      unspecified = 0;
-      zero = 1;
-      thirty = 2;
-      fifty = 3;
-    }
-  }
-  // Confidentiality offset.
-  // default = ConfidentialityOffset.Enum.zero
-  optional ConfidentialityOffset.Enum confidentiality_offset = 3;
-
-  // Tx properties of SecY.
-  SecureEntityStaticKeyTx tx = 4;
-
-  // Rx properties of SecY.
-  SecureEntityStaticKeyRx rx = 5;
-}
-
-// Rekey mode.
-message SecureEntityStaticKeyRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Rekey mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  SecureEntityStaticKeyRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message SecureEntityStaticKeyRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic rekey attempt choices.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// The container for SAK.
-message SecureEntityStaticKeySak {
-
-  // Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending
-  // on the chosen cipher suite.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string sak = 1;
-
-  // 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
-  // default = 00000001
-  optional string ssci = 2;
-
-  // 12 bytes salt used in case of XPN cipher suites.
-  // default = 000000000000000000000001
-  optional string salt = 3;
-}
-
-// A container of static key Tx properties.
-message SecureEntityStaticKeyTx {
-
-  // Tx secure channels.
-  repeated SecureEntityStaticKeyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityStaticKeyRekeyMode rekey_mode = 2;
-}
-
-// Tx SC setting for static key.
-message SecureEntityStaticKeyTxSc {
-
-  // System ID.
-  optional string system_id = 1;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 2;
-
-  // Tx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 3;
-}
-
-// A container of static key Rx properties.
-message SecureEntityStaticKeyRx {
-
-  // Rx secure channels.
-  repeated SecureEntityStaticKeyRxSc secure_channels = 1;
-}
-
-// Rx SC settings.
-message SecureEntityStaticKeyRxSc {
-
-  // System ID in DUT SCI.
-  optional string dut_sci_system_id = 1;
-
-  // Port ID in DUT SCI.
-  // default = 1
-  optional uint32 dut_sci_port_id = 2;
-
-  // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
-  // construct the 64 bits XPN value when test starts.
-  // default = 0
-  optional uint32 dut_msb_xpn = 3;
-
-  // Rx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 4;
+  optional string destination_ip_address = 2;
+
+  // This configuration allows you to configure RDMA flow over the same QP number from
+  // same source and destination.
+  repeated Rocev2QPs qps = 3;
 }
 
 // A high level data plane traffic flow.
@@ -9026,10 +8382,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -9096,16 +8448,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -9114,19 +8459,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9206,39 +8541,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -11748,9 +11053,6 @@ message FlowRxTxRatioRxCount {
 // Under Review: Event configuration is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -11812,12 +11114,6 @@ message EventRequest {
 
   // Constrain the events being returned by specifying event sources.
   // If the list is empty then all event sources will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -11900,10 +11196,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12083,6 +11375,373 @@ message LldpOrgInfoType {
   optional string info = 2;
 }
 
+// A high level data plane traffic flow.
+message StatefulFlow {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rocev2 = 1;
+    }
+  }
+  // Stateful traffic configuration.
+  optional Choice.Enum choice = 1;
+
+  // Rocev2 Flow Groups.
+  repeated Rocev2Flow rocev2 = 2;
+}
+
+// Rocev2 traffic flow configuration.
+message Rocev2Flow {
+
+  // ****Must Add proper description here****
+  repeated Rocev2TxPorts tx_ports = 1;
+}
+
+// ****Description here****
+message Rocev2TxPorts {
+
+  // The name of port for which this settings will be applied to.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  optional string port_name = 1;
+
+  // Description missing in models
+  Rocev2TransmitType transmit_type = 2;
+}
+
+// ****Decription here****
+message Rocev2Flows {
+
+  // The unique name of an emulated device that will be transmitting.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  // required = true
+  optional string tx_endpoint = 1;
+
+  // The unique name of an emulated device that will be recieving.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  optional string rx_endpoint = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 3;
+
+  // Description missing in models
+  Rocev2Verb rocev2_verb = 4;
+
+  // The Maximum message size that is allowed to transfer depends on the MTU size and
+  // the number of VLANs configured on the interfaces.
+  // default = 1
+  optional uint32 message_size = 5;
+
+  message MessageSizeUnit {
+    enum Enum {
+      unspecified = 0;
+      Byte = 1;
+      KB = 2;
+      MB = 3;
+      GB = 4;
+    }
+  }
+  // Unit of the transfer message size. Available options are Bytes, KB, MB.
+  // default = MessageSizeUnit.Enum.mb
+  optional MessageSizeUnit.Enum message_size_unit = 6;
+}
+
+// ****Description here****
+message Rocev2TransmitType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      target_line_rate = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.target_line_rate
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2TargetLineRate target_line_rate = 2;
+}
+
+// ****Description here****
+message Rocev2TargetLineRate {
+
+  // Target Line Rate in percentage.
+  optional uint64 value = 1;
+
+  // Description missing in models
+  repeated Rocev2Flows flows = 2;
+}
+
+// Rocev2 Verb, Available options are: write, wrtie_with_immediate, send, send_with_immediate
+// and read.
+message Rocev2Verb {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      write = 1;
+      write_with_immediate = 2;
+      send = 3;
+      send_with_immediate = 4;
+      read = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.write
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2ImmediateData write_with_immediate = 2;
+
+  // Description missing in models
+  Rocev2ImmediateData send_with_immediate = 3;
+}
+
+// Immediate Data field required for SEND/WRITE with immediate verb.
+message Rocev2ImmediateData {
+
+  // Immediate Data field required for SEND/WRITE with immediate verb.
+  // default = 00000000
+  optional string immediate_data = 1;
+}
+
+// ****Add proper description here****
+message PerPortOptions {
+
+  // This contains all the per port settings for each protocol.
+  repeated OptionsPortSettings port_settings = 1;
+}
+
+// ****Add proper descriptio****
+message OptionsPortSettings {
+
+  // The name of port for which this settings will be applied to.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  optional string port_name = 1;
+
+  // Description missing in models
+  repeated PortProtocols protocols = 2;
+}
+
+// Supprted protocols.
+message PortProtocols {
+
+  // Dummy
+  // default = 1024
+  optional uint32 dummy_field = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rocev2 = 1;
+    }
+  }
+  // list of protocols that have per port settings
+  // default = Choice.Enum.rocev2
+  optional Choice.Enum choice = 2;
+
+  // Rocev2 Port Settings.
+  repeated Rocev2PerPortSettings rocev2 = 3;
+}
+
+// A high level data plane traffic flow.
+message Rocev2PerPortSettings {
+
+  // Description missing in models
+  Rocev2CNP cnp = 1;
+
+  // Description missing in models
+  Rocev2ACK ack = 2;
+
+  // Description missing in models
+  Rocev2NACK nack = 3;
+
+  // Amount of time to wait between the generation of successive CNP packets. Time in
+  // microseconds.
+  // default = 55
+  optional uint32 cnp_delay_timer = 10;
+
+  // Enable Retransmission on ACK Timeout.
+  // default = True
+  optional bool enable_retransmission_ack_timeout = 11;
+
+  // Amount of time to wait before attempting to retransmit on non receipt of ACK. Time
+  // in milliseconds.
+  // default = 1
+  optional uint32 ack_timeout = 12;
+
+  // Number of times to retry retransmission before giving up on non receipt of ACK.
+  // default = 3
+  optional uint32 retransmission_retry_count = 13;
+
+  // Description missing in models
+  Rocev2DCQCN dcqcn_settings = 14;
+}
+
+// CNP parameters.
+message Rocev2CNP {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // The value that would be carried in CNP packet. Available option is IP DSCP. The given
+  // value is carried in IP Header DSCP value of the CNP packet.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // CNP ECN Value.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+}
+
+// ACK parameters.
+message Rocev2ACK {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // The value that would be carried in ACK packet. Available option is IP DSCP. The given
+  // value is carried in IP Header DSCP value of the ACK packet.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // ACK ECN Value.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+}
+
+// NACK parameters.
+message Rocev2NACK {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // The value that would be carried in NACK packet. Available option is IP DSCP. The
+  // given value is carried in IP Header DSCP value of the NACK packet.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // NACK ECN Value.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+}
+
+// Value.
+message Rocev2PriorityValue {
+
+  // Description missing in models
+  // default = 48
+  optional uint32 value = 1;
+}
+
+// Rocev2 DCQCN Settings.
+message Rocev2DCQCN {
+
+  // Enable DCQCN port settigns.
+  // default = True
+  optional bool enable_dcqcn = 1;
+
+  // Alpha G.
+  optional uint64 alpha_g = 2;
+
+  // Initial Alpha.
+  optional uint64 initial_alpha = 3;
+
+  // Alpha Update period in microseconds.
+  optional uint64 alpha_update_period = 4;
+
+  // Rate reduction time period in microseconds.
+  optional uint64 rate_reduction_time_period = 5;
+
+  // initial rate after first CNP in Percentage.
+  optional uint32 initial_rate_after_first_cnp = 6;
+
+  // Minimum Rate Limit in Percentage.
+  optional uint32 minimum_rate_limmit = 7;
+
+  // Maximum rate decrement at time in Percentage.
+  optional uint32 maximum_rate_decrement_at_time = 8;
+
+  // Clamp Target rate.
+  optional bool clamp_target_rate = 9;
+
+  // Rate increment time period in microseconds.
+  optional uint64 rate_increment_time = 10;
+
+  // Rate increment byte counter in uint 64 bytes.
+  optional uint64 rate_increment_byte_counter = 11;
+
+  // Rate increment threshold.
+  optional uint32 rate_increment_threshold = 12;
+
+  // additive increment rate in Percentage.
+  optional uint32 additive_increment_rate = 13;
+
+  // hyper increment rate in Percentage.
+  optional uint32 hyper_increment_rate = 14;
+}
+
 // Error response generated while serving API request.
 message Error {
 
@@ -12251,16 +11910,15 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolOspfv2 ospfv2 = 7;
+
+  // Description missing in models
+  StateProtocolRocev2 rocev2 = 8;
 }
 
 // Sets the link of configured ports.
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12290,10 +11948,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -12315,10 +11969,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -12381,14 +12031,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -12433,10 +12075,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -12458,10 +12096,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12502,11 +12136,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -12555,10 +12184,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -12602,10 +12227,6 @@ message StateProtocolOspfv2Routers {
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -12619,6 +12240,50 @@ message StateProtocolOspfv2Routers {
   // bring up the OSPFv2 session(s) with respective peer(s) and advertise route(s), if
   // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
   // respective peer(s).
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured Rocev2 peers.
+message StateProtocolRocev2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      peers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolRocev2Peers peers = 2;
+}
+
+// Sets state of configured Rocev2 peers.
+message StateProtocolRocev2Peers {
+
+  // The names of Rocev2 peers for which the state has to be applied. An empty or null
+  // list will control all Rocev2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V4Peer/properties/name
+  // - /components/schemas/Rocev2.V6Peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of Rocev2 peer. If the desired state is 'up', underlying IP interface(s)
+  // would be brought up automatically (if not already up),
+  // would attempt to bring up the Rocev2 session(s).
+  // If the desired state is 'down', Rocev2 session(s) would be brought down.
   // required = true
   optional State.Enum state = 2;
 }
@@ -12756,18 +12421,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -12789,10 +12448,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -12859,18 +12514,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -12892,10 +12541,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -12956,11 +12601,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -13016,11 +12656,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -13112,8 +12747,8 @@ message MetricsRequest {
       dhcpv6_server = 13;
       ospfv2 = 14;
       convergence = 15;
-      macsec = 16;
-      mka = 17;
+      rocev2_ipv4 = 16;
+      rocev2_ipv6 = 17;
     }
   }
   // Description missing in models
@@ -13166,10 +12801,13 @@ message MetricsRequest {
   ConvergenceRequest convergence = 16;
 
   // Description missing in models
-  MacsecMetricsRequest macsec = 17;
+  Rocev2IPv4MetricsRequest rocev2_ipv4 = 17;
 
   // Description missing in models
-  MkaMetricsRequest mka = 18;
+  Rocev2IPv6MetricsRequest rocev2_ipv6 = 18;
+
+  // Description missing in models
+  Rocev2FlowMetricsRequest rocev2_flow = 19;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -13193,8 +12831,9 @@ message MetricsResponse {
       dhcpv6_server = 13;
       ospfv2_metrics = 14;
       convergence_metrics = 15;
-      macsec_metrics = 16;
-      mka_metrics = 17;
+      rocev2_ipv4_per_peer_metrics = 16;
+      rocev2_ipv6_per_peer_metrics = 17;
+      rocev2_flow_per_qp_metrics = 18;
     }
   }
   // Description missing in models
@@ -13247,10 +12886,13 @@ message MetricsResponse {
   repeated ConvergenceMetric convergence_metrics = 16;
 
   // Description missing in models
-  repeated MacsecMetric macsec_metrics = 17;
+  repeated Rocev2IPv4MetricPerPeer rocev2_ipv4_per_peer_metrics = 17;
 
   // Description missing in models
-  repeated MkaMetric mka_metrics = 18;
+  repeated Rocev2IPv6MetricPerPeer rocev2_ipv6_per_peer_metrics = 18;
+
+  // Description missing in models
+  repeated Rocev2FlowMetricPerPort rocev2_flow_per_qp_metrics = 19;
 }
 
 // The port result request to the traffic generator
@@ -13258,10 +12900,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13295,10 +12933,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13377,10 +13011,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -13695,10 +13325,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -13825,10 +13451,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -13951,10 +13573,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -14092,10 +13710,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -14122,10 +13736,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -14180,18 +13790,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14312,10 +13914,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -14374,10 +13972,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -14538,10 +14132,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -14599,10 +14189,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -14656,10 +14242,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -14741,10 +14323,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -14834,10 +14412,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -14999,9 +14573,6 @@ message Ospfv2Metric {
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -15012,16 +14583,9 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
@@ -15081,13 +14645,6 @@ message ConvergenceEvent {
   // - /components/schemas/Device.Bgpv4Route/properties/name
   // - /components/schemas/Device.Bgpv6Route/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   optional string source = 2;
 
   // The timestamp(nanoseconds) of the starting event that triggers convergence.
@@ -15097,135 +14654,32 @@ message ConvergenceEvent {
   optional double end_timestamp_ns = 4;
 }
 
-// The request to retrieve MACsec per secure entity(secY) metrics/statistics.
-message MacsecMetricsRequest {
+// The request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+message Rocev2IPv4MetricsRequest {
 
-  // The names of secure entities(secYs) to return results for. An empty list will return
-  // results for all secYs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
-  repeated string secure_entity_names = 1;
-
-  message ColumnNames {
+  message Choice {
     enum Enum {
       unspecified = 0;
-      session_state = 1;
-      session_flap_count = 2;
-      out_pkts_protected = 3;
-      out_pkts_encrypted = 4;
-      in_pkts_ok = 5;
-      in_pkts_bad = 6;
-      in_pkts_bad_tag = 7;
-      in_pkts_late = 8;
-      in_pkts_no_sci = 9;
-      in_pkts_not_using_sa = 10;
-      in_pkts_not_valid = 11;
-      in_pkts_unknown_sci = 12;
-      in_pkts_unused_sa = 13;
-      in_pkts_invalid = 14;
-      in_pkts_untagged = 15;
-      out_octets_protected = 16;
-      out_octets_encrypted = 17;
-      in_octets_validated = 18;
-      in_octets_decrypted = 19;
+      per_peer = 1;
     }
   }
-  // The list of column names that the returned result set will contain. If the list is
-  // empty then all columns will be returned except for any result_groups. The name of
-  // the secure entity(secY) cannot be excluded.
-  repeated ColumnNames.Enum column_names = 2;
+  // Fetch stats per peer_name or per QP
+  // default = Choice.Enum.per_peer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2IPv4ColumnNames per_peer = 2;
 }
 
-// MACsec per secure entity(secY) statistics information.
-message MacsecMetric {
+// The names of Rocev2 over IPv4 peers to return results for. An empty list will return
+// results for all Rocev2 peers.
+message Rocev2IPv4ColumnNames {
 
-  // The name of a configured MACsec secure entity(secY).
-  optional string name = 1;
-
-  message SessionState {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
-  optional SessionState.Enum session_state = 2;
-
-  // Number of times the session went from Up to Down state.
-  optional uint64 session_flap_count = 3;
-
-  // OutPktsProtected, the number of protected packets transmitted.
-  optional uint64 out_pkts_protected = 4;
-
-  // OutPktsEncrypted, the number of encrypted packets transmitted.
-  optional uint64 out_pkts_encrypted = 5;
-
-  // InPktsOk, the number of valid packets received.
-  optional uint64 in_pkts_ok = 6;
-
-  // The total number of received bad packets that failed atleast one validation check.
-  optional uint64 in_pkts_bad = 7;
-
-  // InPktsBadTag, the number of packets discarded due to bad tag/ICV.
-  optional uint64 in_pkts_bad_tag = 8;
-
-  // InPktsLate, the number of packets discarded out of window.
-  optional uint64 in_pkts_late = 9;
-
-  // InPktsNoSCI,the number of packets discarded due to unknown SCI.
-  optional uint64 in_pkts_no_sci = 10;
-
-  // InPktsNotUsingSA, the number of packets discarded due to unused SA.
-  optional uint64 in_pkts_not_using_sa = 11;
-
-  // InPktsNotValid, the number of packets discarded due to invalid ICV.
-  optional uint64 in_pkts_not_valid = 12;
-
-  // InPktsUnknownSCI, the number of packets received with unknown SCI.
-  optional uint64 in_pkts_unknown_sci = 13;
-
-  // InPktsUnusedSA, the number of packets received with unused SA.
-  optional uint64 in_pkts_unused_sa = 14;
-
-  // InPktsInvalid, the number of packets received with invalid ICV.
-  optional uint64 in_pkts_invalid = 15;
-
-  // InPktsUntagged, the number of non-MACsec packets received.
-  optional uint64 in_pkts_untagged = 16;
-
-  // OutOctetsProtected, the number of bytes transmitted as protected.
-  optional uint64 out_octets_protected = 17;
-
-  // OutOctetsEncrypted, the number of bytes transmitted as encrypted.
-  optional uint64 out_octets_encrypted = 18;
-
-  // InOctetsValidated, the number of received bytes validated.
-  optional uint64 in_octets_validated = 19;
-
-  // InOctetsDecrypted, the number of received bytes decrypted.
-  optional uint64 in_octets_decrypted = 20;
-}
-
-// The request to retrieve MKA per peer metrics/statistics.
-message MkaMetricsRequest {
-
-  // The names of peers to return results for. An empty list will return results for all
-  // peers.
+  // The names of Rocev2 over IPv4 peers to return results for. An empty list will return
+  // results for all Rocev2 peers.
   // 
   // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
+  // - /components/schemas/Rocev2.V6peer/properties/name
   // 
   repeated string peer_names = 1;
 
@@ -15233,27 +14687,34 @@ message MkaMetricsRequest {
     enum Enum {
       unspecified = 0;
       session_state = 1;
-      session_flap_count = 2;
-      mkpdu_tx = 3;
-      mkpdu_rx = 4;
-      live_peer_count = 5;
-      potential_peer_count = 6;
-      latest_key_tx_peer_count = 7;
-      latest_key_rx_peer_count = 8;
-      malformed_mkpdu = 9;
-      icv_mismatch = 10;
+      qp_confugred = 2;
+      qp_up = 3;
+      qp_down = 4;
+      connect_request_tx = 5;
+      connect_request_rx = 6;
+      connect_reply_tx = 7;
+      connect_reply_rx = 8;
+      ready_tx = 9;
+      ready_rx = 10;
+      disconnect_request_tx = 11;
+      disconnect_request_rx = 12;
+      disconnect_reply_tx = 13;
+      disconnect_reply_rx = 14;
+      reject_tx = 15;
+      reject_rx = 16;
+      unknown_msg_rx = 17;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
   // empty then all columns will be returned except for any result_groups. The name of
-  // the peer cannot be excluded.
+  // the Rocev2 peer cannot be excluded.
   repeated ColumnNames.Enum column_names = 2;
 }
 
-// MKA per peer statistics information.
-message MkaMetric {
+// Rocev2 per peer statistics information.
+message Rocev2IPv4MetricPerPeer {
 
-  // The name of a configured MKA peer.
+  // The name of a configured Rocev2 peer.
   optional string name = 1;
 
   message SessionState {
@@ -15267,32 +14728,341 @@ message MkaMetric {
   // any other state.
   optional SessionState.Enum session_state = 2;
 
-  // Number of times the session went from Up to Down state.
-  optional uint64 session_flap_count = 3;
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 3;
 
-  // Number of MKA protocol data unit(MKPDU) frames Tx.
-  optional uint64 mkpdu_tx = 4;
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 4;
 
-  // Number of MKA protocol data unit(MKPDU) frames Rx.
-  optional uint64 mkpdu_rx = 5;
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 5;
 
-  // Number of MKA live peers.
-  optional uint64 live_peer_count = 6;
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 6;
 
-  // Number of MKA potential peers.
-  optional uint64 potential_peer_count = 7;
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 7;
 
-  // Number of MKA latest key Tx peers.
-  optional uint64 latest_key_tx_peer_count = 8;
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 9;
 
-  // Number of MKA latest key Rx peers.
-  optional uint64 latest_key_rx_peer_count = 9;
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 10;
 
-  // Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
-  optional uint64 malformed_mkpdu = 10;
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 11;
 
-  // Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
-  optional uint64 icv_mismatch = 11;
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 12;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 13;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 14;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 15;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 16;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 17;
+
+  // Number of Unknown Message Received.
+  optional uint64 unknown_msg_rx = 18;
+}
+
+// The request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+message Rocev2IPv6MetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      per_peer = 1;
+    }
+  }
+  // Fetch stats per peer_name or per QP
+  // default = Choice.Enum.per_peer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2IPv6ColumnNames per_peer = 2;
+}
+
+// The names of Rocev2 over IPv6 peers to return results for. An empty list will return
+// results for all Rocev2 peers.
+message Rocev2IPv6ColumnNames {
+
+  // The names of Rocev2 over IPv6 peers to return results for. An empty list will return
+  // results for all Rocev2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V6peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      qp_confugred = 2;
+      qp_up = 3;
+      qp_down = 4;
+      connect_request_tx = 5;
+      connect_request_rx = 6;
+      connect_reply_tx = 7;
+      connect_reply_rx = 8;
+      ready_tx = 9;
+      ready_rx = 10;
+      disconnect_request_tx = 11;
+      disconnect_request_rx = 12;
+      disconnect_reply_tx = 13;
+      disconnect_reply_rx = 14;
+      reject_tx = 15;
+      reject_rx = 16;
+      unknown_msg_rx = 17;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the Rocev2 peer cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// Rocev2 per peer statistics information.
+message Rocev2IPv6MetricPerPeer {
+
+  // The name of a configured Rocev2 peer.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. Up refers to an Established state and Down refers to
+  // any other state.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 3;
+
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 4;
+
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 5;
+
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 6;
+
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 7;
+
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 9;
+
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 10;
+
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 11;
+
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 12;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 13;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 14;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 15;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 16;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 17;
+
+  // Number of Unknown Message Received.
+  optional uint64 unknown_msg_rx = 18;
+}
+
+// The request to retrieve Rocev2 FLow statistics.
+message Rocev2FlowMetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      per_port = 1;
+    }
+  }
+  // Fetch stats per peer_name or per QP
+  // default = Choice.Enum.per_port
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2FlowColumnNames per_port = 2;
+}
+
+// The names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+message Rocev2FlowColumnNames {
+
+  // The names of Rocev2 FLow to return results for. An empty list will return results
+  // for all Rocev2 FLow.
+  repeated string qp_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      flow_name = 1;
+      traffic_item = 2;
+      port_tx = 3;
+      port_rx = 4;
+      src_qp = 5;
+      dest_qp = 6;
+      src_ipv4 = 7;
+      dest_ipv4 = 8;
+      data_frames_tx = 9;
+      data_frame_rx = 10;
+      frame_delta = 11;
+      data_frames_retransmitted = 12;
+      frame_sequence_error = 13;
+      tx_bytes = 14;
+      rx_bytes = 15;
+      data_tx_rate = 16;
+      data_rx_rate = 17;
+      message_tx = 18;
+      message_complete_rx = 19;
+      message_fail = 20;
+      flow_completion_time = 21;
+      avg_latesncy = 22;
+      min_latency = 23;
+      max_latency = 24;
+      ecn_ce_rx = 25;
+      cnp_tx = 26;
+      cnp_rx = 27;
+      ack_tx = 28;
+      ack_rx = 29;
+      nak_tx = 30;
+      nak_rx = 31;
+      first_timestamp = 32;
+      last_timestamp = 33;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the Flow cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// Rocev2 Flow statistics information.
+message Rocev2FlowMetricPerPort {
+
+  // Flow Name.
+  optional string flow_name = 1;
+
+  // Traffic Item Name.
+  optional string traffic_item = 2;
+
+  // The name of the transmit port
+  optional string port_tx = 3;
+
+  // The name of the receive port
+  optional string port_rx = 4;
+
+  // Current Source QP number.
+  optional uint64 src_qp = 5;
+
+  // Current destination QP number.
+  optional uint64 dest_qp = 6;
+
+  // Current source address.
+  optional string src_ipv4 = 7;
+
+  // Current destination address.
+  optional string dest_ipv4 = 8;
+
+  // Current number of data frames transmitted.
+  optional uint64 data_frame_tx = 9;
+
+  // Current number of data frames received.
+  optional uint64 data_frames_rx = 10;
+
+  // Current differnece between tx and rx data frames
+  optional uint64 frame_delta = 11;
+
+  // Current number of data frames re-transmitted.
+  optional uint64 data_frames_retransmitted = 12;
+
+  // Current number of frame sequence errors.
+  optional uint64 frame_sequence_error = 13;
+
+  // Current number of bytes transmitted.
+  optional uint64 tx_bytes = 14;
+
+  // Current number of bytes received.
+  optional uint64 rx_bytes = 15;
+
+  // Current rate at which data is transmitted in Gbps.
+  optional uint64 data_tx_rate = 16;
+
+  // Current rate at which data is received in Gbps.
+  optional uint64 data_rx_rate = 17;
+
+  // Current number of Message transmitted.
+  optional uint64 message_tx = 18;
+
+  // Current number of Message Complete received.
+  optional uint64 message_complete_rx = 19;
+
+  // Current number of Message Fail count.
+  optional uint64 message_fail = 20;
+
+  // Current flow comletion time in ms.
+  optional uint64 flow_completion_time = 21;
+
+  // Current average latency measured in ns.
+  optional uint64 avg_latency = 22;
+
+  // Current minimum latency measured in ns.
+  optional uint64 min_latency = 23;
+
+  // Current maximum latency measured in ns.
+  optional uint64 max_latency = 24;
+
+  // Current number of ECN-CE Recevied.
+  optional uint64 ecn_ce_rx = 25;
+
+  // Current number of CNP transmitted.
+  optional uint64 cnp_tx = 26;
+
+  // Current number of CNP received.
+  optional uint64 cnp_rx = 27;
+
+  // Current number of ACK transmitted.
+  optional uint64 ack_tx = 28;
+
+  // Current number of ACK received.
+  optional uint64 ack_rx = 29;
+
+  // Current number of NAK transmitted.
+  optional uint64 nak_tx = 30;
+
+  // Current number of NAK received.
+  optional uint64 nak_rx = 31;
+
+  // First Timestamp.
+  optional string first_timestamp = 32;
+
+  // Last Timestamp.
+  optional string last_timestamp = 33;
 }
 
 // Request to traffic generator for states of choice
@@ -15419,10 +15189,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -15452,10 +15218,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -15481,11 +15243,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -16039,10 +15796,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -16583,10 +16336,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -16750,10 +16499,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -16888,10 +16633,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -16925,10 +16666,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -16979,10 +16716,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -17038,10 +16771,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -17089,10 +16818,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -17298,10 +17023,6 @@ message Ospfv2Link {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name

@@ -18,6 +18,7 @@ type configOptions struct {
 	unMarshaller          unMarshalConfigOptions
 	portOptionsHolder     PortOptions
 	protocolOptionsHolder ProtocolOptions
+	perPortOptionsHolder  PerPortOptions
 }
 
 func NewConfigOptions() ConfigOptions {
@@ -247,6 +248,7 @@ func (obj *configOptions) Clone() (ConfigOptions, error) {
 func (obj *configOptions) setNil() {
 	obj.portOptionsHolder = nil
 	obj.protocolOptionsHolder = nil
+	obj.perPortOptionsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -290,6 +292,14 @@ type ConfigOptions interface {
 	SetProtocolOptions(value ProtocolOptions) ConfigOptions
 	// HasProtocolOptions checks if ProtocolOptions has been set in ConfigOptions
 	HasProtocolOptions() bool
+	// PerPortOptions returns PerPortOptions, set in ConfigOptions.
+	// PerPortOptions is ****Add proper description here****
+	PerPortOptions() PerPortOptions
+	// SetPerPortOptions assigns PerPortOptions provided by user to ConfigOptions.
+	// PerPortOptions is ****Add proper description here****
+	SetPerPortOptions(value PerPortOptions) ConfigOptions
+	// HasPerPortOptions checks if PerPortOptions has been set in ConfigOptions
+	HasPerPortOptions() bool
 	setNil()
 }
 
@@ -349,6 +359,34 @@ func (obj *configOptions) SetProtocolOptions(value ProtocolOptions) ConfigOption
 	return obj
 }
 
+// description is TBD
+// PerPortOptions returns a PerPortOptions
+func (obj *configOptions) PerPortOptions() PerPortOptions {
+	if obj.obj.PerPortOptions == nil {
+		obj.obj.PerPortOptions = NewPerPortOptions().msg()
+	}
+	if obj.perPortOptionsHolder == nil {
+		obj.perPortOptionsHolder = &perPortOptions{obj: obj.obj.PerPortOptions}
+	}
+	return obj.perPortOptionsHolder
+}
+
+// description is TBD
+// PerPortOptions returns a PerPortOptions
+func (obj *configOptions) HasPerPortOptions() bool {
+	return obj.obj.PerPortOptions != nil
+}
+
+// description is TBD
+// SetPerPortOptions sets the PerPortOptions value in the ConfigOptions object
+func (obj *configOptions) SetPerPortOptions(value PerPortOptions) ConfigOptions {
+
+	obj.perPortOptionsHolder = nil
+	obj.obj.PerPortOptions = value.msg()
+
+	return obj
+}
+
 func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -362,6 +400,11 @@ func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.ProtocolOptions != nil {
 
 		obj.ProtocolOptions().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PerPortOptions != nil {
+
+		obj.PerPortOptions().validateObj(vObj, set_default)
 	}
 
 }

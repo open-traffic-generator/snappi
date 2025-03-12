@@ -280,12 +280,12 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	HasChoice() bool
 	// getter for VendorInformation to set choice.
 	VendorInformation()
-	// getter for Sztp to set choice.
-	Sztp()
 	// getter for NameServers to set choice.
 	NameServers()
 	// getter for Fqdn to set choice.
 	Fqdn()
+	// getter for Sztp to set choice.
+	Sztp()
 	// getter for BootfileUrl to set choice.
 	BootfileUrl()
 	// Custom returns Dhcpv6ClientOptionsCustom, set in Dhcpv6ClientOptionsOptionsRequest.
@@ -327,11 +327,6 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) VendorInformation() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.VENDOR_INFORMATION)
 }
 
-// getter for Sztp to set choice
-func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
-	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
-}
-
 // getter for NameServers to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
@@ -340,6 +335,11 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
 // getter for Fqdn to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
+}
+
+// getter for Sztp to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
 }
 
 // getter for BootfileUrl to set choice

@@ -31,8 +31,9 @@ type metricsRequest struct {
 	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
 	ospfv2Holder       Ospfv2MetricsRequest
 	convergenceHolder  ConvergenceRequest
-	macsecHolder       MacsecMetricsRequest
-	mkaHolder          MkaMetricsRequest
+	rocev2Ipv4Holder   Rocev2IPv4MetricsRequest
+	rocev2Ipv6Holder   Rocev2IPv6MetricsRequest
+	rocev2FlowHolder   Rocev2FlowMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -275,8 +276,9 @@ func (obj *metricsRequest) setNil() {
 	obj.dhcpv6ServerHolder = nil
 	obj.ospfv2Holder = nil
 	obj.convergenceHolder = nil
-	obj.macsecHolder = nil
-	obj.mkaHolder = nil
+	obj.rocev2Ipv4Holder = nil
+	obj.rocev2Ipv6Holder = nil
+	obj.rocev2FlowHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -425,35 +427,39 @@ type MetricsRequest interface {
 	// Convergence returns ConvergenceRequest, set in MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	Convergence() ConvergenceRequest
 	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	SetConvergence(value ConvergenceRequest) MetricsRequest
 	// HasConvergence checks if Convergence has been set in MetricsRequest
 	HasConvergence() bool
-	// Macsec returns MacsecMetricsRequest, set in MetricsRequest.
-	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity(secY) metrics/statistics.
-	Macsec() MacsecMetricsRequest
-	// SetMacsec assigns MacsecMetricsRequest provided by user to MetricsRequest.
-	// MacsecMetricsRequest is the request to retrieve MACsec per secure entity(secY) metrics/statistics.
-	SetMacsec(value MacsecMetricsRequest) MetricsRequest
-	// HasMacsec checks if Macsec has been set in MetricsRequest
-	HasMacsec() bool
-	// Mka returns MkaMetricsRequest, set in MetricsRequest.
-	// MkaMetricsRequest is the request to retrieve MKA per peer metrics/statistics.
-	Mka() MkaMetricsRequest
-	// SetMka assigns MkaMetricsRequest provided by user to MetricsRequest.
-	// MkaMetricsRequest is the request to retrieve MKA per peer metrics/statistics.
-	SetMka(value MkaMetricsRequest) MetricsRequest
-	// HasMka checks if Mka has been set in MetricsRequest
-	HasMka() bool
+	// Rocev2Ipv4 returns Rocev2IPv4MetricsRequest, set in MetricsRequest.
+	// Rocev2IPv4MetricsRequest is the request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+	Rocev2Ipv4() Rocev2IPv4MetricsRequest
+	// SetRocev2Ipv4 assigns Rocev2IPv4MetricsRequest provided by user to MetricsRequest.
+	// Rocev2IPv4MetricsRequest is the request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+	SetRocev2Ipv4(value Rocev2IPv4MetricsRequest) MetricsRequest
+	// HasRocev2Ipv4 checks if Rocev2Ipv4 has been set in MetricsRequest
+	HasRocev2Ipv4() bool
+	// Rocev2Ipv6 returns Rocev2IPv6MetricsRequest, set in MetricsRequest.
+	// Rocev2IPv6MetricsRequest is the request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+	Rocev2Ipv6() Rocev2IPv6MetricsRequest
+	// SetRocev2Ipv6 assigns Rocev2IPv6MetricsRequest provided by user to MetricsRequest.
+	// Rocev2IPv6MetricsRequest is the request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+	SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) MetricsRequest
+	// HasRocev2Ipv6 checks if Rocev2Ipv6 has been set in MetricsRequest
+	HasRocev2Ipv6() bool
+	// Rocev2Flow returns Rocev2FlowMetricsRequest, set in MetricsRequest.
+	// Rocev2FlowMetricsRequest is the request to retrieve Rocev2 FLow statistics.
+	Rocev2Flow() Rocev2FlowMetricsRequest
+	// SetRocev2Flow assigns Rocev2FlowMetricsRequest provided by user to MetricsRequest.
+	// Rocev2FlowMetricsRequest is the request to retrieve Rocev2 FLow statistics.
+	SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest
+	// HasRocev2Flow checks if Rocev2Flow has been set in MetricsRequest
+	HasRocev2Flow() bool
 	setNil()
 }
 
@@ -476,8 +482,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_SERVER MetricsRequestChoiceEnum
 	OSPFV2        MetricsRequestChoiceEnum
 	CONVERGENCE   MetricsRequestChoiceEnum
-	MACSEC        MetricsRequestChoiceEnum
-	MKA           MetricsRequestChoiceEnum
+	ROCEV2_IPV4   MetricsRequestChoiceEnum
+	ROCEV2_IPV6   MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -494,8 +500,8 @@ var MetricsRequestChoice = struct {
 	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
 	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
 	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
-	MACSEC:        MetricsRequestChoiceEnum("macsec"),
-	MKA:           MetricsRequestChoiceEnum("mka"),
+	ROCEV2_IPV4:   MetricsRequestChoiceEnum("rocev2_ipv4"),
+	ROCEV2_IPV6:   MetricsRequestChoiceEnum("rocev2_ipv6"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -517,10 +523,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.Mka = nil
-	obj.mkaHolder = nil
-	obj.obj.Macsec = nil
-	obj.macsecHolder = nil
+	obj.obj.Rocev2Ipv6 = nil
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2Ipv4 = nil
+	obj.rocev2Ipv4Holder = nil
 	obj.obj.Convergence = nil
 	obj.convergenceHolder = nil
 	obj.obj.Ospfv2 = nil
@@ -612,12 +618,12 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 		obj.obj.Convergence = NewConvergenceRequest().msg()
 	}
 
-	if value == MetricsRequestChoice.MACSEC {
-		obj.obj.Macsec = NewMacsecMetricsRequest().msg()
+	if value == MetricsRequestChoice.ROCEV2_IPV4 {
+		obj.obj.Rocev2Ipv4 = NewRocev2IPv4MetricsRequest().msg()
 	}
 
-	if value == MetricsRequestChoice.MKA {
-		obj.obj.Mka = NewMkaMetricsRequest().msg()
+	if value == MetricsRequestChoice.ROCEV2_IPV6 {
+		obj.obj.Rocev2Ipv6 = NewRocev2IPv6MetricsRequest().msg()
 	}
 
 	return obj
@@ -1044,57 +1050,85 @@ func (obj *metricsRequest) SetConvergence(value ConvergenceRequest) MetricsReque
 }
 
 // description is TBD
-// Macsec returns a MacsecMetricsRequest
-func (obj *metricsRequest) Macsec() MacsecMetricsRequest {
-	if obj.obj.Macsec == nil {
-		obj.setChoice(MetricsRequestChoice.MACSEC)
+// Rocev2Ipv4 returns a Rocev2IPv4MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv4() Rocev2IPv4MetricsRequest {
+	if obj.obj.Rocev2Ipv4 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
 	}
-	if obj.macsecHolder == nil {
-		obj.macsecHolder = &macsecMetricsRequest{obj: obj.obj.Macsec}
+	if obj.rocev2Ipv4Holder == nil {
+		obj.rocev2Ipv4Holder = &rocev2IPv4MetricsRequest{obj: obj.obj.Rocev2Ipv4}
 	}
-	return obj.macsecHolder
+	return obj.rocev2Ipv4Holder
 }
 
 // description is TBD
-// Macsec returns a MacsecMetricsRequest
-func (obj *metricsRequest) HasMacsec() bool {
-	return obj.obj.Macsec != nil
+// Rocev2Ipv4 returns a Rocev2IPv4MetricsRequest
+func (obj *metricsRequest) HasRocev2Ipv4() bool {
+	return obj.obj.Rocev2Ipv4 != nil
 }
 
 // description is TBD
-// SetMacsec sets the MacsecMetricsRequest value in the MetricsRequest object
-func (obj *metricsRequest) SetMacsec(value MacsecMetricsRequest) MetricsRequest {
-	obj.setChoice(MetricsRequestChoice.MACSEC)
-	obj.macsecHolder = nil
-	obj.obj.Macsec = value.msg()
+// SetRocev2Ipv4 sets the Rocev2IPv4MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv4(value Rocev2IPv4MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
+	obj.rocev2Ipv4Holder = nil
+	obj.obj.Rocev2Ipv4 = value.msg()
 
 	return obj
 }
 
 // description is TBD
-// Mka returns a MkaMetricsRequest
-func (obj *metricsRequest) Mka() MkaMetricsRequest {
-	if obj.obj.Mka == nil {
-		obj.setChoice(MetricsRequestChoice.MKA)
+// Rocev2Ipv6 returns a Rocev2IPv6MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv6() Rocev2IPv6MetricsRequest {
+	if obj.obj.Rocev2Ipv6 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
 	}
-	if obj.mkaHolder == nil {
-		obj.mkaHolder = &mkaMetricsRequest{obj: obj.obj.Mka}
+	if obj.rocev2Ipv6Holder == nil {
+		obj.rocev2Ipv6Holder = &rocev2IPv6MetricsRequest{obj: obj.obj.Rocev2Ipv6}
 	}
-	return obj.mkaHolder
+	return obj.rocev2Ipv6Holder
 }
 
 // description is TBD
-// Mka returns a MkaMetricsRequest
-func (obj *metricsRequest) HasMka() bool {
-	return obj.obj.Mka != nil
+// Rocev2Ipv6 returns a Rocev2IPv6MetricsRequest
+func (obj *metricsRequest) HasRocev2Ipv6() bool {
+	return obj.obj.Rocev2Ipv6 != nil
 }
 
 // description is TBD
-// SetMka sets the MkaMetricsRequest value in the MetricsRequest object
-func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
-	obj.setChoice(MetricsRequestChoice.MKA)
-	obj.mkaHolder = nil
-	obj.obj.Mka = value.msg()
+// SetRocev2Ipv6 sets the Rocev2IPv6MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2Ipv6 = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Rocev2Flow returns a Rocev2FlowMetricsRequest
+func (obj *metricsRequest) Rocev2Flow() Rocev2FlowMetricsRequest {
+	if obj.obj.Rocev2Flow == nil {
+		obj.obj.Rocev2Flow = NewRocev2FlowMetricsRequest().msg()
+	}
+	if obj.rocev2FlowHolder == nil {
+		obj.rocev2FlowHolder = &rocev2FlowMetricsRequest{obj: obj.obj.Rocev2Flow}
+	}
+	return obj.rocev2FlowHolder
+}
+
+// description is TBD
+// Rocev2Flow returns a Rocev2FlowMetricsRequest
+func (obj *metricsRequest) HasRocev2Flow() bool {
+	return obj.obj.Rocev2Flow != nil
+}
+
+// description is TBD
+// SetRocev2Flow sets the Rocev2FlowMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest {
+
+	obj.rocev2FlowHolder = nil
+	obj.obj.Rocev2Flow = value.msg()
 
 	return obj
 }
@@ -1179,14 +1213,19 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 		obj.Convergence().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Macsec != nil {
+	if obj.obj.Rocev2Ipv4 != nil {
 
-		obj.Macsec().validateObj(vObj, set_default)
+		obj.Rocev2Ipv4().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Mka != nil {
+	if obj.obj.Rocev2Ipv6 != nil {
 
-		obj.Mka().validateObj(vObj, set_default)
+		obj.Rocev2Ipv6().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2Flow != nil {
+
+		obj.Rocev2Flow().validateObj(vObj, set_default)
 	}
 
 }
@@ -1270,14 +1309,14 @@ func (obj *metricsRequest) setDefault() {
 		choice = MetricsRequestChoice.CONVERGENCE
 	}
 
-	if obj.obj.Macsec != nil {
+	if obj.obj.Rocev2Ipv4 != nil {
 		choices_set += 1
-		choice = MetricsRequestChoice.MACSEC
+		choice = MetricsRequestChoice.ROCEV2_IPV4
 	}
 
-	if obj.obj.Mka != nil {
+	if obj.obj.Rocev2Ipv6 != nil {
 		choices_set += 1
-		choice = MetricsRequestChoice.MKA
+		choice = MetricsRequestChoice.ROCEV2_IPV6
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
