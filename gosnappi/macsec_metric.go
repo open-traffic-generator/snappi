@@ -530,7 +530,7 @@ func (obj *macsecMetric) SetInPktsOk(value uint64) MacsecMetric {
 	return obj
 }
 
-// Total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check.
 // InPktsBad returns a uint64
 func (obj *macsecMetric) InPktsBad() uint64 {
 
@@ -538,13 +538,13 @@ func (obj *macsecMetric) InPktsBad() uint64 {
 
 }
 
-// Total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check.
 // InPktsBad returns a uint64
 func (obj *macsecMetric) HasInPktsBad() bool {
 	return obj.obj.InPktsBad != nil
 }
 
-// Total number of received bad packets that failed atleast one validation check.
+// The total number of received bad packets that failed atleast one validation check.
 // SetInPktsBad sets the uint64 value in the MacsecMetric object
 func (obj *macsecMetric) SetInPktsBad(value uint64) MacsecMetric {
 
