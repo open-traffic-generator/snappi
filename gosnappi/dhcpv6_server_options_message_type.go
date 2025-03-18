@@ -272,8 +272,6 @@ type Dhcpv6ServerOptionsMessageType interface {
 	HasChoice() bool
 	// getter for Reply to set choice.
 	Reply()
-	// getter for ReConfigure to set choice.
-	ReConfigure()
 	// getter for Advertise to set choice.
 	Advertise()
 	// getter for ReConfigure to set choice.
@@ -300,11 +298,6 @@ func (obj *dhcpv6ServerOptionsMessageType) Choice() Dhcpv6ServerOptionsMessageTy
 // getter for Reply to set choice
 func (obj *dhcpv6ServerOptionsMessageType) Reply() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
-}
-
-// getter for ReConfigure to set choice
-func (obj *dhcpv6ServerOptionsMessageType) ReConfigure() {
-	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.RE_CONFIGURE)
 }
 
 // getter for Advertise to set choice
