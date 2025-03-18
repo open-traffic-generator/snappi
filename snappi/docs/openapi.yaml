@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.25.0
+  version: 1.26.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -20955,9 +20955,9 @@ components:
           type: integer
           format: uint64
           x-field-uid: 6
-        bad_pkts_rx:
+        in_pkts_bad:
           description: |-
-            The number of bad packets received.
+            The total number of received bad packets that failed atleast one validation check.
           type: integer
           format: uint64
           x-field-uid: 7

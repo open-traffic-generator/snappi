@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.25.0
+/* Open Traffic Generator API 1.26.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -15234,8 +15234,8 @@ message MacsecMetric {
   // InPktsOk, the number of valid packets received.
   optional uint64 in_pkts_ok = 6;
 
-  // The number of bad packets received.
-  optional uint64 bad_pkts_rx = 7;
+  // The total number of received bad packets that failed atleast one validation check.
+  optional uint64 in_pkts_bad = 7;
 
   // InPktsBadTag, the number of packets discarded due to bad tag/ICV.
   optional uint64 in_pkts_bad_tag = 8;
