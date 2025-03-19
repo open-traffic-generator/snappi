@@ -250,7 +250,7 @@ func (obj *rocev2IPv6MetricsRequest) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2IPv6MetricsRequest is the request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+// Rocev2IPv6MetricsRequest is the request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
 type Rocev2IPv6MetricsRequest interface {
 	Validation
 	// msg marshals Rocev2IPv6MetricsRequest to protobuf object *otg.Rocev2IPv6MetricsRequest
@@ -279,10 +279,10 @@ type Rocev2IPv6MetricsRequest interface {
 	// HasChoice checks if Choice has been set in Rocev2IPv6MetricsRequest
 	HasChoice() bool
 	// PerPeer returns Rocev2IPv6ColumnNames, set in Rocev2IPv6MetricsRequest.
-	// Rocev2IPv6ColumnNames is the names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+	// Rocev2IPv6ColumnNames is the names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 	PerPeer() Rocev2IPv6ColumnNames
 	// SetPerPeer assigns Rocev2IPv6ColumnNames provided by user to Rocev2IPv6MetricsRequest.
-	// Rocev2IPv6ColumnNames is the names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+	// Rocev2IPv6ColumnNames is the names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 	SetPerPeer(value Rocev2IPv6ColumnNames) Rocev2IPv6MetricsRequest
 	// HasPerPeer checks if PerPeer has been set in Rocev2IPv6MetricsRequest
 	HasPerPeer() bool

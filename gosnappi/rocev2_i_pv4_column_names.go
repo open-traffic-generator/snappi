@@ -242,7 +242,7 @@ func (obj *rocev2IPv4ColumnNames) Clone() (Rocev2IPv4ColumnNames, error) {
 	return newObj, nil
 }
 
-// Rocev2IPv4ColumnNames is the names of Rocev2 over IPv4 peers to return results for. An empty list will return results for all Rocev2 peers.
+// Rocev2IPv4ColumnNames is the names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
 type Rocev2IPv4ColumnNames interface {
 	Validation
 	// msg marshals Rocev2IPv4ColumnNames to protobuf object *otg.Rocev2IPv4ColumnNames
@@ -274,10 +274,10 @@ type Rocev2IPv4ColumnNames interface {
 	SetColumnNames(value []Rocev2IPv4ColumnNamesColumnNamesEnum) Rocev2IPv4ColumnNames
 }
 
-// The names of Rocev2 over IPv4 peers to return results for. An empty list will return results for all Rocev2 peers.
+// The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
 //
 // x-constraint:
-// - /components/schemas/Rocev2.V6peer/properties/name
+// - /components/schemas/Rocev2.V4peer/properties/name
 //
 // PeerNames returns a []string
 func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
@@ -287,10 +287,10 @@ func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
 	return obj.obj.PeerNames
 }
 
-// The names of Rocev2 over IPv4 peers to return results for. An empty list will return results for all Rocev2 peers.
+// The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
 //
 // x-constraint:
-// - /components/schemas/Rocev2.V6peer/properties/name
+// - /components/schemas/Rocev2.V4peer/properties/name
 //
 // SetPeerNames sets the []string value in the Rocev2IPv4ColumnNames object
 func (obj *rocev2IPv4ColumnNames) SetPeerNames(value []string) Rocev2IPv4ColumnNames {
@@ -352,7 +352,7 @@ func (obj *rocev2IPv4ColumnNames) ColumnNames() []Rocev2IPv4ColumnNamesColumnNam
 	return items
 }
 
-// The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Rocev2 peer cannot be excluded.
+// The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the RoCEv2 peer cannot be excluded.
 // SetColumnNames sets the []string value in the Rocev2IPv4ColumnNames object
 func (obj *rocev2IPv4ColumnNames) SetColumnNames(value []Rocev2IPv4ColumnNamesColumnNamesEnum) Rocev2IPv4ColumnNames {
 

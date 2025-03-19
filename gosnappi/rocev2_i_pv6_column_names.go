@@ -242,7 +242,7 @@ func (obj *rocev2IPv6ColumnNames) Clone() (Rocev2IPv6ColumnNames, error) {
 	return newObj, nil
 }
 
-// Rocev2IPv6ColumnNames is the names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+// Rocev2IPv6ColumnNames is the names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 type Rocev2IPv6ColumnNames interface {
 	Validation
 	// msg marshals Rocev2IPv6ColumnNames to protobuf object *otg.Rocev2IPv6ColumnNames
@@ -274,7 +274,7 @@ type Rocev2IPv6ColumnNames interface {
 	SetColumnNames(value []Rocev2IPv6ColumnNamesColumnNamesEnum) Rocev2IPv6ColumnNames
 }
 
-// The names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+// The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V6peer/properties/name
@@ -287,7 +287,7 @@ func (obj *rocev2IPv6ColumnNames) PeerNames() []string {
 	return obj.obj.PeerNames
 }
 
-// The names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+// The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V6peer/properties/name
@@ -352,7 +352,7 @@ func (obj *rocev2IPv6ColumnNames) ColumnNames() []Rocev2IPv6ColumnNamesColumnNam
 	return items
 }
 
-// The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Rocev2 peer cannot be excluded.
+// The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the RoCEv2 peer cannot be excluded.
 // SetColumnNames sets the []string value in the Rocev2IPv6ColumnNames object
 func (obj *rocev2IPv6ColumnNames) SetColumnNames(value []Rocev2IPv6ColumnNamesColumnNamesEnum) Rocev2IPv6ColumnNames {
 

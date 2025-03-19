@@ -16,7 +16,7 @@ type statefulFlow struct {
 	obj          *otg.StatefulFlow
 	marshaller   marshalStatefulFlow
 	unMarshaller unMarshalStatefulFlow
-	rocev2Holder StatefulFlowRocev2FlowIter
+	rocev2Holder StatefulFlowRocev2FlowsIter
 }
 
 func NewStatefulFlow() StatefulFlow {
@@ -278,8 +278,8 @@ type StatefulFlow interface {
 	setChoice(value StatefulFlowChoiceEnum) StatefulFlow
 	// HasChoice checks if Choice has been set in StatefulFlow
 	HasChoice() bool
-	// Rocev2 returns StatefulFlowRocev2FlowIterIter, set in StatefulFlow
-	Rocev2() StatefulFlowRocev2FlowIter
+	// Rocev2 returns StatefulFlowRocev2FlowsIterIter, set in StatefulFlow
+	Rocev2() StatefulFlowRocev2FlowsIter
 	setNil()
 }
 
@@ -315,96 +315,96 @@ func (obj *statefulFlow) setChoice(value StatefulFlowChoiceEnum) StatefulFlow {
 	obj.rocev2Holder = nil
 
 	if value == StatefulFlowChoice.ROCEV2 {
-		obj.obj.Rocev2 = []*otg.Rocev2Flow{}
+		obj.obj.Rocev2 = []*otg.Rocev2Flows{}
 	}
 
 	return obj
 }
 
-// Rocev2 Flow Groups.
-// Rocev2 returns a []Rocev2Flow
-func (obj *statefulFlow) Rocev2() StatefulFlowRocev2FlowIter {
+// RoCEv2 Flow Groups.
+// Rocev2 returns a []Rocev2Flows
+func (obj *statefulFlow) Rocev2() StatefulFlowRocev2FlowsIter {
 	if len(obj.obj.Rocev2) == 0 {
 		obj.setChoice(StatefulFlowChoice.ROCEV2)
 	}
 	if obj.rocev2Holder == nil {
-		obj.rocev2Holder = newStatefulFlowRocev2FlowIter(&obj.obj.Rocev2).setMsg(obj)
+		obj.rocev2Holder = newStatefulFlowRocev2FlowsIter(&obj.obj.Rocev2).setMsg(obj)
 	}
 	return obj.rocev2Holder
 }
 
-type statefulFlowRocev2FlowIter struct {
-	obj             *statefulFlow
-	rocev2FlowSlice []Rocev2Flow
-	fieldPtr        *[]*otg.Rocev2Flow
+type statefulFlowRocev2FlowsIter struct {
+	obj              *statefulFlow
+	rocev2FlowsSlice []Rocev2Flows
+	fieldPtr         *[]*otg.Rocev2Flows
 }
 
-func newStatefulFlowRocev2FlowIter(ptr *[]*otg.Rocev2Flow) StatefulFlowRocev2FlowIter {
-	return &statefulFlowRocev2FlowIter{fieldPtr: ptr}
+func newStatefulFlowRocev2FlowsIter(ptr *[]*otg.Rocev2Flows) StatefulFlowRocev2FlowsIter {
+	return &statefulFlowRocev2FlowsIter{fieldPtr: ptr}
 }
 
-type StatefulFlowRocev2FlowIter interface {
-	setMsg(*statefulFlow) StatefulFlowRocev2FlowIter
-	Items() []Rocev2Flow
-	Add() Rocev2Flow
-	Append(items ...Rocev2Flow) StatefulFlowRocev2FlowIter
-	Set(index int, newObj Rocev2Flow) StatefulFlowRocev2FlowIter
-	Clear() StatefulFlowRocev2FlowIter
-	clearHolderSlice() StatefulFlowRocev2FlowIter
-	appendHolderSlice(item Rocev2Flow) StatefulFlowRocev2FlowIter
+type StatefulFlowRocev2FlowsIter interface {
+	setMsg(*statefulFlow) StatefulFlowRocev2FlowsIter
+	Items() []Rocev2Flows
+	Add() Rocev2Flows
+	Append(items ...Rocev2Flows) StatefulFlowRocev2FlowsIter
+	Set(index int, newObj Rocev2Flows) StatefulFlowRocev2FlowsIter
+	Clear() StatefulFlowRocev2FlowsIter
+	clearHolderSlice() StatefulFlowRocev2FlowsIter
+	appendHolderSlice(item Rocev2Flows) StatefulFlowRocev2FlowsIter
 }
 
-func (obj *statefulFlowRocev2FlowIter) setMsg(msg *statefulFlow) StatefulFlowRocev2FlowIter {
+func (obj *statefulFlowRocev2FlowsIter) setMsg(msg *statefulFlow) StatefulFlowRocev2FlowsIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&rocev2Flow{obj: val})
+		obj.appendHolderSlice(&rocev2Flows{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *statefulFlowRocev2FlowIter) Items() []Rocev2Flow {
-	return obj.rocev2FlowSlice
+func (obj *statefulFlowRocev2FlowsIter) Items() []Rocev2Flows {
+	return obj.rocev2FlowsSlice
 }
 
-func (obj *statefulFlowRocev2FlowIter) Add() Rocev2Flow {
-	newObj := &otg.Rocev2Flow{}
+func (obj *statefulFlowRocev2FlowsIter) Add() Rocev2Flows {
+	newObj := &otg.Rocev2Flows{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &rocev2Flow{obj: newObj}
+	newLibObj := &rocev2Flows{obj: newObj}
 	newLibObj.setDefault()
-	obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, newLibObj)
+	obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *statefulFlowRocev2FlowIter) Append(items ...Rocev2Flow) StatefulFlowRocev2FlowIter {
+func (obj *statefulFlowRocev2FlowsIter) Append(items ...Rocev2Flows) StatefulFlowRocev2FlowsIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, item)
+		obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, item)
 	}
 	return obj
 }
 
-func (obj *statefulFlowRocev2FlowIter) Set(index int, newObj Rocev2Flow) StatefulFlowRocev2FlowIter {
+func (obj *statefulFlowRocev2FlowsIter) Set(index int, newObj Rocev2Flows) StatefulFlowRocev2FlowsIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.rocev2FlowSlice[index] = newObj
+	obj.rocev2FlowsSlice[index] = newObj
 	return obj
 }
-func (obj *statefulFlowRocev2FlowIter) Clear() StatefulFlowRocev2FlowIter {
+func (obj *statefulFlowRocev2FlowsIter) Clear() StatefulFlowRocev2FlowsIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Rocev2Flow{}
-		obj.rocev2FlowSlice = []Rocev2Flow{}
+		*obj.fieldPtr = []*otg.Rocev2Flows{}
+		obj.rocev2FlowsSlice = []Rocev2Flows{}
 	}
 	return obj
 }
-func (obj *statefulFlowRocev2FlowIter) clearHolderSlice() StatefulFlowRocev2FlowIter {
-	if len(obj.rocev2FlowSlice) > 0 {
-		obj.rocev2FlowSlice = []Rocev2Flow{}
+func (obj *statefulFlowRocev2FlowsIter) clearHolderSlice() StatefulFlowRocev2FlowsIter {
+	if len(obj.rocev2FlowsSlice) > 0 {
+		obj.rocev2FlowsSlice = []Rocev2Flows{}
 	}
 	return obj
 }
-func (obj *statefulFlowRocev2FlowIter) appendHolderSlice(item Rocev2Flow) StatefulFlowRocev2FlowIter {
-	obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, item)
+func (obj *statefulFlowRocev2FlowsIter) appendHolderSlice(item Rocev2Flows) StatefulFlowRocev2FlowsIter {
+	obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, item)
 	return obj
 }
 
@@ -418,7 +418,7 @@ func (obj *statefulFlow) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.Rocev2().clearHolderSlice()
 			for _, item := range obj.obj.Rocev2 {
-				obj.Rocev2().appendHolderSlice(&rocev2Flow{obj: item})
+				obj.Rocev2().appendHolderSlice(&rocev2Flows{obj: item})
 			}
 		}
 		for _, item := range obj.Rocev2().Items() {

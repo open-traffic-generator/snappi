@@ -13,10 +13,10 @@ import (
 // ***** Rocev2Flows *****
 type rocev2Flows struct {
 	validation
-	obj              *otg.Rocev2Flows
-	marshaller       marshalRocev2Flows
-	unMarshaller     unMarshalRocev2Flows
-	rocev2VerbHolder Rocev2Verb
+	obj           *otg.Rocev2Flows
+	marshaller    marshalRocev2Flows
+	unMarshaller  unMarshalRocev2Flows
+	txPortsHolder Rocev2FlowsRocev2TxPortsIter
 }
 
 func NewRocev2Flows() Rocev2Flows {
@@ -244,13 +244,13 @@ func (obj *rocev2Flows) Clone() (Rocev2Flows, error) {
 }
 
 func (obj *rocev2Flows) setNil() {
-	obj.rocev2VerbHolder = nil
+	obj.txPortsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2Flows is ****Decription here****
+// Rocev2Flows is roCEv2 traffic flow configuration.
 type Rocev2Flows interface {
 	Validation
 	// msg marshals Rocev2Flows to protobuf object *otg.Rocev2Flows
@@ -272,205 +272,95 @@ type Rocev2Flows interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// TxEndpoint returns string, set in Rocev2Flows.
-	TxEndpoint() string
-	// SetTxEndpoint assigns string provided by user to Rocev2Flows
-	SetTxEndpoint(value string) Rocev2Flows
-	// RxEndpoint returns string, set in Rocev2Flows.
-	RxEndpoint() string
-	// SetRxEndpoint assigns string provided by user to Rocev2Flows
-	SetRxEndpoint(value string) Rocev2Flows
-	// HasRxEndpoint checks if RxEndpoint has been set in Rocev2Flows
-	HasRxEndpoint() bool
-	// Name returns string, set in Rocev2Flows.
-	Name() string
-	// SetName assigns string provided by user to Rocev2Flows
-	SetName(value string) Rocev2Flows
-	// Rocev2Verb returns Rocev2Verb, set in Rocev2Flows.
-	// Rocev2Verb is rocev2 Verb, Available options are: write, wrtie_with_immediate, send, send_with_immediate and read.
-	Rocev2Verb() Rocev2Verb
-	// SetRocev2Verb assigns Rocev2Verb provided by user to Rocev2Flows.
-	// Rocev2Verb is rocev2 Verb, Available options are: write, wrtie_with_immediate, send, send_with_immediate and read.
-	SetRocev2Verb(value Rocev2Verb) Rocev2Flows
-	// HasRocev2Verb checks if Rocev2Verb has been set in Rocev2Flows
-	HasRocev2Verb() bool
-	// MessageSize returns uint32, set in Rocev2Flows.
-	MessageSize() uint32
-	// SetMessageSize assigns uint32 provided by user to Rocev2Flows
-	SetMessageSize(value uint32) Rocev2Flows
-	// HasMessageSize checks if MessageSize has been set in Rocev2Flows
-	HasMessageSize() bool
-	// MessageSizeUnit returns Rocev2FlowsMessageSizeUnitEnum, set in Rocev2Flows
-	MessageSizeUnit() Rocev2FlowsMessageSizeUnitEnum
-	// SetMessageSizeUnit assigns Rocev2FlowsMessageSizeUnitEnum provided by user to Rocev2Flows
-	SetMessageSizeUnit(value Rocev2FlowsMessageSizeUnitEnum) Rocev2Flows
-	// HasMessageSizeUnit checks if MessageSizeUnit has been set in Rocev2Flows
-	HasMessageSizeUnit() bool
+	// TxPorts returns Rocev2FlowsRocev2TxPortsIterIter, set in Rocev2Flows
+	TxPorts() Rocev2FlowsRocev2TxPortsIter
 	setNil()
 }
 
-// The unique name of an emulated device that will be transmitting.
-//
-// x-constraint:
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
-// TxEndpoint returns a string
-func (obj *rocev2Flows) TxEndpoint() string {
-
-	return *obj.obj.TxEndpoint
-
-}
-
-// The unique name of an emulated device that will be transmitting.
-//
-// x-constraint:
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
-// SetTxEndpoint sets the string value in the Rocev2Flows object
-func (obj *rocev2Flows) SetTxEndpoint(value string) Rocev2Flows {
-
-	obj.obj.TxEndpoint = &value
-	return obj
-}
-
-// The unique name of an emulated device that will be recieving.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
-// RxEndpoint returns a string
-func (obj *rocev2Flows) RxEndpoint() string {
-
-	return *obj.obj.RxEndpoint
-
-}
-
-// The unique name of an emulated device that will be recieving.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
-// RxEndpoint returns a string
-func (obj *rocev2Flows) HasRxEndpoint() bool {
-	return obj.obj.RxEndpoint != nil
-}
-
-// The unique name of an emulated device that will be recieving.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
-// SetRxEndpoint sets the string value in the Rocev2Flows object
-func (obj *rocev2Flows) SetRxEndpoint(value string) Rocev2Flows {
-
-	obj.obj.RxEndpoint = &value
-	return obj
-}
-
-// Globally unique name of an object. It also serves as the primary key for arrays of objects.
-// Name returns a string
-func (obj *rocev2Flows) Name() string {
-
-	return *obj.obj.Name
-
-}
-
-// Globally unique name of an object. It also serves as the primary key for arrays of objects.
-// SetName sets the string value in the Rocev2Flows object
-func (obj *rocev2Flows) SetName(value string) Rocev2Flows {
-
-	obj.obj.Name = &value
-	return obj
-}
-
-// description is TBD
-// Rocev2Verb returns a Rocev2Verb
-func (obj *rocev2Flows) Rocev2Verb() Rocev2Verb {
-	if obj.obj.Rocev2Verb == nil {
-		obj.obj.Rocev2Verb = NewRocev2Verb().msg()
+// ****Must Add proper description here****
+// TxPorts returns a []Rocev2TxPorts
+func (obj *rocev2Flows) TxPorts() Rocev2FlowsRocev2TxPortsIter {
+	if len(obj.obj.TxPorts) == 0 {
+		obj.obj.TxPorts = []*otg.Rocev2TxPorts{}
 	}
-	if obj.rocev2VerbHolder == nil {
-		obj.rocev2VerbHolder = &rocev2Verb{obj: obj.obj.Rocev2Verb}
+	if obj.txPortsHolder == nil {
+		obj.txPortsHolder = newRocev2FlowsRocev2TxPortsIter(&obj.obj.TxPorts).setMsg(obj)
 	}
-	return obj.rocev2VerbHolder
+	return obj.txPortsHolder
 }
 
-// description is TBD
-// Rocev2Verb returns a Rocev2Verb
-func (obj *rocev2Flows) HasRocev2Verb() bool {
-	return obj.obj.Rocev2Verb != nil
+type rocev2FlowsRocev2TxPortsIter struct {
+	obj                *rocev2Flows
+	rocev2TxPortsSlice []Rocev2TxPorts
+	fieldPtr           *[]*otg.Rocev2TxPorts
 }
 
-// description is TBD
-// SetRocev2Verb sets the Rocev2Verb value in the Rocev2Flows object
-func (obj *rocev2Flows) SetRocev2Verb(value Rocev2Verb) Rocev2Flows {
+func newRocev2FlowsRocev2TxPortsIter(ptr *[]*otg.Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter {
+	return &rocev2FlowsRocev2TxPortsIter{fieldPtr: ptr}
+}
 
-	obj.rocev2VerbHolder = nil
-	obj.obj.Rocev2Verb = value.msg()
+type Rocev2FlowsRocev2TxPortsIter interface {
+	setMsg(*rocev2Flows) Rocev2FlowsRocev2TxPortsIter
+	Items() []Rocev2TxPorts
+	Add() Rocev2TxPorts
+	Append(items ...Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter
+	Set(index int, newObj Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter
+	Clear() Rocev2FlowsRocev2TxPortsIter
+	clearHolderSlice() Rocev2FlowsRocev2TxPortsIter
+	appendHolderSlice(item Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter
+}
 
+func (obj *rocev2FlowsRocev2TxPortsIter) setMsg(msg *rocev2Flows) Rocev2FlowsRocev2TxPortsIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&rocev2TxPorts{obj: val})
+	}
+	obj.obj = msg
 	return obj
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
-// MessageSize returns a uint32
-func (obj *rocev2Flows) MessageSize() uint32 {
-
-	return *obj.obj.MessageSize
-
+func (obj *rocev2FlowsRocev2TxPortsIter) Items() []Rocev2TxPorts {
+	return obj.rocev2TxPortsSlice
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
-// MessageSize returns a uint32
-func (obj *rocev2Flows) HasMessageSize() bool {
-	return obj.obj.MessageSize != nil
+func (obj *rocev2FlowsRocev2TxPortsIter) Add() Rocev2TxPorts {
+	newObj := &otg.Rocev2TxPorts{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &rocev2TxPorts{obj: newObj}
+	newLibObj.setDefault()
+	obj.rocev2TxPortsSlice = append(obj.rocev2TxPortsSlice, newLibObj)
+	return newLibObj
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
-// SetMessageSize sets the uint32 value in the Rocev2Flows object
-func (obj *rocev2Flows) SetMessageSize(value uint32) Rocev2Flows {
-
-	obj.obj.MessageSize = &value
+func (obj *rocev2FlowsRocev2TxPortsIter) Append(items ...Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.rocev2TxPortsSlice = append(obj.rocev2TxPortsSlice, item)
+	}
 	return obj
 }
 
-type Rocev2FlowsMessageSizeUnitEnum string
-
-// Enum of MessageSizeUnit on Rocev2Flows
-var Rocev2FlowsMessageSizeUnit = struct {
-	BYTE Rocev2FlowsMessageSizeUnitEnum
-	KB   Rocev2FlowsMessageSizeUnitEnum
-	MB   Rocev2FlowsMessageSizeUnitEnum
-	GB   Rocev2FlowsMessageSizeUnitEnum
-}{
-	BYTE: Rocev2FlowsMessageSizeUnitEnum("Byte"),
-	KB:   Rocev2FlowsMessageSizeUnitEnum("KB"),
-	MB:   Rocev2FlowsMessageSizeUnitEnum("MB"),
-	GB:   Rocev2FlowsMessageSizeUnitEnum("GB"),
+func (obj *rocev2FlowsRocev2TxPortsIter) Set(index int, newObj Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.rocev2TxPortsSlice[index] = newObj
+	return obj
 }
-
-func (obj *rocev2Flows) MessageSizeUnit() Rocev2FlowsMessageSizeUnitEnum {
-	return Rocev2FlowsMessageSizeUnitEnum(obj.obj.MessageSizeUnit.Enum().String())
-}
-
-// Unit of the transfer message size. Available options are Bytes, KB, MB.
-// MessageSizeUnit returns a string
-func (obj *rocev2Flows) HasMessageSizeUnit() bool {
-	return obj.obj.MessageSizeUnit != nil
-}
-
-func (obj *rocev2Flows) SetMessageSizeUnit(value Rocev2FlowsMessageSizeUnitEnum) Rocev2Flows {
-	intValue, ok := otg.Rocev2Flows_MessageSizeUnit_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Rocev2FlowsMessageSizeUnitEnum", string(value)))
-		return obj
+func (obj *rocev2FlowsRocev2TxPortsIter) Clear() Rocev2FlowsRocev2TxPortsIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Rocev2TxPorts{}
+		obj.rocev2TxPortsSlice = []Rocev2TxPorts{}
 	}
-	enumValue := otg.Rocev2Flows_MessageSizeUnit_Enum(intValue)
-	obj.obj.MessageSizeUnit = &enumValue
-
+	return obj
+}
+func (obj *rocev2FlowsRocev2TxPortsIter) clearHolderSlice() Rocev2FlowsRocev2TxPortsIter {
+	if len(obj.rocev2TxPortsSlice) > 0 {
+		obj.rocev2TxPortsSlice = []Rocev2TxPorts{}
+	}
+	return obj
+}
+func (obj *rocev2FlowsRocev2TxPortsIter) appendHolderSlice(item Rocev2TxPorts) Rocev2FlowsRocev2TxPortsIter {
+	obj.rocev2TxPortsSlice = append(obj.rocev2TxPortsSlice, item)
 	return obj
 }
 
@@ -479,27 +369,16 @@ func (obj *rocev2Flows) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	// TxEndpoint is required
-	if obj.obj.TxEndpoint == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "TxEndpoint is required field on interface Rocev2Flows")
-	}
+	if len(obj.obj.TxPorts) != 0 {
 
-	// Name is required
-	if obj.obj.Name == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Rocev2Flows")
-	}
-
-	if obj.obj.Rocev2Verb != nil {
-
-		obj.Rocev2Verb().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.MessageSize != nil {
-
-		if *obj.obj.MessageSize > 65535 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2Flows.MessageSize <= 65535 but Got %d", *obj.obj.MessageSize))
+		if set_default {
+			obj.TxPorts().clearHolderSlice()
+			for _, item := range obj.obj.TxPorts {
+				obj.TxPorts().appendHolderSlice(&rocev2TxPorts{obj: item})
+			}
+		}
+		for _, item := range obj.TxPorts().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}
@@ -507,12 +386,5 @@ func (obj *rocev2Flows) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *rocev2Flows) setDefault() {
-	if obj.obj.MessageSize == nil {
-		obj.SetMessageSize(1)
-	}
-	if obj.obj.MessageSizeUnit == nil {
-		obj.SetMessageSizeUnit(Rocev2FlowsMessageSizeUnit.MB)
-
-	}
 
 }

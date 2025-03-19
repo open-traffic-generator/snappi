@@ -16,7 +16,7 @@ type rocev2TargetLineRate struct {
 	obj          *otg.Rocev2TargetLineRate
 	marshaller   marshalRocev2TargetLineRate
 	unMarshaller unMarshalRocev2TargetLineRate
-	flowsHolder  Rocev2TargetLineRateRocev2FlowsIter
+	flowsHolder  Rocev2TargetLineRateRocev2FlowIter
 }
 
 func NewRocev2TargetLineRate() Rocev2TargetLineRate {
@@ -278,8 +278,8 @@ type Rocev2TargetLineRate interface {
 	SetValue(value uint64) Rocev2TargetLineRate
 	// HasValue checks if Value has been set in Rocev2TargetLineRate
 	HasValue() bool
-	// Flows returns Rocev2TargetLineRateRocev2FlowsIterIter, set in Rocev2TargetLineRate
-	Flows() Rocev2TargetLineRateRocev2FlowsIter
+	// Flows returns Rocev2TargetLineRateRocev2FlowIterIter, set in Rocev2TargetLineRate
+	Flows() Rocev2TargetLineRateRocev2FlowIter
 	setNil()
 }
 
@@ -306,89 +306,89 @@ func (obj *rocev2TargetLineRate) SetValue(value uint64) Rocev2TargetLineRate {
 }
 
 // description is TBD
-// Flows returns a []Rocev2Flows
-func (obj *rocev2TargetLineRate) Flows() Rocev2TargetLineRateRocev2FlowsIter {
+// Flows returns a []Rocev2Flow
+func (obj *rocev2TargetLineRate) Flows() Rocev2TargetLineRateRocev2FlowIter {
 	if len(obj.obj.Flows) == 0 {
-		obj.obj.Flows = []*otg.Rocev2Flows{}
+		obj.obj.Flows = []*otg.Rocev2Flow{}
 	}
 	if obj.flowsHolder == nil {
-		obj.flowsHolder = newRocev2TargetLineRateRocev2FlowsIter(&obj.obj.Flows).setMsg(obj)
+		obj.flowsHolder = newRocev2TargetLineRateRocev2FlowIter(&obj.obj.Flows).setMsg(obj)
 	}
 	return obj.flowsHolder
 }
 
-type rocev2TargetLineRateRocev2FlowsIter struct {
-	obj              *rocev2TargetLineRate
-	rocev2FlowsSlice []Rocev2Flows
-	fieldPtr         *[]*otg.Rocev2Flows
+type rocev2TargetLineRateRocev2FlowIter struct {
+	obj             *rocev2TargetLineRate
+	rocev2FlowSlice []Rocev2Flow
+	fieldPtr        *[]*otg.Rocev2Flow
 }
 
-func newRocev2TargetLineRateRocev2FlowsIter(ptr *[]*otg.Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter {
-	return &rocev2TargetLineRateRocev2FlowsIter{fieldPtr: ptr}
+func newRocev2TargetLineRateRocev2FlowIter(ptr *[]*otg.Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter {
+	return &rocev2TargetLineRateRocev2FlowIter{fieldPtr: ptr}
 }
 
-type Rocev2TargetLineRateRocev2FlowsIter interface {
-	setMsg(*rocev2TargetLineRate) Rocev2TargetLineRateRocev2FlowsIter
-	Items() []Rocev2Flows
-	Add() Rocev2Flows
-	Append(items ...Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter
-	Set(index int, newObj Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter
-	Clear() Rocev2TargetLineRateRocev2FlowsIter
-	clearHolderSlice() Rocev2TargetLineRateRocev2FlowsIter
-	appendHolderSlice(item Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter
+type Rocev2TargetLineRateRocev2FlowIter interface {
+	setMsg(*rocev2TargetLineRate) Rocev2TargetLineRateRocev2FlowIter
+	Items() []Rocev2Flow
+	Add() Rocev2Flow
+	Append(items ...Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter
+	Set(index int, newObj Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter
+	Clear() Rocev2TargetLineRateRocev2FlowIter
+	clearHolderSlice() Rocev2TargetLineRateRocev2FlowIter
+	appendHolderSlice(item Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter
 }
 
-func (obj *rocev2TargetLineRateRocev2FlowsIter) setMsg(msg *rocev2TargetLineRate) Rocev2TargetLineRateRocev2FlowsIter {
+func (obj *rocev2TargetLineRateRocev2FlowIter) setMsg(msg *rocev2TargetLineRate) Rocev2TargetLineRateRocev2FlowIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&rocev2Flows{obj: val})
+		obj.appendHolderSlice(&rocev2Flow{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *rocev2TargetLineRateRocev2FlowsIter) Items() []Rocev2Flows {
-	return obj.rocev2FlowsSlice
+func (obj *rocev2TargetLineRateRocev2FlowIter) Items() []Rocev2Flow {
+	return obj.rocev2FlowSlice
 }
 
-func (obj *rocev2TargetLineRateRocev2FlowsIter) Add() Rocev2Flows {
-	newObj := &otg.Rocev2Flows{}
+func (obj *rocev2TargetLineRateRocev2FlowIter) Add() Rocev2Flow {
+	newObj := &otg.Rocev2Flow{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &rocev2Flows{obj: newObj}
+	newLibObj := &rocev2Flow{obj: newObj}
 	newLibObj.setDefault()
-	obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, newLibObj)
+	obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *rocev2TargetLineRateRocev2FlowsIter) Append(items ...Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter {
+func (obj *rocev2TargetLineRateRocev2FlowIter) Append(items ...Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, item)
+		obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, item)
 	}
 	return obj
 }
 
-func (obj *rocev2TargetLineRateRocev2FlowsIter) Set(index int, newObj Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter {
+func (obj *rocev2TargetLineRateRocev2FlowIter) Set(index int, newObj Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.rocev2FlowsSlice[index] = newObj
+	obj.rocev2FlowSlice[index] = newObj
 	return obj
 }
-func (obj *rocev2TargetLineRateRocev2FlowsIter) Clear() Rocev2TargetLineRateRocev2FlowsIter {
+func (obj *rocev2TargetLineRateRocev2FlowIter) Clear() Rocev2TargetLineRateRocev2FlowIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Rocev2Flows{}
-		obj.rocev2FlowsSlice = []Rocev2Flows{}
+		*obj.fieldPtr = []*otg.Rocev2Flow{}
+		obj.rocev2FlowSlice = []Rocev2Flow{}
 	}
 	return obj
 }
-func (obj *rocev2TargetLineRateRocev2FlowsIter) clearHolderSlice() Rocev2TargetLineRateRocev2FlowsIter {
-	if len(obj.rocev2FlowsSlice) > 0 {
-		obj.rocev2FlowsSlice = []Rocev2Flows{}
+func (obj *rocev2TargetLineRateRocev2FlowIter) clearHolderSlice() Rocev2TargetLineRateRocev2FlowIter {
+	if len(obj.rocev2FlowSlice) > 0 {
+		obj.rocev2FlowSlice = []Rocev2Flow{}
 	}
 	return obj
 }
-func (obj *rocev2TargetLineRateRocev2FlowsIter) appendHolderSlice(item Rocev2Flows) Rocev2TargetLineRateRocev2FlowsIter {
-	obj.rocev2FlowsSlice = append(obj.rocev2FlowsSlice, item)
+func (obj *rocev2TargetLineRateRocev2FlowIter) appendHolderSlice(item Rocev2Flow) Rocev2TargetLineRateRocev2FlowIter {
+	obj.rocev2FlowSlice = append(obj.rocev2FlowSlice, item)
 	return obj
 }
 
@@ -402,7 +402,7 @@ func (obj *rocev2TargetLineRate) validateObj(vObj *validation, set_default bool)
 		if set_default {
 			obj.Flows().clearHolderSlice()
 			for _, item := range obj.obj.Flows {
-				obj.Flows().appendHolderSlice(&rocev2Flows{obj: item})
+				obj.Flows().appendHolderSlice(&rocev2Flow{obj: item})
 			}
 		}
 		for _, item := range obj.Flows().Items() {

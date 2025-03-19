@@ -292,6 +292,12 @@ type Rocev2CNP interface {
 	SetEcnValue(value Rocev2CNPEcnValueEnum) Rocev2CNP
 	// HasEcnValue checks if EcnValue has been set in Rocev2CNP
 	HasEcnValue() bool
+	// CnpDelayTimer returns uint32, set in Rocev2CNP.
+	CnpDelayTimer() uint32
+	// SetCnpDelayTimer assigns uint32 provided by user to Rocev2CNP
+	SetCnpDelayTimer(value uint32) Rocev2CNP
+	// HasCnpDelayTimer checks if CnpDelayTimer has been set in Rocev2CNP
+	HasCnpDelayTimer() bool
 	setNil()
 }
 
@@ -399,6 +405,28 @@ func (obj *rocev2CNP) SetEcnValue(value Rocev2CNPEcnValueEnum) Rocev2CNP {
 	return obj
 }
 
+// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// CnpDelayTimer returns a uint32
+func (obj *rocev2CNP) CnpDelayTimer() uint32 {
+
+	return *obj.obj.CnpDelayTimer
+
+}
+
+// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// CnpDelayTimer returns a uint32
+func (obj *rocev2CNP) HasCnpDelayTimer() bool {
+	return obj.obj.CnpDelayTimer != nil
+}
+
+// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// SetCnpDelayTimer sets the uint32 value in the Rocev2CNP object
+func (obj *rocev2CNP) SetCnpDelayTimer(value uint32) Rocev2CNP {
+
+	obj.obj.CnpDelayTimer = &value
+	return obj
+}
+
 func (obj *rocev2CNP) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -407,6 +435,16 @@ func (obj *rocev2CNP) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.IpDscp != nil {
 
 		obj.IpDscp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.CnpDelayTimer != nil {
+
+		if *obj.obj.CnpDelayTimer > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Rocev2CNP.CnpDelayTimer <= 255 but Got %d", *obj.obj.CnpDelayTimer))
+		}
+
 	}
 
 }
@@ -440,6 +478,9 @@ func (obj *rocev2CNP) setDefault() {
 	if obj.obj.EcnValue == nil {
 		obj.SetEcnValue(Rocev2CNPEcnValue.ECT_1)
 
+	}
+	if obj.obj.CnpDelayTimer == nil {
+		obj.SetCnpDelayTimer(55)
 	}
 
 }

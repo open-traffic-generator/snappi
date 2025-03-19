@@ -66,7 +66,7 @@ message ConfigOptions {
   ProtocolOptions protocol_options = 2;
 
   // Description missing in models
-  PerPortOptions per_port_options = 3;
+  repeated PerPortOptions per_port_options = 3;
 }
 
 // An abstract test port.
@@ -1688,7 +1688,7 @@ message Device {
   // Configuration of MACsec device.
   DeviceMacsec macsec = 11;
 
-  // Configuration for Rocev2 .
+  // Configuration for RoCEv2 .
   DeviceRocev2Peer rocev2 = 12;
 }
 
@@ -8910,7 +8910,7 @@ message SecureEntityStaticKeyRxSc {
   repeated SecureEntityStaticKeySak saks = 4;
 }
 
-// Configuration for one or more IPv4 or IPv6 Rocev2 Peers.
+// Configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
 message DeviceRocev2Peer {
 
   // This contains an array of references to IPv4 interfaces,  each of which will have
@@ -8922,10 +8922,10 @@ message DeviceRocev2Peer {
   repeated Rocev2V6Interface ipv6_interfaces = 2;
 }
 
-// Configuration for Rocev2 IPv4 peers.
+// Configuration for RoCEv2 IPv4 peers.
 message Rocev2V4Interface {
 
-  // The unique name of the IPv4, used as the source IP for this list of Rocev2 peers.
+  // The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8939,11 +8939,11 @@ message Rocev2V4Interface {
   // default = 1024
   optional uint32 ib_mtu = 2;
 
-  // This contains the list of Rocev2 peers configured on this interface.
+  // This contains the list of RoCEv2 peers configured on this interface.
   repeated Rocev2V4Peer peers = 3;
 }
 
-// Configuration for Rocev2 IPv4 peers.
+// Configuration for RoCEv2 IPv4 peers.
 message Rocev2V4Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -8955,13 +8955,12 @@ message Rocev2V4Peer {
   // required = true
   optional string destination_ip_address = 2;
 
-  // This configuration allows you to configure RDMA flow over the same QP number from
-  // same source and destination.
+  // This allows the user to set QP properties between a pair of source and destination
+  // RoCEv2 devices.
   repeated Rocev2QPs qps = 3;
 }
 
-// This configuration allows you to configure RDMA flow over the same QP number from
-// same source and destination.
+// This allows the user to set QP properties between a particular source and destination.
 message Rocev2QPs {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -8988,17 +8987,17 @@ message Rocev2ConnectionType {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  Rocev2FlowParameters reliable_connection = 2;
+  Rocev2QPParameters reliable_connection = 2;
 }
 
 // ****Description here****
-message Rocev2FlowParameters {
+message Rocev2QPParameters {
 
   // Configure Source QP.
   // default = 2
   optional uint32 source_qp_number = 1;
 
-  // DSCP value for this flow
+  // DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
   // default = 24
   optional uint32 dscp = 2;
 
@@ -9007,27 +9006,28 @@ message Rocev2FlowParameters {
   // default = 1
   optional uint32 ecn = 3;
 
-  // UDP source port number for this flow.
+  // UDP source port number for this QP.
   // default = 49152
   optional uint32 udp_source_port = 4;
 
-  // Initial PSN.
+  // Initial PSN of the data transfer packet generated for this QP.
   // default = 0
   optional uint64 initial_psn = 5;
 
-  // Virutal Address.
+  // Virtual Address where the data transfer from the remote QP will write to/read from.
+  // Applicable for RDMA verbs.
   // default = 0000000000000000
   optional string virtual_address = 6;
 
-  // Remote Key.
+  // Remote Key associated with the virtual address for this QP.
   // default = 00000000
   optional string remote_key = 7;
 }
 
-// Configuration for Rocev2 IPv6 peers.
+// Configuration for RoCEv2 IPv6 peers.
 message Rocev2V6Interface {
 
-  // The unique name of IPv6 used as the source IP for this list of Rocev2 peers.
+  // The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9041,11 +9041,11 @@ message Rocev2V6Interface {
   // default = 1024
   optional uint32 ib_mtu = 2;
 
-  // This contains the list of Rocev2 IPv6 peers configured on this interface.
+  // This contains the list of RoCEv2 IPv6 peers configured on this interface.
   repeated Rocev2V6Peer peers = 3;
 }
 
-// Configuration for Rocev2 IPv6 peer settings.
+// Configuration for RoCEv2 IPv6 peer settings.
 message Rocev2V6Peer {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -9057,8 +9057,8 @@ message Rocev2V6Peer {
   // required = true
   optional string destination_ip_address = 2;
 
-  // This configuration allows you to configure RDMA flow over the same QP number from
-  // same source and destination.
+  // This allows the user to set QP properties between a pair of source and destination
+  // RoCEv2 devices.
   repeated Rocev2QPs qps = 3;
 }
 
@@ -12090,12 +12090,12 @@ message StatefulFlow {
   // Stateful traffic configuration.
   optional Choice.Enum choice = 1;
 
-  // Rocev2 Flow Groups.
-  repeated Rocev2Flow rocev2 = 2;
+  // RoCEv2 Flow Groups.
+  repeated Rocev2Flows rocev2 = 2;
 }
 
-// Rocev2 traffic flow configuration.
-message Rocev2Flow {
+// RoCEv2 traffic flow configuration.
+message Rocev2Flows {
 
   // ****Must Add proper description here****
   repeated Rocev2TxPorts tx_ports = 1;
@@ -12115,8 +12115,35 @@ message Rocev2TxPorts {
   Rocev2TransmitType transmit_type = 2;
 }
 
+// ****Description here****
+message Rocev2TransmitType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      target_line_rate = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.target_line_rate
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2TargetLineRate target_line_rate = 2;
+}
+
+// ****Description here****
+message Rocev2TargetLineRate {
+
+  // Target Line Rate in percentage.
+  optional uint64 value = 1;
+
+  // Description missing in models
+  repeated Rocev2Flow flows = 2;
+}
+
 // ****Decription here****
-message Rocev2Flows {
+message Rocev2Flow {
 
   // The unique name of an emulated device that will be transmitting.
   // 
@@ -12126,7 +12153,7 @@ message Rocev2Flows {
   // required = true
   optional string tx_endpoint = 1;
 
-  // The unique name of an emulated device that will be recieving.
+  // The unique name of remote QP or port which be receiving the packets for the flow.
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12156,39 +12183,12 @@ message Rocev2Flows {
       GB = 4;
     }
   }
-  // Unit of the transfer message size. Available options are Bytes, KB, MB.
+  // Unit of the transfer message size. Available options are Bytes, KB, MB and GB.
   // default = MessageSizeUnit.Enum.mb
   optional MessageSizeUnit.Enum message_size_unit = 6;
 }
 
-// ****Description here****
-message Rocev2TransmitType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      target_line_rate = 1;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.target_line_rate
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  Rocev2TargetLineRate target_line_rate = 2;
-}
-
-// ****Description here****
-message Rocev2TargetLineRate {
-
-  // Target Line Rate in percentage.
-  optional uint64 value = 1;
-
-  // Description missing in models
-  repeated Rocev2Flows flows = 2;
-}
-
-// Rocev2 Verb, Available options are: write, wrtie_with_immediate, send, send_with_immediate
+// RoCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate
 // and read.
 message Rocev2Verb {
 
@@ -12224,13 +12224,6 @@ message Rocev2ImmediateData {
 // ****Add proper description here****
 message PerPortOptions {
 
-  // This contains all the per port settings for each protocol.
-  repeated OptionsPortSettings port_settings = 1;
-}
-
-// ****Add proper descriptio****
-message OptionsPortSettings {
-
   // The name of port for which this settings will be applied to.
   // 
   // x-constraint:
@@ -12239,15 +12232,11 @@ message OptionsPortSettings {
   optional string port_name = 1;
 
   // Description missing in models
-  repeated PortProtocols protocols = 2;
+  repeated PortProtocol protocols = 2;
 }
 
 // Supprted protocols.
-message PortProtocols {
-
-  // Dummy
-  // default = 1024
-  optional uint32 dummy_field = 1;
+message PortProtocol {
 
   message Choice {
     enum Enum {
@@ -12257,10 +12246,10 @@ message PortProtocols {
   }
   // list of protocols that have per port settings
   // default = Choice.Enum.rocev2
-  optional Choice.Enum choice = 2;
+  optional Choice.Enum choice = 1;
 
-  // Rocev2 Port Settings.
-  repeated Rocev2PerPortSettings rocev2 = 3;
+  // Description missing in models
+  Rocev2PerPortSettings rocev2 = 2;
 }
 
 // A high level data plane traffic flow.
@@ -12270,31 +12259,10 @@ message Rocev2PerPortSettings {
   Rocev2CNP cnp = 1;
 
   // Description missing in models
-  Rocev2ACK ack = 2;
+  Rocev2QPConnectionType connection_type = 2;
 
   // Description missing in models
-  Rocev2NACK nack = 3;
-
-  // Amount of time to wait between the generation of successive CNP packets. Time in
-  // microseconds.
-  // default = 55
-  optional uint32 cnp_delay_timer = 4;
-
-  // Enable Retransmission on ACK Timeout.
-  // default = True
-  optional bool enable_retransmission_ack_timeout = 5;
-
-  // Amount of time to wait before attempting to retransmit on non receipt of ACK. Time
-  // in milliseconds.
-  // default = 1
-  optional uint32 ack_timeout = 6;
-
-  // Number of times to retry retransmission before giving up on non receipt of ACK.
-  // default = 3
-  optional uint32 retransmission_retry_count = 7;
-
-  // Description missing in models
-  Rocev2DCQCN dcqcn_settings = 8;
+  Rocev2DCQCN dcqcn_settings = 3;
 }
 
 // CNP parameters.
@@ -12326,6 +12294,52 @@ message Rocev2CNP {
   // CNP ECN Value.
   // default = EcnValue.Enum.ect_1
   optional EcnValue.Enum ecn_value = 3;
+
+  // Amount of time to wait between the generation of successive CNP packets. Time in
+  // microseconds.
+  // default = 55
+  optional uint32 cnp_delay_timer = 4;
+}
+
+// It describes the degree of reliability and to what and how the QP transfers data.
+// There are different types.
+message Rocev2QPConnectionType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reliable_connection = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.reliable_connection
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2AckAndNak reliable_connection = 2;
+}
+
+// ****Description here****
+message Rocev2AckAndNak {
+
+  // Description missing in models
+  Rocev2ACK ack = 1;
+
+  // Description missing in models
+  Rocev2NAK nak = 2;
+
+  // Enable Retransmission on Timeout.
+  // default = True
+  optional bool enable_retransmission_timeout = 3;
+
+  // Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK.
+  // Time in milliseconds.
+  // default = 1
+  optional uint32 retransmission_timeout_value = 4;
+
+  // Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+  // default = 3
+  optional uint32 retransmission_retry_count = 5;
 }
 
 // ACK parameters.
@@ -12359,8 +12373,8 @@ message Rocev2ACK {
   optional EcnValue.Enum ecn_value = 3;
 }
 
-// NACK parameters.
-message Rocev2NACK {
+// NAK parameters.
+message Rocev2NAK {
 
   message Choice {
     enum Enum {
@@ -12372,8 +12386,8 @@ message Rocev2NACK {
   // default = Choice.Enum.ip_dscp
   optional Choice.Enum choice = 1;
 
-  // The value that would be carried in NACK packet. Available option is IP DSCP. The
-  // given value is carried in IP Header DSCP value of the NACK packet.
+  // The value that would be carried in NAK packet. Available option is IP DSCP. The given
+  // value is carried in IP Header DSCP value of the NAK packet.
   Rocev2PriorityValue ip_dscp = 2;
 
   message EcnValue {
@@ -12385,7 +12399,7 @@ message Rocev2NACK {
       ce = 4;
     }
   }
-  // NACK ECN Value.
+  // NAK ECN Value.
   // default = EcnValue.Enum.ect_1
   optional EcnValue.Enum ecn_value = 3;
 }
@@ -12398,7 +12412,7 @@ message Rocev2PriorityValue {
   optional uint32 value = 1;
 }
 
-// Rocev2 DCQCN Settings.
+// RoCEv2 DCQCN Settings.
 message Rocev2DCQCN {
 
   // Enable DCQCN port settigns.
@@ -12947,7 +12961,7 @@ message StateProtocolOspfv2Routers {
   optional State.Enum state = 2;
 }
 
-// Sets state of configured Rocev2 peers.
+// Sets state of configured RoCEv2 peers.
 message StateProtocolRocev2 {
 
   message Choice {
@@ -12964,11 +12978,11 @@ message StateProtocolRocev2 {
   StateProtocolRocev2Peers peers = 2;
 }
 
-// Sets state of configured Rocev2 peers.
+// Sets state of configured RoCEv2 peers.
 message StateProtocolRocev2Peers {
 
-  // The names of Rocev2 peers for which the state has to be applied. An empty or null
-  // list will control all Rocev2 peers.
+  // The names of RoCEv2 peers for which the state has to be applied. An empty or null
+  // list will control all RoCEv2 peers.
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V4Peer/properties/name
@@ -12983,10 +12997,10 @@ message StateProtocolRocev2Peers {
       down = 2;
     }
   }
-  // The desired state of Rocev2 peer. If the desired state is 'up', underlying IP interface(s)
+  // The desired state of RoCEv2 peer. If the desired state is 'up', underlying IP interface(s)
   // would be brought up automatically (if not already up),
-  // would attempt to bring up the Rocev2 session(s).
-  // If the desired state is 'down', Rocev2 session(s) would be brought down.
+  // would attempt to bring up the RoCEv2 session(s).
+  // If the desired state is 'down', RoCEv2 session(s) would be brought down.
   // required = true
   optional State.Enum state = 2;
 }
@@ -15563,7 +15577,7 @@ message MkaMetric {
   optional uint64 icv_mismatch = 11;
 }
 
-// The request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+// The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 message Rocev2IPv4MetricsRequest {
 
   message Choice {
@@ -15580,15 +15594,15 @@ message Rocev2IPv4MetricsRequest {
   Rocev2IPv4ColumnNames per_peer = 2;
 }
 
-// The names of Rocev2 over IPv4 peers to return results for. An empty list will return
-// results for all Rocev2 peers.
+// The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
+// results for all RoCEv2 peers.
 message Rocev2IPv4ColumnNames {
 
-  // The names of Rocev2 over IPv4 peers to return results for. An empty list will return
-  // results for all Rocev2 peers.
+  // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
   // 
   // x-constraint:
-  // - /components/schemas/Rocev2.V6peer/properties/name
+  // - /components/schemas/Rocev2.V4peer/properties/name
   // 
   repeated string peer_names = 1;
 
@@ -15616,14 +15630,14 @@ message Rocev2IPv4ColumnNames {
   }
   // The list of column names that the returned result set will contain. If the list is
   // empty then all columns will be returned except for any result_groups. The name of
-  // the Rocev2 peer cannot be excluded.
+  // the RoCEv2 peer cannot be excluded.
   repeated ColumnNames.Enum column_names = 2;
 }
 
-// Rocev2 per peer statistics information.
+// RoCEv2 per peer statistics information.
 message Rocev2IPv4MetricPerPeer {
 
-  // The name of a configured Rocev2 peer.
+  // The name of a configured RoCEv2 peer.
   optional string name = 1;
 
   message SessionState {
@@ -15683,7 +15697,7 @@ message Rocev2IPv4MetricPerPeer {
   optional uint64 unknown_msg_rx = 18;
 }
 
-// The request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+// The request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
 message Rocev2IPv6MetricsRequest {
 
   message Choice {
@@ -15700,12 +15714,12 @@ message Rocev2IPv6MetricsRequest {
   Rocev2IPv6ColumnNames per_peer = 2;
 }
 
-// The names of Rocev2 over IPv6 peers to return results for. An empty list will return
-// results for all Rocev2 peers.
+// The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
+// results for all RoCEv2 peers.
 message Rocev2IPv6ColumnNames {
 
-  // The names of Rocev2 over IPv6 peers to return results for. An empty list will return
-  // results for all Rocev2 peers.
+  // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V6peer/properties/name
@@ -15736,14 +15750,14 @@ message Rocev2IPv6ColumnNames {
   }
   // The list of column names that the returned result set will contain. If the list is
   // empty then all columns will be returned except for any result_groups. The name of
-  // the Rocev2 peer cannot be excluded.
+  // the RoCEv2 peer cannot be excluded.
   repeated ColumnNames.Enum column_names = 2;
 }
 
-// Rocev2 per peer statistics information.
+// RoCEv2 per peer statistics information.
 message Rocev2IPv6MetricPerPeer {
 
-  // The name of a configured Rocev2 peer.
+  // The name of a configured RoCEv2 peer.
   optional string name = 1;
 
   message SessionState {
@@ -15803,7 +15817,7 @@ message Rocev2IPv6MetricPerPeer {
   optional uint64 unknown_msg_rx = 18;
 }
 
-// The request to retrieve Rocev2 FLow statistics.
+// The request to retrieve RoCEv2 FLow statistics.
 message Rocev2FlowMetricsRequest {
 
   message Choice {
@@ -15820,11 +15834,11 @@ message Rocev2FlowMetricsRequest {
   Rocev2FlowColumnNames per_port = 2;
 }
 
-// The names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+// The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
 message Rocev2FlowColumnNames {
 
-  // The names of Rocev2 FLow to return results for. An empty list will return results
-  // for all Rocev2 FLow.
+  // The names of RoCEv2 FLow to return results for. An empty list will return results
+  // for all RoCEv2 FLow.
   repeated string qp_names = 1;
 
   message ColumnNames {
@@ -15871,7 +15885,7 @@ message Rocev2FlowColumnNames {
   repeated ColumnNames.Enum column_names = 2;
 }
 
-// Rocev2 Flow statistics information.
+// RoCEv2 Flow statistics information.
 message Rocev2FlowMetricPerPort {
 
   // Flow Name.

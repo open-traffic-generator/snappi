@@ -242,7 +242,7 @@ func (obj *rocev2FlowColumnNames) Clone() (Rocev2FlowColumnNames, error) {
 	return newObj, nil
 }
 
-// Rocev2FlowColumnNames is the names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+// Rocev2FlowColumnNames is the names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
 type Rocev2FlowColumnNames interface {
 	Validation
 	// msg marshals Rocev2FlowColumnNames to protobuf object *otg.Rocev2FlowColumnNames
@@ -274,7 +274,7 @@ type Rocev2FlowColumnNames interface {
 	SetColumnNames(value []Rocev2FlowColumnNamesColumnNamesEnum) Rocev2FlowColumnNames
 }
 
-// The names of Rocev2 FLow to return results for. An empty list will return results for all Rocev2 FLow.
+// The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
 // QpNames returns a []string
 func (obj *rocev2FlowColumnNames) QpNames() []string {
 	if obj.obj.QpNames == nil {
@@ -283,7 +283,7 @@ func (obj *rocev2FlowColumnNames) QpNames() []string {
 	return obj.obj.QpNames
 }
 
-// The names of Rocev2 FLow to return results for. An empty list will return results for all Rocev2 FLow.
+// The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
 // SetQpNames sets the []string value in the Rocev2FlowColumnNames object
 func (obj *rocev2FlowColumnNames) SetQpNames(value []string) Rocev2FlowColumnNames {
 

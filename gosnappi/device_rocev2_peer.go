@@ -252,7 +252,7 @@ func (obj *deviceRocev2Peer) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// DeviceRocev2Peer is configuration for one or more IPv4 or IPv6 Rocev2 Peers.
+// DeviceRocev2Peer is configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
 type DeviceRocev2Peer interface {
 	Validation
 	// msg marshals DeviceRocev2Peer to protobuf object *otg.DeviceRocev2Peer

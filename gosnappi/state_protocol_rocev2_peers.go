@@ -242,7 +242,7 @@ func (obj *stateProtocolRocev2Peers) Clone() (StateProtocolRocev2Peers, error) {
 	return newObj, nil
 }
 
-// StateProtocolRocev2Peers is sets state of configured Rocev2 peers.
+// StateProtocolRocev2Peers is sets state of configured RoCEv2 peers.
 type StateProtocolRocev2Peers interface {
 	Validation
 	// msg marshals StateProtocolRocev2Peers to protobuf object *otg.StateProtocolRocev2Peers
@@ -274,7 +274,7 @@ type StateProtocolRocev2Peers interface {
 	SetState(value StateProtocolRocev2PeersStateEnum) StateProtocolRocev2Peers
 }
 
-// The names of Rocev2 peers for which the state has to be applied. An empty or null list will control all Rocev2 peers.
+// The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4Peer/properties/name
@@ -288,7 +288,7 @@ func (obj *stateProtocolRocev2Peers) PeerNames() []string {
 	return obj.obj.PeerNames
 }
 
-// The names of Rocev2 peers for which the state has to be applied. An empty or null list will control all Rocev2 peers.
+// The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4Peer/properties/name

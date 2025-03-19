@@ -16,7 +16,7 @@ type rocev2ConnectionType struct {
 	obj                      *otg.Rocev2ConnectionType
 	marshaller               marshalRocev2ConnectionType
 	unMarshaller             unMarshalRocev2ConnectionType
-	reliableConnectionHolder Rocev2FlowParameters
+	reliableConnectionHolder Rocev2QPParameters
 }
 
 func NewRocev2ConnectionType() Rocev2ConnectionType {
@@ -278,12 +278,12 @@ type Rocev2ConnectionType interface {
 	setChoice(value Rocev2ConnectionTypeChoiceEnum) Rocev2ConnectionType
 	// HasChoice checks if Choice has been set in Rocev2ConnectionType
 	HasChoice() bool
-	// ReliableConnection returns Rocev2FlowParameters, set in Rocev2ConnectionType.
-	// Rocev2FlowParameters is ****Description here****
-	ReliableConnection() Rocev2FlowParameters
-	// SetReliableConnection assigns Rocev2FlowParameters provided by user to Rocev2ConnectionType.
-	// Rocev2FlowParameters is ****Description here****
-	SetReliableConnection(value Rocev2FlowParameters) Rocev2ConnectionType
+	// ReliableConnection returns Rocev2QPParameters, set in Rocev2ConnectionType.
+	// Rocev2QPParameters is ****Description here****
+	ReliableConnection() Rocev2QPParameters
+	// SetReliableConnection assigns Rocev2QPParameters provided by user to Rocev2ConnectionType.
+	// Rocev2QPParameters is ****Description here****
+	SetReliableConnection(value Rocev2QPParameters) Rocev2ConnectionType
 	// HasReliableConnection checks if ReliableConnection has been set in Rocev2ConnectionType
 	HasReliableConnection() bool
 	setNil()
@@ -321,33 +321,33 @@ func (obj *rocev2ConnectionType) setChoice(value Rocev2ConnectionTypeChoiceEnum)
 	obj.reliableConnectionHolder = nil
 
 	if value == Rocev2ConnectionTypeChoice.RELIABLE_CONNECTION {
-		obj.obj.ReliableConnection = NewRocev2FlowParameters().msg()
+		obj.obj.ReliableConnection = NewRocev2QPParameters().msg()
 	}
 
 	return obj
 }
 
 // description is TBD
-// ReliableConnection returns a Rocev2FlowParameters
-func (obj *rocev2ConnectionType) ReliableConnection() Rocev2FlowParameters {
+// ReliableConnection returns a Rocev2QPParameters
+func (obj *rocev2ConnectionType) ReliableConnection() Rocev2QPParameters {
 	if obj.obj.ReliableConnection == nil {
 		obj.setChoice(Rocev2ConnectionTypeChoice.RELIABLE_CONNECTION)
 	}
 	if obj.reliableConnectionHolder == nil {
-		obj.reliableConnectionHolder = &rocev2FlowParameters{obj: obj.obj.ReliableConnection}
+		obj.reliableConnectionHolder = &rocev2QPParameters{obj: obj.obj.ReliableConnection}
 	}
 	return obj.reliableConnectionHolder
 }
 
 // description is TBD
-// ReliableConnection returns a Rocev2FlowParameters
+// ReliableConnection returns a Rocev2QPParameters
 func (obj *rocev2ConnectionType) HasReliableConnection() bool {
 	return obj.obj.ReliableConnection != nil
 }
 
 // description is TBD
-// SetReliableConnection sets the Rocev2FlowParameters value in the Rocev2ConnectionType object
-func (obj *rocev2ConnectionType) SetReliableConnection(value Rocev2FlowParameters) Rocev2ConnectionType {
+// SetReliableConnection sets the Rocev2QPParameters value in the Rocev2ConnectionType object
+func (obj *rocev2ConnectionType) SetReliableConnection(value Rocev2QPParameters) Rocev2ConnectionType {
 	obj.setChoice(Rocev2ConnectionTypeChoice.RELIABLE_CONNECTION)
 	obj.reliableConnectionHolder = nil
 	obj.obj.ReliableConnection = value.msg()

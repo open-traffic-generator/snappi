@@ -312,7 +312,9 @@ components:
           $ref: '#/components/schemas/Protocol.Options'
           x-field-uid: 2
         per_port_options:
-          $ref: '#/components/schemas/PerPort.Options'
+          type: array
+          items:
+            $ref: '#/components/schemas/PerPort.Options'
           x-field-uid: 3
     Port:
       description: |-
@@ -2477,7 +2479,7 @@ components:
           x-field-uid: 11
         rocev2:
           description: |-
-            Configuration for Rocev2 .
+            Configuration for RoCEv2 .
           $ref: '#/components/schemas/Device.Rocev2Peer'
           x-field-uid: 12
       required:
@@ -12088,7 +12090,7 @@ components:
           x-field-uid: 4
     Device.Rocev2Peer:
       description: |-
-        Configuration for one or more IPv4 or IPv6 Rocev2 Peers.
+        Configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
       type: object
       properties:
         ipv4_interfaces:
@@ -12107,14 +12109,14 @@ components:
           x-field-uid: 2
     Rocev2.V4Interface:
       description: |-
-        Configuration for Rocev2 IPv4 peers.
+        Configuration for RoCEv2 IPv4 peers.
       type: object
       required:
       - ipv4_name
       properties:
         ipv4_name:
           description: |
-            The unique name of the IPv4, used as the source IP for this list of Rocev2 peers.
+            The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12133,14 +12135,14 @@ components:
           x-field-uid: 2
         peers:
           description: |-
-            This contains the list of Rocev2 peers configured on this interface.
+            This contains the list of RoCEv2 peers configured on this interface.
           type: array
           items:
             $ref: '#/components/schemas/Rocev2.V4Peer'
           x-field-uid: 3
     Rocev2.V4Peer:
       description: |-
-        Configuration for Rocev2 IPv4 peers.
+        Configuration for RoCEv2 IPv4 peers.
       type: object
       required:
       - name
@@ -12162,13 +12164,13 @@ components:
         qps:
           type: array
           description: |-
-            This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
+            This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
           items:
             $ref: '#/components/schemas/Rocev2.QPs'
           x-field-uid: 3
     Rocev2.QPs:
       description: |-
-        This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
+        This allows the user to set QP properties between a particular source and destination.
       type: object
       required:
       - qp_name
@@ -12198,9 +12200,9 @@ components:
           enum:
           - reliable_connection
         reliable_connection:
-          $ref: '#/components/schemas/Rocev2.FlowParameters'
+          $ref: '#/components/schemas/Rocev2.QPParameters'
           x-field-uid: 2
-    Rocev2.FlowParameters:
+    Rocev2.QPParameters:
       description: |-
         ****Description here****
       type: object
@@ -12216,7 +12218,7 @@ components:
           x-field-uid: 1
         dscp:
           description: |-
-            DSCP value for this flow
+            DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
           type: integer
           format: uint32
           default: 24
@@ -12234,7 +12236,7 @@ components:
           x-field-uid: 3
         udp_source_port:
           description: |-
-            UDP source port number for this flow.
+            UDP source port number for this QP.
           type: integer
           format: uint32
           default: 49152
@@ -12243,7 +12245,7 @@ components:
           x-field-uid: 4
         initial_psn:
           description: |-
-            Initial PSN.
+            Initial PSN of the data transfer packet generated for this QP.
           type: integer
           format: uint64
           default: 0
@@ -12252,7 +12254,7 @@ components:
           x-field-uid: 5
         virtual_address:
           description: |-
-            Virutal Address.
+            Virtual Address where the data transfer from the remote QP will write to/read from. Applicable for RDMA verbs.
           type: string
           format: hex
           default: '0000000000000000'
@@ -12260,7 +12262,7 @@ components:
           x-field-uid: 6
         remote_key:
           description: |-
-            Remote Key.
+            Remote Key associated with the virtual address for this QP.
           type: string
           format: hex
           default: '00000000'
@@ -12268,14 +12270,14 @@ components:
           x-field-uid: 7
     Rocev2.V6Interface:
       description: |-
-        Configuration for Rocev2 IPv6 peers.
+        Configuration for RoCEv2 IPv6 peers.
       type: object
       required:
       - ipv6_name
       properties:
         ipv6_name:
           description: |
-            The unique name of IPv6 used as the source IP for this list of Rocev2 peers.
+            The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12294,14 +12296,14 @@ components:
           x-field-uid: 2
         peers:
           description: |-
-            This contains the list of Rocev2 IPv6 peers configured on this interface.
+            This contains the list of RoCEv2 IPv6 peers configured on this interface.
           type: array
           items:
             $ref: '#/components/schemas/Rocev2.V6Peer'
           x-field-uid: 3
     Rocev2.V6Peer:
       description: |-
-        Configuration for Rocev2 IPv6 peer settings.
+        Configuration for RoCEv2 IPv6 peer settings.
       type: object
       required:
       - name
@@ -12323,7 +12325,7 @@ components:
         qps:
           type: array
           description: |-
-            This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
+            This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
           items:
             $ref: '#/components/schemas/Rocev2.QPs'
           x-field-uid: 3
@@ -16032,14 +16034,14 @@ components:
           - rocev2
         rocev2:
           description: |-
-            Rocev2 Flow Groups.
+            RoCEv2 Flow Groups.
           type: array
           items:
-            $ref: '#/components/schemas/Rocev2.Flow'
+            $ref: '#/components/schemas/Rocev2.Flows'
           x-field-uid: 2
-    Rocev2.Flow:
+    Rocev2.Flows:
       description: |-
-        Rocev2 traffic flow configuration.
+        RoCEv2 traffic flow configuration.
       type: object
       properties:
         tx_ports:
@@ -16067,75 +16069,6 @@ components:
         transmit_type:
           $ref: '#/components/schemas/Rocev2.TransmitType'
           x-field-uid: 2
-    Rocev2.Flows:
-      description: |-
-        ****Decription here****
-      type: object
-      required:
-      - tx_endpoint
-      - name
-      properties:
-        tx_endpoint:
-          description: |
-            The unique name of an emulated device that will be transmitting.
-
-            x-constraint:
-            - /components/schemas/Rocev2.QPs/properties/qp_name
-          type: string
-          x-constraint:
-          - /components/schemas/Rocev2.QPs/properties/qp_name
-          x-field-uid: 1
-        rx_endpoint:
-          description: |
-            The unique name of an emulated device that will be recieving.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Rocev2.QPs/properties/qp_name
-          type: string
-          x-constraint:
-          - /components/schemas/Port/properties/name
-          - /components/schemas/Rocev2.QPs/properties/qp_name
-          x-field-uid: 2
-        name:
-          x-field-uid: 3
-          description: |-
-            Globally unique name of an object. It also serves as the primary key for arrays of objects.
-          type: string
-          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
-          x-unique: global
-        rocev2_verb:
-          $ref: '#/components/schemas/Rocev2.Verb'
-          x-field-uid: 4
-        message_size:
-          description: |-
-            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 65535
-          x-field-uid: 5
-        message_size_unit:
-          description: |-
-            Unit of the transfer message size. Available options are Bytes, KB, MB.
-          type: string
-          default: MB
-          x-enum:
-            Byte:
-              x-field-uid: 1
-            KB:
-              x-field-uid: 2
-            MB:
-              x-field-uid: 3
-            GB:
-              x-field-uid: 4
-          x-field-uid: 6
-          enum:
-          - Byte
-          - KB
-          - MB
-          - GB
     Rocev2.TransmitType:
       description: |-
         ****Description here****
@@ -16167,11 +16100,80 @@ components:
         flows:
           type: array
           items:
-            $ref: '#/components/schemas/Rocev2.Flows'
+            $ref: '#/components/schemas/Rocev2.Flow'
           x-field-uid: 2
+    Rocev2.Flow:
+      description: |-
+        ****Decription here****
+      type: object
+      required:
+      - tx_endpoint
+      - name
+      properties:
+        tx_endpoint:
+          description: |
+            The unique name of an emulated device that will be transmitting.
+
+            x-constraint:
+            - /components/schemas/Rocev2.QPs/properties/qp_name
+          type: string
+          x-constraint:
+          - /components/schemas/Rocev2.QPs/properties/qp_name
+          x-field-uid: 1
+        rx_endpoint:
+          description: |
+            The unique name of remote QP or port which be receiving the packets for the flow.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+            - /components/schemas/Rocev2.QPs/properties/qp_name
+          type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          - /components/schemas/Rocev2.QPs/properties/qp_name
+          x-field-uid: 2
+        name:
+          x-field-uid: 3
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-unique: global
+        rocev2_verb:
+          $ref: '#/components/schemas/Rocev2.Verb'
+          x-field-uid: 4
+        message_size:
+          description: |-
+            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 0
+          maximum: 65535
+          x-field-uid: 5
+        message_size_unit:
+          description: |-
+            Unit of the transfer message size. Available options are Bytes, KB, MB and GB.
+          type: string
+          default: MB
+          x-enum:
+            Byte:
+              x-field-uid: 1
+            KB:
+              x-field-uid: 2
+            MB:
+              x-field-uid: 3
+            GB:
+              x-field-uid: 4
+          x-field-uid: 6
+          enum:
+          - Byte
+          - KB
+          - MB
+          - GB
     Rocev2.Verb:
       description: |-
-        Rocev2 Verb, Available options are: write, wrtie_with_immediate, send, send_with_immediate and read.
+        RoCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate and read.
       type: object
       properties:
         choice:
@@ -16212,22 +16214,12 @@ components:
           type: string
           format: hex
           default: '00000000'
+          minimum: 1
+          maximum: 8
           x-field-uid: 1
     PerPort.Options:
       description: |-
         ****Add proper description here****
-      type: object
-      properties:
-        port_settings:
-          description: "This contains all the per port settings for each protocol.\
-            \   "
-          type: array
-          items:
-            $ref: '#/components/schemas/Options.PortSettings'
-          x-field-uid: 1
-    Options.PortSettings:
-      description: |-
-        ****Add proper descriptio****
       type: object
       properties:
         port_name:
@@ -16243,22 +16235,13 @@ components:
         protocols:
           type: array
           items:
-            $ref: '#/components/schemas/Port.Protocols'
+            $ref: '#/components/schemas/Port.Protocol'
           x-field-uid: 2
-    Port.Protocols:
+    Port.Protocol:
       description: |-
         Supprted protocols.
       type: object
       properties:
-        dummy_field:
-          description: |-
-            Dummy
-          type: integer
-          default: 1024
-          format: uint32
-          minimum: 0
-          maximum: 14000
-          x-field-uid: 1
         choice:
           description: |-
             list of protocols that have per port settings
@@ -16267,16 +16250,12 @@ components:
           x-enum:
             rocev2:
               x-field-uid: 1
-          x-field-uid: 2
+          x-field-uid: 1
           enum:
           - rocev2
         rocev2:
-          description: |-
-            Rocev2 Port Settings.
-          type: array
-          items:
-            $ref: '#/components/schemas/Rocev2.PerPortSettings'
-          x-field-uid: 3
+          $ref: '#/components/schemas/Rocev2.PerPortSettings'
+          x-field-uid: 2
     Rocev2.PerPortSettings:
       description: |-
         A high level data plane traffic flow.
@@ -16285,48 +16264,12 @@ components:
         cnp:
           $ref: '#/components/schemas/Rocev2.CNP'
           x-field-uid: 1
-        ack:
-          $ref: '#/components/schemas/Rocev2.ACK'
+        connection_type:
+          $ref: '#/components/schemas/Rocev2.QPConnectionType'
           x-field-uid: 2
-        nack:
-          $ref: '#/components/schemas/Rocev2.NACK'
-          x-field-uid: 3
-        cnp_delay_timer:
-          description: |-
-            Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
-          type: integer
-          format: uint32
-          default: 55
-          minimum: 0
-          maximum: 255
-          x-field-uid: 4
-        enable_retransmission_ack_timeout:
-          description: |-
-            Enable Retransmission on ACK Timeout.
-          type: boolean
-          default: true
-          x-field-uid: 5
-        ack_timeout:
-          description: |-
-            Amount of time to wait before attempting to retransmit on non receipt of ACK. Time in milliseconds.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 5369
-          x-field-uid: 6
-        retransmission_retry_count:
-          description: |-
-            Number of times to retry retransmission before giving up on non receipt of ACK.
-          type: integer
-          format: uint32
-          default: 3
-          minimum: 0
-          maximum: 254
-          x-field-uid: 7
         dcqcn_settings:
           $ref: '#/components/schemas/Rocev2.DCQCN'
-          x-field-uid: 8
+          x-field-uid: 3
     Rocev2.CNP:
       description: |-
         CNP parameters.
@@ -16366,6 +16309,67 @@ components:
           - ect_1
           - ect_0
           - ce
+        cnp_delay_timer:
+          description: |-
+            Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+          type: integer
+          format: uint32
+          default: 55
+          minimum: 0
+          maximum: 255
+          x-field-uid: 4
+    Rocev2.QPConnectionType:
+      description: |-
+        It describes the degree of reliability and to what and how the QP transfers data. There are different types.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: reliable_connection
+          x-enum:
+            reliable_connection:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - reliable_connection
+        reliable_connection:
+          $ref: '#/components/schemas/Rocev2.AckAndNak'
+          x-field-uid: 2
+    Rocev2.AckAndNak:
+      description: |-
+        ****Description here****
+      type: object
+      properties:
+        ack:
+          $ref: '#/components/schemas/Rocev2.ACK'
+          x-field-uid: 1
+        nak:
+          $ref: '#/components/schemas/Rocev2.NAK'
+          x-field-uid: 2
+        enable_retransmission_timeout:
+          description: |-
+            Enable Retransmission on Timeout.
+          type: boolean
+          default: true
+          x-field-uid: 3
+        retransmission_timeout_value:
+          description: |-
+            Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK. Time in milliseconds.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 0
+          maximum: 5369
+          x-field-uid: 4
+        retransmission_retry_count:
+          description: |-
+            Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+          type: integer
+          format: uint32
+          default: 3
+          minimum: 0
+          maximum: 254
+          x-field-uid: 5
     Rocev2.ACK:
       description: |-
         ACK parameters.
@@ -16405,9 +16409,9 @@ components:
           - ect_1
           - ect_0
           - ce
-    Rocev2.NACK:
+    Rocev2.NAK:
       description: |-
-        NACK parameters.
+        NAK parameters.
       type: object
       properties:
         choice:
@@ -16421,12 +16425,12 @@ components:
           - ip_dscp
         ip_dscp:
           description: |-
-            The value that would be carried in NACK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NACK packet.
+            The value that would be carried in NAK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NAK packet.
           $ref: '#/components/schemas/Rocev2.PriorityValue'
           x-field-uid: 2
         ecn_value:
           description: |-
-            NACK ECN Value.
+            NAK ECN Value.
           type: string
           default: ect_1
           x-enum:
@@ -16458,7 +16462,7 @@ components:
           x-field-uid: 1
     Rocev2.DCQCN:
       description: |-
-        Rocev2 DCQCN Settings.
+        RoCEv2 DCQCN Settings.
       type: object
       properties:
         enable_dcqcn:
@@ -17189,7 +17193,7 @@ components:
           - down
     State.Protocol.Rocev2:
       description: |-
-        Sets state of configured Rocev2 peers.
+        Sets state of configured RoCEv2 peers.
       type: object
       required:
       - choice
@@ -17207,13 +17211,13 @@ components:
           x-field-uid: 2
     State.Protocol.Rocev2.Peers:
       description: |-
-        Sets state of configured Rocev2 peers.
+        Sets state of configured RoCEv2 peers.
       required:
       - state
       properties:
         peer_names:
           description: |
-            The names of Rocev2 peers for which the state has to be applied. An empty or null list will control all Rocev2 peers.
+            The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
 
             x-constraint:
             - /components/schemas/Rocev2.V4Peer/properties/name
@@ -17226,10 +17230,10 @@ components:
           - /components/schemas/Rocev2.V6Peer/properties/name
           x-field-uid: 1
         state:
-          description: "The desired state of Rocev2 peer. If the desired state is\
+          description: "The desired state of RoCEv2 peer. If the desired state is\
             \ 'up', underlying IP interface(s) would be brought up automatically (if\
-            \ not already up),\n would attempt to bring up the Rocev2 session(s).\n\
-            If the desired state is 'down', Rocev2 session(s) would be brought down. "
+            \ not already up),\n would attempt to bring up the RoCEv2 session(s).\n\
+            If the desired state is 'down', RoCEv2 session(s) would be brought down. "
           type: string
           x-field-uid: 2
           x-enum:
@@ -21509,7 +21513,7 @@ components:
           x-field-uid: 11
     Rocev2IPv4.Metrics.Request:
       description: |-
-        The request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+        The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
       type: object
       properties:
         choice:
@@ -21528,24 +21532,24 @@ components:
           x-field-uid: 2
     Rocev2IPv4.ColumnNames:
       description: |-
-        The names of Rocev2 over IPv4 peers to return results for. An empty list will return results for all Rocev2 peers.
+        The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
       type: object
       properties:
         peer_names:
           type: array
           description: |
-            The names of Rocev2 over IPv4 peers to return results for. An empty list will return results for all Rocev2 peers.
+            The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
 
             x-constraint:
-            - /components/schemas/Rocev2.V6peer/properties/name
+            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
-          - /components/schemas/Rocev2.V6peer/properties/name
+          - /components/schemas/Rocev2.V4peer/properties/name
           x-field-uid: 1
         column_names:
           description: |-
-            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Rocev2 peer cannot be excluded.
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the RoCEv2 peer cannot be excluded.
           type: array
           items:
             type: string
@@ -21605,12 +21609,12 @@ components:
           x-field-uid: 2
     Rocev2IPv4.Metric.PerPeer:
       description: |-
-        Rocev2 per peer statistics information.
+        RoCEv2 per peer statistics information.
       type: object
       properties:
         name:
           description: |-
-            The name of a configured Rocev2 peer.
+            The name of a configured RoCEv2 peer.
           type: string
           x-field-uid: 1
         session_state:
@@ -21718,7 +21722,7 @@ components:
           x-field-uid: 18
     Rocev2IPv6.Metrics.Request:
       description: |-
-        The request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+        The request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
       type: object
       properties:
         choice:
@@ -21737,12 +21741,12 @@ components:
           x-field-uid: 2
     Rocev2IPv6.ColumnNames:
       description: |-
-        The names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+        The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
       type: object
       properties:
         peer_names:
           description: |
-            The names of Rocev2 over IPv6 peers to return results for. An empty list will return results for all Rocev2 peers.
+            The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
 
             x-constraint:
             - /components/schemas/Rocev2.V6peer/properties/name
@@ -21754,7 +21758,7 @@ components:
           x-field-uid: 1
         column_names:
           description: |-
-            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Rocev2 peer cannot be excluded.
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the RoCEv2 peer cannot be excluded.
           type: array
           items:
             type: string
@@ -21814,12 +21818,12 @@ components:
           x-field-uid: 2
     Rocev2IPv6.Metric.PerPeer:
       description: |-
-        Rocev2 per peer statistics information.
+        RoCEv2 per peer statistics information.
       type: object
       properties:
         name:
           description: |-
-            The name of a configured Rocev2 peer.
+            The name of a configured RoCEv2 peer.
           type: string
           x-field-uid: 1
         session_state:
@@ -21927,7 +21931,7 @@ components:
           x-field-uid: 18
     Rocev2Flow.Metrics.Request:
       description: |-
-        The request to retrieve Rocev2 FLow statistics.
+        The request to retrieve RoCEv2 FLow statistics.
       type: object
       properties:
         choice:
@@ -21946,12 +21950,12 @@ components:
           x-field-uid: 2
     Rocev2Flow.ColumnNames:
       description: |-
-        The names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+        The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
       type: object
       properties:
         qp_names:
           description: |-
-            The names of Rocev2 FLow to return results for. An empty list will return results for all Rocev2 FLow.
+            The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
           type: array
           items:
             type: string
@@ -22066,7 +22070,7 @@ components:
           x-field-uid: 2
     Rocev2Flow.Metric.PerPort:
       description: |-
-        Rocev2 Flow statistics information.
+        RoCEv2 Flow statistics information.
       type: object
       properties:
         flow_name:

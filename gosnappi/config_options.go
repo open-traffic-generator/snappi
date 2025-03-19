@@ -18,7 +18,7 @@ type configOptions struct {
 	unMarshaller          unMarshalConfigOptions
 	portOptionsHolder     PortOptions
 	protocolOptionsHolder ProtocolOptions
-	perPortOptionsHolder  PerPortOptions
+	perPortOptionsHolder  ConfigOptionsPerPortOptionsIter
 }
 
 func NewConfigOptions() ConfigOptions {
@@ -292,14 +292,8 @@ type ConfigOptions interface {
 	SetProtocolOptions(value ProtocolOptions) ConfigOptions
 	// HasProtocolOptions checks if ProtocolOptions has been set in ConfigOptions
 	HasProtocolOptions() bool
-	// PerPortOptions returns PerPortOptions, set in ConfigOptions.
-	// PerPortOptions is ****Add proper description here****
-	PerPortOptions() PerPortOptions
-	// SetPerPortOptions assigns PerPortOptions provided by user to ConfigOptions.
-	// PerPortOptions is ****Add proper description here****
-	SetPerPortOptions(value PerPortOptions) ConfigOptions
-	// HasPerPortOptions checks if PerPortOptions has been set in ConfigOptions
-	HasPerPortOptions() bool
+	// PerPortOptions returns ConfigOptionsPerPortOptionsIterIter, set in ConfigOptions
+	PerPortOptions() ConfigOptionsPerPortOptionsIter
 	setNil()
 }
 
@@ -360,30 +354,89 @@ func (obj *configOptions) SetProtocolOptions(value ProtocolOptions) ConfigOption
 }
 
 // description is TBD
-// PerPortOptions returns a PerPortOptions
-func (obj *configOptions) PerPortOptions() PerPortOptions {
-	if obj.obj.PerPortOptions == nil {
-		obj.obj.PerPortOptions = NewPerPortOptions().msg()
+// PerPortOptions returns a []PerPortOptions
+func (obj *configOptions) PerPortOptions() ConfigOptionsPerPortOptionsIter {
+	if len(obj.obj.PerPortOptions) == 0 {
+		obj.obj.PerPortOptions = []*otg.PerPortOptions{}
 	}
 	if obj.perPortOptionsHolder == nil {
-		obj.perPortOptionsHolder = &perPortOptions{obj: obj.obj.PerPortOptions}
+		obj.perPortOptionsHolder = newConfigOptionsPerPortOptionsIter(&obj.obj.PerPortOptions).setMsg(obj)
 	}
 	return obj.perPortOptionsHolder
 }
 
-// description is TBD
-// PerPortOptions returns a PerPortOptions
-func (obj *configOptions) HasPerPortOptions() bool {
-	return obj.obj.PerPortOptions != nil
+type configOptionsPerPortOptionsIter struct {
+	obj                 *configOptions
+	perPortOptionsSlice []PerPortOptions
+	fieldPtr            *[]*otg.PerPortOptions
 }
 
-// description is TBD
-// SetPerPortOptions sets the PerPortOptions value in the ConfigOptions object
-func (obj *configOptions) SetPerPortOptions(value PerPortOptions) ConfigOptions {
+func newConfigOptionsPerPortOptionsIter(ptr *[]*otg.PerPortOptions) ConfigOptionsPerPortOptionsIter {
+	return &configOptionsPerPortOptionsIter{fieldPtr: ptr}
+}
 
-	obj.perPortOptionsHolder = nil
-	obj.obj.PerPortOptions = value.msg()
+type ConfigOptionsPerPortOptionsIter interface {
+	setMsg(*configOptions) ConfigOptionsPerPortOptionsIter
+	Items() []PerPortOptions
+	Add() PerPortOptions
+	Append(items ...PerPortOptions) ConfigOptionsPerPortOptionsIter
+	Set(index int, newObj PerPortOptions) ConfigOptionsPerPortOptionsIter
+	Clear() ConfigOptionsPerPortOptionsIter
+	clearHolderSlice() ConfigOptionsPerPortOptionsIter
+	appendHolderSlice(item PerPortOptions) ConfigOptionsPerPortOptionsIter
+}
 
+func (obj *configOptionsPerPortOptionsIter) setMsg(msg *configOptions) ConfigOptionsPerPortOptionsIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&perPortOptions{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configOptionsPerPortOptionsIter) Items() []PerPortOptions {
+	return obj.perPortOptionsSlice
+}
+
+func (obj *configOptionsPerPortOptionsIter) Add() PerPortOptions {
+	newObj := &otg.PerPortOptions{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &perPortOptions{obj: newObj}
+	newLibObj.setDefault()
+	obj.perPortOptionsSlice = append(obj.perPortOptionsSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configOptionsPerPortOptionsIter) Append(items ...PerPortOptions) ConfigOptionsPerPortOptionsIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.perPortOptionsSlice = append(obj.perPortOptionsSlice, item)
+	}
+	return obj
+}
+
+func (obj *configOptionsPerPortOptionsIter) Set(index int, newObj PerPortOptions) ConfigOptionsPerPortOptionsIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.perPortOptionsSlice[index] = newObj
+	return obj
+}
+func (obj *configOptionsPerPortOptionsIter) Clear() ConfigOptionsPerPortOptionsIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.PerPortOptions{}
+		obj.perPortOptionsSlice = []PerPortOptions{}
+	}
+	return obj
+}
+func (obj *configOptionsPerPortOptionsIter) clearHolderSlice() ConfigOptionsPerPortOptionsIter {
+	if len(obj.perPortOptionsSlice) > 0 {
+		obj.perPortOptionsSlice = []PerPortOptions{}
+	}
+	return obj
+}
+func (obj *configOptionsPerPortOptionsIter) appendHolderSlice(item PerPortOptions) ConfigOptionsPerPortOptionsIter {
+	obj.perPortOptionsSlice = append(obj.perPortOptionsSlice, item)
 	return obj
 }
 
@@ -402,9 +455,18 @@ func (obj *configOptions) validateObj(vObj *validation, set_default bool) {
 		obj.ProtocolOptions().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.PerPortOptions != nil {
+	if len(obj.obj.PerPortOptions) != 0 {
 
-		obj.PerPortOptions().validateObj(vObj, set_default)
+		if set_default {
+			obj.PerPortOptions().clearHolderSlice()
+			for _, item := range obj.obj.PerPortOptions {
+				obj.PerPortOptions().appendHolderSlice(&perPortOptions{obj: item})
+			}
+		}
+		for _, item := range obj.PerPortOptions().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

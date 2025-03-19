@@ -250,7 +250,7 @@ func (obj *rocev2V6Peer) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2V6Peer is configuration for Rocev2 IPv6 peer settings.
+// Rocev2V6Peer is configuration for RoCEv2 IPv6 peer settings.
 type Rocev2V6Peer interface {
 	Validation
 	// msg marshals Rocev2V6Peer to protobuf object *otg.Rocev2V6Peer
@@ -317,7 +317,7 @@ func (obj *rocev2V6Peer) SetDestinationIpAddress(value string) Rocev2V6Peer {
 	return obj
 }
 
-// This configuration allows you to configure RDMA flow over the same QP number from same source and destination.
+// This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
 // Qps returns a []Rocev2QPs
 func (obj *rocev2V6Peer) Qps() Rocev2V6PeerRocev2QPsIter {
 	if len(obj.obj.Qps) == 0 {

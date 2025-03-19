@@ -242,7 +242,7 @@ func (obj *rocev2IPv6MetricPerPeer) Clone() (Rocev2IPv6MetricPerPeer, error) {
 	return newObj, nil
 }
 
-// Rocev2IPv6MetricPerPeer is rocev2 per peer statistics information.
+// Rocev2IPv6MetricPerPeer is roCEv2 per peer statistics information.
 type Rocev2IPv6MetricPerPeer interface {
 	Validation
 	// msg marshals Rocev2IPv6MetricPerPeer to protobuf object *otg.Rocev2IPv6MetricPerPeer
@@ -368,7 +368,7 @@ type Rocev2IPv6MetricPerPeer interface {
 	HasUnknownMsgRx() bool
 }
 
-// The name of a configured Rocev2 peer.
+// The name of a configured RoCEv2 peer.
 // Name returns a string
 func (obj *rocev2IPv6MetricPerPeer) Name() string {
 
@@ -376,13 +376,13 @@ func (obj *rocev2IPv6MetricPerPeer) Name() string {
 
 }
 
-// The name of a configured Rocev2 peer.
+// The name of a configured RoCEv2 peer.
 // Name returns a string
 func (obj *rocev2IPv6MetricPerPeer) HasName() bool {
 	return obj.obj.Name != nil
 }
 
-// The name of a configured Rocev2 peer.
+// The name of a configured RoCEv2 peer.
 // SetName sets the string value in the Rocev2IPv6MetricPerPeer object
 func (obj *rocev2IPv6MetricPerPeer) SetName(value string) Rocev2IPv6MetricPerPeer {
 

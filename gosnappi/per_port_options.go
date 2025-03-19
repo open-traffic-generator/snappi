@@ -13,10 +13,10 @@ import (
 // ***** PerPortOptions *****
 type perPortOptions struct {
 	validation
-	obj                *otg.PerPortOptions
-	marshaller         marshalPerPortOptions
-	unMarshaller       unMarshalPerPortOptions
-	portSettingsHolder PerPortOptionsOptionsPortSettingsIter
+	obj             *otg.PerPortOptions
+	marshaller      marshalPerPortOptions
+	unMarshaller    unMarshalPerPortOptions
+	protocolsHolder PerPortOptionsPortProtocolIter
 }
 
 func NewPerPortOptions() PerPortOptions {
@@ -244,7 +244,7 @@ func (obj *perPortOptions) Clone() (PerPortOptions, error) {
 }
 
 func (obj *perPortOptions) setNil() {
-	obj.portSettingsHolder = nil
+	obj.protocolsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -272,95 +272,135 @@ type PerPortOptions interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// PortSettings returns PerPortOptionsOptionsPortSettingsIterIter, set in PerPortOptions
-	PortSettings() PerPortOptionsOptionsPortSettingsIter
+	// PortName returns string, set in PerPortOptions.
+	PortName() string
+	// SetPortName assigns string provided by user to PerPortOptions
+	SetPortName(value string) PerPortOptions
+	// HasPortName checks if PortName has been set in PerPortOptions
+	HasPortName() bool
+	// Protocols returns PerPortOptionsPortProtocolIterIter, set in PerPortOptions
+	Protocols() PerPortOptionsPortProtocolIter
 	setNil()
 }
 
-// This contains all the per port settings for each protocol.
-// PortSettings returns a []OptionsPortSettings
-func (obj *perPortOptions) PortSettings() PerPortOptionsOptionsPortSettingsIter {
-	if len(obj.obj.PortSettings) == 0 {
-		obj.obj.PortSettings = []*otg.OptionsPortSettings{}
+// The name of port for which this settings will be applied to.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
+// PortName returns a string
+func (obj *perPortOptions) PortName() string {
+
+	return *obj.obj.PortName
+
+}
+
+// The name of port for which this settings will be applied to.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
+// PortName returns a string
+func (obj *perPortOptions) HasPortName() bool {
+	return obj.obj.PortName != nil
+}
+
+// The name of port for which this settings will be applied to.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
+// SetPortName sets the string value in the PerPortOptions object
+func (obj *perPortOptions) SetPortName(value string) PerPortOptions {
+
+	obj.obj.PortName = &value
+	return obj
+}
+
+// description is TBD
+// Protocols returns a []PortProtocol
+func (obj *perPortOptions) Protocols() PerPortOptionsPortProtocolIter {
+	if len(obj.obj.Protocols) == 0 {
+		obj.obj.Protocols = []*otg.PortProtocol{}
 	}
-	if obj.portSettingsHolder == nil {
-		obj.portSettingsHolder = newPerPortOptionsOptionsPortSettingsIter(&obj.obj.PortSettings).setMsg(obj)
+	if obj.protocolsHolder == nil {
+		obj.protocolsHolder = newPerPortOptionsPortProtocolIter(&obj.obj.Protocols).setMsg(obj)
 	}
-	return obj.portSettingsHolder
+	return obj.protocolsHolder
 }
 
-type perPortOptionsOptionsPortSettingsIter struct {
-	obj                      *perPortOptions
-	optionsPortSettingsSlice []OptionsPortSettings
-	fieldPtr                 *[]*otg.OptionsPortSettings
+type perPortOptionsPortProtocolIter struct {
+	obj               *perPortOptions
+	portProtocolSlice []PortProtocol
+	fieldPtr          *[]*otg.PortProtocol
 }
 
-func newPerPortOptionsOptionsPortSettingsIter(ptr *[]*otg.OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter {
-	return &perPortOptionsOptionsPortSettingsIter{fieldPtr: ptr}
+func newPerPortOptionsPortProtocolIter(ptr *[]*otg.PortProtocol) PerPortOptionsPortProtocolIter {
+	return &perPortOptionsPortProtocolIter{fieldPtr: ptr}
 }
 
-type PerPortOptionsOptionsPortSettingsIter interface {
-	setMsg(*perPortOptions) PerPortOptionsOptionsPortSettingsIter
-	Items() []OptionsPortSettings
-	Add() OptionsPortSettings
-	Append(items ...OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter
-	Set(index int, newObj OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter
-	Clear() PerPortOptionsOptionsPortSettingsIter
-	clearHolderSlice() PerPortOptionsOptionsPortSettingsIter
-	appendHolderSlice(item OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter
+type PerPortOptionsPortProtocolIter interface {
+	setMsg(*perPortOptions) PerPortOptionsPortProtocolIter
+	Items() []PortProtocol
+	Add() PortProtocol
+	Append(items ...PortProtocol) PerPortOptionsPortProtocolIter
+	Set(index int, newObj PortProtocol) PerPortOptionsPortProtocolIter
+	Clear() PerPortOptionsPortProtocolIter
+	clearHolderSlice() PerPortOptionsPortProtocolIter
+	appendHolderSlice(item PortProtocol) PerPortOptionsPortProtocolIter
 }
 
-func (obj *perPortOptionsOptionsPortSettingsIter) setMsg(msg *perPortOptions) PerPortOptionsOptionsPortSettingsIter {
+func (obj *perPortOptionsPortProtocolIter) setMsg(msg *perPortOptions) PerPortOptionsPortProtocolIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&optionsPortSettings{obj: val})
+		obj.appendHolderSlice(&portProtocol{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *perPortOptionsOptionsPortSettingsIter) Items() []OptionsPortSettings {
-	return obj.optionsPortSettingsSlice
+func (obj *perPortOptionsPortProtocolIter) Items() []PortProtocol {
+	return obj.portProtocolSlice
 }
 
-func (obj *perPortOptionsOptionsPortSettingsIter) Add() OptionsPortSettings {
-	newObj := &otg.OptionsPortSettings{}
+func (obj *perPortOptionsPortProtocolIter) Add() PortProtocol {
+	newObj := &otg.PortProtocol{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &optionsPortSettings{obj: newObj}
+	newLibObj := &portProtocol{obj: newObj}
 	newLibObj.setDefault()
-	obj.optionsPortSettingsSlice = append(obj.optionsPortSettingsSlice, newLibObj)
+	obj.portProtocolSlice = append(obj.portProtocolSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *perPortOptionsOptionsPortSettingsIter) Append(items ...OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter {
+func (obj *perPortOptionsPortProtocolIter) Append(items ...PortProtocol) PerPortOptionsPortProtocolIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.optionsPortSettingsSlice = append(obj.optionsPortSettingsSlice, item)
+		obj.portProtocolSlice = append(obj.portProtocolSlice, item)
 	}
 	return obj
 }
 
-func (obj *perPortOptionsOptionsPortSettingsIter) Set(index int, newObj OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter {
+func (obj *perPortOptionsPortProtocolIter) Set(index int, newObj PortProtocol) PerPortOptionsPortProtocolIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.optionsPortSettingsSlice[index] = newObj
+	obj.portProtocolSlice[index] = newObj
 	return obj
 }
-func (obj *perPortOptionsOptionsPortSettingsIter) Clear() PerPortOptionsOptionsPortSettingsIter {
+func (obj *perPortOptionsPortProtocolIter) Clear() PerPortOptionsPortProtocolIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.OptionsPortSettings{}
-		obj.optionsPortSettingsSlice = []OptionsPortSettings{}
+		*obj.fieldPtr = []*otg.PortProtocol{}
+		obj.portProtocolSlice = []PortProtocol{}
 	}
 	return obj
 }
-func (obj *perPortOptionsOptionsPortSettingsIter) clearHolderSlice() PerPortOptionsOptionsPortSettingsIter {
-	if len(obj.optionsPortSettingsSlice) > 0 {
-		obj.optionsPortSettingsSlice = []OptionsPortSettings{}
+func (obj *perPortOptionsPortProtocolIter) clearHolderSlice() PerPortOptionsPortProtocolIter {
+	if len(obj.portProtocolSlice) > 0 {
+		obj.portProtocolSlice = []PortProtocol{}
 	}
 	return obj
 }
-func (obj *perPortOptionsOptionsPortSettingsIter) appendHolderSlice(item OptionsPortSettings) PerPortOptionsOptionsPortSettingsIter {
-	obj.optionsPortSettingsSlice = append(obj.optionsPortSettingsSlice, item)
+func (obj *perPortOptionsPortProtocolIter) appendHolderSlice(item PortProtocol) PerPortOptionsPortProtocolIter {
+	obj.portProtocolSlice = append(obj.portProtocolSlice, item)
 	return obj
 }
 
@@ -369,15 +409,15 @@ func (obj *perPortOptions) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if len(obj.obj.PortSettings) != 0 {
+	if len(obj.obj.Protocols) != 0 {
 
 		if set_default {
-			obj.PortSettings().clearHolderSlice()
-			for _, item := range obj.obj.PortSettings {
-				obj.PortSettings().appendHolderSlice(&optionsPortSettings{obj: item})
+			obj.Protocols().clearHolderSlice()
+			for _, item := range obj.obj.Protocols {
+				obj.Protocols().appendHolderSlice(&portProtocol{obj: item})
 			}
 		}
-		for _, item := range obj.PortSettings().Items() {
+		for _, item := range obj.Protocols().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

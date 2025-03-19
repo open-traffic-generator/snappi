@@ -250,7 +250,7 @@ func (obj *rocev2V6Interface) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2V6Interface is configuration for Rocev2 IPv6 peers.
+// Rocev2V6Interface is configuration for RoCEv2 IPv6 peers.
 type Rocev2V6Interface interface {
 	Validation
 	// msg marshals Rocev2V6Interface to protobuf object *otg.Rocev2V6Interface
@@ -287,7 +287,7 @@ type Rocev2V6Interface interface {
 	setNil()
 }
 
-// The unique name of IPv6 used as the source IP for this list of Rocev2 peers.
+// The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
@@ -299,7 +299,7 @@ func (obj *rocev2V6Interface) Ipv6Name() string {
 
 }
 
-// The unique name of IPv6 used as the source IP for this list of Rocev2 peers.
+// The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
@@ -333,7 +333,7 @@ func (obj *rocev2V6Interface) SetIbMtu(value uint32) Rocev2V6Interface {
 	return obj
 }
 
-// This contains the list of Rocev2 IPv6 peers configured on this interface.
+// This contains the list of RoCEv2 IPv6 peers configured on this interface.
 // Peers returns a []Rocev2V6Peer
 func (obj *rocev2V6Interface) Peers() Rocev2V6InterfaceRocev2V6PeerIter {
 	if len(obj.obj.Peers) == 0 {

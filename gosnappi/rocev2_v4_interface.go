@@ -250,7 +250,7 @@ func (obj *rocev2V4Interface) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2V4Interface is configuration for Rocev2 IPv4 peers.
+// Rocev2V4Interface is configuration for RoCEv2 IPv4 peers.
 type Rocev2V4Interface interface {
 	Validation
 	// msg marshals Rocev2V4Interface to protobuf object *otg.Rocev2V4Interface
@@ -287,7 +287,7 @@ type Rocev2V4Interface interface {
 	setNil()
 }
 
-// The unique name of the IPv4, used as the source IP for this list of Rocev2 peers.
+// The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
@@ -299,7 +299,7 @@ func (obj *rocev2V4Interface) Ipv4Name() string {
 
 }
 
-// The unique name of the IPv4, used as the source IP for this list of Rocev2 peers.
+// The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
@@ -333,7 +333,7 @@ func (obj *rocev2V4Interface) SetIbMtu(value uint32) Rocev2V4Interface {
 	return obj
 }
 
-// This contains the list of Rocev2 peers configured on this interface.
+// This contains the list of RoCEv2 peers configured on this interface.
 // Peers returns a []Rocev2V4Peer
 func (obj *rocev2V4Interface) Peers() Rocev2V4InterfaceRocev2V4PeerIter {
 	if len(obj.obj.Peers) == 0 {

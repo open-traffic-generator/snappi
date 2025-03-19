@@ -242,7 +242,7 @@ func (obj *rocev2DCQCN) Clone() (Rocev2DCQCN, error) {
 	return newObj, nil
 }
 
-// Rocev2DCQCN is rocev2 DCQCN Settings.
+// Rocev2DCQCN is roCEv2 DCQCN Settings.
 type Rocev2DCQCN interface {
 	Validation
 	// msg marshals Rocev2DCQCN to protobuf object *otg.Rocev2DCQCN

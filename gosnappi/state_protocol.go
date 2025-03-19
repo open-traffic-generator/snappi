@@ -339,10 +339,10 @@ type StateProtocol interface {
 	// HasOspfv2 checks if Ospfv2 has been set in StateProtocol
 	HasOspfv2() bool
 	// Rocev2 returns StateProtocolRocev2, set in StateProtocol.
-	// StateProtocolRocev2 is sets state of configured Rocev2 peers.
+	// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
 	Rocev2() StateProtocolRocev2
 	// SetRocev2 assigns StateProtocolRocev2 provided by user to StateProtocol.
-	// StateProtocolRocev2 is sets state of configured Rocev2 peers.
+	// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
 	SetRocev2(value StateProtocolRocev2) StateProtocol
 	// HasRocev2 checks if Rocev2 has been set in StateProtocol
 	HasRocev2() bool

@@ -13,13 +13,12 @@ import (
 // ***** Rocev2PerPortSettings *****
 type rocev2PerPortSettings struct {
 	validation
-	obj                 *otg.Rocev2PerPortSettings
-	marshaller          marshalRocev2PerPortSettings
-	unMarshaller        unMarshalRocev2PerPortSettings
-	cnpHolder           Rocev2CNP
-	ackHolder           Rocev2ACK
-	nackHolder          Rocev2NACK
-	dcqcnSettingsHolder Rocev2DCQCN
+	obj                  *otg.Rocev2PerPortSettings
+	marshaller           marshalRocev2PerPortSettings
+	unMarshaller         unMarshalRocev2PerPortSettings
+	cnpHolder            Rocev2CNP
+	connectionTypeHolder Rocev2QPConnectionType
+	dcqcnSettingsHolder  Rocev2DCQCN
 }
 
 func NewRocev2PerPortSettings() Rocev2PerPortSettings {
@@ -248,8 +247,7 @@ func (obj *rocev2PerPortSettings) Clone() (Rocev2PerPortSettings, error) {
 
 func (obj *rocev2PerPortSettings) setNil() {
 	obj.cnpHolder = nil
-	obj.ackHolder = nil
-	obj.nackHolder = nil
+	obj.connectionTypeHolder = nil
 	obj.dcqcnSettingsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -286,51 +284,19 @@ type Rocev2PerPortSettings interface {
 	SetCnp(value Rocev2CNP) Rocev2PerPortSettings
 	// HasCnp checks if Cnp has been set in Rocev2PerPortSettings
 	HasCnp() bool
-	// Ack returns Rocev2ACK, set in Rocev2PerPortSettings.
-	// Rocev2ACK is aCK parameters.
-	Ack() Rocev2ACK
-	// SetAck assigns Rocev2ACK provided by user to Rocev2PerPortSettings.
-	// Rocev2ACK is aCK parameters.
-	SetAck(value Rocev2ACK) Rocev2PerPortSettings
-	// HasAck checks if Ack has been set in Rocev2PerPortSettings
-	HasAck() bool
-	// Nack returns Rocev2NACK, set in Rocev2PerPortSettings.
-	// Rocev2NACK is nACK parameters.
-	Nack() Rocev2NACK
-	// SetNack assigns Rocev2NACK provided by user to Rocev2PerPortSettings.
-	// Rocev2NACK is nACK parameters.
-	SetNack(value Rocev2NACK) Rocev2PerPortSettings
-	// HasNack checks if Nack has been set in Rocev2PerPortSettings
-	HasNack() bool
-	// CnpDelayTimer returns uint32, set in Rocev2PerPortSettings.
-	CnpDelayTimer() uint32
-	// SetCnpDelayTimer assigns uint32 provided by user to Rocev2PerPortSettings
-	SetCnpDelayTimer(value uint32) Rocev2PerPortSettings
-	// HasCnpDelayTimer checks if CnpDelayTimer has been set in Rocev2PerPortSettings
-	HasCnpDelayTimer() bool
-	// EnableRetransmissionAckTimeout returns bool, set in Rocev2PerPortSettings.
-	EnableRetransmissionAckTimeout() bool
-	// SetEnableRetransmissionAckTimeout assigns bool provided by user to Rocev2PerPortSettings
-	SetEnableRetransmissionAckTimeout(value bool) Rocev2PerPortSettings
-	// HasEnableRetransmissionAckTimeout checks if EnableRetransmissionAckTimeout has been set in Rocev2PerPortSettings
-	HasEnableRetransmissionAckTimeout() bool
-	// AckTimeout returns uint32, set in Rocev2PerPortSettings.
-	AckTimeout() uint32
-	// SetAckTimeout assigns uint32 provided by user to Rocev2PerPortSettings
-	SetAckTimeout(value uint32) Rocev2PerPortSettings
-	// HasAckTimeout checks if AckTimeout has been set in Rocev2PerPortSettings
-	HasAckTimeout() bool
-	// RetransmissionRetryCount returns uint32, set in Rocev2PerPortSettings.
-	RetransmissionRetryCount() uint32
-	// SetRetransmissionRetryCount assigns uint32 provided by user to Rocev2PerPortSettings
-	SetRetransmissionRetryCount(value uint32) Rocev2PerPortSettings
-	// HasRetransmissionRetryCount checks if RetransmissionRetryCount has been set in Rocev2PerPortSettings
-	HasRetransmissionRetryCount() bool
+	// ConnectionType returns Rocev2QPConnectionType, set in Rocev2PerPortSettings.
+	// Rocev2QPConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	ConnectionType() Rocev2QPConnectionType
+	// SetConnectionType assigns Rocev2QPConnectionType provided by user to Rocev2PerPortSettings.
+	// Rocev2QPConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	SetConnectionType(value Rocev2QPConnectionType) Rocev2PerPortSettings
+	// HasConnectionType checks if ConnectionType has been set in Rocev2PerPortSettings
+	HasConnectionType() bool
 	// DcqcnSettings returns Rocev2DCQCN, set in Rocev2PerPortSettings.
-	// Rocev2DCQCN is rocev2 DCQCN Settings.
+	// Rocev2DCQCN is roCEv2 DCQCN Settings.
 	DcqcnSettings() Rocev2DCQCN
 	// SetDcqcnSettings assigns Rocev2DCQCN provided by user to Rocev2PerPortSettings.
-	// Rocev2DCQCN is rocev2 DCQCN Settings.
+	// Rocev2DCQCN is roCEv2 DCQCN Settings.
 	SetDcqcnSettings(value Rocev2DCQCN) Rocev2PerPortSettings
 	// HasDcqcnSettings checks if DcqcnSettings has been set in Rocev2PerPortSettings
 	HasDcqcnSettings() bool
@@ -366,146 +332,30 @@ func (obj *rocev2PerPortSettings) SetCnp(value Rocev2CNP) Rocev2PerPortSettings 
 }
 
 // description is TBD
-// Ack returns a Rocev2ACK
-func (obj *rocev2PerPortSettings) Ack() Rocev2ACK {
-	if obj.obj.Ack == nil {
-		obj.obj.Ack = NewRocev2ACK().msg()
+// ConnectionType returns a Rocev2QPConnectionType
+func (obj *rocev2PerPortSettings) ConnectionType() Rocev2QPConnectionType {
+	if obj.obj.ConnectionType == nil {
+		obj.obj.ConnectionType = NewRocev2QPConnectionType().msg()
 	}
-	if obj.ackHolder == nil {
-		obj.ackHolder = &rocev2ACK{obj: obj.obj.Ack}
+	if obj.connectionTypeHolder == nil {
+		obj.connectionTypeHolder = &rocev2QPConnectionType{obj: obj.obj.ConnectionType}
 	}
-	return obj.ackHolder
+	return obj.connectionTypeHolder
 }
 
 // description is TBD
-// Ack returns a Rocev2ACK
-func (obj *rocev2PerPortSettings) HasAck() bool {
-	return obj.obj.Ack != nil
+// ConnectionType returns a Rocev2QPConnectionType
+func (obj *rocev2PerPortSettings) HasConnectionType() bool {
+	return obj.obj.ConnectionType != nil
 }
 
 // description is TBD
-// SetAck sets the Rocev2ACK value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetAck(value Rocev2ACK) Rocev2PerPortSettings {
+// SetConnectionType sets the Rocev2QPConnectionType value in the Rocev2PerPortSettings object
+func (obj *rocev2PerPortSettings) SetConnectionType(value Rocev2QPConnectionType) Rocev2PerPortSettings {
 
-	obj.ackHolder = nil
-	obj.obj.Ack = value.msg()
+	obj.connectionTypeHolder = nil
+	obj.obj.ConnectionType = value.msg()
 
-	return obj
-}
-
-// description is TBD
-// Nack returns a Rocev2NACK
-func (obj *rocev2PerPortSettings) Nack() Rocev2NACK {
-	if obj.obj.Nack == nil {
-		obj.obj.Nack = NewRocev2NACK().msg()
-	}
-	if obj.nackHolder == nil {
-		obj.nackHolder = &rocev2NACK{obj: obj.obj.Nack}
-	}
-	return obj.nackHolder
-}
-
-// description is TBD
-// Nack returns a Rocev2NACK
-func (obj *rocev2PerPortSettings) HasNack() bool {
-	return obj.obj.Nack != nil
-}
-
-// description is TBD
-// SetNack sets the Rocev2NACK value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetNack(value Rocev2NACK) Rocev2PerPortSettings {
-
-	obj.nackHolder = nil
-	obj.obj.Nack = value.msg()
-
-	return obj
-}
-
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
-// CnpDelayTimer returns a uint32
-func (obj *rocev2PerPortSettings) CnpDelayTimer() uint32 {
-
-	return *obj.obj.CnpDelayTimer
-
-}
-
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
-// CnpDelayTimer returns a uint32
-func (obj *rocev2PerPortSettings) HasCnpDelayTimer() bool {
-	return obj.obj.CnpDelayTimer != nil
-}
-
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
-// SetCnpDelayTimer sets the uint32 value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetCnpDelayTimer(value uint32) Rocev2PerPortSettings {
-
-	obj.obj.CnpDelayTimer = &value
-	return obj
-}
-
-// Enable Retransmission on ACK Timeout.
-// EnableRetransmissionAckTimeout returns a bool
-func (obj *rocev2PerPortSettings) EnableRetransmissionAckTimeout() bool {
-
-	return *obj.obj.EnableRetransmissionAckTimeout
-
-}
-
-// Enable Retransmission on ACK Timeout.
-// EnableRetransmissionAckTimeout returns a bool
-func (obj *rocev2PerPortSettings) HasEnableRetransmissionAckTimeout() bool {
-	return obj.obj.EnableRetransmissionAckTimeout != nil
-}
-
-// Enable Retransmission on ACK Timeout.
-// SetEnableRetransmissionAckTimeout sets the bool value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetEnableRetransmissionAckTimeout(value bool) Rocev2PerPortSettings {
-
-	obj.obj.EnableRetransmissionAckTimeout = &value
-	return obj
-}
-
-// Amount of time to wait before attempting to retransmit on non receipt of ACK. Time in milliseconds.
-// AckTimeout returns a uint32
-func (obj *rocev2PerPortSettings) AckTimeout() uint32 {
-
-	return *obj.obj.AckTimeout
-
-}
-
-// Amount of time to wait before attempting to retransmit on non receipt of ACK. Time in milliseconds.
-// AckTimeout returns a uint32
-func (obj *rocev2PerPortSettings) HasAckTimeout() bool {
-	return obj.obj.AckTimeout != nil
-}
-
-// Amount of time to wait before attempting to retransmit on non receipt of ACK. Time in milliseconds.
-// SetAckTimeout sets the uint32 value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetAckTimeout(value uint32) Rocev2PerPortSettings {
-
-	obj.obj.AckTimeout = &value
-	return obj
-}
-
-// Number of times to retry retransmission before giving up on non receipt of ACK.
-// RetransmissionRetryCount returns a uint32
-func (obj *rocev2PerPortSettings) RetransmissionRetryCount() uint32 {
-
-	return *obj.obj.RetransmissionRetryCount
-
-}
-
-// Number of times to retry retransmission before giving up on non receipt of ACK.
-// RetransmissionRetryCount returns a uint32
-func (obj *rocev2PerPortSettings) HasRetransmissionRetryCount() bool {
-	return obj.obj.RetransmissionRetryCount != nil
-}
-
-// Number of times to retry retransmission before giving up on non receipt of ACK.
-// SetRetransmissionRetryCount sets the uint32 value in the Rocev2PerPortSettings object
-func (obj *rocev2PerPortSettings) SetRetransmissionRetryCount(value uint32) Rocev2PerPortSettings {
-
-	obj.obj.RetransmissionRetryCount = &value
 	return obj
 }
 
@@ -547,44 +397,9 @@ func (obj *rocev2PerPortSettings) validateObj(vObj *validation, set_default bool
 		obj.Cnp().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Ack != nil {
+	if obj.obj.ConnectionType != nil {
 
-		obj.Ack().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Nack != nil {
-
-		obj.Nack().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.CnpDelayTimer != nil {
-
-		if *obj.obj.CnpDelayTimer > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2PerPortSettings.CnpDelayTimer <= 255 but Got %d", *obj.obj.CnpDelayTimer))
-		}
-
-	}
-
-	if obj.obj.AckTimeout != nil {
-
-		if *obj.obj.AckTimeout > 5369 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2PerPortSettings.AckTimeout <= 5369 but Got %d", *obj.obj.AckTimeout))
-		}
-
-	}
-
-	if obj.obj.RetransmissionRetryCount != nil {
-
-		if *obj.obj.RetransmissionRetryCount > 254 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2PerPortSettings.RetransmissionRetryCount <= 254 but Got %d", *obj.obj.RetransmissionRetryCount))
-		}
-
+		obj.ConnectionType().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.DcqcnSettings != nil {
@@ -595,17 +410,5 @@ func (obj *rocev2PerPortSettings) validateObj(vObj *validation, set_default bool
 }
 
 func (obj *rocev2PerPortSettings) setDefault() {
-	if obj.obj.CnpDelayTimer == nil {
-		obj.SetCnpDelayTimer(55)
-	}
-	if obj.obj.EnableRetransmissionAckTimeout == nil {
-		obj.SetEnableRetransmissionAckTimeout(true)
-	}
-	if obj.obj.AckTimeout == nil {
-		obj.SetAckTimeout(1)
-	}
-	if obj.obj.RetransmissionRetryCount == nil {
-		obj.SetRetransmissionRetryCount(3)
-	}
 
 }

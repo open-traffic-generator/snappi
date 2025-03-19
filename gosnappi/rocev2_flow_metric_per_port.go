@@ -242,7 +242,7 @@ func (obj *rocev2FlowMetricPerPort) Clone() (Rocev2FlowMetricPerPort, error) {
 	return newObj, nil
 }
 
-// Rocev2FlowMetricPerPort is rocev2 Flow statistics information.
+// Rocev2FlowMetricPerPort is roCEv2 Flow statistics information.
 type Rocev2FlowMetricPerPort interface {
 	Validation
 	// msg marshals Rocev2FlowMetricPerPort to protobuf object *otg.Rocev2FlowMetricPerPort

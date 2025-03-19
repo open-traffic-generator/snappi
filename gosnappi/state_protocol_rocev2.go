@@ -250,7 +250,7 @@ func (obj *stateProtocolRocev2) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// StateProtocolRocev2 is sets state of configured Rocev2 peers.
+// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
 type StateProtocolRocev2 interface {
 	Validation
 	// msg marshals StateProtocolRocev2 to protobuf object *otg.StateProtocolRocev2
@@ -277,10 +277,10 @@ type StateProtocolRocev2 interface {
 	// setChoice assigns StateProtocolRocev2ChoiceEnum provided by user to StateProtocolRocev2
 	setChoice(value StateProtocolRocev2ChoiceEnum) StateProtocolRocev2
 	// Peers returns StateProtocolRocev2Peers, set in StateProtocolRocev2.
-	// StateProtocolRocev2Peers is sets state of configured Rocev2 peers.
+	// StateProtocolRocev2Peers is sets state of configured RoCEv2 peers.
 	Peers() StateProtocolRocev2Peers
 	// SetPeers assigns StateProtocolRocev2Peers provided by user to StateProtocolRocev2.
-	// StateProtocolRocev2Peers is sets state of configured Rocev2 peers.
+	// StateProtocolRocev2Peers is sets state of configured RoCEv2 peers.
 	SetPeers(value StateProtocolRocev2Peers) StateProtocolRocev2
 	// HasPeers checks if Peers has been set in StateProtocolRocev2
 	HasPeers() bool

@@ -250,7 +250,7 @@ func (obj *rocev2QPs) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2QPs is this configuration allows you to configure RDMA flow over the same QP number from same source and destination.
+// Rocev2QPs is this allows the user to set QP properties between a particular source and destination.
 type Rocev2QPs interface {
 	Validation
 	// msg marshals Rocev2QPs to protobuf object *otg.Rocev2QPs

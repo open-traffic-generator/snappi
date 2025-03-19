@@ -250,7 +250,7 @@ func (obj *rocev2FlowMetricsRequest) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2FlowMetricsRequest is the request to retrieve Rocev2 FLow statistics.
+// Rocev2FlowMetricsRequest is the request to retrieve RoCEv2 FLow statistics.
 type Rocev2FlowMetricsRequest interface {
 	Validation
 	// msg marshals Rocev2FlowMetricsRequest to protobuf object *otg.Rocev2FlowMetricsRequest
@@ -279,10 +279,10 @@ type Rocev2FlowMetricsRequest interface {
 	// HasChoice checks if Choice has been set in Rocev2FlowMetricsRequest
 	HasChoice() bool
 	// PerPort returns Rocev2FlowColumnNames, set in Rocev2FlowMetricsRequest.
-	// Rocev2FlowColumnNames is the names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+	// Rocev2FlowColumnNames is the names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
 	PerPort() Rocev2FlowColumnNames
 	// SetPerPort assigns Rocev2FlowColumnNames provided by user to Rocev2FlowMetricsRequest.
-	// Rocev2FlowColumnNames is the names of Rocev2 flows. An empty list will return results for all Rocev2 flows.
+	// Rocev2FlowColumnNames is the names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
 	SetPerPort(value Rocev2FlowColumnNames) Rocev2FlowMetricsRequest
 	// HasPerPort checks if PerPort has been set in Rocev2FlowMetricsRequest
 	HasPerPort() bool

@@ -457,26 +457,26 @@ type MetricsRequest interface {
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool
 	// Rocev2Ipv4 returns Rocev2IPv4MetricsRequest, set in MetricsRequest.
-	// Rocev2IPv4MetricsRequest is the request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+	// Rocev2IPv4MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 	Rocev2Ipv4() Rocev2IPv4MetricsRequest
 	// SetRocev2Ipv4 assigns Rocev2IPv4MetricsRequest provided by user to MetricsRequest.
-	// Rocev2IPv4MetricsRequest is the request to retrieve Rocev2 over IPv4 per peer metrics/statistics.
+	// Rocev2IPv4MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 	SetRocev2Ipv4(value Rocev2IPv4MetricsRequest) MetricsRequest
 	// HasRocev2Ipv4 checks if Rocev2Ipv4 has been set in MetricsRequest
 	HasRocev2Ipv4() bool
 	// Rocev2Ipv6 returns Rocev2IPv6MetricsRequest, set in MetricsRequest.
-	// Rocev2IPv6MetricsRequest is the request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+	// Rocev2IPv6MetricsRequest is the request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
 	Rocev2Ipv6() Rocev2IPv6MetricsRequest
 	// SetRocev2Ipv6 assigns Rocev2IPv6MetricsRequest provided by user to MetricsRequest.
-	// Rocev2IPv6MetricsRequest is the request to retrieve Rocev2 over IPv6 per peer metrics/statistics.
+	// Rocev2IPv6MetricsRequest is the request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
 	SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) MetricsRequest
 	// HasRocev2Ipv6 checks if Rocev2Ipv6 has been set in MetricsRequest
 	HasRocev2Ipv6() bool
 	// Rocev2Flow returns Rocev2FlowMetricsRequest, set in MetricsRequest.
-	// Rocev2FlowMetricsRequest is the request to retrieve Rocev2 FLow statistics.
+	// Rocev2FlowMetricsRequest is the request to retrieve RoCEv2 FLow statistics.
 	Rocev2Flow() Rocev2FlowMetricsRequest
 	// SetRocev2Flow assigns Rocev2FlowMetricsRequest provided by user to MetricsRequest.
-	// Rocev2FlowMetricsRequest is the request to retrieve Rocev2 FLow statistics.
+	// Rocev2FlowMetricsRequest is the request to retrieve RoCEv2 FLow statistics.
 	SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest
 	// HasRocev2Flow checks if Rocev2Flow has been set in MetricsRequest
 	HasRocev2Flow() bool
