@@ -16517,8 +16517,8 @@ components:
         initial_rate_after_first_cnp:
           description: |-
             This is the percentage of rate user wants to set on receiving the first CNP.
-          type: integer
-          format: uint32
+          type: number
+          format: float
           minimum: 0
           maximum: 100
           default: 0.002
@@ -16526,8 +16526,8 @@ components:
         minimum_rate_limmit:
           description: "This is the minimum line rate which user wants to restrict.\
             \ Below this the algorithm cannot set the rate. "
-          type: integer
-          format: uint32
+          type: number
+          format: float
           minimum: 0
           maximum: 100
           default: 0.002
@@ -16579,8 +16579,8 @@ components:
         additive_increment_rate:
           description: "This is the rate at which the target rates will increase when\
             \ the DCQCN will be in the additive increase rate recovery mode. "
-          type: integer
-          format: uint32
+          type: number
+          format: float
           minimum: 0
           maximum: 100
           default: 0.001
@@ -16588,8 +16588,8 @@ components:
         hyper_increment_rate:
           description: "This is the rate at which the target rates will increase when\
             \ the DCQCN will be in the hyper increment rate recovery mode. "
-          type: integer
-          format: uint32
+          type: number
+          format: float
           minimum: 0
           maximum: 100
           default: 0.001

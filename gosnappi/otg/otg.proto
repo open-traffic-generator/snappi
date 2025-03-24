@@ -12450,12 +12450,12 @@ message Rocev2DCQCN {
 
   // This is the percentage of rate user wants to set on receiving the first CNP.
   // default = 0.002
-  optional uint32 initial_rate_after_first_cnp = 6;
+  optional float initial_rate_after_first_cnp = 6;
 
   // This is the minimum line rate which user wants to restrict. Below this the algorithm
   // cannot set the rate.
   // default = 0.002
-  optional uint32 minimum_rate_limmit = 7;
+  optional float minimum_rate_limmit = 7;
 
   // This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
   // default = 10
@@ -12487,12 +12487,12 @@ message Rocev2DCQCN {
   // This is the rate at which the target rates will increase when the DCQCN will be in
   // the additive increase rate recovery mode.
   // default = 0.001
-  optional uint32 additive_increment_rate = 13;
+  optional float additive_increment_rate = 13;
 
   // This is the rate at which the target rates will increase when the DCQCN will be in
   // the hyper increment rate recovery mode.
   // default = 0.001
-  optional uint32 hyper_increment_rate = 14;
+  optional float hyper_increment_rate = 14;
 }
 
 // Error response generated while serving API request.

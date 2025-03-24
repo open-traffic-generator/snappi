@@ -294,16 +294,16 @@ type Rocev2DCQCN interface {
 	SetRateReductionTimePeriod(value uint64) Rocev2DCQCN
 	// HasRateReductionTimePeriod checks if RateReductionTimePeriod has been set in Rocev2DCQCN
 	HasRateReductionTimePeriod() bool
-	// InitialRateAfterFirstCnp returns uint32, set in Rocev2DCQCN.
-	InitialRateAfterFirstCnp() uint32
-	// SetInitialRateAfterFirstCnp assigns uint32 provided by user to Rocev2DCQCN
-	SetInitialRateAfterFirstCnp(value uint32) Rocev2DCQCN
+	// InitialRateAfterFirstCnp returns float32, set in Rocev2DCQCN.
+	InitialRateAfterFirstCnp() float32
+	// SetInitialRateAfterFirstCnp assigns float32 provided by user to Rocev2DCQCN
+	SetInitialRateAfterFirstCnp(value float32) Rocev2DCQCN
 	// HasInitialRateAfterFirstCnp checks if InitialRateAfterFirstCnp has been set in Rocev2DCQCN
 	HasInitialRateAfterFirstCnp() bool
-	// MinimumRateLimmit returns uint32, set in Rocev2DCQCN.
-	MinimumRateLimmit() uint32
-	// SetMinimumRateLimmit assigns uint32 provided by user to Rocev2DCQCN
-	SetMinimumRateLimmit(value uint32) Rocev2DCQCN
+	// MinimumRateLimmit returns float32, set in Rocev2DCQCN.
+	MinimumRateLimmit() float32
+	// SetMinimumRateLimmit assigns float32 provided by user to Rocev2DCQCN
+	SetMinimumRateLimmit(value float32) Rocev2DCQCN
 	// HasMinimumRateLimmit checks if MinimumRateLimmit has been set in Rocev2DCQCN
 	HasMinimumRateLimmit() bool
 	// MaximumRateDecrementAtTime returns uint32, set in Rocev2DCQCN.
@@ -336,16 +336,16 @@ type Rocev2DCQCN interface {
 	SetRateIncrementThreshold(value uint32) Rocev2DCQCN
 	// HasRateIncrementThreshold checks if RateIncrementThreshold has been set in Rocev2DCQCN
 	HasRateIncrementThreshold() bool
-	// AdditiveIncrementRate returns uint32, set in Rocev2DCQCN.
-	AdditiveIncrementRate() uint32
-	// SetAdditiveIncrementRate assigns uint32 provided by user to Rocev2DCQCN
-	SetAdditiveIncrementRate(value uint32) Rocev2DCQCN
+	// AdditiveIncrementRate returns float32, set in Rocev2DCQCN.
+	AdditiveIncrementRate() float32
+	// SetAdditiveIncrementRate assigns float32 provided by user to Rocev2DCQCN
+	SetAdditiveIncrementRate(value float32) Rocev2DCQCN
 	// HasAdditiveIncrementRate checks if AdditiveIncrementRate has been set in Rocev2DCQCN
 	HasAdditiveIncrementRate() bool
-	// HyperIncrementRate returns uint32, set in Rocev2DCQCN.
-	HyperIncrementRate() uint32
-	// SetHyperIncrementRate assigns uint32 provided by user to Rocev2DCQCN
-	SetHyperIncrementRate(value uint32) Rocev2DCQCN
+	// HyperIncrementRate returns float32, set in Rocev2DCQCN.
+	HyperIncrementRate() float32
+	// SetHyperIncrementRate assigns float32 provided by user to Rocev2DCQCN
+	SetHyperIncrementRate(value float32) Rocev2DCQCN
 	// HasHyperIncrementRate checks if HyperIncrementRate has been set in Rocev2DCQCN
 	HasHyperIncrementRate() bool
 }
@@ -464,44 +464,44 @@ func (obj *rocev2DCQCN) SetRateReductionTimePeriod(value uint64) Rocev2DCQCN {
 }
 
 // This is the percentage of rate user wants to set on receiving the first CNP.
-// InitialRateAfterFirstCnp returns a uint32
-func (obj *rocev2DCQCN) InitialRateAfterFirstCnp() uint32 {
+// InitialRateAfterFirstCnp returns a float32
+func (obj *rocev2DCQCN) InitialRateAfterFirstCnp() float32 {
 
 	return *obj.obj.InitialRateAfterFirstCnp
 
 }
 
 // This is the percentage of rate user wants to set on receiving the first CNP.
-// InitialRateAfterFirstCnp returns a uint32
+// InitialRateAfterFirstCnp returns a float32
 func (obj *rocev2DCQCN) HasInitialRateAfterFirstCnp() bool {
 	return obj.obj.InitialRateAfterFirstCnp != nil
 }
 
 // This is the percentage of rate user wants to set on receiving the first CNP.
-// SetInitialRateAfterFirstCnp sets the uint32 value in the Rocev2DCQCN object
-func (obj *rocev2DCQCN) SetInitialRateAfterFirstCnp(value uint32) Rocev2DCQCN {
+// SetInitialRateAfterFirstCnp sets the float32 value in the Rocev2DCQCN object
+func (obj *rocev2DCQCN) SetInitialRateAfterFirstCnp(value float32) Rocev2DCQCN {
 
 	obj.obj.InitialRateAfterFirstCnp = &value
 	return obj
 }
 
 // This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
-// MinimumRateLimmit returns a uint32
-func (obj *rocev2DCQCN) MinimumRateLimmit() uint32 {
+// MinimumRateLimmit returns a float32
+func (obj *rocev2DCQCN) MinimumRateLimmit() float32 {
 
 	return *obj.obj.MinimumRateLimmit
 
 }
 
 // This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
-// MinimumRateLimmit returns a uint32
+// MinimumRateLimmit returns a float32
 func (obj *rocev2DCQCN) HasMinimumRateLimmit() bool {
 	return obj.obj.MinimumRateLimmit != nil
 }
 
 // This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
-// SetMinimumRateLimmit sets the uint32 value in the Rocev2DCQCN object
-func (obj *rocev2DCQCN) SetMinimumRateLimmit(value uint32) Rocev2DCQCN {
+// SetMinimumRateLimmit sets the float32 value in the Rocev2DCQCN object
+func (obj *rocev2DCQCN) SetMinimumRateLimmit(value float32) Rocev2DCQCN {
 
 	obj.obj.MinimumRateLimmit = &value
 	return obj
@@ -630,44 +630,44 @@ func (obj *rocev2DCQCN) SetRateIncrementThreshold(value uint32) Rocev2DCQCN {
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
-// AdditiveIncrementRate returns a uint32
-func (obj *rocev2DCQCN) AdditiveIncrementRate() uint32 {
+// AdditiveIncrementRate returns a float32
+func (obj *rocev2DCQCN) AdditiveIncrementRate() float32 {
 
 	return *obj.obj.AdditiveIncrementRate
 
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
-// AdditiveIncrementRate returns a uint32
+// AdditiveIncrementRate returns a float32
 func (obj *rocev2DCQCN) HasAdditiveIncrementRate() bool {
 	return obj.obj.AdditiveIncrementRate != nil
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
-// SetAdditiveIncrementRate sets the uint32 value in the Rocev2DCQCN object
-func (obj *rocev2DCQCN) SetAdditiveIncrementRate(value uint32) Rocev2DCQCN {
+// SetAdditiveIncrementRate sets the float32 value in the Rocev2DCQCN object
+func (obj *rocev2DCQCN) SetAdditiveIncrementRate(value float32) Rocev2DCQCN {
 
 	obj.obj.AdditiveIncrementRate = &value
 	return obj
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
-// HyperIncrementRate returns a uint32
-func (obj *rocev2DCQCN) HyperIncrementRate() uint32 {
+// HyperIncrementRate returns a float32
+func (obj *rocev2DCQCN) HyperIncrementRate() float32 {
 
 	return *obj.obj.HyperIncrementRate
 
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
-// HyperIncrementRate returns a uint32
+// HyperIncrementRate returns a float32
 func (obj *rocev2DCQCN) HasHyperIncrementRate() bool {
 	return obj.obj.HyperIncrementRate != nil
 }
 
 // This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
-// SetHyperIncrementRate sets the uint32 value in the Rocev2DCQCN object
-func (obj *rocev2DCQCN) SetHyperIncrementRate(value uint32) Rocev2DCQCN {
+// SetHyperIncrementRate sets the float32 value in the Rocev2DCQCN object
+func (obj *rocev2DCQCN) SetHyperIncrementRate(value float32) Rocev2DCQCN {
 
 	obj.obj.HyperIncrementRate = &value
 	return obj
@@ -700,20 +700,20 @@ func (obj *rocev2DCQCN) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.InitialRateAfterFirstCnp != nil {
 
-		if *obj.obj.InitialRateAfterFirstCnp > 100 {
+		if *obj.obj.InitialRateAfterFirstCnp < 0 || *obj.obj.InitialRateAfterFirstCnp > 100 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2DCQCN.InitialRateAfterFirstCnp <= 100 but Got %d", *obj.obj.InitialRateAfterFirstCnp))
+				fmt.Sprintf("0 <= Rocev2DCQCN.InitialRateAfterFirstCnp <= 100 but Got %f", *obj.obj.InitialRateAfterFirstCnp))
 		}
 
 	}
 
 	if obj.obj.MinimumRateLimmit != nil {
 
-		if *obj.obj.MinimumRateLimmit > 100 {
+		if *obj.obj.MinimumRateLimmit < 0 || *obj.obj.MinimumRateLimmit > 100 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2DCQCN.MinimumRateLimmit <= 100 but Got %d", *obj.obj.MinimumRateLimmit))
+				fmt.Sprintf("0 <= Rocev2DCQCN.MinimumRateLimmit <= 100 but Got %f", *obj.obj.MinimumRateLimmit))
 		}
 
 	}
@@ -750,20 +750,20 @@ func (obj *rocev2DCQCN) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.AdditiveIncrementRate != nil {
 
-		if *obj.obj.AdditiveIncrementRate > 100 {
+		if *obj.obj.AdditiveIncrementRate < 0 || *obj.obj.AdditiveIncrementRate > 100 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2DCQCN.AdditiveIncrementRate <= 100 but Got %d", *obj.obj.AdditiveIncrementRate))
+				fmt.Sprintf("0 <= Rocev2DCQCN.AdditiveIncrementRate <= 100 but Got %f", *obj.obj.AdditiveIncrementRate))
 		}
 
 	}
 
 	if obj.obj.HyperIncrementRate != nil {
 
-		if *obj.obj.HyperIncrementRate > 100 {
+		if *obj.obj.HyperIncrementRate < 0 || *obj.obj.HyperIncrementRate > 100 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2DCQCN.HyperIncrementRate <= 100 but Got %d", *obj.obj.HyperIncrementRate))
+				fmt.Sprintf("0 <= Rocev2DCQCN.HyperIncrementRate <= 100 but Got %f", *obj.obj.HyperIncrementRate))
 		}
 
 	}
