@@ -250,7 +250,7 @@ func (obj *rocev2IPv4MetricsRequest) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2IPv4MetricsRequest is the request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+// Rocev2IPv4MetricsRequest is request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 type Rocev2IPv4MetricsRequest interface {
 	Validation
 	// msg marshals Rocev2IPv4MetricsRequest to protobuf object *otg.Rocev2IPv4MetricsRequest

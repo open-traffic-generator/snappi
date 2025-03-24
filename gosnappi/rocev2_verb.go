@@ -252,7 +252,7 @@ func (obj *rocev2Verb) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2Verb is roCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate and read.
+// Rocev2Verb is roCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate and READ.
 type Rocev2Verb interface {
 	Validation
 	// msg marshals Rocev2Verb to protobuf object *otg.Rocev2Verb
@@ -280,25 +280,25 @@ type Rocev2Verb interface {
 	setChoice(value Rocev2VerbChoiceEnum) Rocev2Verb
 	// HasChoice checks if Choice has been set in Rocev2Verb
 	HasChoice() bool
-	// getter for Write to set choice.
-	Write()
-	// getter for Read to set choice.
-	Read()
 	// getter for Send to set choice.
 	Send()
+	// getter for Read to set choice.
+	Read()
+	// getter for Write to set choice.
+	Write()
 	// WriteWithImmediate returns Rocev2ImmediateData, set in Rocev2Verb.
-	// Rocev2ImmediateData is immediate Data field required for SEND/WRITE with immediate verb.
+	// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 	WriteWithImmediate() Rocev2ImmediateData
 	// SetWriteWithImmediate assigns Rocev2ImmediateData provided by user to Rocev2Verb.
-	// Rocev2ImmediateData is immediate Data field required for SEND/WRITE with immediate verb.
+	// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 	SetWriteWithImmediate(value Rocev2ImmediateData) Rocev2Verb
 	// HasWriteWithImmediate checks if WriteWithImmediate has been set in Rocev2Verb
 	HasWriteWithImmediate() bool
 	// SendWithImmediate returns Rocev2ImmediateData, set in Rocev2Verb.
-	// Rocev2ImmediateData is immediate Data field required for SEND/WRITE with immediate verb.
+	// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 	SendWithImmediate() Rocev2ImmediateData
 	// SetSendWithImmediate assigns Rocev2ImmediateData provided by user to Rocev2Verb.
-	// Rocev2ImmediateData is immediate Data field required for SEND/WRITE with immediate verb.
+	// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 	SetSendWithImmediate(value Rocev2ImmediateData) Rocev2Verb
 	// HasSendWithImmediate checks if SendWithImmediate has been set in Rocev2Verb
 	HasSendWithImmediate() bool
@@ -326,9 +326,9 @@ func (obj *rocev2Verb) Choice() Rocev2VerbChoiceEnum {
 	return Rocev2VerbChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Write to set choice
-func (obj *rocev2Verb) Write() {
-	obj.setChoice(Rocev2VerbChoice.WRITE)
+// getter for Send to set choice
+func (obj *rocev2Verb) Send() {
+	obj.setChoice(Rocev2VerbChoice.SEND)
 }
 
 // getter for Read to set choice
@@ -336,9 +336,9 @@ func (obj *rocev2Verb) Read() {
 	obj.setChoice(Rocev2VerbChoice.READ)
 }
 
-// getter for Send to set choice
-func (obj *rocev2Verb) Send() {
-	obj.setChoice(Rocev2VerbChoice.SEND)
+// getter for Write to set choice
+func (obj *rocev2Verb) Write() {
+	obj.setChoice(Rocev2VerbChoice.WRITE)
 }
 
 // description is TBD

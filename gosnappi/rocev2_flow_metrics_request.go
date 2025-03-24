@@ -250,7 +250,7 @@ func (obj *rocev2FlowMetricsRequest) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2FlowMetricsRequest is the request to retrieve RoCEv2 FLow statistics.
+// Rocev2FlowMetricsRequest is request to retrieve RoCEv2 FLow statistics.
 type Rocev2FlowMetricsRequest interface {
 	Validation
 	// msg marshals Rocev2FlowMetricsRequest to protobuf object *otg.Rocev2FlowMetricsRequest

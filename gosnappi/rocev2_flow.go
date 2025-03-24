@@ -287,10 +287,10 @@ type Rocev2Flow interface {
 	// SetName assigns string provided by user to Rocev2Flow
 	SetName(value string) Rocev2Flow
 	// Rocev2Verb returns Rocev2Verb, set in Rocev2Flow.
-	// Rocev2Verb is roCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate and read.
+	// Rocev2Verb is roCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate and READ.
 	Rocev2Verb() Rocev2Verb
 	// SetRocev2Verb assigns Rocev2Verb provided by user to Rocev2Flow.
-	// Rocev2Verb is roCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate and read.
+	// Rocev2Verb is roCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate and READ.
 	SetRocev2Verb(value Rocev2Verb) Rocev2Flow
 	// HasRocev2Verb checks if Rocev2Verb has been set in Rocev2Flow
 	HasRocev2Verb() bool
@@ -309,7 +309,7 @@ type Rocev2Flow interface {
 	setNil()
 }
 
-// The unique name of an emulated device that will be transmitting.
+// The unique name of an emulated device that will be transmitting the flows.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -321,7 +321,7 @@ func (obj *rocev2Flow) TxEndpoint() string {
 
 }
 
-// The unique name of an emulated device that will be transmitting.
+// The unique name of an emulated device that will be transmitting the flows.
 //
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name

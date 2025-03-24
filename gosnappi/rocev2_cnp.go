@@ -339,7 +339,7 @@ func (obj *rocev2CNP) setChoice(value Rocev2CNPChoiceEnum) Rocev2CNP {
 	return obj
 }
 
-// The value that would be carried in CNP packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the CNP packet.
+// IP DSCP value for the CNP packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2CNP) IpDscp() Rocev2PriorityValue {
 	if obj.obj.IpDscp == nil {
@@ -351,13 +351,13 @@ func (obj *rocev2CNP) IpDscp() Rocev2PriorityValue {
 	return obj.ipDscpHolder
 }
 
-// The value that would be carried in CNP packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the CNP packet.
+// IP DSCP value for the CNP packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2CNP) HasIpDscp() bool {
 	return obj.obj.IpDscp != nil
 }
 
-// The value that would be carried in CNP packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the CNP packet.
+// IP DSCP value for the CNP packets.
 // SetIpDscp sets the Rocev2PriorityValue value in the Rocev2CNP object
 func (obj *rocev2CNP) SetIpDscp(value Rocev2PriorityValue) Rocev2CNP {
 	obj.setChoice(Rocev2CNPChoice.IP_DSCP)
@@ -405,7 +405,7 @@ func (obj *rocev2CNP) SetEcnValue(value Rocev2CNPEcnValueEnum) Rocev2CNP {
 	return obj
 }
 
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// The interval duration between the generation of successive CNP packets should be specified in microseconds.
 // CnpDelayTimer returns a uint32
 func (obj *rocev2CNP) CnpDelayTimer() uint32 {
 
@@ -413,13 +413,13 @@ func (obj *rocev2CNP) CnpDelayTimer() uint32 {
 
 }
 
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// The interval duration between the generation of successive CNP packets should be specified in microseconds.
 // CnpDelayTimer returns a uint32
 func (obj *rocev2CNP) HasCnpDelayTimer() bool {
 	return obj.obj.CnpDelayTimer != nil
 }
 
-// Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+// The interval duration between the generation of successive CNP packets should be specified in microseconds.
 // SetCnpDelayTimer sets the uint32 value in the Rocev2CNP object
 func (obj *rocev2CNP) SetCnpDelayTimer(value uint32) Rocev2CNP {
 

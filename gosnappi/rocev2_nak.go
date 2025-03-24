@@ -333,7 +333,7 @@ func (obj *rocev2NAK) setChoice(value Rocev2NAKChoiceEnum) Rocev2NAK {
 	return obj
 }
 
-// The value that would be carried in NAK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NAK packet.
+// IP DSCP value for the NAK packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2NAK) IpDscp() Rocev2PriorityValue {
 	if obj.obj.IpDscp == nil {
@@ -345,13 +345,13 @@ func (obj *rocev2NAK) IpDscp() Rocev2PriorityValue {
 	return obj.ipDscpHolder
 }
 
-// The value that would be carried in NAK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NAK packet.
+// IP DSCP value for the NAK packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2NAK) HasIpDscp() bool {
 	return obj.obj.IpDscp != nil
 }
 
-// The value that would be carried in NAK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NAK packet.
+// IP DSCP value for the NAK packets.
 // SetIpDscp sets the Rocev2PriorityValue value in the Rocev2NAK object
 func (obj *rocev2NAK) SetIpDscp(value Rocev2PriorityValue) Rocev2NAK {
 	obj.setChoice(Rocev2NAKChoice.IP_DSCP)
@@ -380,7 +380,7 @@ func (obj *rocev2NAK) EcnValue() Rocev2NAKEcnValueEnum {
 	return Rocev2NAKEcnValueEnum(obj.obj.EcnValue.Enum().String())
 }
 
-// NAK ECN Value.
+// ECN Code point to add in NAK packets.
 // EcnValue returns a string
 func (obj *rocev2NAK) HasEcnValue() bool {
 	return obj.obj.EcnValue != nil

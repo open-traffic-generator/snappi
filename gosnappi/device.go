@@ -846,7 +846,7 @@ func (obj *device) SetMacsec(value DeviceMacsec) Device {
 	return obj
 }
 
-// Configuration for RoCEv2 .
+// Configuration for RoCEv2.
 // Rocev2 returns a DeviceRocev2Peer
 func (obj *device) Rocev2() DeviceRocev2Peer {
 	if obj.obj.Rocev2 == nil {
@@ -858,13 +858,13 @@ func (obj *device) Rocev2() DeviceRocev2Peer {
 	return obj.rocev2Holder
 }
 
-// Configuration for RoCEv2 .
+// Configuration for RoCEv2.
 // Rocev2 returns a DeviceRocev2Peer
 func (obj *device) HasRocev2() bool {
 	return obj.obj.Rocev2 != nil
 }
 
-// Configuration for RoCEv2 .
+// Configuration for RoCEv2.
 // SetRocev2 sets the DeviceRocev2Peer value in the Device object
 func (obj *device) SetRocev2(value DeviceRocev2Peer) Device {
 

@@ -279,10 +279,10 @@ type PortProtocol interface {
 	// HasChoice checks if Choice has been set in PortProtocol
 	HasChoice() bool
 	// Rocev2 returns Rocev2PerPortSettings, set in PortProtocol.
-	// Rocev2PerPortSettings is a high level data plane traffic flow.
+	// Rocev2PerPortSettings is data plane traffic flow configuration for a test port.
 	Rocev2() Rocev2PerPortSettings
 	// SetRocev2 assigns Rocev2PerPortSettings provided by user to PortProtocol.
-	// Rocev2PerPortSettings is a high level data plane traffic flow.
+	// Rocev2PerPortSettings is data plane traffic flow configuration for a test port.
 	SetRocev2(value Rocev2PerPortSettings) PortProtocol
 	// HasRocev2 checks if Rocev2 has been set in PortProtocol
 	HasRocev2() bool

@@ -333,7 +333,7 @@ func (obj *rocev2ACK) setChoice(value Rocev2ACKChoiceEnum) Rocev2ACK {
 	return obj
 }
 
-// The value that would be carried in ACK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the ACK packet.
+// IP DSCP value for the ACK packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2ACK) IpDscp() Rocev2PriorityValue {
 	if obj.obj.IpDscp == nil {
@@ -345,13 +345,13 @@ func (obj *rocev2ACK) IpDscp() Rocev2PriorityValue {
 	return obj.ipDscpHolder
 }
 
-// The value that would be carried in ACK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the ACK packet.
+// IP DSCP value for the ACK packets.
 // IpDscp returns a Rocev2PriorityValue
 func (obj *rocev2ACK) HasIpDscp() bool {
 	return obj.obj.IpDscp != nil
 }
 
-// The value that would be carried in ACK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the ACK packet.
+// IP DSCP value for the ACK packets.
 // SetIpDscp sets the Rocev2PriorityValue value in the Rocev2ACK object
 func (obj *rocev2ACK) SetIpDscp(value Rocev2PriorityValue) Rocev2ACK {
 	obj.setChoice(Rocev2ACKChoice.IP_DSCP)

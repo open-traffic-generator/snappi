@@ -296,7 +296,7 @@ func (obj *statefulFlow) Choice() StatefulFlowChoiceEnum {
 	return StatefulFlowChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Stateful traffic configuration.
+// Stateful traffic flow configuration.
 // Choice returns a string
 func (obj *statefulFlow) HasChoice() bool {
 	return obj.obj.Choice != nil

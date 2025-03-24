@@ -281,7 +281,7 @@ type DeviceRocev2Peer interface {
 	setNil()
 }
 
-// This contains an array of references to IPv4 interfaces,  each of which will have list of peers to different destinations.
+// This contains an array of references to IPv4 interfaces, each having a list of IPv4 peers to various destinations.
 // Ipv4Interfaces returns a []Rocev2V4Interface
 func (obj *deviceRocev2Peer) Ipv4Interfaces() DeviceRocev2PeerRocev2V4InterfaceIter {
 	if len(obj.obj.Ipv4Interfaces) == 0 {
@@ -368,7 +368,7 @@ func (obj *deviceRocev2PeerRocev2V4InterfaceIter) appendHolderSlice(item Rocev2V
 	return obj
 }
 
-// This contains an array of references to IPv6 interfaces,  each of which will have list of peers to different destinations.
+// This contains an array references to IPv6 interfaces, each with a list of IPv6 peers for various destinations.
 // Ipv6Interfaces returns a []Rocev2V6Interface
 func (obj *deviceRocev2Peer) Ipv6Interfaces() DeviceRocev2PeerRocev2V6InterfaceIter {
 	if len(obj.obj.Ipv6Interfaces) == 0 {

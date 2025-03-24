@@ -2479,7 +2479,7 @@ components:
           x-field-uid: 11
         rocev2:
           description: |-
-            Configuration for RoCEv2 .
+            Configuration for RoCEv2.
           $ref: '#/components/schemas/Device.Rocev2Peer'
           x-field-uid: 12
       required:
@@ -12094,15 +12094,15 @@ components:
       type: object
       properties:
         ipv4_interfaces:
-          description: "This contains an array of references to IPv4 interfaces, \
-            \ each of which will have list of peers to different destinations.   "
+          description: "This contains an array of references to IPv4 interfaces, each\
+            \ having a list of IPv4 peers to various destinations.  "
           type: array
           items:
             $ref: '#/components/schemas/Rocev2.V4Interface'
           x-field-uid: 1
         ipv6_interfaces:
           description: |-
-            This contains an array of references to IPv6 interfaces,  each of which will have list of peers to different destinations.
+            This contains an array references to IPv6 interfaces, each with a list of IPv6 peers for various destinations.
           type: array
           items:
             $ref: '#/components/schemas/Rocev2.V6Interface'
@@ -12126,7 +12126,7 @@ components:
           x-field-uid: 1
         ib_mtu:
           description: |-
-            InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+            The InfiniBand protocol defines several fixed sizes for the Maximum Transmission Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload size that corresponds to the configured IB MTU. Additionally, it is possible to configure a custom size.
           type: integer
           default: 1024
           format: uint32
@@ -12176,9 +12176,10 @@ components:
       - qp_name
       properties:
         qp_name:
-          x-field-uid: 1
           description: |-
+            Name of each QP.
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          x-field-uid: 1
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
@@ -12218,7 +12219,7 @@ components:
           x-field-uid: 1
         dscp:
           description: |-
-            DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
+            DSCP value for the RDMA data packets.
           type: integer
           format: uint32
           default: 24
@@ -12227,13 +12228,24 @@ components:
           x-field-uid: 2
         ecn:
           description: |-
-            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-          type: integer
-          format: uint32
-          default: 1
-          minimum: 0
-          maximum: 3
+            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce.
+          type: string
+          default: ect_1
+          x-enum:
+            non_ect:
+              x-field-uid: 1
+            ect_1:
+              x-field-uid: 2
+            ect_0:
+              x-field-uid: 3
+            ce:
+              x-field-uid: 4
           x-field-uid: 3
+          enum:
+          - non_ect
+          - ect_1
+          - ect_0
+          - ce
         udp_source_port:
           description: |-
             UDP source port number for this QP.
@@ -12262,7 +12274,7 @@ components:
           x-field-uid: 6
         remote_key:
           description: |-
-            Remote Key associated with the virtual address for this QP.
+            Remote Key linked to the QP's virtual address.
           type: string
           format: hex
           default: '00000000'
@@ -12287,7 +12299,7 @@ components:
           x-field-uid: 1
         ib_mtu:
           description: |-
-            InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+            The InfiniBand protocol defines several fixed sizes for the Maximum Transmission Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload size that corresponds to the configured IB MTU. Additionally, it is possible to configure a custom size.
           type: integer
           default: 1024
           format: uint32
@@ -16024,7 +16036,7 @@ components:
       properties:
         choice:
           description: |-
-            Stateful traffic configuration.
+            Stateful traffic flow configuration.
           type: string
           x-enum:
             rocev2:
@@ -16093,7 +16105,7 @@ components:
       properties:
         value:
           description: |-
-            Target Line Rate in percentage.
+            Target Line Rate as percentage of max line rate.
           type: integer
           format: uint64
           x-field-uid: 1
@@ -16112,7 +16124,7 @@ components:
       properties:
         tx_endpoint:
           description: |
-            The unique name of an emulated device that will be transmitting.
+            The unique name of an emulated device that will be transmitting the flows.
 
             x-constraint:
             - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -16173,7 +16185,7 @@ components:
           - GB
     Rocev2.Verb:
       description: |-
-        RoCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate and read.
+        RoCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate and READ.
       type: object
       properties:
         choice:
@@ -16205,12 +16217,12 @@ components:
           x-field-uid: 3
     Rocev2.ImmediateData:
       description: |-
-        Immediate Data field required for SEND/WRITE with immediate verb.
+        Four bytes of immediate Data for SEND/WRITE with immediate.
       type: object
       properties:
         immediate_data:
           description: |-
-            Immediate Data field required for SEND/WRITE with immediate verb.
+            Four bytes of immediate Data for SEND/WRITE with immediate.
           type: string
           format: hex
           default: '00000000'
@@ -16258,7 +16270,7 @@ components:
           x-field-uid: 2
     Rocev2.PerPortSettings:
       description: |-
-        A high level data plane traffic flow.
+        Data plane traffic flow configuration for a test port.
       type: object
       properties:
         cnp:
@@ -16286,7 +16298,7 @@ components:
           - ip_dscp
         ip_dscp:
           description: |-
-            The value that would be carried in CNP packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the CNP packet.
+            IP DSCP value for the CNP packets.
           $ref: '#/components/schemas/Rocev2.PriorityValue'
           x-field-uid: 2
         ecn_value:
@@ -16311,7 +16323,7 @@ components:
           - ce
         cnp_delay_timer:
           description: |-
-            Amount of time to wait between the generation of successive CNP packets. Time in microseconds.
+            The interval duration between the generation of successive CNP packets should be specified in microseconds.
           type: integer
           format: uint32
           default: 55
@@ -16354,7 +16366,7 @@ components:
           x-field-uid: 3
         retransmission_timeout_value:
           description: |-
-            Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK. Time in milliseconds.
+            The duration to wait before retrying transmission upon not receiving an acknowledgment (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
           type: integer
           format: uint32
           default: 1
@@ -16363,7 +16375,7 @@ components:
           x-field-uid: 4
         retransmission_retry_count:
           description: |-
-            Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+            Number of retransmission attempts before stopping due to missing ACK/NAK.
           type: integer
           format: uint32
           default: 3
@@ -16386,7 +16398,7 @@ components:
           - ip_dscp
         ip_dscp:
           description: |-
-            The value that would be carried in ACK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the ACK packet.
+            IP DSCP value for the ACK packets.
           $ref: '#/components/schemas/Rocev2.PriorityValue'
           x-field-uid: 2
         ecn_value:
@@ -16425,12 +16437,12 @@ components:
           - ip_dscp
         ip_dscp:
           description: |-
-            The value that would be carried in NAK packet. Available option is IP DSCP. The given value is carried in IP Header DSCP value of the NAK packet.
+            IP DSCP value for the NAK packets.
           $ref: '#/components/schemas/Rocev2.PriorityValue'
           x-field-uid: 2
         ecn_value:
           description: |-
-            NAK ECN Value.
+            ECN Code point to add in NAK packets.
           type: string
           default: ect_1
           x-enum:
@@ -16473,92 +16485,114 @@ components:
           x-field-uid: 1
         alpha_g:
           description: |-
-            Alpha G.
+            Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
           type: integer
           format: uint64
+          default: 1019
+          minimum: 1
+          maximum: 1023
           x-field-uid: 2
         initial_alpha:
-          description: |-
-            Initial Alpha.
+          description: "Value of the alpha at the time when the first CNP is received. "
           type: integer
           format: uint64
+          default: 1023
+          minimum: 1
+          maximum: 1023
           x-field-uid: 3
         alpha_update_period:
           description: |-
-            Alpha Update period in microseconds.
+            timer after which the alpha parameter will update according to the algorithm. Unit is microseconds.
           type: integer
           format: uint64
+          default: 21
           x-field-uid: 4
         rate_reduction_time_period:
-          description: |-
-            Rate reduction time period in microseconds.
+          description: "timer after which the algorithm will check if CNP is there\
+            \ or not and if CNP is present it will reduce the rate.\nUnit is microseconds. "
           type: integer
           format: uint64
+          default: 21
           x-field-uid: 5
         initial_rate_after_first_cnp:
           description: |-
-            initial rate after first CNP in Percentage.
+            This is the percentage of rate user wants to set on receiving the first CNP.
           type: integer
           format: uint32
           minimum: 0
           maximum: 100
+          default: 0.002
           x-field-uid: 6
         minimum_rate_limmit:
-          description: |-
-            Minimum Rate Limit in Percentage.
+          description: "This is the minimum line rate which user wants to restrict.\
+            \ Below this the algorithm cannot set the rate. "
           type: integer
           format: uint32
           minimum: 0
           maximum: 100
+          default: 0.002
           x-field-uid: 7
         maximum_rate_decrement_at_time:
           description: |-
-            Maximum rate decrement at time in Percentage.
+            This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
           type: integer
           format: uint32
+          default: 10
           minimum: 0
           maximum: 100
           x-field-uid: 8
         clamp_target_rate:
-          description: |-
-            Clamp Target rate.
+          description: "Is used to reduce the target rate by remembering the current\
+            \ rate.\nIf it is not set, then only the target rate will be reduced for\
+            \ the\nfirst CNP after each rate increment otherwise if its set then the\
+            \ target\nrate will be reduced for each rate reduce. "
           type: boolean
+          default: false
           x-field-uid: 9
         rate_increment_time:
           description: |-
-            Rate increment time period in microseconds.
+            After the expiry of this timer, the rate recovery algorithms will be triggered. Unit is microseconds.
           type: integer
           format: uint64
+          default: 250
           x-field-uid: 10
         rate_increment_byte_counter:
-          description: |-
-            Rate increment byte counter in uint 64 bytes.
+          description: "This is the bytes counter.\nAfter the expiry of this bytes\
+            \ also counter the rate recovery algorithms will be triggered, and the\
+            \ rate will be recovered. "
           type: integer
           format: uint64
+          default: 32767
+          minimum: 1
+          maximum: 32767
           x-field-uid: 11
         rate_increment_threshold:
-          description: |-
-            Rate increment threshold.
+          description: "This is the threshold value which will ensure how many times,\
+            \ each rate recovery algorithms will execute before moving to the next\
+            \ value. "
           type: integer
           format: uint32
+          default: 25
           minimum: 1
           maximum: 31
           x-field-uid: 12
         additive_increment_rate:
-          description: |-
-            additive increment rate in Percentage.
+          description: "This is the rate at which the target rates will increase when\
+            \ the DCQCN will be in the additive increase rate recovery mode. "
           type: integer
           format: uint32
           minimum: 0
           maximum: 100
+          default: 0.001
           x-field-uid: 13
         hyper_increment_rate:
-          description: |-
-            hyper increment rate in Percentage.
+          description: "This is the rate at which the target rates will increase when\
+            \ the DCQCN will be in the hyper increment rate recovery mode. "
           type: integer
           format: uint32
           minimum: 0
           maximum: 100
+          default: 0.001
           x-field-uid: 14
     Error:
       description: |-
@@ -21513,7 +21547,7 @@ components:
           x-field-uid: 11
     Rocev2IPv4.Metrics.Request:
       description: |-
-        The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+        Request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
       type: object
       properties:
         choice:
@@ -21722,7 +21756,7 @@ components:
           x-field-uid: 18
     Rocev2IPv6.Metrics.Request:
       description: |-
-        The request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+        Request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
       type: object
       properties:
         choice:
@@ -21931,7 +21965,7 @@ components:
           x-field-uid: 18
     Rocev2Flow.Metrics.Request:
       description: |-
-        The request to retrieve RoCEv2 FLow statistics.
+        Request to retrieve RoCEv2 FLow statistics.
       type: object
       properties:
         choice:
@@ -21953,13 +21987,6 @@ components:
         The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
       type: object
       properties:
-        qp_names:
-          description: |-
-            The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
-          type: array
-          items:
-            type: string
-          x-field-uid: 1
         column_names:
           description: |-
             The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the Flow cannot be excluded.
@@ -22067,7 +22094,7 @@ components:
             - nak_rx
             - first_timestamp
             - last_timestamp
-          x-field-uid: 2
+          x-field-uid: 1
     Rocev2Flow.Metric.PerPort:
       description: |-
         RoCEv2 Flow statistics information.

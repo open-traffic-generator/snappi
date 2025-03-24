@@ -276,10 +276,10 @@ type Rocev2QPParameters interface {
 	SetDscp(value uint32) Rocev2QPParameters
 	// HasDscp checks if Dscp has been set in Rocev2QPParameters
 	HasDscp() bool
-	// Ecn returns uint32, set in Rocev2QPParameters.
-	Ecn() uint32
-	// SetEcn assigns uint32 provided by user to Rocev2QPParameters
-	SetEcn(value uint32) Rocev2QPParameters
+	// Ecn returns Rocev2QPParametersEcnEnum, set in Rocev2QPParameters
+	Ecn() Rocev2QPParametersEcnEnum
+	// SetEcn assigns Rocev2QPParametersEcnEnum provided by user to Rocev2QPParameters
+	SetEcn(value Rocev2QPParametersEcnEnum) Rocev2QPParameters
 	// HasEcn checks if Ecn has been set in Rocev2QPParameters
 	HasEcn() bool
 	// UdpSourcePort returns uint32, set in Rocev2QPParameters.
@@ -330,7 +330,7 @@ func (obj *rocev2QPParameters) SetSourceQpNumber(value uint32) Rocev2QPParameter
 	return obj
 }
 
-// DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
+// DSCP value for the RDMA data packets.
 // Dscp returns a uint32
 func (obj *rocev2QPParameters) Dscp() uint32 {
 
@@ -338,13 +338,13 @@ func (obj *rocev2QPParameters) Dscp() uint32 {
 
 }
 
-// DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
+// DSCP value for the RDMA data packets.
 // Dscp returns a uint32
 func (obj *rocev2QPParameters) HasDscp() bool {
 	return obj.obj.Dscp != nil
 }
 
-// DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
+// DSCP value for the RDMA data packets.
 // SetDscp sets the uint32 value in the Rocev2QPParameters object
 func (obj *rocev2QPParameters) SetDscp(value uint32) Rocev2QPParameters {
 
@@ -352,25 +352,41 @@ func (obj *rocev2QPParameters) SetDscp(value uint32) Rocev2QPParameters {
 	return obj
 }
 
-// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-// Ecn returns a uint32
-func (obj *rocev2QPParameters) Ecn() uint32 {
+type Rocev2QPParametersEcnEnum string
 
-	return *obj.obj.Ecn
-
+// Enum of Ecn on Rocev2QPParameters
+var Rocev2QPParametersEcn = struct {
+	NON_ECT Rocev2QPParametersEcnEnum
+	ECT_1   Rocev2QPParametersEcnEnum
+	ECT_0   Rocev2QPParametersEcnEnum
+	CE      Rocev2QPParametersEcnEnum
+}{
+	NON_ECT: Rocev2QPParametersEcnEnum("non_ect"),
+	ECT_1:   Rocev2QPParametersEcnEnum("ect_1"),
+	ECT_0:   Rocev2QPParametersEcnEnum("ect_0"),
+	CE:      Rocev2QPParametersEcnEnum("ce"),
 }
 
-// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-// Ecn returns a uint32
+func (obj *rocev2QPParameters) Ecn() Rocev2QPParametersEcnEnum {
+	return Rocev2QPParametersEcnEnum(obj.obj.Ecn.Enum().String())
+}
+
+// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce.
+// Ecn returns a string
 func (obj *rocev2QPParameters) HasEcn() bool {
 	return obj.obj.Ecn != nil
 }
 
-// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points.
-// SetEcn sets the uint32 value in the Rocev2QPParameters object
-func (obj *rocev2QPParameters) SetEcn(value uint32) Rocev2QPParameters {
+func (obj *rocev2QPParameters) SetEcn(value Rocev2QPParametersEcnEnum) Rocev2QPParameters {
+	intValue, ok := otg.Rocev2QPParameters_Ecn_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Rocev2QPParametersEcnEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Rocev2QPParameters_Ecn_Enum(intValue)
+	obj.obj.Ecn = &enumValue
 
-	obj.obj.Ecn = &value
 	return obj
 }
 
@@ -440,7 +456,7 @@ func (obj *rocev2QPParameters) SetVirtualAddress(value string) Rocev2QPParameter
 	return obj
 }
 
-// Remote Key associated with the virtual address for this QP.
+// Remote Key linked to the QP's virtual address.
 // RemoteKey returns a string
 func (obj *rocev2QPParameters) RemoteKey() string {
 
@@ -448,13 +464,13 @@ func (obj *rocev2QPParameters) RemoteKey() string {
 
 }
 
-// Remote Key associated with the virtual address for this QP.
+// Remote Key linked to the QP's virtual address.
 // RemoteKey returns a string
 func (obj *rocev2QPParameters) HasRemoteKey() bool {
 	return obj.obj.RemoteKey != nil
 }
 
-// Remote Key associated with the virtual address for this QP.
+// Remote Key linked to the QP's virtual address.
 // SetRemoteKey sets the string value in the Rocev2QPParameters object
 func (obj *rocev2QPParameters) SetRemoteKey(value string) Rocev2QPParameters {
 
@@ -483,16 +499,6 @@ func (obj *rocev2QPParameters) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= Rocev2QPParameters.Dscp <= 63 but Got %d", *obj.obj.Dscp))
-		}
-
-	}
-
-	if obj.obj.Ecn != nil {
-
-		if *obj.obj.Ecn > 3 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= Rocev2QPParameters.Ecn <= 3 but Got %d", *obj.obj.Ecn))
 		}
 
 	}
@@ -551,7 +557,8 @@ func (obj *rocev2QPParameters) setDefault() {
 		obj.SetDscp(24)
 	}
 	if obj.obj.Ecn == nil {
-		obj.SetEcn(1)
+		obj.SetEcn(Rocev2QPParametersEcn.ECT_1)
+
 	}
 	if obj.obj.UdpSourcePort == nil {
 		obj.SetUdpSourcePort(49152)

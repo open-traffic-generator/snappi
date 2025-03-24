@@ -264,35 +264,10 @@ type Rocev2FlowColumnNames interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// QpNames returns []string, set in Rocev2FlowColumnNames.
-	QpNames() []string
-	// SetQpNames assigns []string provided by user to Rocev2FlowColumnNames
-	SetQpNames(value []string) Rocev2FlowColumnNames
 	// ColumnNames returns []Rocev2FlowColumnNamesColumnNamesEnum, set in Rocev2FlowColumnNames
 	ColumnNames() []Rocev2FlowColumnNamesColumnNamesEnum
 	// SetColumnNames assigns []Rocev2FlowColumnNamesColumnNamesEnum provided by user to Rocev2FlowColumnNames
 	SetColumnNames(value []Rocev2FlowColumnNamesColumnNamesEnum) Rocev2FlowColumnNames
-}
-
-// The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
-// QpNames returns a []string
-func (obj *rocev2FlowColumnNames) QpNames() []string {
-	if obj.obj.QpNames == nil {
-		obj.obj.QpNames = make([]string, 0)
-	}
-	return obj.obj.QpNames
-}
-
-// The names of RoCEv2 FLow to return results for. An empty list will return results for all RoCEv2 FLow.
-// SetQpNames sets the []string value in the Rocev2FlowColumnNames object
-func (obj *rocev2FlowColumnNames) SetQpNames(value []string) Rocev2FlowColumnNames {
-
-	if obj.obj.QpNames == nil {
-		obj.obj.QpNames = make([]string, 0)
-	}
-	obj.obj.QpNames = value
-
-	return obj
 }
 
 type Rocev2FlowColumnNamesColumnNamesEnum string

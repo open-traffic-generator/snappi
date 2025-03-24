@@ -242,7 +242,7 @@ func (obj *rocev2ImmediateData) Clone() (Rocev2ImmediateData, error) {
 	return newObj, nil
 }
 
-// Rocev2ImmediateData is immediate Data field required for SEND/WRITE with immediate verb.
+// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 type Rocev2ImmediateData interface {
 	Validation
 	// msg marshals Rocev2ImmediateData to protobuf object *otg.Rocev2ImmediateData
@@ -272,7 +272,7 @@ type Rocev2ImmediateData interface {
 	HasImmediateData() bool
 }
 
-// Immediate Data field required for SEND/WRITE with immediate verb.
+// Four bytes of immediate Data for SEND/WRITE with immediate.
 // ImmediateData returns a string
 func (obj *rocev2ImmediateData) ImmediateData() string {
 
@@ -280,13 +280,13 @@ func (obj *rocev2ImmediateData) ImmediateData() string {
 
 }
 
-// Immediate Data field required for SEND/WRITE with immediate verb.
+// Four bytes of immediate Data for SEND/WRITE with immediate.
 // ImmediateData returns a string
 func (obj *rocev2ImmediateData) HasImmediateData() bool {
 	return obj.obj.ImmediateData != nil
 }
 
-// Immediate Data field required for SEND/WRITE with immediate verb.
+// Four bytes of immediate Data for SEND/WRITE with immediate.
 // SetImmediateData sets the string value in the Rocev2ImmediateData object
 func (obj *rocev2ImmediateData) SetImmediateData(value string) Rocev2ImmediateData {
 

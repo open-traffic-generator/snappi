@@ -311,7 +311,7 @@ func (obj *rocev2V4Interface) SetIpv4Name(value string) Rocev2V4Interface {
 	return obj
 }
 
-// InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+// The InfiniBand protocol defines several fixed sizes for the Maximum Transmission Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload size that corresponds to the configured IB MTU. Additionally, it is possible to configure a custom size.
 // IbMtu returns a uint32
 func (obj *rocev2V4Interface) IbMtu() uint32 {
 
@@ -319,13 +319,13 @@ func (obj *rocev2V4Interface) IbMtu() uint32 {
 
 }
 
-// InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+// The InfiniBand protocol defines several fixed sizes for the Maximum Transmission Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload size that corresponds to the configured IB MTU. Additionally, it is possible to configure a custom size.
 // IbMtu returns a uint32
 func (obj *rocev2V4Interface) HasIbMtu() bool {
 	return obj.obj.IbMtu != nil
 }
 
-// InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU: 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same as configured IB MTU. You can configure custom size also.
+// The InfiniBand protocol defines several fixed sizes for the Maximum Transmission Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload size that corresponds to the configured IB MTU. Additionally, it is possible to configure a custom size.
 // SetIbMtu sets the uint32 value in the Rocev2V4Interface object
 func (obj *rocev2V4Interface) SetIbMtu(value uint32) Rocev2V4Interface {
 

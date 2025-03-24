@@ -287,6 +287,7 @@ type Rocev2QPs interface {
 	setNil()
 }
 
+// Name of each QP.
 // Globally unique name of an object. It also serves as the primary key for arrays of objects.
 // QpName returns a string
 func (obj *rocev2QPs) QpName() string {
@@ -295,6 +296,7 @@ func (obj *rocev2QPs) QpName() string {
 
 }
 
+// Name of each QP.
 // Globally unique name of an object. It also serves as the primary key for arrays of objects.
 // SetQpName sets the string value in the Rocev2QPs object
 func (obj *rocev2QPs) SetQpName(value string) Rocev2QPs {

@@ -372,7 +372,7 @@ func (obj *rocev2DCQCN) SetEnableDcqcn(value bool) Rocev2DCQCN {
 	return obj
 }
 
-// Alpha G.
+// Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
 // AlphaG returns a uint64
 func (obj *rocev2DCQCN) AlphaG() uint64 {
 
@@ -380,13 +380,13 @@ func (obj *rocev2DCQCN) AlphaG() uint64 {
 
 }
 
-// Alpha G.
+// Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
 // AlphaG returns a uint64
 func (obj *rocev2DCQCN) HasAlphaG() bool {
 	return obj.obj.AlphaG != nil
 }
 
-// Alpha G.
+// Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
 // SetAlphaG sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetAlphaG(value uint64) Rocev2DCQCN {
 
@@ -394,7 +394,7 @@ func (obj *rocev2DCQCN) SetAlphaG(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// Initial Alpha.
+// Value of the alpha at the time when the first CNP is received.
 // InitialAlpha returns a uint64
 func (obj *rocev2DCQCN) InitialAlpha() uint64 {
 
@@ -402,13 +402,13 @@ func (obj *rocev2DCQCN) InitialAlpha() uint64 {
 
 }
 
-// Initial Alpha.
+// Value of the alpha at the time when the first CNP is received.
 // InitialAlpha returns a uint64
 func (obj *rocev2DCQCN) HasInitialAlpha() bool {
 	return obj.obj.InitialAlpha != nil
 }
 
-// Initial Alpha.
+// Value of the alpha at the time when the first CNP is received.
 // SetInitialAlpha sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetInitialAlpha(value uint64) Rocev2DCQCN {
 
@@ -416,7 +416,7 @@ func (obj *rocev2DCQCN) SetInitialAlpha(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// Alpha Update period in microseconds.
+// timer after which the alpha parameter will update according to the algorithm. Unit is microseconds.
 // AlphaUpdatePeriod returns a uint64
 func (obj *rocev2DCQCN) AlphaUpdatePeriod() uint64 {
 
@@ -424,13 +424,13 @@ func (obj *rocev2DCQCN) AlphaUpdatePeriod() uint64 {
 
 }
 
-// Alpha Update period in microseconds.
+// timer after which the alpha parameter will update according to the algorithm. Unit is microseconds.
 // AlphaUpdatePeriod returns a uint64
 func (obj *rocev2DCQCN) HasAlphaUpdatePeriod() bool {
 	return obj.obj.AlphaUpdatePeriod != nil
 }
 
-// Alpha Update period in microseconds.
+// timer after which the alpha parameter will update according to the algorithm. Unit is microseconds.
 // SetAlphaUpdatePeriod sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetAlphaUpdatePeriod(value uint64) Rocev2DCQCN {
 
@@ -438,7 +438,8 @@ func (obj *rocev2DCQCN) SetAlphaUpdatePeriod(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// Rate reduction time period in microseconds.
+// timer after which the algorithm will check if CNP is there or not and if CNP is present it will reduce the rate.
+// Unit is microseconds.
 // RateReductionTimePeriod returns a uint64
 func (obj *rocev2DCQCN) RateReductionTimePeriod() uint64 {
 
@@ -446,13 +447,15 @@ func (obj *rocev2DCQCN) RateReductionTimePeriod() uint64 {
 
 }
 
-// Rate reduction time period in microseconds.
+// timer after which the algorithm will check if CNP is there or not and if CNP is present it will reduce the rate.
+// Unit is microseconds.
 // RateReductionTimePeriod returns a uint64
 func (obj *rocev2DCQCN) HasRateReductionTimePeriod() bool {
 	return obj.obj.RateReductionTimePeriod != nil
 }
 
-// Rate reduction time period in microseconds.
+// timer after which the algorithm will check if CNP is there or not and if CNP is present it will reduce the rate.
+// Unit is microseconds.
 // SetRateReductionTimePeriod sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetRateReductionTimePeriod(value uint64) Rocev2DCQCN {
 
@@ -460,7 +463,7 @@ func (obj *rocev2DCQCN) SetRateReductionTimePeriod(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// initial rate after first CNP in Percentage.
+// This is the percentage of rate user wants to set on receiving the first CNP.
 // InitialRateAfterFirstCnp returns a uint32
 func (obj *rocev2DCQCN) InitialRateAfterFirstCnp() uint32 {
 
@@ -468,13 +471,13 @@ func (obj *rocev2DCQCN) InitialRateAfterFirstCnp() uint32 {
 
 }
 
-// initial rate after first CNP in Percentage.
+// This is the percentage of rate user wants to set on receiving the first CNP.
 // InitialRateAfterFirstCnp returns a uint32
 func (obj *rocev2DCQCN) HasInitialRateAfterFirstCnp() bool {
 	return obj.obj.InitialRateAfterFirstCnp != nil
 }
 
-// initial rate after first CNP in Percentage.
+// This is the percentage of rate user wants to set on receiving the first CNP.
 // SetInitialRateAfterFirstCnp sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetInitialRateAfterFirstCnp(value uint32) Rocev2DCQCN {
 
@@ -482,7 +485,7 @@ func (obj *rocev2DCQCN) SetInitialRateAfterFirstCnp(value uint32) Rocev2DCQCN {
 	return obj
 }
 
-// Minimum Rate Limit in Percentage.
+// This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
 // MinimumRateLimmit returns a uint32
 func (obj *rocev2DCQCN) MinimumRateLimmit() uint32 {
 
@@ -490,13 +493,13 @@ func (obj *rocev2DCQCN) MinimumRateLimmit() uint32 {
 
 }
 
-// Minimum Rate Limit in Percentage.
+// This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
 // MinimumRateLimmit returns a uint32
 func (obj *rocev2DCQCN) HasMinimumRateLimmit() bool {
 	return obj.obj.MinimumRateLimmit != nil
 }
 
-// Minimum Rate Limit in Percentage.
+// This is the minimum line rate which user wants to restrict. Below this the algorithm cannot set the rate.
 // SetMinimumRateLimmit sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetMinimumRateLimmit(value uint32) Rocev2DCQCN {
 
@@ -504,7 +507,7 @@ func (obj *rocev2DCQCN) SetMinimumRateLimmit(value uint32) Rocev2DCQCN {
 	return obj
 }
 
-// Maximum rate decrement at time in Percentage.
+// This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
 // MaximumRateDecrementAtTime returns a uint32
 func (obj *rocev2DCQCN) MaximumRateDecrementAtTime() uint32 {
 
@@ -512,13 +515,13 @@ func (obj *rocev2DCQCN) MaximumRateDecrementAtTime() uint32 {
 
 }
 
-// Maximum rate decrement at time in Percentage.
+// This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
 // MaximumRateDecrementAtTime returns a uint32
 func (obj *rocev2DCQCN) HasMaximumRateDecrementAtTime() bool {
 	return obj.obj.MaximumRateDecrementAtTime != nil
 }
 
-// Maximum rate decrement at time in Percentage.
+// This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
 // SetMaximumRateDecrementAtTime sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetMaximumRateDecrementAtTime(value uint32) Rocev2DCQCN {
 
@@ -526,7 +529,10 @@ func (obj *rocev2DCQCN) SetMaximumRateDecrementAtTime(value uint32) Rocev2DCQCN 
 	return obj
 }
 
-// Clamp Target rate.
+// Is used to reduce the target rate by remembering the current rate.
+// If it is not set, then only the target rate will be reduced for the
+// first CNP after each rate increment otherwise if its set then the target
+// rate will be reduced for each rate reduce.
 // ClampTargetRate returns a bool
 func (obj *rocev2DCQCN) ClampTargetRate() bool {
 
@@ -534,13 +540,19 @@ func (obj *rocev2DCQCN) ClampTargetRate() bool {
 
 }
 
-// Clamp Target rate.
+// Is used to reduce the target rate by remembering the current rate.
+// If it is not set, then only the target rate will be reduced for the
+// first CNP after each rate increment otherwise if its set then the target
+// rate will be reduced for each rate reduce.
 // ClampTargetRate returns a bool
 func (obj *rocev2DCQCN) HasClampTargetRate() bool {
 	return obj.obj.ClampTargetRate != nil
 }
 
-// Clamp Target rate.
+// Is used to reduce the target rate by remembering the current rate.
+// If it is not set, then only the target rate will be reduced for the
+// first CNP after each rate increment otherwise if its set then the target
+// rate will be reduced for each rate reduce.
 // SetClampTargetRate sets the bool value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetClampTargetRate(value bool) Rocev2DCQCN {
 
@@ -548,7 +560,7 @@ func (obj *rocev2DCQCN) SetClampTargetRate(value bool) Rocev2DCQCN {
 	return obj
 }
 
-// Rate increment time period in microseconds.
+// After the expiry of this timer, the rate recovery algorithms will be triggered. Unit is microseconds.
 // RateIncrementTime returns a uint64
 func (obj *rocev2DCQCN) RateIncrementTime() uint64 {
 
@@ -556,13 +568,13 @@ func (obj *rocev2DCQCN) RateIncrementTime() uint64 {
 
 }
 
-// Rate increment time period in microseconds.
+// After the expiry of this timer, the rate recovery algorithms will be triggered. Unit is microseconds.
 // RateIncrementTime returns a uint64
 func (obj *rocev2DCQCN) HasRateIncrementTime() bool {
 	return obj.obj.RateIncrementTime != nil
 }
 
-// Rate increment time period in microseconds.
+// After the expiry of this timer, the rate recovery algorithms will be triggered. Unit is microseconds.
 // SetRateIncrementTime sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetRateIncrementTime(value uint64) Rocev2DCQCN {
 
@@ -570,7 +582,8 @@ func (obj *rocev2DCQCN) SetRateIncrementTime(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// Rate increment byte counter in uint 64 bytes.
+// This is the bytes counter.
+// After the expiry of this bytes also counter the rate recovery algorithms will be triggered, and the rate will be recovered.
 // RateIncrementByteCounter returns a uint64
 func (obj *rocev2DCQCN) RateIncrementByteCounter() uint64 {
 
@@ -578,13 +591,15 @@ func (obj *rocev2DCQCN) RateIncrementByteCounter() uint64 {
 
 }
 
-// Rate increment byte counter in uint 64 bytes.
+// This is the bytes counter.
+// After the expiry of this bytes also counter the rate recovery algorithms will be triggered, and the rate will be recovered.
 // RateIncrementByteCounter returns a uint64
 func (obj *rocev2DCQCN) HasRateIncrementByteCounter() bool {
 	return obj.obj.RateIncrementByteCounter != nil
 }
 
-// Rate increment byte counter in uint 64 bytes.
+// This is the bytes counter.
+// After the expiry of this bytes also counter the rate recovery algorithms will be triggered, and the rate will be recovered.
 // SetRateIncrementByteCounter sets the uint64 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetRateIncrementByteCounter(value uint64) Rocev2DCQCN {
 
@@ -592,7 +607,7 @@ func (obj *rocev2DCQCN) SetRateIncrementByteCounter(value uint64) Rocev2DCQCN {
 	return obj
 }
 
-// Rate increment threshold.
+// This is the threshold value which will ensure how many times, each rate recovery algorithms will execute before moving to the next value.
 // RateIncrementThreshold returns a uint32
 func (obj *rocev2DCQCN) RateIncrementThreshold() uint32 {
 
@@ -600,13 +615,13 @@ func (obj *rocev2DCQCN) RateIncrementThreshold() uint32 {
 
 }
 
-// Rate increment threshold.
+// This is the threshold value which will ensure how many times, each rate recovery algorithms will execute before moving to the next value.
 // RateIncrementThreshold returns a uint32
 func (obj *rocev2DCQCN) HasRateIncrementThreshold() bool {
 	return obj.obj.RateIncrementThreshold != nil
 }
 
-// Rate increment threshold.
+// This is the threshold value which will ensure how many times, each rate recovery algorithms will execute before moving to the next value.
 // SetRateIncrementThreshold sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetRateIncrementThreshold(value uint32) Rocev2DCQCN {
 
@@ -614,7 +629,7 @@ func (obj *rocev2DCQCN) SetRateIncrementThreshold(value uint32) Rocev2DCQCN {
 	return obj
 }
 
-// additive increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
 // AdditiveIncrementRate returns a uint32
 func (obj *rocev2DCQCN) AdditiveIncrementRate() uint32 {
 
@@ -622,13 +637,13 @@ func (obj *rocev2DCQCN) AdditiveIncrementRate() uint32 {
 
 }
 
-// additive increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
 // AdditiveIncrementRate returns a uint32
 func (obj *rocev2DCQCN) HasAdditiveIncrementRate() bool {
 	return obj.obj.AdditiveIncrementRate != nil
 }
 
-// additive increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the additive increase rate recovery mode.
 // SetAdditiveIncrementRate sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetAdditiveIncrementRate(value uint32) Rocev2DCQCN {
 
@@ -636,7 +651,7 @@ func (obj *rocev2DCQCN) SetAdditiveIncrementRate(value uint32) Rocev2DCQCN {
 	return obj
 }
 
-// hyper increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
 // HyperIncrementRate returns a uint32
 func (obj *rocev2DCQCN) HyperIncrementRate() uint32 {
 
@@ -644,13 +659,13 @@ func (obj *rocev2DCQCN) HyperIncrementRate() uint32 {
 
 }
 
-// hyper increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
 // HyperIncrementRate returns a uint32
 func (obj *rocev2DCQCN) HasHyperIncrementRate() bool {
 	return obj.obj.HyperIncrementRate != nil
 }
 
-// hyper increment rate in Percentage.
+// This is the rate at which the target rates will increase when the DCQCN will be in the hyper increment rate recovery mode.
 // SetHyperIncrementRate sets the uint32 value in the Rocev2DCQCN object
 func (obj *rocev2DCQCN) SetHyperIncrementRate(value uint32) Rocev2DCQCN {
 
@@ -661,6 +676,26 @@ func (obj *rocev2DCQCN) SetHyperIncrementRate(value uint32) Rocev2DCQCN {
 func (obj *rocev2DCQCN) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.AlphaG != nil {
+
+		if *obj.obj.AlphaG < 1 || *obj.obj.AlphaG > 1023 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= Rocev2DCQCN.AlphaG <= 1023 but Got %d", *obj.obj.AlphaG))
+		}
+
+	}
+
+	if obj.obj.InitialAlpha != nil {
+
+		if *obj.obj.InitialAlpha < 1 || *obj.obj.InitialAlpha > 1023 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= Rocev2DCQCN.InitialAlpha <= 1023 but Got %d", *obj.obj.InitialAlpha))
+		}
+
 	}
 
 	if obj.obj.InitialRateAfterFirstCnp != nil {
@@ -689,6 +724,16 @@ func (obj *rocev2DCQCN) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= Rocev2DCQCN.MaximumRateDecrementAtTime <= 100 but Got %d", *obj.obj.MaximumRateDecrementAtTime))
+		}
+
+	}
+
+	if obj.obj.RateIncrementByteCounter != nil {
+
+		if *obj.obj.RateIncrementByteCounter < 1 || *obj.obj.RateIncrementByteCounter > 32767 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= Rocev2DCQCN.RateIncrementByteCounter <= 32767 but Got %d", *obj.obj.RateIncrementByteCounter))
 		}
 
 	}
@@ -728,6 +773,45 @@ func (obj *rocev2DCQCN) validateObj(vObj *validation, set_default bool) {
 func (obj *rocev2DCQCN) setDefault() {
 	if obj.obj.EnableDcqcn == nil {
 		obj.SetEnableDcqcn(true)
+	}
+	if obj.obj.AlphaG == nil {
+		obj.SetAlphaG(1019)
+	}
+	if obj.obj.InitialAlpha == nil {
+		obj.SetInitialAlpha(1023)
+	}
+	if obj.obj.AlphaUpdatePeriod == nil {
+		obj.SetAlphaUpdatePeriod(21)
+	}
+	if obj.obj.RateReductionTimePeriod == nil {
+		obj.SetRateReductionTimePeriod(21)
+	}
+	if obj.obj.InitialRateAfterFirstCnp == nil {
+		obj.SetInitialRateAfterFirstCnp(0.002)
+	}
+	if obj.obj.MinimumRateLimmit == nil {
+		obj.SetMinimumRateLimmit(0.002)
+	}
+	if obj.obj.MaximumRateDecrementAtTime == nil {
+		obj.SetMaximumRateDecrementAtTime(10)
+	}
+	if obj.obj.ClampTargetRate == nil {
+		obj.SetClampTargetRate(false)
+	}
+	if obj.obj.RateIncrementTime == nil {
+		obj.SetRateIncrementTime(250)
+	}
+	if obj.obj.RateIncrementByteCounter == nil {
+		obj.SetRateIncrementByteCounter(32767)
+	}
+	if obj.obj.RateIncrementThreshold == nil {
+		obj.SetRateIncrementThreshold(25)
+	}
+	if obj.obj.AdditiveIncrementRate == nil {
+		obj.SetAdditiveIncrementRate(0.001)
+	}
+	if obj.obj.HyperIncrementRate == nil {
+		obj.SetHyperIncrementRate(0.001)
 	}
 
 }

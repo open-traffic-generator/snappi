@@ -254,7 +254,7 @@ func (obj *rocev2PerPortSettings) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2PerPortSettings is a high level data plane traffic flow.
+// Rocev2PerPortSettings is data plane traffic flow configuration for a test port.
 type Rocev2PerPortSettings interface {
 	Validation
 	// msg marshals Rocev2PerPortSettings to protobuf object *otg.Rocev2PerPortSettings

@@ -389,7 +389,7 @@ func (obj *rocev2AckAndNak) SetEnableRetransmissionTimeout(value bool) Rocev2Ack
 	return obj
 }
 
-// Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK. Time in milliseconds.
+// The duration to wait before retrying transmission upon not receiving an acknowledgment (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
 // RetransmissionTimeoutValue returns a uint32
 func (obj *rocev2AckAndNak) RetransmissionTimeoutValue() uint32 {
 
@@ -397,13 +397,13 @@ func (obj *rocev2AckAndNak) RetransmissionTimeoutValue() uint32 {
 
 }
 
-// Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK. Time in milliseconds.
+// The duration to wait before retrying transmission upon not receiving an acknowledgment (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
 // RetransmissionTimeoutValue returns a uint32
 func (obj *rocev2AckAndNak) HasRetransmissionTimeoutValue() bool {
 	return obj.obj.RetransmissionTimeoutValue != nil
 }
 
-// Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK. Time in milliseconds.
+// The duration to wait before retrying transmission upon not receiving an acknowledgment (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
 // SetRetransmissionTimeoutValue sets the uint32 value in the Rocev2AckAndNak object
 func (obj *rocev2AckAndNak) SetRetransmissionTimeoutValue(value uint32) Rocev2AckAndNak {
 
@@ -411,7 +411,7 @@ func (obj *rocev2AckAndNak) SetRetransmissionTimeoutValue(value uint32) Rocev2Ac
 	return obj
 }
 
-// Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+// Number of retransmission attempts before stopping due to missing ACK/NAK.
 // RetransmissionRetryCount returns a uint32
 func (obj *rocev2AckAndNak) RetransmissionRetryCount() uint32 {
 
@@ -419,13 +419,13 @@ func (obj *rocev2AckAndNak) RetransmissionRetryCount() uint32 {
 
 }
 
-// Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+// Number of retransmission attempts before stopping due to missing ACK/NAK.
 // RetransmissionRetryCount returns a uint32
 func (obj *rocev2AckAndNak) HasRetransmissionRetryCount() bool {
 	return obj.obj.RetransmissionRetryCount != nil
 }
 
-// Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+// Number of retransmission attempts before stopping due to missing ACK/NAK.
 // SetRetransmissionRetryCount sets the uint32 value in the Rocev2AckAndNak object
 func (obj *rocev2AckAndNak) SetRetransmissionRetryCount(value uint32) Rocev2AckAndNak {
 

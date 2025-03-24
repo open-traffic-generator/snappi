@@ -283,7 +283,7 @@ type Rocev2TargetLineRate interface {
 	setNil()
 }
 
-// Target Line Rate in percentage.
+// Target Line Rate as percentage of max line rate.
 // Value returns a uint64
 func (obj *rocev2TargetLineRate) Value() uint64 {
 
@@ -291,13 +291,13 @@ func (obj *rocev2TargetLineRate) Value() uint64 {
 
 }
 
-// Target Line Rate in percentage.
+// Target Line Rate as percentage of max line rate.
 // Value returns a uint64
 func (obj *rocev2TargetLineRate) HasValue() bool {
 	return obj.obj.Value != nil
 }
 
-// Target Line Rate in percentage.
+// Target Line Rate as percentage of max line rate.
 // SetValue sets the uint64 value in the Rocev2TargetLineRate object
 func (obj *rocev2TargetLineRate) SetValue(value uint64) Rocev2TargetLineRate {
 

@@ -1688,7 +1688,7 @@ message Device {
   // Configuration of MACsec device.
   DeviceMacsec macsec = 11;
 
-  // Configuration for RoCEv2 .
+  // Configuration for RoCEv2.
   DeviceRocev2Peer rocev2 = 12;
 }
 
@@ -8913,12 +8913,12 @@ message SecureEntityStaticKeyRxSc {
 // Configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
 message DeviceRocev2Peer {
 
-  // This contains an array of references to IPv4 interfaces,  each of which will have
-  // list of peers to different destinations.
+  // This contains an array of references to IPv4 interfaces, each having a list of IPv4
+  // peers to various destinations.
   repeated Rocev2V4Interface ipv4_interfaces = 1;
 
-  // This contains an array of references to IPv6 interfaces,  each of which will have
-  // list of peers to different destinations.
+  // This contains an array references to IPv6 interfaces, each with a list of IPv6 peers
+  // for various destinations.
   repeated Rocev2V6Interface ipv6_interfaces = 2;
 }
 
@@ -8933,9 +8933,10 @@ message Rocev2V4Interface {
   // required = true
   optional string ipv4_name = 1;
 
-  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
-  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
-  // as configured IB MTU. You can configure custom size also.
+  // The InfiniBand protocol defines several fixed sizes for the Maximum Transmission
+  // Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload
+  // size that corresponds to the configured IB MTU. Additionally, it is possible to configure
+  // a custom size.
   // default = 1024
   optional uint32 ib_mtu = 2;
 
@@ -8963,6 +8964,7 @@ message Rocev2V4Peer {
 // This allows the user to set QP properties between a particular source and destination.
 message Rocev2QPs {
 
+  // Name of each QP.
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
@@ -8997,14 +8999,24 @@ message Rocev2QPParameters {
   // default = 2
   optional uint32 source_qp_number = 1;
 
-  // DSCP value for data transfer verbs for this QP, for eg: RDMA Write.
+  // DSCP value for the RDMA data packets.
   // default = 24
   optional uint32 dscp = 2;
 
+  message Ecn {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
   // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
-  // header to encode four different code points.
-  // default = 1
-  optional uint32 ecn = 3;
+  // header to encode four different code points. Those are non_ect, ect_1, ect_0 and
+  // ce.
+  // default = Ecn.Enum.ect_1
+  optional Ecn.Enum ecn = 3;
 
   // UDP source port number for this QP.
   // default = 49152
@@ -9019,7 +9031,7 @@ message Rocev2QPParameters {
   // default = 0000000000000000
   optional string virtual_address = 6;
 
-  // Remote Key associated with the virtual address for this QP.
+  // Remote Key linked to the QP's virtual address.
   // default = 00000000
   optional string remote_key = 7;
 }
@@ -9035,9 +9047,10 @@ message Rocev2V6Interface {
   // required = true
   optional string ipv6_name = 1;
 
-  // InfiniBand protocol Maximum Transmission Unit (MTU) defines several fix size MTU:
-  // 256, 512, 1024, 2048 or 4096 bytes. RDMA write message will have payload size same
-  // as configured IB MTU. You can configure custom size also.
+  // The InfiniBand protocol defines several fixed sizes for the Maximum Transmission
+  // Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload
+  // size that corresponds to the configured IB MTU. Additionally, it is possible to configure
+  // a custom size.
   // default = 1024
   optional uint32 ib_mtu = 2;
 
@@ -12087,7 +12100,7 @@ message StatefulFlow {
       rocev2 = 1;
     }
   }
-  // Stateful traffic configuration.
+  // Stateful traffic flow configuration.
   optional Choice.Enum choice = 1;
 
   // RoCEv2 Flow Groups.
@@ -12135,7 +12148,7 @@ message Rocev2TransmitType {
 // ****Description here****
 message Rocev2TargetLineRate {
 
-  // Target Line Rate in percentage.
+  // Target Line Rate as percentage of max line rate.
   optional uint64 value = 1;
 
   // Description missing in models
@@ -12145,7 +12158,7 @@ message Rocev2TargetLineRate {
 // ****Decription here****
 message Rocev2Flow {
 
-  // The unique name of an emulated device that will be transmitting.
+  // The unique name of an emulated device that will be transmitting the flows.
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -12188,8 +12201,8 @@ message Rocev2Flow {
   optional MessageSizeUnit.Enum message_size_unit = 6;
 }
 
-// RoCEv2 Verb. Available options are: write, write_with_immediate, send, send_with_immediate
-// and read.
+// RoCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate
+// and READ.
 message Rocev2Verb {
 
   message Choice {
@@ -12213,10 +12226,10 @@ message Rocev2Verb {
   Rocev2ImmediateData send_with_immediate = 3;
 }
 
-// Immediate Data field required for SEND/WRITE with immediate verb.
+// Four bytes of immediate Data for SEND/WRITE with immediate.
 message Rocev2ImmediateData {
 
-  // Immediate Data field required for SEND/WRITE with immediate verb.
+  // Four bytes of immediate Data for SEND/WRITE with immediate.
   // default = 00000000
   optional string immediate_data = 1;
 }
@@ -12252,7 +12265,7 @@ message PortProtocol {
   Rocev2PerPortSettings rocev2 = 2;
 }
 
-// A high level data plane traffic flow.
+// Data plane traffic flow configuration for a test port.
 message Rocev2PerPortSettings {
 
   // Description missing in models
@@ -12278,8 +12291,7 @@ message Rocev2CNP {
   // default = Choice.Enum.ip_dscp
   optional Choice.Enum choice = 1;
 
-  // The value that would be carried in CNP packet. Available option is IP DSCP. The given
-  // value is carried in IP Header DSCP value of the CNP packet.
+  // IP DSCP value for the CNP packets.
   Rocev2PriorityValue ip_dscp = 2;
 
   message EcnValue {
@@ -12295,8 +12307,8 @@ message Rocev2CNP {
   // default = EcnValue.Enum.ect_1
   optional EcnValue.Enum ecn_value = 3;
 
-  // Amount of time to wait between the generation of successive CNP packets. Time in
-  // microseconds.
+  // The interval duration between the generation of successive CNP packets should be
+  // specified in microseconds.
   // default = 55
   optional uint32 cnp_delay_timer = 4;
 }
@@ -12332,12 +12344,12 @@ message Rocev2AckAndNak {
   // default = True
   optional bool enable_retransmission_timeout = 3;
 
-  // Amount of time to wait before attempting to retransmit on non receipt of ACK/NAK.
-  // Time in milliseconds.
+  // The duration to wait before retrying transmission upon not receiving an acknowledgment
+  // (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
   // default = 1
   optional uint32 retransmission_timeout_value = 4;
 
-  // Number of times to retry retransmission before giving up on non receipt of ACK/NAK.
+  // Number of retransmission attempts before stopping due to missing ACK/NAK.
   // default = 3
   optional uint32 retransmission_retry_count = 5;
 }
@@ -12355,8 +12367,7 @@ message Rocev2ACK {
   // default = Choice.Enum.ip_dscp
   optional Choice.Enum choice = 1;
 
-  // The value that would be carried in ACK packet. Available option is IP DSCP. The given
-  // value is carried in IP Header DSCP value of the ACK packet.
+  // IP DSCP value for the ACK packets.
   Rocev2PriorityValue ip_dscp = 2;
 
   message EcnValue {
@@ -12386,8 +12397,7 @@ message Rocev2NAK {
   // default = Choice.Enum.ip_dscp
   optional Choice.Enum choice = 1;
 
-  // The value that would be carried in NAK packet. Available option is IP DSCP. The given
-  // value is carried in IP Header DSCP value of the NAK packet.
+  // IP DSCP value for the NAK packets.
   Rocev2PriorityValue ip_dscp = 2;
 
   message EcnValue {
@@ -12399,7 +12409,7 @@ message Rocev2NAK {
       ce = 4;
     }
   }
-  // NAK ECN Value.
+  // ECN Code point to add in NAK packets.
   // default = EcnValue.Enum.ect_1
   optional EcnValue.Enum ecn_value = 3;
 }
@@ -12419,43 +12429,69 @@ message Rocev2DCQCN {
   // default = True
   optional bool enable_dcqcn = 1;
 
-  // Alpha G.
+  // Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
+  // default = 1019
   optional uint64 alpha_g = 2;
 
-  // Initial Alpha.
+  // Value of the alpha at the time when the first CNP is received.
+  // default = 1023
   optional uint64 initial_alpha = 3;
 
-  // Alpha Update period in microseconds.
+  // timer after which the alpha parameter will update according to the algorithm. Unit
+  // is microseconds.
+  // default = 21
   optional uint64 alpha_update_period = 4;
 
-  // Rate reduction time period in microseconds.
+  // timer after which the algorithm will check if CNP is there or not and if CNP is present
+  // it will reduce the rate.
+  // Unit is microseconds.
+  // default = 21
   optional uint64 rate_reduction_time_period = 5;
 
-  // initial rate after first CNP in Percentage.
+  // This is the percentage of rate user wants to set on receiving the first CNP.
+  // default = 0.002
   optional uint32 initial_rate_after_first_cnp = 6;
 
-  // Minimum Rate Limit in Percentage.
+  // This is the minimum line rate which user wants to restrict. Below this the algorithm
+  // cannot set the rate.
+  // default = 0.002
   optional uint32 minimum_rate_limmit = 7;
 
-  // Maximum rate decrement at time in Percentage.
+  // This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
+  // default = 10
   optional uint32 maximum_rate_decrement_at_time = 8;
 
-  // Clamp Target rate.
+  // Is used to reduce the target rate by remembering the current rate.
+  // If it is not set, then only the target rate will be reduced for the
+  // first CNP after each rate increment otherwise if its set then the target
+  // rate will be reduced for each rate reduce.
+  // default = False
   optional bool clamp_target_rate = 9;
 
-  // Rate increment time period in microseconds.
+  // After the expiry of this timer, the rate recovery algorithms will be triggered. Unit
+  // is microseconds.
+  // default = 250
   optional uint64 rate_increment_time = 10;
 
-  // Rate increment byte counter in uint 64 bytes.
+  // This is the bytes counter.
+  // After the expiry of this bytes also counter the rate recovery algorithms will be
+  // triggered, and the rate will be recovered.
+  // default = 32767
   optional uint64 rate_increment_byte_counter = 11;
 
-  // Rate increment threshold.
+  // This is the threshold value which will ensure how many times, each rate recovery
+  // algorithms will execute before moving to the next value.
+  // default = 25
   optional uint32 rate_increment_threshold = 12;
 
-  // additive increment rate in Percentage.
+  // This is the rate at which the target rates will increase when the DCQCN will be in
+  // the additive increase rate recovery mode.
+  // default = 0.001
   optional uint32 additive_increment_rate = 13;
 
-  // hyper increment rate in Percentage.
+  // This is the rate at which the target rates will increase when the DCQCN will be in
+  // the hyper increment rate recovery mode.
+  // default = 0.001
   optional uint32 hyper_increment_rate = 14;
 }
 
@@ -15577,7 +15613,7 @@ message MkaMetric {
   optional uint64 icv_mismatch = 11;
 }
 
-// The request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+// Request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 message Rocev2IPv4MetricsRequest {
 
   message Choice {
@@ -15697,7 +15733,7 @@ message Rocev2IPv4MetricPerPeer {
   optional uint64 unknown_msg_rx = 18;
 }
 
-// The request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+// Request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
 message Rocev2IPv6MetricsRequest {
 
   message Choice {
@@ -15817,7 +15853,7 @@ message Rocev2IPv6MetricPerPeer {
   optional uint64 unknown_msg_rx = 18;
 }
 
-// The request to retrieve RoCEv2 FLow statistics.
+// Request to retrieve RoCEv2 FLow statistics.
 message Rocev2FlowMetricsRequest {
 
   message Choice {
@@ -15836,10 +15872,6 @@ message Rocev2FlowMetricsRequest {
 
 // The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
 message Rocev2FlowColumnNames {
-
-  // The names of RoCEv2 FLow to return results for. An empty list will return results
-  // for all RoCEv2 FLow.
-  repeated string qp_names = 1;
 
   message ColumnNames {
     enum Enum {
@@ -15882,7 +15914,7 @@ message Rocev2FlowColumnNames {
   // The list of column names that the returned result set will contain. If the list is
   // empty then all columns will be returned except for any result_groups. The name of
   // the Flow cannot be excluded.
-  repeated ColumnNames.Enum column_names = 2;
+  repeated ColumnNames.Enum column_names = 1;
 }
 
 // RoCEv2 Flow statistics information.
