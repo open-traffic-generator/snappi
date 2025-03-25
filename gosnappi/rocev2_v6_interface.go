@@ -250,7 +250,7 @@ func (obj *rocev2V6Interface) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2V6Interface is configuration for RoCEv2 IPv6 peers.
+// Rocev2V6Interface is this contains an array of references to IPv6 interfaces, each having a list of IPv6 peers to various destinations.
 type Rocev2V6Interface interface {
 	Validation
 	// msg marshals Rocev2V6Interface to protobuf object *otg.Rocev2V6Interface

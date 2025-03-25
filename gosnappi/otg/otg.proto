@@ -8922,7 +8922,8 @@ message DeviceRocev2Peer {
   repeated Rocev2V6Interface ipv6_interfaces = 2;
 }
 
-// Configuration for RoCEv2 IPv4 peers.
+// This contains an array of references to IPv4 interfaces, each having a list of IPv4
+// peers to various destinations.
 message Rocev2V4Interface {
 
   // The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
@@ -8952,12 +8953,12 @@ message Rocev2V4Peer {
   // required = true
   optional string name = 1;
 
-  // Specify the IP address of External NIC i.e Destination Point IP Address.
+  // Specify the destination ip address.
   // required = true
   optional string destination_ip_address = 2;
 
-  // This allows the user to set QP properties between a pair of source and destination
-  // RoCEv2 devices.
+  // This allows the user to set  multiple QPs and its properties between a pair of source
+  // and destination RoCEv2 devices.
   repeated Rocev2QPs qps = 3;
 }
 
@@ -8974,8 +8975,8 @@ message Rocev2QPs {
   Rocev2ConnectionType connection_type = 2;
 }
 
-// It describes the degree of reliability and to what and how the QP transfers data.
-// There are different types.
+// Specifies the connection type for the QP, ddetermining what and how the QP transfers
+// data.
 message Rocev2ConnectionType {
 
   message Choice {
@@ -8992,10 +8993,10 @@ message Rocev2ConnectionType {
   Rocev2QPParameters reliable_connection = 2;
 }
 
-// ****Description here****
+// Defines the parameters for configuring a RoCEv2 QP.
 message Rocev2QPParameters {
 
-  // Configure Source QP.
+  // Configure Source QP number which initiates the RDMA operation.
   // default = 2
   optional uint32 source_qp_number = 1;
 
@@ -9026,8 +9027,7 @@ message Rocev2QPParameters {
   // default = 0
   optional uint64 initial_psn = 5;
 
-  // Virtual Address where the data transfer from the remote QP will write to/read from.
-  // Applicable for RDMA verbs.
+  // Virtual Address where the data transfer from the remote QP will write to.
   // default = 0000000000000000
   optional string virtual_address = 6;
 
@@ -9036,7 +9036,8 @@ message Rocev2QPParameters {
   optional string remote_key = 7;
 }
 
-// Configuration for RoCEv2 IPv6 peers.
+// This contains an array of references to IPv6 interfaces, each having a list of IPv6
+// peers to various destinations.
 message Rocev2V6Interface {
 
   // The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
@@ -9066,12 +9067,12 @@ message Rocev2V6Peer {
   // required = true
   optional string name = 1;
 
-  // Specify the IP address of External NIC i.e Destination Point IP Address.
+  // Specify the destination ip address.
   // required = true
   optional string destination_ip_address = 2;
 
-  // This allows the user to set QP properties between a pair of source and destination
-  // RoCEv2 devices.
+  // This allows the user to set  multiple QPs and its properties between a pair of source
+  // and destination RoCEv2 devices.
   repeated Rocev2QPs qps = 3;
 }
 
@@ -12091,7 +12092,8 @@ message LldpOrgInfoType {
   optional string info = 2;
 }
 
-// A high level data plane traffic flow.
+// Conversational traffic where the responding side can be responded back with control
+// messages, eg incase of rocev2 responding side can send ack, nak.
 message StatefulFlow {
 
   message Choice {
@@ -12110,11 +12112,12 @@ message StatefulFlow {
 // RoCEv2 traffic flow configuration.
 message Rocev2Flows {
 
-  // ****Must Add proper description here****
+  // Specifies the list of transmit (TX) ports used for sending RoCEv2 traffic.
   repeated Rocev2TxPorts tx_ports = 1;
 }
 
-// ****Description here****
+// Defines the transmit (TX) port settings for RoCEv2 traffic, including the port name
+// and transmission type configuration.
 message Rocev2TxPorts {
 
   // The name of port for which this settings will be applied to.
@@ -12182,8 +12185,7 @@ message Rocev2Flow {
   // Description missing in models
   Rocev2Verb rocev2_verb = 4;
 
-  // The Maximum message size that is allowed to transfer depends on the MTU size and
-  // the number of VLANs configured on the interfaces.
+  // Length of Message that needs to be transmitted to the remote end-point.
   // default = 1
   optional uint32 message_size = 5;
 
@@ -12313,8 +12315,8 @@ message Rocev2CNP {
   optional uint32 cnp_delay_timer = 4;
 }
 
-// It describes the degree of reliability and to what and how the QP transfers data.
-// There are different types.
+// Specifies the connection type for the QP, ddetermining what and how the QP transfers
+// data.
 message Rocev2QPConnectionType {
 
   message Choice {
@@ -12331,7 +12333,9 @@ message Rocev2QPConnectionType {
   Rocev2AckAndNak reliable_connection = 2;
 }
 
-// ****Description here****
+// Defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable
+// data delivery by controlling how the system responds to successful and failed packet
+// transmissions.
 message Rocev2AckAndNak {
 
   // Description missing in models
@@ -12340,7 +12344,7 @@ message Rocev2AckAndNak {
   // Description missing in models
   Rocev2NAK nak = 2;
 
-  // Enable Retransmission on Timeout.
+  // Enable Retransmission on ACK Timeout.
   // default = True
   optional bool enable_retransmission_timeout = 3;
 
@@ -12414,7 +12418,7 @@ message Rocev2NAK {
   optional EcnValue.Enum ecn_value = 3;
 }
 
-// Value.
+// Priority value for CNP, ACK or NAK packets.
 message Rocev2PriorityValue {
 
   // Description missing in models
@@ -13504,6 +13508,7 @@ message MetricsRequest {
       mka = 17;
       rocev2_ipv4 = 18;
       rocev2_ipv6 = 19;
+      rocev2_flow = 20;
     }
   }
   // Description missing in models

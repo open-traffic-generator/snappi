@@ -506,6 +506,7 @@ var MetricsRequestChoice = struct {
 	MKA           MetricsRequestChoiceEnum
 	ROCEV2_IPV4   MetricsRequestChoiceEnum
 	ROCEV2_IPV6   MetricsRequestChoiceEnum
+	ROCEV2_FLOW   MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -526,6 +527,7 @@ var MetricsRequestChoice = struct {
 	MKA:           MetricsRequestChoiceEnum("mka"),
 	ROCEV2_IPV4:   MetricsRequestChoiceEnum("rocev2_ipv4"),
 	ROCEV2_IPV6:   MetricsRequestChoiceEnum("rocev2_ipv6"),
+	ROCEV2_FLOW:   MetricsRequestChoiceEnum("rocev2_flow"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -547,6 +549,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Rocev2Flow = nil
+	obj.rocev2FlowHolder = nil
 	obj.obj.Rocev2Ipv6 = nil
 	obj.rocev2Ipv6Holder = nil
 	obj.obj.Rocev2Ipv4 = nil
@@ -660,6 +664,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.ROCEV2_IPV6 {
 		obj.obj.Rocev2Ipv6 = NewRocev2IPv6MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2_FLOW {
+		obj.obj.Rocev2Flow = NewRocev2FlowMetricsRequest().msg()
 	}
 
 	return obj
@@ -1201,7 +1209,7 @@ func (obj *metricsRequest) SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) Metrics
 // Rocev2Flow returns a Rocev2FlowMetricsRequest
 func (obj *metricsRequest) Rocev2Flow() Rocev2FlowMetricsRequest {
 	if obj.obj.Rocev2Flow == nil {
-		obj.obj.Rocev2Flow = NewRocev2FlowMetricsRequest().msg()
+		obj.setChoice(MetricsRequestChoice.ROCEV2_FLOW)
 	}
 	if obj.rocev2FlowHolder == nil {
 		obj.rocev2FlowHolder = &rocev2FlowMetricsRequest{obj: obj.obj.Rocev2Flow}
@@ -1218,7 +1226,7 @@ func (obj *metricsRequest) HasRocev2Flow() bool {
 // description is TBD
 // SetRocev2Flow sets the Rocev2FlowMetricsRequest value in the MetricsRequest object
 func (obj *metricsRequest) SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest {
-
+	obj.setChoice(MetricsRequestChoice.ROCEV2_FLOW)
 	obj.rocev2FlowHolder = nil
 	obj.obj.Rocev2Flow = value.msg()
 
@@ -1429,6 +1437,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Rocev2Ipv6 != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.ROCEV2_IPV6
+	}
+
+	if obj.obj.Rocev2Flow != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2_FLOW
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

@@ -250,7 +250,7 @@ func (obj *rocev2ConnectionType) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2ConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+// Rocev2ConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 type Rocev2ConnectionType interface {
 	Validation
 	// msg marshals Rocev2ConnectionType to protobuf object *otg.Rocev2ConnectionType
@@ -279,10 +279,10 @@ type Rocev2ConnectionType interface {
 	// HasChoice checks if Choice has been set in Rocev2ConnectionType
 	HasChoice() bool
 	// ReliableConnection returns Rocev2QPParameters, set in Rocev2ConnectionType.
-	// Rocev2QPParameters is ****Description here****
+	// Rocev2QPParameters is defines the parameters for configuring a RoCEv2 QP.
 	ReliableConnection() Rocev2QPParameters
 	// SetReliableConnection assigns Rocev2QPParameters provided by user to Rocev2ConnectionType.
-	// Rocev2QPParameters is ****Description here****
+	// Rocev2QPParameters is defines the parameters for configuring a RoCEv2 QP.
 	SetReliableConnection(value Rocev2QPParameters) Rocev2ConnectionType
 	// HasReliableConnection checks if ReliableConnection has been set in Rocev2ConnectionType
 	HasReliableConnection() bool

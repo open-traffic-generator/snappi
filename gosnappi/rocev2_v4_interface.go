@@ -250,7 +250,7 @@ func (obj *rocev2V4Interface) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2V4Interface is configuration for RoCEv2 IPv4 peers.
+// Rocev2V4Interface is this contains an array of references to IPv4 interfaces, each having a list of IPv4 peers to various destinations.
 type Rocev2V4Interface interface {
 	Validation
 	// msg marshals Rocev2V4Interface to protobuf object *otg.Rocev2V4Interface

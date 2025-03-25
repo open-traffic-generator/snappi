@@ -252,7 +252,7 @@ func (obj *rocev2AckAndNak) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2AckAndNak is ****Description here****
+// Rocev2AckAndNak is defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable data delivery by controlling how the system responds to successful and failed packet transmissions.
 type Rocev2AckAndNak interface {
 	Validation
 	// msg marshals Rocev2AckAndNak to protobuf object *otg.Rocev2AckAndNak
@@ -367,7 +367,7 @@ func (obj *rocev2AckAndNak) SetNak(value Rocev2NAK) Rocev2AckAndNak {
 	return obj
 }
 
-// Enable Retransmission on Timeout.
+// Enable Retransmission on ACK Timeout.
 // EnableRetransmissionTimeout returns a bool
 func (obj *rocev2AckAndNak) EnableRetransmissionTimeout() bool {
 
@@ -375,13 +375,13 @@ func (obj *rocev2AckAndNak) EnableRetransmissionTimeout() bool {
 
 }
 
-// Enable Retransmission on Timeout.
+// Enable Retransmission on ACK Timeout.
 // EnableRetransmissionTimeout returns a bool
 func (obj *rocev2AckAndNak) HasEnableRetransmissionTimeout() bool {
 	return obj.obj.EnableRetransmissionTimeout != nil
 }
 
-// Enable Retransmission on Timeout.
+// Enable Retransmission on ACK Timeout.
 // SetEnableRetransmissionTimeout sets the bool value in the Rocev2AckAndNak object
 func (obj *rocev2AckAndNak) SetEnableRetransmissionTimeout(value bool) Rocev2AckAndNak {
 

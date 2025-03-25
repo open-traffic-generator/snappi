@@ -277,7 +277,7 @@ type Rocev2Flows interface {
 	setNil()
 }
 
-// ****Must Add proper description here****
+// Specifies the list of transmit (TX) ports used for sending RoCEv2 traffic.
 // TxPorts returns a []Rocev2TxPorts
 func (obj *rocev2Flows) TxPorts() Rocev2FlowsRocev2TxPortsIter {
 	if len(obj.obj.TxPorts) == 0 {

@@ -285,10 +285,10 @@ type Rocev2PerPortSettings interface {
 	// HasCnp checks if Cnp has been set in Rocev2PerPortSettings
 	HasCnp() bool
 	// ConnectionType returns Rocev2QPConnectionType, set in Rocev2PerPortSettings.
-	// Rocev2QPConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	// Rocev2QPConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 	ConnectionType() Rocev2QPConnectionType
 	// SetConnectionType assigns Rocev2QPConnectionType provided by user to Rocev2PerPortSettings.
-	// Rocev2QPConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	// Rocev2QPConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 	SetConnectionType(value Rocev2QPConnectionType) Rocev2PerPortSettings
 	// HasConnectionType checks if ConnectionType has been set in Rocev2PerPortSettings
 	HasConnectionType() bool

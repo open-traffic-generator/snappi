@@ -414,7 +414,7 @@ func (obj *rocev2Flow) SetRocev2Verb(value Rocev2Verb) Rocev2Flow {
 	return obj
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+// Length of Message that needs to be transmitted to the remote end-point.
 // MessageSize returns a uint32
 func (obj *rocev2Flow) MessageSize() uint32 {
 
@@ -422,13 +422,13 @@ func (obj *rocev2Flow) MessageSize() uint32 {
 
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+// Length of Message that needs to be transmitted to the remote end-point.
 // MessageSize returns a uint32
 func (obj *rocev2Flow) HasMessageSize() bool {
 	return obj.obj.MessageSize != nil
 }
 
-// The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+// Length of Message that needs to be transmitted to the remote end-point.
 // SetMessageSize sets the uint32 value in the Rocev2Flow object
 func (obj *rocev2Flow) SetMessageSize(value uint32) Rocev2Flow {
 

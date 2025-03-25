@@ -301,7 +301,7 @@ func (obj *rocev2V4Peer) SetName(value string) Rocev2V4Peer {
 	return obj
 }
 
-// Specify the IP address of External NIC i.e Destination Point IP Address.
+// Specify the destination ip address.
 // DestinationIpAddress returns a string
 func (obj *rocev2V4Peer) DestinationIpAddress() string {
 
@@ -309,7 +309,7 @@ func (obj *rocev2V4Peer) DestinationIpAddress() string {
 
 }
 
-// Specify the IP address of External NIC i.e Destination Point IP Address.
+// Specify the destination ip address.
 // SetDestinationIpAddress sets the string value in the Rocev2V4Peer object
 func (obj *rocev2V4Peer) SetDestinationIpAddress(value string) Rocev2V4Peer {
 
@@ -317,7 +317,7 @@ func (obj *rocev2V4Peer) SetDestinationIpAddress(value string) Rocev2V4Peer {
 	return obj
 }
 
-// This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
+// This allows the user to set  multiple QPs and its properties between a pair of source and destination RoCEv2 devices.
 // Qps returns a []Rocev2QPs
 func (obj *rocev2V4Peer) Qps() Rocev2V4PeerRocev2QPsIter {
 	if len(obj.obj.Qps) == 0 {

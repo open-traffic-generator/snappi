@@ -250,7 +250,7 @@ func (obj *statefulFlow) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// StatefulFlow is a high level data plane traffic flow.
+// StatefulFlow is conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
 type StatefulFlow interface {
 	Validation
 	// msg marshals StatefulFlow to protobuf object *otg.StatefulFlow

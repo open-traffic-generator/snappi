@@ -12109,7 +12109,7 @@ components:
           x-field-uid: 2
     Rocev2.V4Interface:
       description: |-
-        Configuration for RoCEv2 IPv4 peers.
+        This contains an array of references to IPv4 interfaces, each having a list of IPv4 peers to various destinations.
       type: object
       required:
       - ipv4_name
@@ -12157,14 +12157,14 @@ components:
           x-unique: global
         destination_ip_address:
           description: |-
-            Specify the IP address of External NIC i.e Destination Point IP Address.
+            Specify the destination ip address.
           type: string
           format: ipv4
           x-field-uid: 2
         qps:
           type: array
           description: |-
-            This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
+            This allows the user to set  multiple QPs and its properties between a pair of source and destination RoCEv2 devices.
           items:
             $ref: '#/components/schemas/Rocev2.QPs'
           x-field-uid: 3
@@ -12188,7 +12188,7 @@ components:
           x-field-uid: 2
     Rocev2.ConnectionType:
       description: |-
-        It describes the degree of reliability and to what and how the QP transfers data. There are different types.
+        Specifies the connection type for the QP, ddetermining what and how the QP transfers data.
       type: object
       properties:
         choice:
@@ -12205,12 +12205,12 @@ components:
           x-field-uid: 2
     Rocev2.QPParameters:
       description: |-
-        ****Description here****
+        Defines the parameters for configuring a RoCEv2 QP.
       type: object
       properties:
         source_qp_number:
           description: |-
-            Configure Source QP.
+            Configure Source QP number which initiates the RDMA operation.
           type: integer
           format: uint32
           default: 2
@@ -12266,7 +12266,7 @@ components:
           x-field-uid: 5
         virtual_address:
           description: |-
-            Virtual Address where the data transfer from the remote QP will write to/read from. Applicable for RDMA verbs.
+            Virtual Address where the data transfer from the remote QP will write to.
           type: string
           format: hex
           default: '0000000000000000'
@@ -12282,7 +12282,7 @@ components:
           x-field-uid: 7
     Rocev2.V6Interface:
       description: |-
-        Configuration for RoCEv2 IPv6 peers.
+        This contains an array of references to IPv6 interfaces, each having a list of IPv6 peers to various destinations.
       type: object
       required:
       - ipv6_name
@@ -12330,14 +12330,14 @@ components:
           x-unique: global
         destination_ip_address:
           description: |-
-            Specify the IP address of External NIC i.e Destination Point IP Address.
+            Specify the destination ip address.
           type: string
           format: ipv6
           x-field-uid: 2
         qps:
           type: array
           description: |-
-            This allows the user to set QP properties between a pair of source and destination RoCEv2 devices.
+            This allows the user to set  multiple QPs and its properties between a pair of source and destination RoCEv2 devices.
           items:
             $ref: '#/components/schemas/Rocev2.QPs'
           x-field-uid: 3
@@ -16031,7 +16031,7 @@ components:
           x-field-uid: 2
     StatefulFlow:
       description: |-
-        A high level data plane traffic flow.
+        Conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
       type: object
       properties:
         choice:
@@ -16058,14 +16058,14 @@ components:
       properties:
         tx_ports:
           description: |-
-            ****Must Add proper description here****
+            Specifies the list of transmit (TX) ports used for sending RoCEv2 traffic.
           type: array
           items:
             $ref: '#/components/schemas/Rocev2.TxPorts'
           x-field-uid: 1
     Rocev2.TxPorts:
       description: |-
-        ****Description here****
+        Defines the transmit (TX) port settings for RoCEv2 traffic, including the port name and transmission type configuration.
       type: object
       properties:
         port_name:
@@ -16156,7 +16156,7 @@ components:
           x-field-uid: 4
         message_size:
           description: |-
-            The Maximum message size that is allowed to transfer depends on the MTU size and the number of VLANs configured on the interfaces.
+            Length of Message that needs to be transmitted to the remote end-point.
           type: integer
           format: uint32
           default: 1
@@ -16332,7 +16332,7 @@ components:
           x-field-uid: 4
     Rocev2.QPConnectionType:
       description: |-
-        It describes the degree of reliability and to what and how the QP transfers data. There are different types.
+        Specifies the connection type for the QP, ddetermining what and how the QP transfers data.
       type: object
       properties:
         choice:
@@ -16349,7 +16349,7 @@ components:
           x-field-uid: 2
     Rocev2.AckAndNak:
       description: |-
-        ****Description here****
+        Defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable data delivery by controlling how the system responds to successful and failed packet transmissions.
       type: object
       properties:
         ack:
@@ -16360,7 +16360,7 @@ components:
           x-field-uid: 2
         enable_retransmission_timeout:
           description: |-
-            Enable Retransmission on Timeout.
+            Enable Retransmission on ACK Timeout.
           type: boolean
           default: true
           x-field-uid: 3
@@ -16462,7 +16462,7 @@ components:
           - ce
     Rocev2.PriorityValue:
       description: |-
-        Value.
+        Priority value for CNP, ACK or NAK packets.
       type: object
       properties:
         value:
@@ -17871,6 +17871,8 @@ components:
               x-field-uid: 18
             rocev2_ipv6:
               x-field-uid: 19
+            rocev2_flow:
+              x-field-uid: 20
           enum:
           - port
           - flow
@@ -17891,6 +17893,7 @@ components:
           - mka
           - rocev2_ipv4
           - rocev2_ipv6
+          - rocev2_flow
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2

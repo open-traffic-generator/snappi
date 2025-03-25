@@ -250,7 +250,7 @@ func (obj *rocev2TxPorts) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2TxPorts is ****Description here****
+// Rocev2TxPorts is defines the transmit (TX) port settings for RoCEv2 traffic, including the port name and transmission type configuration.
 type Rocev2TxPorts interface {
 	Validation
 	// msg marshals Rocev2TxPorts to protobuf object *otg.Rocev2TxPorts

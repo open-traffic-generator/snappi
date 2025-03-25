@@ -242,7 +242,7 @@ func (obj *rocev2PriorityValue) Clone() (Rocev2PriorityValue, error) {
 	return newObj, nil
 }
 
-// Rocev2PriorityValue is value.
+// Rocev2PriorityValue is priority value for CNP, ACK or NAK packets.
 type Rocev2PriorityValue interface {
 	Validation
 	// msg marshals Rocev2PriorityValue to protobuf object *otg.Rocev2PriorityValue

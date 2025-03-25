@@ -279,10 +279,10 @@ type Rocev2ACK interface {
 	// HasChoice checks if Choice has been set in Rocev2ACK
 	HasChoice() bool
 	// IpDscp returns Rocev2PriorityValue, set in Rocev2ACK.
-	// Rocev2PriorityValue is value.
+	// Rocev2PriorityValue is priority value for CNP, ACK or NAK packets.
 	IpDscp() Rocev2PriorityValue
 	// SetIpDscp assigns Rocev2PriorityValue provided by user to Rocev2ACK.
-	// Rocev2PriorityValue is value.
+	// Rocev2PriorityValue is priority value for CNP, ACK or NAK packets.
 	SetIpDscp(value Rocev2PriorityValue) Rocev2ACK
 	// HasIpDscp checks if IpDscp has been set in Rocev2ACK
 	HasIpDscp() bool

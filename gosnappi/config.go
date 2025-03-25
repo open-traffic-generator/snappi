@@ -329,10 +329,10 @@ type Config interface {
 	// Lldp returns ConfigLldpIterIter, set in Config
 	Lldp() ConfigLldpIter
 	// StatefulFlows returns StatefulFlow, set in Config.
-	// StatefulFlow is a high level data plane traffic flow.
+	// StatefulFlow is conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
 	StatefulFlows() StatefulFlow
 	// SetStatefulFlows assigns StatefulFlow provided by user to Config.
-	// StatefulFlow is a high level data plane traffic flow.
+	// StatefulFlow is conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
 	SetStatefulFlows(value StatefulFlow) Config
 	// HasStatefulFlows checks if StatefulFlows has been set in Config
 	HasStatefulFlows() bool

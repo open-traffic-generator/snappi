@@ -277,10 +277,10 @@ type Rocev2QPs interface {
 	// SetQpName assigns string provided by user to Rocev2QPs
 	SetQpName(value string) Rocev2QPs
 	// ConnectionType returns Rocev2ConnectionType, set in Rocev2QPs.
-	// Rocev2ConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	// Rocev2ConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 	ConnectionType() Rocev2ConnectionType
 	// SetConnectionType assigns Rocev2ConnectionType provided by user to Rocev2QPs.
-	// Rocev2ConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+	// Rocev2ConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 	SetConnectionType(value Rocev2ConnectionType) Rocev2QPs
 	// HasConnectionType checks if ConnectionType has been set in Rocev2QPs
 	HasConnectionType() bool

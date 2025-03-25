@@ -242,7 +242,7 @@ func (obj *rocev2QPParameters) Clone() (Rocev2QPParameters, error) {
 	return newObj, nil
 }
 
-// Rocev2QPParameters is ****Description here****
+// Rocev2QPParameters is defines the parameters for configuring a RoCEv2 QP.
 type Rocev2QPParameters interface {
 	Validation
 	// msg marshals Rocev2QPParameters to protobuf object *otg.Rocev2QPParameters
@@ -308,7 +308,7 @@ type Rocev2QPParameters interface {
 	HasRemoteKey() bool
 }
 
-// Configure Source QP.
+// Configure Source QP number which initiates the RDMA operation.
 // SourceQpNumber returns a uint32
 func (obj *rocev2QPParameters) SourceQpNumber() uint32 {
 
@@ -316,13 +316,13 @@ func (obj *rocev2QPParameters) SourceQpNumber() uint32 {
 
 }
 
-// Configure Source QP.
+// Configure Source QP number which initiates the RDMA operation.
 // SourceQpNumber returns a uint32
 func (obj *rocev2QPParameters) HasSourceQpNumber() bool {
 	return obj.obj.SourceQpNumber != nil
 }
 
-// Configure Source QP.
+// Configure Source QP number which initiates the RDMA operation.
 // SetSourceQpNumber sets the uint32 value in the Rocev2QPParameters object
 func (obj *rocev2QPParameters) SetSourceQpNumber(value uint32) Rocev2QPParameters {
 
@@ -434,7 +434,7 @@ func (obj *rocev2QPParameters) SetInitialPsn(value uint64) Rocev2QPParameters {
 	return obj
 }
 
-// Virtual Address where the data transfer from the remote QP will write to/read from. Applicable for RDMA verbs.
+// Virtual Address where the data transfer from the remote QP will write to.
 // VirtualAddress returns a string
 func (obj *rocev2QPParameters) VirtualAddress() string {
 
@@ -442,13 +442,13 @@ func (obj *rocev2QPParameters) VirtualAddress() string {
 
 }
 
-// Virtual Address where the data transfer from the remote QP will write to/read from. Applicable for RDMA verbs.
+// Virtual Address where the data transfer from the remote QP will write to.
 // VirtualAddress returns a string
 func (obj *rocev2QPParameters) HasVirtualAddress() bool {
 	return obj.obj.VirtualAddress != nil
 }
 
-// Virtual Address where the data transfer from the remote QP will write to/read from. Applicable for RDMA verbs.
+// Virtual Address where the data transfer from the remote QP will write to.
 // SetVirtualAddress sets the string value in the Rocev2QPParameters object
 func (obj *rocev2QPParameters) SetVirtualAddress(value string) Rocev2QPParameters {
 

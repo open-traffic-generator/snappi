@@ -250,7 +250,7 @@ func (obj *rocev2QPConnectionType) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2QPConnectionType is it describes the degree of reliability and to what and how the QP transfers data. There are different types.
+// Rocev2QPConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
 type Rocev2QPConnectionType interface {
 	Validation
 	// msg marshals Rocev2QPConnectionType to protobuf object *otg.Rocev2QPConnectionType
@@ -279,10 +279,10 @@ type Rocev2QPConnectionType interface {
 	// HasChoice checks if Choice has been set in Rocev2QPConnectionType
 	HasChoice() bool
 	// ReliableConnection returns Rocev2AckAndNak, set in Rocev2QPConnectionType.
-	// Rocev2AckAndNak is ****Description here****
+	// Rocev2AckAndNak is defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable data delivery by controlling how the system responds to successful and failed packet transmissions.
 	ReliableConnection() Rocev2AckAndNak
 	// SetReliableConnection assigns Rocev2AckAndNak provided by user to Rocev2QPConnectionType.
-	// Rocev2AckAndNak is ****Description here****
+	// Rocev2AckAndNak is defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable data delivery by controlling how the system responds to successful and failed packet transmissions.
 	SetReliableConnection(value Rocev2AckAndNak) Rocev2QPConnectionType
 	// HasReliableConnection checks if ReliableConnection has been set in Rocev2QPConnectionType
 	HasReliableConnection() bool
