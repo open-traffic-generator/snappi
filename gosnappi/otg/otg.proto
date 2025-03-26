@@ -13666,7 +13666,7 @@ message MetricsResponse {
   repeated Rocev2IPv6MetricPerPeer rocev2_ipv6_per_peer_metrics = 20;
 
   // Description missing in models
-  repeated Rocev2FlowMetricPerPort rocev2_flow_per_qp_metrics = 21;
+  repeated Rocev2FlowMetricPerQP rocev2_flow_per_qp_metrics = 21;
 }
 
 // The port result request to the traffic generator
@@ -15864,15 +15864,15 @@ message Rocev2FlowMetricsRequest {
   message Choice {
     enum Enum {
       unspecified = 0;
-      per_port = 1;
+      per_qp = 1;
     }
   }
   // Fetch stats per peer_name or per QP
-  // default = Choice.Enum.per_port
+  // default = Choice.Enum.per_qp
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  Rocev2FlowColumnNames per_port = 2;
+  Rocev2FlowColumnNames per_qp = 2;
 }
 
 // The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
@@ -15923,7 +15923,7 @@ message Rocev2FlowColumnNames {
 }
 
 // RoCEv2 Flow statistics information.
-message Rocev2FlowMetricPerPort {
+message Rocev2FlowMetricPerQP {
 
   // Flow Name.
   optional string flow_name = 1;

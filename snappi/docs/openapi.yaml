@@ -18123,7 +18123,7 @@ components:
         rocev2_flow_per_qp_metrics:
           type: array
           items:
-            $ref: '#/components/schemas/Rocev2Flow.Metric.PerPort'
+            $ref: '#/components/schemas/Rocev2Flow.Metric.PerQP'
           x-field-uid: 21
     Port.Metrics.Request:
       description: |-
@@ -21975,14 +21975,14 @@ components:
           type: string
           description: |-
             Fetch stats per peer_name or per QP
-          default: per_port
+          default: per_qp
           x-enum:
-            per_port:
+            per_qp:
               x-field-uid: 1
           x-field-uid: 1
           enum:
-          - per_port
-        per_port:
+          - per_qp
+        per_qp:
           $ref: '#/components/schemas/Rocev2Flow.ColumnNames'
           x-field-uid: 2
     Rocev2Flow.ColumnNames:
@@ -22098,7 +22098,7 @@ components:
             - first_timestamp
             - last_timestamp
           x-field-uid: 1
-    Rocev2Flow.Metric.PerPort:
+    Rocev2Flow.Metric.PerQP:
       description: |-
         RoCEv2 Flow statistics information.
       type: object

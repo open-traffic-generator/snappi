@@ -13,10 +13,10 @@ import (
 // ***** Rocev2FlowMetricsRequest *****
 type rocev2FlowMetricsRequest struct {
 	validation
-	obj           *otg.Rocev2FlowMetricsRequest
-	marshaller    marshalRocev2FlowMetricsRequest
-	unMarshaller  unMarshalRocev2FlowMetricsRequest
-	perPortHolder Rocev2FlowColumnNames
+	obj          *otg.Rocev2FlowMetricsRequest
+	marshaller   marshalRocev2FlowMetricsRequest
+	unMarshaller unMarshalRocev2FlowMetricsRequest
+	perQpHolder  Rocev2FlowColumnNames
 }
 
 func NewRocev2FlowMetricsRequest() Rocev2FlowMetricsRequest {
@@ -244,7 +244,7 @@ func (obj *rocev2FlowMetricsRequest) Clone() (Rocev2FlowMetricsRequest, error) {
 }
 
 func (obj *rocev2FlowMetricsRequest) setNil() {
-	obj.perPortHolder = nil
+	obj.perQpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -278,14 +278,14 @@ type Rocev2FlowMetricsRequest interface {
 	setChoice(value Rocev2FlowMetricsRequestChoiceEnum) Rocev2FlowMetricsRequest
 	// HasChoice checks if Choice has been set in Rocev2FlowMetricsRequest
 	HasChoice() bool
-	// PerPort returns Rocev2FlowColumnNames, set in Rocev2FlowMetricsRequest.
+	// PerQp returns Rocev2FlowColumnNames, set in Rocev2FlowMetricsRequest.
 	// Rocev2FlowColumnNames is the names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
-	PerPort() Rocev2FlowColumnNames
-	// SetPerPort assigns Rocev2FlowColumnNames provided by user to Rocev2FlowMetricsRequest.
+	PerQp() Rocev2FlowColumnNames
+	// SetPerQp assigns Rocev2FlowColumnNames provided by user to Rocev2FlowMetricsRequest.
 	// Rocev2FlowColumnNames is the names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
-	SetPerPort(value Rocev2FlowColumnNames) Rocev2FlowMetricsRequest
-	// HasPerPort checks if PerPort has been set in Rocev2FlowMetricsRequest
-	HasPerPort() bool
+	SetPerQp(value Rocev2FlowColumnNames) Rocev2FlowMetricsRequest
+	// HasPerQp checks if PerQp has been set in Rocev2FlowMetricsRequest
+	HasPerQp() bool
 	setNil()
 }
 
@@ -293,9 +293,9 @@ type Rocev2FlowMetricsRequestChoiceEnum string
 
 // Enum of Choice on Rocev2FlowMetricsRequest
 var Rocev2FlowMetricsRequestChoice = struct {
-	PER_PORT Rocev2FlowMetricsRequestChoiceEnum
+	PER_QP Rocev2FlowMetricsRequestChoiceEnum
 }{
-	PER_PORT: Rocev2FlowMetricsRequestChoiceEnum("per_port"),
+	PER_QP: Rocev2FlowMetricsRequestChoiceEnum("per_qp"),
 }
 
 func (obj *rocev2FlowMetricsRequest) Choice() Rocev2FlowMetricsRequestChoiceEnum {
@@ -317,40 +317,40 @@ func (obj *rocev2FlowMetricsRequest) setChoice(value Rocev2FlowMetricsRequestCho
 	}
 	enumValue := otg.Rocev2FlowMetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.PerPort = nil
-	obj.perPortHolder = nil
+	obj.obj.PerQp = nil
+	obj.perQpHolder = nil
 
-	if value == Rocev2FlowMetricsRequestChoice.PER_PORT {
-		obj.obj.PerPort = NewRocev2FlowColumnNames().msg()
+	if value == Rocev2FlowMetricsRequestChoice.PER_QP {
+		obj.obj.PerQp = NewRocev2FlowColumnNames().msg()
 	}
 
 	return obj
 }
 
 // description is TBD
-// PerPort returns a Rocev2FlowColumnNames
-func (obj *rocev2FlowMetricsRequest) PerPort() Rocev2FlowColumnNames {
-	if obj.obj.PerPort == nil {
-		obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_PORT)
+// PerQp returns a Rocev2FlowColumnNames
+func (obj *rocev2FlowMetricsRequest) PerQp() Rocev2FlowColumnNames {
+	if obj.obj.PerQp == nil {
+		obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_QP)
 	}
-	if obj.perPortHolder == nil {
-		obj.perPortHolder = &rocev2FlowColumnNames{obj: obj.obj.PerPort}
+	if obj.perQpHolder == nil {
+		obj.perQpHolder = &rocev2FlowColumnNames{obj: obj.obj.PerQp}
 	}
-	return obj.perPortHolder
+	return obj.perQpHolder
 }
 
 // description is TBD
-// PerPort returns a Rocev2FlowColumnNames
-func (obj *rocev2FlowMetricsRequest) HasPerPort() bool {
-	return obj.obj.PerPort != nil
+// PerQp returns a Rocev2FlowColumnNames
+func (obj *rocev2FlowMetricsRequest) HasPerQp() bool {
+	return obj.obj.PerQp != nil
 }
 
 // description is TBD
-// SetPerPort sets the Rocev2FlowColumnNames value in the Rocev2FlowMetricsRequest object
-func (obj *rocev2FlowMetricsRequest) SetPerPort(value Rocev2FlowColumnNames) Rocev2FlowMetricsRequest {
-	obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_PORT)
-	obj.perPortHolder = nil
-	obj.obj.PerPort = value.msg()
+// SetPerQp sets the Rocev2FlowColumnNames value in the Rocev2FlowMetricsRequest object
+func (obj *rocev2FlowMetricsRequest) SetPerQp(value Rocev2FlowColumnNames) Rocev2FlowMetricsRequest {
+	obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_QP)
+	obj.perQpHolder = nil
+	obj.obj.PerQp = value.msg()
 
 	return obj
 }
@@ -360,9 +360,9 @@ func (obj *rocev2FlowMetricsRequest) validateObj(vObj *validation, set_default b
 		obj.setDefault()
 	}
 
-	if obj.obj.PerPort != nil {
+	if obj.obj.PerQp != nil {
 
-		obj.PerPort().validateObj(vObj, set_default)
+		obj.PerQp().validateObj(vObj, set_default)
 	}
 
 }
@@ -371,13 +371,13 @@ func (obj *rocev2FlowMetricsRequest) setDefault() {
 	var choices_set int = 0
 	var choice Rocev2FlowMetricsRequestChoiceEnum
 
-	if obj.obj.PerPort != nil {
+	if obj.obj.PerQp != nil {
 		choices_set += 1
-		choice = Rocev2FlowMetricsRequestChoice.PER_PORT
+		choice = Rocev2FlowMetricsRequestChoice.PER_QP
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
-			obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_PORT)
+			obj.setChoice(Rocev2FlowMetricsRequestChoice.PER_QP)
 
 		}
 

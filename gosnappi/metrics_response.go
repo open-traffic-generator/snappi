@@ -35,7 +35,7 @@ type metricsResponse struct {
 	mkaMetricsHolder               MetricsResponseMkaMetricIter
 	rocev2Ipv4PerPeerMetricsHolder MetricsResponseRocev2IPv4MetricPerPeerIter
 	rocev2Ipv6PerPeerMetricsHolder MetricsResponseRocev2IPv6MetricPerPeerIter
-	rocev2FlowPerQpMetricsHolder   MetricsResponseRocev2FlowMetricPerPortIter
+	rocev2FlowPerQpMetricsHolder   MetricsResponseRocev2FlowMetricPerQPIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -318,12 +318,12 @@ type MetricsResponse interface {
 	HasChoice() bool
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -362,8 +362,8 @@ type MetricsResponse interface {
 	Rocev2Ipv4PerPeerMetrics() MetricsResponseRocev2IPv4MetricPerPeerIter
 	// Rocev2Ipv6PerPeerMetrics returns MetricsResponseRocev2IPv6MetricPerPeerIterIter, set in MetricsResponse
 	Rocev2Ipv6PerPeerMetrics() MetricsResponseRocev2IPv6MetricPerPeerIter
-	// Rocev2FlowPerQpMetrics returns MetricsResponseRocev2FlowMetricPerPortIterIter, set in MetricsResponse
-	Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerPortIter
+	// Rocev2FlowPerQpMetrics returns MetricsResponseRocev2FlowMetricPerQPIterIter, set in MetricsResponse
+	Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerQPIter
 	setNil()
 }
 
@@ -423,9 +423,9 @@ func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
 // getter for Dhcpv6Client to set choice
@@ -433,9 +433,9 @@ func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // description is TBD
@@ -547,7 +547,7 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 
 	if value == MetricsResponseChoice.ROCEV2_FLOW_PER_QP_METRICS {
-		obj.obj.Rocev2FlowPerQpMetrics = []*otg.Rocev2FlowMetricPerPort{}
+		obj.obj.Rocev2FlowPerQpMetrics = []*otg.Rocev2FlowMetricPerQP{}
 	}
 
 	return obj
@@ -2207,89 +2207,89 @@ func (obj *metricsResponseRocev2IPv6MetricPerPeerIter) appendHolderSlice(item Ro
 }
 
 // description is TBD
-// Rocev2FlowPerQpMetrics returns a []Rocev2FlowMetricPerPort
-func (obj *metricsResponse) Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerPortIter {
+// Rocev2FlowPerQpMetrics returns a []Rocev2FlowMetricPerQP
+func (obj *metricsResponse) Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerQPIter {
 	if len(obj.obj.Rocev2FlowPerQpMetrics) == 0 {
 		obj.setChoice(MetricsResponseChoice.ROCEV2_FLOW_PER_QP_METRICS)
 	}
 	if obj.rocev2FlowPerQpMetricsHolder == nil {
-		obj.rocev2FlowPerQpMetricsHolder = newMetricsResponseRocev2FlowMetricPerPortIter(&obj.obj.Rocev2FlowPerQpMetrics).setMsg(obj)
+		obj.rocev2FlowPerQpMetricsHolder = newMetricsResponseRocev2FlowMetricPerQPIter(&obj.obj.Rocev2FlowPerQpMetrics).setMsg(obj)
 	}
 	return obj.rocev2FlowPerQpMetricsHolder
 }
 
-type metricsResponseRocev2FlowMetricPerPortIter struct {
-	obj                          *metricsResponse
-	rocev2FlowMetricPerPortSlice []Rocev2FlowMetricPerPort
-	fieldPtr                     *[]*otg.Rocev2FlowMetricPerPort
+type metricsResponseRocev2FlowMetricPerQPIter struct {
+	obj                        *metricsResponse
+	rocev2FlowMetricPerQPSlice []Rocev2FlowMetricPerQP
+	fieldPtr                   *[]*otg.Rocev2FlowMetricPerQP
 }
 
-func newMetricsResponseRocev2FlowMetricPerPortIter(ptr *[]*otg.Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter {
-	return &metricsResponseRocev2FlowMetricPerPortIter{fieldPtr: ptr}
+func newMetricsResponseRocev2FlowMetricPerQPIter(ptr *[]*otg.Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter {
+	return &metricsResponseRocev2FlowMetricPerQPIter{fieldPtr: ptr}
 }
 
-type MetricsResponseRocev2FlowMetricPerPortIter interface {
-	setMsg(*metricsResponse) MetricsResponseRocev2FlowMetricPerPortIter
-	Items() []Rocev2FlowMetricPerPort
-	Add() Rocev2FlowMetricPerPort
-	Append(items ...Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter
-	Set(index int, newObj Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter
-	Clear() MetricsResponseRocev2FlowMetricPerPortIter
-	clearHolderSlice() MetricsResponseRocev2FlowMetricPerPortIter
-	appendHolderSlice(item Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter
+type MetricsResponseRocev2FlowMetricPerQPIter interface {
+	setMsg(*metricsResponse) MetricsResponseRocev2FlowMetricPerQPIter
+	Items() []Rocev2FlowMetricPerQP
+	Add() Rocev2FlowMetricPerQP
+	Append(items ...Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter
+	Set(index int, newObj Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter
+	Clear() MetricsResponseRocev2FlowMetricPerQPIter
+	clearHolderSlice() MetricsResponseRocev2FlowMetricPerQPIter
+	appendHolderSlice(item Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter
 }
 
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) setMsg(msg *metricsResponse) MetricsResponseRocev2FlowMetricPerPortIter {
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) setMsg(msg *metricsResponse) MetricsResponseRocev2FlowMetricPerQPIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&rocev2FlowMetricPerPort{obj: val})
+		obj.appendHolderSlice(&rocev2FlowMetricPerQP{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) Items() []Rocev2FlowMetricPerPort {
-	return obj.rocev2FlowMetricPerPortSlice
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) Items() []Rocev2FlowMetricPerQP {
+	return obj.rocev2FlowMetricPerQPSlice
 }
 
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) Add() Rocev2FlowMetricPerPort {
-	newObj := &otg.Rocev2FlowMetricPerPort{}
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) Add() Rocev2FlowMetricPerQP {
+	newObj := &otg.Rocev2FlowMetricPerQP{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &rocev2FlowMetricPerPort{obj: newObj}
+	newLibObj := &rocev2FlowMetricPerQP{obj: newObj}
 	newLibObj.setDefault()
-	obj.rocev2FlowMetricPerPortSlice = append(obj.rocev2FlowMetricPerPortSlice, newLibObj)
+	obj.rocev2FlowMetricPerQPSlice = append(obj.rocev2FlowMetricPerQPSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) Append(items ...Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter {
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) Append(items ...Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.rocev2FlowMetricPerPortSlice = append(obj.rocev2FlowMetricPerPortSlice, item)
+		obj.rocev2FlowMetricPerQPSlice = append(obj.rocev2FlowMetricPerQPSlice, item)
 	}
 	return obj
 }
 
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) Set(index int, newObj Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter {
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) Set(index int, newObj Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.rocev2FlowMetricPerPortSlice[index] = newObj
+	obj.rocev2FlowMetricPerQPSlice[index] = newObj
 	return obj
 }
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) Clear() MetricsResponseRocev2FlowMetricPerPortIter {
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) Clear() MetricsResponseRocev2FlowMetricPerQPIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Rocev2FlowMetricPerPort{}
-		obj.rocev2FlowMetricPerPortSlice = []Rocev2FlowMetricPerPort{}
+		*obj.fieldPtr = []*otg.Rocev2FlowMetricPerQP{}
+		obj.rocev2FlowMetricPerQPSlice = []Rocev2FlowMetricPerQP{}
 	}
 	return obj
 }
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) clearHolderSlice() MetricsResponseRocev2FlowMetricPerPortIter {
-	if len(obj.rocev2FlowMetricPerPortSlice) > 0 {
-		obj.rocev2FlowMetricPerPortSlice = []Rocev2FlowMetricPerPort{}
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) clearHolderSlice() MetricsResponseRocev2FlowMetricPerQPIter {
+	if len(obj.rocev2FlowMetricPerQPSlice) > 0 {
+		obj.rocev2FlowMetricPerQPSlice = []Rocev2FlowMetricPerQP{}
 	}
 	return obj
 }
-func (obj *metricsResponseRocev2FlowMetricPerPortIter) appendHolderSlice(item Rocev2FlowMetricPerPort) MetricsResponseRocev2FlowMetricPerPortIter {
-	obj.rocev2FlowMetricPerPortSlice = append(obj.rocev2FlowMetricPerPortSlice, item)
+func (obj *metricsResponseRocev2FlowMetricPerQPIter) appendHolderSlice(item Rocev2FlowMetricPerQP) MetricsResponseRocev2FlowMetricPerQPIter {
+	obj.rocev2FlowMetricPerQPSlice = append(obj.rocev2FlowMetricPerQPSlice, item)
 	return obj
 }
 
@@ -2569,7 +2569,7 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.Rocev2FlowPerQpMetrics().clearHolderSlice()
 			for _, item := range obj.obj.Rocev2FlowPerQpMetrics {
-				obj.Rocev2FlowPerQpMetrics().appendHolderSlice(&rocev2FlowMetricPerPort{obj: item})
+				obj.Rocev2FlowPerQpMetrics().appendHolderSlice(&rocev2FlowMetricPerQP{obj: item})
 			}
 		}
 		for _, item := range obj.Rocev2FlowPerQpMetrics().Items() {

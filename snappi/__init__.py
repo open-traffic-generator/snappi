@@ -1363,8 +1363,8 @@ from .snappi import Rocev2IPv4MetricPerPeer
 from .snappi import Rocev2IPv4MetricPerPeerIter
 from .snappi import Rocev2IPv6MetricPerPeer
 from .snappi import Rocev2IPv6MetricPerPeerIter
-from .snappi import Rocev2FlowMetricPerPort
-from .snappi import Rocev2FlowMetricPerPortIter
+from .snappi import Rocev2FlowMetricPerQP
+from .snappi import Rocev2FlowMetricPerQPIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
