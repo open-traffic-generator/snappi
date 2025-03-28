@@ -312,12 +312,12 @@ type Rocev2FlowMetricPerQP interface {
 	SetDestIpv4(value string) Rocev2FlowMetricPerQP
 	// HasDestIpv4 checks if DestIpv4 has been set in Rocev2FlowMetricPerQP
 	HasDestIpv4() bool
-	// DataFrameTx returns uint64, set in Rocev2FlowMetricPerQP.
-	DataFrameTx() uint64
-	// SetDataFrameTx assigns uint64 provided by user to Rocev2FlowMetricPerQP
-	SetDataFrameTx(value uint64) Rocev2FlowMetricPerQP
-	// HasDataFrameTx checks if DataFrameTx has been set in Rocev2FlowMetricPerQP
-	HasDataFrameTx() bool
+	// DataFramesTx returns uint64, set in Rocev2FlowMetricPerQP.
+	DataFramesTx() uint64
+	// SetDataFramesTx assigns uint64 provided by user to Rocev2FlowMetricPerQP
+	SetDataFramesTx(value uint64) Rocev2FlowMetricPerQP
+	// HasDataFramesTx checks if DataFramesTx has been set in Rocev2FlowMetricPerQP
+	HasDataFramesTx() bool
 	// DataFramesRx returns uint64, set in Rocev2FlowMetricPerQP.
 	DataFramesRx() uint64
 	// SetDataFramesRx assigns uint64 provided by user to Rocev2FlowMetricPerQP
@@ -641,24 +641,24 @@ func (obj *rocev2FlowMetricPerQP) SetDestIpv4(value string) Rocev2FlowMetricPerQ
 }
 
 // Current number of data frames transmitted.
-// DataFrameTx returns a uint64
-func (obj *rocev2FlowMetricPerQP) DataFrameTx() uint64 {
+// DataFramesTx returns a uint64
+func (obj *rocev2FlowMetricPerQP) DataFramesTx() uint64 {
 
-	return *obj.obj.DataFrameTx
+	return *obj.obj.DataFramesTx
 
 }
 
 // Current number of data frames transmitted.
-// DataFrameTx returns a uint64
-func (obj *rocev2FlowMetricPerQP) HasDataFrameTx() bool {
-	return obj.obj.DataFrameTx != nil
+// DataFramesTx returns a uint64
+func (obj *rocev2FlowMetricPerQP) HasDataFramesTx() bool {
+	return obj.obj.DataFramesTx != nil
 }
 
 // Current number of data frames transmitted.
-// SetDataFrameTx sets the uint64 value in the Rocev2FlowMetricPerQP object
-func (obj *rocev2FlowMetricPerQP) SetDataFrameTx(value uint64) Rocev2FlowMetricPerQP {
+// SetDataFramesTx sets the uint64 value in the Rocev2FlowMetricPerQP object
+func (obj *rocev2FlowMetricPerQP) SetDataFramesTx(value uint64) Rocev2FlowMetricPerQP {
 
-	obj.obj.DataFrameTx = &value
+	obj.obj.DataFramesTx = &value
 	return obj
 }
 

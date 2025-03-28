@@ -283,7 +283,7 @@ var Rocev2FlowColumnNamesColumnNames = struct {
 	SRC_IPV4                  Rocev2FlowColumnNamesColumnNamesEnum
 	DEST_IPV4                 Rocev2FlowColumnNamesColumnNamesEnum
 	DATA_FRAMES_TX            Rocev2FlowColumnNamesColumnNamesEnum
-	DATA_FRAME_RX             Rocev2FlowColumnNamesColumnNamesEnum
+	DATA_FRAMES_RX            Rocev2FlowColumnNamesColumnNamesEnum
 	FRAME_DELTA               Rocev2FlowColumnNamesColumnNamesEnum
 	DATA_FRAMES_RETRANSMITTED Rocev2FlowColumnNamesColumnNamesEnum
 	FRAME_SEQUENCE_ERROR      Rocev2FlowColumnNamesColumnNamesEnum
@@ -317,7 +317,7 @@ var Rocev2FlowColumnNamesColumnNames = struct {
 	SRC_IPV4:                  Rocev2FlowColumnNamesColumnNamesEnum("src_ipv4"),
 	DEST_IPV4:                 Rocev2FlowColumnNamesColumnNamesEnum("dest_ipv4"),
 	DATA_FRAMES_TX:            Rocev2FlowColumnNamesColumnNamesEnum("data_frames_tx"),
-	DATA_FRAME_RX:             Rocev2FlowColumnNamesColumnNamesEnum("data_frame_rx"),
+	DATA_FRAMES_RX:            Rocev2FlowColumnNamesColumnNamesEnum("data_frames_rx"),
 	FRAME_DELTA:               Rocev2FlowColumnNamesColumnNamesEnum("frame_delta"),
 	DATA_FRAMES_RETRANSMITTED: Rocev2FlowColumnNamesColumnNamesEnum("data_frames_retransmitted"),
 	FRAME_SEQUENCE_ERROR:      Rocev2FlowColumnNamesColumnNamesEnum("frame_sequence_error"),

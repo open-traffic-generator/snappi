@@ -22037,7 +22037,7 @@ components:
                 x-field-uid: 8
               data_frames_tx:
                 x-field-uid: 9
-              data_frame_rx:
+              data_frames_rx:
                 x-field-uid: 10
               frame_delta:
                 x-field-uid: 11
@@ -22095,7 +22095,7 @@ components:
             - src_ipv4
             - dest_ipv4
             - data_frames_tx
-            - data_frame_rx
+            - data_frames_rx
             - frame_delta
             - data_frames_retransmitted
             - frame_sequence_error
@@ -22169,7 +22169,7 @@ components:
           type: string
           format: ipv4
           x-field-uid: 8
-        data_frame_tx:
+        data_frames_tx:
           description: |-
             Current number of data frames transmitted.
           type: integer

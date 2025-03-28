@@ -15915,7 +15915,7 @@ message Rocev2FlowColumnNames {
       src_ipv4 = 7;
       dest_ipv4 = 8;
       data_frames_tx = 9;
-      data_frame_rx = 10;
+      data_frames_rx = 10;
       frame_delta = 11;
       data_frames_retransmitted = 12;
       frame_sequence_error = 13;
@@ -15975,7 +15975,7 @@ message Rocev2FlowMetricPerQP {
   optional string dest_ipv4 = 8;
 
   // Current number of data frames transmitted.
-  optional uint64 data_frame_tx = 9;
+  optional uint64 data_frames_tx = 9;
 
   // Current number of data frames received.
   optional uint64 data_frames_rx = 10;
