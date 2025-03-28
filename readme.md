@@ -17,7 +17,7 @@ Test scripts written in `snappi`, an auto-generated python SDK, can be executed 
 <<<<<<< HEAD
 ## Setup Client        
 =======
-## Setup Client  
+## Setup Client   
 >>>>>>> main
  
 ```sh
