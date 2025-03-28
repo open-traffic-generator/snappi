@@ -278,6 +278,7 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	setChoice(value Dhcpv6ClientOptionsOptionsRequestChoiceEnum) Dhcpv6ClientOptionsOptionsRequest
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsOptionsRequest
 	HasChoice() bool
+<<<<<<< HEAD
 	// getter for VendorInformation to set choice.
 	VendorInformation()
 	// getter for NameServers to set choice.
@@ -286,6 +287,16 @@ type Dhcpv6ClientOptionsOptionsRequest interface {
 	Fqdn()
 	// getter for BootfileUrl to set choice.
 	BootfileUrl()
+=======
+	// getter for NameServers to set choice.
+	NameServers()
+	// getter for BootfileUrl to set choice.
+	BootfileUrl()
+	// getter for Fqdn to set choice.
+	Fqdn()
+	// getter for VendorInformation to set choice.
+	VendorInformation()
+>>>>>>> main
 	// getter for Sztp to set choice.
 	Sztp()
 	// Custom returns Dhcpv6ClientOptionsCustom, set in Dhcpv6ClientOptionsOptionsRequest.
@@ -322,11 +333,30 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) Choice() Dhcpv6ClientOptionsOption
 	return Dhcpv6ClientOptionsOptionsRequestChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+<<<<<<< HEAD
+=======
+// getter for NameServers to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
+}
+
+// getter for BootfileUrl to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) BootfileUrl() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.BOOTFILE_URL)
+}
+
+// getter for Fqdn to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Fqdn() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.FQDN)
+}
+
+>>>>>>> main
 // getter for VendorInformation to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) VendorInformation() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.VENDOR_INFORMATION)
 }
 
+<<<<<<< HEAD
 // getter for NameServers to set choice
 func (obj *dhcpv6ClientOptionsOptionsRequest) NameServers() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.NAME_SERVERS)
@@ -347,6 +377,13 @@ func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
 	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
 }
 
+=======
+// getter for Sztp to set choice
+func (obj *dhcpv6ClientOptionsOptionsRequest) Sztp() {
+	obj.setChoice(Dhcpv6ClientOptionsOptionsRequestChoice.SZTP)
+}
+
+>>>>>>> main
 // The Option Request option is used to identify a list of options in a message between a client and a server. The  option code is 6. - Vendor_specific information option, requested by clients for vendor-specific informations from servers. - DNS Recursive Name Server Option, requested by clients to get the list ofIPv6 addresses of DNS recursive name
 // servers to which DNS queries may be sent by the client resolver in order of preference.
 // - Client FQDN option - indicates whether the client or the DHCP server should update DNS with the AAAA record
