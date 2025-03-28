@@ -271,16 +271,20 @@ type Dhcpv6ClientOptionsDuidUuidVersion interface {
 	// HasChoice checks if Choice has been set in Dhcpv6ClientOptionsDuidUuidVersion
 	HasChoice() bool
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// getter for V_4 to set choice.
 	V_4()
 	// getter for V_5 to set choice.
 	V_5()
+=======
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 	// getter for V_2 to set choice.
 	V_2()
-	// getter for V_3 to set choice.
-	V_3()
+	// getter for V_4 to set choice.
+	V_4()
 	// getter for V_1 to set choice.
 	V_1()
+<<<<<<< HEAD
 =======
 	// getter for V_3 to set choice.
 	V_3()
@@ -293,6 +297,12 @@ type Dhcpv6ClientOptionsDuidUuidVersion interface {
 	// getter for V_4 to set choice.
 	V_4()
 >>>>>>> main
+=======
+	// getter for V_3 to set choice.
+	V_3()
+	// getter for V_5 to set choice.
+	V_5()
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 type Dhcpv6ClientOptionsDuidUuidVersionChoiceEnum string
@@ -317,11 +327,20 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) Choice() Dhcpv6ClientOptionsDuidU
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+// getter for V_2 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_2() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_2)
+}
+
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // getter for V_4 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_4() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_4)
 }
 
+<<<<<<< HEAD
 // getter for V_5 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
@@ -340,6 +359,11 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
 // getter for V_2 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_2() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_2)
+=======
+// getter for V_1 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_1() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_1)
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 // getter for V_3 to set choice
@@ -347,9 +371,15 @@ func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_3() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_3)
 }
 
+<<<<<<< HEAD
 // getter for V_4 to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_4() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_4)
+=======
+// getter for V_5 to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVersion) V_5() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVersionChoice.V_5)
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 // The version values are from 1 to 5 in the most significant 4 bits of the timestamp (bits 4 through 7 of the  time_hi_and_version field).

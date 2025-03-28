@@ -273,6 +273,7 @@ type Dhcpv6ClientOptionsMessageType interface {
 	// getter for Request to set choice.
 	Request()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	// getter for InformRequest to set choice.
 	InformRequest()
@@ -281,11 +282,18 @@ type Dhcpv6ClientOptionsMessageType interface {
 >>>>>>> main
 	// getter for Release to set choice.
 	Release()
+=======
+	// getter for Rebind to set choice.
+	Rebind()
+	// getter for Renew to set choice.
+	Renew()
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 	// getter for Solicit to set choice.
 	Solicit()
 <<<<<<< HEAD
 	// getter for InformRequest to set choice.
 	InformRequest()
+<<<<<<< HEAD
 	// getter for Renew to set choice.
 	Renew()
 	// getter for Rebind to set choice.
@@ -294,6 +302,10 @@ type Dhcpv6ClientOptionsMessageType interface {
 	// getter for Renew to set choice.
 	Renew()
 >>>>>>> main
+=======
+	// getter for Release to set choice.
+	Release()
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 type Dhcpv6ClientOptionsMessageTypeChoiceEnum string
@@ -325,9 +337,20 @@ func (obj *dhcpv6ClientOptionsMessageType) Request() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // getter for Release to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Release() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
+=======
+// getter for Rebind to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
+}
+
+// getter for Renew to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Renew() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RENEW)
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 // getter for Solicit to set choice
@@ -342,9 +365,15 @@ func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
 }
 
+<<<<<<< HEAD
 // getter for Rebind to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
+=======
+// getter for Release to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Release() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 <<<<<<< HEAD

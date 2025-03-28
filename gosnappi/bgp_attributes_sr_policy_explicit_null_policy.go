@@ -274,12 +274,9 @@ type BgpAttributesSrPolicyExplicitNullPolicy interface {
 	HasChoice() bool
 	// getter for PushIpv6 to set choice.
 	PushIpv6()
-	// getter for DonotPush to set choice.
-	DonotPush()
-	// getter for PushIpv4AndIpv6 to set choice.
-	PushIpv4AndIpv6()
 	// getter for PushIpv4 to set choice.
 	PushIpv4()
+<<<<<<< HEAD
 	// getter for PushIpv6 to set choice.
 	PushIpv6()
 	// getter for Unknown to set choice.
@@ -289,6 +286,14 @@ type BgpAttributesSrPolicyExplicitNullPolicy interface {
 	// getter for DonotPush to set choice.
 	DonotPush()
 >>>>>>> main
+=======
+	// getter for PushIpv4AndIpv6 to set choice.
+	PushIpv4AndIpv6()
+	// getter for Unknown to set choice.
+	Unknown()
+	// getter for DonotPush to set choice.
+	DonotPush()
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 }
 
 type BgpAttributesSrPolicyExplicitNullPolicyChoiceEnum string
@@ -317,9 +322,9 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV6)
 }
 
-// getter for DonotPush to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
+// getter for PushIpv4 to set choice
+func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4() {
+	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4)
 }
 
 // getter for PushIpv4AndIpv6 to set choice
@@ -327,6 +332,7 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4AndIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4_AND_IPV6)
 }
 
+<<<<<<< HEAD
 // getter for PushIpv4 to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4)
@@ -337,19 +343,27 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV6)
 }
 
+=======
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // getter for Unknown to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Unknown() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.UNKNOWN)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // getter for DonotPush to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
 }
 
+<<<<<<< HEAD
 >>>>>>> main
+=======
+>>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // The Explicit NULL Label policy.
 // Choice returns a string
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) HasChoice() bool {
