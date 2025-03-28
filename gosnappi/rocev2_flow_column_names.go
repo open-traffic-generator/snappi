@@ -295,7 +295,7 @@ var Rocev2FlowColumnNamesColumnNames = struct {
 	MESSAGE_COMPLETE_RX       Rocev2FlowColumnNamesColumnNamesEnum
 	MESSAGE_FAIL              Rocev2FlowColumnNamesColumnNamesEnum
 	FLOW_COMPLETION_TIME      Rocev2FlowColumnNamesColumnNamesEnum
-	AVG_LATESNCY              Rocev2FlowColumnNamesColumnNamesEnum
+	AVG_LATENCY               Rocev2FlowColumnNamesColumnNamesEnum
 	MIN_LATENCY               Rocev2FlowColumnNamesColumnNamesEnum
 	MAX_LATENCY               Rocev2FlowColumnNamesColumnNamesEnum
 	ECN_CE_RX                 Rocev2FlowColumnNamesColumnNamesEnum
@@ -329,7 +329,7 @@ var Rocev2FlowColumnNamesColumnNames = struct {
 	MESSAGE_COMPLETE_RX:       Rocev2FlowColumnNamesColumnNamesEnum("message_complete_rx"),
 	MESSAGE_FAIL:              Rocev2FlowColumnNamesColumnNamesEnum("message_fail"),
 	FLOW_COMPLETION_TIME:      Rocev2FlowColumnNamesColumnNamesEnum("flow_completion_time"),
-	AVG_LATESNCY:              Rocev2FlowColumnNamesColumnNamesEnum("avg_latesncy"),
+	AVG_LATENCY:               Rocev2FlowColumnNamesColumnNamesEnum("avg_latency"),
 	MIN_LATENCY:               Rocev2FlowColumnNamesColumnNamesEnum("min_latency"),
 	MAX_LATENCY:               Rocev2FlowColumnNamesColumnNamesEnum("max_latency"),
 	ECN_CE_RX:                 Rocev2FlowColumnNamesColumnNamesEnum("ecn_ce_rx"),

@@ -270,24 +270,12 @@ type Dhcpv6ServerOptionsMessageType interface {
 	setChoice(value Dhcpv6ServerOptionsMessageTypeChoiceEnum) Dhcpv6ServerOptionsMessageType
 	// HasChoice checks if Choice has been set in Dhcpv6ServerOptionsMessageType
 	HasChoice() bool
-<<<<<<< HEAD
-	// getter for Reply to set choice.
-	Reply()
-<<<<<<< HEAD
-=======
->>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 	// getter for Advertise to set choice.
 	Advertise()
+	// getter for ReConfigure to set choice.
+	ReConfigure()
 	// getter for Reply to set choice.
 	Reply()
-	// getter for ReConfigure to set choice.
-	ReConfigure()
-=======
-	// getter for ReConfigure to set choice.
-	ReConfigure()
-	// getter for Advertise to set choice.
-	Advertise()
->>>>>>> main
 }
 
 type Dhcpv6ServerOptionsMessageTypeChoiceEnum string
@@ -307,43 +295,21 @@ func (obj *dhcpv6ServerOptionsMessageType) Choice() Dhcpv6ServerOptionsMessageTy
 	return Dhcpv6ServerOptionsMessageTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-<<<<<<< HEAD
-// getter for Reply to set choice
-func (obj *dhcpv6ServerOptionsMessageType) Reply() {
-	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
-<<<<<<< HEAD
-=======
-}
-
-// getter for ReConfigure to set choice
-func (obj *dhcpv6ServerOptionsMessageType) ReConfigure() {
-	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.RE_CONFIGURE)
->>>>>>> main
-}
-
-=======
->>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // getter for Advertise to set choice
 func (obj *dhcpv6ServerOptionsMessageType) Advertise() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.ADVERTISE)
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-// getter for Reply to set choice
-func (obj *dhcpv6ServerOptionsMessageType) Reply() {
-	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
-}
-
->>>>>>> 52b453f7a317324e1688bd9afd8825032202ea0a
 // getter for ReConfigure to set choice
 func (obj *dhcpv6ServerOptionsMessageType) ReConfigure() {
 	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.RE_CONFIGURE)
 }
 
-=======
->>>>>>> main
+// getter for Reply to set choice
+func (obj *dhcpv6ServerOptionsMessageType) Reply() {
+	obj.setChoice(Dhcpv6ServerOptionsMessageTypeChoice.REPLY)
+}
+
 // The server message name where the option is included, by default it is all.
 // Choice returns a string
 func (obj *dhcpv6ServerOptionsMessageType) HasChoice() bool {

@@ -22061,7 +22061,7 @@ components:
                 x-field-uid: 20
               flow_completion_time:
                 x-field-uid: 21
-              avg_latesncy:
+              avg_latency:
                 x-field-uid: 22
               min_latency:
                 x-field-uid: 23
@@ -22107,7 +22107,7 @@ components:
             - message_complete_rx
             - message_fail
             - flow_completion_time
-            - avg_latesncy
+            - avg_latency
             - min_latency
             - max_latency
             - ecn_ce_rx

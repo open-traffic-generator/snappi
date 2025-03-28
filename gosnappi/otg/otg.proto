@@ -15927,7 +15927,7 @@ message Rocev2FlowColumnNames {
       message_complete_rx = 19;
       message_fail = 20;
       flow_completion_time = 21;
-      avg_latesncy = 22;
+      avg_latency = 22;
       min_latency = 23;
       max_latency = 24;
       ecn_ce_rx = 25;
