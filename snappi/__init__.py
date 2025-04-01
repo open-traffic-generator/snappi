@@ -1177,6 +1177,7 @@ from .snappi import FlowRSVPPathObjectsCustom
 from .snappi import PatternFlowRSVPPathObjectsCustomType
 from .snappi import PatternFlowRSVPPathObjectsCustomTypeCounter
 from .snappi import FlowRSVPPathObjectsIter
+from .snappi import FlowMacsec
 from .snappi import FlowHeaderIter
 from .snappi import FlowSize
 from .snappi import FlowSizeIncrement
