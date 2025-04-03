@@ -13,26 +13,27 @@ import (
 // ***** MetricsResponse *****
 type metricsResponse struct {
 	validation
-	obj                       *otg.MetricsResponse
-	marshaller                marshalMetricsResponse
-	unMarshaller              unMarshalMetricsResponse
-	portMetricsHolder         MetricsResponsePortMetricIter
-	flowMetricsHolder         MetricsResponseFlowMetricIter
-	bgpv4MetricsHolder        MetricsResponseBgpv4MetricIter
-	bgpv6MetricsHolder        MetricsResponseBgpv6MetricIter
-	isisMetricsHolder         MetricsResponseIsisMetricIter
-	lagMetricsHolder          MetricsResponseLagMetricIter
-	lacpMetricsHolder         MetricsResponseLacpMetricIter
-	lldpMetricsHolder         MetricsResponseLldpMetricIter
-	rsvpMetricsHolder         MetricsResponseRsvpMetricIter
-	dhcpv4ClientMetricsHolder MetricsResponseDhcpv4ClientMetricIter
-	dhcpv4ServerMetricsHolder MetricsResponseDhcpv4ServerMetricIter
-	dhcpv6ClientMetricsHolder MetricsResponseDhcpv6ClientMetricIter
-	dhcpv6ServerMetricsHolder MetricsResponseDhcpv6ServerMetricIter
-	ospfv2MetricsHolder       MetricsResponseOspfv2MetricIter
-	convergenceMetricsHolder  MetricsResponseConvergenceMetricIter
-	macsecMetricsHolder       MetricsResponseMacsecMetricIter
-	mkaMetricsHolder          MetricsResponseMkaMetricIter
+	obj                             *otg.MetricsResponse
+	marshaller                      marshalMetricsResponse
+	unMarshaller                    unMarshalMetricsResponse
+	portMetricsHolder               MetricsResponsePortMetricIter
+	flowMetricsHolder               MetricsResponseFlowMetricIter
+	bgpv4MetricsHolder              MetricsResponseBgpv4MetricIter
+	bgpv6MetricsHolder              MetricsResponseBgpv6MetricIter
+	isisMetricsHolder               MetricsResponseIsisMetricIter
+	lagMetricsHolder                MetricsResponseLagMetricIter
+	lacpMetricsHolder               MetricsResponseLacpMetricIter
+	lldpMetricsHolder               MetricsResponseLldpMetricIter
+	rsvpMetricsHolder               MetricsResponseRsvpMetricIter
+	dhcpv4ClientMetricsHolder       MetricsResponseDhcpv4ClientMetricIter
+	dhcpv4ServerMetricsHolder       MetricsResponseDhcpv4ServerMetricIter
+	dhcpv6ClientMetricsHolder       MetricsResponseDhcpv6ClientMetricIter
+	dhcpv6ServerMetricsHolder       MetricsResponseDhcpv6ServerMetricIter
+	ospfv2MetricsHolder             MetricsResponseOspfv2MetricIter
+	convergenceMetricsHolder        MetricsResponseConvergenceMetricIter
+	macsecMetricsHolder             MetricsResponseMacsecMetricIter
+	mkaMetricsHolder                MetricsResponseMkaMetricIter
+	egressOnlyTrackingMetricsHolder MetricsResponseEgressOnlyTrackingMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -277,6 +278,7 @@ func (obj *metricsResponse) setNil() {
 	obj.convergenceMetricsHolder = nil
 	obj.macsecMetricsHolder = nil
 	obj.mkaMetricsHolder = nil
+	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -310,14 +312,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -352,6 +354,8 @@ type MetricsResponse interface {
 	MacsecMetrics() MetricsResponseMacsecMetricIter
 	// MkaMetrics returns MetricsResponseMkaMetricIterIter, set in MetricsResponse
 	MkaMetrics() MetricsResponseMkaMetricIter
+	// EgressOnlyTrackingMetrics returns MetricsResponseEgressOnlyTrackingMetricIterIter, set in MetricsResponse
+	EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter
 	setNil()
 }
 
@@ -359,50 +363,47 @@ type MetricsResponseChoiceEnum string
 
 // Enum of Choice on MetricsResponse
 var MetricsResponseChoice = struct {
-	FLOW_METRICS        MetricsResponseChoiceEnum
-	PORT_METRICS        MetricsResponseChoiceEnum
-	BGPV4_METRICS       MetricsResponseChoiceEnum
-	BGPV6_METRICS       MetricsResponseChoiceEnum
-	ISIS_METRICS        MetricsResponseChoiceEnum
-	LAG_METRICS         MetricsResponseChoiceEnum
-	LACP_METRICS        MetricsResponseChoiceEnum
-	LLDP_METRICS        MetricsResponseChoiceEnum
-	RSVP_METRICS        MetricsResponseChoiceEnum
-	DHCPV4_CLIENT       MetricsResponseChoiceEnum
-	DHCPV4_SERVER       MetricsResponseChoiceEnum
-	DHCPV6_CLIENT       MetricsResponseChoiceEnum
-	DHCPV6_SERVER       MetricsResponseChoiceEnum
-	OSPFV2_METRICS      MetricsResponseChoiceEnum
-	CONVERGENCE_METRICS MetricsResponseChoiceEnum
-	MACSEC_METRICS      MetricsResponseChoiceEnum
-	MKA_METRICS         MetricsResponseChoiceEnum
+	FLOW_METRICS                 MetricsResponseChoiceEnum
+	PORT_METRICS                 MetricsResponseChoiceEnum
+	BGPV4_METRICS                MetricsResponseChoiceEnum
+	BGPV6_METRICS                MetricsResponseChoiceEnum
+	ISIS_METRICS                 MetricsResponseChoiceEnum
+	LAG_METRICS                  MetricsResponseChoiceEnum
+	LACP_METRICS                 MetricsResponseChoiceEnum
+	LLDP_METRICS                 MetricsResponseChoiceEnum
+	RSVP_METRICS                 MetricsResponseChoiceEnum
+	DHCPV4_CLIENT                MetricsResponseChoiceEnum
+	DHCPV4_SERVER                MetricsResponseChoiceEnum
+	DHCPV6_CLIENT                MetricsResponseChoiceEnum
+	DHCPV6_SERVER                MetricsResponseChoiceEnum
+	OSPFV2_METRICS               MetricsResponseChoiceEnum
+	CONVERGENCE_METRICS          MetricsResponseChoiceEnum
+	MACSEC_METRICS               MetricsResponseChoiceEnum
+	MKA_METRICS                  MetricsResponseChoiceEnum
+	EGRESS_ONLY_TRACKING_METRICS MetricsResponseChoiceEnum
 }{
-	FLOW_METRICS:        MetricsResponseChoiceEnum("flow_metrics"),
-	PORT_METRICS:        MetricsResponseChoiceEnum("port_metrics"),
-	BGPV4_METRICS:       MetricsResponseChoiceEnum("bgpv4_metrics"),
-	BGPV6_METRICS:       MetricsResponseChoiceEnum("bgpv6_metrics"),
-	ISIS_METRICS:        MetricsResponseChoiceEnum("isis_metrics"),
-	LAG_METRICS:         MetricsResponseChoiceEnum("lag_metrics"),
-	LACP_METRICS:        MetricsResponseChoiceEnum("lacp_metrics"),
-	LLDP_METRICS:        MetricsResponseChoiceEnum("lldp_metrics"),
-	RSVP_METRICS:        MetricsResponseChoiceEnum("rsvp_metrics"),
-	DHCPV4_CLIENT:       MetricsResponseChoiceEnum("dhcpv4_client"),
-	DHCPV4_SERVER:       MetricsResponseChoiceEnum("dhcpv4_server"),
-	DHCPV6_CLIENT:       MetricsResponseChoiceEnum("dhcpv6_client"),
-	DHCPV6_SERVER:       MetricsResponseChoiceEnum("dhcpv6_server"),
-	OSPFV2_METRICS:      MetricsResponseChoiceEnum("ospfv2_metrics"),
-	CONVERGENCE_METRICS: MetricsResponseChoiceEnum("convergence_metrics"),
-	MACSEC_METRICS:      MetricsResponseChoiceEnum("macsec_metrics"),
-	MKA_METRICS:         MetricsResponseChoiceEnum("mka_metrics"),
+	FLOW_METRICS:                 MetricsResponseChoiceEnum("flow_metrics"),
+	PORT_METRICS:                 MetricsResponseChoiceEnum("port_metrics"),
+	BGPV4_METRICS:                MetricsResponseChoiceEnum("bgpv4_metrics"),
+	BGPV6_METRICS:                MetricsResponseChoiceEnum("bgpv6_metrics"),
+	ISIS_METRICS:                 MetricsResponseChoiceEnum("isis_metrics"),
+	LAG_METRICS:                  MetricsResponseChoiceEnum("lag_metrics"),
+	LACP_METRICS:                 MetricsResponseChoiceEnum("lacp_metrics"),
+	LLDP_METRICS:                 MetricsResponseChoiceEnum("lldp_metrics"),
+	RSVP_METRICS:                 MetricsResponseChoiceEnum("rsvp_metrics"),
+	DHCPV4_CLIENT:                MetricsResponseChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER:                MetricsResponseChoiceEnum("dhcpv4_server"),
+	DHCPV6_CLIENT:                MetricsResponseChoiceEnum("dhcpv6_client"),
+	DHCPV6_SERVER:                MetricsResponseChoiceEnum("dhcpv6_server"),
+	OSPFV2_METRICS:               MetricsResponseChoiceEnum("ospfv2_metrics"),
+	CONVERGENCE_METRICS:          MetricsResponseChoiceEnum("convergence_metrics"),
+	MACSEC_METRICS:               MetricsResponseChoiceEnum("macsec_metrics"),
+	MKA_METRICS:                  MetricsResponseChoiceEnum("mka_metrics"),
+	EGRESS_ONLY_TRACKING_METRICS: MetricsResponseChoiceEnum("egress_only_tracking_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // getter for Dhcpv6Server to set choice
@@ -420,6 +421,11 @@ func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
+}
+
 // description is TBD
 // Choice returns a string
 func (obj *metricsResponse) HasChoice() bool {
@@ -435,6 +441,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.EgressOnlyTrackingMetrics = nil
+	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.obj.MkaMetrics = nil
 	obj.mkaMetricsHolder = nil
 	obj.obj.MacsecMetrics = nil
@@ -512,6 +520,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.MKA_METRICS {
 		obj.obj.MkaMetrics = []*otg.MkaMetric{}
+	}
+
+	if value == MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS {
+		obj.obj.EgressOnlyTrackingMetrics = []*otg.EgressOnlyTrackingMetric{}
 	}
 
 	return obj
@@ -1996,6 +2008,93 @@ func (obj *metricsResponseMkaMetricIter) appendHolderSlice(item MkaMetric) Metri
 	return obj
 }
 
+// description is TBD
+// EgressOnlyTrackingMetrics returns a []EgressOnlyTrackingMetric
+func (obj *metricsResponse) EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(obj.obj.EgressOnlyTrackingMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS)
+	}
+	if obj.egressOnlyTrackingMetricsHolder == nil {
+		obj.egressOnlyTrackingMetricsHolder = newMetricsResponseEgressOnlyTrackingMetricIter(&obj.obj.EgressOnlyTrackingMetrics).setMsg(obj)
+	}
+	return obj.egressOnlyTrackingMetricsHolder
+}
+
+type metricsResponseEgressOnlyTrackingMetricIter struct {
+	obj                           *metricsResponse
+	egressOnlyTrackingMetricSlice []EgressOnlyTrackingMetric
+	fieldPtr                      *[]*otg.EgressOnlyTrackingMetric
+}
+
+func newMetricsResponseEgressOnlyTrackingMetricIter(ptr *[]*otg.EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	return &metricsResponseEgressOnlyTrackingMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseEgressOnlyTrackingMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseEgressOnlyTrackingMetricIter
+	Items() []EgressOnlyTrackingMetric
+	Add() EgressOnlyTrackingMetric
+	Append(items ...EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+	Set(index int, newObj EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+	Clear() MetricsResponseEgressOnlyTrackingMetricIter
+	clearHolderSlice() MetricsResponseEgressOnlyTrackingMetricIter
+	appendHolderSlice(item EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) setMsg(msg *metricsResponse) MetricsResponseEgressOnlyTrackingMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&egressOnlyTrackingMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Items() []EgressOnlyTrackingMetric {
+	return obj.egressOnlyTrackingMetricSlice
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Add() EgressOnlyTrackingMetric {
+	newObj := &otg.EgressOnlyTrackingMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &egressOnlyTrackingMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Append(items ...EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Set(index int, newObj EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.egressOnlyTrackingMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Clear() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.EgressOnlyTrackingMetric{}
+		obj.egressOnlyTrackingMetricSlice = []EgressOnlyTrackingMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) clearHolderSlice() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(obj.egressOnlyTrackingMetricSlice) > 0 {
+		obj.egressOnlyTrackingMetricSlice = []EgressOnlyTrackingMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) appendHolderSlice(item EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2239,6 +2338,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.EgressOnlyTrackingMetrics) != 0 {
+
+		if set_default {
+			obj.EgressOnlyTrackingMetrics().clearHolderSlice()
+			for _, item := range obj.obj.EgressOnlyTrackingMetrics {
+				obj.EgressOnlyTrackingMetrics().appendHolderSlice(&egressOnlyTrackingMetric{obj: item})
+			}
+		}
+		for _, item := range obj.EgressOnlyTrackingMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -2308,6 +2421,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.MkaMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.MKA_METRICS
+	}
+
+	if len(obj.obj.EgressOnlyTrackingMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

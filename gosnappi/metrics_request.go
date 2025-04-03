@@ -13,26 +13,27 @@ import (
 // ***** MetricsRequest *****
 type metricsRequest struct {
 	validation
-	obj                *otg.MetricsRequest
-	marshaller         marshalMetricsRequest
-	unMarshaller       unMarshalMetricsRequest
-	portHolder         PortMetricsRequest
-	flowHolder         FlowMetricsRequest
-	bgpv4Holder        Bgpv4MetricsRequest
-	bgpv6Holder        Bgpv6MetricsRequest
-	isisHolder         IsisMetricsRequest
-	lagHolder          LagMetricsRequest
-	lacpHolder         LacpMetricsRequest
-	lldpHolder         LldpMetricsRequest
-	rsvpHolder         RsvpMetricsRequest
-	dhcpv4ClientHolder Dhcpv4ClientMetricsRequest
-	dhcpv4ServerHolder Dhcpv4ServerMetricsRequest
-	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
-	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
-	ospfv2Holder       Ospfv2MetricsRequest
-	convergenceHolder  ConvergenceRequest
-	macsecHolder       MacsecMetricsRequest
-	mkaHolder          MkaMetricsRequest
+	obj                      *otg.MetricsRequest
+	marshaller               marshalMetricsRequest
+	unMarshaller             unMarshalMetricsRequest
+	portHolder               PortMetricsRequest
+	flowHolder               FlowMetricsRequest
+	bgpv4Holder              Bgpv4MetricsRequest
+	bgpv6Holder              Bgpv6MetricsRequest
+	isisHolder               IsisMetricsRequest
+	lagHolder                LagMetricsRequest
+	lacpHolder               LacpMetricsRequest
+	lldpHolder               LldpMetricsRequest
+	rsvpHolder               RsvpMetricsRequest
+	dhcpv4ClientHolder       Dhcpv4ClientMetricsRequest
+	dhcpv4ServerHolder       Dhcpv4ServerMetricsRequest
+	dhcpv6ClientHolder       Dhcpv6ClientMetricsRequest
+	dhcpv6ServerHolder       Dhcpv6ServerMetricsRequest
+	ospfv2Holder             Ospfv2MetricsRequest
+	convergenceHolder        ConvergenceRequest
+	macsecHolder             MacsecMetricsRequest
+	mkaHolder                MkaMetricsRequest
+	egressOnlyTrackingHolder EgressOnlyTrackingMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -277,6 +278,7 @@ func (obj *metricsRequest) setNil() {
 	obj.convergenceHolder = nil
 	obj.macsecHolder = nil
 	obj.mkaHolder = nil
+	obj.egressOnlyTrackingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -425,14 +427,10 @@ type MetricsRequest interface {
 	// Convergence returns ConvergenceRequest, set in MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	Convergence() ConvergenceRequest
 	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	SetConvergence(value ConvergenceRequest) MetricsRequest
@@ -454,6 +452,14 @@ type MetricsRequest interface {
 	SetMka(value MkaMetricsRequest) MetricsRequest
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool
+	// EgressOnlyTracking returns EgressOnlyTrackingMetricsRequest, set in MetricsRequest.
+	// EgressOnlyTrackingMetricsRequest is the container for a egress only tracking metric request.
+	EgressOnlyTracking() EgressOnlyTrackingMetricsRequest
+	// SetEgressOnlyTracking assigns EgressOnlyTrackingMetricsRequest provided by user to MetricsRequest.
+	// EgressOnlyTrackingMetricsRequest is the container for a egress only tracking metric request.
+	SetEgressOnlyTracking(value EgressOnlyTrackingMetricsRequest) MetricsRequest
+	// HasEgressOnlyTracking checks if EgressOnlyTracking has been set in MetricsRequest
+	HasEgressOnlyTracking() bool
 	setNil()
 }
 
@@ -461,41 +467,43 @@ type MetricsRequestChoiceEnum string
 
 // Enum of Choice on MetricsRequest
 var MetricsRequestChoice = struct {
-	PORT          MetricsRequestChoiceEnum
-	FLOW          MetricsRequestChoiceEnum
-	BGPV4         MetricsRequestChoiceEnum
-	BGPV6         MetricsRequestChoiceEnum
-	ISIS          MetricsRequestChoiceEnum
-	LAG           MetricsRequestChoiceEnum
-	LACP          MetricsRequestChoiceEnum
-	LLDP          MetricsRequestChoiceEnum
-	RSVP          MetricsRequestChoiceEnum
-	DHCPV4_CLIENT MetricsRequestChoiceEnum
-	DHCPV4_SERVER MetricsRequestChoiceEnum
-	DHCPV6_CLIENT MetricsRequestChoiceEnum
-	DHCPV6_SERVER MetricsRequestChoiceEnum
-	OSPFV2        MetricsRequestChoiceEnum
-	CONVERGENCE   MetricsRequestChoiceEnum
-	MACSEC        MetricsRequestChoiceEnum
-	MKA           MetricsRequestChoiceEnum
+	PORT                 MetricsRequestChoiceEnum
+	FLOW                 MetricsRequestChoiceEnum
+	BGPV4                MetricsRequestChoiceEnum
+	BGPV6                MetricsRequestChoiceEnum
+	ISIS                 MetricsRequestChoiceEnum
+	LAG                  MetricsRequestChoiceEnum
+	LACP                 MetricsRequestChoiceEnum
+	LLDP                 MetricsRequestChoiceEnum
+	RSVP                 MetricsRequestChoiceEnum
+	DHCPV4_CLIENT        MetricsRequestChoiceEnum
+	DHCPV4_SERVER        MetricsRequestChoiceEnum
+	DHCPV6_CLIENT        MetricsRequestChoiceEnum
+	DHCPV6_SERVER        MetricsRequestChoiceEnum
+	OSPFV2               MetricsRequestChoiceEnum
+	CONVERGENCE          MetricsRequestChoiceEnum
+	MACSEC               MetricsRequestChoiceEnum
+	MKA                  MetricsRequestChoiceEnum
+	EGRESS_ONLY_TRACKING MetricsRequestChoiceEnum
 }{
-	PORT:          MetricsRequestChoiceEnum("port"),
-	FLOW:          MetricsRequestChoiceEnum("flow"),
-	BGPV4:         MetricsRequestChoiceEnum("bgpv4"),
-	BGPV6:         MetricsRequestChoiceEnum("bgpv6"),
-	ISIS:          MetricsRequestChoiceEnum("isis"),
-	LAG:           MetricsRequestChoiceEnum("lag"),
-	LACP:          MetricsRequestChoiceEnum("lacp"),
-	LLDP:          MetricsRequestChoiceEnum("lldp"),
-	RSVP:          MetricsRequestChoiceEnum("rsvp"),
-	DHCPV4_CLIENT: MetricsRequestChoiceEnum("dhcpv4_client"),
-	DHCPV4_SERVER: MetricsRequestChoiceEnum("dhcpv4_server"),
-	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
-	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
-	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
-	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
-	MACSEC:        MetricsRequestChoiceEnum("macsec"),
-	MKA:           MetricsRequestChoiceEnum("mka"),
+	PORT:                 MetricsRequestChoiceEnum("port"),
+	FLOW:                 MetricsRequestChoiceEnum("flow"),
+	BGPV4:                MetricsRequestChoiceEnum("bgpv4"),
+	BGPV6:                MetricsRequestChoiceEnum("bgpv6"),
+	ISIS:                 MetricsRequestChoiceEnum("isis"),
+	LAG:                  MetricsRequestChoiceEnum("lag"),
+	LACP:                 MetricsRequestChoiceEnum("lacp"),
+	LLDP:                 MetricsRequestChoiceEnum("lldp"),
+	RSVP:                 MetricsRequestChoiceEnum("rsvp"),
+	DHCPV4_CLIENT:        MetricsRequestChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER:        MetricsRequestChoiceEnum("dhcpv4_server"),
+	DHCPV6_CLIENT:        MetricsRequestChoiceEnum("dhcpv6_client"),
+	DHCPV6_SERVER:        MetricsRequestChoiceEnum("dhcpv6_server"),
+	OSPFV2:               MetricsRequestChoiceEnum("ospfv2"),
+	CONVERGENCE:          MetricsRequestChoiceEnum("convergence"),
+	MACSEC:               MetricsRequestChoiceEnum("macsec"),
+	MKA:                  MetricsRequestChoiceEnum("mka"),
+	EGRESS_ONLY_TRACKING: MetricsRequestChoiceEnum("egress_only_tracking"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -517,6 +525,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.EgressOnlyTracking = nil
+	obj.egressOnlyTrackingHolder = nil
 	obj.obj.Mka = nil
 	obj.mkaHolder = nil
 	obj.obj.Macsec = nil
@@ -618,6 +628,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.MKA {
 		obj.obj.Mka = NewMkaMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.EGRESS_ONLY_TRACKING {
+		obj.obj.EgressOnlyTracking = NewEgressOnlyTrackingMetricsRequest().msg()
 	}
 
 	return obj
@@ -1099,6 +1113,34 @@ func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
 	return obj
 }
 
+// description is TBD
+// EgressOnlyTracking returns a EgressOnlyTrackingMetricsRequest
+func (obj *metricsRequest) EgressOnlyTracking() EgressOnlyTrackingMetricsRequest {
+	if obj.obj.EgressOnlyTracking == nil {
+		obj.setChoice(MetricsRequestChoice.EGRESS_ONLY_TRACKING)
+	}
+	if obj.egressOnlyTrackingHolder == nil {
+		obj.egressOnlyTrackingHolder = &egressOnlyTrackingMetricsRequest{obj: obj.obj.EgressOnlyTracking}
+	}
+	return obj.egressOnlyTrackingHolder
+}
+
+// description is TBD
+// EgressOnlyTracking returns a EgressOnlyTrackingMetricsRequest
+func (obj *metricsRequest) HasEgressOnlyTracking() bool {
+	return obj.obj.EgressOnlyTracking != nil
+}
+
+// description is TBD
+// SetEgressOnlyTracking sets the EgressOnlyTrackingMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetEgressOnlyTracking(value EgressOnlyTrackingMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.EGRESS_ONLY_TRACKING)
+	obj.egressOnlyTrackingHolder = nil
+	obj.obj.EgressOnlyTracking = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1187,6 +1229,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Mka != nil {
 
 		obj.Mka().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.EgressOnlyTracking != nil {
+
+		obj.EgressOnlyTracking().validateObj(vObj, set_default)
 	}
 
 }
@@ -1278,6 +1325,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Mka != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.MKA
+	}
+
+	if obj.obj.EgressOnlyTracking != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.EGRESS_ONLY_TRACKING
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

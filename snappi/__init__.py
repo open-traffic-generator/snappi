@@ -1197,6 +1197,12 @@ from .snappi import LldpOrgInfo
 from .snappi import LldpOrgInfoType
 from .snappi import LldpOrgInfoIter
 from .snappi import LldpIter
+from .snappi import EgressOnlyTracking
+from .snappi import EgressOnlyTrackingMetricTags
+from .snappi import EgressOnlyTrackingMetricTagsIter
+from .snappi import EgressOnlyTrackingFilter
+from .snappi import EgressOnlyTrackingFilterIter
+from .snappi import EgressOnlyTrackingIter
 from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
@@ -1272,6 +1278,8 @@ from .snappi import Ospfv2MetricsRequest
 from .snappi import ConvergenceRequest
 from .snappi import MacsecMetricsRequest
 from .snappi import MkaMetricsRequest
+from .snappi import EgressOnlyTrackingMetricsRequest
+from .snappi import EgressOnlyTrackingTaggedMetricsFilter
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1316,6 +1324,15 @@ from .snappi import MacsecMetric
 from .snappi import MacsecMetricIter
 from .snappi import MkaMetric
 from .snappi import MkaMetricIter
+from .snappi import EgressOnlyTrackingMetric
+from .snappi import EgressOnlyTrackingTaggedMetric
+from .snappi import EgressOnlyTrackingMetricTag
+from .snappi import EgressOnlyTrackingMetricTagValue
+from .snappi import EgressOnlyTrackingMetricTagIter
+from .snappi import EgressOnlyTrackingTimestamp
+from .snappi import EgressOnlyTrackingTxMetrics
+from .snappi import EgressOnlyTrackingTaggedMetricIter
+from .snappi import EgressOnlyTrackingMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
