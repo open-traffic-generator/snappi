@@ -270,12 +270,6 @@ type Rocev2FlowMetricPerQP interface {
 	SetFlowName(value string) Rocev2FlowMetricPerQP
 	// HasFlowName checks if FlowName has been set in Rocev2FlowMetricPerQP
 	HasFlowName() bool
-	// TrafficItem returns string, set in Rocev2FlowMetricPerQP.
-	TrafficItem() string
-	// SetTrafficItem assigns string provided by user to Rocev2FlowMetricPerQP
-	SetTrafficItem(value string) Rocev2FlowMetricPerQP
-	// HasTrafficItem checks if TrafficItem has been set in Rocev2FlowMetricPerQP
-	HasTrafficItem() bool
 	// PortTx returns string, set in Rocev2FlowMetricPerQP.
 	PortTx() string
 	// SetPortTx assigns string provided by user to Rocev2FlowMetricPerQP
@@ -486,28 +480,6 @@ func (obj *rocev2FlowMetricPerQP) SetFlowName(value string) Rocev2FlowMetricPerQ
 	return obj
 }
 
-// Traffic Item Name.
-// TrafficItem returns a string
-func (obj *rocev2FlowMetricPerQP) TrafficItem() string {
-
-	return *obj.obj.TrafficItem
-
-}
-
-// Traffic Item Name.
-// TrafficItem returns a string
-func (obj *rocev2FlowMetricPerQP) HasTrafficItem() bool {
-	return obj.obj.TrafficItem != nil
-}
-
-// Traffic Item Name.
-// SetTrafficItem sets the string value in the Rocev2FlowMetricPerQP object
-func (obj *rocev2FlowMetricPerQP) SetTrafficItem(value string) Rocev2FlowMetricPerQP {
-
-	obj.obj.TrafficItem = &value
-	return obj
-}
-
 // The name of the transmit port
 // PortTx returns a string
 func (obj *rocev2FlowMetricPerQP) PortTx() string {
@@ -552,7 +524,7 @@ func (obj *rocev2FlowMetricPerQP) SetPortRx(value string) Rocev2FlowMetricPerQP 
 	return obj
 }
 
-// Current Source QP number.
+// Current source QP number.
 // SrcQp returns a uint64
 func (obj *rocev2FlowMetricPerQP) SrcQp() uint64 {
 
@@ -560,13 +532,13 @@ func (obj *rocev2FlowMetricPerQP) SrcQp() uint64 {
 
 }
 
-// Current Source QP number.
+// Current source QP number.
 // SrcQp returns a uint64
 func (obj *rocev2FlowMetricPerQP) HasSrcQp() bool {
 	return obj.obj.SrcQp != nil
 }
 
-// Current Source QP number.
+// Current source QP number.
 // SetSrcQp sets the uint64 value in the Rocev2FlowMetricPerQP object
 func (obj *rocev2FlowMetricPerQP) SetSrcQp(value uint64) Rocev2FlowMetricPerQP {
 

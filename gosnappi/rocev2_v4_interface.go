@@ -287,7 +287,7 @@ type Rocev2V4Interface interface {
 	setNil()
 }
 
-// The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
+// The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
@@ -299,7 +299,7 @@ func (obj *rocev2V4Interface) Ipv4Name() string {
 
 }
 
-// The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
+// The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

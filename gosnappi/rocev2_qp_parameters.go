@@ -371,7 +371,7 @@ func (obj *rocev2QPParameters) Ecn() Rocev2QPParametersEcnEnum {
 	return Rocev2QPParametersEcnEnum(obj.obj.Ecn.Enum().String())
 }
 
-// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce.
+// This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce. non_ect quivalent is 00, ect_1 represent 01, ect_0 represent 10 and ce means 11.
 // Ecn returns a string
 func (obj *rocev2QPParameters) HasEcn() bool {
 	return obj.obj.Ecn != nil
@@ -412,7 +412,7 @@ func (obj *rocev2QPParameters) SetUdpSourcePort(value uint32) Rocev2QPParameters
 	return obj
 }
 
-// Initial PSN of the data transfer packet generated for this QP.
+// Initial packet sequence number of the data transfer packet generated for this QP.
 // InitialPsn returns a uint64
 func (obj *rocev2QPParameters) InitialPsn() uint64 {
 
@@ -420,13 +420,13 @@ func (obj *rocev2QPParameters) InitialPsn() uint64 {
 
 }
 
-// Initial PSN of the data transfer packet generated for this QP.
+// Initial packet sequence number of the data transfer packet generated for this QP.
 // InitialPsn returns a uint64
 func (obj *rocev2QPParameters) HasInitialPsn() bool {
 	return obj.obj.InitialPsn != nil
 }
 
-// Initial PSN of the data transfer packet generated for this QP.
+// Initial packet sequence number of the data transfer packet generated for this QP.
 // SetInitialPsn sets the uint64 value in the Rocev2QPParameters object
 func (obj *rocev2QPParameters) SetInitialPsn(value uint64) Rocev2QPParameters {
 

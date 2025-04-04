@@ -250,7 +250,7 @@ func (obj *rocev2QPConnectionType) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2QPConnectionType is specifies the connection type for the QP, ddetermining what and how the QP transfers data.
+// Rocev2QPConnectionType is specifies the connection type for the QP, determining what and how the QP transfers data.
 type Rocev2QPConnectionType interface {
 	Validation
 	// msg marshals Rocev2QPConnectionType to protobuf object *otg.Rocev2QPConnectionType

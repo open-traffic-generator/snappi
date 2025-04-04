@@ -302,7 +302,7 @@ func (obj *rocev2IPv6MetricsRequest) Choice() Rocev2IPv6MetricsRequestChoiceEnum
 	return Rocev2IPv6MetricsRequestChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Fetch stats per peer_name or per QP
+// Fetch stats per_peer
 // Choice returns a string
 func (obj *rocev2IPv6MetricsRequest) HasChoice() bool {
 	return obj.obj.Choice != nil

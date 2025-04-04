@@ -250,7 +250,7 @@ func (obj *rocev2TransmitType) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2TransmitType is ****Description here****
+// Rocev2TransmitType is roCEv2 flows can be configured to run in continuous mode or fixed iteration.
 type Rocev2TransmitType interface {
 	Validation
 	// msg marshals Rocev2TransmitType to protobuf object *otg.Rocev2TransmitType
@@ -279,10 +279,10 @@ type Rocev2TransmitType interface {
 	// HasChoice checks if Choice has been set in Rocev2TransmitType
 	HasChoice() bool
 	// TargetLineRate returns Rocev2TargetLineRate, set in Rocev2TransmitType.
-	// Rocev2TargetLineRate is ****Description here****
+	// Rocev2TargetLineRate is configure target line rate of traffic rate on this port as percentage of link speed.
 	TargetLineRate() Rocev2TargetLineRate
 	// SetTargetLineRate assigns Rocev2TargetLineRate provided by user to Rocev2TransmitType.
-	// Rocev2TargetLineRate is ****Description here****
+	// Rocev2TargetLineRate is configure target line rate of traffic rate on this port as percentage of link speed.
 	SetTargetLineRate(value Rocev2TargetLineRate) Rocev2TransmitType
 	// HasTargetLineRate checks if TargetLineRate has been set in Rocev2TransmitType
 	HasTargetLineRate() bool

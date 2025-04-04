@@ -307,8 +307,7 @@ type Rocev2IPv4ColumnNamesColumnNamesEnum string
 
 // Enum of ColumnNames on Rocev2IPv4ColumnNames
 var Rocev2IPv4ColumnNamesColumnNames = struct {
-	SESSION_STATE         Rocev2IPv4ColumnNamesColumnNamesEnum
-	QP_CONFUGRED          Rocev2IPv4ColumnNamesColumnNamesEnum
+	QP_CONFIGURED         Rocev2IPv4ColumnNamesColumnNamesEnum
 	QP_UP                 Rocev2IPv4ColumnNamesColumnNamesEnum
 	QP_DOWN               Rocev2IPv4ColumnNamesColumnNamesEnum
 	CONNECT_REQUEST_TX    Rocev2IPv4ColumnNamesColumnNamesEnum
@@ -325,8 +324,7 @@ var Rocev2IPv4ColumnNamesColumnNames = struct {
 	REJECT_RX             Rocev2IPv4ColumnNamesColumnNamesEnum
 	UNKNOWN_MSG_RX        Rocev2IPv4ColumnNamesColumnNamesEnum
 }{
-	SESSION_STATE:         Rocev2IPv4ColumnNamesColumnNamesEnum("session_state"),
-	QP_CONFUGRED:          Rocev2IPv4ColumnNamesColumnNamesEnum("qp_confugred"),
+	QP_CONFIGURED:         Rocev2IPv4ColumnNamesColumnNamesEnum("qp_configured"),
 	QP_UP:                 Rocev2IPv4ColumnNamesColumnNamesEnum("qp_up"),
 	QP_DOWN:               Rocev2IPv4ColumnNamesColumnNamesEnum("qp_down"),
 	CONNECT_REQUEST_TX:    Rocev2IPv4ColumnNamesColumnNamesEnum("connect_request_tx"),

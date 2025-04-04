@@ -12116,7 +12116,7 @@ components:
       properties:
         ipv4_name:
           description: |
-            The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
+            The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -12188,7 +12188,7 @@ components:
           x-field-uid: 2
     Rocev2.ConnectionType:
       description: |-
-        Specifies the connection type for the QP, ddetermining what and how the QP transfers data.
+        Specifies the connection type for the QP, determining what and how the QP transfers data.
       type: object
       properties:
         choice:
@@ -12228,7 +12228,7 @@ components:
           x-field-uid: 2
         ecn:
           description: |-
-            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce.
+            This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6 header to encode four different code points. Those are non_ect, ect_1, ect_0 and ce. non_ect quivalent is 00, ect_1 represent 01, ect_0 represent 10 and ce means 11.
           type: string
           default: ect_1
           x-enum:
@@ -12257,7 +12257,7 @@ components:
           x-field-uid: 4
         initial_psn:
           description: |-
-            Initial PSN of the data transfer packet generated for this QP.
+            Initial packet sequence number of the data transfer packet generated for this QP.
           type: integer
           format: uint64
           default: 0
@@ -16105,7 +16105,7 @@ components:
           x-field-uid: 2
     Rocev2.TransmitType:
       description: |-
-        ****Description here****
+        RoCEv2 flows can be configured to run in continuous mode or fixed iteration.
       type: object
       properties:
         choice:
@@ -16122,7 +16122,7 @@ components:
           x-field-uid: 2
     Rocev2.TargetLineRate:
       description: |-
-        ****Description here****
+        Configure target line rate of traffic rate on this port as percentage of link speed.
       type: object
       properties:
         value:
@@ -16130,6 +16130,9 @@ components:
             Target Line Rate as percentage of max line rate.
           type: integer
           format: uint64
+          minimum: 0
+          maximum: 100
+          default: 98
           x-field-uid: 1
         flows:
           type: array
@@ -16138,7 +16141,7 @@ components:
           x-field-uid: 2
     Rocev2.Flow:
       description: |-
-        ****Decription here****
+        Configure properties for a specific RoCE flow on the Tx port.
       type: object
       required:
       - tx_endpoint
@@ -16187,24 +16190,24 @@ components:
           x-field-uid: 5
         message_size_unit:
           description: |-
-            Unit of the transfer message size. Available options are Bytes, KB, MB and GB.
+            Unit of the transfer message size. Available options are Bytes, KiloBtyes (KB), NegaBytes (MB) and GigaBytes (GB).
           type: string
           default: MB
           x-enum:
-            Byte:
+            bytes:
               x-field-uid: 1
-            KB:
+            kb:
               x-field-uid: 2
-            MB:
+            mb:
               x-field-uid: 3
-            GB:
+            gb:
               x-field-uid: 4
           x-field-uid: 6
           enum:
-          - Byte
-          - KB
-          - MB
-          - GB
+          - bytes
+          - kb
+          - mb
+          - gb
     Rocev2.Verb:
       description: |-
         RoCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate and READ.
@@ -16253,7 +16256,7 @@ components:
           x-field-uid: 1
     PerPort.Options:
       description: |-
-        ****Add proper description here****
+        Port specific configurations.
       type: object
       properties:
         port_name:
@@ -16354,7 +16357,7 @@ components:
           x-field-uid: 4
     Rocev2.QPConnectionType:
       description: |-
-        Specifies the connection type for the QP, ddetermining what and how the QP transfers data.
+        Specifies the connection type for the QP, determining what and how the QP transfers data.
       type: object
       properties:
         choice:
@@ -21578,7 +21581,7 @@ components:
         choice:
           type: string
           description: |-
-            Fetch stats per peer_name or per QP
+            Fetch stats per_peer
           default: per_peer
           x-enum:
             per_peer:
@@ -21613,43 +21616,40 @@ components:
           items:
             type: string
             x-enum:
-              session_state:
+              qp_configured:
                 x-field-uid: 1
-              qp_confugred:
-                x-field-uid: 2
               qp_up:
-                x-field-uid: 3
+                x-field-uid: 2
               qp_down:
-                x-field-uid: 4
+                x-field-uid: 3
               connect_request_tx:
-                x-field-uid: 5
+                x-field-uid: 4
               connect_request_rx:
-                x-field-uid: 6
+                x-field-uid: 5
               connect_reply_tx:
-                x-field-uid: 7
+                x-field-uid: 6
               connect_reply_rx:
-                x-field-uid: 8
+                x-field-uid: 7
               ready_tx:
-                x-field-uid: 9
+                x-field-uid: 8
               ready_rx:
-                x-field-uid: 10
+                x-field-uid: 9
               disconnect_request_tx:
-                x-field-uid: 11
+                x-field-uid: 10
               disconnect_request_rx:
-                x-field-uid: 12
+                x-field-uid: 11
               disconnect_reply_tx:
-                x-field-uid: 13
+                x-field-uid: 12
               disconnect_reply_rx:
-                x-field-uid: 14
+                x-field-uid: 13
               reject_tx:
-                x-field-uid: 15
+                x-field-uid: 14
               reject_rx:
-                x-field-uid: 16
+                x-field-uid: 15
               unknown_msg_rx:
-                x-field-uid: 17
+                x-field-uid: 16
             enum:
-            - session_state
-            - qp_confugred
+            - qp_configured
             - qp_up
             - qp_down
             - connect_request_tx
@@ -21676,109 +21676,96 @@ components:
             The name of a configured RoCEv2 peer.
           type: string
           x-field-uid: 1
-        session_state:
-          description: |-
-            Session state as up or down. Up refers to an Established state and Down refers to any other state.
-          type: string
-          x-field-uid: 2
-          x-enum:
-            up:
-              x-field-uid: 1
-            down:
-              x-field-uid: 2
-          enum:
-          - up
-          - down
         qp_configured:
           description: |-
             Number of QPs configured on this port.
           type: integer
           format: uint64
-          x-field-uid: 3
+          x-field-uid: 2
         qp_up:
           description: |-
             Number of QPs that are in UP state.
           type: integer
           format: uint64
-          x-field-uid: 4
+          x-field-uid: 3
         qp_down:
           description: |-
             Number of QPs that have not come UP.
           type: integer
           format: uint64
-          x-field-uid: 5
+          x-field-uid: 4
         connect_request_tx:
           description: |-
             Number of REQ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 6
+          x-field-uid: 5
         connect_request_rx:
           description: |-
             Number of REQ Message Received.
           type: integer
           format: uint64
-          x-field-uid: 7
+          x-field-uid: 6
         connect_reply_tx:
           description: |-
             Number of REP Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 9
+          x-field-uid: 8
         connect_reply_rx:
           description: |-
             Number of REP Message Received.
           type: integer
           format: uint64
-          x-field-uid: 10
+          x-field-uid: 9
         ready_tx:
           description: |-
             Number of RTU Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 11
+          x-field-uid: 10
         ready_rx:
           description: |-
             Number of RTU Message Received.
           type: integer
           format: uint64
-          x-field-uid: 12
+          x-field-uid: 11
         disconnect_request_tx:
           description: |-
             Number of DREQ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 13
+          x-field-uid: 12
         disconnect_request_rx:
           description: |-
             Number of DREQ Message Received.
           type: integer
           format: uint64
-          x-field-uid: 14
+          x-field-uid: 13
         disconnect_reply_tx:
           description: |-
             Number of DREP Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 15
+          x-field-uid: 14
         disconnect_reply_rx:
           description: |-
             Number of DREP Message Received.
           type: integer
           format: uint64
-          x-field-uid: 16
+          x-field-uid: 15
         reject_tx:
           description: |-
             Number of REJ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 17
+          x-field-uid: 16
         unknown_msg_rx:
           description: |-
             Number of Unknown Message Received.
           type: integer
           format: uint64
-          x-field-uid: 18
+          x-field-uid: 17
     Rocev2IPv6.Metrics.Request:
       description: |-
         Request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
@@ -21787,7 +21774,7 @@ components:
         choice:
           type: string
           description: |-
-            Fetch stats per peer_name or per QP
+            Fetch stats per_peer
           default: per_peer
           x-enum:
             per_peer:
@@ -21822,43 +21809,40 @@ components:
           items:
             type: string
             x-enum:
-              session_state:
+              qp_configured:
                 x-field-uid: 1
-              qp_confugred:
-                x-field-uid: 2
               qp_up:
-                x-field-uid: 3
+                x-field-uid: 2
               qp_down:
-                x-field-uid: 4
+                x-field-uid: 3
               connect_request_tx:
-                x-field-uid: 5
+                x-field-uid: 4
               connect_request_rx:
-                x-field-uid: 6
+                x-field-uid: 5
               connect_reply_tx:
-                x-field-uid: 7
+                x-field-uid: 6
               connect_reply_rx:
-                x-field-uid: 8
+                x-field-uid: 7
               ready_tx:
-                x-field-uid: 9
+                x-field-uid: 8
               ready_rx:
-                x-field-uid: 10
+                x-field-uid: 9
               disconnect_request_tx:
-                x-field-uid: 11
+                x-field-uid: 10
               disconnect_request_rx:
-                x-field-uid: 12
+                x-field-uid: 11
               disconnect_reply_tx:
-                x-field-uid: 13
+                x-field-uid: 12
               disconnect_reply_rx:
-                x-field-uid: 14
+                x-field-uid: 13
               reject_tx:
-                x-field-uid: 15
+                x-field-uid: 14
               reject_rx:
-                x-field-uid: 16
+                x-field-uid: 15
               unknown_msg_rx:
-                x-field-uid: 17
+                x-field-uid: 16
             enum:
-            - session_state
-            - qp_confugred
+            - qp_configured
             - qp_up
             - qp_down
             - connect_request_tx
@@ -21885,109 +21869,96 @@ components:
             The name of a configured RoCEv2 peer.
           type: string
           x-field-uid: 1
-        session_state:
-          description: |-
-            Session state as up or down. Up refers to an Established state and Down refers to any other state.
-          type: string
-          x-field-uid: 2
-          x-enum:
-            up:
-              x-field-uid: 1
-            down:
-              x-field-uid: 2
-          enum:
-          - up
-          - down
         qp_configured:
           description: |-
             Number of QPs configured on this port.
           type: integer
           format: uint64
-          x-field-uid: 3
+          x-field-uid: 2
         qp_up:
           description: |-
             Number of QPs that are in UP state.
           type: integer
           format: uint64
-          x-field-uid: 4
+          x-field-uid: 3
         qp_down:
           description: |-
             Number of QPs that have not come UP.
           type: integer
           format: uint64
-          x-field-uid: 5
+          x-field-uid: 4
         connect_request_tx:
           description: |-
             Number of REQ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 6
+          x-field-uid: 5
         connect_request_rx:
           description: |-
             Number of REQ Message Received.
           type: integer
           format: uint64
-          x-field-uid: 7
+          x-field-uid: 6
         connect_reply_tx:
           description: |-
             Number of REP Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 9
+          x-field-uid: 8
         connect_reply_rx:
           description: |-
             Number of REP Message Received.
           type: integer
           format: uint64
-          x-field-uid: 10
+          x-field-uid: 9
         ready_tx:
           description: |-
             Number of RTU Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 11
+          x-field-uid: 10
         ready_rx:
           description: |-
             Number of RTU Message Received.
           type: integer
           format: uint64
-          x-field-uid: 12
+          x-field-uid: 11
         disconnect_request_tx:
           description: |-
             Number of DREQ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 13
+          x-field-uid: 12
         disconnect_request_rx:
           description: |-
             Number of DREQ Message Received.
           type: integer
           format: uint64
-          x-field-uid: 14
+          x-field-uid: 13
         disconnect_reply_tx:
           description: |-
             Number of DREP Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 15
+          x-field-uid: 14
         disconnect_reply_rx:
           description: |-
             Number of DREP Message Received.
           type: integer
           format: uint64
-          x-field-uid: 16
+          x-field-uid: 15
         reject_tx:
           description: |-
             Number of REJ Message Transmitted.
           type: integer
           format: uint64
-          x-field-uid: 17
+          x-field-uid: 16
         unknown_msg_rx:
           description: |-
             Number of Unknown Message Received.
           type: integer
           format: uint64
-          x-field-uid: 18
+          x-field-uid: 17
     Rocev2Flow.Metrics.Request:
       description: |-
         Request to retrieve RoCEv2 FLow statistics.
@@ -21996,7 +21967,7 @@ components:
         choice:
           type: string
           description: |-
-            Fetch stats per peer_name or per QP
+            Fetch stats per QP
           default: per_qp
           x-enum:
             per_qp:
@@ -22021,73 +21992,70 @@ components:
             x-enum:
               flow_name:
                 x-field-uid: 1
-              traffic_item:
-                x-field-uid: 2
               port_tx:
-                x-field-uid: 3
+                x-field-uid: 2
               port_rx:
-                x-field-uid: 4
+                x-field-uid: 3
               src_qp:
-                x-field-uid: 5
+                x-field-uid: 4
               dest_qp:
-                x-field-uid: 6
+                x-field-uid: 5
               src_ipv4:
-                x-field-uid: 7
+                x-field-uid: 6
               dest_ipv4:
-                x-field-uid: 8
+                x-field-uid: 7
               data_frames_tx:
-                x-field-uid: 9
+                x-field-uid: 8
               data_frames_rx:
-                x-field-uid: 10
+                x-field-uid: 9
               frame_delta:
-                x-field-uid: 11
+                x-field-uid: 10
               data_frames_retransmitted:
-                x-field-uid: 12
+                x-field-uid: 11
               frame_sequence_error:
-                x-field-uid: 13
+                x-field-uid: 12
               tx_bytes:
-                x-field-uid: 14
+                x-field-uid: 13
               rx_bytes:
-                x-field-uid: 15
+                x-field-uid: 14
               data_tx_rate:
-                x-field-uid: 16
+                x-field-uid: 15
               data_rx_rate:
-                x-field-uid: 17
+                x-field-uid: 16
               message_tx:
-                x-field-uid: 18
+                x-field-uid: 17
               message_complete_rx:
-                x-field-uid: 19
+                x-field-uid: 18
               message_fail:
-                x-field-uid: 20
+                x-field-uid: 19
               flow_completion_time:
-                x-field-uid: 21
+                x-field-uid: 20
               avg_latency:
-                x-field-uid: 22
+                x-field-uid: 21
               min_latency:
-                x-field-uid: 23
+                x-field-uid: 22
               max_latency:
-                x-field-uid: 24
+                x-field-uid: 23
               ecn_ce_rx:
-                x-field-uid: 25
+                x-field-uid: 24
               cnp_tx:
-                x-field-uid: 26
+                x-field-uid: 25
               cnp_rx:
-                x-field-uid: 27
+                x-field-uid: 26
               ack_tx:
-                x-field-uid: 28
+                x-field-uid: 27
               ack_rx:
-                x-field-uid: 29
+                x-field-uid: 28
               nak_tx:
-                x-field-uid: 30
+                x-field-uid: 29
               nak_rx:
-                x-field-uid: 31
+                x-field-uid: 30
               first_timestamp:
-                x-field-uid: 32
+                x-field-uid: 31
               last_timestamp:
-                x-field-uid: 33
+                x-field-uid: 32
             enum:
             - flow_name
-            - traffic_item
             - port_tx
             - port_rx
             - src_qp
@@ -22130,193 +22098,188 @@ components:
             Flow Name.
           type: string
           x-field-uid: 1
-        traffic_item:
-          description: |-
-            Traffic Item Name.
-          type: string
-          x-field-uid: 2
         port_tx:
           description: |-
             The name of the transmit port
           type: string
-          x-field-uid: 3
+          x-field-uid: 2
         port_rx:
           description: |-
             The name of the receive port
           type: string
-          x-field-uid: 4
+          x-field-uid: 3
         src_qp:
           description: |-
-            Current Source QP number.
+            Current source QP number.
           type: integer
           format: uint64
-          x-field-uid: 5
+          x-field-uid: 4
         dest_qp:
           description: |-
             Current destination QP number.
           type: integer
           format: uint64
-          x-field-uid: 6
+          x-field-uid: 5
         src_ipv4:
           description: |-
             Current source address.
           type: string
           format: ipv4
-          x-field-uid: 7
+          x-field-uid: 6
         dest_ipv4:
           description: |-
             Current destination address.
           type: string
           format: ipv4
-          x-field-uid: 8
+          x-field-uid: 7
         data_frames_tx:
           description: |-
             Current number of data frames transmitted.
           type: integer
           format: uint64
-          x-field-uid: 9
+          x-field-uid: 8
         data_frames_rx:
           description: |-
             Current number of data frames received.
           type: integer
           format: uint64
-          x-field-uid: 10
+          x-field-uid: 9
         frame_delta:
           description: |-
             Current differnece between tx and rx data frames
           type: integer
           format: uint64
-          x-field-uid: 11
+          x-field-uid: 10
         data_frames_retransmitted:
           description: |-
             Current number of data frames re-transmitted.
           type: integer
           format: uint64
-          x-field-uid: 12
+          x-field-uid: 11
         frame_sequence_error:
           description: |-
             Current number of frame sequence errors.
           type: integer
           format: uint64
-          x-field-uid: 13
+          x-field-uid: 12
         tx_bytes:
           description: |-
             Current number of bytes transmitted.
           type: integer
           format: uint64
-          x-field-uid: 14
+          x-field-uid: 13
         rx_bytes:
           description: |-
             Current number of bytes received.
           type: integer
           format: uint64
-          x-field-uid: 15
+          x-field-uid: 14
         data_tx_rate:
           description: |-
             Current rate at which data is transmitted in Gbps.
           type: integer
           format: uint64
-          x-field-uid: 16
+          x-field-uid: 15
         data_rx_rate:
           description: |-
             Current rate at which data is received in Gbps.
           type: integer
           format: uint64
-          x-field-uid: 17
+          x-field-uid: 16
         message_tx:
           description: |-
             Current number of Message transmitted.
           type: integer
           format: uint64
-          x-field-uid: 18
+          x-field-uid: 17
         message_complete_rx:
           description: |-
             Current number of Message Complete received.
           type: integer
           format: uint64
-          x-field-uid: 19
+          x-field-uid: 18
         message_fail:
           description: |-
             Current number of Message Fail count.
           type: integer
           format: uint64
-          x-field-uid: 20
+          x-field-uid: 19
         flow_completion_time:
           description: |-
             Current flow comletion time in ms.
           type: integer
           format: uint64
-          x-field-uid: 21
+          x-field-uid: 20
         avg_latency:
           description: |-
             Current average latency measured in ns.
           type: integer
           format: uint64
-          x-field-uid: 22
+          x-field-uid: 21
         min_latency:
           description: |-
             Current minimum latency measured in ns.
           type: integer
           format: uint64
-          x-field-uid: 23
+          x-field-uid: 22
         max_latency:
           description: |-
             Current maximum latency measured in ns.
           type: integer
           format: uint64
-          x-field-uid: 24
+          x-field-uid: 23
         ecn_ce_rx:
           description: |-
             Current number of ECN-CE Recevied.
           type: integer
           format: uint64
-          x-field-uid: 25
+          x-field-uid: 24
         cnp_tx:
           description: |-
             Current number of CNP transmitted.
           type: integer
           format: uint64
-          x-field-uid: 26
+          x-field-uid: 25
         cnp_rx:
           description: |-
             Current number of CNP received.
           type: integer
           format: uint64
-          x-field-uid: 27
+          x-field-uid: 26
         ack_tx:
           description: |-
             Current number of ACK transmitted.
           type: integer
           format: uint64
-          x-field-uid: 28
+          x-field-uid: 27
         ack_rx:
           description: |-
             Current number of ACK received.
           type: integer
           format: uint64
-          x-field-uid: 29
+          x-field-uid: 28
         nak_tx:
           description: |-
             Current number of NAK transmitted.
           type: integer
           format: uint64
-          x-field-uid: 30
+          x-field-uid: 29
         nak_rx:
           description: |-
             Current number of NAK received.
           type: integer
           format: uint64
-          x-field-uid: 31
+          x-field-uid: 30
         first_timestamp:
           description: |-
             First Timestamp.
           type: string
-          x-field-uid: 32
+          x-field-uid: 31
         last_timestamp:
           description: |-
             Last Timestamp.
           type: string
-          x-field-uid: 33
+          x-field-uid: 32
     States.Request:
       description: |-
         Request to traffic generator for states of choice

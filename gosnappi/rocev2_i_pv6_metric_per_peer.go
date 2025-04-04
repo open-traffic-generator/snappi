@@ -270,12 +270,6 @@ type Rocev2IPv6MetricPerPeer interface {
 	SetName(value string) Rocev2IPv6MetricPerPeer
 	// HasName checks if Name has been set in Rocev2IPv6MetricPerPeer
 	HasName() bool
-	// SessionState returns Rocev2IPv6MetricPerPeerSessionStateEnum, set in Rocev2IPv6MetricPerPeer
-	SessionState() Rocev2IPv6MetricPerPeerSessionStateEnum
-	// SetSessionState assigns Rocev2IPv6MetricPerPeerSessionStateEnum provided by user to Rocev2IPv6MetricPerPeer
-	SetSessionState(value Rocev2IPv6MetricPerPeerSessionStateEnum) Rocev2IPv6MetricPerPeer
-	// HasSessionState checks if SessionState has been set in Rocev2IPv6MetricPerPeer
-	HasSessionState() bool
 	// QpConfigured returns uint64, set in Rocev2IPv6MetricPerPeer.
 	QpConfigured() uint64
 	// SetQpConfigured assigns uint64 provided by user to Rocev2IPv6MetricPerPeer
@@ -387,40 +381,6 @@ func (obj *rocev2IPv6MetricPerPeer) HasName() bool {
 func (obj *rocev2IPv6MetricPerPeer) SetName(value string) Rocev2IPv6MetricPerPeer {
 
 	obj.obj.Name = &value
-	return obj
-}
-
-type Rocev2IPv6MetricPerPeerSessionStateEnum string
-
-// Enum of SessionState on Rocev2IPv6MetricPerPeer
-var Rocev2IPv6MetricPerPeerSessionState = struct {
-	UP   Rocev2IPv6MetricPerPeerSessionStateEnum
-	DOWN Rocev2IPv6MetricPerPeerSessionStateEnum
-}{
-	UP:   Rocev2IPv6MetricPerPeerSessionStateEnum("up"),
-	DOWN: Rocev2IPv6MetricPerPeerSessionStateEnum("down"),
-}
-
-func (obj *rocev2IPv6MetricPerPeer) SessionState() Rocev2IPv6MetricPerPeerSessionStateEnum {
-	return Rocev2IPv6MetricPerPeerSessionStateEnum(obj.obj.SessionState.Enum().String())
-}
-
-// Session state as up or down. Up refers to an Established state and Down refers to any other state.
-// SessionState returns a string
-func (obj *rocev2IPv6MetricPerPeer) HasSessionState() bool {
-	return obj.obj.SessionState != nil
-}
-
-func (obj *rocev2IPv6MetricPerPeer) SetSessionState(value Rocev2IPv6MetricPerPeerSessionStateEnum) Rocev2IPv6MetricPerPeer {
-	intValue, ok := otg.Rocev2IPv6MetricPerPeer_SessionState_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Rocev2IPv6MetricPerPeerSessionStateEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.Rocev2IPv6MetricPerPeer_SessionState_Enum(intValue)
-	obj.obj.SessionState = &enumValue
-
 	return obj
 }
 

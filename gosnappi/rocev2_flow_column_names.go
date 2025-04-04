@@ -275,7 +275,6 @@ type Rocev2FlowColumnNamesColumnNamesEnum string
 // Enum of ColumnNames on Rocev2FlowColumnNames
 var Rocev2FlowColumnNamesColumnNames = struct {
 	FLOW_NAME                 Rocev2FlowColumnNamesColumnNamesEnum
-	TRAFFIC_ITEM              Rocev2FlowColumnNamesColumnNamesEnum
 	PORT_TX                   Rocev2FlowColumnNamesColumnNamesEnum
 	PORT_RX                   Rocev2FlowColumnNamesColumnNamesEnum
 	SRC_QP                    Rocev2FlowColumnNamesColumnNamesEnum
@@ -309,7 +308,6 @@ var Rocev2FlowColumnNamesColumnNames = struct {
 	LAST_TIMESTAMP            Rocev2FlowColumnNamesColumnNamesEnum
 }{
 	FLOW_NAME:                 Rocev2FlowColumnNamesColumnNamesEnum("flow_name"),
-	TRAFFIC_ITEM:              Rocev2FlowColumnNamesColumnNamesEnum("traffic_item"),
 	PORT_TX:                   Rocev2FlowColumnNamesColumnNamesEnum("port_tx"),
 	PORT_RX:                   Rocev2FlowColumnNamesColumnNamesEnum("port_rx"),
 	SRC_QP:                    Rocev2FlowColumnNamesColumnNamesEnum("src_qp"),

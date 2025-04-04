@@ -250,7 +250,7 @@ func (obj *perPortOptions) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PerPortOptions is ****Add proper description here****
+// PerPortOptions is port specific configurations.
 type PerPortOptions interface {
 	Validation
 	// msg marshals PerPortOptions to protobuf object *otg.PerPortOptions

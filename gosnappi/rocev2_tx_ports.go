@@ -279,10 +279,10 @@ type Rocev2TxPorts interface {
 	// HasPortName checks if PortName has been set in Rocev2TxPorts
 	HasPortName() bool
 	// TransmitType returns Rocev2TransmitType, set in Rocev2TxPorts.
-	// Rocev2TransmitType is ****Description here****
+	// Rocev2TransmitType is roCEv2 flows can be configured to run in continuous mode or fixed iteration.
 	TransmitType() Rocev2TransmitType
 	// SetTransmitType assigns Rocev2TransmitType provided by user to Rocev2TxPorts.
-	// Rocev2TransmitType is ****Description here****
+	// Rocev2TransmitType is roCEv2 flows can be configured to run in continuous mode or fixed iteration.
 	SetTransmitType(value Rocev2TransmitType) Rocev2TxPorts
 	// HasTransmitType checks if TransmitType has been set in Rocev2TxPorts
 	HasTransmitType() bool

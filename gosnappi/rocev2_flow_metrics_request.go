@@ -302,7 +302,7 @@ func (obj *rocev2FlowMetricsRequest) Choice() Rocev2FlowMetricsRequestChoiceEnum
 	return Rocev2FlowMetricsRequestChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Fetch stats per peer_name or per QP
+// Fetch stats per QP
 // Choice returns a string
 func (obj *rocev2FlowMetricsRequest) HasChoice() bool {
 	return obj.obj.Choice != nil

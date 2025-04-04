@@ -8926,7 +8926,8 @@ message DeviceRocev2Peer {
 // peers to various destinations.
 message Rocev2V4Interface {
 
-  // The unique name of the IPv4, used as the source IP for this list of RoCEv2 peers.
+  // The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2
+  // peers.
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8975,7 +8976,7 @@ message Rocev2QPs {
   Rocev2ConnectionType connection_type = 2;
 }
 
-// Specifies the connection type for the QP, ddetermining what and how the QP transfers
+// Specifies the connection type for the QP, determining what and how the QP transfers
 // data.
 message Rocev2ConnectionType {
 
@@ -9015,7 +9016,8 @@ message Rocev2QPParameters {
   }
   // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
   // header to encode four different code points. Those are non_ect, ect_1, ect_0 and
-  // ce.
+  // ce. non_ect quivalent is 00, ect_1 represent 01, ect_0 represent 10 and ce means
+  // 11.
   // default = Ecn.Enum.ect_1
   optional Ecn.Enum ecn = 3;
 
@@ -9023,7 +9025,7 @@ message Rocev2QPParameters {
   // default = 49152
   optional uint32 udp_source_port = 4;
 
-  // Initial PSN of the data transfer packet generated for this QP.
+  // Initial packet sequence number of the data transfer packet generated for this QP.
   // default = 0
   optional uint64 initial_psn = 5;
 
@@ -12156,7 +12158,7 @@ message Rocev2TxPorts {
   Rocev2TransmitType transmit_type = 2;
 }
 
-// ****Description here****
+// RoCEv2 flows can be configured to run in continuous mode or fixed iteration.
 message Rocev2TransmitType {
 
   message Choice {
@@ -12173,17 +12175,18 @@ message Rocev2TransmitType {
   Rocev2TargetLineRate target_line_rate = 2;
 }
 
-// ****Description here****
+// Configure target line rate of traffic rate on this port as percentage of link speed.
 message Rocev2TargetLineRate {
 
   // Target Line Rate as percentage of max line rate.
+  // default = 98
   optional uint64 value = 1;
 
   // Description missing in models
   repeated Rocev2Flow flows = 2;
 }
 
-// ****Decription here****
+// Configure properties for a specific RoCE flow on the Tx port.
 message Rocev2Flow {
 
   // The unique name of an emulated device that will be transmitting the flows.
@@ -12217,13 +12220,14 @@ message Rocev2Flow {
   message MessageSizeUnit {
     enum Enum {
       unspecified = 0;
-      Byte = 1;
-      KB = 2;
-      MB = 3;
-      GB = 4;
+      bytes = 1;
+      kb = 2;
+      mb = 3;
+      gb = 4;
     }
   }
-  // Unit of the transfer message size. Available options are Bytes, KB, MB and GB.
+  // Unit of the transfer message size. Available options are Bytes, KiloBtyes (KB), NegaBytes
+  // (MB) and GigaBytes (GB).
   // default = MessageSizeUnit.Enum.mb
   optional MessageSizeUnit.Enum message_size_unit = 6;
 }
@@ -12261,7 +12265,7 @@ message Rocev2ImmediateData {
   optional string immediate_data = 1;
 }
 
-// ****Add proper description here****
+// Port specific configurations.
 message PerPortOptions {
 
   // The name of port for which this settings will be applied to.
@@ -12340,7 +12344,7 @@ message Rocev2CNP {
   optional uint32 cnp_delay_timer = 4;
 }
 
-// Specifies the connection type for the QP, ddetermining what and how the QP transfers
+// Specifies the connection type for the QP, determining what and how the QP transfers
 // data.
 message Rocev2QPConnectionType {
 
@@ -15652,7 +15656,7 @@ message Rocev2IPv4MetricsRequest {
       per_peer = 1;
     }
   }
-  // Fetch stats per peer_name or per QP
+  // Fetch stats per_peer
   // default = Choice.Enum.per_peer
   optional Choice.Enum choice = 1;
 
@@ -15675,23 +15679,22 @@ message Rocev2IPv4ColumnNames {
   message ColumnNames {
     enum Enum {
       unspecified = 0;
-      session_state = 1;
-      qp_confugred = 2;
-      qp_up = 3;
-      qp_down = 4;
-      connect_request_tx = 5;
-      connect_request_rx = 6;
-      connect_reply_tx = 7;
-      connect_reply_rx = 8;
-      ready_tx = 9;
-      ready_rx = 10;
-      disconnect_request_tx = 11;
-      disconnect_request_rx = 12;
-      disconnect_reply_tx = 13;
-      disconnect_reply_rx = 14;
-      reject_tx = 15;
-      reject_rx = 16;
-      unknown_msg_rx = 17;
+      qp_configured = 1;
+      qp_up = 2;
+      qp_down = 3;
+      connect_request_tx = 4;
+      connect_request_rx = 5;
+      connect_reply_tx = 6;
+      connect_reply_rx = 7;
+      ready_tx = 8;
+      ready_rx = 9;
+      disconnect_request_tx = 10;
+      disconnect_request_rx = 11;
+      disconnect_reply_tx = 12;
+      disconnect_reply_rx = 13;
+      reject_tx = 14;
+      reject_rx = 15;
+      unknown_msg_rx = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -15706,61 +15709,50 @@ message Rocev2IPv4MetricPerPeer {
   // The name of a configured RoCEv2 peer.
   optional string name = 1;
 
-  message SessionState {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
-  optional SessionState.Enum session_state = 2;
-
   // Number of QPs configured on this port.
-  optional uint64 qp_configured = 3;
+  optional uint64 qp_configured = 2;
 
   // Number of QPs that are in UP state.
-  optional uint64 qp_up = 4;
+  optional uint64 qp_up = 3;
 
   // Number of QPs that have not come UP.
-  optional uint64 qp_down = 5;
+  optional uint64 qp_down = 4;
 
   // Number of REQ Message Transmitted.
-  optional uint64 connect_request_tx = 6;
+  optional uint64 connect_request_tx = 5;
 
   // Number of REQ Message Received.
-  optional uint64 connect_request_rx = 7;
+  optional uint64 connect_request_rx = 6;
 
   // Number of REP Message Transmitted.
-  optional uint64 connect_reply_tx = 9;
+  optional uint64 connect_reply_tx = 8;
 
   // Number of REP Message Received.
-  optional uint64 connect_reply_rx = 10;
+  optional uint64 connect_reply_rx = 9;
 
   // Number of RTU Message Transmitted.
-  optional uint64 ready_tx = 11;
+  optional uint64 ready_tx = 10;
 
   // Number of RTU Message Received.
-  optional uint64 ready_rx = 12;
+  optional uint64 ready_rx = 11;
 
   // Number of DREQ Message Transmitted.
-  optional uint64 disconnect_request_tx = 13;
+  optional uint64 disconnect_request_tx = 12;
 
   // Number of DREQ Message Received.
-  optional uint64 disconnect_request_rx = 14;
+  optional uint64 disconnect_request_rx = 13;
 
   // Number of DREP Message Transmitted.
-  optional uint64 disconnect_reply_tx = 15;
+  optional uint64 disconnect_reply_tx = 14;
 
   // Number of DREP Message Received.
-  optional uint64 disconnect_reply_rx = 16;
+  optional uint64 disconnect_reply_rx = 15;
 
   // Number of REJ Message Transmitted.
-  optional uint64 reject_tx = 17;
+  optional uint64 reject_tx = 16;
 
   // Number of Unknown Message Received.
-  optional uint64 unknown_msg_rx = 18;
+  optional uint64 unknown_msg_rx = 17;
 }
 
 // Request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
@@ -15772,7 +15764,7 @@ message Rocev2IPv6MetricsRequest {
       per_peer = 1;
     }
   }
-  // Fetch stats per peer_name or per QP
+  // Fetch stats per_peer
   // default = Choice.Enum.per_peer
   optional Choice.Enum choice = 1;
 
@@ -15795,23 +15787,22 @@ message Rocev2IPv6ColumnNames {
   message ColumnNames {
     enum Enum {
       unspecified = 0;
-      session_state = 1;
-      qp_confugred = 2;
-      qp_up = 3;
-      qp_down = 4;
-      connect_request_tx = 5;
-      connect_request_rx = 6;
-      connect_reply_tx = 7;
-      connect_reply_rx = 8;
-      ready_tx = 9;
-      ready_rx = 10;
-      disconnect_request_tx = 11;
-      disconnect_request_rx = 12;
-      disconnect_reply_tx = 13;
-      disconnect_reply_rx = 14;
-      reject_tx = 15;
-      reject_rx = 16;
-      unknown_msg_rx = 17;
+      qp_configured = 1;
+      qp_up = 2;
+      qp_down = 3;
+      connect_request_tx = 4;
+      connect_request_rx = 5;
+      connect_reply_tx = 6;
+      connect_reply_rx = 7;
+      ready_tx = 8;
+      ready_rx = 9;
+      disconnect_request_tx = 10;
+      disconnect_request_rx = 11;
+      disconnect_reply_tx = 12;
+      disconnect_reply_rx = 13;
+      reject_tx = 14;
+      reject_rx = 15;
+      unknown_msg_rx = 16;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -15826,61 +15817,50 @@ message Rocev2IPv6MetricPerPeer {
   // The name of a configured RoCEv2 peer.
   optional string name = 1;
 
-  message SessionState {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
-  optional SessionState.Enum session_state = 2;
-
   // Number of QPs configured on this port.
-  optional uint64 qp_configured = 3;
+  optional uint64 qp_configured = 2;
 
   // Number of QPs that are in UP state.
-  optional uint64 qp_up = 4;
+  optional uint64 qp_up = 3;
 
   // Number of QPs that have not come UP.
-  optional uint64 qp_down = 5;
+  optional uint64 qp_down = 4;
 
   // Number of REQ Message Transmitted.
-  optional uint64 connect_request_tx = 6;
+  optional uint64 connect_request_tx = 5;
 
   // Number of REQ Message Received.
-  optional uint64 connect_request_rx = 7;
+  optional uint64 connect_request_rx = 6;
 
   // Number of REP Message Transmitted.
-  optional uint64 connect_reply_tx = 9;
+  optional uint64 connect_reply_tx = 8;
 
   // Number of REP Message Received.
-  optional uint64 connect_reply_rx = 10;
+  optional uint64 connect_reply_rx = 9;
 
   // Number of RTU Message Transmitted.
-  optional uint64 ready_tx = 11;
+  optional uint64 ready_tx = 10;
 
   // Number of RTU Message Received.
-  optional uint64 ready_rx = 12;
+  optional uint64 ready_rx = 11;
 
   // Number of DREQ Message Transmitted.
-  optional uint64 disconnect_request_tx = 13;
+  optional uint64 disconnect_request_tx = 12;
 
   // Number of DREQ Message Received.
-  optional uint64 disconnect_request_rx = 14;
+  optional uint64 disconnect_request_rx = 13;
 
   // Number of DREP Message Transmitted.
-  optional uint64 disconnect_reply_tx = 15;
+  optional uint64 disconnect_reply_tx = 14;
 
   // Number of DREP Message Received.
-  optional uint64 disconnect_reply_rx = 16;
+  optional uint64 disconnect_reply_rx = 15;
 
   // Number of REJ Message Transmitted.
-  optional uint64 reject_tx = 17;
+  optional uint64 reject_tx = 16;
 
   // Number of Unknown Message Received.
-  optional uint64 unknown_msg_rx = 18;
+  optional uint64 unknown_msg_rx = 17;
 }
 
 // Request to retrieve RoCEv2 FLow statistics.
@@ -15892,7 +15872,7 @@ message Rocev2FlowMetricsRequest {
       per_qp = 1;
     }
   }
-  // Fetch stats per peer_name or per QP
+  // Fetch stats per QP
   // default = Choice.Enum.per_qp
   optional Choice.Enum choice = 1;
 
@@ -15907,38 +15887,37 @@ message Rocev2FlowColumnNames {
     enum Enum {
       unspecified = 0;
       flow_name = 1;
-      traffic_item = 2;
-      port_tx = 3;
-      port_rx = 4;
-      src_qp = 5;
-      dest_qp = 6;
-      src_ipv4 = 7;
-      dest_ipv4 = 8;
-      data_frames_tx = 9;
-      data_frames_rx = 10;
-      frame_delta = 11;
-      data_frames_retransmitted = 12;
-      frame_sequence_error = 13;
-      tx_bytes = 14;
-      rx_bytes = 15;
-      data_tx_rate = 16;
-      data_rx_rate = 17;
-      message_tx = 18;
-      message_complete_rx = 19;
-      message_fail = 20;
-      flow_completion_time = 21;
-      avg_latency = 22;
-      min_latency = 23;
-      max_latency = 24;
-      ecn_ce_rx = 25;
-      cnp_tx = 26;
-      cnp_rx = 27;
-      ack_tx = 28;
-      ack_rx = 29;
-      nak_tx = 30;
-      nak_rx = 31;
-      first_timestamp = 32;
-      last_timestamp = 33;
+      port_tx = 2;
+      port_rx = 3;
+      src_qp = 4;
+      dest_qp = 5;
+      src_ipv4 = 6;
+      dest_ipv4 = 7;
+      data_frames_tx = 8;
+      data_frames_rx = 9;
+      frame_delta = 10;
+      data_frames_retransmitted = 11;
+      frame_sequence_error = 12;
+      tx_bytes = 13;
+      rx_bytes = 14;
+      data_tx_rate = 15;
+      data_rx_rate = 16;
+      message_tx = 17;
+      message_complete_rx = 18;
+      message_fail = 19;
+      flow_completion_time = 20;
+      avg_latency = 21;
+      min_latency = 22;
+      max_latency = 23;
+      ecn_ce_rx = 24;
+      cnp_tx = 25;
+      cnp_rx = 26;
+      ack_tx = 27;
+      ack_rx = 28;
+      nak_tx = 29;
+      nak_rx = 30;
+      first_timestamp = 31;
+      last_timestamp = 32;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -15953,101 +15932,98 @@ message Rocev2FlowMetricPerQP {
   // Flow Name.
   optional string flow_name = 1;
 
-  // Traffic Item Name.
-  optional string traffic_item = 2;
-
   // The name of the transmit port
-  optional string port_tx = 3;
+  optional string port_tx = 2;
 
   // The name of the receive port
-  optional string port_rx = 4;
+  optional string port_rx = 3;
 
-  // Current Source QP number.
-  optional uint64 src_qp = 5;
+  // Current source QP number.
+  optional uint64 src_qp = 4;
 
   // Current destination QP number.
-  optional uint64 dest_qp = 6;
+  optional uint64 dest_qp = 5;
 
   // Current source address.
-  optional string src_ipv4 = 7;
+  optional string src_ipv4 = 6;
 
   // Current destination address.
-  optional string dest_ipv4 = 8;
+  optional string dest_ipv4 = 7;
 
   // Current number of data frames transmitted.
-  optional uint64 data_frames_tx = 9;
+  optional uint64 data_frames_tx = 8;
 
   // Current number of data frames received.
-  optional uint64 data_frames_rx = 10;
+  optional uint64 data_frames_rx = 9;
 
   // Current differnece between tx and rx data frames
-  optional uint64 frame_delta = 11;
+  optional uint64 frame_delta = 10;
 
   // Current number of data frames re-transmitted.
-  optional uint64 data_frames_retransmitted = 12;
+  optional uint64 data_frames_retransmitted = 11;
 
   // Current number of frame sequence errors.
-  optional uint64 frame_sequence_error = 13;
+  optional uint64 frame_sequence_error = 12;
 
   // Current number of bytes transmitted.
-  optional uint64 tx_bytes = 14;
+  optional uint64 tx_bytes = 13;
 
   // Current number of bytes received.
-  optional uint64 rx_bytes = 15;
+  optional uint64 rx_bytes = 14;
 
   // Current rate at which data is transmitted in Gbps.
-  optional uint64 data_tx_rate = 16;
+  optional uint64 data_tx_rate = 15;
 
   // Current rate at which data is received in Gbps.
-  optional uint64 data_rx_rate = 17;
+  optional uint64 data_rx_rate = 16;
 
   // Current number of Message transmitted.
-  optional uint64 message_tx = 18;
+  optional uint64 message_tx = 17;
 
   // Current number of Message Complete received.
-  optional uint64 message_complete_rx = 19;
+  optional uint64 message_complete_rx = 18;
 
   // Current number of Message Fail count.
-  optional uint64 message_fail = 20;
+  optional uint64 message_fail = 19;
 
   // Current flow comletion time in ms.
-  optional uint64 flow_completion_time = 21;
+  optional uint64 flow_completion_time = 20;
 
   // Current average latency measured in ns.
-  optional uint64 avg_latency = 22;
+  optional uint64 avg_latency = 21;
 
   // Current minimum latency measured in ns.
-  optional uint64 min_latency = 23;
+  optional uint64 min_latency = 22;
 
   // Current maximum latency measured in ns.
-  optional uint64 max_latency = 24;
+  optional uint64 max_latency = 23;
 
   // Current number of ECN-CE Recevied.
-  optional uint64 ecn_ce_rx = 25;
+  optional uint64 ecn_ce_rx = 24;
 
   // Current number of CNP transmitted.
-  optional uint64 cnp_tx = 26;
+  optional uint64 cnp_tx = 25;
 
   // Current number of CNP received.
-  optional uint64 cnp_rx = 27;
+  optional uint64 cnp_rx = 26;
 
   // Current number of ACK transmitted.
-  optional uint64 ack_tx = 28;
+  optional uint64 ack_tx = 27;
 
   // Current number of ACK received.
-  optional uint64 ack_rx = 29;
+  optional uint64 ack_rx = 28;
 
   // Current number of NAK transmitted.
-  optional uint64 nak_tx = 30;
+  optional uint64 nak_tx = 29;
 
   // Current number of NAK received.
-  optional uint64 nak_rx = 31;
+  optional uint64 nak_rx = 30;
 
   // First Timestamp.
-  optional string first_timestamp = 32;
+  optional string first_timestamp = 31;
 
   // Last Timestamp.
-  optional string last_timestamp = 33;
+  optional string last_timestamp = 32;
 }
 
 // Request to traffic generator for states of choice

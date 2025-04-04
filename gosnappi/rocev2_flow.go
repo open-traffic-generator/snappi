@@ -250,7 +250,7 @@ func (obj *rocev2Flow) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2Flow is ****Decription here****
+// Rocev2Flow is configure properties for a specific RoCE flow on the Tx port.
 type Rocev2Flow interface {
 	Validation
 	// msg marshals Rocev2Flow to protobuf object *otg.Rocev2Flow
@@ -440,22 +440,22 @@ type Rocev2FlowMessageSizeUnitEnum string
 
 // Enum of MessageSizeUnit on Rocev2Flow
 var Rocev2FlowMessageSizeUnit = struct {
-	BYTE Rocev2FlowMessageSizeUnitEnum
-	KB   Rocev2FlowMessageSizeUnitEnum
-	MB   Rocev2FlowMessageSizeUnitEnum
-	GB   Rocev2FlowMessageSizeUnitEnum
+	BYTES Rocev2FlowMessageSizeUnitEnum
+	KB    Rocev2FlowMessageSizeUnitEnum
+	MB    Rocev2FlowMessageSizeUnitEnum
+	GB    Rocev2FlowMessageSizeUnitEnum
 }{
-	BYTE: Rocev2FlowMessageSizeUnitEnum("Byte"),
-	KB:   Rocev2FlowMessageSizeUnitEnum("KB"),
-	MB:   Rocev2FlowMessageSizeUnitEnum("MB"),
-	GB:   Rocev2FlowMessageSizeUnitEnum("GB"),
+	BYTES: Rocev2FlowMessageSizeUnitEnum("bytes"),
+	KB:    Rocev2FlowMessageSizeUnitEnum("kb"),
+	MB:    Rocev2FlowMessageSizeUnitEnum("mb"),
+	GB:    Rocev2FlowMessageSizeUnitEnum("gb"),
 }
 
 func (obj *rocev2Flow) MessageSizeUnit() Rocev2FlowMessageSizeUnitEnum {
 	return Rocev2FlowMessageSizeUnitEnum(obj.obj.MessageSizeUnit.Enum().String())
 }
 
-// Unit of the transfer message size. Available options are Bytes, KB, MB and GB.
+// Unit of the transfer message size. Available options are Bytes, KiloBtyes (KB), NegaBytes (MB) and GigaBytes (GB).
 // MessageSizeUnit returns a string
 func (obj *rocev2Flow) HasMessageSizeUnit() bool {
 	return obj.obj.MessageSizeUnit != nil

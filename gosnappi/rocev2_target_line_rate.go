@@ -250,7 +250,7 @@ func (obj *rocev2TargetLineRate) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Rocev2TargetLineRate is ****Description here****
+// Rocev2TargetLineRate is configure target line rate of traffic rate on this port as percentage of link speed.
 type Rocev2TargetLineRate interface {
 	Validation
 	// msg marshals Rocev2TargetLineRate to protobuf object *otg.Rocev2TargetLineRate
@@ -397,6 +397,16 @@ func (obj *rocev2TargetLineRate) validateObj(vObj *validation, set_default bool)
 		obj.setDefault()
 	}
 
+	if obj.obj.Value != nil {
+
+		if *obj.obj.Value > 100 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Rocev2TargetLineRate.Value <= 100 but Got %d", *obj.obj.Value))
+		}
+
+	}
+
 	if len(obj.obj.Flows) != 0 {
 
 		if set_default {
@@ -414,5 +424,8 @@ func (obj *rocev2TargetLineRate) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *rocev2TargetLineRate) setDefault() {
+	if obj.obj.Value == nil {
+		obj.SetValue(98)
+	}
 
 }
