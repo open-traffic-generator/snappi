@@ -17,7 +17,7 @@ type egressOnlyTracking struct {
 	marshaller       marshalEgressOnlyTracking
 	unMarshaller     unMarshalEgressOnlyTracking
 	metricTagsHolder EgressOnlyTrackingEgressOnlyTrackingMetricTagsIter
-	filterHolder     EgressOnlyTrackingEgressOnlyTrackingFilterIter
+	filtersHolder    EgressOnlyTrackingEgressOnlyTrackingFilterIter
 }
 
 func NewEgressOnlyTracking() EgressOnlyTracking {
@@ -246,7 +246,7 @@ func (obj *egressOnlyTracking) Clone() (EgressOnlyTracking, error) {
 
 func (obj *egressOnlyTracking) setNil() {
 	obj.metricTagsHolder = nil
-	obj.filterHolder = nil
+	obj.filtersHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -282,8 +282,8 @@ type EgressOnlyTracking interface {
 	SetPortName(value string) EgressOnlyTracking
 	// MetricTags returns EgressOnlyTrackingEgressOnlyTrackingMetricTagsIterIter, set in EgressOnlyTracking
 	MetricTags() EgressOnlyTrackingEgressOnlyTrackingMetricTagsIter
-	// Filter returns EgressOnlyTrackingEgressOnlyTrackingFilterIterIter, set in EgressOnlyTracking
-	Filter() EgressOnlyTrackingEgressOnlyTrackingFilterIter
+	// Filters returns EgressOnlyTrackingEgressOnlyTrackingFilterIterIter, set in EgressOnlyTracking
+	Filters() EgressOnlyTrackingEgressOnlyTrackingFilterIter
 	setNil()
 }
 
@@ -404,15 +404,15 @@ func (obj *egressOnlyTrackingEgressOnlyTrackingMetricTagsIter) appendHolderSlice
 // before applying the egress tracking metric_tags on them.
 // If multiple filters are provided, then an incoming packet MUST pass all the filters.
 // If the packet does not pass any filter, it is not considered for egress tracking.
-// Filter returns a []EgressOnlyTrackingFilter
-func (obj *egressOnlyTracking) Filter() EgressOnlyTrackingEgressOnlyTrackingFilterIter {
-	if len(obj.obj.Filter) == 0 {
-		obj.obj.Filter = []*otg.EgressOnlyTrackingFilter{}
+// Filters returns a []EgressOnlyTrackingFilter
+func (obj *egressOnlyTracking) Filters() EgressOnlyTrackingEgressOnlyTrackingFilterIter {
+	if len(obj.obj.Filters) == 0 {
+		obj.obj.Filters = []*otg.EgressOnlyTrackingFilter{}
 	}
-	if obj.filterHolder == nil {
-		obj.filterHolder = newEgressOnlyTrackingEgressOnlyTrackingFilterIter(&obj.obj.Filter).setMsg(obj)
+	if obj.filtersHolder == nil {
+		obj.filtersHolder = newEgressOnlyTrackingEgressOnlyTrackingFilterIter(&obj.obj.Filters).setMsg(obj)
 	}
-	return obj.filterHolder
+	return obj.filtersHolder
 }
 
 type egressOnlyTrackingEgressOnlyTrackingFilterIter struct {
@@ -514,15 +514,15 @@ func (obj *egressOnlyTracking) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.Filter) != 0 {
+	if len(obj.obj.Filters) != 0 {
 
 		if set_default {
-			obj.Filter().clearHolderSlice()
-			for _, item := range obj.obj.Filter {
-				obj.Filter().appendHolderSlice(&egressOnlyTrackingFilter{obj: item})
+			obj.Filters().clearHolderSlice()
+			for _, item := range obj.obj.Filters {
+				obj.Filters().appendHolderSlice(&egressOnlyTrackingFilter{obj: item})
 			}
 		}
-		for _, item := range obj.Filter().Items() {
+		for _, item := range obj.Filters().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

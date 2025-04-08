@@ -58,7 +58,7 @@ message Config {
   // It enables the user to retrieve information based on number of unique packets
   // received for each unique value in the bits being tracked from the beginning of the
   // test.
-  repeated EgressOnlyTracking egress_only_tracking = 10;
+  repeated EgressOnlyTracking egress_only_trackings = 10;
 }
 
 // Global configuration options.
@@ -11976,7 +11976,7 @@ message EgressOnlyTracking {
   // If multiple filters are provided, then an incoming packet MUST pass all the filters.
   // 
   // If the packet does not pass any filter, it is not considered for egress tracking.
-  repeated EgressOnlyTrackingFilter filter = 3;
+  repeated EgressOnlyTrackingFilter filters = 3;
 }
 
 // Metric Tag can be used to enable tracking portion of or all bits

@@ -13,19 +13,19 @@ import (
 // ***** Config *****
 type config struct {
 	validation
-	obj                      *otg.Config
-	marshaller               marshalConfig
-	unMarshaller             unMarshalConfig
-	portsHolder              ConfigPortIter
-	lagsHolder               ConfigLagIter
-	layer1Holder             ConfigLayer1Iter
-	capturesHolder           ConfigCaptureIter
-	devicesHolder            ConfigDeviceIter
-	flowsHolder              ConfigFlowIter
-	eventsHolder             Event
-	optionsHolder            ConfigOptions
-	lldpHolder               ConfigLldpIter
-	egressOnlyTrackingHolder ConfigEgressOnlyTrackingIter
+	obj                       *otg.Config
+	marshaller                marshalConfig
+	unMarshaller              unMarshalConfig
+	portsHolder               ConfigPortIter
+	lagsHolder                ConfigLagIter
+	layer1Holder              ConfigLayer1Iter
+	capturesHolder            ConfigCaptureIter
+	devicesHolder             ConfigDeviceIter
+	flowsHolder               ConfigFlowIter
+	eventsHolder              Event
+	optionsHolder             ConfigOptions
+	lldpHolder                ConfigLldpIter
+	egressOnlyTrackingsHolder ConfigEgressOnlyTrackingIter
 }
 
 func NewConfig() Config {
@@ -262,7 +262,7 @@ func (obj *config) setNil() {
 	obj.eventsHolder = nil
 	obj.optionsHolder = nil
 	obj.lldpHolder = nil
-	obj.egressOnlyTrackingHolder = nil
+	obj.egressOnlyTrackingsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -328,8 +328,8 @@ type Config interface {
 	HasOptions() bool
 	// Lldp returns ConfigLldpIterIter, set in Config
 	Lldp() ConfigLldpIter
-	// EgressOnlyTracking returns ConfigEgressOnlyTrackingIterIter, set in Config
-	EgressOnlyTracking() ConfigEgressOnlyTrackingIter
+	// EgressOnlyTrackings returns ConfigEgressOnlyTrackingIterIter, set in Config
+	EgressOnlyTrackings() ConfigEgressOnlyTrackingIter
 	setNil()
 }
 
@@ -1006,15 +1006,15 @@ func (obj *configLldpIter) appendHolderSlice(item Lldp) ConfigLldpIter {
 // for received packets on specified receive ports.
 // It enables the user to retrieve information based on number of unique packets
 // received for each unique value in the bits being tracked from the beginning of the test.
-// EgressOnlyTracking returns a []EgressOnlyTracking
-func (obj *config) EgressOnlyTracking() ConfigEgressOnlyTrackingIter {
-	if len(obj.obj.EgressOnlyTracking) == 0 {
-		obj.obj.EgressOnlyTracking = []*otg.EgressOnlyTracking{}
+// EgressOnlyTrackings returns a []EgressOnlyTracking
+func (obj *config) EgressOnlyTrackings() ConfigEgressOnlyTrackingIter {
+	if len(obj.obj.EgressOnlyTrackings) == 0 {
+		obj.obj.EgressOnlyTrackings = []*otg.EgressOnlyTracking{}
 	}
-	if obj.egressOnlyTrackingHolder == nil {
-		obj.egressOnlyTrackingHolder = newConfigEgressOnlyTrackingIter(&obj.obj.EgressOnlyTracking).setMsg(obj)
+	if obj.egressOnlyTrackingsHolder == nil {
+		obj.egressOnlyTrackingsHolder = newConfigEgressOnlyTrackingIter(&obj.obj.EgressOnlyTrackings).setMsg(obj)
 	}
-	return obj.egressOnlyTrackingHolder
+	return obj.egressOnlyTrackingsHolder
 }
 
 type configEgressOnlyTrackingIter struct {
@@ -1205,15 +1205,15 @@ func (obj *config) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if len(obj.obj.EgressOnlyTracking) != 0 {
+	if len(obj.obj.EgressOnlyTrackings) != 0 {
 
 		if set_default {
-			obj.EgressOnlyTracking().clearHolderSlice()
-			for _, item := range obj.obj.EgressOnlyTracking {
-				obj.EgressOnlyTracking().appendHolderSlice(&egressOnlyTracking{obj: item})
+			obj.EgressOnlyTrackings().clearHolderSlice()
+			for _, item := range obj.obj.EgressOnlyTrackings {
+				obj.EgressOnlyTrackings().appendHolderSlice(&egressOnlyTracking{obj: item})
 			}
 		}
-		for _, item := range obj.EgressOnlyTracking().Items() {
+		for _, item := range obj.EgressOnlyTrackings().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

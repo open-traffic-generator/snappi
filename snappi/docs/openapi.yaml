@@ -297,7 +297,7 @@ components:
           items:
             $ref: '#/components/schemas/Lldp'
           x-field-uid: 9
-        egress_only_tracking:
+        egress_only_trackings:
           description: "Container for specification of desired tracking, based on\
             \ certain offset and length of bits \nfor received packets on specified\
             \ receive ports. \nIt enables the user to retrieve information based on\
@@ -15823,7 +15823,7 @@ components:
           items:
             $ref: '#/components/schemas/EgressOnlyTracking.MetricTags'
           x-field-uid: 2
-        filter:
+        filters:
           description: "Specifies a rule which will be used to first filter received\
             \ packets on this port \nbefore applying the egress tracking metric_tags\
             \ on them. \nIf multiple filters are provided, then an incoming packet\
