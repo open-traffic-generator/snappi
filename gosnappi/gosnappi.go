@@ -349,7 +349,7 @@ func (api *gosnappiApi) streamConfig(ctx context.Context, data string) (*otg.Set
 	}
 	bytes := []byte(data)
 	for i := 0; i < len(bytes); i += chunkSize {
-		data := &sanity.Data{}
+		data := &otg.Data{}
 		if i+chunkSize > len(bytes) {
 			data.Datum = bytes[i:]
 		} else {
