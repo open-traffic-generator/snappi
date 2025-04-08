@@ -30119,6 +30119,11 @@ message Failure {
   Error error = 1;
 }
 
+// Data that needs to be streamed
+message Data {
+  bytes datum = 1;
+}
+
 message SetConfigRequest {
   Config config = 1;
 }
@@ -30193,6 +30198,7 @@ service Openapi {
 
   // Sets configuration resources on the traffic generator.
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse);
+  rpc StreamConfig(stream Data) returns(SetConfigResponse);
   // Description missing in models
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
   // Updates specific attributes of resources configured on the traffic generator. The

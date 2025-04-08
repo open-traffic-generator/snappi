@@ -247,6 +247,8 @@ type Api interface {
 	// CheckVersionCompatibility compares API spec version for local client and remote server,
 	// and returns an error if they are not compatible according to Semantic Versioning 2.0.0
 	CheckVersionCompatibility() error
+	// streamConfig provides us a way to stream grpc config by first chunking the data
+	streamConfig(context.Context, string) (*otg.SetConfigResponse, error)
 }
 
 func (api *gosnappiApi) GetLocalVersion() Version {
@@ -339,6 +341,31 @@ func (api *gosnappiApi) CheckVersionCompatibility() error {
 	return nil
 }
 
+func (api *gosnappiApi) streamConfig(ctx context.Context, data string) (*otg.SetConfigResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamConfig(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &sanity.Data{}
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 
 	if err := config.validate(); err != nil {
@@ -357,7 +384,18 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	request := otg.SetConfigRequest{Config: config.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetConfig(ctx, &request)
+	var resp *otg.SetConfigResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := config.Marshal().ToPbText()
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamConfig(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetConfig(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -386,7 +424,9 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 	request := emptypb.Empty{}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetConfig(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -419,7 +459,9 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 	request := otg.UpdateConfigRequest{ConfigUpdate: configUpdate.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.UpdateConfig(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -452,7 +494,9 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	request := otg.SetControlStateRequest{ControlState: controlState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.SetControlState(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -485,7 +529,9 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	request := otg.SetControlActionRequest{ControlAction: controlAction.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.SetControlAction(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -518,7 +564,9 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	request := otg.GetMetricsRequest{MetricsRequest: metricsRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetMetrics(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -551,7 +599,9 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	request := otg.GetStatesRequest{StatesRequest: statesRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetStates(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -584,7 +634,9 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	request := otg.GetCaptureRequest{CaptureRequest: captureRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetCapture(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -608,7 +660,9 @@ func (api *gosnappiApi) GetVersion() (Version, error) {
 	request := emptypb.Empty{}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetVersion(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er

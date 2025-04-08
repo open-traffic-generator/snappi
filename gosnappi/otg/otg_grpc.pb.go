@@ -26,6 +26,7 @@ const _ = grpc.SupportPackageIsVersion7
 type OpenapiClient interface {
 	// Sets configuration resources on the traffic generator.
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
+	StreamConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamConfigClient, error)
 	// Description missing in models
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
 	// Updates specific attributes of resources configured on the traffic generator. The
@@ -63,6 +64,40 @@ func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opt
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *openapiClient) StreamConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamConfigClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[0], "/otg.Openapi/StreamConfig", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &openapiStreamConfigClient{stream}
+	return x, nil
+}
+
+type Openapi_StreamConfigClient interface {
+	Send(*Data) error
+	CloseAndRecv() (*SetConfigResponse, error)
+	grpc.ClientStream
+}
+
+type openapiStreamConfigClient struct {
+	grpc.ClientStream
+}
+
+func (x *openapiStreamConfigClient) Send(m *Data) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *openapiStreamConfigClient) CloseAndRecv() (*SetConfigResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SetConfigResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error) {
@@ -143,6 +178,7 @@ func (c *openapiClient) GetVersion(ctx context.Context, in *emptypb.Empty, opts 
 type OpenapiServer interface {
 	// Sets configuration resources on the traffic generator.
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
+	StreamConfig(Openapi_StreamConfigServer) error
 	// Description missing in models
 	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
 	// Updates specific attributes of resources configured on the traffic generator. The
@@ -172,6 +208,9 @@ type UnimplementedOpenapiServer struct {
 
 func (UnimplementedOpenapiServer) SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetConfig not implemented")
+}
+func (UnimplementedOpenapiServer) StreamConfig(Openapi_StreamConfigServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamConfig not implemented")
 }
 func (UnimplementedOpenapiServer) GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
@@ -226,6 +265,32 @@ func _Openapi_SetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 		return srv.(OpenapiServer).SetConfig(ctx, req.(*SetConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_StreamConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OpenapiServer).StreamConfig(&openapiStreamConfigServer{stream})
+}
+
+type Openapi_StreamConfigServer interface {
+	SendAndClose(*SetConfigResponse) error
+	Recv() (*Data, error)
+	grpc.ServerStream
+}
+
+type openapiStreamConfigServer struct {
+	grpc.ServerStream
+}
+
+func (x *openapiStreamConfigServer) SendAndClose(m *SetConfigResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *openapiStreamConfigServer) Recv() (*Data, error) {
+	m := new(Data)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func _Openapi_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -416,6 +481,12 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openapi_GetVersion_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamConfig",
+			Handler:       _Openapi_StreamConfig_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "otg.proto",
 }

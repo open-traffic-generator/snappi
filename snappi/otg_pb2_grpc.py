@@ -29,6 +29,11 @@ class OpenapiStub(object):
                 request_serializer=otg__pb2.SetConfigRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetConfigResponse.FromString,
                 )
+        self.StreamConfig = channel.stream_unary(
+                '/otg.Openapi/StreamConfig',
+                request_serializer=otg__pb2.Data.SerializeToString,
+                response_deserializer=otg__pb2.SetConfigResponse.FromString,
+                )
         self.GetConfig = channel.unary_unary(
                 '/otg.Openapi/GetConfig',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
@@ -83,6 +88,12 @@ class OpenapiServicer(object):
     def SetConfig(self, request, context):
         """Sets configuration resources on the traffic generator.
         """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def StreamConfig(self, request_iterator, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -155,6 +166,11 @@ def add_OpenapiServicer_to_server(servicer, server):
                     request_deserializer=otg__pb2.SetConfigRequest.FromString,
                     response_serializer=otg__pb2.SetConfigResponse.SerializeToString,
             ),
+            'StreamConfig': grpc.stream_unary_rpc_method_handler(
+                    servicer.StreamConfig,
+                    request_deserializer=otg__pb2.Data.FromString,
+                    response_serializer=otg__pb2.SetConfigResponse.SerializeToString,
+            ),
             'GetConfig': grpc.unary_unary_rpc_method_handler(
                     servicer.GetConfig,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
@@ -224,6 +240,23 @@ class Openapi(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/otg.Openapi/SetConfig',
             otg__pb2.SetConfigRequest.SerializeToString,
+            otg__pb2.SetConfigResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def StreamConfig(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/otg.Openapi/StreamConfig',
+            otg__pb2.Data.SerializeToString,
             otg__pb2.SetConfigResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
