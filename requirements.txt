@@ -1,5 +1,7 @@
 --prefer-binary
 grpcio-tools~=1.44.0 ; python_version <= '3.6'
+grpcio-tools~=1.59.0 ; python_version > '3.6'
+grpcio~=1.59.0 ; python_version > '3.6'
 grpcio~=1.44.0 ; python_version <= '3.6'
 grpcio-tools~=1.59.0 ; python_version > '3.6'
 grpcio~=1.59.0 ; python_version > '3.6'
