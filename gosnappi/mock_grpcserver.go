@@ -372,6 +372,6 @@ func (s *server) StreamConfig(srv otg.Openapi_StreamConfigServer) error {
 			return err
 		}
 		blob = append(blob, data.Datum...)
-	}	
+	}
 
 }
