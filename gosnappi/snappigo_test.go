@@ -1104,3 +1104,16 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Contains(t, err.Error(), `unmarshal error (line 2:12): invalid value for enum field state: "run"`)
 }
+
+func TestGrpcStreamConfigApi(t *testing.T) {
+	api := gosnappi.NewApi()
+	grpc := api.NewGrpcTransport()
+	grpc.SetLocation(mockGrpcServerLocation).EnableGrpcStreaming()
+	config := config1(api)
+	state, err := api.SetConfig(config)
+	assert.NotNil(t, state)
+	assert.Nil(t, err)
+	status, _error := api.GetConfig()
+	assert.NotNil(t, status)
+	assert.Nil(t, _error)
+}

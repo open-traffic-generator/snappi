@@ -3,6 +3,7 @@ package gosnappi
 import (
 	context "context"
 	"fmt"
+	"io"
 	log "log"
 	net "net"
 	"reflect"
@@ -337,4 +338,40 @@ func (s *server) SetRouteState(ctx context.Context, req *otg.SetControlStateRequ
 		}
 	}
 	return resp, err
+}
+
+func (s *server) StreamConfig(srv otg.Openapi_StreamConfigServer) error {
+
+	var resp *otg.SetConfigResponse
+	var blob []byte
+	for {
+		data, err := srv.Recv()
+		if data != nil {
+			fmt.Println("Receiving chunk ")
+		}
+		if err != nil {
+			if err == io.EOF {
+				fmt.Println("transfer success")
+				fmt.Println(fmt.Sprintf("Transfer of %d bytes successful\n", len(blob)))
+				config := NewConfig()
+				er := config.Unmarshal().FromPbText(string(blob))
+				if er != nil {
+					return er
+				}
+				yaml, _ := config.Marshal().ToYaml()
+				fmt.Println(yaml)
+
+				mockConfig, _ = config.Marshal().ToProto()
+				resp = &otg.SetConfigResponse{
+					Warning: &otg.Warning{
+						Warnings: []string{},
+					},
+				}
+				return srv.SendAndClose(resp)
+			}
+			return err
+		}
+		blob = append(blob, data.Datum...)
+	}	
+
 }
