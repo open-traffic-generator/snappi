@@ -13,13 +13,13 @@ import (
 // ***** Ospfv3Interface *****
 type ospfv3Interface struct {
 	validation
-	obj                *otg.Ospfv3Interface
-	marshaller         marshalOspfv3Interface
-	unMarshaller       unMarshalOspfv3Interface
-	areaHolder         Ospfv3InterfaceArea
-	networkTypeHolder  Ospfv3InterfaceNetworkType
-	capabilitiesHolder Ospfv3InterfaceCapabilities
-	optionsHolder      Ospfv3InterfaceOptions
+	obj               *otg.Ospfv3Interface
+	marshaller        marshalOspfv3Interface
+	unMarshaller      unMarshalOspfv3Interface
+	areaHolder        Ospfv3InterfaceArea
+	networkTypeHolder Ospfv3InterfaceNetworkType
+	advancedHolder    Ospfv3InterfaceAdvanced
+	optionsHolder     Ospfv3InterfaceOptions
 }
 
 func NewOspfv3Interface() Ospfv3Interface {
@@ -249,7 +249,7 @@ func (obj *ospfv3Interface) Clone() (Ospfv3Interface, error) {
 func (obj *ospfv3Interface) setNil() {
 	obj.areaHolder = nil
 	obj.networkTypeHolder = nil
-	obj.capabilitiesHolder = nil
+	obj.advancedHolder = nil
 	obj.optionsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -306,14 +306,14 @@ type Ospfv3Interface interface {
 	SetNetworkType(value Ospfv3InterfaceNetworkType) Ospfv3Interface
 	// HasNetworkType checks if NetworkType has been set in Ospfv3Interface
 	HasNetworkType() bool
-	// Capabilities returns Ospfv3InterfaceCapabilities, set in Ospfv3Interface.
-	// Ospfv3InterfaceCapabilities is contains OSPFv3 interface capabilities.
-	Capabilities() Ospfv3InterfaceCapabilities
-	// SetCapabilities assigns Ospfv3InterfaceCapabilities provided by user to Ospfv3Interface.
-	// Ospfv3InterfaceCapabilities is contains OSPFv3 interface capabilities.
-	SetCapabilities(value Ospfv3InterfaceCapabilities) Ospfv3Interface
-	// HasCapabilities checks if Capabilities has been set in Ospfv3Interface
-	HasCapabilities() bool
+	// Advanced returns Ospfv3InterfaceAdvanced, set in Ospfv3Interface.
+	// Ospfv3InterfaceAdvanced is contains OSPFv3 advanced properties.
+	Advanced() Ospfv3InterfaceAdvanced
+	// SetAdvanced assigns Ospfv3InterfaceAdvanced provided by user to Ospfv3Interface.
+	// Ospfv3InterfaceAdvanced is contains OSPFv3 advanced properties.
+	SetAdvanced(value Ospfv3InterfaceAdvanced) Ospfv3Interface
+	// HasAdvanced checks if Advanced has been set in Ospfv3Interface
+	HasAdvanced() bool
 	// Options returns Ospfv3InterfaceOptions, set in Ospfv3Interface.
 	// Ospfv3InterfaceOptions is the Options field is present in OSPFv3 Hello packets, Database Description packets and all LSAs.
 	// The Options field enables OSPF routers to support (or not support) optional capabilities, and to
@@ -439,30 +439,30 @@ func (obj *ospfv3Interface) SetNetworkType(value Ospfv3InterfaceNetworkType) Osp
 	return obj
 }
 
-// Container for OSPFv3 interface capabilities.
-// Capabilities returns a Ospfv3InterfaceCapabilities
-func (obj *ospfv3Interface) Capabilities() Ospfv3InterfaceCapabilities {
-	if obj.obj.Capabilities == nil {
-		obj.obj.Capabilities = NewOspfv3InterfaceCapabilities().msg()
+// Optional container for advanced interface properties.
+// Advanced returns a Ospfv3InterfaceAdvanced
+func (obj *ospfv3Interface) Advanced() Ospfv3InterfaceAdvanced {
+	if obj.obj.Advanced == nil {
+		obj.obj.Advanced = NewOspfv3InterfaceAdvanced().msg()
 	}
-	if obj.capabilitiesHolder == nil {
-		obj.capabilitiesHolder = &ospfv3InterfaceCapabilities{obj: obj.obj.Capabilities}
+	if obj.advancedHolder == nil {
+		obj.advancedHolder = &ospfv3InterfaceAdvanced{obj: obj.obj.Advanced}
 	}
-	return obj.capabilitiesHolder
+	return obj.advancedHolder
 }
 
-// Container for OSPFv3 interface capabilities.
-// Capabilities returns a Ospfv3InterfaceCapabilities
-func (obj *ospfv3Interface) HasCapabilities() bool {
-	return obj.obj.Capabilities != nil
+// Optional container for advanced interface properties.
+// Advanced returns a Ospfv3InterfaceAdvanced
+func (obj *ospfv3Interface) HasAdvanced() bool {
+	return obj.obj.Advanced != nil
 }
 
-// Container for OSPFv3 interface capabilities.
-// SetCapabilities sets the Ospfv3InterfaceCapabilities value in the Ospfv3Interface object
-func (obj *ospfv3Interface) SetCapabilities(value Ospfv3InterfaceCapabilities) Ospfv3Interface {
+// Optional container for advanced interface properties.
+// SetAdvanced sets the Ospfv3InterfaceAdvanced value in the Ospfv3Interface object
+func (obj *ospfv3Interface) SetAdvanced(value Ospfv3InterfaceAdvanced) Ospfv3Interface {
 
-	obj.capabilitiesHolder = nil
-	obj.obj.Capabilities = value.msg()
+	obj.advancedHolder = nil
+	obj.obj.Advanced = value.msg()
 
 	return obj
 }
@@ -548,9 +548,9 @@ func (obj *ospfv3Interface) validateObj(vObj *validation, set_default bool) {
 		obj.NetworkType().validateObj(vObj, set_default)
 	}
 
-	if obj.obj.Capabilities != nil {
+	if obj.obj.Advanced != nil {
 
-		obj.Capabilities().validateObj(vObj, set_default)
+		obj.Advanced().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Options != nil {

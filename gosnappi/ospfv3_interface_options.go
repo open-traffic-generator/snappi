@@ -299,7 +299,7 @@ type Ospfv3InterfaceOptions interface {
 	HasV6Bit() bool
 }
 
-// Demand Circuit: This bit describes the router's handling of demand circuits.
+// Demand Circuit: This bit describes the router's handling of demand circuits, as specified in [Ref10], rfc2740.
 // DcBit returns a bool
 func (obj *ospfv3InterfaceOptions) DcBit() bool {
 
@@ -307,13 +307,13 @@ func (obj *ospfv3InterfaceOptions) DcBit() bool {
 
 }
 
-// Demand Circuit: This bit describes the router's handling of demand circuits.
+// Demand Circuit: This bit describes the router's handling of demand circuits, as specified in [Ref10], rfc2740.
 // DcBit returns a bool
 func (obj *ospfv3InterfaceOptions) HasDcBit() bool {
 	return obj.obj.DcBit != nil
 }
 
-// Demand Circuit: This bit describes the router's handling of demand circuits.
+// Demand Circuit: This bit describes the router's handling of demand circuits, as specified in [Ref10], rfc2740.
 // SetDcBit sets the bool value in the Ospfv3InterfaceOptions object
 func (obj *ospfv3InterfaceOptions) SetDcBit(value bool) Ospfv3InterfaceOptions {
 

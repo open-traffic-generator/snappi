@@ -301,7 +301,7 @@ func (obj *ospfv3V6RRForwardingAddress) InterfaceIp() {
 }
 
 // IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
-// - interface_ip: if set, forwarding address is set with Interface IP6 address.
+// - interface_ip: if set, forwarding address is set with Interface IPv6 address.
 // - custom: if set, forwarding address is set with a custom IPv6 address.
 // Choice returns a string
 func (obj *ospfv3V6RRForwardingAddress) HasChoice() bool {

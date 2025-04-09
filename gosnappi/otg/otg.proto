@@ -9021,8 +9021,8 @@ message Ospfv3Interface {
   // The OSPF network link type.
   Ospfv3InterfaceNetworkType network_type = 4;
 
-  // Container for OSPFv3 interface capabilities.
-  Ospfv3InterfaceCapabilities capabilities = 5;
+  // Optional container for advanced interface properties.
+  Ospfv3InterfaceAdvanced advanced = 5;
 
   // Container for OSPFv3 optional interface properties.
   Ospfv3InterfaceOptions options = 6;
@@ -9080,8 +9080,8 @@ message Ospfv3InterfaceNetworkType {
   Ospfv3InterfaceBroadcast broadcast = 2;
 }
 
-// Contains OSPFv3 interface capabilities.
-message Ospfv3InterfaceCapabilities {
+// Contains OSPFv3 advanced properties.
+message Ospfv3InterfaceAdvanced {
 
   // The time interval, in seconds, between the Hello packets that
   // the router sends on the interface. Advertised in Hello packets
@@ -9116,7 +9116,8 @@ message Ospfv3InterfaceCapabilities {
 // because of a capability mismatch.
 message Ospfv3InterfaceOptions {
 
-  // Demand Circuit: This bit describes the router's handling of demand circuits.
+  // Demand Circuit: This bit describes the router's handling of demand circuits, as specified
+  // in [Ref10], rfc2740.
   // default = False
   optional bool dc_bit = 1;
 
@@ -9223,7 +9224,7 @@ message Ospfv3V6RRForwardingAddress {
     }
   }
   // IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
-  // - interface_ip: if set, forwarding address is set with Interface IP6 address.
+  // - interface_ip: if set, forwarding address is set with Interface IPv6 address.
   // - custom: if set, forwarding address is set with a custom IPv6 address.
   // default = Choice.Enum.interface_ip
   optional Choice.Enum choice = 1;

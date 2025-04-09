@@ -12261,10 +12261,10 @@ components:
             The OSPF network link type.
           $ref: '#/components/schemas/Ospfv3Interface.NetworkType'
           x-field-uid: 4
-        capabilities:
+        advanced:
           description: |-
-            Container for OSPFv3 interface capabilities.
-          $ref: '#/components/schemas/Ospfv3Interface.Capabilities'
+            Optional container for advanced interface properties.
+          $ref: '#/components/schemas/Ospfv3Interface.Advanced'
           x-field-uid: 5
         options:
           description: |-
@@ -12339,9 +12339,9 @@ components:
             Capabilities associated with network type broadcast.
           $ref: '#/components/schemas/Ospfv3Interface.Broadcast'
           x-field-uid: 2
-    Ospfv3Interface.Capabilities:
+    Ospfv3Interface.Advanced:
       description: |-
-        Contains OSPFv3 interface capabilities.
+        Contains OSPFv3 advanced properties.
       type: object
       properties:
         hello_interval:
@@ -12370,6 +12370,7 @@ components:
           type: integer
           format: uint32
           default: 10
+          maximum: 65535
           x-field-uid: 3
         validate_received_mtu:
           description: "If this is set to true, then the MTU received from the neighbor\
@@ -12388,7 +12389,7 @@ components:
       properties:
         dc_bit:
           description: |-
-            Demand Circuit: This bit describes the router's handling of demand circuits.
+            Demand Circuit: This bit describes the router's handling of demand circuits, as specified in [Ref10], rfc2740.
           type: boolean
           default: false
           x-field-uid: 1
@@ -12532,7 +12533,7 @@ components:
         choice:
           description: |-
             IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
-            - interface_ip: if set, forwarding address is set with Interface IP6 address.
+            - interface_ip: if set, forwarding address is set with Interface IPv6 address.
             - custom: if set, forwarding address is set with a custom IPv6 address.
           type: string
           default: interface_ip

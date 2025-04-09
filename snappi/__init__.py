@@ -415,7 +415,7 @@ from .snappi import Ospfv3Interface
 from .snappi import Ospfv3InterfaceArea
 from .snappi import Ospfv3InterfaceNetworkType
 from .snappi import Ospfv3InterfaceBroadcast
-from .snappi import Ospfv3InterfaceCapabilities
+from .snappi import Ospfv3InterfaceAdvanced
 from .snappi import Ospfv3InterfaceOptions
 from .snappi import Ospfv3InterfaceIter
 from .snappi import Ospfv3V6RouteRange
