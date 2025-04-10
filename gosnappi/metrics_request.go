@@ -33,6 +33,7 @@ type metricsRequest struct {
 	convergenceHolder  ConvergenceRequest
 	macsecHolder       MacsecMetricsRequest
 	mkaHolder          MkaMetricsRequest
+	ospfv3Holder       Ospfv3MetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -277,6 +278,7 @@ func (obj *metricsRequest) setNil() {
 	obj.convergenceHolder = nil
 	obj.macsecHolder = nil
 	obj.mkaHolder = nil
+	obj.ospfv3Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -454,6 +456,14 @@ type MetricsRequest interface {
 	SetMka(value MkaMetricsRequest) MetricsRequest
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool
+	// Ospfv3 returns Ospfv3MetricsRequest, set in MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	Ospfv3() Ospfv3MetricsRequest
+	// SetOspfv3 assigns Ospfv3MetricsRequest provided by user to MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest
+	// HasOspfv3 checks if Ospfv3 has been set in MetricsRequest
+	HasOspfv3() bool
 	setNil()
 }
 
@@ -478,6 +488,7 @@ var MetricsRequestChoice = struct {
 	CONVERGENCE   MetricsRequestChoiceEnum
 	MACSEC        MetricsRequestChoiceEnum
 	MKA           MetricsRequestChoiceEnum
+	OSPFV3        MetricsRequestChoiceEnum
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -496,6 +507,7 @@ var MetricsRequestChoice = struct {
 	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
 	MACSEC:        MetricsRequestChoiceEnum("macsec"),
 	MKA:           MetricsRequestChoiceEnum("mka"),
+	OSPFV3:        MetricsRequestChoiceEnum("ospfv3"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -517,6 +529,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv3 = nil
+	obj.ospfv3Holder = nil
 	obj.obj.Mka = nil
 	obj.mkaHolder = nil
 	obj.obj.Macsec = nil
@@ -618,6 +632,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.MKA {
 		obj.obj.Mka = NewMkaMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.OSPFV3 {
+		obj.obj.Ospfv3 = NewOspfv3MetricsRequest().msg()
 	}
 
 	return obj
@@ -1099,6 +1117,34 @@ func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
 	return obj
 }
 
+// description is TBD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) Ospfv3() Ospfv3MetricsRequest {
+	if obj.obj.Ospfv3 == nil {
+		obj.setChoice(MetricsRequestChoice.OSPFV3)
+	}
+	if obj.ospfv3Holder == nil {
+		obj.ospfv3Holder = &ospfv3MetricsRequest{obj: obj.obj.Ospfv3}
+	}
+	return obj.ospfv3Holder
+}
+
+// description is TBD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) HasOspfv3() bool {
+	return obj.obj.Ospfv3 != nil
+}
+
+// description is TBD
+// SetOspfv3 sets the Ospfv3MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.OSPFV3)
+	obj.ospfv3Holder = nil
+	obj.obj.Ospfv3 = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1187,6 +1233,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Mka != nil {
 
 		obj.Mka().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ospfv3 != nil {
+
+		obj.Ospfv3().validateObj(vObj, set_default)
 	}
 
 }
@@ -1278,6 +1329,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Mka != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.MKA
+	}
+
+	if obj.obj.Ospfv3 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.OSPFV3
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
