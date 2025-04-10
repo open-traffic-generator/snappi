@@ -4,11 +4,11 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [3.9]
+        python-version: [3.7]
 
     steps:
       - name: Checkout source
@@ -68,7 +68,7 @@ jobs:
 
   python_tests:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 6
       matrix:
@@ -97,7 +97,7 @@ jobs:
 
   go_tests:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -115,7 +115,7 @@ jobs:
   publish_python_package:
     if: github.ref == 'refs/heads/main'
     needs: [go_tests, python_tests]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
