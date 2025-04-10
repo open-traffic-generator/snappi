@@ -278,12 +278,12 @@ type Ospfv3V6RRRouteOrigin interface {
 	setChoice(value Ospfv3V6RRRouteOriginChoiceEnum) Ospfv3V6RRRouteOrigin
 	// HasChoice checks if Choice has been set in Ospfv3V6RRRouteOrigin
 	HasChoice() bool
-	// getter for IntraArea to set choice.
-	IntraArea()
 	// getter for ExternalType_2 to set choice.
 	ExternalType_2()
 	// getter for ExternalType_1 to set choice.
 	ExternalType_1()
+	// getter for IntraArea to set choice.
+	IntraArea()
 	// getter for InterArea to set choice.
 	InterArea()
 	// NssaExternal returns Ospfv3V6RRNssaExternal, set in Ospfv3V6RRRouteOrigin.
@@ -318,11 +318,6 @@ func (obj *ospfv3V6RRRouteOrigin) Choice() Ospfv3V6RRRouteOriginChoiceEnum {
 	return Ospfv3V6RRRouteOriginChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IntraArea to set choice
-func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
-	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
-}
-
 // getter for ExternalType_2 to set choice
 func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_2)
@@ -331,6 +326,11 @@ func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
 // getter for ExternalType_1 to set choice
 func (obj *ospfv3V6RRRouteOrigin) ExternalType_1() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_1)
+}
+
+// getter for IntraArea to set choice
+func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
+	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
 }
 
 // getter for InterArea to set choice
