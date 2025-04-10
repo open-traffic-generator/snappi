@@ -39,6 +39,16 @@ class OpenapiStub(object):
                 request_serializer=otg__pb2.UpdateConfigRequest.SerializeToString,
                 response_deserializer=otg__pb2.UpdateConfigResponse.FromString,
                 )
+        self.AppendConfig = channel.unary_unary(
+                '/otg.Openapi/AppendConfig',
+                request_serializer=otg__pb2.AppendConfigRequest.SerializeToString,
+                response_deserializer=otg__pb2.AppendConfigResponse.FromString,
+                )
+        self.DeleteConfig = channel.unary_unary(
+                '/otg.Openapi/DeleteConfig',
+                request_serializer=otg__pb2.DeleteConfigRequest.SerializeToString,
+                response_deserializer=otg__pb2.DeleteConfigResponse.FromString,
+                )
         self.SetControlState = channel.unary_unary(
                 '/otg.Openapi/SetControlState',
                 request_serializer=otg__pb2.SetControlStateRequest.SerializeToString,
@@ -105,6 +115,26 @@ class OpenapiServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AppendConfig(self, request, context):
+        """Append new attributes of resources to existing configuration on the traffic generator.
+        Resource names should not be part of existing configuration of that resource type;
+        it should be unique for the operation to succeed. The fetched configuration shall
+        also reflect the new configuration applied successfully.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteConfig(self, request, context):
+        """Delete attributes of resources from existing configuration on the traffic generator.
+        Resource names should already be part of existing configuration of that resource
+        type; for the operation to succeed. The fetched configuration shall not reflect the
+        removed configuration deleted successfully.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SetControlState(self, request, context):
         """Sets the operational state of configured resources.
         """
@@ -164,6 +194,16 @@ def add_OpenapiServicer_to_server(servicer, server):
                     servicer.UpdateConfig,
                     request_deserializer=otg__pb2.UpdateConfigRequest.FromString,
                     response_serializer=otg__pb2.UpdateConfigResponse.SerializeToString,
+            ),
+            'AppendConfig': grpc.unary_unary_rpc_method_handler(
+                    servicer.AppendConfig,
+                    request_deserializer=otg__pb2.AppendConfigRequest.FromString,
+                    response_serializer=otg__pb2.AppendConfigResponse.SerializeToString,
+            ),
+            'DeleteConfig': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteConfig,
+                    request_deserializer=otg__pb2.DeleteConfigRequest.FromString,
+                    response_serializer=otg__pb2.DeleteConfigResponse.SerializeToString,
             ),
             'SetControlState': grpc.unary_unary_rpc_method_handler(
                     servicer.SetControlState,
@@ -259,6 +299,40 @@ class Openapi(object):
         return grpc.experimental.unary_unary(request, target, '/otg.Openapi/UpdateConfig',
             otg__pb2.UpdateConfigRequest.SerializeToString,
             otg__pb2.UpdateConfigResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AppendConfig(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/AppendConfig',
+            otg__pb2.AppendConfigRequest.SerializeToString,
+            otg__pb2.AppendConfigResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteConfig(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/otg.Openapi/DeleteConfig',
+            otg__pb2.DeleteConfigRequest.SerializeToString,
+            otg__pb2.DeleteConfigResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

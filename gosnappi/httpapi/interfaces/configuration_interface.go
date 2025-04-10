@@ -13,6 +13,8 @@ type ConfigurationController interface {
 	SetConfig(w http.ResponseWriter, r *http.Request)
 	GetConfig(w http.ResponseWriter, r *http.Request)
 	UpdateConfig(w http.ResponseWriter, r *http.Request)
+	AppendConfig(w http.ResponseWriter, r *http.Request)
+	DeleteConfig(w http.ResponseWriter, r *http.Request)
 }
 
 type ConfigurationHandler interface {
@@ -33,4 +35,14 @@ type ConfigurationHandler interface {
 		The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	*/
 	UpdateConfig(rbody gosnappi.ConfigUpdate, r *http.Request) (gosnappi.UpdateConfigResponse, error)
+	/*
+		AppendConfig: PATCH /config/append
+		Description: Append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. The fetched configuration shall also reflect the new configuration applied successfully.
+	*/
+	AppendConfig(rbody gosnappi.ConfigAppend, r *http.Request) (gosnappi.AppendConfigResponse, error)
+	/*
+		DeleteConfig: PATCH /config/delete
+		Description: Delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. The fetched configuration shall not reflect the removed configuration deleted successfully.
+	*/
+	DeleteConfig(rbody gosnappi.ConfigDelete, r *http.Request) (gosnappi.DeleteConfigResponse, error)
 }
