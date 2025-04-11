@@ -253,7 +253,7 @@ type Api interface {
 
 func (api *gosnappiApi) GetLocalVersion() Version {
 	if api.versionMeta.localVersion == nil {
-		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.28.0").SetSdkVersion("1.28.0")
+		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.28.0").SetSdkVersion("1.28.2")
 	}
 
 	return api.versionMeta.localVersion
