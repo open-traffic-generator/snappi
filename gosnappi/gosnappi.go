@@ -387,7 +387,7 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	var resp *otg.SetConfigResponse
 	var err error
 	if api.grpc.enableGrpcStreaming {
-		str, er := config.Marshal().ToPbText()
+		str, er := config.Marshal().ToJson()
 		if er != nil {
 			return nil, er
 		}
