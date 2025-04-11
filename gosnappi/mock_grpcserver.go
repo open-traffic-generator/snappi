@@ -352,9 +352,9 @@ func (s *server) StreamConfig(srv otg.Openapi_StreamConfigServer) error {
 		if err != nil {
 			if err == io.EOF {
 				fmt.Println("transfer success")
-				fmt.Println(fmt.Sprintf("Transfer of %d bytes successful\n", len(blob)))
+				fmt.Printf("Transfer of %d bytes successful\n", len(blob))
 				config := NewConfig()
-				er := config.Unmarshal().FromPbText(string(blob))
+				er := config.Unmarshal().FromJson(string(blob))
 				if er != nil {
 					return er
 				}
