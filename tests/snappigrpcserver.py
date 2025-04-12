@@ -55,7 +55,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
 
         self._log("received all chunks ")
         self._log(full_str)
-        obj = pb2.PrefixConfig()
+        obj = pb2.Config()
         obj.ParseFromString(full_str)
         self._log(obj)
 
