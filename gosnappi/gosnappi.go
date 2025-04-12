@@ -25,6 +25,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -248,7 +249,7 @@ type Api interface {
 	// and returns an error if they are not compatible according to Semantic Versioning 2.0.0
 	CheckVersionCompatibility() error
 	// streamConfig provides us a way to stream grpc config by first chunking the data
-	streamConfig(context.Context, string) (*otg.SetConfigResponse, error)
+	streamConfig(context.Context, []byte) (*otg.SetConfigResponse, error)
 }
 
 func (api *gosnappiApi) GetLocalVersion() Version {
@@ -341,7 +342,7 @@ func (api *gosnappiApi) CheckVersionCompatibility() error {
 	return nil
 }
 
-func (api *gosnappiApi) streamConfig(ctx context.Context, data string) (*otg.SetConfigResponse, error) {
+func (api *gosnappiApi) streamConfig(ctx context.Context, data []byte) (*otg.SetConfigResponse, error) {
 	chunkSize := api.grpc.chunkSize
 	streamClient, err := api.grpcClient.StreamConfig(ctx)
 	if err != nil {
@@ -387,7 +388,7 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	var resp *otg.SetConfigResponse
 	var err error
 	if api.grpc.enableGrpcStreaming {
-		str, er := config.Marshal().ToJson()
+		str, er := proto.Marshal(config.msg())
 		if er != nil {
 			return nil, er
 		}

@@ -2,7 +2,7 @@ module github.com/open-traffic-generator/snappi/gosnappi
 
 go 1.22.0
 
-toolchain go1.23.7
+toolchain go1.23.8
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
