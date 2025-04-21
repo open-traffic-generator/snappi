@@ -13,17 +13,18 @@ import (
 // ***** DeviceIsisRouter *****
 type deviceIsisRouter struct {
 	validation
-	obj                  *otg.DeviceIsisRouter
-	marshaller           marshalDeviceIsisRouter
-	unMarshaller         unMarshalDeviceIsisRouter
-	instanceHolder       DeviceIsisMultiInstance
-	interfacesHolder     DeviceIsisRouterIsisInterfaceIter
-	basicHolder          IsisBasic
-	advancedHolder       IsisAdvanced
-	routerAuthHolder     IsisAuthentication
-	v4RoutesHolder       DeviceIsisRouterIsisV4RouteRangeIter
-	v6RoutesHolder       DeviceIsisRouterIsisV6RouteRangeIter
-	segmentRoutingHolder IsisSegmentRouting
+	obj                   *otg.DeviceIsisRouter
+	marshaller            marshalDeviceIsisRouter
+	unMarshaller          unMarshalDeviceIsisRouter
+	instanceHolder        DeviceIsisMultiInstance
+	interfacesHolder      DeviceIsisRouterIsisInterfaceIter
+	basicHolder           IsisBasic
+	advancedHolder        IsisAdvanced
+	routerAuthHolder      IsisAuthentication
+	v4RoutesHolder        DeviceIsisRouterIsisV4RouteRangeIter
+	v6RoutesHolder        DeviceIsisRouterIsisV6RouteRangeIter
+	segmentRoutingHolder  IsisSegmentRouting
+	gracefulRestartHolder IsisGracefulRestart
 }
 
 func NewDeviceIsisRouter() DeviceIsisRouter {
@@ -259,6 +260,7 @@ func (obj *deviceIsisRouter) setNil() {
 	obj.v4RoutesHolder = nil
 	obj.v6RoutesHolder = nil
 	obj.segmentRoutingHolder = nil
+	obj.gracefulRestartHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -356,6 +358,14 @@ type DeviceIsisRouter interface {
 	SetSegmentRouting(value IsisSegmentRouting) DeviceIsisRouter
 	// HasSegmentRouting checks if SegmentRouting has been set in DeviceIsisRouter
 	HasSegmentRouting() bool
+	// GracefulRestart returns IsisGracefulRestart, set in DeviceIsisRouter.
+	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters. https://datatracker.ietf.org/doc/html/rfc5306
+	GracefulRestart() IsisGracefulRestart
+	// SetGracefulRestart assigns IsisGracefulRestart provided by user to DeviceIsisRouter.
+	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters. https://datatracker.ietf.org/doc/html/rfc5306
+	SetGracefulRestart(value IsisGracefulRestart) DeviceIsisRouter
+	// HasGracefulRestart checks if GracefulRestart has been set in DeviceIsisRouter
+	HasGracefulRestart() bool
 	setNil()
 }
 
@@ -792,6 +802,34 @@ func (obj *deviceIsisRouter) SetSegmentRouting(value IsisSegmentRouting) DeviceI
 	return obj
 }
 
+// Optional IS-IS Graceful Restart Configuration.
+// GracefulRestart returns a IsisGracefulRestart
+func (obj *deviceIsisRouter) GracefulRestart() IsisGracefulRestart {
+	if obj.obj.GracefulRestart == nil {
+		obj.obj.GracefulRestart = NewIsisGracefulRestart().msg()
+	}
+	if obj.gracefulRestartHolder == nil {
+		obj.gracefulRestartHolder = &isisGracefulRestart{obj: obj.obj.GracefulRestart}
+	}
+	return obj.gracefulRestartHolder
+}
+
+// Optional IS-IS Graceful Restart Configuration.
+// GracefulRestart returns a IsisGracefulRestart
+func (obj *deviceIsisRouter) HasGracefulRestart() bool {
+	return obj.obj.GracefulRestart != nil
+}
+
+// Optional IS-IS Graceful Restart Configuration.
+// SetGracefulRestart sets the IsisGracefulRestart value in the DeviceIsisRouter object
+func (obj *deviceIsisRouter) SetGracefulRestart(value IsisGracefulRestart) DeviceIsisRouter {
+
+	obj.gracefulRestartHolder = nil
+	obj.obj.GracefulRestart = value.msg()
+
+	return obj
+}
+
 func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -880,6 +918,11 @@ func (obj *deviceIsisRouter) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SegmentRouting != nil {
 
 		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.GracefulRestart != nil {
+
+		obj.GracefulRestart().validateObj(vObj, set_default)
 	}
 
 }

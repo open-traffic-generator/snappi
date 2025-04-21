@@ -351,7 +351,7 @@ func (obj *ospfv2V4RRRouteOrigin) Choice() Ospfv2V4RRRouteOriginChoiceEnum {
 	return Ospfv2V4RRRouteOriginChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS metric. - external_type_2: for Autonomous System (AS) External with internal and external AS metric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+// Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS meteric. - external_type_2: for Autonomous System (AS) External with internal and external AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
 // Choice returns a string
 func (obj *ospfv2V4RRRouteOrigin) HasChoice() bool {
 	return obj.obj.Choice != nil

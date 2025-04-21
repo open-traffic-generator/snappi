@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.28.0
+/* Open Traffic Generator API 1.21.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -121,10 +121,6 @@ message Lag {
 message LagPort {
 
   // The name of a port object that will be part of the LAG.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -301,17 +297,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -320,11 +308,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -349,10 +332,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -458,10 +437,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -532,10 +507,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1249,10 +1220,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1304,16 +1271,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1454,17 +1415,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1723,12 +1678,6 @@ message Device {
 
   // Configuration for OSPFv2 router.
   DeviceOspfv2Router ospfv2 = 10;
-
-  // Configuration of MACsec device.
-  DeviceMacsec macsec = 11;
-
-  // Configuration for OSPFv3 router.
-  DeviceOspfv3Router ospfv3 = 12;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1778,6 +1727,9 @@ message DeviceIsisRouter {
 
   // Optional Segment Routing (SR).
   IsisSegmentRouting segment_routing = 10;
+
+  // Optional IS-IS Graceful Restart Configuration.
+  IsisGracefulRestart graceful_restart = 11;
 }
 
 // This container properties of an Multi-Instance-capable router (MI-RTR).
@@ -1801,10 +1753,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -2633,18 +2581,11 @@ message IsisRouterCapability {
   // This contains one or more Segment Routing Algorithm that a router may use various
   // algorithms when calculating
   // reachability to other nodes or to prefixes attached to these nodes.
-  // The Isis may use various algorithms when calculating reachability to other nodes
-  // or to prefixes attached to these
-  // nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained
-  // SPF, etc.
-  // - 0: SPF algorithm based on link metric.
-  // - 1: Strict SPF algorithm based on link metric.
-  // Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
   // When the originating router does not advertise the SR-Algorithm sub-TLV, it implies
   // that algorithm 0 is the only algorithm supported by the routers.
   // When the originating router does advertise the SR-Algorithm sub-TLV, then algorithm
   // 0 MUST be present while non-zero algorithms MAY be present.
-  repeated uint32 algorithms = 6;
+  repeated IsisSRAlgorithm algorithms = 6;
 
   // This contains the list of SR Local Block (SRLB)
   repeated IsisSRSrlb srlb_ranges = 7;
@@ -2724,6 +2665,54 @@ message IsisSRSrlb {
   // This represents the number of SIDs in a SRLB range.
   // default = 8000
   optional uint32 range = 2;
+}
+
+// Container for SR-Algorithms. The Isis may use various algorithms when calculating
+// reachability to other nodes or to prefixes attached to these
+// nodes. Examples of these algorithms are metric-based SPF, various sorts of Constrained
+// SPF, etc.
+// - 0: SPF algorithm based on link metric.
+// - 1: Strict SPF algorithm based on link metric.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-igp-algorithm-types-registr.
+message IsisSRAlgorithm {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 algorithm = 1;
+}
+
+// Contains IS-IS Graceful configuration parameters. https://datatracker.ietf.org/doc/html/rfc5306
+message IsisGracefulRestart {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      normal_mode = 1;
+      starting_mode = 2;
+      graceful_restart_mode = 3;
+      helper_mode = 4;
+    }
+  }
+  // Choice of Graceful Restart mode.
+  // - normal_mode: The emulated IS-IS router sends to the neighbor router (DUT) an IIH
+  // containing a Restart TLV with the RR (Restart Request) bit unset.
+  // - starting_mode: The emulated IS-IS router is in the Starting mode.
+  // It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the
+  // SA (Suppress Adjacency Advertisement) bit set.
+  // - graceful_restart: The emulated IS-IS router is in the unplanned Restarting mode.
+  // It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the
+  // RR (Restart Request) bit set.
+  // - helper_mode: The emulated IS-IS router is acting as the Helper for the DUT that
+  // is restarting.
+  // It acknowledges the Restart TLV sent by the DUT by sending an IIH containing
+  // a Restart TLV with the RA (Restart Acknowledgment) bit set.
+  // default = Choice.Enum.normal_mode
+  optional Choice.Enum choice = 1;
+
+  // This is the estimated duration (in seconds) it will take for the IS-IS session to
+  // be re-established after a start/restart.
+  // default = 30
+  optional uint32 restart_time = 2;
 }
 
 // Configuration for one or more IPv4 or IPv6 BGP peers.
@@ -2968,12 +2957,6 @@ message BgpV4Interface {
 
   // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the
   // source IP for this list of BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -3739,8 +3722,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -4200,8 +4181,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6565,12 +6544,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6832,11 +6805,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6860,11 +6828,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7028,10 +6991,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -7093,11 +7052,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7527,10 +7481,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7603,10 +7553,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7780,8 +7726,6 @@ message DhcpV6ServerSecondaryDns {
 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -7919,10 +7863,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8223,9 +8163,9 @@ message Ospfv2V4RRRouteOrigin {
     }
   }
   // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
-  // - external_type_1: for Autonomous System (AS) External with internal AS metric. -
-  // external_type_2: for Autonomous System (AS) External with internal and external AS
-  // metric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
+  // - external_type_1: for Autonomous System (AS) External with internal AS meteric.
+  // - external_type_2: for Autonomous System (AS) External with internal and external
+  // AS meteric. - nssa_external: for 7 Not-So-Stubby Area (NSSA) External.
   // default = Choice.Enum.inter_area
   optional Choice.Enum choice = 1;
 
@@ -8302,1045 +8242,6 @@ message Ospfv2V4RRExtdPrefixFlags {
   optional bool n_flag = 2;
 }
 
-// A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
-message DeviceMacsec {
-
-  // Ethernet Interfaces
-  repeated DeviceMacsecEthernetInterface ethernet_interfaces = 1;
-}
-
-// Configuration for single MACsec interface.
-message DeviceMacsecEthernetInterface {
-
-  // The unique name of the Ethernet interface on which MACsec is enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
-  // required = true
-  optional string eth_name = 1;
-
-  // This contains the properties of Secure Entity (SecY).
-  // required = true
-  SecureEntity secure_entity = 2;
-}
-
-// Configuration of a Secure Entity (SecY).
-message SecureEntity {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // This contains the properties of key generation protocol of Secure Entity (SecY).
-  // required = true
-  SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
-
-  // This contains the properties of data plane of Secure Entity (SecY).
-  SecureEntityDataPlane data_plane = 3;
-}
-
-// Container of Key generation protocol configuration.
-message SecureEntityKeyGenerationProtocol {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      mka = 1;
-      static_key = 2;
-    }
-  }
-  // Key generation protocol choices. Choose mka for dynamic key distribution using MACsec
-  // key agreement(MKA) protocol. Choose static_key for static configuration of secure
-  // association key(SAK).
-  // default = Choice.Enum.mka
-  optional Choice.Enum choice = 1;
-
-  // This contains the properties of Key Agreement Entity (KaY) in MKA supplicant.
-  Mka mka = 2;
-
-  // Static key properties properties of SecY. Static key is used in absence MKA.
-  SecureEntityStaticKey static_key = 3;
-}
-
-// A container of data plane properties.
-message SecureEntityDataPlane {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encapsulation = 1;
-      no_encapsulation = 2;
-    }
-  }
-  // Choose encapsulation so that data packets are sent with MACsec encapsulation. Choose
-  // no_encapsulation so that data packets are sent without MACsec encapsulation.
-  // default = Choice.Enum.encapsulation
-  optional Choice.Enum choice = 1;
-
-  // A container of encapsulation properties for a secure entity(SecY).
-  SecureEntityDataPlaneEncapsulation encapsulation = 2;
-}
-
-// A container of encapsulation properties for a secure entity(SecY).
-message SecureEntityDataPlaneEncapsulation {
-
-  // Tx properties of SecY.
-  SecureEntityDataPlaneTx tx = 1;
-
-  // Rx properties of SecY.
-  SecureEntityDataPlaneRx rx = 2;
-
-  // Crypto engine properties of SecY.
-  // required = true
-  SecureEntityCryptoEngine crypto_engine = 3;
-}
-
-// A container of Tx properties of SecY.
-message SecureEntityDataPlaneTx {
-
-  // End station on not.
-  // default = False
-  optional bool end_station = 1;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 2;
-}
-
-// A container for Rx settings of SecY.
-message SecureEntityDataPlaneRx {
-
-  // Enable replay protection on not.
-  // default = False
-  optional bool replay_protection = 1;
-
-  // Replay window size.
-  // default = 1
-  optional uint32 replay_window = 2;
-}
-
-// A container of crypto engine properties of a SecY.
-message SecureEntityCryptoEngine {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encrypt_only = 1;
-    }
-  }
-  // Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only
-  // - engine can only encrypt transmitted packets but it cannot decrypt packets upon
-  // arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered
-  // to the receiving device. Hence only stateless traffic can be sent.
-  // default = Choice.Enum.encrypt_only
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnly encrypt_only = 2;
-}
-
-// The container for encrypt only engine configuration.
-message SecureEntityCryptoEngineEncryptOnly {
-
-  // Description missing in models
-  repeated SecureEntityCryptoEngineEncryptOnlyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTrafficOptions traffic_options = 2;
-}
-
-// The container for Tx secure channel configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxSc {
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTxScTxPn tx_pn = 1;
-}
-
-// Tx packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxScTxPn {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      fixed_pn = 1;
-      incrementing_pn = 2;
-    }
-  }
-  // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets
-  // will be sent out with the configured fixed PN or lower half of configured fixed XPN.
-  // 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing
-  // PN or XPN.
-  // default = Choice.Enum.fixed_pn
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyFixedPn fixed = 2;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyIncrementingPn incrementing = 3;
-}
-
-// Fixed packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyFixedPn {
-
-  // Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
-  // default = 6
-  optional uint32 pn = 1;
-
-  // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
-  // sent out.
-  // default = 0x0000000000000006
-  optional string xpn = 2;
-}
-
-// Incrementing packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
-
-  // Count of packet numbers in series.
-  // default = 100
-  optional uint32 count = 1;
-
-  // The starting packet number(PN).
-  // default = 10000
-  optional uint32 starting_pn = 2;
-
-  // The starting extended packet number(XPN).
-  // default = 0x0000000000010000
-  optional string starting_xpn = 3;
-}
-
-// Encrypt only traffic options.
-message SecureEntityCryptoEngineEncryptOnlyTrafficOptions {
-
-  // Send gratuitous ARP or not.
-  // default = True
-  optional bool send_gratuitous_arp = 1;
-}
-
-// Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
-message Mka {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // This contains the basic properties of KaY.
-  // required = true
-  MkaBasic basic = 2;
-
-  // Key server attributes.
-  MkaKeyServer key_server = 3;
-
-  // Tx Properties.
-  // required = true
-  MkaTx tx = 4;
-}
-
-// A container of basic properties for a KaY.
-message MkaBasic {
-
-  message KeyDerivationFunction {
-    enum Enum {
-      unspecified = 0;
-      aes_cmac_128 = 1;
-      aes_cmac_256 = 2;
-    }
-  }
-  // Key Derivation Function.
-  // default = KeyDerivationFunction.Enum.aes_cmac_128
-  optional KeyDerivationFunction.Enum key_derivation_function = 1;
-
-  // Key source.
-  // required = true
-  MkaBasicKeySource key_source = 2;
-
-  // Actor priority.
-  // default = 70
-  optional string actor_priority = 3;
-
-  // Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
-  // default = True
-  optional bool macsec_desired = 4;
-
-  message MacsecCapability {
-    enum Enum {
-      unspecified = 0;
-      macsec_not_implemented = 1;
-      macsec_integrity_without_confidentiality = 2;
-      macsec_integrity_with_no_confidentiality_offset = 3;
-      macsec_integrity_with_confidentiality_offset = 4;
-    }
-  }
-  // MACSec Capability.
-  // default = MacsecCapability.Enum.macsec_integrity_with_confidentiality_offset
-  optional MacsecCapability.Enum macsec_capability = 5;
-
-  // Supported Cipher Suites.
-  MkaBasicSupportedCipherSuites supported_cipher_suites = 6;
-
-  // EAPOL Ethernet type.
-  // default = 888E
-  optional string eapol_ethernet_type = 7;
-
-  // MKA Version.
-  // default = 3
-  optional uint32 mka_version = 8;
-
-  // MKA Hello Time (msec).
-  // default = 2000
-  optional uint32 mka_hello_time = 9;
-
-  // MKA Life Time (sec).
-  // default = 6
-  optional uint32 mka_life_time = 10;
-
-  // Send ICV Indicator in MKPDU.
-  // default = True
-  optional bool send_icv_indicatior_in_mkpdu = 11;
-
-  // Delay Protect or not. When delay protect is enabled, it guards against delaying the
-  // delivery of MACsec encrypted frames by an attacker to the recipient.
-  // default = True
-  optional bool delay_protect = 12;
-
-  // Rekey Mode.
-  MkaBasicRekeyMode rekey_mode = 13;
-
-  // Description missing in models
-  MkaBasicPskChainStartTime psk_chain_start_time = 14;
-}
-
-// The container for supported cipher suites.
-message MkaBasicSupportedCipherSuites {
-
-  // GCM-AES-128.
-  // default = True
-  optional bool gcm_aes_128 = 1;
-
-  // GCM-AES-256.
-  // default = True
-  optional bool gcm_aes_256 = 2;
-
-  // GCM-AES-XPN-128.
-  // default = True
-  optional bool gcm_aes_xpn_128 = 3;
-
-  // GCM-AES-XPN-256.
-  // default = True
-  optional bool gcm_aes_xpn_256 = 4;
-}
-
-// The container for key source settings.
-message MkaBasicKeySource {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      psk = 1;
-      msk = 2;
-    }
-  }
-  // Key source. Choose one from PSK or MSK.
-  // default = Choice.Enum.psk
-  optional Choice.Enum choice = 1;
-
-  // PSK chain.
-  repeated MkaBasicKeySourcePsk psks = 2;
-}
-
-// The container for Pre-shared key(PSK).
-message MkaBasicKeySourcePsk {
-
-  // Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending
-  // on the chosen MKA key derivation function.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string cak_value = 1;
-
-  // Connectivity association key(CAK) name.
-  // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
-  optional string cak_name = 2;
-
-  // 
-  MkaBasicStartOffsetTime start_offset_time = 3;
-
-  // 
-  MkaBasicEndOffsetTime end_offset_time = 4;
-}
-
-// Key start offset time in HH:MM. This is relative to key chain start time.
-message MkaBasicStartOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Key end offset time in HH:MM. This is relative to key chain start time. A value of
-// 00:00 makes the key valid for lifetime.
-message MkaBasicEndOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this
-// time is set, the key start time will be relative to this value. Otherwise if this
-// value is not set, key start time will be relative to test start time.
-message MkaBasicPskChainStartTime {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      utc = 1;
-    }
-  }
-  // Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
-  // default = Choice.Enum.utc
-  optional Choice.Enum choice = 1;
-
-  // Coordinated Universal Time(UTC) time.
-  MkaBasicTimeUtc utc = 2;
-}
-
-// Coordinated Universal Time(UTC).
-message MkaBasicTimeUtc {
-
-  // Day of the month in DD format.
-  optional uint32 day = 1;
-
-  // Month of the year in MM format.
-  optional uint32 month = 2;
-
-  // Year from the start of common era(CE) in YYYY format.
-  optional uint32 year = 3;
-
-  // Hour of the day in HH format.
-  optional uint32 hour = 4;
-
-  // Minute of the hour in MM format.
-  optional uint32 minute = 5;
-
-  // Second of the minute in SS format.
-  optional uint32 second = 6;
-}
-
-// Rekey mode.
-message MkaBasicRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  MkaBasicRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message MkaBasicRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic Rekey count.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// Key server attributes of a KaY.
-message MkaKeyServer {
-
-  message ConfidentialtyOffset {
-    enum Enum {
-      unspecified = 0;
-      no_confidentiality = 1;
-      no_confidentiality_offset = 2;
-      confidentiality_offset_30_octets = 3;
-      confidentiality_offset_50_octets = 4;
-    }
-  }
-  // Confidentiality Offset.
-  // default = ConfidentialtyOffset.Enum.no_confidentiality_offset
-  optional ConfidentialtyOffset.Enum confidentialty_offset = 1;
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 2;
-
-  // Starting Key Number.
-  // default = 1
-  optional uint32 starting_key_number = 3;
-
-  // Starting Distributed AN.
-  // default = 0
-  optional uint32 starting_distributed_an = 4;
-
-  // Determines the PN rekey threshold.
-  // default = C0000000
-  optional string rekey_threshold_pn = 5;
-
-  // Determines the XPN rekey threshold.
-  // default = C000000000000000
-  optional string rekey_threshold_xpn = 6;
-}
-
-// A container of Tx properties.
-message MkaTx {
-
-  // Tx secure channels.
-  repeated MkaTxSc secure_channels = 1;
-}
-
-// Tx secure channel(SC) properties.
-message MkaTxSc {
-
-  // Tx SC name.
-  // required = true
-  optional string name = 1;
-
-  // System ID.
-  // required = true
-  optional string system_id = 2;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 3;
-
-  // Starting Message Number.
-  // default = 1
-  optional uint64 starting_message_number = 4;
-}
-
-// A container of static key properties for a secure entity(SecY). This configuration
-// is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA)
-// is configured. If MKA is configured, any static key configuration is not applicable.
-message SecureEntityStaticKey {
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128
-  // GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 1;
-
-  // Encrypt or not.
-  // default = True
-  optional bool confidentiality = 2;
-
-  message ConfidentialityOffset {
-    enum Enum {
-      unspecified = 0;
-      zero = 1;
-      thirty = 2;
-      fifty = 3;
-    }
-  }
-  // Confidentiality offset.
-  // default = ConfidentialityOffset.Enum.zero
-  optional ConfidentialityOffset.Enum confidentiality_offset = 3;
-
-  // Tx properties of SecY.
-  SecureEntityStaticKeyTx tx = 4;
-
-  // Rx properties of SecY.
-  SecureEntityStaticKeyRx rx = 5;
-}
-
-// Rekey mode.
-message SecureEntityStaticKeyRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Rekey mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  SecureEntityStaticKeyRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message SecureEntityStaticKeyRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic rekey attempt choices.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// The container for SAK.
-message SecureEntityStaticKeySak {
-
-  // Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending
-  // on the chosen cipher suite.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string sak = 1;
-
-  // 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
-  // default = 00000001
-  optional string ssci = 2;
-
-  // 12 bytes salt used in case of XPN cipher suites.
-  // default = 000000000000000000000001
-  optional string salt = 3;
-}
-
-// A container of static key Tx properties.
-message SecureEntityStaticKeyTx {
-
-  // Tx secure channels.
-  repeated SecureEntityStaticKeyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityStaticKeyRekeyMode rekey_mode = 2;
-}
-
-// Tx SC setting for static key.
-message SecureEntityStaticKeyTxSc {
-
-  // System ID.
-  optional string system_id = 1;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 2;
-
-  // Tx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 3;
-}
-
-// A container of static key Rx properties.
-message SecureEntityStaticKeyRx {
-
-  // Rx secure channels.
-  repeated SecureEntityStaticKeyRxSc secure_channels = 1;
-}
-
-// Rx SC settings.
-message SecureEntityStaticKeyRxSc {
-
-  // System ID in DUT SCI.
-  optional string dut_sci_system_id = 1;
-
-  // Port ID in DUT SCI.
-  // default = 1
-  optional uint32 dut_sci_port_id = 2;
-
-  // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
-  // construct the 64 bits XPN value when test starts.
-  // default = 0
-  optional uint32 dut_msb_xpn = 3;
-
-  // Rx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 4;
-}
-
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
-// A container of properties for an OSPFv3 router.
-message DeviceOspfv3Router {
-
-  // OSPFv3 Router Id.
-  Ospfv3RouterId router_id = 1;
-
-  // List of OSPFv3 router instances for this router.
-  repeated Ospfv3RouterInstance instances = 2;
-}
-
-// A container of properties for an OSPFv3 router instance and its interfaces and route
-// ranges.
-message Ospfv3RouterInstance {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // The time in seconds for LSA retransmission.
-  // default = 5
-  optional uint32 lsa_retransmit_time = 2;
-
-  // The time in seconds required for LSA refresh.
-  // default = 1800
-  optional uint32 lsa_refresh_time = 3;
-
-  // The gap in miliseconds between each Flood Link State Update burst.
-  // default = 1000
-  optional uint32 inter_burst_lsu_interval = 4;
-
-  // Description missing in models
-  Ospfv3GracefulRestart graceful_restart = 5;
-
-  // Configuration for controlling storage of OSPFv3 learned LSAs received from the neighbors.
-  // default = False
-  optional bool store_lsa = 6;
-
-  // Optional container for OSPFv3 router capabilities.
-  Ospfv3Capabilities capabilities = 7;
-
-  // List of OSPFv3 interfaces for this router.
-  repeated Ospfv3Interface interfaces = 8;
-
-  // Emulated OSPFv4 IPv6 routes.
-  repeated Ospfv3V6RouteRange v6_routes = 9;
-}
-
-// Container for OSPFv3 Router ID configuration.
-message Ospfv3RouterId {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      auto = 1;
-      custom = 2;
-    }
-  }
-  // IP address of Router ID for this emulated OSPFv3 router.
-  // - auto: When first IPv4 address on the router is attempted to be assigned as Router
-  // ID.
-  // If none are available for use, implementation should return an error.
-  // - custom: When, Router ID needs to be configured different from first IPv4 address
-  // of the router.
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-
-  // Router ID in IPv4 address format.
-  optional string custom = 2;
-}
-
-// The OSPFv3 router optional attributes.
-message Ospfv3Capabilities {
-
-  // Set to indicate that the router acts as an Area Border Router.
-  // default = False
-  optional bool lsa_b_bit = 1;
-
-  // Set to indicate that the router acts as an AS Boundary Router.
-  // default = False
-  optional bool lsa_e_bit = 2;
-}
-
-// Container of properties of OSPFv3 Graceful Retstart.
-message Ospfv3GracefulRestart {
-
-  // Support of Graceful Restart in Helper Mode.
-  // default = False
-  optional bool helper_mode = 1;
-}
-
-// Configuration for single OSPFv3 interface.
-message Ospfv3Interface {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // The globally unique name of the IPv6 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
-  // required = true
-  optional string ipv6_name = 2;
-
-  // The Area ID of the area to which the attached network belongs.
-  // All routing protocol packets originating from the interface are
-  // labelled with this Area ID.
-  Ospfv3InterfaceArea area = 3;
-
-  // The OSPF network link type.
-  Ospfv3InterfaceNetworkType network_type = 4;
-
-  // Optional container for advanced interface properties.
-  Ospfv3InterfaceAdvanced advanced = 5;
-
-  // Container for OSPFv3 optional interface properties.
-  Ospfv3InterfaceOptions options = 6;
-
-  // Enables multiple instances of OSPF to be run over a single link.
-  // Each protocol instance should be assigned a separate Instance ID;
-  // the Instance ID has link-local significance only.
-  // default = 0
-  optional uint32 instance_id = 7;
-}
-
-// Container for OSPFv3 Area ID identifies the routing area to which the host belongs.
-// 
-message Ospfv3InterfaceArea {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      id = 1;
-      ip = 2;
-    }
-  }
-  // The OSPFv3 Area ID identifies the routing area to which the host belongs. Area ID
-  // type can be following format.
-  // - id: A 32-bit number identifying the area.
-  // - ip: The Area ID in IPv4 address format.
-  // default = Choice.Enum.id
-  optional Choice.Enum choice = 1;
-
-  // The Area ID.
-  // default = 0
-  optional uint32 id = 2;
-
-  // The Area ID in IPv4 address format.
-  optional string ip = 3;
-}
-
-// The OSPFv3 network link type options.
-// - Broadcast
-// - Point to Point
-message Ospfv3InterfaceNetworkType {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      broadcast = 1;
-      point_to_point = 2;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.broadcast
-  optional Choice.Enum choice = 1;
-
-  // Capabilities associated with network type broadcast.
-  Ospfv3InterfaceBroadcast broadcast = 2;
-}
-
-// Contains OSPFv3 advanced properties.
-message Ospfv3InterfaceAdvanced {
-
-  // The time interval, in seconds, between the Hello packets that
-  // the router sends on the interface. Advertised in Hello packets
-  // sent out this interface.
-  // default = 10
-  optional uint32 hello_interval = 1;
-
-  // The time interval in seconds before the router's neighbors will declare
-  // it down, when they stop hearing the router's Hello Packets.
-  // Advertised in Hello packets sent out this interface.
-  // default = 40
-  optional uint32 dead_interval = 2;
-
-  // The cost of transmitting data on this link.
-  // default = 10
-  optional uint32 link_metric = 3;
-
-  // If this is set to true, then the MTU received from the neighbor during Database (DB)
-  // Exchange
-  // will be validated, otherwise it will be ignored.
-  // 
-  // default = True
-  optional bool validate_received_mtu = 4;
-}
-
-// The Options field is present in OSPFv3 Hello packets, Database Description packets
-// and all LSAs.
-// The Options field enables OSPF routers to support (or not support) optional capabilities,
-// and to
-// communicate their capability level to other OSPF routers (https://datatracker.ietf.org/doc/html/rfc2740#appendix-A.2).
-// When used in Hello packets, the Options field allows a router to reject a neighbor
-// because of a capability mismatch.
-message Ospfv3InterfaceOptions {
-
-  // Demand Circuit: This bit describes the router's handling of demand circuits, as specified
-  // in [Ref10], rfc2740.
-  // default = False
-  optional bool dc_bit = 1;
-
-  // Router: This bit indicates if the originator is an active router.
-  // default = True
-  optional bool r_bit = 2;
-
-  // NSSA Capability: This bit describes the handling of Type-7 LSAs, as specified in
-  // [Ref8], rfc2740.
-  // default = False
-  optional bool n_bit = 3;
-
-  // External Capability: This bit describes the router's willingness to receive and forward
-  // External-Attributes-LSAs,  as specified in [Ref1], rfc2740.
-  // default = True
-  optional bool e_bit = 4;
-
-  // V6: If set, the router/link should be included in IPv6 routing calculations.
-  // default = True
-  optional bool v6_bit = 5;
-}
-
-// Container for capabilities associated with network type broadcast.
-message Ospfv3InterfaceBroadcast {
-
-  // The Priority for (Backup) Designated Router election.
-  // This value is used in Hello packets for the Designated Router (DR) election process.
-  // The default is 0, which indicates that the router will not participate in the DR
-  // election process.
-  // default = 0
-  optional uint32 priority = 1;
-}
-
-// Emulated OSPFv3 IPv6 routes.
-message Ospfv3V6RouteRange {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // A list of group of IPv6 route addresses.
-  repeated V6RouteAddress addresses = 2;
-
-  // The user-defined metric associated with this route range.
-  // default = 0
-  optional uint32 metric = 3;
-
-  // The type of the OSPFv3 routes.
-  Ospfv3V6RRRouteOrigin route_origin = 4;
-}
-
-// Container of type of the OSPFv3 types correspond directly to the OSPFv3 LSAs types.
-// 
-message Ospfv3V6RRRouteOrigin {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      intra_area = 1;
-      inter_area = 2;
-      external_type_1 = 3;
-      external_type_2 = 4;
-      nssa_external = 5;
-    }
-  }
-  // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area.
-  // - external_type_1: for Autonomous System (AS) External with internal AS metric. -
-  // external_type_2: for Autonomous System (AS) External with internal and external AS
-  // metric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.
-  // default = Choice.Enum.inter_area
-  optional Choice.Enum choice = 1;
-
-  // Configuration for the type 7 Not-So-Stubby Area (NSSA) External.
-  Ospfv3V6RRNssaExternal nssa_external = 2;
-}
-
-// Container for the forwarding address of NSSA External route origin configuration.
-message Ospfv3V6RRNssaExternal {
-
-  // Configuration for capabilities associated with route origin.
-  Ospfv3V6RRCapabilities capabilities = 1;
-}
-
-// Container for the capabilities associated with route origin.
-message Ospfv3V6RRCapabilities {
-
-  // If set, LSAs will be propagated between Areas.
-  // default = False
-  optional bool propagation = 1;
-
-  // Configuration for forwarding address of NSSA External route origin.
-  Ospfv3V6RRForwardingAddress forwarding_address = 2;
-}
-
-// Container for the forwarding address of NSSA External route origin configuration.
-message Ospfv3V6RRForwardingAddress {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      interface_ip = 1;
-      custom = 2;
-    }
-  }
-  // IPv6 forwarding address of Type 7 LSA Not-So-Stubby Area (NSSA) External.
-  // - interface_ip: if set, forwarding address is set with Interface IPv6 address.
-  // - custom: if set, forwarding address is set with a custom IPv6 address.
-  // default = Choice.Enum.interface_ip
-  optional Choice.Enum choice = 1;
-
-  // Forwarding address in IPv6 format.
-  optional string custom = 2;
-}
-
 // A high level data plane traffic flow.
 message Flow {
 
@@ -9364,10 +8265,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -9434,16 +8331,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -9452,19 +8342,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9541,23 +8421,6 @@ message FlowRouter {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
@@ -9577,23 +8440,6 @@ message FlowRouter {
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
@@ -9626,7 +8472,6 @@ message FlowHeader {
       mpls = 19;
       snmpv2c = 20;
       rsvp = 21;
-      macsec = 22;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -9696,9 +8541,6 @@ message FlowHeader {
 
   // Description missing in models
   FlowRsvp rsvp = 22;
-
-  // Description missing in models
-  FlowMacsec macsec = 23;
 }
 
 // Custom packet header
@@ -11655,27 +10497,6 @@ message FlowRSVPPathObjectsCustom {
   optional string bytes = 3;
 }
 
-// MACsec packet header.
-message FlowMacsec {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      auto = 1;
-    }
-  }
-  // Currently only auto choice is allowed. If choice is auto, MACsec header is autogenerated.
-  // If auto choice is selected, MACsec protocol must be configured in device; flow.tx_rx.choice
-  // must be of type 'device' and flow.tx_rx.device.tx_names[0] must be chosen to be an
-  // endpoint that is on or behind a MACSec enabled ethernet to be able to correctly auto-fill
-  // the fields of the MACsec header. If one of the conditions is not true, the implementation
-  // should return an error specifying the issue. A custom choice can be added in future
-  // to allow user to set specific MACsec header fields and/ or to generate flow.tx_rx.port
-  // type of traffic with MACSec header fields explicitly specified by the user.
-  // default = Choice.Enum.auto
-  optional Choice.Enum choice = 1;
-}
-
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -12115,9 +10936,6 @@ message FlowRxTxRatioRxCount {
 // Under Review: Event configuration is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -12179,12 +10997,6 @@ message EventRequest {
 
   // Constrain the events being returned by specifying event sources.
   // If the list is empty then all event sources will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12267,10 +11079,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12595,7 +11403,6 @@ message StateProtocol {
       bgp = 4;
       isis = 5;
       ospfv2 = 6;
-      ospfv3 = 7;
     }
   }
   // Description missing in models
@@ -12619,19 +11426,12 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolOspfv2 ospfv2 = 7;
-
-  // Description missing in models
-  StateProtocolOspfv3 ospfv3 = 8;
 }
 
 // Sets the link of configured ports.
 message StatePortLink {
 
   // The names of target ports. An empty or null list will target all ports.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12661,10 +11461,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -12686,10 +11482,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -12751,16 +11543,6 @@ message StateProtocolRoute {
   // - /components/schemas/Isis.V4RouteRange/properties/name
   // - /components/schemas/Isis.V6RouteRange/properties/name
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // 
   repeated string names = 1;
 
@@ -12806,10 +11588,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -12831,10 +11609,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12875,11 +11649,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -12928,10 +11697,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -12975,10 +11740,6 @@ message StateProtocolOspfv2Routers {
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -12991,53 +11752,6 @@ message StateProtocolOspfv2Routers {
   // The desired state of OSPFv2 router. If the desired state is 'up', would attempt to
   // bring up the OSPFv2 session(s) with respective peer(s) and advertise route(s), if
   // configured. If the desired state is 'down', would bring down OSPFv2 session(s) with
-  // respective peer(s).
-  // required = true
-  optional State.Enum state = 2;
-}
-
-// Sets state of configured OSPFv3 routers.
-message StateProtocolOspfv3 {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      routers = 1;
-    }
-  }
-  // Description missing in models
-  // required = true
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  StateProtocolOspfv3Routers routers = 2;
-}
-
-// Sets state of configured OSPFv3 routers.
-message StateProtocolOspfv3Routers {
-
-  // The names of OSPFv3 routers for which the state has to be applied. An empty or null
-  // list will control all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  repeated string router_names = 1;
-
-  message State {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // The desired state of OSPFv3 router. If the desired state is 'up', would attempt to
-  // bring up the OSPFv3 session(s) with respective peer(s) and advertise route(s), if
-  // configured. If the desired state is 'down', would bring down OSPFv3 session(s) with
   // respective peer(s).
   // required = true
   optional State.Enum state = 2;
@@ -13110,6 +11824,9 @@ message ActionProtocol {
 
   // Description missing in models
   ActionProtocolBgp bgp = 4;
+
+  // Description missing in models
+  ActionProtocolIsis isis = 5;
 }
 
 // Response for actions associated with protocols on configured resources.
@@ -13176,18 +11893,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -13209,10 +11920,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -13279,18 +11986,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -13312,10 +12013,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -13376,11 +12073,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -13436,11 +12128,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -13511,6 +12198,55 @@ message ActionProtocolBgpGracefulRestartNotification {
   DeviceBgpCustomError custom = 9;
 }
 
+// Actions associated with IS-IS on configured resources.
+message ActionProtocolIsis {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      initiate_starting_mode = 1;
+      initiate_to_restarting_mode = 2;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ActionProtocolIsisInitiateGracefulStart initiate_starting_mode = 2;
+
+  // Description missing in models
+  ActionProtocolIsisInitiateGracefulRestart initiate_restarting_mode = 3;
+}
+
+// Initiates IS-IS Graceful Start process for the selected IS-IS routers. If no name
+// is specified then Graceful Start will be sent to all configured IS-IS routers. To
+// emulate scenarios where a router sends Graceful Restart TlV this will result in
+// Graceful tart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
+message ActionProtocolIsisInitiateGracefulStart {
+
+  // The names of device rfc5306 objects to control.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+}
+
+// Initiates IS-IS Graceful Restart process for the selected IS-IS routers. If no name
+// is specified then Graceful Restart will be sent to all configured IS-IS routers.
+// To emulate scenarios where a router sends Graceful Start TlV this will result in
+// Graceful Restart scenario to be triggered as perReference: https://datatracker.ietf.org/doc/html/rfc5306.
+message ActionProtocolIsisInitiateGracefulRestart {
+
+  // The names of device rfc5306 objects to control.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+}
+
 // Request to traffic generator for metrics of choice.
 message MetricsRequest {
 
@@ -13532,9 +12268,6 @@ message MetricsRequest {
       dhcpv6_server = 13;
       ospfv2 = 14;
       convergence = 15;
-      macsec = 16;
-      mka = 17;
-      ospfv3 = 18;
     }
   }
   // Description missing in models
@@ -13585,15 +12318,6 @@ message MetricsRequest {
 
   // Description missing in models
   ConvergenceRequest convergence = 16;
-
-  // Description missing in models
-  MacsecMetricsRequest macsec = 17;
-
-  // Description missing in models
-  MkaMetricsRequest mka = 18;
-
-  // Description missing in models
-  Ospfv3MetricsRequest ospfv3 = 19;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -13617,9 +12341,6 @@ message MetricsResponse {
       dhcpv6_server = 13;
       ospfv2_metrics = 14;
       convergence_metrics = 15;
-      macsec_metrics = 16;
-      mka_metrics = 17;
-      ospfv3_metrics = 18;
     }
   }
   // Description missing in models
@@ -13670,15 +12391,6 @@ message MetricsResponse {
 
   // Description missing in models
   repeated ConvergenceMetric convergence_metrics = 16;
-
-  // Description missing in models
-  repeated MacsecMetric macsec_metrics = 17;
-
-  // Description missing in models
-  repeated MkaMetric mka_metrics = 18;
-
-  // Description missing in models
-  repeated Ospfv3Metric ospfv3_metrics = 19;
 }
 
 // The port result request to the traffic generator
@@ -13686,10 +12398,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13723,10 +12431,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13805,10 +12509,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -14123,10 +12823,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -14249,10 +12945,6 @@ message Bgpv6MetricsRequest {
 
   // The names of BGPv6 peers to return results for. An empty list will return results
   // for all BGPv6 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
@@ -14383,10 +13075,6 @@ message IsisMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message ColumnNames {
@@ -14418,6 +13106,18 @@ message IsisMetricsRequest {
       l2_csnp_received = 24;
       l2_lsp_sent = 25;
       l2_lsp_received = 26;
+      l1_rr_sent = 27;
+      l1_rr_received = 28;
+      l1_ra_sent = 29;
+      l1_ra_received = 30;
+      l1_sa_sent = 31;
+      l1_sa_received = 32;
+      l2_rr_sent = 33;
+      l2_rr_received = 34;
+      l2_ra_sent = 35;
+      l2_ra_received = 36;
+      l2_sa_sent = 37;
+      l2_sa_received = 38;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -14509,6 +13209,39 @@ message IsisMetric {
 
   // Number of Level 2 (L2) Link State Protocol Data Units (LSPs) received.
   optional uint64 l2_lsp_received = 27;
+
+  // Number of Level 1 (L1) Restart Request (RR) sent.
+  optional uint64 l1_rr_sent = 28;
+
+  // Number of Level 1 (L1) Restart Request (RR) received.
+  optional uint64 l1_rr_received = 29;
+
+  // Number of Level 1 (L1) Restart Acknowledgement (RA) sent.
+  optional uint64 l1_ra_sent = 30;
+
+  // Number of Level 1 (L1) Restart Acknowledgement (RA) received.
+  optional uint64 l1_ra_received = 31;
+
+  // Number of Level 1 (L1) Suppress adjacency advertisement (SA) sent.
+  optional uint64 l1_sa_sent = 32;
+
+  // Number of Level 1 (L1) Suppress adjacency advertisement (SA) received.
+  optional uint64 l1_sa_received = 33;
+
+  // Number of Level 2 (L2) Restart Request (RR) received.
+  optional uint64 l2_rr_received = 34;
+
+  // Number of Level 2 (L2) Restart Acknowledgement (RA) sent.
+  optional uint64 l2_ra_sent = 35;
+
+  // Number of Level 2 (L2) Restart Acknowledgement (RA) received.
+  optional uint64 l2_ra_received = 36;
+
+  // Number of Level 2 (L2) Suppress adjacency advertisement (SA) sent.
+  optional uint64 l2_sa_sent = 37;
+
+  // Number of Level 2 (L2) Suppress adjacency advertisement (SA) received.
+  optional uint64 l2_sa_received = 38;
 }
 
 // The request to retrieve per LAG metrics/statistics.
@@ -14516,10 +13249,6 @@ message LagMetricsRequest {
 
   // The names of LAGs to return results for. An empty list will return results for all
   // LAGs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -14550,10 +13279,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -14608,18 +13333,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14740,10 +13457,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -14802,10 +13515,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -14966,10 +13675,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -15027,10 +13732,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -15084,10 +13785,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -15169,10 +13866,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -15262,10 +13955,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -15427,9 +14116,6 @@ message Ospfv2Metric {
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -15440,16 +14126,9 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
@@ -15509,13 +14188,6 @@ message ConvergenceEvent {
   // - /components/schemas/Device.Bgpv4Route/properties/name
   // - /components/schemas/Device.Bgpv6Route/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   optional string source = 2;
 
   // The timestamp(nanoseconds) of the starting event that triggers convergence.
@@ -15523,362 +14195,6 @@ message ConvergenceEvent {
 
   // The timestamp(nanoseconds) of the end event that triggers convergence.
   optional double end_timestamp_ns = 4;
-}
-
-// The request to retrieve MACsec per secure entity(secY) metrics/statistics.
-message MacsecMetricsRequest {
-
-  // The names of secure entities(secYs) to return results for. An empty list will return
-  // results for all secYs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
-  repeated string secure_entity_names = 1;
-
-  message ColumnNames {
-    enum Enum {
-      unspecified = 0;
-      session_state = 1;
-      session_flap_count = 2;
-      out_pkts_protected = 3;
-      out_pkts_encrypted = 4;
-      in_pkts_ok = 5;
-      in_pkts_bad = 6;
-      in_pkts_bad_tag = 7;
-      in_pkts_late = 8;
-      in_pkts_no_sci = 9;
-      in_pkts_not_using_sa = 10;
-      in_pkts_not_valid = 11;
-      in_pkts_unknown_sci = 12;
-      in_pkts_unused_sa = 13;
-      in_pkts_invalid = 14;
-      in_pkts_untagged = 15;
-      out_octets_protected = 16;
-      out_octets_encrypted = 17;
-      in_octets_validated = 18;
-      in_octets_decrypted = 19;
-    }
-  }
-  // The list of column names that the returned result set will contain. If the list is
-  // empty then all columns will be returned except for any result_groups. The name of
-  // the secure entity(secY) cannot be excluded.
-  repeated ColumnNames.Enum column_names = 2;
-}
-
-// MACsec per secure entity(secY) statistics information.
-message MacsecMetric {
-
-  // The name of a configured MACsec secure entity(secY).
-  optional string name = 1;
-
-  message SessionState {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
-  optional SessionState.Enum session_state = 2;
-
-  // Number of times the session went from Up to Down state.
-  optional uint64 session_flap_count = 3;
-
-  // OutPktsProtected, the number of protected packets transmitted.
-  optional uint64 out_pkts_protected = 4;
-
-  // OutPktsEncrypted, the number of encrypted packets transmitted.
-  optional uint64 out_pkts_encrypted = 5;
-
-  // InPktsOk, the number of valid packets received.
-  optional uint64 in_pkts_ok = 6;
-
-  // The total number of received bad packets that failed atleast one validation check.
-  optional uint64 in_pkts_bad = 7;
-
-  // InPktsBadTag, the number of packets discarded due to bad tag/ICV.
-  optional uint64 in_pkts_bad_tag = 8;
-
-  // InPktsLate, the number of packets discarded out of window.
-  optional uint64 in_pkts_late = 9;
-
-  // InPktsNoSCI,the number of packets discarded due to unknown SCI.
-  optional uint64 in_pkts_no_sci = 10;
-
-  // InPktsNotUsingSA, the number of packets discarded due to unused SA.
-  optional uint64 in_pkts_not_using_sa = 11;
-
-  // InPktsNotValid, the number of packets discarded due to invalid ICV.
-  optional uint64 in_pkts_not_valid = 12;
-
-  // InPktsUnknownSCI, the number of packets received with unknown SCI.
-  optional uint64 in_pkts_unknown_sci = 13;
-
-  // InPktsUnusedSA, the number of packets received with unused SA.
-  optional uint64 in_pkts_unused_sa = 14;
-
-  // InPktsInvalid, the number of packets received with invalid ICV.
-  optional uint64 in_pkts_invalid = 15;
-
-  // InPktsUntagged, the number of non-MACsec packets received.
-  optional uint64 in_pkts_untagged = 16;
-
-  // OutOctetsProtected, the number of bytes transmitted as protected.
-  optional uint64 out_octets_protected = 17;
-
-  // OutOctetsEncrypted, the number of bytes transmitted as encrypted.
-  optional uint64 out_octets_encrypted = 18;
-
-  // InOctetsValidated, the number of received bytes validated.
-  optional uint64 in_octets_validated = 19;
-
-  // InOctetsDecrypted, the number of received bytes decrypted.
-  optional uint64 in_octets_decrypted = 20;
-}
-
-// The request to retrieve MKA per peer metrics/statistics.
-message MkaMetricsRequest {
-
-  // The names of peers to return results for. An empty list will return results for all
-  // peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
-  repeated string peer_names = 1;
-
-  message ColumnNames {
-    enum Enum {
-      unspecified = 0;
-      session_state = 1;
-      session_flap_count = 2;
-      mkpdu_tx = 3;
-      mkpdu_rx = 4;
-      live_peer_count = 5;
-      potential_peer_count = 6;
-      latest_key_tx_peer_count = 7;
-      latest_key_rx_peer_count = 8;
-      malformed_mkpdu = 9;
-      icv_mismatch = 10;
-    }
-  }
-  // The list of column names that the returned result set will contain. If the list is
-  // empty then all columns will be returned except for any result_groups. The name of
-  // the peer cannot be excluded.
-  repeated ColumnNames.Enum column_names = 2;
-}
-
-// MKA per peer statistics information.
-message MkaMetric {
-
-  // The name of a configured MKA peer.
-  optional string name = 1;
-
-  message SessionState {
-    enum Enum {
-      unspecified = 0;
-      up = 1;
-      down = 2;
-    }
-  }
-  // Session state as up or down. Up refers to an Established state and Down refers to
-  // any other state.
-  optional SessionState.Enum session_state = 2;
-
-  // Number of times the session went from Up to Down state.
-  optional uint64 session_flap_count = 3;
-
-  // Number of MKA protocol data unit(MKPDU) frames Tx.
-  optional uint64 mkpdu_tx = 4;
-
-  // Number of MKA protocol data unit(MKPDU) frames Rx.
-  optional uint64 mkpdu_rx = 5;
-
-  // Number of MKA live peers.
-  optional uint64 live_peer_count = 6;
-
-  // Number of MKA potential peers.
-  optional uint64 potential_peer_count = 7;
-
-  // Number of MKA latest key Tx peers.
-  optional uint64 latest_key_tx_peer_count = 8;
-
-  // Number of MKA latest key Rx peers.
-  optional uint64 latest_key_rx_peer_count = 9;
-
-  // Number of malformed MKA Protocol Data Unit(MKPDU) frames Rx.
-  optional uint64 malformed_mkpdu = 10;
-
-  // Number of MKA Protocol Data Unit(MKPDU) frames with ICV mismatch Rx.
-  optional uint64 icv_mismatch = 11;
-}
-
-// The request to retrieve OSPFv3 per router metrics/statistics.
-message Ospfv3MetricsRequest {
-
-  // The names of OSPFv3 routers to return results for. An empty list will return results
-  // for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  repeated string router_names = 1;
-
-  message ColumnNames {
-    enum Enum {
-      unspecified = 0;
-      full_state_count = 1;
-      down_state_count = 2;
-      sessions_flap = 3;
-      hellos_sent = 4;
-      hellos_received = 5;
-      dbd_sent = 6;
-      dbd_received = 7;
-      ls_request_sent = 8;
-      ls_request_received = 9;
-      ls_update_sent = 10;
-      ls_update_received = 11;
-      ls_ack_sent = 12;
-      ls_ack_received = 13;
-      lsa_sent = 14;
-      lsa_received = 15;
-      router_lsa_sent = 16;
-      router_lsa_received = 17;
-      network_lsa_sent = 18;
-      network_lsa_received = 19;
-      inter_area_prefix_lsa_sent = 20;
-      inter_area_prefix_lsa_received = 21;
-      inter_area_router_lsa_sent = 22;
-      inter_area_router_lsa_received = 23;
-      external_lsa_sent = 24;
-      external_lsa_received = 25;
-      nssa_lsa_sent = 26;
-      nssa_lsa_received = 27;
-      link_lsa_sent = 28;
-      link_lsa_received = 29;
-      intra_area_prefix_lsa_sent = 30;
-      intra_area_prefix_lsa_received = 31;
-    }
-  }
-  // The list of column names that the returned result set will contain.
-  // If the list is empty then all columns will be returned except for
-  // any result_groups.
-  // The name of the OSPFv3 Router cannot be excluded.
-  repeated ColumnNames.Enum column_names = 2;
-}
-
-// OSPFv3 per router statistics information.
-message Ospfv3Metric {
-
-  // The name of a configured OSPFv3 router.
-  optional string name = 1;
-
-  // The number of OSPFv3 sessions in up state.
-  optional uint64 full_state_count = 2;
-
-  // The number of OSPFv3 sessions in down state.
-  optional uint64 down_state_count = 3;
-
-  // The number of change of OSPFv3 sessions from up to down state.
-  optional uint64 sessions_flap = 4;
-
-  // The number of OSPFv3 Hello messages transmitted.
-  optional uint64 hellos_sent = 5;
-
-  // The number of OSPFv3 Hello messages received.
-  optional uint64 hellos_received = 6;
-
-  // The number of OSPFv3 Database Description (DBD) messages transmitted.
-  optional uint64 dbd_sent = 7;
-
-  // The number of OSPFv3 Database Description (DBD) messages received.
-  optional uint64 dbd_received = 8;
-
-  // The number of OSPFv3 LinkState (LS) Request messages transmitted.
-  optional uint64 ls_request_sent = 9;
-
-  // The number of OSPFv3 LinkState (LS) Request messages received.
-  optional uint64 ls_request_received = 10;
-
-  // The number of OSPFv3 LinkState (LS) Update messages transmitted.
-  optional uint64 ls_update_sent = 11;
-
-  // The number of OSPFv3 LinkState (LS) Update messages received.
-  optional uint64 ls_update_received = 12;
-
-  // The number of OSPFv3 LinkState (LS) Acknowledgement messages transmitted.
-  optional uint64 ls_ack_sent = 13;
-
-  // The number of OSPFv3 LinkState (LS) Acknowledgement messages received.
-  optional uint64 ls_ack_received = 14;
-
-  // The total number of OSPFv3 LinkState Advertisement (LSA) messages transmitted.
-  optional uint64 lsa_sent = 15;
-
-  // The total number of OSPFv3 LinkState Advertisement (LSA) messages received.
-  optional uint64 lsa_received = 16;
-
-  // The number of OSPFv3 Router (Type 1) LSAs transmitted.
-  optional uint64 router_lsa_sent = 17;
-
-  // The number of OSPFv3 Router (Type 1) LSAs received.
-  optional uint64 router_lsa_received = 18;
-
-  // The number of OSPFv3 Network (Type 2) LSAs transmitted.
-  optional uint64 network_lsa_sent = 19;
-
-  // The number of OSPFv3 Network (Type 2) LSAs received.
-  optional uint64 network_lsa_received = 20;
-
-  // The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs transmitted.
-  optional uint64 inter_area_prefix_lsa_sent = 21;
-
-  // The number of OSPFv3 Inter-Area-Prefix (Type 3) LSAs received.
-  optional uint64 inter_area_prefix_lsa_received = 22;
-
-  // The number of OSPFv3 Inter-Area-Router (Type 4) LSAs transmitted.
-  optional uint64 inter_area_router_lsa_sent = 23;
-
-  // The number of OSPFv3 Inter-Area-Router (Type 4) LSAs received.
-  optional uint64 inter_area_router_lsa_received = 24;
-
-  // The number of OSPFv3 External (Type 5) LSAs transmitted.
-  optional uint64 external_lsa_sent = 25;
-
-  // The number of OSPFv3 External (Type 5) LSAs received.
-  optional uint64 external_lsa_received = 26;
-
-  // The number of OSPFv3 NSSA (Type 7) LSAs transmitted.
-  optional uint64 nssa_lsa_sent = 27;
-
-  // The number of OSPFv3 NSSA (Type 7) LSAs received.
-  optional uint64 nssa_lsa_received = 28;
-
-  // The number of OSPFv3 Link (Type 8) LSAs transmitted.
-  optional uint64 link_lsa_sent = 29;
-
-  // The number of OSPFv3 Link (Type 8) LSAs received.
-  optional uint64 link_lsa_received = 30;
-
-  // The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs transmitted.
-  optional uint64 intra_area_prefix_lsa_sent = 31;
-
-  // The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs received.
-  optional uint64 intra_area_prefix_lsa_received = 32;
 }
 
 // Request to traffic generator for states of choice
@@ -15898,7 +14214,6 @@ message StatesRequest {
       dhcpv6_interfaces = 9;
       dhcpv6_leases = 10;
       ospfv2_lsas = 11;
-      ospfv3_lsas = 12;
     }
   }
   // Description missing in models
@@ -15937,9 +14252,6 @@ message StatesRequest {
 
   // Description missing in models
   Ospfv2LsasStateRequest ospfv2_lsas = 12;
-
-  // Description missing in models
-  Ospfv3LsasStateRequest ospfv3_lsas = 13;
 }
 
 // Response containing chosen traffic generator states
@@ -15959,7 +14271,6 @@ message StatesResponse {
       dhcpv6_interfaces = 9;
       dhcpv6_leases = 10;
       ospfv2_lsas = 11;
-      ospfv3_lsas = 12;
     }
   }
   // Description missing in models
@@ -15998,9 +14309,6 @@ message StatesResponse {
 
   // Description missing in models
   repeated Ospfv2LsaState ospfv2_lsas = 12;
-
-  // Description missing in models
-  repeated Ospfv3LsaState ospfv3_lsas = 13;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -16009,10 +14317,6 @@ message Neighborsv4StatesRequest {
   // The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will
   // be retrieved. If no names are specified then the results will contain Neighbor state
   // (ARP cache entries) for all available Ethernet interfaces.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -16046,10 +14350,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -16075,11 +14375,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -16633,10 +14928,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -17027,7 +15318,7 @@ message IsisLspCapability {
   IsisLspSRCapability sr_capability = 4;
 
   // This contains one or more SR-Algorithm.
-  repeated uint32 algorithms = 5;
+  repeated IsisLspAlgorithm algorithms = 5;
 
   // This contains the list of SR Local Block (SRLB)
   repeated IsisLspSrlb srlb_ranges = 6;
@@ -17080,18 +15371,19 @@ message IsisLspSrlb {
   optional uint32 range = 2;
 }
 
+// Container for SR-Algorithms. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-sr-algorithm-sub-tlv.
+message IsisLspAlgorithm {
+
+  // The Isis may use various algorithms when calculating reachability to other nodes
+  // or to prefixes attached to these nodes.
+  optional uint32 algorithm = 1;
+}
+
 // This container defines segment routing adjacency SIDs.
 message IsisLspAdjacencySid {
 
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      adj_sid = 1;
-      lan_adj_sid = 2;
-    }
-  }
-  // Adjacency-SID type: Adjacency SIDs(31) or LAN adjacency SID (32).
-  optional Type.Enum type = 1;
+  // The corresponding adjacency SID type.
+  optional uint32 tlv_type = 1;
 
   // One or more SID/Indices are the SID/Label values associated with the IGP adjacency
   // SID.
@@ -17173,10 +15465,6 @@ message LldpNeighborsStateRequest {
   // The names of LLDP instances for which neighbor information will be retrieved. If
   // no names are specified then the results will contain neighbor information for all
   // configured LLDP instances.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
@@ -17344,10 +15632,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -17482,10 +15766,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -17519,10 +15799,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -17573,10 +15849,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -17632,10 +15904,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -17683,10 +15951,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -17887,242 +16151,11 @@ message Ospfv2Link {
   optional uint32 metric = 4;
 }
 
-// The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned
-// by the routers.
-message Ospfv3LsasStateRequest {
-
-  // The names of OSPFv3 routers for which learned information is requested. An empty
-  // list will return results for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
-  repeated string router_names = 1;
-}
-
-// The result of OSPFv3 LSA information that are retrieved.
-message Ospfv3LsaState {
-
-  // The name of the OSPFv3 Router that learned the LSA information.
-  optional string router_name = 1;
-
-  // One or more OSPFv3 Router LSA - Type 1.
-  repeated Ospfv3RouterLsa router_lsas = 2;
-
-  // One or more OSPFv3 Network LSA - Type 2.
-  repeated Ospfv3NetworkLsa network_lsas = 3;
-
-  // One or more OSPFv3 Inter-Area-Prefix LSA - Type 3.
-  repeated Ospfv3InterAreaPrefixLsa inter_area_prefix_lsas = 4;
-
-  // One or more OSPFv3 Inter-Area-Router LSA - Type 4.
-  repeated Ospfv3InterAreaRouterLsa inter_area_router_lsas = 5;
-
-  // OSPFv3 AS-External LSA - Type 5.
-  repeated Ospfv3ExternalAsLsa external_as_lsas = 6;
-
-  // One or more OSPFv3 NSSA LSA - Type 7.
-  repeated Ospfv3NssaLsa nssa_lsas = 7;
-
-  // One or more OSPFv3 Link LSA - Type 8.
-  repeated Ospfv3LinkLsa link_lsas = 8;
-
-  // One or more OSPFv3 Intra-Area-Prefix LSA - Type 9.
-  repeated Ospfv3IntraAreaPrefixLsa intra_area_prefix_lsas = 9;
-}
-
-// Contents of the router LSA.
-message Ospfv3RouterLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // Neighbor router id that is described within the LSA.
-  optional string neighbor_router_id = 2;
-
-  // Links that are described within the LSA.
-  repeated Ospfv3Link links = 3;
-}
-
-// Contents of the Network LSA.
-message Ospfv3NetworkLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // Attached router ids that are described within the LSA.
-  repeated string attached_router_ids = 2;
-}
-
-// Contents of the Inter-Area-Prefix LSA - Type 3.
-message Ospfv3InterAreaPrefixLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The prefix for Inter Area Prefix LSA Address.
-  optional string address_prefix = 2;
-
-  // The prefix length for the IP address.
-  optional uint32 prefix_length = 3;
-
-  // The cost of the summary route TOS level 0 and all unspecified levels.
-  optional uint32 metric = 4;
-}
-
-// Contents of OSPFv3 Inter-Area-Router LSA - Type 4.
-message Ospfv3InterAreaRouterLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The cost of the summary route TOS level 0 and all unspecified levels.
-  optional uint32 metric = 2;
-
-  // The id of the destination router of LSA.
-  optional string destination_router_id = 3;
-}
-
-// Contents of OSPFv3 AS-External-LSA - Type 5.
-message Ospfv3ExternalAsLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The first IPv6 address prefix to be advertised in the LSA.
-  optional string address_prefix = 2;
-
-  // The length of the IPv6 address prefix, in bits.
-  optional uint32 prefix_length = 3;
-
-  // The cost metric value for the route to this destination router.
-  optional uint32 metric = 4;
-
-  // If non-zero, an LSA with this LS type is to be associated with this LSA.
-  optional uint32 referenced_ls_type = 5;
-
-  // The IPV6 address where traffic for the advertised destination is forwarded.
-  optional string forwarding_address = 6;
-
-  // The optional field may be used to communicate additional information between  AS
-  // boundary routers.
-  optional string route_tag = 7;
-}
-
-// Contents of OSPFv3 NSSA LSA - Type 7.
-message Ospfv3NssaLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The first IPv6 address prefix to be advertised in the LSA.
-  optional string address_prefix = 2;
-
-  // The length of the IPv6 address prefix, in bits.
-  optional uint32 prefix_length = 3;
-
-  // The cost metric value for the route to this destination router.
-  optional uint32 metric = 4;
-
-  // The IPV6 address where traffic for the advertised destination is forwarded.
-  optional string forwarding_address = 5;
-
-  // The optional field may be used to communicate additional information between  AS
-  // boundary routers.
-  optional string route_tag = 6;
-}
-
-// Contents of OSPFv3 Link LSA - Type 8.
-message Ospfv3LinkLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The first IPv6 address prefix to be advertised in the LSA.
-  optional string address_prefix = 2;
-
-  // The length of the IPv6 address prefix, in bits.
-  optional uint32 prefix_length = 3;
-
-  // The IPV6 Link Local address for the originating router's interface attached to this
-  // link.
-  optional string link_local_address = 4;
-}
-
-// Contents of OSPFv3 Intra-Area-Prefix LSA - Type 9.
-message Ospfv3IntraAreaPrefixLsa {
-
-  // Contents of the LSA header.
-  Ospfv3LsaHeader header = 1;
-
-  // The first IPv6 address prefix to be advertised in the LSA.
-  optional string address_prefix = 2;
-
-  // The length of the IPv6 address prefix, in bits.
-  optional uint32 prefix_length = 3;
-
-  // The cost metric value for the route to this destination router.
-  optional uint32 metric = 4;
-}
-
-// Attributes in LSA Header.
-message Ospfv3LsaHeader {
-
-  // LSA ID in the IPv4 format. The Link State ID for the specified LSA type.
-  optional string lsa_id = 1;
-
-  // The router ID (in the IPv4 format) of the router that originated the LSA.
-  optional string advertising_router_id = 2;
-
-  // Sequence number to detect old and duplicate LSAs. The greater the sequence number
-  // the more recent the LSA.
-  optional uint32 sequence_number = 3;
-
-  // The time since the LSA's generation in seconds.
-  optional uint32 age = 4;
-}
-
-// Generic attributes used to identify links within OSPFv3.
-message Ospfv3Link {
-
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      point_to_point = 1;
-      transit = 2;
-      stub = 3;
-      virtual = 4;
-    }
-  }
-  // The data associated with the link type. The value is dependent upon the subtype of
-  // the LSA. - point_to_point: The LSA represents a point-to-point connection to another
-  // router. - transit: The LSA represents a connection to a transit network. - stub:
-  // The LSA represents a connection to a stub network. - virtual: The LSA represents
-  // a virtual link connection.
-  optional Type.Enum type = 1;
-
-  // The data associated with the link type. The value is
-  // dependent upon the subtype of the LSA. When the connection is
-  // to a stub network it represents the mask; for p2p connections
-  // that are unnumbered it represents the ifIndex value of the
-  // router's interface; for all other connections it represents
-  // the local system's IP address.
-  optional uint32 metric = 2;
-}
-
 // The capture result request to the traffic generator. Stops the port capture on the
 // port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name

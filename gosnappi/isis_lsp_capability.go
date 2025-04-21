@@ -17,6 +17,7 @@ type isisLspCapability struct {
 	marshaller         marshalIsisLspCapability
 	unMarshaller       unMarshalIsisLspCapability
 	srCapabilityHolder IsisLspSRCapability
+	algorithmsHolder   IsisLspCapabilityIsisLspAlgorithmIter
 	srlbRangesHolder   IsisLspCapabilityIsisLspSrlbIter
 }
 
@@ -246,6 +247,7 @@ func (obj *isisLspCapability) Clone() (IsisLspCapability, error) {
 
 func (obj *isisLspCapability) setNil() {
 	obj.srCapabilityHolder = nil
+	obj.algorithmsHolder = nil
 	obj.srlbRangesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -300,10 +302,8 @@ type IsisLspCapability interface {
 	SetSrCapability(value IsisLspSRCapability) IsisLspCapability
 	// HasSrCapability checks if SrCapability has been set in IsisLspCapability
 	HasSrCapability() bool
-	// Algorithms returns []uint32, set in IsisLspCapability.
-	Algorithms() []uint32
-	// SetAlgorithms assigns []uint32 provided by user to IsisLspCapability
-	SetAlgorithms(value []uint32) IsisLspCapability
+	// Algorithms returns IsisLspCapabilityIsisLspAlgorithmIterIter, set in IsisLspCapability
+	Algorithms() IsisLspCapabilityIsisLspAlgorithmIter
 	// SrlbRanges returns IsisLspCapabilityIsisLspSrlbIterIter, set in IsisLspCapability
 	SrlbRanges() IsisLspCapabilityIsisLspSrlbIter
 	setNil()
@@ -434,23 +434,89 @@ func (obj *isisLspCapability) SetSrCapability(value IsisLspSRCapability) IsisLsp
 }
 
 // This contains one or more SR-Algorithm.
-// Algorithms returns a []uint32
-func (obj *isisLspCapability) Algorithms() []uint32 {
-	if obj.obj.Algorithms == nil {
-		obj.obj.Algorithms = make([]uint32, 0)
+// Algorithms returns a []IsisLspAlgorithm
+func (obj *isisLspCapability) Algorithms() IsisLspCapabilityIsisLspAlgorithmIter {
+	if len(obj.obj.Algorithms) == 0 {
+		obj.obj.Algorithms = []*otg.IsisLspAlgorithm{}
 	}
-	return obj.obj.Algorithms
+	if obj.algorithmsHolder == nil {
+		obj.algorithmsHolder = newIsisLspCapabilityIsisLspAlgorithmIter(&obj.obj.Algorithms).setMsg(obj)
+	}
+	return obj.algorithmsHolder
 }
 
-// This contains one or more SR-Algorithm.
-// SetAlgorithms sets the []uint32 value in the IsisLspCapability object
-func (obj *isisLspCapability) SetAlgorithms(value []uint32) IsisLspCapability {
+type isisLspCapabilityIsisLspAlgorithmIter struct {
+	obj                   *isisLspCapability
+	isisLspAlgorithmSlice []IsisLspAlgorithm
+	fieldPtr              *[]*otg.IsisLspAlgorithm
+}
 
-	if obj.obj.Algorithms == nil {
-		obj.obj.Algorithms = make([]uint32, 0)
+func newIsisLspCapabilityIsisLspAlgorithmIter(ptr *[]*otg.IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter {
+	return &isisLspCapabilityIsisLspAlgorithmIter{fieldPtr: ptr}
+}
+
+type IsisLspCapabilityIsisLspAlgorithmIter interface {
+	setMsg(*isisLspCapability) IsisLspCapabilityIsisLspAlgorithmIter
+	Items() []IsisLspAlgorithm
+	Add() IsisLspAlgorithm
+	Append(items ...IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter
+	Set(index int, newObj IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter
+	Clear() IsisLspCapabilityIsisLspAlgorithmIter
+	clearHolderSlice() IsisLspCapabilityIsisLspAlgorithmIter
+	appendHolderSlice(item IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter
+}
+
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) setMsg(msg *isisLspCapability) IsisLspCapabilityIsisLspAlgorithmIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisLspAlgorithm{obj: val})
 	}
-	obj.obj.Algorithms = value
+	obj.obj = msg
+	return obj
+}
 
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) Items() []IsisLspAlgorithm {
+	return obj.isisLspAlgorithmSlice
+}
+
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) Add() IsisLspAlgorithm {
+	newObj := &otg.IsisLspAlgorithm{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisLspAlgorithm{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisLspAlgorithmSlice = append(obj.isisLspAlgorithmSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) Append(items ...IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisLspAlgorithmSlice = append(obj.isisLspAlgorithmSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) Set(index int, newObj IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisLspAlgorithmSlice[index] = newObj
+	return obj
+}
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) Clear() IsisLspCapabilityIsisLspAlgorithmIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisLspAlgorithm{}
+		obj.isisLspAlgorithmSlice = []IsisLspAlgorithm{}
+	}
+	return obj
+}
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) clearHolderSlice() IsisLspCapabilityIsisLspAlgorithmIter {
+	if len(obj.isisLspAlgorithmSlice) > 0 {
+		obj.isisLspAlgorithmSlice = []IsisLspAlgorithm{}
+	}
+	return obj
+}
+func (obj *isisLspCapabilityIsisLspAlgorithmIter) appendHolderSlice(item IsisLspAlgorithm) IsisLspCapabilityIsisLspAlgorithmIter {
+	obj.isisLspAlgorithmSlice = append(obj.isisLspAlgorithmSlice, item)
 	return obj
 }
 
@@ -558,6 +624,20 @@ func (obj *isisLspCapability) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SrCapability != nil {
 
 		obj.SrCapability().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.Algorithms) != 0 {
+
+		if set_default {
+			obj.Algorithms().clearHolderSlice()
+			for _, item := range obj.obj.Algorithms {
+				obj.Algorithms().appendHolderSlice(&isisLspAlgorithm{obj: item})
+			}
+		}
+		for _, item := range obj.Algorithms().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 	if len(obj.obj.SrlbRanges) != 0 {

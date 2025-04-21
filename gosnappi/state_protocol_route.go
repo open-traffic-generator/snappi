@@ -282,15 +282,6 @@ type StateProtocolRoute interface {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 //
 // Names returns a []string
 func (obj *stateProtocolRoute) Names() []string {
@@ -308,15 +299,6 @@ func (obj *stateProtocolRoute) Names() []string {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 //
 // SetNames sets the []string value in the StateProtocolRoute object
 func (obj *stateProtocolRoute) SetNames(value []string) StateProtocolRoute {

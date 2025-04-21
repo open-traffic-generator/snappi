@@ -272,12 +272,12 @@ type IsisLspAdjacencySid interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Type returns IsisLspAdjacencySidTypeEnum, set in IsisLspAdjacencySid
-	Type() IsisLspAdjacencySidTypeEnum
-	// SetType assigns IsisLspAdjacencySidTypeEnum provided by user to IsisLspAdjacencySid
-	SetType(value IsisLspAdjacencySidTypeEnum) IsisLspAdjacencySid
-	// HasType checks if Type has been set in IsisLspAdjacencySid
-	HasType() bool
+	// TlvType returns uint32, set in IsisLspAdjacencySid.
+	TlvType() uint32
+	// SetTlvType assigns uint32 provided by user to IsisLspAdjacencySid
+	SetTlvType(value uint32) IsisLspAdjacencySid
+	// HasTlvType checks if TlvType has been set in IsisLspAdjacencySid
+	HasTlvType() bool
 	// Sids returns []uint32, set in IsisLspAdjacencySid.
 	Sids() []uint32
 	// SetSids assigns []uint32 provided by user to IsisLspAdjacencySid
@@ -299,37 +299,25 @@ type IsisLspAdjacencySid interface {
 	setNil()
 }
 
-type IsisLspAdjacencySidTypeEnum string
+// The corresponding adjacency SID type.
+// TlvType returns a uint32
+func (obj *isisLspAdjacencySid) TlvType() uint32 {
 
-// Enum of Type on IsisLspAdjacencySid
-var IsisLspAdjacencySidType = struct {
-	ADJ_SID     IsisLspAdjacencySidTypeEnum
-	LAN_ADJ_SID IsisLspAdjacencySidTypeEnum
-}{
-	ADJ_SID:     IsisLspAdjacencySidTypeEnum("adj_sid"),
-	LAN_ADJ_SID: IsisLspAdjacencySidTypeEnum("lan_adj_sid"),
+	return *obj.obj.TlvType
+
 }
 
-func (obj *isisLspAdjacencySid) Type() IsisLspAdjacencySidTypeEnum {
-	return IsisLspAdjacencySidTypeEnum(obj.obj.Type.Enum().String())
+// The corresponding adjacency SID type.
+// TlvType returns a uint32
+func (obj *isisLspAdjacencySid) HasTlvType() bool {
+	return obj.obj.TlvType != nil
 }
 
-// Adjacency-SID type: Adjacency SIDs(31) or LAN adjacency SID (32).
-// Type returns a string
-func (obj *isisLspAdjacencySid) HasType() bool {
-	return obj.obj.Type != nil
-}
+// The corresponding adjacency SID type.
+// SetTlvType sets the uint32 value in the IsisLspAdjacencySid object
+func (obj *isisLspAdjacencySid) SetTlvType(value uint32) IsisLspAdjacencySid {
 
-func (obj *isisLspAdjacencySid) SetType(value IsisLspAdjacencySidTypeEnum) IsisLspAdjacencySid {
-	intValue, ok := otg.IsisLspAdjacencySid_Type_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on IsisLspAdjacencySidTypeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.IsisLspAdjacencySid_Type_Enum(intValue)
-	obj.obj.Type = &enumValue
-
+	obj.obj.TlvType = &value
 	return obj
 }
 
