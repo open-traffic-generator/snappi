@@ -270,14 +270,14 @@ type IsisGracefulRestart interface {
 	setChoice(value IsisGracefulRestartChoiceEnum) IsisGracefulRestart
 	// HasChoice checks if Choice has been set in IsisGracefulRestart
 	HasChoice() bool
+	// getter for GracefulRestartMode to set choice.
+	GracefulRestartMode()
+	// getter for NormalMode to set choice.
+	NormalMode()
 	// getter for StartingMode to set choice.
 	StartingMode()
 	// getter for HelperMode to set choice.
 	HelperMode()
-	// getter for NormalMode to set choice.
-	NormalMode()
-	// getter for GracefulRestartMode to set choice.
-	GracefulRestartMode()
 	// RestartTime returns uint32, set in IsisGracefulRestart.
 	RestartTime() uint32
 	// SetRestartTime assigns uint32 provided by user to IsisGracefulRestart
@@ -305,6 +305,16 @@ func (obj *isisGracefulRestart) Choice() IsisGracefulRestartChoiceEnum {
 	return IsisGracefulRestartChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for GracefulRestartMode to set choice
+func (obj *isisGracefulRestart) GracefulRestartMode() {
+	obj.setChoice(IsisGracefulRestartChoice.GRACEFUL_RESTART_MODE)
+}
+
+// getter for NormalMode to set choice
+func (obj *isisGracefulRestart) NormalMode() {
+	obj.setChoice(IsisGracefulRestartChoice.NORMAL_MODE)
+}
+
 // getter for StartingMode to set choice
 func (obj *isisGracefulRestart) StartingMode() {
 	obj.setChoice(IsisGracefulRestartChoice.STARTING_MODE)
@@ -313,16 +323,6 @@ func (obj *isisGracefulRestart) StartingMode() {
 // getter for HelperMode to set choice
 func (obj *isisGracefulRestart) HelperMode() {
 	obj.setChoice(IsisGracefulRestartChoice.HELPER_MODE)
-}
-
-// getter for NormalMode to set choice
-func (obj *isisGracefulRestart) NormalMode() {
-	obj.setChoice(IsisGracefulRestartChoice.NORMAL_MODE)
-}
-
-// getter for GracefulRestartMode to set choice
-func (obj *isisGracefulRestart) GracefulRestartMode() {
-	obj.setChoice(IsisGracefulRestartChoice.GRACEFUL_RESTART_MODE)
 }
 
 // Choice of Graceful Restart mode.
