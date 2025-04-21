@@ -25,6 +25,8 @@ type device struct {
 	rsvpHolder          DeviceRsvp
 	dhcpServerHolder    DeviceDhcpServer
 	ospfv2Holder        DeviceOspfv2Router
+	macsecHolder        DeviceMacsec
+	ospfv3Holder        DeviceOspfv3Router
 }
 
 func NewDevice() Device {
@@ -261,6 +263,8 @@ func (obj *device) setNil() {
 	obj.rsvpHolder = nil
 	obj.dhcpServerHolder = nil
 	obj.ospfv2Holder = nil
+	obj.macsecHolder = nil
+	obj.ospfv3Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -350,6 +354,26 @@ type Device interface {
 	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
+	// Macsec returns DeviceMacsec, set in Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
+	Macsec() DeviceMacsec
+	// SetMacsec assigns DeviceMacsec provided by user to Device.
+	// DeviceMacsec is a container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
+	SetMacsec(value DeviceMacsec) Device
+	// HasMacsec checks if Macsec has been set in Device
+	HasMacsec() bool
+	// Ospfv3 returns DeviceOspfv3Router, set in Device.
+	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
+	//
+	// A container of properties for an OSPFv3 router.
+	Ospfv3() DeviceOspfv3Router
+	// SetOspfv3 assigns DeviceOspfv3Router provided by user to Device.
+	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
+	//
+	// A container of properties for an OSPFv3 router.
+	SetOspfv3(value DeviceOspfv3Router) Device
+	// HasOspfv3 checks if Ospfv3 has been set in Device
+	HasOspfv3() bool
 	setNil()
 }
 
@@ -798,6 +822,62 @@ func (obj *device) SetOspfv2(value DeviceOspfv2Router) Device {
 	return obj
 }
 
+// Configuration of MACsec device.
+// Macsec returns a DeviceMacsec
+func (obj *device) Macsec() DeviceMacsec {
+	if obj.obj.Macsec == nil {
+		obj.obj.Macsec = NewDeviceMacsec().msg()
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &deviceMacsec{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// Configuration of MACsec device.
+// Macsec returns a DeviceMacsec
+func (obj *device) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// Configuration of MACsec device.
+// SetMacsec sets the DeviceMacsec value in the Device object
+func (obj *device) SetMacsec(value DeviceMacsec) Device {
+
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
+// Configuration for OSPFv3 router.
+// Ospfv3 returns a DeviceOspfv3Router
+func (obj *device) Ospfv3() DeviceOspfv3Router {
+	if obj.obj.Ospfv3 == nil {
+		obj.obj.Ospfv3 = NewDeviceOspfv3Router().msg()
+	}
+	if obj.ospfv3Holder == nil {
+		obj.ospfv3Holder = &deviceOspfv3Router{obj: obj.obj.Ospfv3}
+	}
+	return obj.ospfv3Holder
+}
+
+// Configuration for OSPFv3 router.
+// Ospfv3 returns a DeviceOspfv3Router
+func (obj *device) HasOspfv3() bool {
+	return obj.obj.Ospfv3 != nil
+}
+
+// Configuration for OSPFv3 router.
+// SetOspfv3 sets the DeviceOspfv3Router value in the Device object
+func (obj *device) SetOspfv3(value DeviceOspfv3Router) Device {
+
+	obj.ospfv3Holder = nil
+	obj.obj.Ospfv3 = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -878,6 +958,16 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv2 != nil {
 
 		obj.Ospfv2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ospfv3 != nil {
+
+		obj.Ospfv3().validateObj(vObj, set_default)
 	}
 
 }
