@@ -111,6 +111,7 @@ from .snappi import IsisSRSrgb
 from .snappi import IsisSRSrgbIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
+from .snappi import IsisGracefulRestart
 from .snappi import DeviceBgpRouter
 from .snappi import BgpV4Interface
 from .snappi import BgpV4Peer
@@ -1261,6 +1262,9 @@ from .snappi import DeviceBgpFiniteStateMachineError
 from .snappi import DeviceBgpCustomError
 from .snappi import ActionProtocolBgpInitiateGracefulRestart
 from .snappi import ActionProtocolBgpGracefulRestartNotification
+from .snappi import ActionProtocolIsis
+from .snappi import ActionProtocolIsisInitiateGracefulStart
+from .snappi import ActionProtocolIsisInitiateGracefulRestart
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol

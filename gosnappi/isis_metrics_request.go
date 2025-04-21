@@ -279,9 +279,6 @@ type IsisMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // RouterNames returns a []string
 func (obj *isisMetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -291,9 +288,6 @@ func (obj *isisMetricsRequest) RouterNames() []string {
 }
 
 // The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
@@ -339,6 +333,18 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
 	L2_LSP_SENT                       IsisMetricsRequestColumnNamesEnum
 	L2_LSP_RECEIVED                   IsisMetricsRequestColumnNamesEnum
+	L1_RR_SENT                        IsisMetricsRequestColumnNamesEnum
+	L1_RR_RECEIVED                    IsisMetricsRequestColumnNamesEnum
+	L1_RA_SENT                        IsisMetricsRequestColumnNamesEnum
+	L1_RA_RECEIVED                    IsisMetricsRequestColumnNamesEnum
+	L1_SA_SENT                        IsisMetricsRequestColumnNamesEnum
+	L1_SA_RECEIVED                    IsisMetricsRequestColumnNamesEnum
+	L2_RR_SENT                        IsisMetricsRequestColumnNamesEnum
+	L2_RR_RECEIVED                    IsisMetricsRequestColumnNamesEnum
+	L2_RA_SENT                        IsisMetricsRequestColumnNamesEnum
+	L2_RA_RECEIVED                    IsisMetricsRequestColumnNamesEnum
+	L2_SA_SENT                        IsisMetricsRequestColumnNamesEnum
+	L2_SA_RECEIVED                    IsisMetricsRequestColumnNamesEnum
 }{
 	L1_SESSIONS_UP:                    IsisMetricsRequestColumnNamesEnum("l1_sessions_up"),
 	L1_SESSION_FLAP:                   IsisMetricsRequestColumnNamesEnum("l1_session_flap"),
@@ -366,6 +372,18 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l2_csnp_received"),
 	L2_LSP_SENT:                       IsisMetricsRequestColumnNamesEnum("l2_lsp_sent"),
 	L2_LSP_RECEIVED:                   IsisMetricsRequestColumnNamesEnum("l2_lsp_received"),
+	L1_RR_SENT:                        IsisMetricsRequestColumnNamesEnum("l1_rr_sent"),
+	L1_RR_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l1_rr_received"),
+	L1_RA_SENT:                        IsisMetricsRequestColumnNamesEnum("l1_ra_sent"),
+	L1_RA_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l1_ra_received"),
+	L1_SA_SENT:                        IsisMetricsRequestColumnNamesEnum("l1_sa_sent"),
+	L1_SA_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l1_sa_received"),
+	L2_RR_SENT:                        IsisMetricsRequestColumnNamesEnum("l2_rr_sent"),
+	L2_RR_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l2_rr_received"),
+	L2_RA_SENT:                        IsisMetricsRequestColumnNamesEnum("l2_ra_sent"),
+	L2_RA_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l2_ra_received"),
+	L2_SA_SENT:                        IsisMetricsRequestColumnNamesEnum("l2_sa_sent"),
+	L2_SA_RECEIVED:                    IsisMetricsRequestColumnNamesEnum("l2_sa_received"),
 }
 
 func (obj *isisMetricsRequest) ColumnNames() []IsisMetricsRequestColumnNamesEnum {
