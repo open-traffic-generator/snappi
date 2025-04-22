@@ -33,13 +33,10 @@ type metricsRequest struct {
 	convergenceHolder  ConvergenceRequest
 	macsecHolder       MacsecMetricsRequest
 	mkaHolder          MkaMetricsRequest
-<<<<<<< HEAD
+	ospfv3Holder       Ospfv3MetricsRequest
 	rocev2Ipv4Holder   Rocev2IPv4MetricsRequest
 	rocev2Ipv6Holder   Rocev2IPv6MetricsRequest
 	rocev2FlowHolder   Rocev2FlowMetricsRequest
-=======
-	ospfv3Holder       Ospfv3MetricsRequest
->>>>>>> main
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -284,13 +281,10 @@ func (obj *metricsRequest) setNil() {
 	obj.convergenceHolder = nil
 	obj.macsecHolder = nil
 	obj.mkaHolder = nil
-<<<<<<< HEAD
+	obj.ospfv3Holder = nil
 	obj.rocev2Ipv4Holder = nil
 	obj.rocev2Ipv6Holder = nil
 	obj.rocev2FlowHolder = nil
-=======
-	obj.ospfv3Holder = nil
->>>>>>> main
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -464,7 +458,14 @@ type MetricsRequest interface {
 	SetMka(value MkaMetricsRequest) MetricsRequest
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool
-<<<<<<< HEAD
+	// Ospfv3 returns Ospfv3MetricsRequest, set in MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	Ospfv3() Ospfv3MetricsRequest
+	// SetOspfv3 assigns Ospfv3MetricsRequest provided by user to MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest
+	// HasOspfv3 checks if Ospfv3 has been set in MetricsRequest
+	HasOspfv3() bool
 	// Rocev2Ipv4 returns Rocev2IPv4MetricsRequest, set in MetricsRequest.
 	// Rocev2IPv4MetricsRequest is request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
 	Rocev2Ipv4() Rocev2IPv4MetricsRequest
@@ -489,16 +490,6 @@ type MetricsRequest interface {
 	SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest
 	// HasRocev2Flow checks if Rocev2Flow has been set in MetricsRequest
 	HasRocev2Flow() bool
-=======
-	// Ospfv3 returns Ospfv3MetricsRequest, set in MetricsRequest.
-	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
-	Ospfv3() Ospfv3MetricsRequest
-	// SetOspfv3 assigns Ospfv3MetricsRequest provided by user to MetricsRequest.
-	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
-	SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest
-	// HasOspfv3 checks if Ospfv3 has been set in MetricsRequest
-	HasOspfv3() bool
->>>>>>> main
 	setNil()
 }
 
@@ -523,13 +514,10 @@ var MetricsRequestChoice = struct {
 	CONVERGENCE   MetricsRequestChoiceEnum
 	MACSEC        MetricsRequestChoiceEnum
 	MKA           MetricsRequestChoiceEnum
-<<<<<<< HEAD
+	OSPFV3        MetricsRequestChoiceEnum
 	ROCEV2_IPV4   MetricsRequestChoiceEnum
 	ROCEV2_IPV6   MetricsRequestChoiceEnum
 	ROCEV2_FLOW   MetricsRequestChoiceEnum
-=======
-	OSPFV3        MetricsRequestChoiceEnum
->>>>>>> main
 }{
 	PORT:          MetricsRequestChoiceEnum("port"),
 	FLOW:          MetricsRequestChoiceEnum("flow"),
@@ -548,13 +536,10 @@ var MetricsRequestChoice = struct {
 	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
 	MACSEC:        MetricsRequestChoiceEnum("macsec"),
 	MKA:           MetricsRequestChoiceEnum("mka"),
-<<<<<<< HEAD
+	OSPFV3:        MetricsRequestChoiceEnum("ospfv3"),
 	ROCEV2_IPV4:   MetricsRequestChoiceEnum("rocev2_ipv4"),
 	ROCEV2_IPV6:   MetricsRequestChoiceEnum("rocev2_ipv6"),
 	ROCEV2_FLOW:   MetricsRequestChoiceEnum("rocev2_flow"),
-=======
-	OSPFV3:        MetricsRequestChoiceEnum("ospfv3"),
->>>>>>> main
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -576,17 +561,14 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-<<<<<<< HEAD
 	obj.obj.Rocev2Flow = nil
 	obj.rocev2FlowHolder = nil
 	obj.obj.Rocev2Ipv6 = nil
 	obj.rocev2Ipv6Holder = nil
 	obj.obj.Rocev2Ipv4 = nil
 	obj.rocev2Ipv4Holder = nil
-=======
 	obj.obj.Ospfv3 = nil
 	obj.ospfv3Holder = nil
->>>>>>> main
 	obj.obj.Mka = nil
 	obj.mkaHolder = nil
 	obj.obj.Macsec = nil
@@ -690,7 +672,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 		obj.obj.Mka = NewMkaMetricsRequest().msg()
 	}
 
-<<<<<<< HEAD
+	if value == MetricsRequestChoice.OSPFV3 {
+		obj.obj.Ospfv3 = NewOspfv3MetricsRequest().msg()
+	}
+
 	if value == MetricsRequestChoice.ROCEV2_IPV4 {
 		obj.obj.Rocev2Ipv4 = NewRocev2IPv4MetricsRequest().msg()
 	}
@@ -701,10 +686,6 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.ROCEV2_FLOW {
 		obj.obj.Rocev2Flow = NewRocev2FlowMetricsRequest().msg()
-=======
-	if value == MetricsRequestChoice.OSPFV3 {
-		obj.obj.Ospfv3 = NewOspfv3MetricsRequest().msg()
->>>>>>> main
 	}
 
 	return obj
@@ -1187,7 +1168,34 @@ func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
 }
 
 // description is TBD
-<<<<<<< HEAD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) Ospfv3() Ospfv3MetricsRequest {
+	if obj.obj.Ospfv3 == nil {
+		obj.setChoice(MetricsRequestChoice.OSPFV3)
+	}
+	if obj.ospfv3Holder == nil {
+		obj.ospfv3Holder = &ospfv3MetricsRequest{obj: obj.obj.Ospfv3}
+	}
+	return obj.ospfv3Holder
+}
+
+// description is TBD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) HasOspfv3() bool {
+	return obj.obj.Ospfv3 != nil
+}
+
+// description is TBD
+// SetOspfv3 sets the Ospfv3MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.OSPFV3)
+	obj.ospfv3Holder = nil
+	obj.obj.Ospfv3 = value.msg()
+
+	return obj
+}
+
+// description is TBD
 // Rocev2Ipv4 returns a Rocev2IPv4MetricsRequest
 func (obj *metricsRequest) Rocev2Ipv4() Rocev2IPv4MetricsRequest {
 	if obj.obj.Rocev2Ipv4 == nil {
@@ -1267,31 +1275,6 @@ func (obj *metricsRequest) SetRocev2Flow(value Rocev2FlowMetricsRequest) Metrics
 	obj.setChoice(MetricsRequestChoice.ROCEV2_FLOW)
 	obj.rocev2FlowHolder = nil
 	obj.obj.Rocev2Flow = value.msg()
-=======
-// Ospfv3 returns a Ospfv3MetricsRequest
-func (obj *metricsRequest) Ospfv3() Ospfv3MetricsRequest {
-	if obj.obj.Ospfv3 == nil {
-		obj.setChoice(MetricsRequestChoice.OSPFV3)
-	}
-	if obj.ospfv3Holder == nil {
-		obj.ospfv3Holder = &ospfv3MetricsRequest{obj: obj.obj.Ospfv3}
-	}
-	return obj.ospfv3Holder
-}
-
-// description is TBD
-// Ospfv3 returns a Ospfv3MetricsRequest
-func (obj *metricsRequest) HasOspfv3() bool {
-	return obj.obj.Ospfv3 != nil
-}
-
-// description is TBD
-// SetOspfv3 sets the Ospfv3MetricsRequest value in the MetricsRequest object
-func (obj *metricsRequest) SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest {
-	obj.setChoice(MetricsRequestChoice.OSPFV3)
-	obj.ospfv3Holder = nil
-	obj.obj.Ospfv3 = value.msg()
->>>>>>> main
 
 	return obj
 }
@@ -1386,7 +1369,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 		obj.Mka().validateObj(vObj, set_default)
 	}
 
-<<<<<<< HEAD
+	if obj.obj.Ospfv3 != nil {
+
+		obj.Ospfv3().validateObj(vObj, set_default)
+	}
+
 	if obj.obj.Rocev2Ipv4 != nil {
 
 		obj.Rocev2Ipv4().validateObj(vObj, set_default)
@@ -1400,11 +1387,6 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rocev2Flow != nil {
 
 		obj.Rocev2Flow().validateObj(vObj, set_default)
-=======
-	if obj.obj.Ospfv3 != nil {
-
-		obj.Ospfv3().validateObj(vObj, set_default)
->>>>>>> main
 	}
 
 }
@@ -1498,7 +1480,11 @@ func (obj *metricsRequest) setDefault() {
 		choice = MetricsRequestChoice.MKA
 	}
 
-<<<<<<< HEAD
+	if obj.obj.Ospfv3 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.OSPFV3
+	}
+
 	if obj.obj.Rocev2Ipv4 != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.ROCEV2_IPV4
@@ -1512,11 +1498,6 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Rocev2Flow != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.ROCEV2_FLOW
-=======
-	if obj.obj.Ospfv3 != nil {
-		choices_set += 1
-		choice = MetricsRequestChoice.OSPFV3
->>>>>>> main
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

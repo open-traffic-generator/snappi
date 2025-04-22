@@ -357,24 +357,6 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
->>>>>>> main
 // TxNames returns a []string
 func (obj *flowRouter) TxNames() []string {
 	if obj.obj.TxNames == nil {
@@ -400,24 +382,6 @@ func (obj *flowRouter) TxNames() []string {
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
->>>>>>> main
 // SetTxNames sets the []string value in the FlowRouter object
 func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 
@@ -446,24 +410,6 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
->>>>>>> main
 // RxNames returns a []string
 func (obj *flowRouter) RxNames() []string {
 	if obj.obj.RxNames == nil {
@@ -489,24 +435,6 @@ func (obj *flowRouter) RxNames() []string {
 // - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-<<<<<<< HEAD
-=======
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
->>>>>>> main
 // SetRxNames sets the []string value in the FlowRouter object
 func (obj *flowRouter) SetRxNames(value []string) FlowRouter {
 

@@ -406,21 +406,6 @@ from .snappi import SecureEntityCryptoEngineEncryptOnlyIncrementingPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxScIter
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTrafficOptions
 from .snappi import DeviceMacsecEthernetInterfaceIter
-<<<<<<< HEAD
-from .snappi import DeviceRocev2Peer
-from .snappi import Rocev2V4Interface
-from .snappi import Rocev2V4Peer
-from .snappi import Rocev2QPs
-from .snappi import Rocev2ConnectionType
-from .snappi import Rocev2QPParameters
-from .snappi import Rocev2QPsIter
-from .snappi import Rocev2V4PeerIter
-from .snappi import Rocev2V4InterfaceIter
-from .snappi import Rocev2V6Interface
-from .snappi import Rocev2V6Peer
-from .snappi import Rocev2V6PeerIter
-from .snappi import Rocev2V6InterfaceIter
-=======
 from .snappi import DeviceOspfv3Router
 from .snappi import Ospfv3RouterId
 from .snappi import Ospfv3RouterInstance
@@ -440,7 +425,19 @@ from .snappi import Ospfv3V6RRCapabilities
 from .snappi import Ospfv3V6RRForwardingAddress
 from .snappi import Ospfv3V6RouteRangeIter
 from .snappi import Ospfv3RouterInstanceIter
->>>>>>> main
+from .snappi import DeviceRocev2Peer
+from .snappi import Rocev2V4Interface
+from .snappi import Rocev2V4Peer
+from .snappi import Rocev2QPs
+from .snappi import Rocev2ConnectionType
+from .snappi import Rocev2QPParameters
+from .snappi import Rocev2QPsIter
+from .snappi import Rocev2V4PeerIter
+from .snappi import Rocev2V4InterfaceIter
+from .snappi import Rocev2V6Interface
+from .snappi import Rocev2V6Peer
+from .snappi import Rocev2V6PeerIter
+from .snappi import Rocev2V6InterfaceIter
 from .snappi import DeviceIter
 from .snappi import Flow
 from .snappi import FlowTxRx
@@ -1275,13 +1272,10 @@ from .snappi import StateProtocolIsis
 from .snappi import StateProtocolIsisRouters
 from .snappi import StateProtocolOspfv2
 from .snappi import StateProtocolOspfv2Routers
-<<<<<<< HEAD
-from .snappi import StateProtocolRocev2
-from .snappi import StateProtocolRocev2Peers
-=======
 from .snappi import StateProtocolOspfv3
 from .snappi import StateProtocolOspfv3Routers
->>>>>>> main
+from .snappi import StateProtocolRocev2
+from .snappi import StateProtocolRocev2Peers
 from .snappi import StateTraffic
 from .snappi import StateTrafficFlowTransmit
 from .snappi import ControlAction
@@ -1337,16 +1331,13 @@ from .snappi import Ospfv2MetricsRequest
 from .snappi import ConvergenceRequest
 from .snappi import MacsecMetricsRequest
 from .snappi import MkaMetricsRequest
-<<<<<<< HEAD
+from .snappi import Ospfv3MetricsRequest
 from .snappi import Rocev2IPv4MetricsRequest
 from .snappi import Rocev2IPv4ColumnNames
 from .snappi import Rocev2IPv6MetricsRequest
 from .snappi import Rocev2IPv6ColumnNames
 from .snappi import Rocev2FlowMetricsRequest
 from .snappi import Rocev2FlowColumnNames
-=======
-from .snappi import Ospfv3MetricsRequest
->>>>>>> main
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1391,17 +1382,14 @@ from .snappi import MacsecMetric
 from .snappi import MacsecMetricIter
 from .snappi import MkaMetric
 from .snappi import MkaMetricIter
-<<<<<<< HEAD
+from .snappi import Ospfv3Metric
+from .snappi import Ospfv3MetricIter
 from .snappi import Rocev2IPv4MetricPerPeer
 from .snappi import Rocev2IPv4MetricPerPeerIter
 from .snappi import Rocev2IPv6MetricPerPeer
 from .snappi import Rocev2IPv6MetricPerPeerIter
 from .snappi import Rocev2FlowMetricPerQP
 from .snappi import Rocev2FlowMetricPerQPIter
-=======
-from .snappi import Ospfv3Metric
-from .snappi import Ospfv3MetricIter
->>>>>>> main
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
