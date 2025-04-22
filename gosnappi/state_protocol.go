@@ -22,7 +22,11 @@ type stateProtocol struct {
 	bgpHolder    StateProtocolBgp
 	isisHolder   StateProtocolIsis
 	ospfv2Holder StateProtocolOspfv2
+<<<<<<< HEAD
 	rocev2Holder StateProtocolRocev2
+=======
+	ospfv3Holder StateProtocolOspfv3
+>>>>>>> main
 }
 
 func NewStateProtocol() StateProtocol {
@@ -256,7 +260,11 @@ func (obj *stateProtocol) setNil() {
 	obj.bgpHolder = nil
 	obj.isisHolder = nil
 	obj.ospfv2Holder = nil
+<<<<<<< HEAD
 	obj.rocev2Holder = nil
+=======
+	obj.ospfv3Holder = nil
+>>>>>>> main
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -338,6 +346,7 @@ type StateProtocol interface {
 	SetOspfv2(value StateProtocolOspfv2) StateProtocol
 	// HasOspfv2 checks if Ospfv2 has been set in StateProtocol
 	HasOspfv2() bool
+<<<<<<< HEAD
 	// Rocev2 returns StateProtocolRocev2, set in StateProtocol.
 	// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
 	Rocev2() StateProtocolRocev2
@@ -346,6 +355,16 @@ type StateProtocol interface {
 	SetRocev2(value StateProtocolRocev2) StateProtocol
 	// HasRocev2 checks if Rocev2 has been set in StateProtocol
 	HasRocev2() bool
+=======
+	// Ospfv3 returns StateProtocolOspfv3, set in StateProtocol.
+	// StateProtocolOspfv3 is sets state of configured OSPFv3 routers.
+	Ospfv3() StateProtocolOspfv3
+	// SetOspfv3 assigns StateProtocolOspfv3 provided by user to StateProtocol.
+	// StateProtocolOspfv3 is sets state of configured OSPFv3 routers.
+	SetOspfv3(value StateProtocolOspfv3) StateProtocol
+	// HasOspfv3 checks if Ospfv3 has been set in StateProtocol
+	HasOspfv3() bool
+>>>>>>> main
 	setNil()
 }
 
@@ -359,6 +378,7 @@ var StateProtocolChoice = struct {
 	BGP    StateProtocolChoiceEnum
 	ISIS   StateProtocolChoiceEnum
 	OSPFV2 StateProtocolChoiceEnum
+	OSPFV3 StateProtocolChoiceEnum
 }{
 	ALL:    StateProtocolChoiceEnum("all"),
 	ROUTE:  StateProtocolChoiceEnum("route"),
@@ -366,6 +386,7 @@ var StateProtocolChoice = struct {
 	BGP:    StateProtocolChoiceEnum("bgp"),
 	ISIS:   StateProtocolChoiceEnum("isis"),
 	OSPFV2: StateProtocolChoiceEnum("ospfv2"),
+	OSPFV3: StateProtocolChoiceEnum("ospfv3"),
 }
 
 func (obj *stateProtocol) Choice() StateProtocolChoiceEnum {
@@ -381,6 +402,8 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 	}
 	enumValue := otg.StateProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv3 = nil
+	obj.ospfv3Holder = nil
 	obj.obj.Ospfv2 = nil
 	obj.ospfv2Holder = nil
 	obj.obj.Isis = nil
@@ -416,6 +439,10 @@ func (obj *stateProtocol) setChoice(value StateProtocolChoiceEnum) StateProtocol
 
 	if value == StateProtocolChoice.OSPFV2 {
 		obj.obj.Ospfv2 = NewStateProtocolOspfv2().msg()
+	}
+
+	if value == StateProtocolChoice.OSPFV3 {
+		obj.obj.Ospfv3 = NewStateProtocolOspfv3().msg()
 	}
 
 	return obj
@@ -590,6 +617,7 @@ func (obj *stateProtocol) SetOspfv2(value StateProtocolOspfv2) StateProtocol {
 }
 
 // description is TBD
+<<<<<<< HEAD
 // Rocev2 returns a StateProtocolRocev2
 func (obj *stateProtocol) Rocev2() StateProtocolRocev2 {
 	if obj.obj.Rocev2 == nil {
@@ -613,6 +641,31 @@ func (obj *stateProtocol) SetRocev2(value StateProtocolRocev2) StateProtocol {
 
 	obj.rocev2Holder = nil
 	obj.obj.Rocev2 = value.msg()
+=======
+// Ospfv3 returns a StateProtocolOspfv3
+func (obj *stateProtocol) Ospfv3() StateProtocolOspfv3 {
+	if obj.obj.Ospfv3 == nil {
+		obj.setChoice(StateProtocolChoice.OSPFV3)
+	}
+	if obj.ospfv3Holder == nil {
+		obj.ospfv3Holder = &stateProtocolOspfv3{obj: obj.obj.Ospfv3}
+	}
+	return obj.ospfv3Holder
+}
+
+// description is TBD
+// Ospfv3 returns a StateProtocolOspfv3
+func (obj *stateProtocol) HasOspfv3() bool {
+	return obj.obj.Ospfv3 != nil
+}
+
+// description is TBD
+// SetOspfv3 sets the StateProtocolOspfv3 value in the StateProtocol object
+func (obj *stateProtocol) SetOspfv3(value StateProtocolOspfv3) StateProtocol {
+	obj.setChoice(StateProtocolChoice.OSPFV3)
+	obj.ospfv3Holder = nil
+	obj.obj.Ospfv3 = value.msg()
+>>>>>>> main
 
 	return obj
 }
@@ -657,9 +710,15 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 		obj.Ospfv2().validateObj(vObj, set_default)
 	}
 
+<<<<<<< HEAD
 	if obj.obj.Rocev2 != nil {
 
 		obj.Rocev2().validateObj(vObj, set_default)
+=======
+	if obj.obj.Ospfv3 != nil {
+
+		obj.Ospfv3().validateObj(vObj, set_default)
+>>>>>>> main
 	}
 
 }
@@ -696,6 +755,11 @@ func (obj *stateProtocol) setDefault() {
 	if obj.obj.Ospfv2 != nil {
 		choices_set += 1
 		choice = StateProtocolChoice.OSPFV2
+	}
+
+	if obj.obj.Ospfv3 != nil {
+		choices_set += 1
+		choice = StateProtocolChoice.OSPFV3
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

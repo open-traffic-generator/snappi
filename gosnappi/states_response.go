@@ -27,6 +27,7 @@ type statesResponse struct {
 	dhcpv6InterfacesHolder StatesResponseDhcpv6InterfaceStateIter
 	dhcpv6LeasesHolder     StatesResponseDhcpv6LeasesStateIter
 	ospfv2LsasHolder       StatesResponseOspfv2LsaStateIter
+	ospfv3LsasHolder       StatesResponseOspfv3LsaStateIter
 }
 
 func NewStatesResponse() StatesResponse {
@@ -265,6 +266,7 @@ func (obj *statesResponse) setNil() {
 	obj.dhcpv6InterfacesHolder = nil
 	obj.dhcpv6LeasesHolder = nil
 	obj.ospfv2LsasHolder = nil
+	obj.ospfv3LsasHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -320,6 +322,8 @@ type StatesResponse interface {
 	Dhcpv6Leases() StatesResponseDhcpv6LeasesStateIter
 	// Ospfv2Lsas returns StatesResponseOspfv2LsaStateIterIter, set in StatesResponse
 	Ospfv2Lsas() StatesResponseOspfv2LsaStateIter
+	// Ospfv3Lsas returns StatesResponseOspfv3LsaStateIterIter, set in StatesResponse
+	Ospfv3Lsas() StatesResponseOspfv3LsaStateIter
 	setNil()
 }
 
@@ -338,6 +342,7 @@ var StatesResponseChoice = struct {
 	DHCPV6_INTERFACES StatesResponseChoiceEnum
 	DHCPV6_LEASES     StatesResponseChoiceEnum
 	OSPFV2_LSAS       StatesResponseChoiceEnum
+	OSPFV3_LSAS       StatesResponseChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesResponseChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesResponseChoiceEnum("ipv6_neighbors"),
@@ -350,6 +355,7 @@ var StatesResponseChoice = struct {
 	DHCPV6_INTERFACES: StatesResponseChoiceEnum("dhcpv6_interfaces"),
 	DHCPV6_LEASES:     StatesResponseChoiceEnum("dhcpv6_leases"),
 	OSPFV2_LSAS:       StatesResponseChoiceEnum("ospfv2_lsas"),
+	OSPFV3_LSAS:       StatesResponseChoiceEnum("ospfv3_lsas"),
 }
 
 func (obj *statesResponse) Choice() StatesResponseChoiceEnum {
@@ -371,6 +377,8 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 	}
 	enumValue := otg.StatesResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ospfv3Lsas = nil
+	obj.ospfv3LsasHolder = nil
 	obj.obj.Ospfv2Lsas = nil
 	obj.ospfv2LsasHolder = nil
 	obj.obj.Dhcpv6Leases = nil
@@ -436,6 +444,10 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 
 	if value == StatesResponseChoice.OSPFV2_LSAS {
 		obj.obj.Ospfv2Lsas = []*otg.Ospfv2LsaState{}
+	}
+
+	if value == StatesResponseChoice.OSPFV3_LSAS {
+		obj.obj.Ospfv3Lsas = []*otg.Ospfv3LsaState{}
 	}
 
 	return obj
@@ -1398,6 +1410,93 @@ func (obj *statesResponseOspfv2LsaStateIter) appendHolderSlice(item Ospfv2LsaSta
 	return obj
 }
 
+// description is TBD
+// Ospfv3Lsas returns a []Ospfv3LsaState
+func (obj *statesResponse) Ospfv3Lsas() StatesResponseOspfv3LsaStateIter {
+	if len(obj.obj.Ospfv3Lsas) == 0 {
+		obj.setChoice(StatesResponseChoice.OSPFV3_LSAS)
+	}
+	if obj.ospfv3LsasHolder == nil {
+		obj.ospfv3LsasHolder = newStatesResponseOspfv3LsaStateIter(&obj.obj.Ospfv3Lsas).setMsg(obj)
+	}
+	return obj.ospfv3LsasHolder
+}
+
+type statesResponseOspfv3LsaStateIter struct {
+	obj                 *statesResponse
+	ospfv3LsaStateSlice []Ospfv3LsaState
+	fieldPtr            *[]*otg.Ospfv3LsaState
+}
+
+func newStatesResponseOspfv3LsaStateIter(ptr *[]*otg.Ospfv3LsaState) StatesResponseOspfv3LsaStateIter {
+	return &statesResponseOspfv3LsaStateIter{fieldPtr: ptr}
+}
+
+type StatesResponseOspfv3LsaStateIter interface {
+	setMsg(*statesResponse) StatesResponseOspfv3LsaStateIter
+	Items() []Ospfv3LsaState
+	Add() Ospfv3LsaState
+	Append(items ...Ospfv3LsaState) StatesResponseOspfv3LsaStateIter
+	Set(index int, newObj Ospfv3LsaState) StatesResponseOspfv3LsaStateIter
+	Clear() StatesResponseOspfv3LsaStateIter
+	clearHolderSlice() StatesResponseOspfv3LsaStateIter
+	appendHolderSlice(item Ospfv3LsaState) StatesResponseOspfv3LsaStateIter
+}
+
+func (obj *statesResponseOspfv3LsaStateIter) setMsg(msg *statesResponse) StatesResponseOspfv3LsaStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv3LsaState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *statesResponseOspfv3LsaStateIter) Items() []Ospfv3LsaState {
+	return obj.ospfv3LsaStateSlice
+}
+
+func (obj *statesResponseOspfv3LsaStateIter) Add() Ospfv3LsaState {
+	newObj := &otg.Ospfv3LsaState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv3LsaState{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv3LsaStateSlice = append(obj.ospfv3LsaStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *statesResponseOspfv3LsaStateIter) Append(items ...Ospfv3LsaState) StatesResponseOspfv3LsaStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv3LsaStateSlice = append(obj.ospfv3LsaStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *statesResponseOspfv3LsaStateIter) Set(index int, newObj Ospfv3LsaState) StatesResponseOspfv3LsaStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv3LsaStateSlice[index] = newObj
+	return obj
+}
+func (obj *statesResponseOspfv3LsaStateIter) Clear() StatesResponseOspfv3LsaStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv3LsaState{}
+		obj.ospfv3LsaStateSlice = []Ospfv3LsaState{}
+	}
+	return obj
+}
+func (obj *statesResponseOspfv3LsaStateIter) clearHolderSlice() StatesResponseOspfv3LsaStateIter {
+	if len(obj.ospfv3LsaStateSlice) > 0 {
+		obj.ospfv3LsaStateSlice = []Ospfv3LsaState{}
+	}
+	return obj
+}
+func (obj *statesResponseOspfv3LsaStateIter) appendHolderSlice(item Ospfv3LsaState) StatesResponseOspfv3LsaStateIter {
+	obj.ospfv3LsaStateSlice = append(obj.ospfv3LsaStateSlice, item)
+	return obj
+}
+
 func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1557,6 +1656,20 @@ func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.Ospfv3Lsas) != 0 {
+
+		if set_default {
+			obj.Ospfv3Lsas().clearHolderSlice()
+			for _, item := range obj.obj.Ospfv3Lsas {
+				obj.Ospfv3Lsas().appendHolderSlice(&ospfv3LsaState{obj: item})
+			}
+		}
+		for _, item := range obj.Ospfv3Lsas().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *statesResponse) setDefault() {
@@ -1616,6 +1729,11 @@ func (obj *statesResponse) setDefault() {
 	if len(obj.obj.Ospfv2Lsas) > 0 {
 		choices_set += 1
 		choice = StatesResponseChoice.OSPFV2_LSAS
+	}
+
+	if len(obj.obj.Ospfv3Lsas) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.OSPFV3_LSAS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

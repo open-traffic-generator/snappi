@@ -406,6 +406,7 @@ from .snappi import SecureEntityCryptoEngineEncryptOnlyIncrementingPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxScIter
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTrafficOptions
 from .snappi import DeviceMacsecEthernetInterfaceIter
+<<<<<<< HEAD
 from .snappi import DeviceRocev2Peer
 from .snappi import Rocev2V4Interface
 from .snappi import Rocev2V4Peer
@@ -419,6 +420,27 @@ from .snappi import Rocev2V6Interface
 from .snappi import Rocev2V6Peer
 from .snappi import Rocev2V6PeerIter
 from .snappi import Rocev2V6InterfaceIter
+=======
+from .snappi import DeviceOspfv3Router
+from .snappi import Ospfv3RouterId
+from .snappi import Ospfv3RouterInstance
+from .snappi import Ospfv3GracefulRestart
+from .snappi import Ospfv3Capabilities
+from .snappi import Ospfv3Interface
+from .snappi import Ospfv3InterfaceArea
+from .snappi import Ospfv3InterfaceNetworkType
+from .snappi import Ospfv3InterfaceBroadcast
+from .snappi import Ospfv3InterfaceAdvanced
+from .snappi import Ospfv3InterfaceOptions
+from .snappi import Ospfv3InterfaceIter
+from .snappi import Ospfv3V6RouteRange
+from .snappi import Ospfv3V6RRRouteOrigin
+from .snappi import Ospfv3V6RRNssaExternal
+from .snappi import Ospfv3V6RRCapabilities
+from .snappi import Ospfv3V6RRForwardingAddress
+from .snappi import Ospfv3V6RouteRangeIter
+from .snappi import Ospfv3RouterInstanceIter
+>>>>>>> main
 from .snappi import DeviceIter
 from .snappi import Flow
 from .snappi import FlowTxRx
@@ -1253,8 +1275,13 @@ from .snappi import StateProtocolIsis
 from .snappi import StateProtocolIsisRouters
 from .snappi import StateProtocolOspfv2
 from .snappi import StateProtocolOspfv2Routers
+<<<<<<< HEAD
 from .snappi import StateProtocolRocev2
 from .snappi import StateProtocolRocev2Peers
+=======
+from .snappi import StateProtocolOspfv3
+from .snappi import StateProtocolOspfv3Routers
+>>>>>>> main
 from .snappi import StateTraffic
 from .snappi import StateTrafficFlowTransmit
 from .snappi import ControlAction
@@ -1310,12 +1337,16 @@ from .snappi import Ospfv2MetricsRequest
 from .snappi import ConvergenceRequest
 from .snappi import MacsecMetricsRequest
 from .snappi import MkaMetricsRequest
+<<<<<<< HEAD
 from .snappi import Rocev2IPv4MetricsRequest
 from .snappi import Rocev2IPv4ColumnNames
 from .snappi import Rocev2IPv6MetricsRequest
 from .snappi import Rocev2IPv6ColumnNames
 from .snappi import Rocev2FlowMetricsRequest
 from .snappi import Rocev2FlowColumnNames
+=======
+from .snappi import Ospfv3MetricsRequest
+>>>>>>> main
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1360,12 +1391,17 @@ from .snappi import MacsecMetric
 from .snappi import MacsecMetricIter
 from .snappi import MkaMetric
 from .snappi import MkaMetricIter
+<<<<<<< HEAD
 from .snappi import Rocev2IPv4MetricPerPeer
 from .snappi import Rocev2IPv4MetricPerPeerIter
 from .snappi import Rocev2IPv6MetricPerPeer
 from .snappi import Rocev2IPv6MetricPerPeerIter
 from .snappi import Rocev2FlowMetricPerQP
 from .snappi import Rocev2FlowMetricPerQPIter
+=======
+from .snappi import Ospfv3Metric
+from .snappi import Ospfv3MetricIter
+>>>>>>> main
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest
@@ -1382,6 +1418,7 @@ from .snappi import Dhcpv4LeaseStateRequest
 from .snappi import Dhcpv6InterfaceStateRequest
 from .snappi import Dhcpv6LeaseStateRequest
 from .snappi import Ospfv2LsasStateRequest
+from .snappi import Ospfv3LsasStateRequest
 from .snappi import StatesResponse
 from .snappi import Neighborsv4State
 from .snappi import Neighborsv4StateIter
@@ -1510,6 +1547,27 @@ from .snappi import Ospfv2NssaLsaIter
 from .snappi import Ospfv2OpaqueLsa
 from .snappi import Ospfv2OpaqueLsaIter
 from .snappi import Ospfv2LsaStateIter
+from .snappi import Ospfv3LsaState
+from .snappi import Ospfv3RouterLsa
+from .snappi import Ospfv3LsaHeader
+from .snappi import Ospfv3Link
+from .snappi import Ospfv3LinkIter
+from .snappi import Ospfv3RouterLsaIter
+from .snappi import Ospfv3NetworkLsa
+from .snappi import Ospfv3NetworkLsaIter
+from .snappi import Ospfv3InterAreaPrefixLsa
+from .snappi import Ospfv3InterAreaPrefixLsaIter
+from .snappi import Ospfv3InterAreaRouterLsa
+from .snappi import Ospfv3InterAreaRouterLsaIter
+from .snappi import Ospfv3ExternalAsLsa
+from .snappi import Ospfv3ExternalAsLsaIter
+from .snappi import Ospfv3NssaLsa
+from .snappi import Ospfv3NssaLsaIter
+from .snappi import Ospfv3LinkLsa
+from .snappi import Ospfv3LinkLsaIter
+from .snappi import Ospfv3IntraAreaPrefixLsa
+from .snappi import Ospfv3IntraAreaPrefixLsaIter
+from .snappi import Ospfv3LsaStateIter
 from .snappi import CaptureRequest
 from .snappi import Version
 from .snappi import Api

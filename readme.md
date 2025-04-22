@@ -15,9 +15,13 @@ Test scripts written in `snappi`, an auto-generated python SDK, can be executed 
 > The repository is under active development and is subject to updates. All efforts will be made to keep the updates backwards compatible.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Setup Client         
 =======
 ## Setup Client   
+>>>>>>> main
+=======
+## Setup Client 
 >>>>>>> main
  
 ```sh
