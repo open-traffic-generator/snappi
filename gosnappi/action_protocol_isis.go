@@ -13,11 +13,10 @@ import (
 // ***** ActionProtocolIsis *****
 type actionProtocolIsis struct {
 	validation
-	obj                          *otg.ActionProtocolIsis
-	marshaller                   marshalActionProtocolIsis
-	unMarshaller                 unMarshalActionProtocolIsis
-	initiateStartingModeHolder   ActionProtocolIsisInitiateGracefulStart
-	initiateRestartingModeHolder ActionProtocolIsisInitiateGracefulRestart
+	obj                               *otg.ActionProtocolIsis
+	marshaller                        marshalActionProtocolIsis
+	unMarshaller                      unMarshalActionProtocolIsis
+	initiateUnplannedRestartingHolder IsisActionProtocolIsisRestartParams
 }
 
 func NewActionProtocolIsis() ActionProtocolIsis {
@@ -245,8 +244,7 @@ func (obj *actionProtocolIsis) Clone() (ActionProtocolIsis, error) {
 }
 
 func (obj *actionProtocolIsis) setNil() {
-	obj.initiateStartingModeHolder = nil
-	obj.initiateRestartingModeHolder = nil
+	obj.initiateUnplannedRestartingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -278,24 +276,14 @@ type ActionProtocolIsis interface {
 	Choice() ActionProtocolIsisChoiceEnum
 	// setChoice assigns ActionProtocolIsisChoiceEnum provided by user to ActionProtocolIsis
 	setChoice(value ActionProtocolIsisChoiceEnum) ActionProtocolIsis
-	// getter for InitiateToRestartingMode to set choice.
-	InitiateToRestartingMode()
-	// InitiateStartingMode returns ActionProtocolIsisInitiateGracefulStart, set in ActionProtocolIsis.
-	// ActionProtocolIsisInitiateGracefulStart is initiates IS-IS Graceful Start process for the selected IS-IS routers. If no name is specified then Graceful Start will be sent to all configured IS-IS routers. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Graceful tart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
-	InitiateStartingMode() ActionProtocolIsisInitiateGracefulStart
-	// SetInitiateStartingMode assigns ActionProtocolIsisInitiateGracefulStart provided by user to ActionProtocolIsis.
-	// ActionProtocolIsisInitiateGracefulStart is initiates IS-IS Graceful Start process for the selected IS-IS routers. If no name is specified then Graceful Start will be sent to all configured IS-IS routers. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Graceful tart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
-	SetInitiateStartingMode(value ActionProtocolIsisInitiateGracefulStart) ActionProtocolIsis
-	// HasInitiateStartingMode checks if InitiateStartingMode has been set in ActionProtocolIsis
-	HasInitiateStartingMode() bool
-	// InitiateRestartingMode returns ActionProtocolIsisInitiateGracefulRestart, set in ActionProtocolIsis.
-	// ActionProtocolIsisInitiateGracefulRestart is initiates IS-IS Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. To emulate scenarios where a router sends Graceful Start TlV this will result in  Graceful Restart scenario to be triggered as perReference: https://datatracker.ietf.org/doc/html/rfc5306.
-	InitiateRestartingMode() ActionProtocolIsisInitiateGracefulRestart
-	// SetInitiateRestartingMode assigns ActionProtocolIsisInitiateGracefulRestart provided by user to ActionProtocolIsis.
-	// ActionProtocolIsisInitiateGracefulRestart is initiates IS-IS Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. To emulate scenarios where a router sends Graceful Start TlV this will result in  Graceful Restart scenario to be triggered as perReference: https://datatracker.ietf.org/doc/html/rfc5306.
-	SetInitiateRestartingMode(value ActionProtocolIsisInitiateGracefulRestart) ActionProtocolIsis
-	// HasInitiateRestartingMode checks if InitiateRestartingMode has been set in ActionProtocolIsis
-	HasInitiateRestartingMode() bool
+	// InitiateUnplannedRestarting returns IsisActionProtocolIsisRestartParams, set in ActionProtocolIsis.
+	// IsisActionProtocolIsisRestartParams is configuration for IS-IS Graceful Restart
+	InitiateUnplannedRestarting() IsisActionProtocolIsisRestartParams
+	// SetInitiateUnplannedRestarting assigns IsisActionProtocolIsisRestartParams provided by user to ActionProtocolIsis.
+	// IsisActionProtocolIsisRestartParams is configuration for IS-IS Graceful Restart
+	SetInitiateUnplannedRestarting(value IsisActionProtocolIsisRestartParams) ActionProtocolIsis
+	// HasInitiateUnplannedRestarting checks if InitiateUnplannedRestarting has been set in ActionProtocolIsis
+	HasInitiateUnplannedRestarting() bool
 	setNil()
 }
 
@@ -303,20 +291,13 @@ type ActionProtocolIsisChoiceEnum string
 
 // Enum of Choice on ActionProtocolIsis
 var ActionProtocolIsisChoice = struct {
-	INITIATE_STARTING_MODE      ActionProtocolIsisChoiceEnum
-	INITIATE_TO_RESTARTING_MODE ActionProtocolIsisChoiceEnum
+	INITIATE_UNPLANNED_RESTARTING ActionProtocolIsisChoiceEnum
 }{
-	INITIATE_STARTING_MODE:      ActionProtocolIsisChoiceEnum("initiate_starting_mode"),
-	INITIATE_TO_RESTARTING_MODE: ActionProtocolIsisChoiceEnum("initiate_to_restarting_mode"),
+	INITIATE_UNPLANNED_RESTARTING: ActionProtocolIsisChoiceEnum("initiate_unplanned_restarting"),
 }
 
 func (obj *actionProtocolIsis) Choice() ActionProtocolIsisChoiceEnum {
 	return ActionProtocolIsisChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for InitiateToRestartingMode to set choice
-func (obj *actionProtocolIsis) InitiateToRestartingMode() {
-	obj.setChoice(ActionProtocolIsisChoice.INITIATE_TO_RESTARTING_MODE)
 }
 
 func (obj *actionProtocolIsis) setChoice(value ActionProtocolIsisChoiceEnum) ActionProtocolIsis {
@@ -328,68 +309,40 @@ func (obj *actionProtocolIsis) setChoice(value ActionProtocolIsisChoiceEnum) Act
 	}
 	enumValue := otg.ActionProtocolIsis_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.InitiateStartingMode = nil
-	obj.initiateStartingModeHolder = nil
+	obj.obj.InitiateUnplannedRestarting = nil
+	obj.initiateUnplannedRestartingHolder = nil
 
-	if value == ActionProtocolIsisChoice.INITIATE_STARTING_MODE {
-		obj.obj.InitiateStartingMode = NewActionProtocolIsisInitiateGracefulStart().msg()
+	if value == ActionProtocolIsisChoice.INITIATE_UNPLANNED_RESTARTING {
+		obj.obj.InitiateUnplannedRestarting = NewIsisActionProtocolIsisRestartParams().msg()
 	}
 
 	return obj
 }
 
-// description is TBD
-// InitiateStartingMode returns a ActionProtocolIsisInitiateGracefulStart
-func (obj *actionProtocolIsis) InitiateStartingMode() ActionProtocolIsisInitiateGracefulStart {
-	if obj.obj.InitiateStartingMode == nil {
-		obj.setChoice(ActionProtocolIsisChoice.INITIATE_STARTING_MODE)
+// Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the unplanned "Restarting" mode, it sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit set. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Unplanned Graceful Restart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
+// InitiateUnplannedRestarting returns a IsisActionProtocolIsisRestartParams
+func (obj *actionProtocolIsis) InitiateUnplannedRestarting() IsisActionProtocolIsisRestartParams {
+	if obj.obj.InitiateUnplannedRestarting == nil {
+		obj.setChoice(ActionProtocolIsisChoice.INITIATE_UNPLANNED_RESTARTING)
 	}
-	if obj.initiateStartingModeHolder == nil {
-		obj.initiateStartingModeHolder = &actionProtocolIsisInitiateGracefulStart{obj: obj.obj.InitiateStartingMode}
+	if obj.initiateUnplannedRestartingHolder == nil {
+		obj.initiateUnplannedRestartingHolder = &isisActionProtocolIsisRestartParams{obj: obj.obj.InitiateUnplannedRestarting}
 	}
-	return obj.initiateStartingModeHolder
+	return obj.initiateUnplannedRestartingHolder
 }
 
-// description is TBD
-// InitiateStartingMode returns a ActionProtocolIsisInitiateGracefulStart
-func (obj *actionProtocolIsis) HasInitiateStartingMode() bool {
-	return obj.obj.InitiateStartingMode != nil
+// Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the unplanned "Restarting" mode, it sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit set. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Unplanned Graceful Restart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
+// InitiateUnplannedRestarting returns a IsisActionProtocolIsisRestartParams
+func (obj *actionProtocolIsis) HasInitiateUnplannedRestarting() bool {
+	return obj.obj.InitiateUnplannedRestarting != nil
 }
 
-// description is TBD
-// SetInitiateStartingMode sets the ActionProtocolIsisInitiateGracefulStart value in the ActionProtocolIsis object
-func (obj *actionProtocolIsis) SetInitiateStartingMode(value ActionProtocolIsisInitiateGracefulStart) ActionProtocolIsis {
-	obj.setChoice(ActionProtocolIsisChoice.INITIATE_STARTING_MODE)
-	obj.initiateStartingModeHolder = nil
-	obj.obj.InitiateStartingMode = value.msg()
-
-	return obj
-}
-
-// description is TBD
-// InitiateRestartingMode returns a ActionProtocolIsisInitiateGracefulRestart
-func (obj *actionProtocolIsis) InitiateRestartingMode() ActionProtocolIsisInitiateGracefulRestart {
-	if obj.obj.InitiateRestartingMode == nil {
-		obj.obj.InitiateRestartingMode = NewActionProtocolIsisInitiateGracefulRestart().msg()
-	}
-	if obj.initiateRestartingModeHolder == nil {
-		obj.initiateRestartingModeHolder = &actionProtocolIsisInitiateGracefulRestart{obj: obj.obj.InitiateRestartingMode}
-	}
-	return obj.initiateRestartingModeHolder
-}
-
-// description is TBD
-// InitiateRestartingMode returns a ActionProtocolIsisInitiateGracefulRestart
-func (obj *actionProtocolIsis) HasInitiateRestartingMode() bool {
-	return obj.obj.InitiateRestartingMode != nil
-}
-
-// description is TBD
-// SetInitiateRestartingMode sets the ActionProtocolIsisInitiateGracefulRestart value in the ActionProtocolIsis object
-func (obj *actionProtocolIsis) SetInitiateRestartingMode(value ActionProtocolIsisInitiateGracefulRestart) ActionProtocolIsis {
-
-	obj.initiateRestartingModeHolder = nil
-	obj.obj.InitiateRestartingMode = value.msg()
+// Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the unplanned "Restarting" mode, it sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit set. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Unplanned Graceful Restart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
+// SetInitiateUnplannedRestarting sets the IsisActionProtocolIsisRestartParams value in the ActionProtocolIsis object
+func (obj *actionProtocolIsis) SetInitiateUnplannedRestarting(value IsisActionProtocolIsisRestartParams) ActionProtocolIsis {
+	obj.setChoice(ActionProtocolIsisChoice.INITIATE_UNPLANNED_RESTARTING)
+	obj.initiateUnplannedRestartingHolder = nil
+	obj.obj.InitiateUnplannedRestarting = value.msg()
 
 	return obj
 }
@@ -404,14 +357,9 @@ func (obj *actionProtocolIsis) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Choice is required field on interface ActionProtocolIsis")
 	}
 
-	if obj.obj.InitiateStartingMode != nil {
+	if obj.obj.InitiateUnplannedRestarting != nil {
 
-		obj.InitiateStartingMode().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.InitiateRestartingMode != nil {
-
-		obj.InitiateRestartingMode().validateObj(vObj, set_default)
+		obj.InitiateUnplannedRestarting().validateObj(vObj, set_default)
 	}
 
 }
@@ -420,9 +368,9 @@ func (obj *actionProtocolIsis) setDefault() {
 	var choices_set int = 0
 	var choice ActionProtocolIsisChoiceEnum
 
-	if obj.obj.InitiateStartingMode != nil {
+	if obj.obj.InitiateUnplannedRestarting != nil {
 		choices_set += 1
-		choice = ActionProtocolIsisChoice.INITIATE_STARTING_MODE
+		choice = ActionProtocolIsisChoice.INITIATE_UNPLANNED_RESTARTING
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

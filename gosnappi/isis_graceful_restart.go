@@ -264,112 +264,64 @@ type IsisGracefulRestart interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Choice returns IsisGracefulRestartChoiceEnum, set in IsisGracefulRestart
-	Choice() IsisGracefulRestartChoiceEnum
-	// setChoice assigns IsisGracefulRestartChoiceEnum provided by user to IsisGracefulRestart
-	setChoice(value IsisGracefulRestartChoiceEnum) IsisGracefulRestart
-	// HasChoice checks if Choice has been set in IsisGracefulRestart
-	HasChoice() bool
-	// getter for GracefulRestartMode to set choice.
-	GracefulRestartMode()
-	// getter for NormalMode to set choice.
-	NormalMode()
-	// getter for StartingMode to set choice.
-	StartingMode()
-	// getter for HelperMode to set choice.
-	HelperMode()
-	// RestartTime returns uint32, set in IsisGracefulRestart.
-	RestartTime() uint32
-	// SetRestartTime assigns uint32 provided by user to IsisGracefulRestart
-	SetRestartTime(value uint32) IsisGracefulRestart
-	// HasRestartTime checks if RestartTime has been set in IsisGracefulRestart
-	HasRestartTime() bool
+	// Enabled returns bool, set in IsisGracefulRestart.
+	Enabled() bool
+	// SetEnabled assigns bool provided by user to IsisGracefulRestart
+	SetEnabled(value bool) IsisGracefulRestart
+	// HasEnabled checks if Enabled has been set in IsisGracefulRestart
+	HasEnabled() bool
+	// HelperMode returns bool, set in IsisGracefulRestart.
+	HelperMode() bool
+	// SetHelperMode assigns bool provided by user to IsisGracefulRestart
+	SetHelperMode(value bool) IsisGracefulRestart
+	// HasHelperMode checks if HelperMode has been set in IsisGracefulRestart
+	HasHelperMode() bool
 }
 
-type IsisGracefulRestartChoiceEnum string
+// The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV.
+// It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit unset.
+// Enabled returns a bool
+func (obj *isisGracefulRestart) Enabled() bool {
 
-// Enum of Choice on IsisGracefulRestart
-var IsisGracefulRestartChoice = struct {
-	NORMAL_MODE           IsisGracefulRestartChoiceEnum
-	STARTING_MODE         IsisGracefulRestartChoiceEnum
-	GRACEFUL_RESTART_MODE IsisGracefulRestartChoiceEnum
-	HELPER_MODE           IsisGracefulRestartChoiceEnum
-}{
-	NORMAL_MODE:           IsisGracefulRestartChoiceEnum("normal_mode"),
-	STARTING_MODE:         IsisGracefulRestartChoiceEnum("starting_mode"),
-	GRACEFUL_RESTART_MODE: IsisGracefulRestartChoiceEnum("graceful_restart_mode"),
-	HELPER_MODE:           IsisGracefulRestartChoiceEnum("helper_mode"),
+	return *obj.obj.Enabled
+
 }
 
-func (obj *isisGracefulRestart) Choice() IsisGracefulRestartChoiceEnum {
-	return IsisGracefulRestartChoiceEnum(obj.obj.Choice.Enum().String())
+// The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV.
+// It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit unset.
+// Enabled returns a bool
+func (obj *isisGracefulRestart) HasEnabled() bool {
+	return obj.obj.Enabled != nil
 }
 
-// getter for GracefulRestartMode to set choice
-func (obj *isisGracefulRestart) GracefulRestartMode() {
-	obj.setChoice(IsisGracefulRestartChoice.GRACEFUL_RESTART_MODE)
-}
+// The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV.
+// It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit unset.
+// SetEnabled sets the bool value in the IsisGracefulRestart object
+func (obj *isisGracefulRestart) SetEnabled(value bool) IsisGracefulRestart {
 
-// getter for NormalMode to set choice
-func (obj *isisGracefulRestart) NormalMode() {
-	obj.setChoice(IsisGracefulRestartChoice.NORMAL_MODE)
-}
-
-// getter for StartingMode to set choice
-func (obj *isisGracefulRestart) StartingMode() {
-	obj.setChoice(IsisGracefulRestartChoice.STARTING_MODE)
-}
-
-// getter for HelperMode to set choice
-func (obj *isisGracefulRestart) HelperMode() {
-	obj.setChoice(IsisGracefulRestartChoice.HELPER_MODE)
-}
-
-// Choice of Graceful Restart mode.
-// - normal_mode: The emulated IS-IS router sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit unset.
-// - starting_mode: The emulated IS-IS router is in the "Starting" mode.
-// It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the SA (Suppress Adjacency Advertisement) bit set.
-// - graceful_restart: The emulated IS-IS router is in the unplanned "Restarting" mode.
-// It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit set.
-// - helper_mode: The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.
-// It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
-// Choice returns a string
-func (obj *isisGracefulRestart) HasChoice() bool {
-	return obj.obj.Choice != nil
-}
-
-func (obj *isisGracefulRestart) setChoice(value IsisGracefulRestartChoiceEnum) IsisGracefulRestart {
-	intValue, ok := otg.IsisGracefulRestart_Choice_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on IsisGracefulRestartChoiceEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.IsisGracefulRestart_Choice_Enum(intValue)
-	obj.obj.Choice = &enumValue
-
+	obj.obj.Enabled = &value
 	return obj
 }
 
-// This is the estimated duration (in seconds) it will take for the IS-IS session to be re-established after a start/restart.
-// RestartTime returns a uint32
-func (obj *isisGracefulRestart) RestartTime() uint32 {
+// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// HelperMode returns a bool
+func (obj *isisGracefulRestart) HelperMode() bool {
 
-	return *obj.obj.RestartTime
+	return *obj.obj.HelperMode
 
 }
 
-// This is the estimated duration (in seconds) it will take for the IS-IS session to be re-established after a start/restart.
-// RestartTime returns a uint32
-func (obj *isisGracefulRestart) HasRestartTime() bool {
-	return obj.obj.RestartTime != nil
+// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// HelperMode returns a bool
+func (obj *isisGracefulRestart) HasHelperMode() bool {
+	return obj.obj.HelperMode != nil
 }
 
-// This is the estimated duration (in seconds) it will take for the IS-IS session to be re-established after a start/restart.
-// SetRestartTime sets the uint32 value in the IsisGracefulRestart object
-func (obj *isisGracefulRestart) SetRestartTime(value uint32) IsisGracefulRestart {
+// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// SetHelperMode sets the bool value in the IsisGracefulRestart object
+func (obj *isisGracefulRestart) SetHelperMode(value bool) IsisGracefulRestart {
 
-	obj.obj.RestartTime = &value
+	obj.obj.HelperMode = &value
 	return obj
 }
 
@@ -378,41 +330,14 @@ func (obj *isisGracefulRestart) validateObj(vObj *validation, set_default bool) 
 		obj.setDefault()
 	}
 
-	if obj.obj.RestartTime != nil {
-
-		if *obj.obj.RestartTime > 1 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= IsisGracefulRestart.RestartTime <= 1 but Got %d", *obj.obj.RestartTime))
-		}
-
-	}
-
 }
 
 func (obj *isisGracefulRestart) setDefault() {
-	var choices_set int = 0
-	var choice IsisGracefulRestartChoiceEnum
-	if choices_set == 0 {
-		if obj.obj.Choice == nil {
-			obj.setChoice(IsisGracefulRestartChoice.NORMAL_MODE)
-
-		}
-
-	} else if choices_set == 1 && choice != "" {
-		if obj.obj.Choice != nil {
-			if obj.Choice() != choice {
-				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in IsisGracefulRestart")
-			}
-		} else {
-			intVal := otg.IsisGracefulRestart_Choice_Enum_value[string(choice)]
-			enumValue := otg.IsisGracefulRestart_Choice_Enum(intVal)
-			obj.obj.Choice = &enumValue
-		}
+	if obj.obj.Enabled == nil {
+		obj.SetEnabled(false)
 	}
-
-	if obj.obj.RestartTime == nil {
-		obj.SetRestartTime(30)
+	if obj.obj.HelperMode == nil {
+		obj.SetHelperMode(true)
 	}
 
 }
