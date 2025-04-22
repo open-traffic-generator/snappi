@@ -1263,7 +1263,7 @@ from .snappi import DeviceBgpCustomError
 from .snappi import ActionProtocolBgpInitiateGracefulRestart
 from .snappi import ActionProtocolBgpGracefulRestartNotification
 from .snappi import ActionProtocolIsis
-from .snappi import IsisActionProtocolIsisRestartParams
+from .snappi import IsisActionProtocolIsisStartParams
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol

@@ -17534,17 +17534,25 @@ components:
         choice:
           type: string
           x-enum:
-            initiate_unplanned_restarting:
+            initiate_unplanned_restart:
               x-field-uid: 1
+            initiate_starting:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
-          - initiate_unplanned_restarting
-        initiate_unplanned_restarting:
+          - initiate_unplanned_restart
+          - initiate_starting
+        initiate_unplanned_restart:
           description: |-
             Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the unplanned "Restarting" mode, it sends to the neighbor router (DUT) an IIH containing a Restart TLV with the RR (Restart Request) bit set. To emulate scenarios where a router sends Graceful Restart TlV this will result in  Unplanned Graceful Restart scenario to be triggered as per Reference: https://datatracker.ietf.org/doc/html/rfc5306.
-          $ref: '#/components/schemas/Isis.Action.Protocol.Isis.RestartParams'
+          $ref: '#/components/schemas/Isis.Action.Protocol.Isis.StartParams'
           x-field-uid: 2
-    Isis.Action.Protocol.Isis.RestartParams:
+        initiate_start:
+          description: |-
+            Initiates IS-IS Start Process for the selected IS-IS routers.  It sends to the neighbor router (DUT) an IIH containing a Restart TLV with the SA (Suppress Adjacency Advertisement) bit set.
+          $ref: '#/components/schemas/Isis.Action.Protocol.Isis.StartParams'
+          x-field-uid: 3
+    Isis.Action.Protocol.Isis.StartParams:
       description: "Configuration for IS-IS Graceful Restart "
       type: object
       properties:

@@ -13290,7 +13290,8 @@ message ActionProtocolIsis {
   message Choice {
     enum Enum {
       unspecified = 0;
-      initiate_unplanned_restarting = 1;
+      initiate_unplanned_restart = 1;
+      initiate_starting = 2;
     }
   }
   // Description missing in models
@@ -13304,11 +13305,16 @@ message ActionProtocolIsis {
   // Request) bit set. To emulate scenarios where a router sends Graceful Restart TlV
   // this will result in  Unplanned Graceful Restart scenario to be triggered as per Reference:
   // https://datatracker.ietf.org/doc/html/rfc5306.
-  IsisActionProtocolIsisRestartParams initiate_unplanned_restarting = 2;
+  IsisActionProtocolIsisStartParams initiate_unplanned_restart = 2;
+
+  // Initiates IS-IS Start Process for the selected IS-IS routers.  It sends to the neighbor
+  // router (DUT) an IIH containing a Restart TLV with the SA (Suppress Adjacency Advertisement)
+  // bit set.
+  IsisActionProtocolIsisStartParams initiate_start = 3;
 }
 
 // Configuration for IS-IS Graceful Restart
-message IsisActionProtocolIsisRestartParams {
+message IsisActionProtocolIsisStartParams {
 
   // The names of device objects to control.
   // 
