@@ -1220,10 +1220,12 @@ from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
 from .snappi import FlowsUpdate
-from .snappi import ConfigAppendResourceIter
+from .snappi import ConfigAppend
 from .snappi import ConfigAppendResource
-from .snappi import ConfigDeleteResourceIter
+from .snappi import ConfigAppendResourceIter
+from .snappi import ConfigDelete
 from .snappi import ConfigDeleteResource
+from .snappi import ConfigDeleteResourceIter
 from .snappi import ControlState
 from .snappi import StatePort
 from .snappi import StatePortLink

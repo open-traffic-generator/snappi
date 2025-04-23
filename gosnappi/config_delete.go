@@ -13,9 +13,10 @@ import (
 // ***** ConfigDelete *****
 type configDelete struct {
 	validation
-	obj          *otg.ConfigDelete
-	marshaller   marshalConfigDelete
-	unMarshaller unMarshalConfigDelete
+	obj                    *otg.ConfigDelete
+	marshaller             marshalConfigDelete
+	unMarshaller           unMarshalConfigDelete
+	configDeleteListHolder ConfigDeleteConfigDeleteResourceIter
 }
 
 func NewConfigDelete() ConfigDelete {
@@ -29,7 +30,7 @@ func (obj *configDelete) msg() *otg.ConfigDelete {
 }
 
 func (obj *configDelete) setMsg(msg *otg.ConfigDelete) ConfigDelete {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalconfigDelete) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalconfigDelete) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalconfigDelete) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *configDelete) Clone() (ConfigDelete, error) {
 	return newObj, nil
 }
 
+func (obj *configDelete) setNil() {
+	obj.configDeleteListHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // ConfigDelete is a container for all configuration resources of various types to be deleted.
 type ConfigDelete interface {
 	Validation
@@ -264,11 +272,115 @@ type ConfigDelete interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// ConfigDeleteList returns ConfigDeleteConfigDeleteResourceIterIter, set in ConfigDelete
+	ConfigDeleteList() ConfigDeleteConfigDeleteResourceIter
+	setNil()
+}
+
+// description is TBD
+// ConfigDeleteList returns a []ConfigDeleteResource
+func (obj *configDelete) ConfigDeleteList() ConfigDeleteConfigDeleteResourceIter {
+	if len(obj.obj.ConfigDeleteList) == 0 {
+		obj.obj.ConfigDeleteList = []*otg.ConfigDeleteResource{}
+	}
+	if obj.configDeleteListHolder == nil {
+		obj.configDeleteListHolder = newConfigDeleteConfigDeleteResourceIter(&obj.obj.ConfigDeleteList).setMsg(obj)
+	}
+	return obj.configDeleteListHolder
+}
+
+type configDeleteConfigDeleteResourceIter struct {
+	obj                       *configDelete
+	configDeleteResourceSlice []ConfigDeleteResource
+	fieldPtr                  *[]*otg.ConfigDeleteResource
+}
+
+func newConfigDeleteConfigDeleteResourceIter(ptr *[]*otg.ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter {
+	return &configDeleteConfigDeleteResourceIter{fieldPtr: ptr}
+}
+
+type ConfigDeleteConfigDeleteResourceIter interface {
+	setMsg(*configDelete) ConfigDeleteConfigDeleteResourceIter
+	Items() []ConfigDeleteResource
+	Add() ConfigDeleteResource
+	Append(items ...ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter
+	Set(index int, newObj ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter
+	Clear() ConfigDeleteConfigDeleteResourceIter
+	clearHolderSlice() ConfigDeleteConfigDeleteResourceIter
+	appendHolderSlice(item ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter
+}
+
+func (obj *configDeleteConfigDeleteResourceIter) setMsg(msg *configDelete) ConfigDeleteConfigDeleteResourceIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&configDeleteResource{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configDeleteConfigDeleteResourceIter) Items() []ConfigDeleteResource {
+	return obj.configDeleteResourceSlice
+}
+
+func (obj *configDeleteConfigDeleteResourceIter) Add() ConfigDeleteResource {
+	newObj := &otg.ConfigDeleteResource{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &configDeleteResource{obj: newObj}
+	newLibObj.setDefault()
+	obj.configDeleteResourceSlice = append(obj.configDeleteResourceSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configDeleteConfigDeleteResourceIter) Append(items ...ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.configDeleteResourceSlice = append(obj.configDeleteResourceSlice, item)
+	}
+	return obj
+}
+
+func (obj *configDeleteConfigDeleteResourceIter) Set(index int, newObj ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.configDeleteResourceSlice[index] = newObj
+	return obj
+}
+func (obj *configDeleteConfigDeleteResourceIter) Clear() ConfigDeleteConfigDeleteResourceIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.ConfigDeleteResource{}
+		obj.configDeleteResourceSlice = []ConfigDeleteResource{}
+	}
+	return obj
+}
+func (obj *configDeleteConfigDeleteResourceIter) clearHolderSlice() ConfigDeleteConfigDeleteResourceIter {
+	if len(obj.configDeleteResourceSlice) > 0 {
+		obj.configDeleteResourceSlice = []ConfigDeleteResource{}
+	}
+	return obj
+}
+func (obj *configDeleteConfigDeleteResourceIter) appendHolderSlice(item ConfigDeleteResource) ConfigDeleteConfigDeleteResourceIter {
+	obj.configDeleteResourceSlice = append(obj.configDeleteResourceSlice, item)
+	return obj
 }
 
 func (obj *configDelete) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if len(obj.obj.ConfigDeleteList) != 0 {
+
+		if set_default {
+			obj.ConfigDeleteList().clearHolderSlice()
+			for _, item := range obj.obj.ConfigDeleteList {
+				obj.ConfigDeleteList().appendHolderSlice(&configDeleteResource{obj: item})
+			}
+		}
+		for _, item := range obj.ConfigDeleteList().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

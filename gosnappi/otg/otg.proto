@@ -12348,6 +12348,9 @@ message FlowsUpdate {
 
 // A container for all configuration resources of various types to be appended.
 message ConfigAppend {
+
+  // Description missing in models
+  repeated ConfigAppendResource config_append_list = 1;
 }
 
 // A container for an existing resource to be appended.
@@ -12370,6 +12373,9 @@ message ConfigAppendResource {
 
 // A container for all configuration resources of various types to be deleted.
 message ConfigDelete {
+
+  // Description missing in models
+  repeated ConfigDeleteResource config_delete_list = 1;
 }
 
 // A container for an existing resource to be deleted.
