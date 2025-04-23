@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = "support_array_top_level"
+USE_OPENAPIART_BRANCH = None
 USE_MODELS_BRANCH = "dev-append-delete-config"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
