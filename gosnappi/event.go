@@ -254,8 +254,6 @@ func (obj *event) setNil() {
 
 // Event is under Review: Event configuration is currently under review for pending exploration on use cases.
 //
-// Under Review: Event configuration is currently under review for pending exploration on use cases.
-//
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // control_plane_data_plane_convergence_us metric values for convergence metrics.

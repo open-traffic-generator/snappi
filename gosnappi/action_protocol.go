@@ -19,6 +19,7 @@ type actionProtocol struct {
 	ipv4Holder   ActionProtocolIpv4
 	ipv6Holder   ActionProtocolIpv6
 	bgpHolder    ActionProtocolBgp
+	isisHolder   ActionProtocolIsis
 }
 
 func NewActionProtocol() ActionProtocol {
@@ -249,6 +250,7 @@ func (obj *actionProtocol) setNil() {
 	obj.ipv4Holder = nil
 	obj.ipv6Holder = nil
 	obj.bgpHolder = nil
+	obj.isisHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -304,6 +306,14 @@ type ActionProtocol interface {
 	SetBgp(value ActionProtocolBgp) ActionProtocol
 	// HasBgp checks if Bgp has been set in ActionProtocol
 	HasBgp() bool
+	// Isis returns ActionProtocolIsis, set in ActionProtocol.
+	// ActionProtocolIsis is actions associated with IS-IS on configured resources.
+	Isis() ActionProtocolIsis
+	// SetIsis assigns ActionProtocolIsis provided by user to ActionProtocol.
+	// ActionProtocolIsis is actions associated with IS-IS on configured resources.
+	SetIsis(value ActionProtocolIsis) ActionProtocol
+	// HasIsis checks if Isis has been set in ActionProtocol
+	HasIsis() bool
 	setNil()
 }
 
@@ -439,6 +449,34 @@ func (obj *actionProtocol) SetBgp(value ActionProtocolBgp) ActionProtocol {
 	return obj
 }
 
+// description is TBD
+// Isis returns a ActionProtocolIsis
+func (obj *actionProtocol) Isis() ActionProtocolIsis {
+	if obj.obj.Isis == nil {
+		obj.obj.Isis = NewActionProtocolIsis().msg()
+	}
+	if obj.isisHolder == nil {
+		obj.isisHolder = &actionProtocolIsis{obj: obj.obj.Isis}
+	}
+	return obj.isisHolder
+}
+
+// description is TBD
+// Isis returns a ActionProtocolIsis
+func (obj *actionProtocol) HasIsis() bool {
+	return obj.obj.Isis != nil
+}
+
+// description is TBD
+// SetIsis sets the ActionProtocolIsis value in the ActionProtocol object
+func (obj *actionProtocol) SetIsis(value ActionProtocolIsis) ActionProtocol {
+
+	obj.isisHolder = nil
+	obj.obj.Isis = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -462,6 +500,11 @@ func (obj *actionProtocol) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Bgp != nil {
 
 		obj.Bgp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Isis != nil {
+
+		obj.Isis().validateObj(vObj, set_default)
 	}
 
 }
