@@ -527,7 +527,7 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	var resp *otg.SetControlStateResponse
 	var err error
 	if api.grpc.enableGrpcStreaming {
-		str, er := proto.Marshal(config.msg())
+		str, er := proto.Marshal(controlState.msg())
 		if er != nil {
 			return nil, er
 		}
@@ -596,7 +596,7 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	var resp *otg.SetControlActionResponse
 	var err error
 	if api.grpc.enableGrpcStreaming {
-		str, er := proto.Marshal(config.msg())
+		str, er := proto.Marshal(controlAction.msg())
 		if er != nil {
 			return nil, er
 		}
