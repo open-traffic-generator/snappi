@@ -30994,7 +30994,8 @@ service Openapi {
 
   // Sets configuration resources on the traffic generator.
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse);
-  rpc StreamConfig(stream Data) returns(SetConfigResponse);
+  // streaming version of the rpc SetConfig
+  rpc streamSetConfig(stream Data) returns (SetConfigResponse);
   // Description missing in models
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
   // Updates specific attributes of resources configured on the traffic generator. The
@@ -31005,8 +31006,12 @@ service Openapi {
   rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse);
   // Sets the operational state of configured resources.
   rpc SetControlState(SetControlStateRequest) returns (SetControlStateResponse);
+  // streaming version of the rpc SetControlState
+  rpc streamSetControlState(stream Data) returns (SetControlStateResponse);
   // Triggers actions against configured resources.
   rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
+  // streaming version of the rpc SetControlAction
+  rpc streamSetControlAction(stream Data) returns (SetControlActionResponse);
   // Description missing in models
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
   // Description missing in models

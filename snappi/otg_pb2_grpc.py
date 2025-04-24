@@ -29,8 +29,8 @@ class OpenapiStub(object):
                 request_serializer=otg__pb2.SetConfigRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetConfigResponse.FromString,
                 )
-        self.StreamConfig = channel.stream_unary(
-                '/otg.Openapi/StreamConfig',
+        self.streamSetConfig = channel.stream_unary(
+                '/otg.Openapi/streamSetConfig',
                 request_serializer=otg__pb2.Data.SerializeToString,
                 response_deserializer=otg__pb2.SetConfigResponse.FromString,
                 )
@@ -49,9 +49,19 @@ class OpenapiStub(object):
                 request_serializer=otg__pb2.SetControlStateRequest.SerializeToString,
                 response_deserializer=otg__pb2.SetControlStateResponse.FromString,
                 )
+        self.streamSetControlState = channel.stream_unary(
+                '/otg.Openapi/streamSetControlState',
+                request_serializer=otg__pb2.Data.SerializeToString,
+                response_deserializer=otg__pb2.SetControlStateResponse.FromString,
+                )
         self.SetControlAction = channel.unary_unary(
                 '/otg.Openapi/SetControlAction',
                 request_serializer=otg__pb2.SetControlActionRequest.SerializeToString,
+                response_deserializer=otg__pb2.SetControlActionResponse.FromString,
+                )
+        self.streamSetControlAction = channel.stream_unary(
+                '/otg.Openapi/streamSetControlAction',
+                request_serializer=otg__pb2.Data.SerializeToString,
                 response_deserializer=otg__pb2.SetControlActionResponse.FromString,
                 )
         self.GetMetrics = channel.unary_unary(
@@ -92,8 +102,9 @@ class OpenapiServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def StreamConfig(self, request_iterator, context):
-        """Missing associated documentation comment in .proto file."""
+    def streamSetConfig(self, request_iterator, context):
+        """streaming version of the rpc SetConfig
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -123,8 +134,22 @@ class OpenapiServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def streamSetControlState(self, request_iterator, context):
+        """streaming version of the rpc SetControlState
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def SetControlAction(self, request, context):
         """Triggers actions against configured resources.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def streamSetControlAction(self, request_iterator, context):
+        """streaming version of the rpc SetControlAction
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -166,8 +191,8 @@ def add_OpenapiServicer_to_server(servicer, server):
                     request_deserializer=otg__pb2.SetConfigRequest.FromString,
                     response_serializer=otg__pb2.SetConfigResponse.SerializeToString,
             ),
-            'StreamConfig': grpc.stream_unary_rpc_method_handler(
-                    servicer.StreamConfig,
+            'streamSetConfig': grpc.stream_unary_rpc_method_handler(
+                    servicer.streamSetConfig,
                     request_deserializer=otg__pb2.Data.FromString,
                     response_serializer=otg__pb2.SetConfigResponse.SerializeToString,
             ),
@@ -186,9 +211,19 @@ def add_OpenapiServicer_to_server(servicer, server):
                     request_deserializer=otg__pb2.SetControlStateRequest.FromString,
                     response_serializer=otg__pb2.SetControlStateResponse.SerializeToString,
             ),
+            'streamSetControlState': grpc.stream_unary_rpc_method_handler(
+                    servicer.streamSetControlState,
+                    request_deserializer=otg__pb2.Data.FromString,
+                    response_serializer=otg__pb2.SetControlStateResponse.SerializeToString,
+            ),
             'SetControlAction': grpc.unary_unary_rpc_method_handler(
                     servicer.SetControlAction,
                     request_deserializer=otg__pb2.SetControlActionRequest.FromString,
+                    response_serializer=otg__pb2.SetControlActionResponse.SerializeToString,
+            ),
+            'streamSetControlAction': grpc.stream_unary_rpc_method_handler(
+                    servicer.streamSetControlAction,
+                    request_deserializer=otg__pb2.Data.FromString,
                     response_serializer=otg__pb2.SetControlActionResponse.SerializeToString,
             ),
             'GetMetrics': grpc.unary_unary_rpc_method_handler(
@@ -245,7 +280,7 @@ class Openapi(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def StreamConfig(request_iterator,
+    def streamSetConfig(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -255,7 +290,7 @@ class Openapi(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/otg.Openapi/StreamConfig',
+        return grpc.experimental.stream_unary(request_iterator, target, '/otg.Openapi/streamSetConfig',
             otg__pb2.Data.SerializeToString,
             otg__pb2.SetConfigResponse.FromString,
             options, channel_credentials,
@@ -313,6 +348,23 @@ class Openapi(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def streamSetControlState(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/otg.Openapi/streamSetControlState',
+            otg__pb2.Data.SerializeToString,
+            otg__pb2.SetControlStateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def SetControlAction(request,
             target,
             options=(),
@@ -325,6 +377,23 @@ class Openapi(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/otg.Openapi/SetControlAction',
             otg__pb2.SetControlActionRequest.SerializeToString,
+            otg__pb2.SetControlActionResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def streamSetControlAction(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(request_iterator, target, '/otg.Openapi/streamSetControlAction',
+            otg__pb2.Data.SerializeToString,
             otg__pb2.SetControlActionResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

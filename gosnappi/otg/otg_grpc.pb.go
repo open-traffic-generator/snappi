@@ -26,7 +26,8 @@ const _ = grpc.SupportPackageIsVersion7
 type OpenapiClient interface {
 	// Sets configuration resources on the traffic generator.
 	SetConfig(ctx context.Context, in *SetConfigRequest, opts ...grpc.CallOption) (*SetConfigResponse, error)
-	StreamConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamConfigClient, error)
+	// streaming version of the rpc SetConfig
+	StreamSetConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetConfigClient, error)
 	// Description missing in models
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConfigResponse, error)
 	// Updates specific attributes of resources configured on the traffic generator. The
@@ -37,8 +38,12 @@ type OpenapiClient interface {
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error)
+	// streaming version of the rpc SetControlState
+	StreamSetControlState(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetControlStateClient, error)
 	// Triggers actions against configured resources.
 	SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error)
+	// streaming version of the rpc SetControlAction
+	StreamSetControlAction(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetControlActionClient, error)
 	// Description missing in models
 	GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error)
 	// Description missing in models
@@ -66,30 +71,30 @@ func (c *openapiClient) SetConfig(ctx context.Context, in *SetConfigRequest, opt
 	return out, nil
 }
 
-func (c *openapiClient) StreamConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamConfigClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[0], "/otg.Openapi/StreamConfig", opts...)
+func (c *openapiClient) StreamSetConfig(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetConfigClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[0], "/otg.Openapi/streamSetConfig", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &openapiStreamConfigClient{stream}
+	x := &openapiStreamSetConfigClient{stream}
 	return x, nil
 }
 
-type Openapi_StreamConfigClient interface {
+type Openapi_StreamSetConfigClient interface {
 	Send(*Data) error
 	CloseAndRecv() (*SetConfigResponse, error)
 	grpc.ClientStream
 }
 
-type openapiStreamConfigClient struct {
+type openapiStreamSetConfigClient struct {
 	grpc.ClientStream
 }
 
-func (x *openapiStreamConfigClient) Send(m *Data) error {
+func (x *openapiStreamSetConfigClient) Send(m *Data) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *openapiStreamConfigClient) CloseAndRecv() (*SetConfigResponse, error) {
+func (x *openapiStreamSetConfigClient) CloseAndRecv() (*SetConfigResponse, error) {
 	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
@@ -127,6 +132,40 @@ func (c *openapiClient) SetControlState(ctx context.Context, in *SetControlState
 	return out, nil
 }
 
+func (c *openapiClient) StreamSetControlState(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetControlStateClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[1], "/otg.Openapi/streamSetControlState", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &openapiStreamSetControlStateClient{stream}
+	return x, nil
+}
+
+type Openapi_StreamSetControlStateClient interface {
+	Send(*Data) error
+	CloseAndRecv() (*SetControlStateResponse, error)
+	grpc.ClientStream
+}
+
+type openapiStreamSetControlStateClient struct {
+	grpc.ClientStream
+}
+
+func (x *openapiStreamSetControlStateClient) Send(m *Data) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *openapiStreamSetControlStateClient) CloseAndRecv() (*SetControlStateResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SetControlStateResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *openapiClient) SetControlAction(ctx context.Context, in *SetControlActionRequest, opts ...grpc.CallOption) (*SetControlActionResponse, error) {
 	out := new(SetControlActionResponse)
 	err := c.cc.Invoke(ctx, "/otg.Openapi/SetControlAction", in, out, opts...)
@@ -134,6 +173,40 @@ func (c *openapiClient) SetControlAction(ctx context.Context, in *SetControlActi
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *openapiClient) StreamSetControlAction(ctx context.Context, opts ...grpc.CallOption) (Openapi_StreamSetControlActionClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[2], "/otg.Openapi/streamSetControlAction", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &openapiStreamSetControlActionClient{stream}
+	return x, nil
+}
+
+type Openapi_StreamSetControlActionClient interface {
+	Send(*Data) error
+	CloseAndRecv() (*SetControlActionResponse, error)
+	grpc.ClientStream
+}
+
+type openapiStreamSetControlActionClient struct {
+	grpc.ClientStream
+}
+
+func (x *openapiStreamSetControlActionClient) Send(m *Data) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *openapiStreamSetControlActionClient) CloseAndRecv() (*SetControlActionResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(SetControlActionResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *openapiClient) GetMetrics(ctx context.Context, in *GetMetricsRequest, opts ...grpc.CallOption) (*GetMetricsResponse, error) {
@@ -178,7 +251,8 @@ func (c *openapiClient) GetVersion(ctx context.Context, in *emptypb.Empty, opts 
 type OpenapiServer interface {
 	// Sets configuration resources on the traffic generator.
 	SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error)
-	StreamConfig(Openapi_StreamConfigServer) error
+	// streaming version of the rpc SetConfig
+	StreamSetConfig(Openapi_StreamSetConfigServer) error
 	// Description missing in models
 	GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error)
 	// Updates specific attributes of resources configured on the traffic generator. The
@@ -189,8 +263,12 @@ type OpenapiServer interface {
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error)
+	// streaming version of the rpc SetControlState
+	StreamSetControlState(Openapi_StreamSetControlStateServer) error
 	// Triggers actions against configured resources.
 	SetControlAction(context.Context, *SetControlActionRequest) (*SetControlActionResponse, error)
+	// streaming version of the rpc SetControlAction
+	StreamSetControlAction(Openapi_StreamSetControlActionServer) error
 	// Description missing in models
 	GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error)
 	// Description missing in models
@@ -209,8 +287,8 @@ type UnimplementedOpenapiServer struct {
 func (UnimplementedOpenapiServer) SetConfig(context.Context, *SetConfigRequest) (*SetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetConfig not implemented")
 }
-func (UnimplementedOpenapiServer) StreamConfig(Openapi_StreamConfigServer) error {
-	return status.Errorf(codes.Unimplemented, "method StreamConfig not implemented")
+func (UnimplementedOpenapiServer) StreamSetConfig(Openapi_StreamSetConfigServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamSetConfig not implemented")
 }
 func (UnimplementedOpenapiServer) GetConfig(context.Context, *emptypb.Empty) (*GetConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
@@ -221,8 +299,14 @@ func (UnimplementedOpenapiServer) UpdateConfig(context.Context, *UpdateConfigReq
 func (UnimplementedOpenapiServer) SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetControlState not implemented")
 }
+func (UnimplementedOpenapiServer) StreamSetControlState(Openapi_StreamSetControlStateServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamSetControlState not implemented")
+}
 func (UnimplementedOpenapiServer) SetControlAction(context.Context, *SetControlActionRequest) (*SetControlActionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetControlAction not implemented")
+}
+func (UnimplementedOpenapiServer) StreamSetControlAction(Openapi_StreamSetControlActionServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamSetControlAction not implemented")
 }
 func (UnimplementedOpenapiServer) GetMetrics(context.Context, *GetMetricsRequest) (*GetMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMetrics not implemented")
@@ -267,25 +351,25 @@ func _Openapi_SetConfig_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Openapi_StreamConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(OpenapiServer).StreamConfig(&openapiStreamConfigServer{stream})
+func _Openapi_StreamSetConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OpenapiServer).StreamSetConfig(&openapiStreamSetConfigServer{stream})
 }
 
-type Openapi_StreamConfigServer interface {
+type Openapi_StreamSetConfigServer interface {
 	SendAndClose(*SetConfigResponse) error
 	Recv() (*Data, error)
 	grpc.ServerStream
 }
 
-type openapiStreamConfigServer struct {
+type openapiStreamSetConfigServer struct {
 	grpc.ServerStream
 }
 
-func (x *openapiStreamConfigServer) SendAndClose(m *SetConfigResponse) error {
+func (x *openapiStreamSetConfigServer) SendAndClose(m *SetConfigResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *openapiStreamConfigServer) Recv() (*Data, error) {
+func (x *openapiStreamSetConfigServer) Recv() (*Data, error) {
 	m := new(Data)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -347,6 +431,32 @@ func _Openapi_SetControlState_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Openapi_StreamSetControlState_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OpenapiServer).StreamSetControlState(&openapiStreamSetControlStateServer{stream})
+}
+
+type Openapi_StreamSetControlStateServer interface {
+	SendAndClose(*SetControlStateResponse) error
+	Recv() (*Data, error)
+	grpc.ServerStream
+}
+
+type openapiStreamSetControlStateServer struct {
+	grpc.ServerStream
+}
+
+func (x *openapiStreamSetControlStateServer) SendAndClose(m *SetControlStateResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *openapiStreamSetControlStateServer) Recv() (*Data, error) {
+	m := new(Data)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func _Openapi_SetControlAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetControlActionRequest)
 	if err := dec(in); err != nil {
@@ -363,6 +473,32 @@ func _Openapi_SetControlAction_Handler(srv interface{}, ctx context.Context, dec
 		return srv.(OpenapiServer).SetControlAction(ctx, req.(*SetControlActionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_StreamSetControlAction_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OpenapiServer).StreamSetControlAction(&openapiStreamSetControlActionServer{stream})
+}
+
+type Openapi_StreamSetControlActionServer interface {
+	SendAndClose(*SetControlActionResponse) error
+	Recv() (*Data, error)
+	grpc.ServerStream
+}
+
+type openapiStreamSetControlActionServer struct {
+	grpc.ServerStream
+}
+
+func (x *openapiStreamSetControlActionServer) SendAndClose(m *SetControlActionResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *openapiStreamSetControlActionServer) Recv() (*Data, error) {
+	m := new(Data)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func _Openapi_GetMetrics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -483,8 +619,18 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "StreamConfig",
-			Handler:       _Openapi_StreamConfig_Handler,
+			StreamName:    "streamSetConfig",
+			Handler:       _Openapi_StreamSetConfig_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "streamSetControlState",
+			Handler:       _Openapi_StreamSetControlState_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "streamSetControlAction",
+			Handler:       _Openapi_StreamSetControlAction_Handler,
 			ClientStreams: true,
 		},
 	},
