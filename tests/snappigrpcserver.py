@@ -46,7 +46,7 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
         res_obj = json_format.Parse(response_200, pb2.SetConfigResponse())
         return res_obj
 
-    def StreamConfig(self, request_iterator, context):
+    def streamSetConfig(self, request_iterator, context):
         self._log("Executing SetConfig")
         full_str = b""
         for data in request_iterator:

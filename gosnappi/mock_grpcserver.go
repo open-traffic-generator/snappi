@@ -340,7 +340,7 @@ func (s *server) SetRouteState(ctx context.Context, req *otg.SetControlStateRequ
 	return resp, err
 }
 
-func (s *server) StreamConfig(srv otg.Openapi_StreamConfigServer) error {
+func (s *server) StreamSetConfig(srv otg.Openapi_StreamSetConfigServer) error {
 
 	var resp *otg.SetConfigResponse
 	var blob []byte
