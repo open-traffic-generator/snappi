@@ -1108,7 +1108,7 @@ func TestFromJsonUnmarshalError(t *testing.T) {
 func TestGrpcStreamConfigApi(t *testing.T) {
 	api := gosnappi.NewApi()
 	grpc := api.NewGrpcTransport()
-	grpc.SetLocation(mockGrpcServerLocation).EnableGrpcStreaming()
+	grpc.SetLocation(mockGrpcServerLocation).EnableGrpcStreaming().SetStreamChunkSize(100)
 	config := config1(api)
 	state, err := api.SetConfig(config)
 	assert.NotNil(t, state)
