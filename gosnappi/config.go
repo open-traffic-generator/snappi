@@ -13,18 +13,19 @@ import (
 // ***** Config *****
 type config struct {
 	validation
-	obj            *otg.Config
-	marshaller     marshalConfig
-	unMarshaller   unMarshalConfig
-	portsHolder    ConfigPortIter
-	lagsHolder     ConfigLagIter
-	layer1Holder   ConfigLayer1Iter
-	capturesHolder ConfigCaptureIter
-	devicesHolder  ConfigDeviceIter
-	flowsHolder    ConfigFlowIter
-	eventsHolder   Event
-	optionsHolder  ConfigOptions
-	lldpHolder     ConfigLldpIter
+	obj                 *otg.Config
+	marshaller          marshalConfig
+	unMarshaller        unMarshalConfig
+	portsHolder         ConfigPortIter
+	lagsHolder          ConfigLagIter
+	layer1Holder        ConfigLayer1Iter
+	capturesHolder      ConfigCaptureIter
+	devicesHolder       ConfigDeviceIter
+	flowsHolder         ConfigFlowIter
+	eventsHolder        Event
+	optionsHolder       ConfigOptions
+	lldpHolder          ConfigLldpIter
+	statefulFlowsHolder StatefulFlow
 }
 
 func NewConfig() Config {
@@ -261,6 +262,7 @@ func (obj *config) setNil() {
 	obj.eventsHolder = nil
 	obj.optionsHolder = nil
 	obj.lldpHolder = nil
+	obj.statefulFlowsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -330,6 +332,14 @@ type Config interface {
 	HasOptions() bool
 	// Lldp returns ConfigLldpIterIter, set in Config
 	Lldp() ConfigLldpIter
+	// StatefulFlows returns StatefulFlow, set in Config.
+	// StatefulFlow is conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
+	StatefulFlows() StatefulFlow
+	// SetStatefulFlows assigns StatefulFlow provided by user to Config.
+	// StatefulFlow is conversational traffic where the responding side can be responded back with control messages, eg incase of rocev2 responding side can send ack, nak.
+	SetStatefulFlows(value StatefulFlow) Config
+	// HasStatefulFlows checks if StatefulFlows has been set in Config
+	HasStatefulFlows() bool
 	setNil()
 }
 
@@ -1002,6 +1012,34 @@ func (obj *configLldpIter) appendHolderSlice(item Lldp) ConfigLldpIter {
 	return obj
 }
 
+// description is TBD
+// StatefulFlows returns a StatefulFlow
+func (obj *config) StatefulFlows() StatefulFlow {
+	if obj.obj.StatefulFlows == nil {
+		obj.obj.StatefulFlows = NewStatefulFlow().msg()
+	}
+	if obj.statefulFlowsHolder == nil {
+		obj.statefulFlowsHolder = &statefulFlow{obj: obj.obj.StatefulFlows}
+	}
+	return obj.statefulFlowsHolder
+}
+
+// description is TBD
+// StatefulFlows returns a StatefulFlow
+func (obj *config) HasStatefulFlows() bool {
+	return obj.obj.StatefulFlows != nil
+}
+
+// description is TBD
+// SetStatefulFlows sets the StatefulFlow value in the Config object
+func (obj *config) SetStatefulFlows(value StatefulFlow) Config {
+
+	obj.statefulFlowsHolder = nil
+	obj.obj.StatefulFlows = value.msg()
+
+	return obj
+}
+
 func (obj *config) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1113,6 +1151,11 @@ func (obj *config) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.StatefulFlows != nil {
+
+		obj.StatefulFlows().validateObj(vObj, set_default)
 	}
 
 }
