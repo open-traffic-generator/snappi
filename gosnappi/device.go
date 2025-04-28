@@ -27,6 +27,7 @@ type device struct {
 	ospfv2Holder        DeviceOspfv2Router
 	macsecHolder        DeviceMacsec
 	ospfv3Holder        DeviceOspfv3Router
+	rocev2Holder        DeviceRocev2Peer
 }
 
 func NewDevice() Device {
@@ -265,6 +266,7 @@ func (obj *device) setNil() {
 	obj.ospfv2Holder = nil
 	obj.macsecHolder = nil
 	obj.ospfv3Holder = nil
+	obj.rocev2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -382,6 +384,14 @@ type Device interface {
 	SetOspfv3(value DeviceOspfv3Router) Device
 	// HasOspfv3 checks if Ospfv3 has been set in Device
 	HasOspfv3() bool
+	// Rocev2 returns DeviceRocev2Peer, set in Device.
+	// DeviceRocev2Peer is configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+	Rocev2() DeviceRocev2Peer
+	// SetRocev2 assigns DeviceRocev2Peer provided by user to Device.
+	// DeviceRocev2Peer is configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+	SetRocev2(value DeviceRocev2Peer) Device
+	// HasRocev2 checks if Rocev2 has been set in Device
+	HasRocev2() bool
 	setNil()
 }
 
@@ -886,6 +896,34 @@ func (obj *device) SetOspfv3(value DeviceOspfv3Router) Device {
 	return obj
 }
 
+// Configuration for RoCEv2.
+// Rocev2 returns a DeviceRocev2Peer
+func (obj *device) Rocev2() DeviceRocev2Peer {
+	if obj.obj.Rocev2 == nil {
+		obj.obj.Rocev2 = NewDeviceRocev2Peer().msg()
+	}
+	if obj.rocev2Holder == nil {
+		obj.rocev2Holder = &deviceRocev2Peer{obj: obj.obj.Rocev2}
+	}
+	return obj.rocev2Holder
+}
+
+// Configuration for RoCEv2.
+// Rocev2 returns a DeviceRocev2Peer
+func (obj *device) HasRocev2() bool {
+	return obj.obj.Rocev2 != nil
+}
+
+// Configuration for RoCEv2.
+// SetRocev2 sets the DeviceRocev2Peer value in the Device object
+func (obj *device) SetRocev2(value DeviceRocev2Peer) Device {
+
+	obj.rocev2Holder = nil
+	obj.obj.Rocev2 = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -976,6 +1014,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv3 != nil {
 
 		obj.Ospfv3().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2 != nil {
+
+		obj.Rocev2().validateObj(vObj, set_default)
 	}
 
 }
