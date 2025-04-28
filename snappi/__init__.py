@@ -1252,6 +1252,12 @@ from .snappi import Rocev2ImmediateData
 from .snappi import Rocev2FlowIter
 from .snappi import Rocev2TxPortsIter
 from .snappi import Rocev2FlowsIter
+from .snappi import EgressOnlyTracking
+from .snappi import EgressOnlyTrackingMetricTags
+from .snappi import EgressOnlyTrackingMetricTagsIter
+from .snappi import EgressOnlyTrackingFilter
+from .snappi import EgressOnlyTrackingFilterIter
+from .snappi import EgressOnlyTrackingIter
 from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
@@ -1338,6 +1344,8 @@ from .snappi import Rocev2IPv6MetricsRequest
 from .snappi import Rocev2IPv6ColumnNames
 from .snappi import Rocev2FlowMetricsRequest
 from .snappi import Rocev2FlowColumnNames
+from .snappi import EgressOnlyTrackingMetricsRequest
+from .snappi import EgressOnlyTrackingTaggedMetricsFilter
 from .snappi import MetricsResponse
 from .snappi import PortMetric
 from .snappi import PortMetricIter
@@ -1390,6 +1398,14 @@ from .snappi import Rocev2IPv6MetricPerPeer
 from .snappi import Rocev2IPv6MetricPerPeerIter
 from .snappi import Rocev2FlowMetricPerQP
 from .snappi import Rocev2FlowMetricPerQPIter
+from .snappi import EgressOnlyTrackingMetric
+from .snappi import EgressOnlyTrackingTaggedMetric
+from .snappi import EgressOnlyTrackingMetricTag
+from .snappi import EgressOnlyTrackingMetricTagIter
+from .snappi import EgressOnlyTrackingTimestamp
+from .snappi import EgressOnlyTrackingTxMetrics
+from .snappi import EgressOnlyTrackingTaggedMetricIter
+from .snappi import EgressOnlyTrackingMetricIter
 from .snappi import StatesRequest
 from .snappi import Neighborsv4StatesRequest
 from .snappi import Neighborsv6StatesRequest

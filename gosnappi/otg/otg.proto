@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.29.0
+/* Open Traffic Generator API 1.30.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -54,6 +54,14 @@ message Config {
 
   // Description missing in models
   StatefulFlow stateful_flows = 10;
+
+  // Container for specification of desired tracking, based on certain offset and length
+  // of bits
+  // for received packets on specified receive ports.
+  // It enables the user to retrieve information based on number of unique packets
+  // received for each unique value in the bits being tracked from the beginning of the
+  // test.
+  repeated EgressOnlyTracking egress_only_tracking = 11;
 }
 
 // Global configuration options.
@@ -12794,6 +12802,83 @@ message Rocev2ImmediateData {
   optional string immediate_data = 1;
 }
 
+// Egress tracking specification for a specified port.
+// An application which supports a single or limited number of egress tracking specifications
+// for a single port
+// should return an error if the number of egress tracking specifications for a specific
+// port or in total exceeds its capabilities.
+message EgressOnlyTracking {
+
+  // Name of the received port this egress tracking rule/specification has to be applied.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // required = true
+  optional string port_name = 1;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits
+  // in a corresponding header field for metrics per each applicable value.
+  // These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+  repeated EgressOnlyTrackingMetricTags metric_tags = 2;
+
+  // Enables additional metric first and last timestamps.
+  // default = False
+  optional bool enable_timestamps = 3;
+
+  // Specifies a rule which will be used to first filter received packets on this port
+  // 
+  // before applying the egress tracking metric_tags on them.
+  // If multiple filters are provided, then an incoming packet MUST pass all the filters.
+  // 
+  // If the packet does not pass any filter, it is not considered for egress tracking.
+  repeated EgressOnlyTrackingFilter filters = 4;
+}
+
+// Metric Tag can be used to enable tracking portion of or all bits
+// in a corresponding header field for metrics per each applicable value.
+// These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+message EgressOnlyTrackingMetricTags {
+
+  // The Name used to identify the metrics associated with the values applicable
+  // for configured offset and length inside corresponding header field.
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of the packet.
+  // required = true
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset
+  // from start of the packet.
+  // default = 1
+  optional uint32 length = 3;
+}
+
+// Description missing in models
+message EgressOnlyTrackingFilter {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      auto_macsec = 2;
+    }
+  }
+  // If a packet does not match the filter it will not be considered for egress tracking.
+  // Currently two options are provided: none: All packets will be considered for egress
+  // only tracking. auto_macsec: This requires that MACsec enabled Ethernet interface
+  // should be configured on this port.  This filter will ensure that only packets with
+  // Ethernet Type set to MACsec (0x88E5) and  destined to traffic Rx device(s) will be
+  // considered for egress only tracking
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+}
+
 // Port specific configurations.
 message PerPortOptions {
 
@@ -14201,6 +14286,7 @@ message MetricsRequest {
       rocev2_ipv4 = 19;
       rocev2_ipv6 = 20;
       rocev2_flow = 21;
+      egress_only_tracking = 22;
     }
   }
   // Description missing in models
@@ -14269,6 +14355,9 @@ message MetricsRequest {
 
   // Description missing in models
   Rocev2FlowMetricsRequest rocev2_flow = 22;
+
+  // Description missing in models
+  EgressOnlyTrackingMetricsRequest egress_only_tracking = 23;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -14298,6 +14387,7 @@ message MetricsResponse {
       rocev2_ipv4_per_peer_metrics = 19;
       rocev2_ipv6_per_peer_metrics = 20;
       rocev2_flow_per_qp_metrics = 21;
+      egress_only_tracking_metrics = 22;
     }
   }
   // Description missing in models
@@ -14366,6 +14456,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Rocev2FlowMetricPerQP rocev2_flow_per_qp_metrics = 22;
+
+  // Description missing in models
+  repeated EgressOnlyTrackingMetric egress_only_tracking_metrics = 23;
 }
 
 // The port result request to the traffic generator
@@ -16953,6 +17046,165 @@ message Rocev2FlowMetricPerQP {
 
   // Last Timestamp.
   optional string last_timestamp = 32;
+}
+
+// The container for a egress only tracking metric request.
+message EgressOnlyTrackingMetricsRequest {
+
+  // Egress only tracking metrics will be retrieved for these port names.
+  // If no port-names are provided, egress_only_tracking metrics will be returned for
+  // all ports
+  // which have one or more egress_only_tracking enabled.
+  // 
+  // x-constraint:
+  // - /components/schemas/EgressOnlyTracking/properties/port_name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/EgressOnlyTracking/properties/port_name
+  // 
+  repeated string port_names = 1;
+
+  // Description missing in models
+  EgressOnlyTrackingTaggedMetricsFilter tagged_metrics = 2;
+}
+
+// Filter for tagged metrics
+message EgressOnlyTrackingTaggedMetricsFilter {
+
+  // Controls inclusion/exclusion of tagged metrics where each underlying attribute has
+  // zero value or absent value.
+  // default = False
+  optional bool include_empty_metrics = 1;
+
+  message MetricNames {
+    enum Enum {
+      unspecified = 0;
+      frames_rx = 1;
+      bytes_rx = 2;
+      frames_rx_rate = 3;
+      rx_l1_rate_bps = 4;
+      rx_rate_bytes = 5;
+      rx_rate_bps = 6;
+      rx_rate_kbps = 7;
+      rx_rate_mbps = 8;
+      tx_metrics = 9;
+    }
+  }
+  // The list of metric names that the returned result set will contain. If the list is
+  // empty then all metrics will be returned. Note: tx_metrics is optional, it is applicable
+  // where implementation is able to retrieve transmitter information. In order to get
+  // Tx metrics, tx_metric must be added in metric_names and all supported Tx metrics
+  // will be returned as listed in metric response.
+  repeated MetricNames.Enum metric_names = 2;
+}
+
+// A container for egress-only-tracking metrics.
+// The container is keyed by the port_rx.
+message EgressOnlyTrackingMetric {
+
+  // The name of the receive port
+  optional string port_rx = 1;
+
+  // List of metrics corresponding to a set of values applicable
+  // for configured metric tags in egress packet header fields.
+  // The container is keyed by list of tag-value pairs.
+  repeated EgressOnlyTrackingTaggedMetric tagged_metrics = 2;
+}
+
+// Metrics for each set of values applicable for configured
+// metric tags in egress packet header fields.
+// The container is keyed by list of tag-value pairs.
+message EgressOnlyTrackingTaggedMetric {
+
+  // List of tag and value pairs
+  repeated EgressOnlyTrackingMetricTag tags = 1;
+
+  // The current total number of valid frames received
+  optional uint64 frames_rx = 2;
+
+  // The current total number of bytes received
+  optional uint64 bytes_rx = 3;
+
+  // The current rate of valid frames received
+  optional float frames_rx_rate = 4;
+
+  // Description missing in models
+  EgressOnlyTrackingTimestamp timestamps = 5;
+
+  // The Layer 1 receive rate in bits per second.
+  optional float rx_l1_rate_bps = 6;
+
+  // The receive rate in bytes per second.
+  optional float rx_rate_bytes = 7;
+
+  // The receive rate in bits per second.
+  optional float rx_rate_bps = 8;
+
+  // The receive rate in Kilobits per second.
+  optional float rx_rate_kbps = 9;
+
+  // The receive rate in Megabits per second.
+  optional float rx_rate_mbps = 10;
+
+  // Description missing in models
+  EgressOnlyTrackingTxMetrics tx_metrics = 11;
+}
+
+// Description missing in models
+message EgressOnlyTrackingMetricTag {
+
+  // Name of packet field metric tag
+  optional string name = 1;
+
+  // Value of packet field metric tag in hexadecimal format
+  optional string value = 2;
+}
+
+// The container for timestamp metrics.
+// The container will be empty if the timestamp has not been configured for the flow.
+message EgressOnlyTrackingTimestamp {
+
+  // First timestamp in nanoseconds
+  optional double first_timestamp_ns = 1;
+
+  // Last timestamp in nanoseconds
+  optional double last_timestamp_ns = 2;
+}
+
+// The container for tx metrics.
+// The container will be empty if the tx metrics has not been configured.
+message EgressOnlyTrackingTxMetrics {
+
+  // The name of the transmit port
+  optional string port_tx = 1;
+
+  // The current total number of frames transmitted
+  optional uint64 frames_tx = 2;
+
+  // The current total number of bytes transmitted
+  optional uint64 bytes_tx = 3;
+
+  // The current rate of frames transmitted
+  optional float frames_tx_rate = 4;
+
+  // The percentage of lost frames
+  optional float loss = 5;
+
+  // The Layer 1 transmission rate in bits per second.
+  optional float tx_l1_rate_bps = 6;
+
+  // The transmission rate in bytes per second.
+  optional float tx_rate_bytes = 7;
+
+  // The transmission rate in bits per second.
+  optional float tx_rate_bps = 8;
+
+  // The transmission rate in Kilobits per second.
+  optional float tx_rate_kbps = 9;
+
+  // The transmission rate in Megabits per second.
+  optional float tx_rate_mbps = 10;
 }
 
 // Request to traffic generator for states of choice

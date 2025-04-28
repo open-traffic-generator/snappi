@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.29.0
+  version: 1.30.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -300,6 +300,16 @@ components:
         stateful_flows:
           $ref: '#/components/schemas/StatefulFlow'
           x-field-uid: 10
+        egress_only_tracking:
+          description: "Container for specification of desired tracking, based on\
+            \ certain offset and length of bits \nfor received packets on specified\
+            \ receive ports. \nIt enables the user to retrieve information based on\
+            \ number of unique packets \nreceived for each unique value in the bits\
+            \ being tracked from the beginning of the test. "
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking'
+          x-field-uid: 11
     Config.Options:
       description: |-
         Global configuration options.
@@ -16899,6 +16909,103 @@ components:
           minimum: 1
           maximum: 8
           x-field-uid: 1
+    EgressOnlyTracking:
+      description: "Egress tracking specification for a specified port. \nAn application\
+        \ which supports a single or limited number of egress tracking specifications\
+        \ for a single port \nshould return an error if the number of egress tracking\
+        \ specifications for a specific port or in total exceeds its capabilities."
+      type: object
+      required:
+      - port_name
+      properties:
+        port_name:
+          description: |
+            Name of the received port this egress tracking rule/specification has to be applied.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
+        metric_tags:
+          description: |-
+            One or more metric tags can be used to enable tracking portion of or all bits
+            in a corresponding header field for metrics per each applicable value.
+            These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking.MetricTags'
+          x-field-uid: 2
+        enable_timestamps:
+          description: |-
+            Enables additional metric first and last timestamps.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        filters:
+          description: "Specifies a rule which will be used to first filter received\
+            \ packets on this port \nbefore applying the egress tracking metric_tags\
+            \ on them. \nIf multiple filters are provided, then an incoming packet\
+            \ MUST pass all the filters. \nIf the packet does not pass any filter,\
+            \ it is not considered for egress tracking."
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking.Filter'
+          x-field-uid: 4
+    EgressOnlyTracking.MetricTags:
+      description: |-
+        Metric Tag can be used to enable tracking portion of or all bits
+        in a corresponding header field for metrics per each applicable value.
+        These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+      type: object
+      required:
+      - name
+      - offset
+      properties:
+        name:
+          description: |-
+            The Name used to identify the metrics associated with the values applicable
+            for configured offset and length inside corresponding header field.
+          type: string
+          pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
+          x-field-uid: 1
+        offset:
+          description: |-
+            Offset in bits relative to start of the packet.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        length:
+          description: |-
+            Number of bits to track for metrics starting from configured offset
+            from start of the packet.
+          type: integer
+          format: uint32
+          default: 1
+          minimum: 1
+          x-field-uid: 3
+    EgressOnlyTracking.Filter:
+      type: object
+      properties:
+        choice:
+          description: |-
+            If a packet does not match the filter it will not be considered for egress tracking. Currently two options are provided: none: All packets will be considered for egress only tracking. auto_macsec: This requires that MACsec enabled Ethernet interface should be configured on this port.  This filter will ensure that only packets with Ethernet Type set to MACsec (0x88E5) and  destined to traffic Rx device(s) will be considered for egress only tracking
+          type: string
+          x-field-uid: 1
+          default: none
+          x-enum:
+            none:
+              x-field-uid: 1
+            auto_macsec:
+              x-field-uid: 2
+          enum:
+          - none
+          - auto_macsec
     PerPort.Options:
       description: |-
         Port specific configurations.
@@ -18689,6 +18796,8 @@ components:
               x-field-uid: 20
             rocev2_flow:
               x-field-uid: 21
+            egress_only_tracking:
+              x-field-uid: 22
           enum:
           - port
           - flow
@@ -18711,6 +18820,7 @@ components:
           - rocev2_ipv4
           - rocev2_ipv6
           - rocev2_flow
+          - egress_only_tracking
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -18774,6 +18884,9 @@ components:
         rocev2_flow:
           $ref: '#/components/schemas/Rocev2Flow.Metrics.Request'
           x-field-uid: 22
+        egress_only_tracking:
+          $ref: '#/components/schemas/EgressOnlyTracking.Metrics.Request'
+          x-field-uid: 23
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -18826,6 +18939,8 @@ components:
               x-field-uid: 20
             rocev2_flow_per_qp_metrics:
               x-field-uid: 21
+            egress_only_tracking_metrics:
+              x-field-uid: 22
           enum:
           - flow_metrics
           - port_metrics
@@ -18848,6 +18963,7 @@ components:
           - rocev2_ipv4_per_peer_metrics
           - rocev2_ipv6_per_peer_metrics
           - rocev2_flow_per_qp_metrics
+          - egress_only_tracking_metrics
         port_metrics:
           type: array
           items:
@@ -18953,6 +19069,11 @@ components:
           items:
             $ref: '#/components/schemas/Rocev2Flow.Metric.PerQP'
           x-field-uid: 22
+        egress_only_tracking_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking.Metric'
+          x-field-uid: 23
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -23499,6 +23620,251 @@ components:
             Last Timestamp.
           type: string
           x-field-uid: 32
+    EgressOnlyTracking.Metrics.Request:
+      description: |-
+        The container for a egress only tracking metric request.
+      type: object
+      properties:
+        port_names:
+          description: |
+            Egress only tracking metrics will be retrieved for these port names.
+            If no port-names are provided, egress_only_tracking metrics will be returned for all ports
+            which have one or more egress_only_tracking enabled.
+
+            x-constraint:
+            - /components/schemas/EgressOnlyTracking/properties/port_name
+
+
+            x-constraint:
+            - /components/schemas/EgressOnlyTracking/properties/port_name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/EgressOnlyTracking/properties/port_name
+          x-field-uid: 1
+        tagged_metrics:
+          $ref: '#/components/schemas/EgressOnlyTracking.TaggedMetrics.Filter'
+          x-field-uid: 2
+    EgressOnlyTracking.TaggedMetrics.Filter:
+      description: |-
+        Filter for tagged metrics
+      type: object
+      properties:
+        include_empty_metrics:
+          description: |-
+            Controls inclusion/exclusion of tagged metrics where each underlying attribute has zero value or absent value.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        metric_names:
+          description: |-
+            The list of metric names that the returned result set will contain. If the list is empty then all metrics will be returned. Note: tx_metrics is optional, it is applicable where implementation is able to retrieve transmitter information. In order to get Tx metrics, tx_metric must be added in metric_names and all supported Tx metrics will be returned as listed in metric response.
+          type: array
+          items:
+            type: string
+            x-enum:
+              frames_rx:
+                x-field-uid: 1
+              bytes_rx:
+                x-field-uid: 2
+              frames_rx_rate:
+                x-field-uid: 3
+              rx_l1_rate_bps:
+                x-field-uid: 4
+              rx_rate_bytes:
+                x-field-uid: 5
+              rx_rate_bps:
+                x-field-uid: 6
+              rx_rate_kbps:
+                x-field-uid: 7
+              rx_rate_mbps:
+                x-field-uid: 8
+              tx_metrics:
+                x-field-uid: 9
+            enum:
+            - frames_rx
+            - bytes_rx
+            - frames_rx_rate
+            - rx_l1_rate_bps
+            - rx_rate_bytes
+            - rx_rate_bps
+            - rx_rate_kbps
+            - rx_rate_mbps
+            - tx_metrics
+          x-field-uid: 2
+    EgressOnlyTracking.Metric:
+      description: |-
+        A container for egress-only-tracking metrics.
+        The container is keyed by the port_rx.
+      type: object
+      properties:
+        port_rx:
+          description: |-
+            The name of the receive port
+          type: string
+          x-field-uid: 1
+        tagged_metrics:
+          description: |-
+            List of metrics corresponding to a set of values applicable
+            for configured metric tags in egress packet header fields.
+            The container is keyed by list of tag-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking.TaggedMetric'
+          x-field-uid: 2
+    EgressOnlyTracking.TaggedMetric:
+      description: |-
+        Metrics for each set of values applicable for configured
+        metric tags in egress packet header fields.
+        The container is keyed by list of tag-value pairs.
+      type: object
+      properties:
+        tags:
+          description: |-
+            List of tag and value pairs
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressOnlyTracking.MetricTag'
+          x-field-uid: 1
+        frames_rx:
+          description: |-
+            The current total number of valid frames received
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        bytes_rx:
+          description: |-
+            The current total number of bytes received
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        frames_rx_rate:
+          description: |-
+            The current rate of valid frames received
+          type: number
+          x-field-uid: 4
+        timestamps:
+          $ref: '#/components/schemas/EgressOnlyTracking.Timestamp'
+          x-field-uid: 5
+        rx_l1_rate_bps:
+          description: |-
+            The Layer 1 receive rate in bits per second.
+          type: number
+          x-field-uid: 6
+        rx_rate_bytes:
+          description: |-
+            The receive rate in bytes per second.
+          type: number
+          x-field-uid: 7
+        rx_rate_bps:
+          description: |-
+            The receive rate in bits per second.
+          type: number
+          x-field-uid: 8
+        rx_rate_kbps:
+          description: |-
+            The receive rate in Kilobits per second.
+          type: number
+          x-field-uid: 9
+        rx_rate_mbps:
+          description: |-
+            The receive rate in Megabits per second.
+          type: number
+          x-field-uid: 10
+        tx_metrics:
+          $ref: '#/components/schemas/EgressOnlyTracking.TxMetrics'
+          x-field-uid: 11
+    EgressOnlyTracking.MetricTag:
+      type: object
+      properties:
+        name:
+          description: |-
+            Name of packet field metric tag
+          type: string
+          x-field-uid: 1
+        value:
+          description: |-
+            Value of packet field metric tag in hexadecimal format
+          type: string
+          format: hex
+          x-field-uid: 2
+    EgressOnlyTracking.Timestamp:
+      description: |-
+        The container for timestamp metrics.
+        The container will be empty if the timestamp has not been configured for the flow.
+      type: object
+      properties:
+        first_timestamp_ns:
+          description: |-
+            First timestamp in nanoseconds
+          type: number
+          format: double
+          x-field-uid: 1
+        last_timestamp_ns:
+          description: |-
+            Last timestamp in nanoseconds
+          type: number
+          format: double
+          x-field-uid: 2
+    EgressOnlyTracking.TxMetrics:
+      description: |-
+        The container for tx metrics.
+        The container will be empty if the tx metrics has not been configured.
+      type: object
+      properties:
+        port_tx:
+          description: |-
+            The name of the transmit port
+          type: string
+          x-field-uid: 1
+        frames_tx:
+          description: |-
+            The current total number of frames transmitted
+          type: integer
+          format: uint64
+          x-field-uid: 2
+        bytes_tx:
+          description: |-
+            The current total number of bytes transmitted
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        frames_tx_rate:
+          description: |-
+            The current rate of frames transmitted
+          type: number
+          x-field-uid: 4
+        loss:
+          description: |-
+            The percentage of lost frames
+          type: number
+          x-field-uid: 5
+        tx_l1_rate_bps:
+          description: |-
+            The Layer 1 transmission rate in bits per second.
+          type: number
+          x-field-uid: 6
+        tx_rate_bytes:
+          description: |-
+            The transmission rate in bytes per second.
+          type: number
+          x-field-uid: 7
+        tx_rate_bps:
+          description: |-
+            The transmission rate in bits per second.
+          type: number
+          x-field-uid: 8
+        tx_rate_kbps:
+          description: |-
+            The transmission rate in Kilobits per second.
+          type: number
+          x-field-uid: 9
+        tx_rate_mbps:
+          description: |-
+            The transmission rate in Megabits per second.
+          type: number
+          x-field-uid: 10
     States.Request:
       description: |-
         Request to traffic generator for states of choice

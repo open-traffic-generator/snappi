@@ -13,30 +13,31 @@ import (
 // ***** MetricsResponse *****
 type metricsResponse struct {
 	validation
-	obj                            *otg.MetricsResponse
-	marshaller                     marshalMetricsResponse
-	unMarshaller                   unMarshalMetricsResponse
-	portMetricsHolder              MetricsResponsePortMetricIter
-	flowMetricsHolder              MetricsResponseFlowMetricIter
-	bgpv4MetricsHolder             MetricsResponseBgpv4MetricIter
-	bgpv6MetricsHolder             MetricsResponseBgpv6MetricIter
-	isisMetricsHolder              MetricsResponseIsisMetricIter
-	lagMetricsHolder               MetricsResponseLagMetricIter
-	lacpMetricsHolder              MetricsResponseLacpMetricIter
-	lldpMetricsHolder              MetricsResponseLldpMetricIter
-	rsvpMetricsHolder              MetricsResponseRsvpMetricIter
-	dhcpv4ClientMetricsHolder      MetricsResponseDhcpv4ClientMetricIter
-	dhcpv4ServerMetricsHolder      MetricsResponseDhcpv4ServerMetricIter
-	dhcpv6ClientMetricsHolder      MetricsResponseDhcpv6ClientMetricIter
-	dhcpv6ServerMetricsHolder      MetricsResponseDhcpv6ServerMetricIter
-	ospfv2MetricsHolder            MetricsResponseOspfv2MetricIter
-	convergenceMetricsHolder       MetricsResponseConvergenceMetricIter
-	macsecMetricsHolder            MetricsResponseMacsecMetricIter
-	mkaMetricsHolder               MetricsResponseMkaMetricIter
-	ospfv3MetricsHolder            MetricsResponseOspfv3MetricIter
-	rocev2Ipv4PerPeerMetricsHolder MetricsResponseRocev2IPv4MetricPerPeerIter
-	rocev2Ipv6PerPeerMetricsHolder MetricsResponseRocev2IPv6MetricPerPeerIter
-	rocev2FlowPerQpMetricsHolder   MetricsResponseRocev2FlowMetricPerQPIter
+	obj                             *otg.MetricsResponse
+	marshaller                      marshalMetricsResponse
+	unMarshaller                    unMarshalMetricsResponse
+	portMetricsHolder               MetricsResponsePortMetricIter
+	flowMetricsHolder               MetricsResponseFlowMetricIter
+	bgpv4MetricsHolder              MetricsResponseBgpv4MetricIter
+	bgpv6MetricsHolder              MetricsResponseBgpv6MetricIter
+	isisMetricsHolder               MetricsResponseIsisMetricIter
+	lagMetricsHolder                MetricsResponseLagMetricIter
+	lacpMetricsHolder               MetricsResponseLacpMetricIter
+	lldpMetricsHolder               MetricsResponseLldpMetricIter
+	rsvpMetricsHolder               MetricsResponseRsvpMetricIter
+	dhcpv4ClientMetricsHolder       MetricsResponseDhcpv4ClientMetricIter
+	dhcpv4ServerMetricsHolder       MetricsResponseDhcpv4ServerMetricIter
+	dhcpv6ClientMetricsHolder       MetricsResponseDhcpv6ClientMetricIter
+	dhcpv6ServerMetricsHolder       MetricsResponseDhcpv6ServerMetricIter
+	ospfv2MetricsHolder             MetricsResponseOspfv2MetricIter
+	convergenceMetricsHolder        MetricsResponseConvergenceMetricIter
+	macsecMetricsHolder             MetricsResponseMacsecMetricIter
+	mkaMetricsHolder                MetricsResponseMkaMetricIter
+	ospfv3MetricsHolder             MetricsResponseOspfv3MetricIter
+	rocev2Ipv4PerPeerMetricsHolder  MetricsResponseRocev2IPv4MetricPerPeerIter
+	rocev2Ipv6PerPeerMetricsHolder  MetricsResponseRocev2IPv6MetricPerPeerIter
+	rocev2FlowPerQpMetricsHolder    MetricsResponseRocev2FlowMetricPerQPIter
+	egressOnlyTrackingMetricsHolder MetricsResponseEgressOnlyTrackingMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -285,6 +286,7 @@ func (obj *metricsResponse) setNil() {
 	obj.rocev2Ipv4PerPeerMetricsHolder = nil
 	obj.rocev2Ipv6PerPeerMetricsHolder = nil
 	obj.rocev2FlowPerQpMetricsHolder = nil
+	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -320,12 +322,12 @@ type MetricsResponse interface {
 	HasChoice() bool
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -368,6 +370,8 @@ type MetricsResponse interface {
 	Rocev2Ipv6PerPeerMetrics() MetricsResponseRocev2IPv6MetricPerPeerIter
 	// Rocev2FlowPerQpMetrics returns MetricsResponseRocev2FlowMetricPerQPIterIter, set in MetricsResponse
 	Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerQPIter
+	// EgressOnlyTrackingMetrics returns MetricsResponseEgressOnlyTrackingMetricIterIter, set in MetricsResponse
+	EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter
 	setNil()
 }
 
@@ -396,6 +400,7 @@ var MetricsResponseChoice = struct {
 	ROCEV2_IPV4_PER_PEER_METRICS MetricsResponseChoiceEnum
 	ROCEV2_IPV6_PER_PEER_METRICS MetricsResponseChoiceEnum
 	ROCEV2_FLOW_PER_QP_METRICS   MetricsResponseChoiceEnum
+	EGRESS_ONLY_TRACKING_METRICS MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:                 MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:                 MetricsResponseChoiceEnum("port_metrics"),
@@ -418,6 +423,7 @@ var MetricsResponseChoice = struct {
 	ROCEV2_IPV4_PER_PEER_METRICS: MetricsResponseChoiceEnum("rocev2_ipv4_per_peer_metrics"),
 	ROCEV2_IPV6_PER_PEER_METRICS: MetricsResponseChoiceEnum("rocev2_ipv6_per_peer_metrics"),
 	ROCEV2_FLOW_PER_QP_METRICS:   MetricsResponseChoiceEnum("rocev2_flow_per_qp_metrics"),
+	EGRESS_ONLY_TRACKING_METRICS: MetricsResponseChoiceEnum("egress_only_tracking_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
@@ -429,11 +435,6 @@ func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
 }
 
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
-}
-
 // getter for Dhcpv6Client to set choice
 func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
@@ -442,6 +443,11 @@ func (obj *metricsResponse) Dhcpv6Client() {
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
+}
+
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // description is TBD
@@ -459,6 +465,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.EgressOnlyTrackingMetrics = nil
+	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.obj.Rocev2FlowPerQpMetrics = nil
 	obj.rocev2FlowPerQpMetricsHolder = nil
 	obj.obj.Rocev2Ipv6PerPeerMetrics = nil
@@ -560,6 +568,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.ROCEV2_FLOW_PER_QP_METRICS {
 		obj.obj.Rocev2FlowPerQpMetrics = []*otg.Rocev2FlowMetricPerQP{}
+	}
+
+	if value == MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS {
+		obj.obj.EgressOnlyTrackingMetrics = []*otg.EgressOnlyTrackingMetric{}
 	}
 
 	return obj
@@ -2392,6 +2404,93 @@ func (obj *metricsResponseRocev2FlowMetricPerQPIter) appendHolderSlice(item Roce
 	return obj
 }
 
+// description is TBD
+// EgressOnlyTrackingMetrics returns a []EgressOnlyTrackingMetric
+func (obj *metricsResponse) EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(obj.obj.EgressOnlyTrackingMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS)
+	}
+	if obj.egressOnlyTrackingMetricsHolder == nil {
+		obj.egressOnlyTrackingMetricsHolder = newMetricsResponseEgressOnlyTrackingMetricIter(&obj.obj.EgressOnlyTrackingMetrics).setMsg(obj)
+	}
+	return obj.egressOnlyTrackingMetricsHolder
+}
+
+type metricsResponseEgressOnlyTrackingMetricIter struct {
+	obj                           *metricsResponse
+	egressOnlyTrackingMetricSlice []EgressOnlyTrackingMetric
+	fieldPtr                      *[]*otg.EgressOnlyTrackingMetric
+}
+
+func newMetricsResponseEgressOnlyTrackingMetricIter(ptr *[]*otg.EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	return &metricsResponseEgressOnlyTrackingMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseEgressOnlyTrackingMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseEgressOnlyTrackingMetricIter
+	Items() []EgressOnlyTrackingMetric
+	Add() EgressOnlyTrackingMetric
+	Append(items ...EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+	Set(index int, newObj EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+	Clear() MetricsResponseEgressOnlyTrackingMetricIter
+	clearHolderSlice() MetricsResponseEgressOnlyTrackingMetricIter
+	appendHolderSlice(item EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) setMsg(msg *metricsResponse) MetricsResponseEgressOnlyTrackingMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&egressOnlyTrackingMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Items() []EgressOnlyTrackingMetric {
+	return obj.egressOnlyTrackingMetricSlice
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Add() EgressOnlyTrackingMetric {
+	newObj := &otg.EgressOnlyTrackingMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &egressOnlyTrackingMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Append(items ...EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Set(index int, newObj EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.egressOnlyTrackingMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) Clear() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.EgressOnlyTrackingMetric{}
+		obj.egressOnlyTrackingMetricSlice = []EgressOnlyTrackingMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) clearHolderSlice() MetricsResponseEgressOnlyTrackingMetricIter {
+	if len(obj.egressOnlyTrackingMetricSlice) > 0 {
+		obj.egressOnlyTrackingMetricSlice = []EgressOnlyTrackingMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseEgressOnlyTrackingMetricIter) appendHolderSlice(item EgressOnlyTrackingMetric) MetricsResponseEgressOnlyTrackingMetricIter {
+	obj.egressOnlyTrackingMetricSlice = append(obj.egressOnlyTrackingMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2691,6 +2790,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.EgressOnlyTrackingMetrics) != 0 {
+
+		if set_default {
+			obj.EgressOnlyTrackingMetrics().clearHolderSlice()
+			for _, item := range obj.obj.EgressOnlyTrackingMetrics {
+				obj.EgressOnlyTrackingMetrics().appendHolderSlice(&egressOnlyTrackingMetric{obj: item})
+			}
+		}
+		for _, item := range obj.EgressOnlyTrackingMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -2780,6 +2893,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.Rocev2FlowPerQpMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.ROCEV2_FLOW_PER_QP_METRICS
+	}
+
+	if len(obj.obj.EgressOnlyTrackingMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

@@ -13,19 +13,20 @@ import (
 // ***** Config *****
 type config struct {
 	validation
-	obj                 *otg.Config
-	marshaller          marshalConfig
-	unMarshaller        unMarshalConfig
-	portsHolder         ConfigPortIter
-	lagsHolder          ConfigLagIter
-	layer1Holder        ConfigLayer1Iter
-	capturesHolder      ConfigCaptureIter
-	devicesHolder       ConfigDeviceIter
-	flowsHolder         ConfigFlowIter
-	eventsHolder        Event
-	optionsHolder       ConfigOptions
-	lldpHolder          ConfigLldpIter
-	statefulFlowsHolder StatefulFlow
+	obj                      *otg.Config
+	marshaller               marshalConfig
+	unMarshaller             unMarshalConfig
+	portsHolder              ConfigPortIter
+	lagsHolder               ConfigLagIter
+	layer1Holder             ConfigLayer1Iter
+	capturesHolder           ConfigCaptureIter
+	devicesHolder            ConfigDeviceIter
+	flowsHolder              ConfigFlowIter
+	eventsHolder             Event
+	optionsHolder            ConfigOptions
+	lldpHolder               ConfigLldpIter
+	statefulFlowsHolder      StatefulFlow
+	egressOnlyTrackingHolder ConfigEgressOnlyTrackingIter
 }
 
 func NewConfig() Config {
@@ -263,6 +264,7 @@ func (obj *config) setNil() {
 	obj.optionsHolder = nil
 	obj.lldpHolder = nil
 	obj.statefulFlowsHolder = nil
+	obj.egressOnlyTrackingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -340,6 +342,8 @@ type Config interface {
 	SetStatefulFlows(value StatefulFlow) Config
 	// HasStatefulFlows checks if StatefulFlows has been set in Config
 	HasStatefulFlows() bool
+	// EgressOnlyTracking returns ConfigEgressOnlyTrackingIterIter, set in Config
+	EgressOnlyTracking() ConfigEgressOnlyTrackingIter
 	setNil()
 }
 
@@ -1040,6 +1044,96 @@ func (obj *config) SetStatefulFlows(value StatefulFlow) Config {
 	return obj
 }
 
+// Container for specification of desired tracking, based on certain offset and length of bits
+// for received packets on specified receive ports.
+// It enables the user to retrieve information based on number of unique packets
+// received for each unique value in the bits being tracked from the beginning of the test.
+// EgressOnlyTracking returns a []EgressOnlyTracking
+func (obj *config) EgressOnlyTracking() ConfigEgressOnlyTrackingIter {
+	if len(obj.obj.EgressOnlyTracking) == 0 {
+		obj.obj.EgressOnlyTracking = []*otg.EgressOnlyTracking{}
+	}
+	if obj.egressOnlyTrackingHolder == nil {
+		obj.egressOnlyTrackingHolder = newConfigEgressOnlyTrackingIter(&obj.obj.EgressOnlyTracking).setMsg(obj)
+	}
+	return obj.egressOnlyTrackingHolder
+}
+
+type configEgressOnlyTrackingIter struct {
+	obj                     *config
+	egressOnlyTrackingSlice []EgressOnlyTracking
+	fieldPtr                *[]*otg.EgressOnlyTracking
+}
+
+func newConfigEgressOnlyTrackingIter(ptr *[]*otg.EgressOnlyTracking) ConfigEgressOnlyTrackingIter {
+	return &configEgressOnlyTrackingIter{fieldPtr: ptr}
+}
+
+type ConfigEgressOnlyTrackingIter interface {
+	setMsg(*config) ConfigEgressOnlyTrackingIter
+	Items() []EgressOnlyTracking
+	Add() EgressOnlyTracking
+	Append(items ...EgressOnlyTracking) ConfigEgressOnlyTrackingIter
+	Set(index int, newObj EgressOnlyTracking) ConfigEgressOnlyTrackingIter
+	Clear() ConfigEgressOnlyTrackingIter
+	clearHolderSlice() ConfigEgressOnlyTrackingIter
+	appendHolderSlice(item EgressOnlyTracking) ConfigEgressOnlyTrackingIter
+}
+
+func (obj *configEgressOnlyTrackingIter) setMsg(msg *config) ConfigEgressOnlyTrackingIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&egressOnlyTracking{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *configEgressOnlyTrackingIter) Items() []EgressOnlyTracking {
+	return obj.egressOnlyTrackingSlice
+}
+
+func (obj *configEgressOnlyTrackingIter) Add() EgressOnlyTracking {
+	newObj := &otg.EgressOnlyTracking{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &egressOnlyTracking{obj: newObj}
+	newLibObj.setDefault()
+	obj.egressOnlyTrackingSlice = append(obj.egressOnlyTrackingSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *configEgressOnlyTrackingIter) Append(items ...EgressOnlyTracking) ConfigEgressOnlyTrackingIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.egressOnlyTrackingSlice = append(obj.egressOnlyTrackingSlice, item)
+	}
+	return obj
+}
+
+func (obj *configEgressOnlyTrackingIter) Set(index int, newObj EgressOnlyTracking) ConfigEgressOnlyTrackingIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.egressOnlyTrackingSlice[index] = newObj
+	return obj
+}
+func (obj *configEgressOnlyTrackingIter) Clear() ConfigEgressOnlyTrackingIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.EgressOnlyTracking{}
+		obj.egressOnlyTrackingSlice = []EgressOnlyTracking{}
+	}
+	return obj
+}
+func (obj *configEgressOnlyTrackingIter) clearHolderSlice() ConfigEgressOnlyTrackingIter {
+	if len(obj.egressOnlyTrackingSlice) > 0 {
+		obj.egressOnlyTrackingSlice = []EgressOnlyTracking{}
+	}
+	return obj
+}
+func (obj *configEgressOnlyTrackingIter) appendHolderSlice(item EgressOnlyTracking) ConfigEgressOnlyTrackingIter {
+	obj.egressOnlyTrackingSlice = append(obj.egressOnlyTrackingSlice, item)
+	return obj
+}
+
 func (obj *config) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1156,6 +1250,20 @@ func (obj *config) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.StatefulFlows != nil {
 
 		obj.StatefulFlows().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.EgressOnlyTracking) != 0 {
+
+		if set_default {
+			obj.EgressOnlyTracking().clearHolderSlice()
+			for _, item := range obj.obj.EgressOnlyTracking {
+				obj.EgressOnlyTracking().appendHolderSlice(&egressOnlyTracking{obj: item})
+			}
+		}
+		for _, item := range obj.EgressOnlyTracking().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }
