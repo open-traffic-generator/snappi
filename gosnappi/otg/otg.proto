@@ -32324,6 +32324,8 @@ service Openapi {
   rpc streamSetConfig(stream Data) returns (SetConfigResponse);
   // Description missing in models
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
+  // streaming version of the rpc GetConfig
+  rpc streamGetConfig(google.protobuf.Empty) returns (stream Data);
   // Updates specific attributes of resources configured on the traffic generator. The
   // fetched configuration shall reflect the updates applied successfully.
   // The Response.Warnings in the Success response is available for implementers to disclose
@@ -32340,10 +32342,16 @@ service Openapi {
   rpc streamSetControlAction(stream Data) returns (SetControlActionResponse);
   // Description missing in models
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+  // streaming version of the rpc GetMetrics
+  rpc streamGetMetrics(GetMetricsRequest) returns (stream Data);
   // Description missing in models
   rpc GetStates(GetStatesRequest) returns (GetStatesResponse);
+  // streaming version of the rpc GetStates
+  rpc streamGetStates(GetStatesRequest) returns (stream Data);
   // Description missing in models
   rpc GetCapture(GetCaptureRequest) returns (GetCaptureResponse);
+  // streaming version of the rpc GetCapture
+  rpc streamGetCapture(GetCaptureRequest) returns (stream Data);
   // Description missing in models
   rpc GetVersion(google.protobuf.Empty) returns (GetVersionResponse);
 }
