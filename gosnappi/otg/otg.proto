@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.28.0
+/* Open Traffic Generator API 1.30.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -51,6 +51,17 @@ message Config {
 
   // LLDP protocol that will be configured on traffic generator.
   repeated Lldp lldp = 9;
+
+  // Description missing in models
+  StatefulFlow stateful_flows = 10;
+
+  // Container for specification of desired tracking, based on certain offset and length
+  // of bits
+  // for received packets on specified receive ports.
+  // It enables the user to retrieve information based on number of unique packets
+  // received for each unique value in the bits being tracked from the beginning of the
+  // test.
+  repeated EgressOnlyTracking egress_only_tracking = 11;
 }
 
 // Global configuration options.
@@ -61,6 +72,9 @@ message ConfigOptions {
 
   // Description missing in models
   ProtocolOptions protocol_options = 2;
+
+  // Description missing in models
+  repeated PerPortOptions per_port_options = 3;
 }
 
 // An abstract test port.
@@ -1729,6 +1743,9 @@ message Device {
 
   // Configuration for OSPFv3 router.
   DeviceOspfv3Router ospfv3 = 12;
+
+  // Configuration for RoCEv2.
+  DeviceRocev2Peer rocev2 = 13;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -9341,6 +9358,182 @@ message Ospfv3V6RRForwardingAddress {
   optional string custom = 2;
 }
 
+// Configuration for one or more IPv4 or IPv6 RoCEv2 Peers.
+message DeviceRocev2Peer {
+
+  // This contains an array of references to IPv4 interfaces, each having a list of IPv4
+  // peers to various destinations.
+  repeated Rocev2V4Interface ipv4_interfaces = 1;
+
+  // This contains an array references to IPv6 interfaces, each with a list of IPv6 peers
+  // for various destinations.
+  repeated Rocev2V6Interface ipv6_interfaces = 2;
+}
+
+// This contains an array of references to IPv4 interfaces, each having a list of IPv4
+// peers to various destinations.
+message Rocev2V4Interface {
+
+  // The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2
+  // peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 1;
+
+  // The InfiniBand protocol defines several fixed sizes for the Maximum Transmission
+  // Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload
+  // size that corresponds to the configured IB MTU. Additionally, it is possible to configure
+  // a custom size.
+  // default = 1024
+  optional uint32 ib_mtu = 2;
+
+  // This contains the list of RoCEv2 peers configured on this interface.
+  repeated Rocev2V4Peer peers = 3;
+}
+
+// Configuration for RoCEv2 IPv4 peers.
+message Rocev2V4Peer {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // Specify the destination ip address.
+  // required = true
+  optional string destination_ip_address = 2;
+
+  // This allows the user to set  multiple QPs and its properties between a pair of source
+  // and destination RoCEv2 devices.
+  repeated Rocev2QPs qps = 3;
+}
+
+// This allows the user to set QP properties between a particular source and destination.
+message Rocev2QPs {
+
+  // Name of each QP.
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string qp_name = 1;
+
+  // Description missing in models
+  Rocev2ConnectionType connection_type = 2;
+}
+
+// Specifies the connection type for the QP, determining what and how the QP transfers
+// data.
+message Rocev2ConnectionType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reliable_connection = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.reliable_connection
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2QPParameters reliable_connection = 2;
+}
+
+// Defines the parameters for configuring a RoCEv2 QP.
+message Rocev2QPParameters {
+
+  // Configure Source QP number which initiates the RDMA operation.
+  // default = 2
+  optional uint32 source_qp_number = 1;
+
+  // DSCP value for the RDMA data packets.
+  // default = 24
+  optional uint32 dscp = 2;
+
+  message Ecn {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // This field allows to configure bits of the Traffic Class field in the IPv4 or IPv6
+  // header to encode four different code points. Those are non_ect, ect_1, ect_0 and
+  // ce. non_ect quivalent is 00, ect_1 represent 01, ect_0 represent 10 and ce means
+  // 11.
+  // default = Ecn.Enum.ect_1
+  optional Ecn.Enum ecn = 3;
+
+  // UDP source port number for this QP.
+  // default = 49152
+  optional uint32 udp_source_port = 4;
+
+  // Initial packet sequence number of the data transfer packet generated for this QP.
+  // default = 0
+  optional uint64 initial_psn = 5;
+
+  // Virtual Address where the data transfer from the remote QP will write to.
+  // default = 0000000000000000
+  optional string virtual_address = 6;
+
+  // Remote Key linked to the QP's virtual address.
+  // default = 00000000
+  optional string remote_key = 7;
+}
+
+// This contains an array of references to IPv6 interfaces, each having a list of IPv6
+// peers to various destinations.
+message Rocev2V6Interface {
+
+  // The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 1;
+
+  // The InfiniBand protocol defines several fixed sizes for the Maximum Transmission
+  // Unit (IB MTU): 256, 512, 1024, 2048, or 4096 bytes. RDMA messages will have a payload
+  // size that corresponds to the configured IB MTU. Additionally, it is possible to configure
+  // a custom size.
+  // default = 1024
+  optional uint32 ib_mtu = 2;
+
+  // This contains the list of RoCEv2 IPv6 peers configured on this interface.
+  repeated Rocev2V6Peer peers = 3;
+}
+
+// Configuration for RoCEv2 IPv6 peer settings.
+message Rocev2V6Peer {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // Specify the destination ip address.
+  // required = true
+  optional string destination_ip_address = 2;
+
+  // This allows the user to set  multiple QPs and its properties between a pair of source
+  // and destination RoCEv2 devices.
+  repeated Rocev2QPs qps = 3;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -12450,6 +12643,509 @@ message LldpOrgInfoType {
   optional string info = 2;
 }
 
+// Conversational traffic where the responding side can be responded back with control
+// messages, eg incase of rocev2 responding side can send ack, nak.
+message StatefulFlow {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rocev2 = 1;
+    }
+  }
+  // Stateful traffic flow configuration.
+  optional Choice.Enum choice = 1;
+
+  // RoCEv2 Flow Groups.
+  repeated Rocev2Flows rocev2 = 2;
+}
+
+// RoCEv2 traffic flow configuration.
+message Rocev2Flows {
+
+  // Specifies the list of transmit (TX) ports used for sending RoCEv2 traffic.
+  repeated Rocev2TxPorts tx_ports = 1;
+}
+
+// Defines the transmit (TX) port settings for RoCEv2 traffic, including the port name
+// and transmission type configuration.
+message Rocev2TxPorts {
+
+  // The name of port for which this settings will be applied to.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  optional string port_name = 1;
+
+  // Description missing in models
+  Rocev2TransmitType transmit_type = 2;
+}
+
+// RoCEv2 flows can be configured to run in continuous mode or fixed iteration.
+message Rocev2TransmitType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      target_line_rate = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.target_line_rate
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2TargetLineRate target_line_rate = 2;
+}
+
+// Configure target line rate of traffic rate on this port as percentage of link speed.
+message Rocev2TargetLineRate {
+
+  // Target Line Rate as percentage of max line rate.
+  // default = 98
+  optional uint64 value = 1;
+
+  // Description missing in models
+  repeated Rocev2Flow flows = 2;
+}
+
+// Configure properties for a specific RoCE flow on the Tx port.
+message Rocev2Flow {
+
+  // The unique name of an emulated device that will be transmitting the flows.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  // required = true
+  optional string tx_endpoint = 1;
+
+  // The unique name of remote QP or port which be receiving the packets for the flow.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // - /components/schemas/Rocev2.QPs/properties/qp_name
+  // 
+  optional string rx_endpoint = 2;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 3;
+
+  // Description missing in models
+  Rocev2Verb rocev2_verb = 4;
+
+  // Length of Message that needs to be transmitted to the remote end-point.
+  // default = 1
+  optional uint32 message_size = 5;
+
+  message MessageSizeUnit {
+    enum Enum {
+      unspecified = 0;
+      bytes = 1;
+      kb = 2;
+      mb = 3;
+      gb = 4;
+    }
+  }
+  // Unit of the transfer message size. Available options are Bytes, KiloBtyes (KB), NegaBytes
+  // (MB) and GigaBytes (GB).
+  // default = MessageSizeUnit.Enum.mb
+  optional MessageSizeUnit.Enum message_size_unit = 6;
+}
+
+// RoCEv2 Verb. Available options are: WRITE, WRITE_With_Immediate, SEND, SEND_With_Immediate
+// and READ.
+message Rocev2Verb {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      write = 1;
+      write_with_immediate = 2;
+      send = 3;
+      send_with_immediate = 4;
+      read = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.write
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2ImmediateData write_with_immediate = 2;
+
+  // Description missing in models
+  Rocev2ImmediateData send_with_immediate = 3;
+}
+
+// Four bytes of immediate Data for SEND/WRITE with immediate.
+message Rocev2ImmediateData {
+
+  // Four bytes of immediate Data for SEND/WRITE with immediate.
+  // default = 00000000
+  optional string immediate_data = 1;
+}
+
+// Egress tracking specification for a specified port.
+// An application which supports a single or limited number of egress tracking specifications
+// for a single port
+// should return an error if the number of egress tracking specifications for a specific
+// port or in total exceeds its capabilities.
+message EgressOnlyTracking {
+
+  // Name of the received port this egress tracking rule/specification has to be applied.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // required = true
+  optional string port_name = 1;
+
+  // One or more metric tags can be used to enable tracking portion of or all bits
+  // in a corresponding header field for metrics per each applicable value.
+  // These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+  repeated EgressOnlyTrackingMetricTags metric_tags = 2;
+
+  // Enables additional metric first and last timestamps.
+  // default = False
+  optional bool enable_timestamps = 3;
+
+  // Specifies a rule which will be used to first filter received packets on this port
+  // 
+  // before applying the egress tracking metric_tags on them.
+  // If multiple filters are provided, then an incoming packet MUST pass all the filters.
+  // 
+  // If the packet does not pass any filter, it is not considered for egress tracking.
+  repeated EgressOnlyTrackingFilter filters = 4;
+}
+
+// Metric Tag can be used to enable tracking portion of or all bits
+// in a corresponding header field for metrics per each applicable value.
+// These would appear as tagged metrics in corresponding egress_only_tracking metrics.
+message EgressOnlyTrackingMetricTags {
+
+  // The Name used to identify the metrics associated with the values applicable
+  // for configured offset and length inside corresponding header field.
+  // required = true
+  optional string name = 1;
+
+  // Offset in bits relative to start of the packet.
+  // required = true
+  optional uint32 offset = 2;
+
+  // Number of bits to track for metrics starting from configured offset
+  // from start of the packet.
+  // default = 1
+  optional uint32 length = 3;
+}
+
+// Description missing in models
+message EgressOnlyTrackingFilter {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      auto_macsec = 2;
+    }
+  }
+  // If a packet does not match the filter it will not be considered for egress tracking.
+  // Currently two options are provided: none: All packets will be considered for egress
+  // only tracking. auto_macsec: This requires that MACsec enabled Ethernet interface
+  // should be configured on this port.  This filter will ensure that only packets with
+  // Ethernet Type set to MACsec (0x88E5) and  destined to traffic Rx device(s) will be
+  // considered for egress only tracking
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+}
+
+// Port specific configurations.
+message PerPortOptions {
+
+  // The name of port for which this settings will be applied to.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  optional string port_name = 1;
+
+  // Description missing in models
+  repeated PortProtocol protocols = 2;
+}
+
+// Supprted protocols.
+message PortProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      rocev2 = 1;
+    }
+  }
+  // list of protocols that have per port settings
+  // default = Choice.Enum.rocev2
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2PerPortSettings rocev2 = 2;
+}
+
+// Data plane traffic flow configuration for a test port.
+message Rocev2PerPortSettings {
+
+  // Description missing in models
+  Rocev2CNP cnp = 1;
+
+  // Description missing in models
+  Rocev2QPConnectionType connection_type = 2;
+
+  // Description missing in models
+  Rocev2DCQCN dcqcn_settings = 3;
+}
+
+// CNP parameters.
+message Rocev2CNP {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // IP DSCP value for the CNP packets.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // CNP ECN Value.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+
+  // The interval duration between the generation of successive CNP packets should be
+  // specified in microseconds.
+  // default = 55
+  optional uint32 cnp_delay_timer = 4;
+}
+
+// Specifies the connection type for the QP, determining what and how the QP transfers
+// data.
+message Rocev2QPConnectionType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reliable_connection = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.reliable_connection
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2AckAndNak reliable_connection = 2;
+}
+
+// Defines the ACK and NAK settings for RoCEv2. This configuration ensures reliable
+// data delivery by controlling how the system responds to successful and failed packet
+// transmissions.
+message Rocev2AckAndNak {
+
+  // Description missing in models
+  Rocev2ACK ack = 1;
+
+  // Description missing in models
+  Rocev2NAK nak = 2;
+
+  // Enable Retransmission on ACK Timeout.
+  // default = True
+  optional bool enable_retransmission_timeout = 3;
+
+  // The duration to wait before retrying transmission upon not receiving an acknowledgment
+  // (ACK) or negative acknowledgment (NAK) is specified in milliseconds.
+  // default = 1
+  optional uint32 retransmission_timeout_value = 4;
+
+  // Number of retransmission attempts before stopping due to missing ACK/NAK.
+  // default = 3
+  optional uint32 retransmission_retry_count = 5;
+}
+
+// ACK parameters.
+message Rocev2ACK {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // IP DSCP value for the ACK packets.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // ACK ECN Value.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+}
+
+// NAK parameters.
+message Rocev2NAK {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ip_dscp = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ip_dscp
+  optional Choice.Enum choice = 1;
+
+  // IP DSCP value for the NAK packets.
+  Rocev2PriorityValue ip_dscp = 2;
+
+  message EcnValue {
+    enum Enum {
+      unspecified = 0;
+      non_ect = 1;
+      ect_1 = 2;
+      ect_0 = 3;
+      ce = 4;
+    }
+  }
+  // ECN Code point to add in NAK packets.
+  // default = EcnValue.Enum.ect_1
+  optional EcnValue.Enum ecn_value = 3;
+}
+
+// Priority value for CNP, ACK or NAK packets.
+message Rocev2PriorityValue {
+
+  // Description missing in models
+  // default = 48
+  optional uint32 value = 1;
+}
+
+// RoCEv2 DCQCN Settings.
+message Rocev2DCQCN {
+
+  // Enable DCQCN port settigns.
+  // default = True
+  optional bool enable_dcqcn = 1;
+
+  // Controls the increment / decrement of the alpha parameter in DCQCN algorithm.
+  // default = 1019
+  optional uint64 alpha_g = 2;
+
+  // Value of the alpha at the time when the first CNP is received.
+  // default = 1023
+  optional uint64 initial_alpha = 3;
+
+  // timer after which the alpha parameter will update according to the algorithm. Unit
+  // is microseconds.
+  // default = 21
+  optional uint64 alpha_update_period = 4;
+
+  // timer after which the algorithm will check if CNP is there or not and if CNP is present
+  // it will reduce the rate.
+  // Unit is microseconds.
+  // default = 21
+  optional uint64 rate_reduction_time_period = 5;
+
+  // This is the percentage of rate user wants to set on receiving the first CNP.
+  // default = 0.002
+  optional float initial_rate_after_first_cnp = 6;
+
+  // This is the minimum line rate which user wants to restrict. Below this the algorithm
+  // cannot set the rate.
+  // default = 0.002
+  optional float minimum_rate_limmit = 7;
+
+  // This is the maximum that line rate can be decreased on triggering a rate reduce algorithm.
+  // default = 10
+  optional uint32 maximum_rate_decrement_at_time = 8;
+
+  // Is used to reduce the target rate by remembering the current rate.
+  // If it is not set, then only the target rate will be reduced for the
+  // first CNP after each rate increment otherwise if its set then the target
+  // rate will be reduced for each rate reduce.
+  // default = False
+  optional bool clamp_target_rate = 9;
+
+  // After the expiry of this timer, the rate recovery algorithms will be triggered. Unit
+  // is microseconds.
+  // default = 250
+  optional uint64 rate_increment_time = 10;
+
+  // This is the bytes counter.
+  // After the expiry of this bytes also counter the rate recovery algorithms will be
+  // triggered, and the rate will be recovered.
+  // default = 32767
+  optional uint64 rate_increment_byte_counter = 11;
+
+  // This is the threshold value which will ensure how many times, each rate recovery
+  // algorithms will execute before moving to the next value.
+  // default = 25
+  optional uint32 rate_increment_threshold = 12;
+
+  // This is the rate at which the target rates will increase when the DCQCN will be in
+  // the additive increase rate recovery mode.
+  // default = 0.001
+  optional float additive_increment_rate = 13;
+
+  // This is the rate at which the target rates will increase when the DCQCN will be in
+  // the hyper increment rate recovery mode.
+  // default = 0.001
+  optional float hyper_increment_rate = 14;
+}
+
 // Error response generated while serving API request.
 message Error {
 
@@ -12622,6 +13318,9 @@ message StateProtocol {
 
   // Description missing in models
   StateProtocolOspfv3 ospfv3 = 8;
+
+  // Description missing in models
+  StateProtocolRocev2 rocev2 = 9;
 }
 
 // Sets the link of configured ports.
@@ -13039,6 +13738,55 @@ message StateProtocolOspfv3Routers {
   // bring up the OSPFv3 session(s) with respective peer(s) and advertise route(s), if
   // configured. If the desired state is 'down', would bring down OSPFv3 session(s) with
   // respective peer(s).
+  // required = true
+  optional State.Enum state = 2;
+}
+
+// Sets state of configured RoCEv2 peers.
+message StateProtocolRocev2 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      peers = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  StateProtocolRocev2Peers peers = 2;
+}
+
+// Sets state of configured RoCEv2 peers.
+message StateProtocolRocev2Peers {
+
+  // The names of RoCEv2 peers for which the state has to be applied. An empty or null
+  // list will control all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V4Peer/properties/name
+  // - /components/schemas/Rocev2.V6Peer/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V4Peer/properties/name
+  // - /components/schemas/Rocev2.V6Peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message State {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The desired state of RoCEv2 peer. If the desired state is 'up', underlying IP interface(s)
+  // would be brought up automatically (if not already up),
+  // would attempt to bring up the RoCEv2 session(s).
+  // If the desired state is 'down', RoCEv2 session(s) would be brought down.
   // required = true
   optional State.Enum state = 2;
 }
@@ -13535,6 +14283,10 @@ message MetricsRequest {
       macsec = 16;
       mka = 17;
       ospfv3 = 18;
+      rocev2_ipv4 = 19;
+      rocev2_ipv6 = 20;
+      rocev2_flow = 21;
+      egress_only_tracking = 22;
     }
   }
   // Description missing in models
@@ -13594,6 +14346,18 @@ message MetricsRequest {
 
   // Description missing in models
   Ospfv3MetricsRequest ospfv3 = 19;
+
+  // Description missing in models
+  Rocev2IPv4MetricsRequest rocev2_ipv4 = 20;
+
+  // Description missing in models
+  Rocev2IPv6MetricsRequest rocev2_ipv6 = 21;
+
+  // Description missing in models
+  Rocev2FlowMetricsRequest rocev2_flow = 22;
+
+  // Description missing in models
+  EgressOnlyTrackingMetricsRequest egress_only_tracking = 23;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -13620,6 +14384,10 @@ message MetricsResponse {
       macsec_metrics = 16;
       mka_metrics = 17;
       ospfv3_metrics = 18;
+      rocev2_ipv4_per_peer_metrics = 19;
+      rocev2_ipv6_per_peer_metrics = 20;
+      rocev2_flow_per_qp_metrics = 21;
+      egress_only_tracking_metrics = 22;
     }
   }
   // Description missing in models
@@ -13679,6 +14447,18 @@ message MetricsResponse {
 
   // Description missing in models
   repeated Ospfv3Metric ospfv3_metrics = 19;
+
+  // Description missing in models
+  repeated Rocev2IPv4MetricPerPeer rocev2_ipv4_per_peer_metrics = 20;
+
+  // Description missing in models
+  repeated Rocev2IPv6MetricPerPeer rocev2_ipv6_per_peer_metrics = 21;
+
+  // Description missing in models
+  repeated Rocev2FlowMetricPerQP rocev2_flow_per_qp_metrics = 22;
+
+  // Description missing in models
+  repeated EgressOnlyTrackingMetric egress_only_tracking_metrics = 23;
 }
 
 // The port result request to the traffic generator
@@ -15879,6 +16659,552 @@ message Ospfv3Metric {
 
   // The number of OSPFv3 Intra-Area-Prefix (Type 9) LSAs received.
   optional uint64 intra_area_prefix_lsa_received = 32;
+}
+
+// Request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+message Rocev2IPv4MetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      per_peer = 1;
+    }
+  }
+  // Fetch stats per_peer
+  // default = Choice.Enum.per_peer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2IPv4ColumnNames per_peer = 2;
+}
+
+// The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
+// results for all RoCEv2 peers.
+message Rocev2IPv4ColumnNames {
+
+  // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V4peer/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V4peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      qp_configured = 1;
+      qp_up = 2;
+      qp_down = 3;
+      connect_request_tx = 4;
+      connect_request_rx = 5;
+      connect_reply_tx = 6;
+      connect_reply_rx = 7;
+      ready_tx = 8;
+      ready_rx = 9;
+      disconnect_request_tx = 10;
+      disconnect_request_rx = 11;
+      disconnect_reply_tx = 12;
+      disconnect_reply_rx = 13;
+      reject_tx = 14;
+      reject_rx = 15;
+      unknown_msg_rx = 16;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the RoCEv2 peer cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// RoCEv2 per peer statistics information.
+message Rocev2IPv4MetricPerPeer {
+
+  // The name of a configured RoCEv2 peer.
+  optional string name = 1;
+
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 2;
+
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 3;
+
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 4;
+
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 5;
+
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 6;
+
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 8;
+
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 9;
+
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 10;
+
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 11;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 12;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 13;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 14;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 15;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 16;
+
+  // Number of Unknown Message Received.
+  optional uint64 unknown_msg_rx = 17;
+}
+
+// Request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+message Rocev2IPv6MetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      per_peer = 1;
+    }
+  }
+  // Fetch stats per_peer
+  // default = Choice.Enum.per_peer
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2IPv6ColumnNames per_peer = 2;
+}
+
+// The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
+// results for all RoCEv2 peers.
+message Rocev2IPv6ColumnNames {
+
+  // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
+  // results for all RoCEv2 peers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V6peer/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Rocev2.V6peer/properties/name
+  // 
+  repeated string peer_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      qp_configured = 1;
+      qp_up = 2;
+      qp_down = 3;
+      connect_request_tx = 4;
+      connect_request_rx = 5;
+      connect_reply_tx = 6;
+      connect_reply_rx = 7;
+      ready_tx = 8;
+      ready_rx = 9;
+      disconnect_request_tx = 10;
+      disconnect_request_rx = 11;
+      disconnect_reply_tx = 12;
+      disconnect_reply_rx = 13;
+      reject_tx = 14;
+      reject_rx = 15;
+      unknown_msg_rx = 16;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the RoCEv2 peer cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// RoCEv2 per peer statistics information.
+message Rocev2IPv6MetricPerPeer {
+
+  // The name of a configured RoCEv2 peer.
+  optional string name = 1;
+
+  // Number of QPs configured on this port.
+  optional uint64 qp_configured = 2;
+
+  // Number of QPs that are in UP state.
+  optional uint64 qp_up = 3;
+
+  // Number of QPs that have not come UP.
+  optional uint64 qp_down = 4;
+
+  // Number of REQ Message Transmitted.
+  optional uint64 connect_request_tx = 5;
+
+  // Number of REQ Message Received.
+  optional uint64 connect_request_rx = 6;
+
+  // Number of REP Message Transmitted.
+  optional uint64 connect_reply_tx = 8;
+
+  // Number of REP Message Received.
+  optional uint64 connect_reply_rx = 9;
+
+  // Number of RTU Message Transmitted.
+  optional uint64 ready_tx = 10;
+
+  // Number of RTU Message Received.
+  optional uint64 ready_rx = 11;
+
+  // Number of DREQ Message Transmitted.
+  optional uint64 disconnect_request_tx = 12;
+
+  // Number of DREQ Message Received.
+  optional uint64 disconnect_request_rx = 13;
+
+  // Number of DREP Message Transmitted.
+  optional uint64 disconnect_reply_tx = 14;
+
+  // Number of DREP Message Received.
+  optional uint64 disconnect_reply_rx = 15;
+
+  // Number of REJ Message Transmitted.
+  optional uint64 reject_tx = 16;
+
+  // Number of Unknown Message Received.
+  optional uint64 unknown_msg_rx = 17;
+}
+
+// Request to retrieve RoCEv2 FLow statistics.
+message Rocev2FlowMetricsRequest {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      per_qp = 1;
+    }
+  }
+  // Fetch stats per QP
+  // default = Choice.Enum.per_qp
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  Rocev2FlowColumnNames per_qp = 2;
+}
+
+// The names of RoCEv2 flows. An empty list will return results for all RoCEv2 flows.
+message Rocev2FlowColumnNames {
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      flow_name = 1;
+      port_tx = 2;
+      port_rx = 3;
+      src_qp = 4;
+      dest_qp = 5;
+      src_ipv4 = 6;
+      dest_ipv4 = 7;
+      data_frames_tx = 8;
+      data_frames_rx = 9;
+      frame_delta = 10;
+      data_frames_retransmitted = 11;
+      frame_sequence_error = 12;
+      tx_bytes = 13;
+      rx_bytes = 14;
+      data_tx_rate = 15;
+      data_rx_rate = 16;
+      message_tx = 17;
+      message_complete_rx = 18;
+      message_fail = 19;
+      flow_completion_time = 20;
+      avg_latency = 21;
+      min_latency = 22;
+      max_latency = 23;
+      ecn_ce_rx = 24;
+      cnp_tx = 25;
+      cnp_rx = 26;
+      ack_tx = 27;
+      ack_rx = 28;
+      nak_tx = 29;
+      nak_rx = 30;
+      first_timestamp = 31;
+      last_timestamp = 32;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the Flow cannot be excluded.
+  repeated ColumnNames.Enum column_names = 1;
+}
+
+// RoCEv2 Flow statistics information.
+message Rocev2FlowMetricPerQP {
+
+  // Flow Name.
+  optional string flow_name = 1;
+
+  // The name of the transmit port
+  optional string port_tx = 2;
+
+  // The name of the receive port
+  optional string port_rx = 3;
+
+  // Current source QP number.
+  optional uint64 src_qp = 4;
+
+  // Current destination QP number.
+  optional uint64 dest_qp = 5;
+
+  // Current source address.
+  optional string src_ipv4 = 6;
+
+  // Current destination address.
+  optional string dest_ipv4 = 7;
+
+  // Current number of data frames transmitted.
+  optional uint64 data_frames_tx = 8;
+
+  // Current number of data frames received.
+  optional uint64 data_frames_rx = 9;
+
+  // Current differnece between tx and rx data frames
+  optional uint64 frame_delta = 10;
+
+  // Current number of data frames re-transmitted.
+  optional uint64 data_frames_retransmitted = 11;
+
+  // Current number of frame sequence errors.
+  optional uint64 frame_sequence_error = 12;
+
+  // Current number of bytes transmitted.
+  optional uint64 tx_bytes = 13;
+
+  // Current number of bytes received.
+  optional uint64 rx_bytes = 14;
+
+  // Current rate at which data is transmitted in Gbps.
+  optional uint64 data_tx_rate = 15;
+
+  // Current rate at which data is received in Gbps.
+  optional uint64 data_rx_rate = 16;
+
+  // Current number of Message transmitted.
+  optional uint64 message_tx = 17;
+
+  // Current number of Message Complete received.
+  optional uint64 message_complete_rx = 18;
+
+  // Current number of Message Fail count.
+  optional uint64 message_fail = 19;
+
+  // Current flow comletion time in ms.
+  optional uint64 flow_completion_time = 20;
+
+  // Current average latency measured in ns.
+  optional uint64 avg_latency = 21;
+
+  // Current minimum latency measured in ns.
+  optional uint64 min_latency = 22;
+
+  // Current maximum latency measured in ns.
+  optional uint64 max_latency = 23;
+
+  // Current number of ECN-CE Recevied.
+  optional uint64 ecn_ce_rx = 24;
+
+  // Current number of CNP transmitted.
+  optional uint64 cnp_tx = 25;
+
+  // Current number of CNP received.
+  optional uint64 cnp_rx = 26;
+
+  // Current number of ACK transmitted.
+  optional uint64 ack_tx = 27;
+
+  // Current number of ACK received.
+  optional uint64 ack_rx = 28;
+
+  // Current number of NAK transmitted.
+  optional uint64 nak_tx = 29;
+
+  // Current number of NAK received.
+  optional uint64 nak_rx = 30;
+
+  // First Timestamp.
+  optional string first_timestamp = 31;
+
+  // Last Timestamp.
+  optional string last_timestamp = 32;
+}
+
+// The container for a egress only tracking metric request.
+message EgressOnlyTrackingMetricsRequest {
+
+  // Egress only tracking metrics will be retrieved for these port names.
+  // If no port-names are provided, egress_only_tracking metrics will be returned for
+  // all ports
+  // which have one or more egress_only_tracking enabled.
+  // 
+  // x-constraint:
+  // - /components/schemas/EgressOnlyTracking/properties/port_name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/EgressOnlyTracking/properties/port_name
+  // 
+  repeated string port_names = 1;
+
+  // Description missing in models
+  EgressOnlyTrackingTaggedMetricsFilter tagged_metrics = 2;
+}
+
+// Filter for tagged metrics
+message EgressOnlyTrackingTaggedMetricsFilter {
+
+  // Controls inclusion/exclusion of tagged metrics where each underlying attribute has
+  // zero value or absent value.
+  // default = False
+  optional bool include_empty_metrics = 1;
+
+  message MetricNames {
+    enum Enum {
+      unspecified = 0;
+      frames_rx = 1;
+      bytes_rx = 2;
+      frames_rx_rate = 3;
+      rx_l1_rate_bps = 4;
+      rx_rate_bytes = 5;
+      rx_rate_bps = 6;
+      rx_rate_kbps = 7;
+      rx_rate_mbps = 8;
+      tx_metrics = 9;
+    }
+  }
+  // The list of metric names that the returned result set will contain. If the list is
+  // empty then all metrics will be returned. Note: tx_metrics is optional, it is applicable
+  // where implementation is able to retrieve transmitter information. In order to get
+  // Tx metrics, tx_metric must be added in metric_names and all supported Tx metrics
+  // will be returned as listed in metric response.
+  repeated MetricNames.Enum metric_names = 2;
+}
+
+// A container for egress-only-tracking metrics.
+// The container is keyed by the port_rx.
+message EgressOnlyTrackingMetric {
+
+  // The name of the receive port
+  optional string port_rx = 1;
+
+  // List of metrics corresponding to a set of values applicable
+  // for configured metric tags in egress packet header fields.
+  // The container is keyed by list of tag-value pairs.
+  repeated EgressOnlyTrackingTaggedMetric tagged_metrics = 2;
+}
+
+// Metrics for each set of values applicable for configured
+// metric tags in egress packet header fields.
+// The container is keyed by list of tag-value pairs.
+message EgressOnlyTrackingTaggedMetric {
+
+  // List of tag and value pairs
+  repeated EgressOnlyTrackingMetricTag tags = 1;
+
+  // The current total number of valid frames received
+  optional uint64 frames_rx = 2;
+
+  // The current total number of bytes received
+  optional uint64 bytes_rx = 3;
+
+  // The current rate of valid frames received
+  optional float frames_rx_rate = 4;
+
+  // Description missing in models
+  EgressOnlyTrackingTimestamp timestamps = 5;
+
+  // The Layer 1 receive rate in bits per second.
+  optional float rx_l1_rate_bps = 6;
+
+  // The receive rate in bytes per second.
+  optional float rx_rate_bytes = 7;
+
+  // The receive rate in bits per second.
+  optional float rx_rate_bps = 8;
+
+  // The receive rate in Kilobits per second.
+  optional float rx_rate_kbps = 9;
+
+  // The receive rate in Megabits per second.
+  optional float rx_rate_mbps = 10;
+
+  // Description missing in models
+  EgressOnlyTrackingTxMetrics tx_metrics = 11;
+}
+
+// Description missing in models
+message EgressOnlyTrackingMetricTag {
+
+  // Name of packet field metric tag
+  optional string name = 1;
+
+  // Value of packet field metric tag in hexadecimal format
+  optional string value = 2;
+}
+
+// The container for timestamp metrics.
+// The container will be empty if the timestamp has not been configured for the flow.
+message EgressOnlyTrackingTimestamp {
+
+  // First timestamp in nanoseconds
+  optional double first_timestamp_ns = 1;
+
+  // Last timestamp in nanoseconds
+  optional double last_timestamp_ns = 2;
+}
+
+// The container for tx metrics.
+// The container will be empty if the tx metrics has not been configured.
+message EgressOnlyTrackingTxMetrics {
+
+  // The name of the transmit port
+  optional string port_tx = 1;
+
+  // The current total number of frames transmitted
+  optional uint64 frames_tx = 2;
+
+  // The current total number of bytes transmitted
+  optional uint64 bytes_tx = 3;
+
+  // The current rate of frames transmitted
+  optional float frames_tx_rate = 4;
+
+  // The percentage of lost frames
+  optional float loss = 5;
+
+  // The Layer 1 transmission rate in bits per second.
+  optional float tx_l1_rate_bps = 6;
+
+  // The transmission rate in bytes per second.
+  optional float tx_rate_bytes = 7;
+
+  // The transmission rate in bits per second.
+  optional float tx_rate_bps = 8;
+
+  // The transmission rate in Kilobits per second.
+  optional float tx_rate_kbps = 9;
+
+  // The transmission rate in Megabits per second.
+  optional float tx_rate_mbps = 10;
 }
 
 // Request to traffic generator for states of choice

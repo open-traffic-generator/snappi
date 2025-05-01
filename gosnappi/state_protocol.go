@@ -23,6 +23,7 @@ type stateProtocol struct {
 	isisHolder   StateProtocolIsis
 	ospfv2Holder StateProtocolOspfv2
 	ospfv3Holder StateProtocolOspfv3
+	rocev2Holder StateProtocolRocev2
 }
 
 func NewStateProtocol() StateProtocol {
@@ -257,6 +258,7 @@ func (obj *stateProtocol) setNil() {
 	obj.isisHolder = nil
 	obj.ospfv2Holder = nil
 	obj.ospfv3Holder = nil
+	obj.rocev2Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -346,6 +348,14 @@ type StateProtocol interface {
 	SetOspfv3(value StateProtocolOspfv3) StateProtocol
 	// HasOspfv3 checks if Ospfv3 has been set in StateProtocol
 	HasOspfv3() bool
+	// Rocev2 returns StateProtocolRocev2, set in StateProtocol.
+	// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
+	Rocev2() StateProtocolRocev2
+	// SetRocev2 assigns StateProtocolRocev2 provided by user to StateProtocol.
+	// StateProtocolRocev2 is sets state of configured RoCEv2 peers.
+	SetRocev2(value StateProtocolRocev2) StateProtocol
+	// HasRocev2 checks if Rocev2 has been set in StateProtocol
+	HasRocev2() bool
 	setNil()
 }
 
@@ -625,6 +635,34 @@ func (obj *stateProtocol) SetOspfv3(value StateProtocolOspfv3) StateProtocol {
 	return obj
 }
 
+// description is TBD
+// Rocev2 returns a StateProtocolRocev2
+func (obj *stateProtocol) Rocev2() StateProtocolRocev2 {
+	if obj.obj.Rocev2 == nil {
+		obj.obj.Rocev2 = NewStateProtocolRocev2().msg()
+	}
+	if obj.rocev2Holder == nil {
+		obj.rocev2Holder = &stateProtocolRocev2{obj: obj.obj.Rocev2}
+	}
+	return obj.rocev2Holder
+}
+
+// description is TBD
+// Rocev2 returns a StateProtocolRocev2
+func (obj *stateProtocol) HasRocev2() bool {
+	return obj.obj.Rocev2 != nil
+}
+
+// description is TBD
+// SetRocev2 sets the StateProtocolRocev2 value in the StateProtocol object
+func (obj *stateProtocol) SetRocev2(value StateProtocolRocev2) StateProtocol {
+
+	obj.rocev2Holder = nil
+	obj.obj.Rocev2 = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -668,6 +706,11 @@ func (obj *stateProtocol) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv3 != nil {
 
 		obj.Ospfv3().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2 != nil {
+
+		obj.Rocev2().validateObj(vObj, set_default)
 	}
 
 }
