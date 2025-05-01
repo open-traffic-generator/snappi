@@ -375,3 +375,74 @@ func (s *server) StreamSetConfig(srv otg.Openapi_StreamSetConfigServer) error {
 	}
 
 }
+
+func (s *server) StreamGetConfig(in *emptypb.Empty, srv otg.Openapi_StreamGetConfigServer) error {
+	config := NewConfig()
+	port1 := config.Ports().Add().SetName("p1")
+	port2 := config.Ports().Add().SetName("p2")
+	flow1 := config.Flows().Add().SetName("f1")
+	flow1.TxRx().Port().SetTxName(port1.Name()).SetRxName(port2.Name())
+
+	eth := flow1.Packet().Add().Ethernet()
+	eth.Src()
+	eth.Dst()
+	eth.EtherType()
+
+	ipv4 := flow1.Packet().Add().Ipv4()
+	ipv4.Src()
+	ipv4.Dst()
+	ipv4.Version()
+	ipv4.Priority()
+
+	udp := flow1.Packet().Add().Udp()
+	udp.SrcPort()
+	udp.DstPort()
+	udp.Checksum()
+
+	flow1.Duration().Continuous()
+	flow1.Rate()
+	text, err := config.Marshal().ToPbText()
+	if err != nil {
+		return err
+	}
+	bytes := []byte(text)
+	chunkSize := 50
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &otg.Data{}
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := srv.Send(data); err != nil {
+			fmt.Printf("Failed to send: %v\n", err)
+			return err
+		}
+		fmt.Printf("Sent: %v\n", data)
+	}
+
+	fmt.Println("Finished streaming")
+	return nil
+}
+
+func (s *server) StreamGetCapture(in *otg.GetCaptureRequest, srv otg.Openapi_StreamGetCaptureServer) error {
+	fmt.Println(in)
+	bytes := []byte("Hello how are you ?\nHello how are you ?\nHello how are you ?\nHello how are you ?\nHello how are you ?\nHello how are you ?\n")
+	chunkSize := 10
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &otg.Data{}
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := srv.Send(data); err != nil {
+			fmt.Printf("Failed to send: %v\n", err)
+			return err
+		}
+		fmt.Printf("Sent: %v\n", data)
+	}
+
+	fmt.Println("Finished streaming")
+	return nil
+}

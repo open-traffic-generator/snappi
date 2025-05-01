@@ -1117,3 +1117,24 @@ func TestGrpcStreamConfigApi(t *testing.T) {
 	assert.NotNil(t, status)
 	assert.Nil(t, _error)
 }
+
+func TestGrpcStreamGetConfigApi(t *testing.T) {
+	api := gosnappi.NewApi()
+	grpc := api.NewGrpcTransport()
+	grpc.SetLocation(mockGrpcServerLocation).EnableGrpcStreaming()
+	cfg, _error := api.GetConfig()
+	assert.NotNil(t, cfg)
+	assert.Nil(t, _error)
+	fmt.Println(cfg)
+}
+
+func TestGrpcStreamGetCaptureApi(t *testing.T) {
+	api := gosnappi.NewApi()
+	grpc := api.NewGrpcTransport()
+	grpc.SetLocation(mockGrpcServerLocation).EnableGrpcStreaming()
+	cap := gosnappi.NewCaptureRequest().SetPortName("p1")
+	cfg, _error := api.GetCapture(cap)
+	assert.NotNil(t, cfg)
+	assert.Nil(t, _error)
+	fmt.Println(cfg, string(cfg))
+}
