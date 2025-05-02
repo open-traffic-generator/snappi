@@ -1263,7 +1263,9 @@ from .snappi import DeviceBgpCustomError
 from .snappi import ActionProtocolBgpInitiateGracefulRestart
 from .snappi import ActionProtocolBgpGracefulRestartNotification
 from .snappi import ActionProtocolIsis
-from .snappi import IsisActionProtocolIsisStartParams
+from .snappi import IsisActionProtocolIsisInitiateRestart
+from .snappi import IsisActionProtocolIsisUnplannedRestart
+from .snappi import IsisActionProtocolIsisSubpressAdjacency
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol
@@ -1360,6 +1362,7 @@ from .snappi import Dhcpv6InterfaceStateRequest
 from .snappi import Dhcpv6LeaseStateRequest
 from .snappi import Ospfv2LsasStateRequest
 from .snappi import Ospfv3LsasStateRequest
+from .snappi import IsisIIHsStateRequest
 from .snappi import StatesResponse
 from .snappi import Neighborsv4State
 from .snappi import Neighborsv4StateIter
@@ -1509,6 +1512,16 @@ from .snappi import Ospfv3LinkLsaIter
 from .snappi import Ospfv3IntraAreaPrefixLsa
 from .snappi import Ospfv3IntraAreaPrefixLsaIter
 from .snappi import Ospfv3LsaStateIter
+from .snappi import IsisIIHsState
+from .snappi import IsisRouterIIHState
+from .snappi import IsisIIHRestartInfo
+from .snappi import IsisIIHTlvs
+from .snappi import IsisIIHRestartTlv
+from .snappi import IsisIIHRestartFlags
+from .snappi import IsisRouterIIHStateIter
+from .snappi import IsisNeighborIIHState
+from .snappi import IsisNeighborIIHStateIter
+from .snappi import IsisIIHsStateIter
 from .snappi import CaptureRequest
 from .snappi import Version
 from .snappi import Api

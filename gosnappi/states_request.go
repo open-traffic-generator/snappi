@@ -28,6 +28,7 @@ type statesRequest struct {
 	dhcpv6LeasesHolder     Dhcpv6LeaseStateRequest
 	ospfv2LsasHolder       Ospfv2LsasStateRequest
 	ospfv3LsasHolder       Ospfv3LsasStateRequest
+	isisIihsHolder         IsisIIHsStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -267,6 +268,7 @@ func (obj *statesRequest) setNil() {
 	obj.dhcpv6LeasesHolder = nil
 	obj.ospfv2LsasHolder = nil
 	obj.ospfv3LsasHolder = nil
+	obj.isisIihsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -396,6 +398,14 @@ type StatesRequest interface {
 	SetOspfv3Lsas(value Ospfv3LsasStateRequest) StatesRequest
 	// HasOspfv3Lsas checks if Ospfv3Lsas has been set in StatesRequest
 	HasOspfv3Lsas() bool
+	// IsisIihs returns IsisIIHsStateRequest, set in StatesRequest.
+	// IsisIIHsStateRequest is the request to retrieve ISIS IIH information exchanged by the ISIS routers.
+	IsisIihs() IsisIIHsStateRequest
+	// SetIsisIihs assigns IsisIIHsStateRequest provided by user to StatesRequest.
+	// IsisIIHsStateRequest is the request to retrieve ISIS IIH information exchanged by the ISIS routers.
+	SetIsisIihs(value IsisIIHsStateRequest) StatesRequest
+	// HasIsisIihs checks if IsisIihs has been set in StatesRequest
+	HasIsisIihs() bool
 	setNil()
 }
 
@@ -415,6 +425,7 @@ var StatesRequestChoice = struct {
 	DHCPV6_LEASES     StatesRequestChoiceEnum
 	OSPFV2_LSAS       StatesRequestChoiceEnum
 	OSPFV3_LSAS       StatesRequestChoiceEnum
+	ISIS_IIHS         StatesRequestChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
@@ -428,6 +439,7 @@ var StatesRequestChoice = struct {
 	DHCPV6_LEASES:     StatesRequestChoiceEnum("dhcpv6_leases"),
 	OSPFV2_LSAS:       StatesRequestChoiceEnum("ospfv2_lsas"),
 	OSPFV3_LSAS:       StatesRequestChoiceEnum("ospfv3_lsas"),
+	ISIS_IIHS:         StatesRequestChoiceEnum("isis_iihs"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -449,6 +461,8 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.IsisIihs = nil
+	obj.isisIihsHolder = nil
 	obj.obj.Ospfv3Lsas = nil
 	obj.ospfv3LsasHolder = nil
 	obj.obj.Ospfv2Lsas = nil
@@ -520,6 +534,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.OSPFV3_LSAS {
 		obj.obj.Ospfv3Lsas = NewOspfv3LsasStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.ISIS_IIHS {
+		obj.obj.IsisIihs = NewIsisIIHsStateRequest().msg()
 	}
 
 	return obj
@@ -861,6 +879,34 @@ func (obj *statesRequest) SetOspfv3Lsas(value Ospfv3LsasStateRequest) StatesRequ
 	return obj
 }
 
+// description is TBD
+// IsisIihs returns a IsisIIHsStateRequest
+func (obj *statesRequest) IsisIihs() IsisIIHsStateRequest {
+	if obj.obj.IsisIihs == nil {
+		obj.setChoice(StatesRequestChoice.ISIS_IIHS)
+	}
+	if obj.isisIihsHolder == nil {
+		obj.isisIihsHolder = &isisIIHsStateRequest{obj: obj.obj.IsisIihs}
+	}
+	return obj.isisIihsHolder
+}
+
+// description is TBD
+// IsisIihs returns a IsisIIHsStateRequest
+func (obj *statesRequest) HasIsisIihs() bool {
+	return obj.obj.IsisIihs != nil
+}
+
+// description is TBD
+// SetIsisIihs sets the IsisIIHsStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetIsisIihs(value IsisIIHsStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.ISIS_IIHS)
+	obj.isisIihsHolder = nil
+	obj.obj.IsisIihs = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -924,6 +970,11 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ospfv3Lsas != nil {
 
 		obj.Ospfv3Lsas().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.IsisIihs != nil {
+
+		obj.IsisIihs().validateObj(vObj, set_default)
 	}
 
 }
@@ -990,6 +1041,11 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.Ospfv3Lsas != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.OSPFV3_LSAS
+	}
+
+	if obj.obj.IsisIihs != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.ISIS_IIHS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

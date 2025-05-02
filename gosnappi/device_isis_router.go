@@ -359,10 +359,20 @@ type DeviceIsisRouter interface {
 	// HasSegmentRouting checks if SegmentRouting has been set in DeviceIsisRouter
 	HasSegmentRouting() bool
 	// GracefulRestart returns IsisGracefulRestart, set in DeviceIsisRouter.
-	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters. https://datatracker.ietf.org/doc/html/rfc5306
+	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters.
+	// The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV in all transmitted IIHs.
+	// - If this router is to be acting as the "Helper" mode for a Restarting Router.
+	// - If this router is to be acting as the "Restarting" mode then "Restart" trigger should be initiated from set_control_action for "isis" under "protocol" choice.
+	// In that case, "helper_mode" can be configured as true or false for the "Helper" mode as well "Restarting" mode or only "Restaring" router respectively.
+	// Refrence: https://datatracker.ietf.org/doc/html/rfc8706
 	GracefulRestart() IsisGracefulRestart
 	// SetGracefulRestart assigns IsisGracefulRestart provided by user to DeviceIsisRouter.
-	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters. https://datatracker.ietf.org/doc/html/rfc5306
+	// IsisGracefulRestart is contains IS-IS Graceful configuration parameters.
+	// The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV in all transmitted IIHs.
+	// - If this router is to be acting as the "Helper" mode for a Restarting Router.
+	// - If this router is to be acting as the "Restarting" mode then "Restart" trigger should be initiated from set_control_action for "isis" under "protocol" choice.
+	// In that case, "helper_mode" can be configured as true or false for the "Helper" mode as well "Restarting" mode or only "Restaring" router respectively.
+	// Refrence: https://datatracker.ietf.org/doc/html/rfc8706
 	SetGracefulRestart(value IsisGracefulRestart) DeviceIsisRouter
 	// HasGracefulRestart checks if GracefulRestart has been set in DeviceIsisRouter
 	HasGracefulRestart() bool
