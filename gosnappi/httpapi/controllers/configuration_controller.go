@@ -227,7 +227,7 @@ func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWr
 
 /*
 AppendConfig: PATCH /config/append
-Description: Append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. The fetched configuration shall also reflect the new configuration applied successfully.
+Description: Append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. A failed append might leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the appended resources, it is expected that the user fix the error and  restart from SetConfig operation. The fetched configuration shall also reflect the new configuration applied successfully.
 */
 func (ctrl *configurationController) AppendConfig(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.ConfigAppend
@@ -295,7 +295,7 @@ func (ctrl *configurationController) responseAppendConfigError(w http.ResponseWr
 
 /*
 DeleteConfig: PATCH /config/delete
-Description: Delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. The fetched configuration shall not reflect the removed configuration deleted successfully.
+Description: Delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. A failed delete will leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the deleted  resources, it is expected that the user fix the error and restart from SetConfig operation. On successful deletion the fetched configuration shall not reflect the removed configuration.
 */
 func (ctrl *configurationController) DeleteConfig(w http.ResponseWriter, r *http.Request) {
 	var item gosnappi.ConfigDelete

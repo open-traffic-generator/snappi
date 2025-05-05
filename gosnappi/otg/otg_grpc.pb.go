@@ -36,13 +36,19 @@ type OpenapiClient interface {
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
 	// Append new attributes of resources to existing configuration on the traffic generator.
 	// Resource names should not be part of existing configuration of that resource type;
-	// it should be unique for the operation to succeed. The fetched configuration shall
-	// also reflect the new configuration applied successfully.
+	// it should be unique for the operation to succeed. A failed append might leave the
+	// configuration in an undefined state and if the error is due to some invalid or unsupported
+	// configuration in the appended resources, it is expected that the user fix the error
+	// and  restart from SetConfig operation. The fetched configuration shall also reflect
+	// the new configuration applied successfully.
 	AppendConfig(ctx context.Context, in *AppendConfigRequest, opts ...grpc.CallOption) (*AppendConfigResponse, error)
 	// Delete attributes of resources from existing configuration on the traffic generator.
 	// Resource names should already be part of existing configuration of that resource
-	// type; for the operation to succeed. The fetched configuration shall not reflect the
-	// removed configuration deleted successfully.
+	// type; for the operation to succeed. A failed delete will leave the configuration
+	// in an undefined state and if the error is due to some invalid or unsupported configuration
+	// in the deleted  resources, it is expected that the user fix the error and restart
+	// from SetConfig operation. On successful deletion the fetched configuration shall
+	// not reflect the removed configuration.
 	DeleteConfig(ctx context.Context, in *DeleteConfigRequest, opts ...grpc.CallOption) (*DeleteConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error)
@@ -181,13 +187,19 @@ type OpenapiServer interface {
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
 	// Append new attributes of resources to existing configuration on the traffic generator.
 	// Resource names should not be part of existing configuration of that resource type;
-	// it should be unique for the operation to succeed. The fetched configuration shall
-	// also reflect the new configuration applied successfully.
+	// it should be unique for the operation to succeed. A failed append might leave the
+	// configuration in an undefined state and if the error is due to some invalid or unsupported
+	// configuration in the appended resources, it is expected that the user fix the error
+	// and  restart from SetConfig operation. The fetched configuration shall also reflect
+	// the new configuration applied successfully.
 	AppendConfig(context.Context, *AppendConfigRequest) (*AppendConfigResponse, error)
 	// Delete attributes of resources from existing configuration on the traffic generator.
 	// Resource names should already be part of existing configuration of that resource
-	// type; for the operation to succeed. The fetched configuration shall not reflect the
-	// removed configuration deleted successfully.
+	// type; for the operation to succeed. A failed delete will leave the configuration
+	// in an undefined state and if the error is due to some invalid or unsupported configuration
+	// in the deleted  resources, it is expected that the user fix the error and restart
+	// from SetConfig operation. On successful deletion the fetched configuration shall
+	// not reflect the removed configuration.
 	DeleteConfig(context.Context, *DeleteConfigRequest) (*DeleteConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error)

@@ -16,7 +16,7 @@ type configAppend struct {
 	obj                    *otg.ConfigAppend
 	marshaller             marshalConfigAppend
 	unMarshaller           unMarshalConfigAppend
-	configAppendListHolder ConfigAppendConfigAppendResourceIter
+	configAppendListHolder ConfigAppendConfigAppendResourcesIter
 }
 
 func NewConfigAppend() ConfigAppend {
@@ -272,95 +272,95 @@ type ConfigAppend interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// ConfigAppendList returns ConfigAppendConfigAppendResourceIterIter, set in ConfigAppend
-	ConfigAppendList() ConfigAppendConfigAppendResourceIter
+	// ConfigAppendList returns ConfigAppendConfigAppendResourcesIterIter, set in ConfigAppend
+	ConfigAppendList() ConfigAppendConfigAppendResourcesIter
 	setNil()
 }
 
 // description is TBD
-// ConfigAppendList returns a []ConfigAppendResource
-func (obj *configAppend) ConfigAppendList() ConfigAppendConfigAppendResourceIter {
+// ConfigAppendList returns a []ConfigAppendResources
+func (obj *configAppend) ConfigAppendList() ConfigAppendConfigAppendResourcesIter {
 	if len(obj.obj.ConfigAppendList) == 0 {
-		obj.obj.ConfigAppendList = []*otg.ConfigAppendResource{}
+		obj.obj.ConfigAppendList = []*otg.ConfigAppendResources{}
 	}
 	if obj.configAppendListHolder == nil {
-		obj.configAppendListHolder = newConfigAppendConfigAppendResourceIter(&obj.obj.ConfigAppendList).setMsg(obj)
+		obj.configAppendListHolder = newConfigAppendConfigAppendResourcesIter(&obj.obj.ConfigAppendList).setMsg(obj)
 	}
 	return obj.configAppendListHolder
 }
 
-type configAppendConfigAppendResourceIter struct {
-	obj                       *configAppend
-	configAppendResourceSlice []ConfigAppendResource
-	fieldPtr                  *[]*otg.ConfigAppendResource
+type configAppendConfigAppendResourcesIter struct {
+	obj                        *configAppend
+	configAppendResourcesSlice []ConfigAppendResources
+	fieldPtr                   *[]*otg.ConfigAppendResources
 }
 
-func newConfigAppendConfigAppendResourceIter(ptr *[]*otg.ConfigAppendResource) ConfigAppendConfigAppendResourceIter {
-	return &configAppendConfigAppendResourceIter{fieldPtr: ptr}
+func newConfigAppendConfigAppendResourcesIter(ptr *[]*otg.ConfigAppendResources) ConfigAppendConfigAppendResourcesIter {
+	return &configAppendConfigAppendResourcesIter{fieldPtr: ptr}
 }
 
-type ConfigAppendConfigAppendResourceIter interface {
-	setMsg(*configAppend) ConfigAppendConfigAppendResourceIter
-	Items() []ConfigAppendResource
-	Add() ConfigAppendResource
-	Append(items ...ConfigAppendResource) ConfigAppendConfigAppendResourceIter
-	Set(index int, newObj ConfigAppendResource) ConfigAppendConfigAppendResourceIter
-	Clear() ConfigAppendConfigAppendResourceIter
-	clearHolderSlice() ConfigAppendConfigAppendResourceIter
-	appendHolderSlice(item ConfigAppendResource) ConfigAppendConfigAppendResourceIter
+type ConfigAppendConfigAppendResourcesIter interface {
+	setMsg(*configAppend) ConfigAppendConfigAppendResourcesIter
+	Items() []ConfigAppendResources
+	Add() ConfigAppendResources
+	Append(items ...ConfigAppendResources) ConfigAppendConfigAppendResourcesIter
+	Set(index int, newObj ConfigAppendResources) ConfigAppendConfigAppendResourcesIter
+	Clear() ConfigAppendConfigAppendResourcesIter
+	clearHolderSlice() ConfigAppendConfigAppendResourcesIter
+	appendHolderSlice(item ConfigAppendResources) ConfigAppendConfigAppendResourcesIter
 }
 
-func (obj *configAppendConfigAppendResourceIter) setMsg(msg *configAppend) ConfigAppendConfigAppendResourceIter {
+func (obj *configAppendConfigAppendResourcesIter) setMsg(msg *configAppend) ConfigAppendConfigAppendResourcesIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&configAppendResource{obj: val})
+		obj.appendHolderSlice(&configAppendResources{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *configAppendConfigAppendResourceIter) Items() []ConfigAppendResource {
-	return obj.configAppendResourceSlice
+func (obj *configAppendConfigAppendResourcesIter) Items() []ConfigAppendResources {
+	return obj.configAppendResourcesSlice
 }
 
-func (obj *configAppendConfigAppendResourceIter) Add() ConfigAppendResource {
-	newObj := &otg.ConfigAppendResource{}
+func (obj *configAppendConfigAppendResourcesIter) Add() ConfigAppendResources {
+	newObj := &otg.ConfigAppendResources{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &configAppendResource{obj: newObj}
+	newLibObj := &configAppendResources{obj: newObj}
 	newLibObj.setDefault()
-	obj.configAppendResourceSlice = append(obj.configAppendResourceSlice, newLibObj)
+	obj.configAppendResourcesSlice = append(obj.configAppendResourcesSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *configAppendConfigAppendResourceIter) Append(items ...ConfigAppendResource) ConfigAppendConfigAppendResourceIter {
+func (obj *configAppendConfigAppendResourcesIter) Append(items ...ConfigAppendResources) ConfigAppendConfigAppendResourcesIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.configAppendResourceSlice = append(obj.configAppendResourceSlice, item)
+		obj.configAppendResourcesSlice = append(obj.configAppendResourcesSlice, item)
 	}
 	return obj
 }
 
-func (obj *configAppendConfigAppendResourceIter) Set(index int, newObj ConfigAppendResource) ConfigAppendConfigAppendResourceIter {
+func (obj *configAppendConfigAppendResourcesIter) Set(index int, newObj ConfigAppendResources) ConfigAppendConfigAppendResourcesIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.configAppendResourceSlice[index] = newObj
+	obj.configAppendResourcesSlice[index] = newObj
 	return obj
 }
-func (obj *configAppendConfigAppendResourceIter) Clear() ConfigAppendConfigAppendResourceIter {
+func (obj *configAppendConfigAppendResourcesIter) Clear() ConfigAppendConfigAppendResourcesIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.ConfigAppendResource{}
-		obj.configAppendResourceSlice = []ConfigAppendResource{}
+		*obj.fieldPtr = []*otg.ConfigAppendResources{}
+		obj.configAppendResourcesSlice = []ConfigAppendResources{}
 	}
 	return obj
 }
-func (obj *configAppendConfigAppendResourceIter) clearHolderSlice() ConfigAppendConfigAppendResourceIter {
-	if len(obj.configAppendResourceSlice) > 0 {
-		obj.configAppendResourceSlice = []ConfigAppendResource{}
+func (obj *configAppendConfigAppendResourcesIter) clearHolderSlice() ConfigAppendConfigAppendResourcesIter {
+	if len(obj.configAppendResourcesSlice) > 0 {
+		obj.configAppendResourcesSlice = []ConfigAppendResources{}
 	}
 	return obj
 }
-func (obj *configAppendConfigAppendResourceIter) appendHolderSlice(item ConfigAppendResource) ConfigAppendConfigAppendResourceIter {
-	obj.configAppendResourceSlice = append(obj.configAppendResourceSlice, item)
+func (obj *configAppendConfigAppendResourcesIter) appendHolderSlice(item ConfigAppendResources) ConfigAppendConfigAppendResourcesIter {
+	obj.configAppendResourcesSlice = append(obj.configAppendResourcesSlice, item)
 	return obj
 }
 
@@ -374,7 +374,7 @@ func (obj *configAppend) validateObj(vObj *validation, set_default bool) {
 		if set_default {
 			obj.ConfigAppendList().clearHolderSlice()
 			for _, item := range obj.obj.ConfigAppendList {
-				obj.ConfigAppendList().appendHolderSlice(&configAppendResource{obj: item})
+				obj.ConfigAppendList().appendHolderSlice(&configAppendResources{obj: item})
 			}
 		}
 		for _, item := range obj.ConfigAppendList().Items() {

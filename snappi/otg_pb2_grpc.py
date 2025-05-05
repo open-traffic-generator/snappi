@@ -118,8 +118,11 @@ class OpenapiServicer(object):
     def AppendConfig(self, request, context):
         """Append new attributes of resources to existing configuration on the traffic generator.
         Resource names should not be part of existing configuration of that resource type;
-        it should be unique for the operation to succeed. The fetched configuration shall
-        also reflect the new configuration applied successfully.
+        it should be unique for the operation to succeed. A failed append might leave the
+        configuration in an undefined state and if the error is due to some invalid or unsupported
+        configuration in the appended resources, it is expected that the user fix the error
+        and  restart from SetConfig operation. The fetched configuration shall also reflect
+        the new configuration applied successfully.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -128,8 +131,11 @@ class OpenapiServicer(object):
     def DeleteConfig(self, request, context):
         """Delete attributes of resources from existing configuration on the traffic generator.
         Resource names should already be part of existing configuration of that resource
-        type; for the operation to succeed. The fetched configuration shall not reflect the
-        removed configuration deleted successfully.
+        type; for the operation to succeed. A failed delete will leave the configuration
+        in an undefined state and if the error is due to some invalid or unsupported configuration
+        in the deleted  resources, it is expected that the user fix the error and restart
+        from SetConfig operation. On successful deletion the fetched configuration shall
+        not reflect the removed configuration.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

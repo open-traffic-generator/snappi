@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.28.0
+/* Open Traffic Generator API 1.30.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  *
@@ -223,9 +223,9 @@ type Api interface {
 	// UpdateConfig updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
 	// The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
-	// AppendConfig append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. The fetched configuration shall also reflect the new configuration applied successfully.
+	// AppendConfig append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. A failed append might leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the appended resources, it is expected that the user fix the error and  restart from SetConfig operation. The fetched configuration shall also reflect the new configuration applied successfully.
 	AppendConfig(configAppend ConfigAppend) (Warning, error)
-	// DeleteConfig delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. The fetched configuration shall not reflect the removed configuration deleted successfully.
+	// DeleteConfig delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. A failed delete will leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the deleted  resources, it is expected that the user fix the error and restart from SetConfig operation. On successful deletion the fetched configuration shall not reflect the removed configuration.
 	DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	// SetControlState sets the operational state of configured resources.
 	SetControlState(controlState ControlState) (Warning, error)
@@ -255,7 +255,7 @@ type Api interface {
 
 func (api *gosnappiApi) GetLocalVersion() Version {
 	if api.versionMeta.localVersion == nil {
-		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.28.0").SetSdkVersion("1.28.2")
+		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.30.0").SetSdkVersion("1.28.2")
 	}
 
 	return api.versionMeta.localVersion
