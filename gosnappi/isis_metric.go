@@ -426,72 +426,30 @@ type IsisMetric interface {
 	SetL2LspReceived(value uint64) IsisMetric
 	// HasL2LspReceived checks if L2LspReceived has been set in IsisMetric
 	HasL2LspReceived() bool
-	// L1RrSent returns uint64, set in IsisMetric.
-	L1RrSent() uint64
-	// SetL1RrSent assigns uint64 provided by user to IsisMetric
-	SetL1RrSent(value uint64) IsisMetric
-	// HasL1RrSent checks if L1RrSent has been set in IsisMetric
-	HasL1RrSent() bool
-	// L1RrReceived returns uint64, set in IsisMetric.
-	L1RrReceived() uint64
-	// SetL1RrReceived assigns uint64 provided by user to IsisMetric
-	SetL1RrReceived(value uint64) IsisMetric
-	// HasL1RrReceived checks if L1RrReceived has been set in IsisMetric
-	HasL1RrReceived() bool
-	// L1RaSent returns uint64, set in IsisMetric.
-	L1RaSent() uint64
-	// SetL1RaSent assigns uint64 provided by user to IsisMetric
-	SetL1RaSent(value uint64) IsisMetric
-	// HasL1RaSent checks if L1RaSent has been set in IsisMetric
-	HasL1RaSent() bool
-	// L1RaReceived returns uint64, set in IsisMetric.
-	L1RaReceived() uint64
-	// SetL1RaReceived assigns uint64 provided by user to IsisMetric
-	SetL1RaReceived(value uint64) IsisMetric
-	// HasL1RaReceived checks if L1RaReceived has been set in IsisMetric
-	HasL1RaReceived() bool
-	// L1SaSent returns uint64, set in IsisMetric.
-	L1SaSent() uint64
-	// SetL1SaSent assigns uint64 provided by user to IsisMetric
-	SetL1SaSent(value uint64) IsisMetric
-	// HasL1SaSent checks if L1SaSent has been set in IsisMetric
-	HasL1SaSent() bool
-	// L1SaReceived returns uint64, set in IsisMetric.
-	L1SaReceived() uint64
-	// SetL1SaReceived assigns uint64 provided by user to IsisMetric
-	SetL1SaReceived(value uint64) IsisMetric
-	// HasL1SaReceived checks if L1SaReceived has been set in IsisMetric
-	HasL1SaReceived() bool
-	// L2RrReceived returns uint64, set in IsisMetric.
-	L2RrReceived() uint64
-	// SetL2RrReceived assigns uint64 provided by user to IsisMetric
-	SetL2RrReceived(value uint64) IsisMetric
-	// HasL2RrReceived checks if L2RrReceived has been set in IsisMetric
-	HasL2RrReceived() bool
-	// L2RaSent returns uint64, set in IsisMetric.
-	L2RaSent() uint64
-	// SetL2RaSent assigns uint64 provided by user to IsisMetric
-	SetL2RaSent(value uint64) IsisMetric
-	// HasL2RaSent checks if L2RaSent has been set in IsisMetric
-	HasL2RaSent() bool
-	// L2RaReceived returns uint64, set in IsisMetric.
-	L2RaReceived() uint64
-	// SetL2RaReceived assigns uint64 provided by user to IsisMetric
-	SetL2RaReceived(value uint64) IsisMetric
-	// HasL2RaReceived checks if L2RaReceived has been set in IsisMetric
-	HasL2RaReceived() bool
-	// L2SaSent returns uint64, set in IsisMetric.
-	L2SaSent() uint64
-	// SetL2SaSent assigns uint64 provided by user to IsisMetric
-	SetL2SaSent(value uint64) IsisMetric
-	// HasL2SaSent checks if L2SaSent has been set in IsisMetric
-	HasL2SaSent() bool
-	// L2SaReceived returns uint64, set in IsisMetric.
-	L2SaReceived() uint64
-	// SetL2SaReceived assigns uint64 provided by user to IsisMetric
-	SetL2SaReceived(value uint64) IsisMetric
-	// HasL2SaReceived checks if L2SaReceived has been set in IsisMetric
-	HasL2SaReceived() bool
+	// L1NeighborGrInitiated returns uint64, set in IsisMetric.
+	L1NeighborGrInitiated() uint64
+	// SetL1NeighborGrInitiated assigns uint64 provided by user to IsisMetric
+	SetL1NeighborGrInitiated(value uint64) IsisMetric
+	// HasL1NeighborGrInitiated checks if L1NeighborGrInitiated has been set in IsisMetric
+	HasL1NeighborGrInitiated() bool
+	// L1NeighborGrSucceeded returns uint64, set in IsisMetric.
+	L1NeighborGrSucceeded() uint64
+	// SetL1NeighborGrSucceeded assigns uint64 provided by user to IsisMetric
+	SetL1NeighborGrSucceeded(value uint64) IsisMetric
+	// HasL1NeighborGrSucceeded checks if L1NeighborGrSucceeded has been set in IsisMetric
+	HasL1NeighborGrSucceeded() bool
+	// L2NeighborGrInitiated returns uint64, set in IsisMetric.
+	L2NeighborGrInitiated() uint64
+	// SetL2NeighborGrInitiated assigns uint64 provided by user to IsisMetric
+	SetL2NeighborGrInitiated(value uint64) IsisMetric
+	// HasL2NeighborGrInitiated checks if L2NeighborGrInitiated has been set in IsisMetric
+	HasL2NeighborGrInitiated() bool
+	// L2NeighborGrSucceeded returns uint64, set in IsisMetric.
+	L2NeighborGrSucceeded() uint64
+	// SetL2NeighborGrSucceeded assigns uint64 provided by user to IsisMetric
+	SetL2NeighborGrSucceeded(value uint64) IsisMetric
+	// HasL2NeighborGrSucceeded checks if L2NeighborGrSucceeded has been set in IsisMetric
+	HasL2NeighborGrSucceeded() bool
 }
 
 // The name of a configured ISIS router.
@@ -1088,245 +1046,91 @@ func (obj *isisMetric) SetL2LspReceived(value uint64) IsisMetric {
 	return obj
 }
 
-// Number of Level 1 (L1) Restart Request (RR) sent.
-// L1RrSent returns a uint64
-func (obj *isisMetric) L1RrSent() uint64 {
+// Number of Level 1 (L1) Graceful Restart initiated by a Neighbor.
+// L1NeighborGrInitiated returns a uint64
+func (obj *isisMetric) L1NeighborGrInitiated() uint64 {
 
-	return *obj.obj.L1RrSent
+	return *obj.obj.L1NeighborGrInitiated
 
 }
 
-// Number of Level 1 (L1) Restart Request (RR) sent.
-// L1RrSent returns a uint64
-func (obj *isisMetric) HasL1RrSent() bool {
-	return obj.obj.L1RrSent != nil
+// Number of Level 1 (L1) Graceful Restart initiated by a Neighbor.
+// L1NeighborGrInitiated returns a uint64
+func (obj *isisMetric) HasL1NeighborGrInitiated() bool {
+	return obj.obj.L1NeighborGrInitiated != nil
 }
 
-// Number of Level 1 (L1) Restart Request (RR) sent.
-// SetL1RrSent sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1RrSent(value uint64) IsisMetric {
+// Number of Level 1 (L1) Graceful Restart initiated by a Neighbor.
+// SetL1NeighborGrInitiated sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetL1NeighborGrInitiated(value uint64) IsisMetric {
 
-	obj.obj.L1RrSent = &value
+	obj.obj.L1NeighborGrInitiated = &value
 	return obj
 }
 
-// Number of Level 1 (L1) Restart Request (RR) received.
-// L1RrReceived returns a uint64
-func (obj *isisMetric) L1RrReceived() uint64 {
+// Number of Level 1 (L1) Graceful Restart succeeded that were initiated by a Neighbor.
+// L1NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) L1NeighborGrSucceeded() uint64 {
 
-	return *obj.obj.L1RrReceived
+	return *obj.obj.L1NeighborGrSucceeded
 
 }
 
-// Number of Level 1 (L1) Restart Request (RR) received.
-// L1RrReceived returns a uint64
-func (obj *isisMetric) HasL1RrReceived() bool {
-	return obj.obj.L1RrReceived != nil
+// Number of Level 1 (L1) Graceful Restart succeeded that were initiated by a Neighbor.
+// L1NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) HasL1NeighborGrSucceeded() bool {
+	return obj.obj.L1NeighborGrSucceeded != nil
 }
 
-// Number of Level 1 (L1) Restart Request (RR) received.
-// SetL1RrReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1RrReceived(value uint64) IsisMetric {
+// Number of Level 1 (L1) Graceful Restart succeeded that were initiated by a Neighbor.
+// SetL1NeighborGrSucceeded sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetL1NeighborGrSucceeded(value uint64) IsisMetric {
 
-	obj.obj.L1RrReceived = &value
+	obj.obj.L1NeighborGrSucceeded = &value
 	return obj
 }
 
-// Number of Level 1 (L1) Restart Acknowledgement (RA) sent.
-// L1RaSent returns a uint64
-func (obj *isisMetric) L1RaSent() uint64 {
+// Number of Level 2 (L2) Graceful Restart initiated by a Neighbor.
+// L2NeighborGrInitiated returns a uint64
+func (obj *isisMetric) L2NeighborGrInitiated() uint64 {
 
-	return *obj.obj.L1RaSent
+	return *obj.obj.L2NeighborGrInitiated
 
 }
 
-// Number of Level 1 (L1) Restart Acknowledgement (RA) sent.
-// L1RaSent returns a uint64
-func (obj *isisMetric) HasL1RaSent() bool {
-	return obj.obj.L1RaSent != nil
+// Number of Level 2 (L2) Graceful Restart initiated by a Neighbor.
+// L2NeighborGrInitiated returns a uint64
+func (obj *isisMetric) HasL2NeighborGrInitiated() bool {
+	return obj.obj.L2NeighborGrInitiated != nil
 }
 
-// Number of Level 1 (L1) Restart Acknowledgement (RA) sent.
-// SetL1RaSent sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1RaSent(value uint64) IsisMetric {
+// Number of Level 2 (L2) Graceful Restart initiated by a Neighbor.
+// SetL2NeighborGrInitiated sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetL2NeighborGrInitiated(value uint64) IsisMetric {
 
-	obj.obj.L1RaSent = &value
+	obj.obj.L2NeighborGrInitiated = &value
 	return obj
 }
 
-// Number of Level 1 (L1) Restart Acknowledgement (RA) received.
-// L1RaReceived returns a uint64
-func (obj *isisMetric) L1RaReceived() uint64 {
+// Number of Level 2 (L2) Graceful Restart succeeded that were initiated by a Neighbor.
+// L2NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) L2NeighborGrSucceeded() uint64 {
 
-	return *obj.obj.L1RaReceived
-
-}
-
-// Number of Level 1 (L1) Restart Acknowledgement (RA) received.
-// L1RaReceived returns a uint64
-func (obj *isisMetric) HasL1RaReceived() bool {
-	return obj.obj.L1RaReceived != nil
-}
-
-// Number of Level 1 (L1) Restart Acknowledgement (RA) received.
-// SetL1RaReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1RaReceived(value uint64) IsisMetric {
-
-	obj.obj.L1RaReceived = &value
-	return obj
-}
-
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) sent.
-// L1SaSent returns a uint64
-func (obj *isisMetric) L1SaSent() uint64 {
-
-	return *obj.obj.L1SaSent
+	return *obj.obj.L2NeighborGrSucceeded
 
 }
 
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) sent.
-// L1SaSent returns a uint64
-func (obj *isisMetric) HasL1SaSent() bool {
-	return obj.obj.L1SaSent != nil
+// Number of Level 2 (L2) Graceful Restart succeeded that were initiated by a Neighbor.
+// L2NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) HasL2NeighborGrSucceeded() bool {
+	return obj.obj.L2NeighborGrSucceeded != nil
 }
 
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) sent.
-// SetL1SaSent sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1SaSent(value uint64) IsisMetric {
+// Number of Level 2 (L2) Graceful Restart succeeded that were initiated by a Neighbor.
+// SetL2NeighborGrSucceeded sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetL2NeighborGrSucceeded(value uint64) IsisMetric {
 
-	obj.obj.L1SaSent = &value
-	return obj
-}
-
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) received.
-// L1SaReceived returns a uint64
-func (obj *isisMetric) L1SaReceived() uint64 {
-
-	return *obj.obj.L1SaReceived
-
-}
-
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) received.
-// L1SaReceived returns a uint64
-func (obj *isisMetric) HasL1SaReceived() bool {
-	return obj.obj.L1SaReceived != nil
-}
-
-// Number of Level 1 (L1) Suppress adjacency advertisement (SA) received.
-// SetL1SaReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL1SaReceived(value uint64) IsisMetric {
-
-	obj.obj.L1SaReceived = &value
-	return obj
-}
-
-// Number of Level 2 (L2) Restart Request (RR) received.
-// L2RrReceived returns a uint64
-func (obj *isisMetric) L2RrReceived() uint64 {
-
-	return *obj.obj.L2RrReceived
-
-}
-
-// Number of Level 2 (L2) Restart Request (RR) received.
-// L2RrReceived returns a uint64
-func (obj *isisMetric) HasL2RrReceived() bool {
-	return obj.obj.L2RrReceived != nil
-}
-
-// Number of Level 2 (L2) Restart Request (RR) received.
-// SetL2RrReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL2RrReceived(value uint64) IsisMetric {
-
-	obj.obj.L2RrReceived = &value
-	return obj
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) sent.
-// L2RaSent returns a uint64
-func (obj *isisMetric) L2RaSent() uint64 {
-
-	return *obj.obj.L2RaSent
-
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) sent.
-// L2RaSent returns a uint64
-func (obj *isisMetric) HasL2RaSent() bool {
-	return obj.obj.L2RaSent != nil
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) sent.
-// SetL2RaSent sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL2RaSent(value uint64) IsisMetric {
-
-	obj.obj.L2RaSent = &value
-	return obj
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) received.
-// L2RaReceived returns a uint64
-func (obj *isisMetric) L2RaReceived() uint64 {
-
-	return *obj.obj.L2RaReceived
-
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) received.
-// L2RaReceived returns a uint64
-func (obj *isisMetric) HasL2RaReceived() bool {
-	return obj.obj.L2RaReceived != nil
-}
-
-// Number of Level 2 (L2) Restart Acknowledgement (RA) received.
-// SetL2RaReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL2RaReceived(value uint64) IsisMetric {
-
-	obj.obj.L2RaReceived = &value
-	return obj
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) sent.
-// L2SaSent returns a uint64
-func (obj *isisMetric) L2SaSent() uint64 {
-
-	return *obj.obj.L2SaSent
-
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) sent.
-// L2SaSent returns a uint64
-func (obj *isisMetric) HasL2SaSent() bool {
-	return obj.obj.L2SaSent != nil
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) sent.
-// SetL2SaSent sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL2SaSent(value uint64) IsisMetric {
-
-	obj.obj.L2SaSent = &value
-	return obj
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) received.
-// L2SaReceived returns a uint64
-func (obj *isisMetric) L2SaReceived() uint64 {
-
-	return *obj.obj.L2SaReceived
-
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) received.
-// L2SaReceived returns a uint64
-func (obj *isisMetric) HasL2SaReceived() bool {
-	return obj.obj.L2SaReceived != nil
-}
-
-// Number of Level 2 (L2) Suppress adjacency advertisement (SA) received.
-// SetL2SaReceived sets the uint64 value in the IsisMetric object
-func (obj *isisMetric) SetL2SaReceived(value uint64) IsisMetric {
-
-	obj.obj.L2SaReceived = &value
+	obj.obj.L2NeighborGrSucceeded = &value
 	return obj
 }
 

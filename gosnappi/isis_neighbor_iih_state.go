@@ -13,11 +13,11 @@ import (
 // ***** IsisNeighborIIHState *****
 type isisNeighborIIHState struct {
 	validation
-	obj                  *otg.IsisNeighborIIHState
-	marshaller           marshalIsisNeighborIIHState
-	unMarshaller         unMarshalIsisNeighborIIHState
-	restartingInfoHolder IsisIIHRestartInfo
-	tlvsHolder           IsisIIHTlvs
+	obj                    *otg.IsisNeighborIIHState
+	marshaller             marshalIsisNeighborIIHState
+	unMarshaller           unMarshalIsisNeighborIIHState
+	restartingStatusHolder IsisIIHNeighborRestartStatus
+	tlvsHolder             IsisIIHTlvs
 }
 
 func NewIsisNeighborIIHState() IsisNeighborIIHState {
@@ -245,7 +245,7 @@ func (obj *isisNeighborIIHState) Clone() (IsisNeighborIIHState, error) {
 }
 
 func (obj *isisNeighborIIHState) setNil() {
-	obj.restartingInfoHolder = nil
+	obj.restartingStatusHolder = nil
 	obj.tlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -280,12 +280,6 @@ type IsisNeighborIIHState interface {
 	SetSystemId(value string) IsisNeighborIIHState
 	// HasSystemId checks if SystemId has been set in IsisNeighborIIHState
 	HasSystemId() bool
-	// NetworkType returns IsisNeighborIIHStateNetworkTypeEnum, set in IsisNeighborIIHState
-	NetworkType() IsisNeighborIIHStateNetworkTypeEnum
-	// SetNetworkType assigns IsisNeighborIIHStateNetworkTypeEnum provided by user to IsisNeighborIIHState
-	SetNetworkType(value IsisNeighborIIHStateNetworkTypeEnum) IsisNeighborIIHState
-	// HasNetworkType checks if NetworkType has been set in IsisNeighborIIHState
-	HasNetworkType() bool
 	// LevelType returns IsisNeighborIIHStateLevelTypeEnum, set in IsisNeighborIIHState
 	LevelType() IsisNeighborIIHStateLevelTypeEnum
 	// SetLevelType assigns IsisNeighborIIHStateLevelTypeEnum provided by user to IsisNeighborIIHState
@@ -298,19 +292,19 @@ type IsisNeighborIIHState interface {
 	SetHoldTimer(value uint32) IsisNeighborIIHState
 	// HasHoldTimer checks if HoldTimer has been set in IsisNeighborIIHState
 	HasHoldTimer() bool
-	// RestartingInfo returns IsisIIHRestartInfo, set in IsisNeighborIIHState.
-	// IsisIIHRestartInfo is this contains the list of TLVs present in a IIH packet.
-	RestartingInfo() IsisIIHRestartInfo
-	// SetRestartingInfo assigns IsisIIHRestartInfo provided by user to IsisNeighborIIHState.
-	// IsisIIHRestartInfo is this contains the list of TLVs present in a IIH packet.
-	SetRestartingInfo(value IsisIIHRestartInfo) IsisNeighborIIHState
-	// HasRestartingInfo checks if RestartingInfo has been set in IsisNeighborIIHState
-	HasRestartingInfo() bool
+	// RestartingStatus returns IsisIIHNeighborRestartStatus, set in IsisNeighborIIHState.
+	// IsisIIHNeighborRestartStatus is this contains the Restarting/Starting/Running state of a neighbor router.
+	RestartingStatus() IsisIIHNeighborRestartStatus
+	// SetRestartingStatus assigns IsisIIHNeighborRestartStatus provided by user to IsisNeighborIIHState.
+	// IsisIIHNeighborRestartStatus is this contains the Restarting/Starting/Running state of a neighbor router.
+	SetRestartingStatus(value IsisIIHNeighborRestartStatus) IsisNeighborIIHState
+	// HasRestartingStatus checks if RestartingStatus has been set in IsisNeighborIIHState
+	HasRestartingStatus() bool
 	// Tlvs returns IsisIIHTlvs, set in IsisNeighborIIHState.
-	// IsisIIHTlvs is this contains the list of TLVs present in a IIH packet.
+	// IsisIIHTlvs is this contains the list of TLVs present in a IIH PDU.
 	Tlvs() IsisIIHTlvs
 	// SetTlvs assigns IsisIIHTlvs provided by user to IsisNeighborIIHState.
-	// IsisIIHTlvs is this contains the list of TLVs present in a IIH packet.
+	// IsisIIHTlvs is this contains the list of TLVs present in a IIH PDU.
 	SetTlvs(value IsisIIHTlvs) IsisNeighborIIHState
 	// HasTlvs checks if Tlvs has been set in IsisNeighborIIHState
 	HasTlvs() bool
@@ -339,40 +333,6 @@ func (obj *isisNeighborIIHState) SetSystemId(value string) IsisNeighborIIHState 
 	return obj
 }
 
-type IsisNeighborIIHStateNetworkTypeEnum string
-
-// Enum of NetworkType on IsisNeighborIIHState
-var IsisNeighborIIHStateNetworkType = struct {
-	BROADCAST      IsisNeighborIIHStateNetworkTypeEnum
-	POINT_TO_POINT IsisNeighborIIHStateNetworkTypeEnum
-}{
-	BROADCAST:      IsisNeighborIIHStateNetworkTypeEnum("broadcast"),
-	POINT_TO_POINT: IsisNeighborIIHStateNetworkTypeEnum("point_to_point"),
-}
-
-func (obj *isisNeighborIIHState) NetworkType() IsisNeighborIIHStateNetworkTypeEnum {
-	return IsisNeighborIIHStateNetworkTypeEnum(obj.obj.NetworkType.Enum().String())
-}
-
-// The type of network link.
-// NetworkType returns a string
-func (obj *isisNeighborIIHState) HasNetworkType() bool {
-	return obj.obj.NetworkType != nil
-}
-
-func (obj *isisNeighborIIHState) SetNetworkType(value IsisNeighborIIHStateNetworkTypeEnum) IsisNeighborIIHState {
-	intValue, ok := otg.IsisNeighborIIHState_NetworkType_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on IsisNeighborIIHStateNetworkTypeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.IsisNeighborIIHState_NetworkType_Enum(intValue)
-	obj.obj.NetworkType = &enumValue
-
-	return obj
-}
-
 type IsisNeighborIIHStateLevelTypeEnum string
 
 // Enum of LevelType on IsisNeighborIIHState
@@ -390,7 +350,7 @@ func (obj *isisNeighborIIHState) LevelType() IsisNeighborIIHStateLevelTypeEnum {
 	return IsisNeighborIIHStateLevelTypeEnum(obj.obj.LevelType.Enum().String())
 }
 
-// This indicates whether Neighbor ISIS router is participating in Level-1 (L1),
+// This indicates whether Neighbor IS-IS router is participating in Level-1 (L1),
 // Level-2 (L2) or both L1 and L2 domains on this interface.
 // LevelType returns a string
 func (obj *isisNeighborIIHState) HasLevelType() bool {
@@ -410,7 +370,7 @@ func (obj *isisNeighborIIHState) SetLevelType(value IsisNeighborIIHStateLevelTyp
 	return obj
 }
 
-// Hold timer is in the IIH.
+// Hold timer is in the IIH PDU.
 // HoldTimer returns a uint32
 func (obj *isisNeighborIIHState) HoldTimer() uint32 {
 
@@ -418,13 +378,13 @@ func (obj *isisNeighborIIHState) HoldTimer() uint32 {
 
 }
 
-// Hold timer is in the IIH.
+// Hold timer is in the IIH PDU.
 // HoldTimer returns a uint32
 func (obj *isisNeighborIIHState) HasHoldTimer() bool {
 	return obj.obj.HoldTimer != nil
 }
 
-// Hold timer is in the IIH.
+// Hold timer is in the IIH PDU.
 // SetHoldTimer sets the uint32 value in the IsisNeighborIIHState object
 func (obj *isisNeighborIIHState) SetHoldTimer(value uint32) IsisNeighborIIHState {
 
@@ -433,34 +393,34 @@ func (obj *isisNeighborIIHState) SetHoldTimer(value uint32) IsisNeighborIIHState
 }
 
 // Reference to Restarting Information.
-// RestartingInfo returns a IsisIIHRestartInfo
-func (obj *isisNeighborIIHState) RestartingInfo() IsisIIHRestartInfo {
-	if obj.obj.RestartingInfo == nil {
-		obj.obj.RestartingInfo = NewIsisIIHRestartInfo().msg()
+// RestartingStatus returns a IsisIIHNeighborRestartStatus
+func (obj *isisNeighborIIHState) RestartingStatus() IsisIIHNeighborRestartStatus {
+	if obj.obj.RestartingStatus == nil {
+		obj.obj.RestartingStatus = NewIsisIIHNeighborRestartStatus().msg()
 	}
-	if obj.restartingInfoHolder == nil {
-		obj.restartingInfoHolder = &isisIIHRestartInfo{obj: obj.obj.RestartingInfo}
+	if obj.restartingStatusHolder == nil {
+		obj.restartingStatusHolder = &isisIIHNeighborRestartStatus{obj: obj.obj.RestartingStatus}
 	}
-	return obj.restartingInfoHolder
+	return obj.restartingStatusHolder
 }
 
 // Reference to Restarting Information.
-// RestartingInfo returns a IsisIIHRestartInfo
-func (obj *isisNeighborIIHState) HasRestartingInfo() bool {
-	return obj.obj.RestartingInfo != nil
+// RestartingStatus returns a IsisIIHNeighborRestartStatus
+func (obj *isisNeighborIIHState) HasRestartingStatus() bool {
+	return obj.obj.RestartingStatus != nil
 }
 
 // Reference to Restarting Information.
-// SetRestartingInfo sets the IsisIIHRestartInfo value in the IsisNeighborIIHState object
-func (obj *isisNeighborIIHState) SetRestartingInfo(value IsisIIHRestartInfo) IsisNeighborIIHState {
+// SetRestartingStatus sets the IsisIIHNeighborRestartStatus value in the IsisNeighborIIHState object
+func (obj *isisNeighborIIHState) SetRestartingStatus(value IsisIIHNeighborRestartStatus) IsisNeighborIIHState {
 
-	obj.restartingInfoHolder = nil
-	obj.obj.RestartingInfo = value.msg()
+	obj.restartingStatusHolder = nil
+	obj.obj.RestartingStatus = value.msg()
 
 	return obj
 }
 
-// It refers to IIH packet TLVs container.
+// It refers to IIH PDU TLVs container.
 // Tlvs returns a IsisIIHTlvs
 func (obj *isisNeighborIIHState) Tlvs() IsisIIHTlvs {
 	if obj.obj.Tlvs == nil {
@@ -472,13 +432,13 @@ func (obj *isisNeighborIIHState) Tlvs() IsisIIHTlvs {
 	return obj.tlvsHolder
 }
 
-// It refers to IIH packet TLVs container.
+// It refers to IIH PDU TLVs container.
 // Tlvs returns a IsisIIHTlvs
 func (obj *isisNeighborIIHState) HasTlvs() bool {
 	return obj.obj.Tlvs != nil
 }
 
-// It refers to IIH packet TLVs container.
+// It refers to IIH PDU TLVs container.
 // SetTlvs sets the IsisIIHTlvs value in the IsisNeighborIIHState object
 func (obj *isisNeighborIIHState) SetTlvs(value IsisIIHTlvs) IsisNeighborIIHState {
 
@@ -493,9 +453,9 @@ func (obj *isisNeighborIIHState) validateObj(vObj *validation, set_default bool)
 		obj.setDefault()
 	}
 
-	if obj.obj.RestartingInfo != nil {
+	if obj.obj.RestartingStatus != nil {
 
-		obj.RestartingInfo().validateObj(vObj, set_default)
+		obj.RestartingStatus().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Tlvs != nil {
@@ -506,9 +466,5 @@ func (obj *isisNeighborIIHState) validateObj(vObj *validation, set_default bool)
 }
 
 func (obj *isisNeighborIIHState) setDefault() {
-	if obj.obj.NetworkType == nil {
-		obj.SetNetworkType(IsisNeighborIIHStateNetworkType.BROADCAST)
-
-	}
 
 }

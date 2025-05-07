@@ -16,7 +16,7 @@ type isisIIHsState struct {
 	obj                   *otg.IsisIIHsState
 	marshaller            marshalIsisIIHsState
 	unMarshaller          unMarshalIsisIIHsState
-	myStateHolder         IsisIIHsStateIsisRouterIIHStateIter
+	statesHolder          IsisIIHsStateIsisLocalIIHStateIter
 	neighborsStatesHolder IsisIIHsStateIsisNeighborIIHStateIter
 }
 
@@ -245,7 +245,7 @@ func (obj *isisIIHsState) Clone() (IsisIIHsState, error) {
 }
 
 func (obj *isisIIHsState) setNil() {
-	obj.myStateHolder = nil
+	obj.statesHolder = nil
 	obj.neighborsStatesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -280,8 +280,8 @@ type IsisIIHsState interface {
 	SetIsisRouterName(value string) IsisIIHsState
 	// HasIsisRouterName checks if IsisRouterName has been set in IsisIIHsState
 	HasIsisRouterName() bool
-	// MyState returns IsisIIHsStateIsisRouterIIHStateIterIter, set in IsisIIHsState
-	MyState() IsisIIHsStateIsisRouterIIHStateIter
+	// States returns IsisIIHsStateIsisLocalIIHStateIterIter, set in IsisIIHsState
+	States() IsisIIHsStateIsisLocalIIHStateIter
 	// NeighborsStates returns IsisIIHsStateIsisNeighborIIHStateIterIter, set in IsisIIHsState
 	NeighborsStates() IsisIIHsStateIsisNeighborIIHStateIter
 	setNil()
@@ -309,90 +309,90 @@ func (obj *isisIIHsState) SetIsisRouterName(value string) IsisIIHsState {
 	return obj
 }
 
-// IIH information of this router.
-// MyState returns a []IsisRouterIIHState
-func (obj *isisIIHsState) MyState() IsisIIHsStateIsisRouterIIHStateIter {
-	if len(obj.obj.MyState) == 0 {
-		obj.obj.MyState = []*otg.IsisRouterIIHState{}
+// State of this router.
+// States returns a []IsisLocalIIHState
+func (obj *isisIIHsState) States() IsisIIHsStateIsisLocalIIHStateIter {
+	if len(obj.obj.States) == 0 {
+		obj.obj.States = []*otg.IsisLocalIIHState{}
 	}
-	if obj.myStateHolder == nil {
-		obj.myStateHolder = newIsisIIHsStateIsisRouterIIHStateIter(&obj.obj.MyState).setMsg(obj)
+	if obj.statesHolder == nil {
+		obj.statesHolder = newIsisIIHsStateIsisLocalIIHStateIter(&obj.obj.States).setMsg(obj)
 	}
-	return obj.myStateHolder
+	return obj.statesHolder
 }
 
-type isisIIHsStateIsisRouterIIHStateIter struct {
-	obj                     *isisIIHsState
-	isisRouterIIHStateSlice []IsisRouterIIHState
-	fieldPtr                *[]*otg.IsisRouterIIHState
+type isisIIHsStateIsisLocalIIHStateIter struct {
+	obj                    *isisIIHsState
+	isisLocalIIHStateSlice []IsisLocalIIHState
+	fieldPtr               *[]*otg.IsisLocalIIHState
 }
 
-func newIsisIIHsStateIsisRouterIIHStateIter(ptr *[]*otg.IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter {
-	return &isisIIHsStateIsisRouterIIHStateIter{fieldPtr: ptr}
+func newIsisIIHsStateIsisLocalIIHStateIter(ptr *[]*otg.IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter {
+	return &isisIIHsStateIsisLocalIIHStateIter{fieldPtr: ptr}
 }
 
-type IsisIIHsStateIsisRouterIIHStateIter interface {
-	setMsg(*isisIIHsState) IsisIIHsStateIsisRouterIIHStateIter
-	Items() []IsisRouterIIHState
-	Add() IsisRouterIIHState
-	Append(items ...IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter
-	Set(index int, newObj IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter
-	Clear() IsisIIHsStateIsisRouterIIHStateIter
-	clearHolderSlice() IsisIIHsStateIsisRouterIIHStateIter
-	appendHolderSlice(item IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter
+type IsisIIHsStateIsisLocalIIHStateIter interface {
+	setMsg(*isisIIHsState) IsisIIHsStateIsisLocalIIHStateIter
+	Items() []IsisLocalIIHState
+	Add() IsisLocalIIHState
+	Append(items ...IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter
+	Set(index int, newObj IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter
+	Clear() IsisIIHsStateIsisLocalIIHStateIter
+	clearHolderSlice() IsisIIHsStateIsisLocalIIHStateIter
+	appendHolderSlice(item IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter
 }
 
-func (obj *isisIIHsStateIsisRouterIIHStateIter) setMsg(msg *isisIIHsState) IsisIIHsStateIsisRouterIIHStateIter {
+func (obj *isisIIHsStateIsisLocalIIHStateIter) setMsg(msg *isisIIHsState) IsisIIHsStateIsisLocalIIHStateIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisRouterIIHState{obj: val})
+		obj.appendHolderSlice(&isisLocalIIHState{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *isisIIHsStateIsisRouterIIHStateIter) Items() []IsisRouterIIHState {
-	return obj.isisRouterIIHStateSlice
+func (obj *isisIIHsStateIsisLocalIIHStateIter) Items() []IsisLocalIIHState {
+	return obj.isisLocalIIHStateSlice
 }
 
-func (obj *isisIIHsStateIsisRouterIIHStateIter) Add() IsisRouterIIHState {
-	newObj := &otg.IsisRouterIIHState{}
+func (obj *isisIIHsStateIsisLocalIIHStateIter) Add() IsisLocalIIHState {
+	newObj := &otg.IsisLocalIIHState{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisRouterIIHState{obj: newObj}
+	newLibObj := &isisLocalIIHState{obj: newObj}
 	newLibObj.setDefault()
-	obj.isisRouterIIHStateSlice = append(obj.isisRouterIIHStateSlice, newLibObj)
+	obj.isisLocalIIHStateSlice = append(obj.isisLocalIIHStateSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *isisIIHsStateIsisRouterIIHStateIter) Append(items ...IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter {
+func (obj *isisIIHsStateIsisLocalIIHStateIter) Append(items ...IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisRouterIIHStateSlice = append(obj.isisRouterIIHStateSlice, item)
+		obj.isisLocalIIHStateSlice = append(obj.isisLocalIIHStateSlice, item)
 	}
 	return obj
 }
 
-func (obj *isisIIHsStateIsisRouterIIHStateIter) Set(index int, newObj IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter {
+func (obj *isisIIHsStateIsisLocalIIHStateIter) Set(index int, newObj IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisRouterIIHStateSlice[index] = newObj
+	obj.isisLocalIIHStateSlice[index] = newObj
 	return obj
 }
-func (obj *isisIIHsStateIsisRouterIIHStateIter) Clear() IsisIIHsStateIsisRouterIIHStateIter {
+func (obj *isisIIHsStateIsisLocalIIHStateIter) Clear() IsisIIHsStateIsisLocalIIHStateIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisRouterIIHState{}
-		obj.isisRouterIIHStateSlice = []IsisRouterIIHState{}
+		*obj.fieldPtr = []*otg.IsisLocalIIHState{}
+		obj.isisLocalIIHStateSlice = []IsisLocalIIHState{}
 	}
 	return obj
 }
-func (obj *isisIIHsStateIsisRouterIIHStateIter) clearHolderSlice() IsisIIHsStateIsisRouterIIHStateIter {
-	if len(obj.isisRouterIIHStateSlice) > 0 {
-		obj.isisRouterIIHStateSlice = []IsisRouterIIHState{}
+func (obj *isisIIHsStateIsisLocalIIHStateIter) clearHolderSlice() IsisIIHsStateIsisLocalIIHStateIter {
+	if len(obj.isisLocalIIHStateSlice) > 0 {
+		obj.isisLocalIIHStateSlice = []IsisLocalIIHState{}
 	}
 	return obj
 }
-func (obj *isisIIHsStateIsisRouterIIHStateIter) appendHolderSlice(item IsisRouterIIHState) IsisIIHsStateIsisRouterIIHStateIter {
-	obj.isisRouterIIHStateSlice = append(obj.isisRouterIIHStateSlice, item)
+func (obj *isisIIHsStateIsisLocalIIHStateIter) appendHolderSlice(item IsisLocalIIHState) IsisIIHsStateIsisLocalIIHStateIter {
+	obj.isisLocalIIHStateSlice = append(obj.isisLocalIIHStateSlice, item)
 	return obj
 }
 
@@ -488,15 +488,15 @@ func (obj *isisIIHsState) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if len(obj.obj.MyState) != 0 {
+	if len(obj.obj.States) != 0 {
 
 		if set_default {
-			obj.MyState().clearHolderSlice()
-			for _, item := range obj.obj.MyState {
-				obj.MyState().appendHolderSlice(&isisRouterIIHState{obj: item})
+			obj.States().clearHolderSlice()
+			for _, item := range obj.obj.States {
+				obj.States().appendHolderSlice(&isisLocalIIHState{obj: item})
 			}
 		}
-		for _, item := range obj.MyState().Items() {
+		for _, item := range obj.States().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

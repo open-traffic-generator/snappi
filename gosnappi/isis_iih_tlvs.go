@@ -250,7 +250,7 @@ func (obj *isisIIHTlvs) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// IsisIIHTlvs is this contains the list of TLVs present in a IIH packet.
+// IsisIIHTlvs is this contains the list of TLVs present in a IIH PDU.
 type IsisIIHTlvs interface {
 	Validation
 	// msg marshals IsisIIHTlvs to protobuf object *otg.IsisIIHTlvs

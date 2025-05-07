@@ -244,10 +244,8 @@ func (obj *isisGracefulRestart) Clone() (IsisGracefulRestart, error) {
 
 // IsisGracefulRestart is contains IS-IS Graceful configuration parameters.
 // The emulated IS-IS router that supports Graceful Restart capability MUST include Restart TLV in all transmitted IIHs.
-// - If this router is to be acting as the "Helper" mode for a Restarting Router.
-// - If this router is to be acting as the "Restarting" mode then "Restart" trigger should be initiated from set_control_action for "isis" under "protocol" choice.
-// In that case, "helper_mode" can be configured as true or false for the "Helper" mode as well "Restarting" mode or only "Restaring" router respectively.
-// Refrence: https://datatracker.ietf.org/doc/html/rfc8706
+// - If this router is to be acting as the "Restarting" mode then "Restart" trigger should be initiated by set_control_action for "isis" under "protocol" choice.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8706
 type IsisGracefulRestart interface {
 	Validation
 	// msg marshals IsisGracefulRestart to protobuf object *otg.IsisGracefulRestart
@@ -277,7 +275,7 @@ type IsisGracefulRestart interface {
 	HasHelperMode() bool
 }
 
-// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// The emulated IS-IS router will act as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
 // HelperMode returns a bool
 func (obj *isisGracefulRestart) HelperMode() bool {
 
@@ -285,13 +283,13 @@ func (obj *isisGracefulRestart) HelperMode() bool {
 
 }
 
-// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// The emulated IS-IS router will act as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
 // HelperMode returns a bool
 func (obj *isisGracefulRestart) HasHelperMode() bool {
 	return obj.obj.HelperMode != nil
 }
 
-// The emulated IS-IS router is acting as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
+// The emulated IS-IS router will act as the "Helper" for the DUT that is restarting.  It acknowledges the Restart TLV sent by the DUT by sending an IIH containing a Restart TLV with the RA (Restart Acknowledgment) bit set.
 // SetHelperMode sets the bool value in the IsisGracefulRestart object
 func (obj *isisGracefulRestart) SetHelperMode(value bool) IsisGracefulRestart {
 
