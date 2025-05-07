@@ -294,6 +294,9 @@ type EgressOnlyTrackingMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/EgressOnlyTracking/properties/port_name
 //
+// x-constraint:
+// - /components/schemas/EgressOnlyTracking/properties/port_name
+//
 // PortNames returns a []string
 func (obj *egressOnlyTrackingMetricsRequest) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -305,6 +308,9 @@ func (obj *egressOnlyTrackingMetricsRequest) PortNames() []string {
 // Egress only tracking metrics will be retrieved for these port names.
 // If no port-names are provided, egress_only_tracking metrics will be returned for all ports
 // which have one or more egress_only_tracking enabled.
+//
+// x-constraint:
+// - /components/schemas/EgressOnlyTracking/properties/port_name
 //
 // x-constraint:
 // - /components/schemas/EgressOnlyTracking/properties/port_name

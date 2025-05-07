@@ -292,6 +292,9 @@ type Rocev2V6Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // Ipv6Name returns a string
 func (obj *rocev2V6Interface) Ipv6Name() string {
 
@@ -300,6 +303,9 @@ func (obj *rocev2V6Interface) Ipv6Name() string {
 }
 
 // The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

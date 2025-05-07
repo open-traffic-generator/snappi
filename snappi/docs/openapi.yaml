@@ -12647,6 +12647,10 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12817,6 +12821,10 @@ components:
         ipv6_name:
           description: |
             The unique name of IPv6 used as the source IP for this list of RoCEv2 peers.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv6/properties/name
+
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -16627,6 +16635,10 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -16684,6 +16696,10 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.QPs/properties/qp_name
+
+
+            x-constraint:
+            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -16691,6 +16707,11 @@ components:
         rx_endpoint:
           description: |
             The unique name of remote QP or port which be receiving the packets for the flow.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+            - /components/schemas/Rocev2.QPs/properties/qp_name
+
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -16800,6 +16821,10 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -16886,6 +16911,10 @@ components:
         port_name:
           description: |
             The name of port for which this settings will be applied to.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -18024,6 +18053,11 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
+
+            x-constraint:
+            - /components/schemas/Rocev2.V4Peer/properties/name
+            - /components/schemas/Rocev2.V6Peer/properties/name
+
 
             x-constraint:
             - /components/schemas/Rocev2.V4Peer/properties/name
@@ -22697,6 +22731,10 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.V4peer/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
@@ -22886,6 +22924,10 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
+
+            x-constraint:
+            - /components/schemas/Rocev2.V6peer/properties/name
+
 
             x-constraint:
             - /components/schemas/Rocev2.V6peer/properties/name
@@ -23383,6 +23425,10 @@ components:
             Egress only tracking metrics will be retrieved for these port names.
             If no port-names are provided, egress_only_tracking metrics will be returned for all ports
             which have one or more egress_only_tracking enabled.
+
+            x-constraint:
+            - /components/schemas/EgressOnlyTracking/properties/port_name
+
 
             x-constraint:
             - /components/schemas/EgressOnlyTracking/properties/port_name
