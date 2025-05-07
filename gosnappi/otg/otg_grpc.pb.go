@@ -34,6 +34,22 @@ type OpenapiClient interface {
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error)
+	// Append new attributes of resources to existing configuration on the traffic generator.
+	// Resource names should not be part of existing configuration of that resource type;
+	// it should be unique for the operation to succeed. A failed append might leave the
+	// configuration in an undefined state and if the error is due to some invalid or unsupported
+	// configuration in the appended resources, it is expected that the user fix the error
+	// and  restart from SetConfig operation. The fetched configuration shall also reflect
+	// the new configuration applied successfully.
+	AppendConfig(ctx context.Context, in *AppendConfigRequest, opts ...grpc.CallOption) (*AppendConfigResponse, error)
+	// Delete attributes of resources from existing configuration on the traffic generator.
+	// Resource names should already be part of existing configuration of that resource
+	// type; for the operation to succeed. A failed delete will leave the configuration
+	// in an undefined state and if the error is due to some invalid or unsupported configuration
+	// in the deleted  resources, it is expected that the user fix the error and restart
+	// from SetConfig operation. On successful deletion the fetched configuration shall
+	// not reflect the removed configuration.
+	DeleteConfig(ctx context.Context, in *DeleteConfigRequest, opts ...grpc.CallOption) (*DeleteConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(ctx context.Context, in *SetControlStateRequest, opts ...grpc.CallOption) (*SetControlStateResponse, error)
 	// Triggers actions against configured resources.
@@ -77,6 +93,24 @@ func (c *openapiClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts .
 func (c *openapiClient) UpdateConfig(ctx context.Context, in *UpdateConfigRequest, opts ...grpc.CallOption) (*UpdateConfigResponse, error) {
 	out := new(UpdateConfigResponse)
 	err := c.cc.Invoke(ctx, "/otg.Openapi/UpdateConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) AppendConfig(ctx context.Context, in *AppendConfigRequest, opts ...grpc.CallOption) (*AppendConfigResponse, error) {
+	out := new(AppendConfigResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/AppendConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) DeleteConfig(ctx context.Context, in *DeleteConfigRequest, opts ...grpc.CallOption) (*DeleteConfigResponse, error) {
+	out := new(DeleteConfigResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/DeleteConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -151,6 +185,22 @@ type OpenapiServer interface {
 	// additional information about a state change including any implicit changes that are
 	// outside the scope of the state change.
 	UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error)
+	// Append new attributes of resources to existing configuration on the traffic generator.
+	// Resource names should not be part of existing configuration of that resource type;
+	// it should be unique for the operation to succeed. A failed append might leave the
+	// configuration in an undefined state and if the error is due to some invalid or unsupported
+	// configuration in the appended resources, it is expected that the user fix the error
+	// and  restart from SetConfig operation. The fetched configuration shall also reflect
+	// the new configuration applied successfully.
+	AppendConfig(context.Context, *AppendConfigRequest) (*AppendConfigResponse, error)
+	// Delete attributes of resources from existing configuration on the traffic generator.
+	// Resource names should already be part of existing configuration of that resource
+	// type; for the operation to succeed. A failed delete will leave the configuration
+	// in an undefined state and if the error is due to some invalid or unsupported configuration
+	// in the deleted  resources, it is expected that the user fix the error and restart
+	// from SetConfig operation. On successful deletion the fetched configuration shall
+	// not reflect the removed configuration.
+	DeleteConfig(context.Context, *DeleteConfigRequest) (*DeleteConfigResponse, error)
 	// Sets the operational state of configured resources.
 	SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error)
 	// Triggers actions against configured resources.
@@ -178,6 +228,12 @@ func (UnimplementedOpenapiServer) GetConfig(context.Context, *emptypb.Empty) (*G
 }
 func (UnimplementedOpenapiServer) UpdateConfig(context.Context, *UpdateConfigRequest) (*UpdateConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
+}
+func (UnimplementedOpenapiServer) AppendConfig(context.Context, *AppendConfigRequest) (*AppendConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AppendConfig not implemented")
+}
+func (UnimplementedOpenapiServer) DeleteConfig(context.Context, *DeleteConfigRequest) (*DeleteConfigResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteConfig not implemented")
 }
 func (UnimplementedOpenapiServer) SetControlState(context.Context, *SetControlStateRequest) (*SetControlStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetControlState not implemented")
@@ -260,6 +316,42 @@ func _Openapi_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(OpenapiServer).UpdateConfig(ctx, req.(*UpdateConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_AppendConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppendConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).AppendConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/AppendConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).AppendConfig(ctx, req.(*AppendConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_DeleteConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).DeleteConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/DeleteConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).DeleteConfig(ctx, req.(*DeleteConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -390,6 +482,14 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateConfig",
 			Handler:    _Openapi_UpdateConfig_Handler,
+		},
+		{
+			MethodName: "AppendConfig",
+			Handler:    _Openapi_AppendConfig_Handler,
+		},
+		{
+			MethodName: "DeleteConfig",
+			Handler:    _Openapi_DeleteConfig_Handler,
 		},
 		{
 			MethodName: "SetControlState",

@@ -74,6 +74,20 @@ func (h *configurationHandler) UpdateConfig(rbody gosnappi.ConfigUpdate, r *http
 	return result, nil
 }
 
+func (h *configurationHandler) AppendConfig(rbody gosnappi.ConfigAppend, r *http.Request) (gosnappi.AppendConfigResponse, error) {
+	fmt.Println("AppendConfig: We need to put our business logic ...")
+	result := gosnappi.NewAppendConfigResponse()
+	result.Warning()
+	return result, nil
+}
+
+func (h *configurationHandler) DeleteConfig(rbody gosnappi.ConfigDelete, r *http.Request) (gosnappi.DeleteConfigResponse, error) {
+	fmt.Println("DeleteConfig: We need to put our business logic ...")
+	result := gosnappi.NewDeleteConfigResponse()
+	result.Warning()
+	return result, nil
+}
+
 //////////////////////////////////////////////////////////////////
 // 		Test Code where init gosnappi server and access it through gosnappi package
 //////////////////////////////////////////////////////////////////

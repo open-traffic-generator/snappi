@@ -1262,6 +1262,12 @@ from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
 from .snappi import FlowsUpdate
+from .snappi import ConfigAppend
+from .snappi import ConfigAppendResources
+from .snappi import ConfigAppendResourcesIter
+from .snappi import ConfigDelete
+from .snappi import ConfigDeleteResources
+from .snappi import ConfigDeleteResourcesIter
 from .snappi import ControlState
 from .snappi import StatePort
 from .snappi import StatePortLink

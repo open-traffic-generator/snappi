@@ -26,6 +26,8 @@ func (ctrl *configurationController) Routes() []httpapi.Route {
 		{Path: "/config", Method: "POST", Name: "SetConfig", Handler: ctrl.SetConfig},
 		{Path: "/config", Method: "GET", Name: "GetConfig", Handler: ctrl.GetConfig},
 		{Path: "/config", Method: "PATCH", Name: "UpdateConfig", Handler: ctrl.UpdateConfig},
+		{Path: "/config/append", Method: "PATCH", Name: "AppendConfig", Handler: ctrl.AppendConfig},
+		{Path: "/config/delete", Method: "PATCH", Name: "DeleteConfig", Handler: ctrl.DeleteConfig},
 	}
 }
 
@@ -195,6 +197,142 @@ func (ctrl *configurationController) UpdateConfig(w http.ResponseWriter, r *http
 }
 
 func (ctrl *configurationController) responseUpdateConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
+	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
+
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.Unmarshal().FromJson(rsp_err.Error())
+		if err != nil {
+			_ = result.SetCode(statusCode)
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
+			_ = result.SetErrors([]string{rsp_err.Error()})
+		}
+	}
+
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
+AppendConfig: PATCH /config/append
+Description: Append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. A failed append might leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the appended resources, it is expected that the user fix the error and  restart from SetConfig operation. The fetched configuration shall also reflect the new configuration applied successfully.
+*/
+func (ctrl *configurationController) AppendConfig(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.ConfigAppend
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewConfigAppend()
+			err := item.Unmarshal().FromJson(string(body))
+			if err != nil {
+				ctrl.responseAppendConfigError(w, "validation", err)
+				return
+			}
+		} else {
+			ctrl.responseAppendConfigError(w, "validation", readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseAppendConfigError(w, "validation", bodyError)
+		return
+	}
+	result, err := ctrl.handler.AppendConfig(item, r)
+	if err != nil {
+		ctrl.responseAppendConfigError(w, "internal", err)
+		return
+	}
+
+	if result.HasWarning() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Warning().Marshal()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseAppendConfigError(w, "internal", errors.New("Unknown error"))
+}
+
+func (ctrl *configurationController) responseAppendConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
+	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
+
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.Unmarshal().FromJson(rsp_err.Error())
+		if err != nil {
+			_ = result.SetCode(statusCode)
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
+			_ = result.SetErrors([]string{rsp_err.Error()})
+		}
+	}
+
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
+		log.Print(err.Error())
+	}
+}
+
+/*
+DeleteConfig: PATCH /config/delete
+Description: Delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. A failed delete will leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the deleted  resources, it is expected that the user fix the error and restart from SetConfig operation. On successful deletion the fetched configuration shall not reflect the removed configuration.
+*/
+func (ctrl *configurationController) DeleteConfig(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.ConfigDelete
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewConfigDelete()
+			err := item.Unmarshal().FromJson(string(body))
+			if err != nil {
+				ctrl.responseDeleteConfigError(w, "validation", err)
+				return
+			}
+		} else {
+			ctrl.responseDeleteConfigError(w, "validation", readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseDeleteConfigError(w, "validation", bodyError)
+		return
+	}
+	result, err := ctrl.handler.DeleteConfig(item, r)
+	if err != nil {
+		ctrl.responseDeleteConfigError(w, "internal", err)
+		return
+	}
+
+	if result.HasWarning() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.Warning().Marshal()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseDeleteConfigError(w, "internal", errors.New("Unknown error"))
+}
+
+func (ctrl *configurationController) responseDeleteConfigError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
 	var result gosnappi.Error
 	var statusCode int32
 	if errorKind == "validation" {
