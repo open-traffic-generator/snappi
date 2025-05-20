@@ -33,7 +33,7 @@ sdk_version = Version.version
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
-USE_MODELS_DIR = None
+USE_MODELS_DIR = "grpc_stream"
 
 # supported values - branch name or None
 USE_OPENAPIART_BRANCH = "support_config_streaming"
