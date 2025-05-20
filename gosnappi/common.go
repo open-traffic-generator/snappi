@@ -170,7 +170,7 @@ func (api *apiSt) NewGrpcTransport() GrpcTransport {
 		requestTimeout:      10 * time.Second,
 		dialTimeout:         10 * time.Second,
 		enableGrpcStreaming: false,
-		chunkSize:           50,
+		chunkSize:           4000000,
 	}
 	api.http = nil
 	return api.grpc

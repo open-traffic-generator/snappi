@@ -363,6 +363,7 @@ func (api *gosnappiApi) streamSetConfig(ctx context.Context, data []byte) (*otg.
 	bytes := []byte(data)
 	for i := 0; i < len(bytes); i += chunkSize {
 		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
 		if i+chunkSize > len(bytes) {
 			data.Datum = bytes[i:]
 		} else {
@@ -528,6 +529,7 @@ func (api *gosnappiApi) streamSetControlState(ctx context.Context, data []byte) 
 	bytes := []byte(data)
 	for i := 0; i < len(bytes); i += chunkSize {
 		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
 		if i+chunkSize > len(bytes) {
 			data.Datum = bytes[i:]
 		} else {
@@ -597,6 +599,7 @@ func (api *gosnappiApi) streamSetControlAction(ctx context.Context, data []byte)
 	bytes := []byte(data)
 	for i := 0; i < len(bytes); i += chunkSize {
 		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
 		if i+chunkSize > len(bytes) {
 			data.Datum = bytes[i:]
 		} else {

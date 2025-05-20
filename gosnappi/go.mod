@@ -2,14 +2,14 @@ module github.com/open-traffic-generator/snappi/gosnappi
 
 go 1.23
 
-toolchain go1.23.8
+toolchain go1.23.9
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
 	github.com/ghodss/yaml v1.0.0
 	github.com/gorilla/mux v1.8.1
 	github.com/stretchr/testify v1.10.0
-	google.golang.org/grpc v1.72.0
+	google.golang.org/grpc v1.72.1
 	google.golang.org/protobuf v1.36.6
 )
 
