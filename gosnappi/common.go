@@ -47,6 +47,7 @@ type GrpcTransport interface {
 	// DisableGrpcStreaming disables streaming of data through GRPC channel
 	DisableGrpcStreaming() GrpcTransport
 	// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
+	// we accept value in MB so if you set 1 we will consider it as 1MB
 	SetStreamChunkSize(value int) GrpcTransport
 }
 
@@ -104,7 +105,7 @@ func (obj *grpcTransport) DisableGrpcStreaming() GrpcTransport {
 
 // SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
 func (obj *grpcTransport) SetStreamChunkSize(value int) GrpcTransport {
-	obj.chunkSize = value
+	obj.chunkSize = value * 1024 * 1024
 	return obj
 }
 
