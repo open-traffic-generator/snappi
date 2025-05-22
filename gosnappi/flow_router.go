@@ -372,6 +372,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
@@ -386,6 +387,7 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
@@ -410,6 +412,7 @@ func (obj *flowRouter) TxNames() []string {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
@@ -424,6 +427,7 @@ func (obj *flowRouter) TxNames() []string {
 // - /components/schemas/Isis.V4RouteRange/properties/name
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
@@ -452,6 +456,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
@@ -466,6 +471,7 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // RxNames returns a []string
@@ -490,6 +496,7 @@ func (obj *flowRouter) RxNames() []string {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
@@ -504,6 +511,7 @@ func (obj *flowRouter) RxNames() []string {
 // - /components/schemas/Isis.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Ospfv2.V4RouteRange/properties/name
+// - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // SetRxNames sets the []string value in the FlowRouter object

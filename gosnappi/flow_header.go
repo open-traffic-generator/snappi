@@ -37,6 +37,7 @@ type flowHeader struct {
 	mplsHolder          FlowMpls
 	snmpv2CHolder       FlowSnmpv2C
 	rsvpHolder          FlowRsvp
+	macsecHolder        FlowMacsec
 }
 
 func NewFlowHeader() FlowHeader {
@@ -304,6 +305,7 @@ func (obj *flowHeader) setNil() {
 	obj.mplsHolder = nil
 	obj.snmpv2CHolder = nil
 	obj.rsvpHolder = nil
+	obj.macsecHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -503,6 +505,14 @@ type FlowHeader interface {
 	SetRsvp(value FlowRsvp) FlowHeader
 	// HasRsvp checks if Rsvp has been set in FlowHeader
 	HasRsvp() bool
+	// Macsec returns FlowMacsec, set in FlowHeader.
+	// FlowMacsec is mACsec packet header.
+	Macsec() FlowMacsec
+	// SetMacsec assigns FlowMacsec provided by user to FlowHeader.
+	// FlowMacsec is mACsec packet header.
+	SetMacsec(value FlowMacsec) FlowHeader
+	// HasMacsec checks if Macsec has been set in FlowHeader
+	HasMacsec() bool
 	setNil()
 }
 
@@ -531,6 +541,7 @@ var FlowHeaderChoice = struct {
 	MPLS          FlowHeaderChoiceEnum
 	SNMPV2C       FlowHeaderChoiceEnum
 	RSVP          FlowHeaderChoiceEnum
+	MACSEC        FlowHeaderChoiceEnum
 }{
 	CUSTOM:        FlowHeaderChoiceEnum("custom"),
 	ETHERNET:      FlowHeaderChoiceEnum("ethernet"),
@@ -553,6 +564,7 @@ var FlowHeaderChoice = struct {
 	MPLS:          FlowHeaderChoiceEnum("mpls"),
 	SNMPV2C:       FlowHeaderChoiceEnum("snmpv2c"),
 	RSVP:          FlowHeaderChoiceEnum("rsvp"),
+	MACSEC:        FlowHeaderChoiceEnum("macsec"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -575,6 +587,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Macsec = nil
+	obj.macsecHolder = nil
 	obj.obj.Rsvp = nil
 	obj.rsvpHolder = nil
 	obj.obj.Snmpv2C = nil
@@ -700,6 +714,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.RSVP {
 		obj.obj.Rsvp = NewFlowRsvp().msg()
+	}
+
+	if value == FlowHeaderChoice.MACSEC {
+		obj.obj.Macsec = NewFlowMacsec().msg()
 	}
 
 	return obj
@@ -1293,6 +1311,34 @@ func (obj *flowHeader) SetRsvp(value FlowRsvp) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Macsec returns a FlowMacsec
+func (obj *flowHeader) Macsec() FlowMacsec {
+	if obj.obj.Macsec == nil {
+		obj.setChoice(FlowHeaderChoice.MACSEC)
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &flowMacsec{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// description is TBD
+// Macsec returns a FlowMacsec
+func (obj *flowHeader) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// description is TBD
+// SetMacsec sets the FlowMacsec value in the FlowHeader object
+func (obj *flowHeader) SetMacsec(value FlowMacsec) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.MACSEC)
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1401,6 +1447,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rsvp != nil {
 
 		obj.Rsvp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
 	}
 
 }
@@ -1512,6 +1563,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Rsvp != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.RSVP
+	}
+
+	if obj.obj.Macsec != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.MACSEC
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

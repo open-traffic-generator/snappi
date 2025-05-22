@@ -319,12 +319,12 @@ type MacsecMetric interface {
 	SetInPktsOk(value uint64) MacsecMetric
 	// HasInPktsOk checks if InPktsOk has been set in MacsecMetric
 	HasInPktsOk() bool
-	// BadPktsRx returns uint64, set in MacsecMetric.
-	BadPktsRx() uint64
-	// SetBadPktsRx assigns uint64 provided by user to MacsecMetric
-	SetBadPktsRx(value uint64) MacsecMetric
-	// HasBadPktsRx checks if BadPktsRx has been set in MacsecMetric
-	HasBadPktsRx() bool
+	// InPktsBad returns uint64, set in MacsecMetric.
+	InPktsBad() uint64
+	// SetInPktsBad assigns uint64 provided by user to MacsecMetric
+	SetInPktsBad(value uint64) MacsecMetric
+	// HasInPktsBad checks if InPktsBad has been set in MacsecMetric
+	HasInPktsBad() bool
 	// InPktsBadTag returns uint64, set in MacsecMetric.
 	InPktsBadTag() uint64
 	// SetInPktsBadTag assigns uint64 provided by user to MacsecMetric
@@ -549,25 +549,25 @@ func (obj *macsecMetric) SetInPktsOk(value uint64) MacsecMetric {
 	return obj
 }
 
-// The number of bad packets received.
-// BadPktsRx returns a uint64
-func (obj *macsecMetric) BadPktsRx() uint64 {
+// The total number of received bad packets that failed atleast one validation check.
+// InPktsBad returns a uint64
+func (obj *macsecMetric) InPktsBad() uint64 {
 
-	return *obj.obj.BadPktsRx
+	return *obj.obj.InPktsBad
 
 }
 
-// The number of bad packets received.
-// BadPktsRx returns a uint64
-func (obj *macsecMetric) HasBadPktsRx() bool {
-	return obj.obj.BadPktsRx != nil
+// The total number of received bad packets that failed atleast one validation check.
+// InPktsBad returns a uint64
+func (obj *macsecMetric) HasInPktsBad() bool {
+	return obj.obj.InPktsBad != nil
 }
 
-// The number of bad packets received.
-// SetBadPktsRx sets the uint64 value in the MacsecMetric object
-func (obj *macsecMetric) SetBadPktsRx(value uint64) MacsecMetric {
+// The total number of received bad packets that failed atleast one validation check.
+// SetInPktsBad sets the uint64 value in the MacsecMetric object
+func (obj *macsecMetric) SetInPktsBad(value uint64) MacsecMetric {
 
-	obj.obj.BadPktsRx = &value
+	obj.obj.InPktsBad = &value
 	return obj
 }
 

@@ -13,26 +13,31 @@ import (
 // ***** MetricsRequest *****
 type metricsRequest struct {
 	validation
-	obj                *otg.MetricsRequest
-	marshaller         marshalMetricsRequest
-	unMarshaller       unMarshalMetricsRequest
-	portHolder         PortMetricsRequest
-	flowHolder         FlowMetricsRequest
-	bgpv4Holder        Bgpv4MetricsRequest
-	bgpv6Holder        Bgpv6MetricsRequest
-	isisHolder         IsisMetricsRequest
-	lagHolder          LagMetricsRequest
-	lacpHolder         LacpMetricsRequest
-	lldpHolder         LldpMetricsRequest
-	rsvpHolder         RsvpMetricsRequest
-	dhcpv4ClientHolder Dhcpv4ClientMetricsRequest
-	dhcpv4ServerHolder Dhcpv4ServerMetricsRequest
-	dhcpv6ClientHolder Dhcpv6ClientMetricsRequest
-	dhcpv6ServerHolder Dhcpv6ServerMetricsRequest
-	ospfv2Holder       Ospfv2MetricsRequest
-	convergenceHolder  ConvergenceRequest
-	macsecHolder       MacsecMetricsRequest
-	mkaHolder          MkaMetricsRequest
+	obj                      *otg.MetricsRequest
+	marshaller               marshalMetricsRequest
+	unMarshaller             unMarshalMetricsRequest
+	portHolder               PortMetricsRequest
+	flowHolder               FlowMetricsRequest
+	bgpv4Holder              Bgpv4MetricsRequest
+	bgpv6Holder              Bgpv6MetricsRequest
+	isisHolder               IsisMetricsRequest
+	lagHolder                LagMetricsRequest
+	lacpHolder               LacpMetricsRequest
+	lldpHolder               LldpMetricsRequest
+	rsvpHolder               RsvpMetricsRequest
+	dhcpv4ClientHolder       Dhcpv4ClientMetricsRequest
+	dhcpv4ServerHolder       Dhcpv4ServerMetricsRequest
+	dhcpv6ClientHolder       Dhcpv6ClientMetricsRequest
+	dhcpv6ServerHolder       Dhcpv6ServerMetricsRequest
+	ospfv2Holder             Ospfv2MetricsRequest
+	convergenceHolder        ConvergenceRequest
+	macsecHolder             MacsecMetricsRequest
+	mkaHolder                MkaMetricsRequest
+	ospfv3Holder             Ospfv3MetricsRequest
+	rocev2Ipv4Holder         Rocev2IPv4MetricsRequest
+	rocev2Ipv6Holder         Rocev2IPv6MetricsRequest
+	rocev2FlowHolder         Rocev2FlowMetricsRequest
+	egressOnlyTrackingHolder EgressOnlyTrackingMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -296,6 +301,11 @@ func (obj *metricsRequest) setNil() {
 	obj.convergenceHolder = nil
 	obj.macsecHolder = nil
 	obj.mkaHolder = nil
+	obj.ospfv3Holder = nil
+	obj.rocev2Ipv4Holder = nil
+	obj.rocev2Ipv6Holder = nil
+	obj.rocev2FlowHolder = nil
+	obj.egressOnlyTrackingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -473,6 +483,46 @@ type MetricsRequest interface {
 	SetMka(value MkaMetricsRequest) MetricsRequest
 	// HasMka checks if Mka has been set in MetricsRequest
 	HasMka() bool
+	// Ospfv3 returns Ospfv3MetricsRequest, set in MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	Ospfv3() Ospfv3MetricsRequest
+	// SetOspfv3 assigns Ospfv3MetricsRequest provided by user to MetricsRequest.
+	// Ospfv3MetricsRequest is the request to retrieve OSPFv3 per router metrics/statistics.
+	SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest
+	// HasOspfv3 checks if Ospfv3 has been set in MetricsRequest
+	HasOspfv3() bool
+	// Rocev2Ipv4 returns Rocev2IPv4MetricsRequest, set in MetricsRequest.
+	// Rocev2IPv4MetricsRequest is request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	Rocev2Ipv4() Rocev2IPv4MetricsRequest
+	// SetRocev2Ipv4 assigns Rocev2IPv4MetricsRequest provided by user to MetricsRequest.
+	// Rocev2IPv4MetricsRequest is request to retrieve RoCEv2 over IPv4 per peer metrics/statistics.
+	SetRocev2Ipv4(value Rocev2IPv4MetricsRequest) MetricsRequest
+	// HasRocev2Ipv4 checks if Rocev2Ipv4 has been set in MetricsRequest
+	HasRocev2Ipv4() bool
+	// Rocev2Ipv6 returns Rocev2IPv6MetricsRequest, set in MetricsRequest.
+	// Rocev2IPv6MetricsRequest is request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+	Rocev2Ipv6() Rocev2IPv6MetricsRequest
+	// SetRocev2Ipv6 assigns Rocev2IPv6MetricsRequest provided by user to MetricsRequest.
+	// Rocev2IPv6MetricsRequest is request to retrieve RoCEv2 over IPv6 per peer metrics/statistics.
+	SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) MetricsRequest
+	// HasRocev2Ipv6 checks if Rocev2Ipv6 has been set in MetricsRequest
+	HasRocev2Ipv6() bool
+	// Rocev2Flow returns Rocev2FlowMetricsRequest, set in MetricsRequest.
+	// Rocev2FlowMetricsRequest is request to retrieve RoCEv2 FLow statistics.
+	Rocev2Flow() Rocev2FlowMetricsRequest
+	// SetRocev2Flow assigns Rocev2FlowMetricsRequest provided by user to MetricsRequest.
+	// Rocev2FlowMetricsRequest is request to retrieve RoCEv2 FLow statistics.
+	SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest
+	// HasRocev2Flow checks if Rocev2Flow has been set in MetricsRequest
+	HasRocev2Flow() bool
+	// EgressOnlyTracking returns EgressOnlyTrackingMetricsRequest, set in MetricsRequest.
+	// EgressOnlyTrackingMetricsRequest is the container for a egress only tracking metric request.
+	EgressOnlyTracking() EgressOnlyTrackingMetricsRequest
+	// SetEgressOnlyTracking assigns EgressOnlyTrackingMetricsRequest provided by user to MetricsRequest.
+	// EgressOnlyTrackingMetricsRequest is the container for a egress only tracking metric request.
+	SetEgressOnlyTracking(value EgressOnlyTrackingMetricsRequest) MetricsRequest
+	// HasEgressOnlyTracking checks if EgressOnlyTracking has been set in MetricsRequest
+	HasEgressOnlyTracking() bool
 	setNil()
 }
 
@@ -480,41 +530,51 @@ type MetricsRequestChoiceEnum string
 
 // Enum of Choice on MetricsRequest
 var MetricsRequestChoice = struct {
-	PORT          MetricsRequestChoiceEnum
-	FLOW          MetricsRequestChoiceEnum
-	BGPV4         MetricsRequestChoiceEnum
-	BGPV6         MetricsRequestChoiceEnum
-	ISIS          MetricsRequestChoiceEnum
-	LAG           MetricsRequestChoiceEnum
-	LACP          MetricsRequestChoiceEnum
-	LLDP          MetricsRequestChoiceEnum
-	RSVP          MetricsRequestChoiceEnum
-	DHCPV4_CLIENT MetricsRequestChoiceEnum
-	DHCPV4_SERVER MetricsRequestChoiceEnum
-	DHCPV6_CLIENT MetricsRequestChoiceEnum
-	DHCPV6_SERVER MetricsRequestChoiceEnum
-	OSPFV2        MetricsRequestChoiceEnum
-	CONVERGENCE   MetricsRequestChoiceEnum
-	MACSEC        MetricsRequestChoiceEnum
-	MKA           MetricsRequestChoiceEnum
+	PORT                 MetricsRequestChoiceEnum
+	FLOW                 MetricsRequestChoiceEnum
+	BGPV4                MetricsRequestChoiceEnum
+	BGPV6                MetricsRequestChoiceEnum
+	ISIS                 MetricsRequestChoiceEnum
+	LAG                  MetricsRequestChoiceEnum
+	LACP                 MetricsRequestChoiceEnum
+	LLDP                 MetricsRequestChoiceEnum
+	RSVP                 MetricsRequestChoiceEnum
+	DHCPV4_CLIENT        MetricsRequestChoiceEnum
+	DHCPV4_SERVER        MetricsRequestChoiceEnum
+	DHCPV6_CLIENT        MetricsRequestChoiceEnum
+	DHCPV6_SERVER        MetricsRequestChoiceEnum
+	OSPFV2               MetricsRequestChoiceEnum
+	CONVERGENCE          MetricsRequestChoiceEnum
+	MACSEC               MetricsRequestChoiceEnum
+	MKA                  MetricsRequestChoiceEnum
+	OSPFV3               MetricsRequestChoiceEnum
+	ROCEV2_IPV4          MetricsRequestChoiceEnum
+	ROCEV2_IPV6          MetricsRequestChoiceEnum
+	ROCEV2_FLOW          MetricsRequestChoiceEnum
+	EGRESS_ONLY_TRACKING MetricsRequestChoiceEnum
 }{
-	PORT:          MetricsRequestChoiceEnum("port"),
-	FLOW:          MetricsRequestChoiceEnum("flow"),
-	BGPV4:         MetricsRequestChoiceEnum("bgpv4"),
-	BGPV6:         MetricsRequestChoiceEnum("bgpv6"),
-	ISIS:          MetricsRequestChoiceEnum("isis"),
-	LAG:           MetricsRequestChoiceEnum("lag"),
-	LACP:          MetricsRequestChoiceEnum("lacp"),
-	LLDP:          MetricsRequestChoiceEnum("lldp"),
-	RSVP:          MetricsRequestChoiceEnum("rsvp"),
-	DHCPV4_CLIENT: MetricsRequestChoiceEnum("dhcpv4_client"),
-	DHCPV4_SERVER: MetricsRequestChoiceEnum("dhcpv4_server"),
-	DHCPV6_CLIENT: MetricsRequestChoiceEnum("dhcpv6_client"),
-	DHCPV6_SERVER: MetricsRequestChoiceEnum("dhcpv6_server"),
-	OSPFV2:        MetricsRequestChoiceEnum("ospfv2"),
-	CONVERGENCE:   MetricsRequestChoiceEnum("convergence"),
-	MACSEC:        MetricsRequestChoiceEnum("macsec"),
-	MKA:           MetricsRequestChoiceEnum("mka"),
+	PORT:                 MetricsRequestChoiceEnum("port"),
+	FLOW:                 MetricsRequestChoiceEnum("flow"),
+	BGPV4:                MetricsRequestChoiceEnum("bgpv4"),
+	BGPV6:                MetricsRequestChoiceEnum("bgpv6"),
+	ISIS:                 MetricsRequestChoiceEnum("isis"),
+	LAG:                  MetricsRequestChoiceEnum("lag"),
+	LACP:                 MetricsRequestChoiceEnum("lacp"),
+	LLDP:                 MetricsRequestChoiceEnum("lldp"),
+	RSVP:                 MetricsRequestChoiceEnum("rsvp"),
+	DHCPV4_CLIENT:        MetricsRequestChoiceEnum("dhcpv4_client"),
+	DHCPV4_SERVER:        MetricsRequestChoiceEnum("dhcpv4_server"),
+	DHCPV6_CLIENT:        MetricsRequestChoiceEnum("dhcpv6_client"),
+	DHCPV6_SERVER:        MetricsRequestChoiceEnum("dhcpv6_server"),
+	OSPFV2:               MetricsRequestChoiceEnum("ospfv2"),
+	CONVERGENCE:          MetricsRequestChoiceEnum("convergence"),
+	MACSEC:               MetricsRequestChoiceEnum("macsec"),
+	MKA:                  MetricsRequestChoiceEnum("mka"),
+	OSPFV3:               MetricsRequestChoiceEnum("ospfv3"),
+	ROCEV2_IPV4:          MetricsRequestChoiceEnum("rocev2_ipv4"),
+	ROCEV2_IPV6:          MetricsRequestChoiceEnum("rocev2_ipv6"),
+	ROCEV2_FLOW:          MetricsRequestChoiceEnum("rocev2_flow"),
+	EGRESS_ONLY_TRACKING: MetricsRequestChoiceEnum("egress_only_tracking"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -536,6 +596,16 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.EgressOnlyTracking = nil
+	obj.egressOnlyTrackingHolder = nil
+	obj.obj.Rocev2Flow = nil
+	obj.rocev2FlowHolder = nil
+	obj.obj.Rocev2Ipv6 = nil
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2Ipv4 = nil
+	obj.rocev2Ipv4Holder = nil
+	obj.obj.Ospfv3 = nil
+	obj.ospfv3Holder = nil
 	obj.obj.Mka = nil
 	obj.mkaHolder = nil
 	obj.obj.Macsec = nil
@@ -637,6 +707,26 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.MKA {
 		obj.obj.Mka = NewMkaMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.OSPFV3 {
+		obj.obj.Ospfv3 = NewOspfv3MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2_IPV4 {
+		obj.obj.Rocev2Ipv4 = NewRocev2IPv4MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2_IPV6 {
+		obj.obj.Rocev2Ipv6 = NewRocev2IPv6MetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.ROCEV2_FLOW {
+		obj.obj.Rocev2Flow = NewRocev2FlowMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.EGRESS_ONLY_TRACKING {
+		obj.obj.EgressOnlyTracking = NewEgressOnlyTrackingMetricsRequest().msg()
 	}
 
 	return obj
@@ -1118,6 +1208,146 @@ func (obj *metricsRequest) SetMka(value MkaMetricsRequest) MetricsRequest {
 	return obj
 }
 
+// description is TBD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) Ospfv3() Ospfv3MetricsRequest {
+	if obj.obj.Ospfv3 == nil {
+		obj.setChoice(MetricsRequestChoice.OSPFV3)
+	}
+	if obj.ospfv3Holder == nil {
+		obj.ospfv3Holder = &ospfv3MetricsRequest{obj: obj.obj.Ospfv3}
+	}
+	return obj.ospfv3Holder
+}
+
+// description is TBD
+// Ospfv3 returns a Ospfv3MetricsRequest
+func (obj *metricsRequest) HasOspfv3() bool {
+	return obj.obj.Ospfv3 != nil
+}
+
+// description is TBD
+// SetOspfv3 sets the Ospfv3MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetOspfv3(value Ospfv3MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.OSPFV3)
+	obj.ospfv3Holder = nil
+	obj.obj.Ospfv3 = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Rocev2Ipv4 returns a Rocev2IPv4MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv4() Rocev2IPv4MetricsRequest {
+	if obj.obj.Rocev2Ipv4 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
+	}
+	if obj.rocev2Ipv4Holder == nil {
+		obj.rocev2Ipv4Holder = &rocev2IPv4MetricsRequest{obj: obj.obj.Rocev2Ipv4}
+	}
+	return obj.rocev2Ipv4Holder
+}
+
+// description is TBD
+// Rocev2Ipv4 returns a Rocev2IPv4MetricsRequest
+func (obj *metricsRequest) HasRocev2Ipv4() bool {
+	return obj.obj.Rocev2Ipv4 != nil
+}
+
+// description is TBD
+// SetRocev2Ipv4 sets the Rocev2IPv4MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv4(value Rocev2IPv4MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV4)
+	obj.rocev2Ipv4Holder = nil
+	obj.obj.Rocev2Ipv4 = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Rocev2Ipv6 returns a Rocev2IPv6MetricsRequest
+func (obj *metricsRequest) Rocev2Ipv6() Rocev2IPv6MetricsRequest {
+	if obj.obj.Rocev2Ipv6 == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
+	}
+	if obj.rocev2Ipv6Holder == nil {
+		obj.rocev2Ipv6Holder = &rocev2IPv6MetricsRequest{obj: obj.obj.Rocev2Ipv6}
+	}
+	return obj.rocev2Ipv6Holder
+}
+
+// description is TBD
+// Rocev2Ipv6 returns a Rocev2IPv6MetricsRequest
+func (obj *metricsRequest) HasRocev2Ipv6() bool {
+	return obj.obj.Rocev2Ipv6 != nil
+}
+
+// description is TBD
+// SetRocev2Ipv6 sets the Rocev2IPv6MetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Ipv6(value Rocev2IPv6MetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_IPV6)
+	obj.rocev2Ipv6Holder = nil
+	obj.obj.Rocev2Ipv6 = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// Rocev2Flow returns a Rocev2FlowMetricsRequest
+func (obj *metricsRequest) Rocev2Flow() Rocev2FlowMetricsRequest {
+	if obj.obj.Rocev2Flow == nil {
+		obj.setChoice(MetricsRequestChoice.ROCEV2_FLOW)
+	}
+	if obj.rocev2FlowHolder == nil {
+		obj.rocev2FlowHolder = &rocev2FlowMetricsRequest{obj: obj.obj.Rocev2Flow}
+	}
+	return obj.rocev2FlowHolder
+}
+
+// description is TBD
+// Rocev2Flow returns a Rocev2FlowMetricsRequest
+func (obj *metricsRequest) HasRocev2Flow() bool {
+	return obj.obj.Rocev2Flow != nil
+}
+
+// description is TBD
+// SetRocev2Flow sets the Rocev2FlowMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetRocev2Flow(value Rocev2FlowMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.ROCEV2_FLOW)
+	obj.rocev2FlowHolder = nil
+	obj.obj.Rocev2Flow = value.msg()
+
+	return obj
+}
+
+// description is TBD
+// EgressOnlyTracking returns a EgressOnlyTrackingMetricsRequest
+func (obj *metricsRequest) EgressOnlyTracking() EgressOnlyTrackingMetricsRequest {
+	if obj.obj.EgressOnlyTracking == nil {
+		obj.setChoice(MetricsRequestChoice.EGRESS_ONLY_TRACKING)
+	}
+	if obj.egressOnlyTrackingHolder == nil {
+		obj.egressOnlyTrackingHolder = &egressOnlyTrackingMetricsRequest{obj: obj.obj.EgressOnlyTracking}
+	}
+	return obj.egressOnlyTrackingHolder
+}
+
+// description is TBD
+// EgressOnlyTracking returns a EgressOnlyTrackingMetricsRequest
+func (obj *metricsRequest) HasEgressOnlyTracking() bool {
+	return obj.obj.EgressOnlyTracking != nil
+}
+
+// description is TBD
+// SetEgressOnlyTracking sets the EgressOnlyTrackingMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetEgressOnlyTracking(value EgressOnlyTrackingMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.EGRESS_ONLY_TRACKING)
+	obj.egressOnlyTrackingHolder = nil
+	obj.obj.EgressOnlyTracking = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1206,6 +1436,31 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Mka != nil {
 
 		obj.Mka().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ospfv3 != nil {
+
+		obj.Ospfv3().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2Ipv4 != nil {
+
+		obj.Rocev2Ipv4().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2Ipv6 != nil {
+
+		obj.Rocev2Ipv6().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Rocev2Flow != nil {
+
+		obj.Rocev2Flow().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.EgressOnlyTracking != nil {
+
+		obj.EgressOnlyTracking().validateObj(vObj, set_default)
 	}
 
 }
@@ -1297,6 +1552,31 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.Mka != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.MKA
+	}
+
+	if obj.obj.Ospfv3 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.OSPFV3
+	}
+
+	if obj.obj.Rocev2Ipv4 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2_IPV4
+	}
+
+	if obj.obj.Rocev2Ipv6 != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2_IPV6
+	}
+
+	if obj.obj.Rocev2Flow != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.ROCEV2_FLOW
+	}
+
+	if obj.obj.EgressOnlyTracking != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.EGRESS_ONLY_TRACKING
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
