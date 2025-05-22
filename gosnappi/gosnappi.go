@@ -112,8 +112,7 @@ func (api *gosnappiApi) grpcConnect() error {
 			var opts []grpc.DialOption
 			opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 			if api.Telemetry().isOTLPEnabled() {
-				opts = append(opts, grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
-				opts = append(opts, grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()))
+				opts = append(opts, grpc.WithStatsHandler(otelgrpc.NewClientHandler()))
 			}
 			conn, err := grpc.DialContext(ctx, api.grpc.location, opts...)
 			if err != nil {
