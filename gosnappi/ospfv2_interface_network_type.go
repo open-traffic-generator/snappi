@@ -300,10 +300,10 @@ type Ospfv2InterfaceNetworkType interface {
 	setChoice(value Ospfv2InterfaceNetworkTypeChoiceEnum) Ospfv2InterfaceNetworkType
 	// HasChoice checks if Choice has been set in Ospfv2InterfaceNetworkType
 	HasChoice() bool
-	// getter for PointToPoint to set choice.
-	PointToPoint()
 	// getter for Broadcast to set choice.
 	Broadcast()
+	// getter for PointToPoint to set choice.
+	PointToPoint()
 	// PointToMultipoint returns Ospfv2InterfaceNetworkTypeOspfv2InterfaceNeighborIterIter, set in Ospfv2InterfaceNetworkType
 	PointToMultipoint() Ospfv2InterfaceNetworkTypeOspfv2InterfaceNeighborIter
 	setNil()
@@ -326,14 +326,14 @@ func (obj *ospfv2InterfaceNetworkType) Choice() Ospfv2InterfaceNetworkTypeChoice
 	return Ospfv2InterfaceNetworkTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for PointToPoint to set choice
-func (obj *ospfv2InterfaceNetworkType) PointToPoint() {
-	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.POINT_TO_POINT)
-}
-
 // getter for Broadcast to set choice
 func (obj *ospfv2InterfaceNetworkType) Broadcast() {
 	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.BROADCAST)
+}
+
+// getter for PointToPoint to set choice
+func (obj *ospfv2InterfaceNetworkType) PointToPoint() {
+	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.POINT_TO_POINT)
 }
 
 // description is TBD

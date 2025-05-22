@@ -299,10 +299,10 @@ type SecureEntityCryptoEngineEncryptOnlyTxScTxPn interface {
 	setChoice(value SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoiceEnum) SecureEntityCryptoEngineEncryptOnlyTxScTxPn
 	// HasChoice checks if Choice has been set in SecureEntityCryptoEngineEncryptOnlyTxScTxPn
 	HasChoice() bool
-	// getter for IncrementingPn to set choice.
-	IncrementingPn()
 	// getter for FixedPn to set choice.
 	FixedPn()
+	// getter for IncrementingPn to set choice.
+	IncrementingPn()
 	// Fixed returns SecureEntityCryptoEngineEncryptOnlyFixedPn, set in SecureEntityCryptoEngineEncryptOnlyTxScTxPn.
 	// SecureEntityCryptoEngineEncryptOnlyFixedPn is fixed packet number(PN) configuration.
 	Fixed() SecureEntityCryptoEngineEncryptOnlyFixedPn
@@ -337,14 +337,14 @@ func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) Choice() SecureEntityCry
 	return SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IncrementingPn to set choice
-func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) IncrementingPn() {
-	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.INCREMENTING_PN)
-}
-
 // getter for FixedPn to set choice
 func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) FixedPn() {
 	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.FIXED_PN)
+}
+
+// getter for IncrementingPn to set choice
+func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) IncrementingPn() {
+	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.INCREMENTING_PN)
 }
 
 // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets will be sent out with the configured fixed PN or lower half of configured fixed XPN. 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing PN or XPN.

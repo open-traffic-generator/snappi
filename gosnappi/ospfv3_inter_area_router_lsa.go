@@ -48,6 +48,8 @@ type marshalOspfv3InterAreaRouterLsa interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3InterAreaRouterLsa to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv3InterAreaRouterLsa to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3InterAreaRouterLsa struct {
@@ -165,6 +167,23 @@ func (m *unMarshalospfv3InterAreaRouterLsa) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv3InterAreaRouterLsa) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv3InterAreaRouterLsa) ToJson() (string, error) {

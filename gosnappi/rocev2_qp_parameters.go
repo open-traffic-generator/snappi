@@ -47,6 +47,8 @@ type marshalRocev2QPParameters interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2QPParameters to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Rocev2QPParameters to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2QPParameters struct {
@@ -164,6 +166,23 @@ func (m *unMarshalrocev2QPParameters) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalrocev2QPParameters) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalrocev2QPParameters) ToJson() (string, error) {

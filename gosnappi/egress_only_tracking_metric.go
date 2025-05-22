@@ -48,6 +48,8 @@ type marshalEgressOnlyTrackingMetric interface {
 	ToYaml() (string, error)
 	// ToJson marshals EgressOnlyTrackingMetric to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals EgressOnlyTrackingMetric to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalegressOnlyTrackingMetric struct {
@@ -165,6 +167,23 @@ func (m *unMarshalegressOnlyTrackingMetric) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalegressOnlyTrackingMetric) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalegressOnlyTrackingMetric) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalEgressOnlyTrackingTimestamp interface {
 	ToYaml() (string, error)
 	// ToJson marshals EgressOnlyTrackingTimestamp to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals EgressOnlyTrackingTimestamp to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalegressOnlyTrackingTimestamp struct {
@@ -164,6 +166,23 @@ func (m *unMarshalegressOnlyTrackingTimestamp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalegressOnlyTrackingTimestamp) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalegressOnlyTrackingTimestamp) ToJson() (string, error) {

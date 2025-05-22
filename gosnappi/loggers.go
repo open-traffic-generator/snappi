@@ -21,7 +21,7 @@ type logInfo struct {
 var (
 	logSt       *logInfo
 	Logger      *zerolog.Logger
-	logLevel    zerolog.Level = zerolog.InfoLevel
+	logLevel    zerolog.Level = zerolog.WarnLevel
 	logToFile   bool          = false
 	logFileName string
 	ModuleName  string

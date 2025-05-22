@@ -47,6 +47,8 @@ type marshalOspfv3LsaHeader interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3LsaHeader to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv3LsaHeader to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3LsaHeader struct {
@@ -164,6 +166,23 @@ func (m *unMarshalospfv3LsaHeader) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv3LsaHeader) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv3LsaHeader) ToJson() (string, error) {

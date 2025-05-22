@@ -297,10 +297,10 @@ type MkaBasicRekeyMode interface {
 	setChoice(value MkaBasicRekeyModeChoiceEnum) MkaBasicRekeyMode
 	// HasChoice checks if Choice has been set in MkaBasicRekeyMode
 	HasChoice() bool
-	// getter for DontRekey to set choice.
-	DontRekey()
 	// getter for PnBased to set choice.
 	PnBased()
+	// getter for DontRekey to set choice.
+	DontRekey()
 	// TimerBased returns MkaBasicRekeyModeTimerBased, set in MkaBasicRekeyMode.
 	// MkaBasicRekeyModeTimerBased is timer based periodic rekey properties.
 	TimerBased() MkaBasicRekeyModeTimerBased
@@ -329,14 +329,14 @@ func (obj *mkaBasicRekeyMode) Choice() MkaBasicRekeyModeChoiceEnum {
 	return MkaBasicRekeyModeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for DontRekey to set choice
-func (obj *mkaBasicRekeyMode) DontRekey() {
-	obj.setChoice(MkaBasicRekeyModeChoice.DONT_REKEY)
-}
-
 // getter for PnBased to set choice
 func (obj *mkaBasicRekeyMode) PnBased() {
 	obj.setChoice(MkaBasicRekeyModeChoice.PN_BASED)
+}
+
+// getter for DontRekey to set choice
+func (obj *mkaBasicRekeyMode) DontRekey() {
+	obj.setChoice(MkaBasicRekeyModeChoice.DONT_REKEY)
 }
 
 // Mode choices.

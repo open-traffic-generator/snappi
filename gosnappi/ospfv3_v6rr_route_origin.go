@@ -48,6 +48,8 @@ type marshalOspfv3V6RRRouteOrigin interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3V6RRRouteOrigin to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv3V6RRRouteOrigin to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3V6RRRouteOrigin struct {
@@ -167,6 +169,23 @@ func (m *unMarshalospfv3V6RRRouteOrigin) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalospfv3V6RRRouteOrigin) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalospfv3V6RRRouteOrigin) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -278,12 +297,12 @@ type Ospfv3V6RRRouteOrigin interface {
 	setChoice(value Ospfv3V6RRRouteOriginChoiceEnum) Ospfv3V6RRRouteOrigin
 	// HasChoice checks if Choice has been set in Ospfv3V6RRRouteOrigin
 	HasChoice() bool
-	// getter for ExternalType_2 to set choice.
-	ExternalType_2()
 	// getter for ExternalType_1 to set choice.
 	ExternalType_1()
 	// getter for IntraArea to set choice.
 	IntraArea()
+	// getter for ExternalType_2 to set choice.
+	ExternalType_2()
 	// getter for InterArea to set choice.
 	InterArea()
 	// NssaExternal returns Ospfv3V6RRNssaExternal, set in Ospfv3V6RRRouteOrigin.
@@ -318,11 +337,6 @@ func (obj *ospfv3V6RRRouteOrigin) Choice() Ospfv3V6RRRouteOriginChoiceEnum {
 	return Ospfv3V6RRRouteOriginChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for ExternalType_2 to set choice
-func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
-	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_2)
-}
-
 // getter for ExternalType_1 to set choice
 func (obj *ospfv3V6RRRouteOrigin) ExternalType_1() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_1)
@@ -331,6 +345,11 @@ func (obj *ospfv3V6RRRouteOrigin) ExternalType_1() {
 // getter for IntraArea to set choice
 func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
+}
+
+// getter for ExternalType_2 to set choice
+func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
+	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_2)
 }
 
 // getter for InterArea to set choice
