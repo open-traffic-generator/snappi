@@ -47,6 +47,8 @@ type marshalPatternFlowMplsBottomOfStackMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowMplsBottomOfStackMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowMplsBottomOfStackMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowMplsBottomOfStackMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowMplsBottomOfStackMetricTag) FromYaml(value string) 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowMplsBottomOfStackMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowMplsBottomOfStackMetricTag) ToJson() (string, error) {

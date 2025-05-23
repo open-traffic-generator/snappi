@@ -55,6 +55,8 @@ type marshalBgpSrteV4TunnelTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrteV4TunnelTlv to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals BgpSrteV4TunnelTlv to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrteV4TunnelTlv struct {
@@ -172,6 +174,23 @@ func (m *unMarshalbgpSrteV4TunnelTlv) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalbgpSrteV4TunnelTlv) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalbgpSrteV4TunnelTlv) ToJson() (string, error) {

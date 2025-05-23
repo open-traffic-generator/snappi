@@ -49,6 +49,8 @@ type marshalRocev2AckAndNak interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2AckAndNak to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Rocev2AckAndNak to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2AckAndNak struct {
@@ -166,6 +168,23 @@ func (m *unMarshalrocev2AckAndNak) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalrocev2AckAndNak) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalrocev2AckAndNak) ToJson() (string, error) {

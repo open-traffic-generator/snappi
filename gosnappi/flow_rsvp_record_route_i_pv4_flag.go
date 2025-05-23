@@ -47,6 +47,8 @@ type marshalFlowRSVPRecordRouteIPv4Flag interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPRecordRouteIPv4Flag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPRecordRouteIPv4Flag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPRecordRouteIPv4Flag struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowRSVPRecordRouteIPv4Flag) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalflowRSVPRecordRouteIPv4Flag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalflowRSVPRecordRouteIPv4Flag) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -270,10 +289,10 @@ type FlowRSVPRecordRouteIPv4Flag interface {
 	setChoice(value FlowRSVPRecordRouteIPv4FlagChoiceEnum) FlowRSVPRecordRouteIPv4Flag
 	// HasChoice checks if Choice has been set in FlowRSVPRecordRouteIPv4Flag
 	HasChoice() bool
-	// getter for LocalProtectionAvailable to set choice.
-	LocalProtectionAvailable()
 	// getter for LocalProtectionInUse to set choice.
 	LocalProtectionInUse()
+	// getter for LocalProtectionAvailable to set choice.
+	LocalProtectionAvailable()
 }
 
 type FlowRSVPRecordRouteIPv4FlagChoiceEnum string
@@ -291,14 +310,14 @@ func (obj *flowRSVPRecordRouteIPv4Flag) Choice() FlowRSVPRecordRouteIPv4FlagChoi
 	return FlowRSVPRecordRouteIPv4FlagChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for LocalProtectionAvailable to set choice
-func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionAvailable() {
-	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
-}
-
 // getter for LocalProtectionInUse to set choice
 func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionInUse() {
 	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_IN_USE)
+}
+
+// getter for LocalProtectionAvailable to set choice
+func (obj *flowRSVPRecordRouteIPv4Flag) LocalProtectionAvailable() {
+	obj.setChoice(FlowRSVPRecordRouteIPv4FlagChoice.LOCAL_PROTECTION_AVAILABLE)
 }
 
 // description is TBD

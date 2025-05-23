@@ -48,6 +48,8 @@ type marshalRocev2V6Peer interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2V6Peer to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Rocev2V6Peer to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2V6Peer struct {
@@ -165,6 +167,23 @@ func (m *unMarshalrocev2V6Peer) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalrocev2V6Peer) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalrocev2V6Peer) ToJson() (string, error) {

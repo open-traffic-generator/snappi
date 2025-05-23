@@ -47,6 +47,8 @@ type marshalLldpCustomTLVState interface {
 	ToYaml() (string, error)
 	// ToJson marshals LldpCustomTLVState to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals LldpCustomTLVState to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallldpCustomTLVState struct {
@@ -164,6 +166,23 @@ func (m *unMarshallldpCustomTLVState) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallldpCustomTLVState) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallldpCustomTLVState) ToJson() (string, error) {

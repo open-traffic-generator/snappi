@@ -48,6 +48,8 @@ type marshalIsisLspIpv4ExternalReachabilityTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspIpv4ExternalReachabilityTlv to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals IsisLspIpv4ExternalReachabilityTlv to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspIpv4ExternalReachabilityTlv struct {
@@ -165,6 +167,23 @@ func (m *unMarshalisisLspIpv4ExternalReachabilityTlv) FromYaml(value string) err
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalisisLspIpv4ExternalReachabilityTlv) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalisisLspIpv4ExternalReachabilityTlv) ToJson() (string, error) {

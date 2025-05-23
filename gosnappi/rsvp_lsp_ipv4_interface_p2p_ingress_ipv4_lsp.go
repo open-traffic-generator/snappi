@@ -51,6 +51,8 @@ type marshalRsvpLspIpv4InterfaceP2PIngressIpv4Lsp interface {
 	ToYaml() (string, error)
 	// ToJson marshals RsvpLspIpv4InterfaceP2PIngressIpv4Lsp to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals RsvpLspIpv4InterfaceP2PIngressIpv4Lsp to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalrsvpLspIpv4InterfaceP2PIngressIpv4Lsp struct {
@@ -168,6 +170,23 @@ func (m *unMarshalrsvpLspIpv4InterfaceP2PIngressIpv4Lsp) FromYaml(value string) 
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalrsvpLspIpv4InterfaceP2PIngressIpv4Lsp) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalrsvpLspIpv4InterfaceP2PIngressIpv4Lsp) ToJson() (string, error) {

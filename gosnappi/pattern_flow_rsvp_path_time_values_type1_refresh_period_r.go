@@ -49,6 +49,8 @@ type marshalPatternFlowRSVPPathTimeValuesType1RefreshPeriodR interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathTimeValuesType1RefreshPeriodR to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowRSVPPathTimeValuesType1RefreshPeriodR to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathTimeValuesType1RefreshPeriodR struct {
@@ -166,6 +168,23 @@ func (m *unMarshalpatternFlowRSVPPathTimeValuesType1RefreshPeriodR) FromYaml(val
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowRSVPPathTimeValuesType1RefreshPeriodR) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathTimeValuesType1RefreshPeriodR) ToJson() (string, error) {

@@ -47,6 +47,8 @@ type marshalPatternFlowIcmpv6EchoTypeMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIcmpv6EchoTypeMetricTag to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals PatternFlowIcmpv6EchoTypeMetricTag to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIcmpv6EchoTypeMetricTag struct {
@@ -164,6 +166,23 @@ func (m *unMarshalpatternFlowIcmpv6EchoTypeMetricTag) FromYaml(value string) err
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalpatternFlowIcmpv6EchoTypeMetricTag) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalpatternFlowIcmpv6EchoTypeMetricTag) ToJson() (string, error) {

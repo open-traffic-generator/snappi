@@ -47,6 +47,8 @@ type marshalLagProtocolStatic interface {
 	ToYaml() (string, error)
 	// ToJson marshals LagProtocolStatic to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals LagProtocolStatic to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshallagProtocolStatic struct {
@@ -164,6 +166,23 @@ func (m *unMarshallagProtocolStatic) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshallagProtocolStatic) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshallagProtocolStatic) ToJson() (string, error) {

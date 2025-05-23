@@ -48,6 +48,8 @@ type marshalDhcpV6ServerDns interface {
 	ToYaml() (string, error)
 	// ToJson marshals DhcpV6ServerDns to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals DhcpV6ServerDns to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpV6ServerDns struct {
@@ -165,6 +167,23 @@ func (m *unMarshaldhcpV6ServerDns) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldhcpV6ServerDns) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldhcpV6ServerDns) ToJson() (string, error) {

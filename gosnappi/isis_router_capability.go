@@ -49,6 +49,8 @@ type marshalIsisRouterCapability interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisRouterCapability to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals IsisRouterCapability to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisRouterCapability struct {
@@ -168,6 +170,23 @@ func (m *unMarshalisisRouterCapability) FromYaml(value string) error {
 	return nil
 }
 
+func (m *marshalisisRouterCapability) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func (m *marshalisisRouterCapability) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -282,10 +301,10 @@ type IsisRouterCapability interface {
 	setChoice(value IsisRouterCapabilityChoiceEnum) IsisRouterCapability
 	// HasChoice checks if Choice has been set in IsisRouterCapability
 	HasChoice() bool
-	// getter for Ipv4TeRouterId to set choice.
-	Ipv4TeRouterId()
 	// getter for InterfaceIp to set choice.
 	InterfaceIp()
+	// getter for Ipv4TeRouterId to set choice.
+	Ipv4TeRouterId()
 	// CustomRouterCapId returns string, set in IsisRouterCapability.
 	CustomRouterCapId() string
 	// SetCustomRouterCapId assigns string provided by user to IsisRouterCapability
@@ -346,14 +365,14 @@ func (obj *isisRouterCapability) Choice() IsisRouterCapabilityChoiceEnum {
 	return IsisRouterCapabilityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Ipv4TeRouterId to set choice
-func (obj *isisRouterCapability) Ipv4TeRouterId() {
-	obj.setChoice(IsisRouterCapabilityChoice.IPV4_TE_ROUTER_ID)
-}
-
 // getter for InterfaceIp to set choice
 func (obj *isisRouterCapability) InterfaceIp() {
 	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
+}
+
+// getter for Ipv4TeRouterId to set choice
+func (obj *isisRouterCapability) Ipv4TeRouterId() {
+	obj.setChoice(IsisRouterCapabilityChoice.IPV4_TE_ROUTER_ID)
 }
 
 // The Router Capability ID SHOULD be identical to the value advertised in the Traffic Engineering Router ID TLV [RFC5305].

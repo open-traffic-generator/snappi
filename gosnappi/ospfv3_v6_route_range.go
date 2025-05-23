@@ -49,6 +49,8 @@ type marshalOspfv3V6RouteRange interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3V6RouteRange to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals Ospfv3V6RouteRange to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3V6RouteRange struct {
@@ -166,6 +168,23 @@ func (m *unMarshalospfv3V6RouteRange) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalospfv3V6RouteRange) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalospfv3V6RouteRange) ToJson() (string, error) {

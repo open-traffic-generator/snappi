@@ -49,6 +49,8 @@ type marshalFlowRSVPPathObjectsClassSessionAttribute interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathObjectsClassSessionAttribute to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowRSVPPathObjectsClassSessionAttribute to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathObjectsClassSessionAttribute struct {
@@ -166,6 +168,23 @@ func (m *unMarshalflowRSVPPathObjectsClassSessionAttribute) FromYaml(value strin
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowRSVPPathObjectsClassSessionAttribute) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathObjectsClassSessionAttribute) ToJson() (string, error) {

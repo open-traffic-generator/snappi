@@ -48,6 +48,8 @@ type marshalFlowContinuous interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowContinuous to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals FlowContinuous to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowContinuous struct {
@@ -165,6 +167,23 @@ func (m *unMarshalflowContinuous) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalflowContinuous) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalflowContinuous) ToJson() (string, error) {

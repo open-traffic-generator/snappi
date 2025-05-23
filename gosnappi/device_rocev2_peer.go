@@ -49,6 +49,8 @@ type marshalDeviceRocev2Peer interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceRocev2Peer to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals DeviceRocev2Peer to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceRocev2Peer struct {
@@ -166,6 +168,23 @@ func (m *unMarshaldeviceRocev2Peer) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshaldeviceRocev2Peer) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshaldeviceRocev2Peer) ToJson() (string, error) {

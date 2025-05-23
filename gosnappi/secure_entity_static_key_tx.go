@@ -49,6 +49,8 @@ type marshalSecureEntityStaticKeyTx interface {
 	ToYaml() (string, error)
 	// ToJson marshals SecureEntityStaticKeyTx to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals SecureEntityStaticKeyTx to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalsecureEntityStaticKeyTx struct {
@@ -166,6 +168,23 @@ func (m *unMarshalsecureEntityStaticKeyTx) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalsecureEntityStaticKeyTx) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalsecureEntityStaticKeyTx) ToJson() (string, error) {

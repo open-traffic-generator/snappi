@@ -47,6 +47,8 @@ type marshalResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin interface {
 	ToYaml() (string, error)
 	// ToJson marshals ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin to JSON text
 	ToJson() (string, error)
+	// ToJsonRaw marshals ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin to raw JSON text
+	ToJsonRaw() (string, error)
 }
 
 type unMarshalresultExtendedCommunityTransitive2OctetAsTypeRouteOrigin struct {
@@ -164,6 +166,23 @@ func (m *unMarshalresultExtendedCommunityTransitive2OctetAsTypeRouteOrigin) From
 		return vErr
 	}
 	return nil
+}
+
+func (m *marshalresultExtendedCommunityTransitive2OctetAsTypeRouteOrigin) ToJsonRaw() (string, error) {
+	vErr := m.obj.validateToAndFrom()
+	if vErr != nil {
+		return "", vErr
+	}
+	opts := protojson.MarshalOptions{
+		UseProtoNames:   true,
+		AllowPartial:    true,
+		EmitUnpopulated: false,
+	}
+	data, err := opts.Marshal(m.obj.msg())
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func (m *marshalresultExtendedCommunityTransitive2OctetAsTypeRouteOrigin) ToJson() (string, error) {
