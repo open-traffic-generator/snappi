@@ -279,9 +279,6 @@ type PortMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *portMetricsRequest) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -291,9 +288,6 @@ func (obj *portMetricsRequest) PortNames() []string {
 }
 
 // The names of objects to return results for. An empty list will return all port row results.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
