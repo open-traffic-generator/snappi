@@ -279,6 +279,9 @@ type MacsecMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Macsec/properties/name
 //
+// x-constraint:
+// - /components/schemas/Macsec/properties/name
+//
 // SecureEntityNames returns a []string
 func (obj *macsecMetricsRequest) SecureEntityNames() []string {
 	if obj.obj.SecureEntityNames == nil {
@@ -288,6 +291,9 @@ func (obj *macsecMetricsRequest) SecureEntityNames() []string {
 }
 
 // The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
+//
+// x-constraint:
+// - /components/schemas/Macsec/properties/name
 //
 // x-constraint:
 // - /components/schemas/Macsec/properties/name

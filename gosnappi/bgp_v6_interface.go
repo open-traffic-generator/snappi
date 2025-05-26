@@ -288,6 +288,11 @@ type BgpV6Interface interface {
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+// - /components/schemas/Device.Ipv6Loopback/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
+//
 // Ipv6Name returns a string
 func (obj *bgpV6Interface) Ipv6Name() string {
 
@@ -296,6 +301,11 @@ func (obj *bgpV6Interface) Ipv6Name() string {
 }
 
 // The unique name of IPv6 Loopback IPv6 interface or DHCPv4 client used as the source IP for this list of BGP peers.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+// - /components/schemas/Device.Ipv6Loopback/properties/name
+// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

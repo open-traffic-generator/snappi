@@ -279,6 +279,9 @@ type Ospfv2MetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ospfv2/properties/name
+//
 // RouterNames returns a []string
 func (obj *ospfv2MetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -288,6 +291,9 @@ func (obj *ospfv2MetricsRequest) RouterNames() []string {
 }
 
 // The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
+//
+// x-constraint:
+// - /components/schemas/Device.Ospfv2/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name
