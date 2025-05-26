@@ -290,6 +290,9 @@ type DeviceMacsecEthernetInterface interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
+//
 // EthName returns a string
 func (obj *deviceMacsecEthernetInterface) EthName() string {
 
@@ -298,6 +301,9 @@ func (obj *deviceMacsecEthernetInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which MACsec is enabled.
+//
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

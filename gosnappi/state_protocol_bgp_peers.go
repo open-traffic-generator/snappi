@@ -280,6 +280,10 @@ type StateProtocolBgpPeers interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
+//
 // PeerNames returns a []string
 func (obj *stateProtocolBgpPeers) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -289,6 +293,10 @@ func (obj *stateProtocolBgpPeers) PeerNames() []string {
 }
 
 // The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
+//
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name

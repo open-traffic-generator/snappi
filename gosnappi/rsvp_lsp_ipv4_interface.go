@@ -297,6 +297,10 @@ type RsvpLspIpv4Interface interface {
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
+//
 // Ipv4Name returns a string
 func (obj *rsvpLspIpv4Interface) Ipv4Name() string {
 
@@ -305,6 +309,10 @@ func (obj *rsvpLspIpv4Interface) Ipv4Name() string {
 }
 
 // The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

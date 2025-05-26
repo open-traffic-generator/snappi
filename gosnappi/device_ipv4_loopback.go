@@ -285,6 +285,9 @@ type DeviceIpv4Loopback interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
+//
 // EthName returns a string
 func (obj *deviceIpv4Loopback) EthName() string {
 
@@ -293,6 +296,9 @@ func (obj *deviceIpv4Loopback) EthName() string {
 }
 
 // The unique name of the Ethernet interface behind which this Loopback  interface will be created.
+//
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

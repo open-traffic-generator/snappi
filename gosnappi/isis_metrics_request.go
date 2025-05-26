@@ -279,6 +279,9 @@ type IsisMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
+//
 // RouterNames returns a []string
 func (obj *isisMetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -288,6 +291,9 @@ func (obj *isisMetricsRequest) RouterNames() []string {
 }
 
 // The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
+//
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
