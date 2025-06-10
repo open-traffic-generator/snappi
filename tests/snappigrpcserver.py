@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "snappi"))
 pb2_grpc = importlib.import_module("otg_pb2_grpc")
 pb2 = importlib.import_module("otg_pb2")
 
-GRPC_PORT = 50001
+GRPC_PORT = 8080
 
 class OpenapiServicer(pb2_grpc.OpenapiServicer):
     def __init__(self):

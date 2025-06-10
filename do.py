@@ -369,11 +369,11 @@ def dist():
 
 
 def install():
-    wheel = "{}-{}-py2.py3-none-any.whl".format(*pkg())
+    wheel = "snappi"
     run(
         [
             "{} -m pip install --upgrade --force-reinstall {}[testing]".format(
-                py(), os.path.join("dist", wheel)
+                py(), wheel,
             ),
         ]
     )

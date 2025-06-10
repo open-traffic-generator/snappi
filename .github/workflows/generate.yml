@@ -3,71 +3,70 @@ name: cicd
 on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-22.04
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [3.9]
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-          submodules: recursive
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Setup Go and protoc
-        run: |
-          python do.py setup_ext
-      - name: Install dependencies
-        run: |
-          python do.py setup
-          python do.py init
-      - name: Generate Python and Go SDK
-        run: |
-          ".env/bin/python" do.py generate_sdk
-      - name: Build distribution
-        run: |
-          python do.py dist
-          python do.py generate_distribution_checksum
-      - name: Commit go and python pkg
-        id: get_sha
-        run: |
-          git config user.name "Github Actions Bot"
-          git config user.email "actions@github.com"
-          git pull
-          git add --force gosnappi/\*
-          git add --force snappi/\*
-          git add --force requirements.txt
-          if git status --porcelain | grep .
-            then
-              git commit -m "Update auto generated go snappi"
-              git push
-            else
-              echo "No change in auto generated go snappi"
-          fi
-          echo "::set-output name=sha::$(git rev-parse HEAD)"
-      - name: storing get_sha in file
-        run: |
-          echo "${{ steps.get_sha.outputs.sha }}" > store_sha_file
-      - name: Archive generated artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-artifacts
-          path: |
-            dist
-            snappi
-            gosnappi
-            models-release
-            *.proto
-            store_sha_file
+#  build:
+#    runs-on: ubuntu-22.04
+#    strategy:
+#      max-parallel: 1
+#      matrix:
+#        python-version: [3.9]
+#
+#    steps:
+#      - name: Checkout source
+#        uses: actions/checkout@v2
+#        with:
+#          ref: ${{ github.head_ref }}
+#          submodules: recursive
+#      - name: Set up Python ${{ matrix.python-version }}
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: ${{ matrix.python-version }}
+#      - name: Setup Go and protoc
+#        run: |
+#          python do.py setup_ext
+#      - name: Install dependencies
+#        run: |
+#          python do.py setup
+#          python do.py init
+#      - name: Generate Python and Go SDK
+#        run: |
+#          ".env/bin/python" do.py generate_sdk
+#      - name: Build distribution
+#        run: |
+#          python do.py dist
+#          python do.py generate_distribution_checksum
+#      - name: Commit go and python pkg
+#        id: get_sha
+#        run: |
+#          git config user.name "Github Actions Bot"
+#          git config user.email "actions@github.com"
+#          git pull
+#          git add --force gosnappi/\*
+#          git add --force snappi/\*
+#          git add --force requirements.txt
+#          if git status --porcelain | grep .
+#            then
+#              git commit -m "Update auto generated go snappi"
+#              git push
+#            else
+#              echo "No change in auto generated go snappi"
+#          fi
+#          echo "::set-output name=sha::$(git rev-parse HEAD)"
+#      - name: storing get_sha in file
+#        run: |
+#          echo "${{ steps.get_sha.outputs.sha }}" > store_sha_file
+#      - name: Archive generated artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: generated-artifacts
+#          path: |
+#            dist
+#            snappi
+#            gosnappi
+#            models-release
+#            *.proto
+#            store_sha_file
 
   python_tests:
-    needs: build
     runs-on: macos-latest
     strategy:
       max-parallel: 6
