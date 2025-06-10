@@ -75,8 +75,7 @@ class SnappiServer(object):
         self._CONFIG = None
 
     def start(self):
-        self._web_server_thread = threading.Thread(target=web_server)
-        self._web_server_thread.setDaemon(True)
+        self._web_server_thread = threading.Thread(target=web_server, daemon=True)
         self._web_server_thread.start()
         self._wait_until_ready()
         return self
