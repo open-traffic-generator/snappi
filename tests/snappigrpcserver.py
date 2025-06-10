@@ -62,7 +62,7 @@ def gRpcServer():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_OpenapiServicer_to_server(OpenapiServicer(), server)
     print("gRPC Server: Starting server. Listening on port %s." % GRPC_PORT)
-    server.add_insecure_port("127.0.0.1:{}".format(GRPC_PORT))
+    server.add_insecure_port("localhost:{}".format(GRPC_PORT))
     server.start()
 
     try:
@@ -73,8 +73,7 @@ def gRpcServer():
 
 
 def grpc_server():
-    web_server_thread = threading.Thread(target=gRpcServer)
-    web_server_thread.setDaemon(True)
+    web_server_thread = threading.Thread(target=gRpcServer, daemon=True)
     web_server_thread.start()
 
 if __name__ == '__main__':

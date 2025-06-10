@@ -21,7 +21,7 @@ def grpc_api():
     import snappi
 
     grpc_api = snappi.api(
-        location="127.0.0.1:%s" % GRPC_PORT, transport=snappi.Transport.GRPC
+        location="localhost:%s" % GRPC_PORT, transport=snappi.Transport.GRPC
     )
 
     # verify gRpc server is up
@@ -34,7 +34,7 @@ def grpc_api():
             print(e)
             if attempts > 5:
                 raise (e)
-        time.sleep(0.5)
+        time.sleep(1)
         attempts += 1
     return grpc_api
 
