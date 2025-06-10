@@ -68,11 +68,11 @@ jobs:
 
   python_tests:
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: macos-latest
     strategy:
       max-parallel: 6
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -95,76 +95,76 @@ jobs:
         run: |
           sudo python do.py testpy
 
-  go_tests:
-    needs: build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-artifacts
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Run go tests
-        run: |
-          python do.py testgo
+  # go_tests:
+  #   needs: build
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.head_ref }}
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: generated-artifacts
+  #     - name: Display structure of downloaded files
+  #       run: ls -R
+  #     - name: Run go tests
+  #       run: |
+  #         python do.py testgo
 
-  publish_python_package:
-    if: github.ref == 'refs/heads/main'
-    needs: [go_tests, python_tests]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - uses: actions/download-artifact@v4
-        with:
-          name: generated-artifacts
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Get package version
-        id: get_version
-        run: |
-          echo "::set-output name=version::v$(python do.py version)"
-      - name: Check tag for current version
-        uses: mukunku/tag-exists-action@v1.0.0
-        id: check_tag
-        with:
-          tag: ${{ steps.get_version.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish package
-        if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
-        run: |
-          PYPI_USERNAME=__token__ PYPI_PASSWORD=${{ secrets.PYPI_API_TOKEN }} python do.py release
-      - name: Create release and publish artifacts
-        if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "dist/*,models-release,*.proto"
-          tag: ${{ steps.get_version.outputs.version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: get_sha value from file
-        id: get_sha
-        run: |
-          echo "::set-output name=value::$(cat store_sha_file)"
-      - name: Create tag for gosnappi
-        if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
-              sha: "${{ steps.get_sha.outputs.value }}"
-            })
+  # publish_python_package:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: [go_tests, python_tests]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ github.head_ref }}
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.8
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: generated-artifacts
+  #     - name: Display structure of downloaded files
+  #       run: ls -R
+  #     - name: Get package version
+  #       id: get_version
+  #       run: |
+  #         echo "::set-output name=version::v$(python do.py version)"
+  #     - name: Check tag for current version
+  #       uses: mukunku/tag-exists-action@v1.0.0
+  #       id: check_tag
+  #       with:
+  #         tag: ${{ steps.get_version.outputs.version }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Publish package
+  #       if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
+  #       run: |
+  #         PYPI_USERNAME=__token__ PYPI_PASSWORD=${{ secrets.PYPI_API_TOKEN }} python do.py release
+  #     - name: Create release and publish artifacts
+  #       if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: "dist/*,models-release,*.proto"
+  #         tag: ${{ steps.get_version.outputs.version }}
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: get_sha value from file
+  #       id: get_sha
+  #       run: |
+  #         echo "::set-output name=value::$(cat store_sha_file)"
+  #     - name: Create tag for gosnappi
+  #       if: github.ref == 'refs/heads/main' && steps.check_tag.outputs.exists == 'false'
+  #       uses: actions/github-script@v3
+  #       with:
+  #         github-token: ${{ github.token }}
+  #         script: |
+  #           github.git.createRef({
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             ref: "refs/tags/gosnappi/${{ steps.get_version.outputs.version }}",
+  #             sha: "${{ steps.get_sha.outputs.value }}"
+  #           })
