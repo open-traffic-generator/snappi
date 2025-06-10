@@ -12,7 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "snappi"))
 pb2_grpc = importlib.import_module("otg_pb2_grpc")
 pb2 = importlib.import_module("otg_pb2")
 
-GRPC_PORT = 8080
+GRPC_PORT = 50000
 
 class OpenapiServicer(pb2_grpc.OpenapiServicer):
     def __init__(self):
@@ -62,7 +62,7 @@ def gRpcServer():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pb2_grpc.add_OpenapiServicer_to_server(OpenapiServicer(), server)
     print("gRPC Server: Starting server. Listening on port %s." % GRPC_PORT)
-    server.add_insecure_port("[::]:{}".format(GRPC_PORT))
+    server.add_insecure_port("127.0.0.1:{}".format(GRPC_PORT))
     server.start()
 
     try:
