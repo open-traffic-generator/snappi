@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.30.0
+/* Open Traffic Generator API 1.31.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -13027,6 +13027,59 @@ message FlowsUpdate {
   repeated Flow flows = 2;
 }
 
+// A container for all configuration resources of various types to be appended.
+message ConfigAppend {
+
+  // Description missing in models
+  repeated ConfigAppendResources config_append_list = 1;
+}
+
+// A container for an existing resource to be appended.
+message ConfigAppendResources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      flows = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // The flows that will be added to existing configuration on the traffic generator.
+  // The flow name must not already be used in existing configuration.
+  repeated Flow flows = 2;
+}
+
+// A container for all configuration resources of various types to be deleted.
+message ConfigDelete {
+
+  // Description missing in models
+  repeated ConfigDeleteResources config_delete_list = 1;
+}
+
+// A container for an existing resource to be deleted.
+message ConfigDeleteResources {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      flows = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // List of flows that will be deleted from existing configuration on the traffic generator.
+  // 
+  // x-constraint:
+  // - /components/schemas/Flow/properties/name
+  // 
+  repeated string flows = 2;
+}
+
 // Request for setting operational state of configured resources.
 message ControlState {
 
@@ -14062,10 +14115,10 @@ message ActionProtocolIsisUnplannedRestart {
   // default = 30
   optional uint32 holding_time = 1;
 
-  // Once it receives Restarting TLV having RA bit set in a IIH PDU,  time (in seconds),
-  // after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should
-  // result in IIH to be transmitted indicating restart is Completed,  not started i.e.
-  // RR bit is cleared and hold_timer is reset to normal.
+  // Once it receives Restarting TLV having RA bit set in a IIH PDU and CSNP PDU, time
+  // (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be
+  // sent. This should result in IIH to be transmitted indicating restart is Completed,
+  // not started i.e. RR bit is cleared and hold_timer is reset to normal.
   // default = 10
   optional uint32 restart_after = 2;
 }
@@ -32219,6 +32272,22 @@ message UpdateConfigResponse {
 }
 
 
+message AppendConfigRequest {
+  ConfigAppend config_append = 1;
+}
+message AppendConfigResponse {
+  Warning warning = 1;
+}
+
+
+message DeleteConfigRequest {
+  ConfigDelete config_delete = 1;
+}
+message DeleteConfigResponse {
+  Warning warning = 1;
+}
+
+
 message SetControlStateRequest {
   ControlState control_state = 1;
 }
@@ -32281,6 +32350,22 @@ service Openapi {
   // additional information about a state change including any implicit changes that are
   // outside the scope of the state change.
   rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse);
+  // Append new attributes of resources to existing configuration on the traffic generator.
+  // Resource names should not be part of existing configuration of that resource type;
+  // it should be unique for the operation to succeed. A failed append might leave the
+  // configuration in an undefined state and if the error is due to some invalid or unsupported
+  // configuration in the appended resources, it is expected that the user fix the error
+  // and  restart from SetConfig operation. The fetched configuration shall also reflect
+  // the new configuration applied successfully.
+  rpc AppendConfig(AppendConfigRequest) returns (AppendConfigResponse);
+  // Delete attributes of resources from existing configuration on the traffic generator.
+  // Resource names should already be part of existing configuration of that resource
+  // type; for the operation to succeed. A failed delete will leave the configuration
+  // in an undefined state and if the error is due to some invalid or unsupported configuration
+  // in the deleted  resources, it is expected that the user fix the error and restart
+  // from SetConfig operation. On successful deletion the fetched configuration shall
+  // not reflect the removed configuration.
+  rpc DeleteConfig(DeleteConfigRequest) returns (DeleteConfigResponse);
   // Sets the operational state of configured resources.
   rpc SetControlState(SetControlStateRequest) returns (SetControlStateResponse);
   // Triggers actions against configured resources.

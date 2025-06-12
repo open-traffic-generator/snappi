@@ -300,7 +300,7 @@ func (obj *actionProtocolIsisUnplannedRestart) SetHoldingTime(value uint32) Acti
 	return obj
 }
 
-// Once it receives Restarting TLV having RA bit set in a IIH PDU,  time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
+// Once it receives Restarting TLV having RA bit set in a IIH PDU and CSNP PDU, time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
 // RestartAfter returns a uint32
 func (obj *actionProtocolIsisUnplannedRestart) RestartAfter() uint32 {
 
@@ -308,13 +308,13 @@ func (obj *actionProtocolIsisUnplannedRestart) RestartAfter() uint32 {
 
 }
 
-// Once it receives Restarting TLV having RA bit set in a IIH PDU,  time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
+// Once it receives Restarting TLV having RA bit set in a IIH PDU and CSNP PDU, time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
 // RestartAfter returns a uint32
 func (obj *actionProtocolIsisUnplannedRestart) HasRestartAfter() bool {
 	return obj.obj.RestartAfter != nil
 }
 
-// Once it receives Restarting TLV having RA bit set in a IIH PDU,  time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
+// Once it receives Restarting TLV having RA bit set in a IIH PDU and CSNP PDU, time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
 // SetRestartAfter sets the uint32 value in the ActionProtocolIsisUnplannedRestart object
 func (obj *actionProtocolIsisUnplannedRestart) SetRestartAfter(value uint32) ActionProtocolIsisUnplannedRestart {
 
@@ -339,10 +339,10 @@ func (obj *actionProtocolIsisUnplannedRestart) validateObj(vObj *validation, set
 
 	if obj.obj.RestartAfter != nil {
 
-		if *obj.obj.RestartAfter < 1 || *obj.obj.RestartAfter > 4096 {
+		if *obj.obj.RestartAfter > 4096 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= ActionProtocolIsisUnplannedRestart.RestartAfter <= 4096 but Got %d", *obj.obj.RestartAfter))
+				fmt.Sprintf("0 <= ActionProtocolIsisUnplannedRestart.RestartAfter <= 4096 but Got %d", *obj.obj.RestartAfter))
 		}
 
 	}

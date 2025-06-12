@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.30.0
+  version: 1.31.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -66,6 +66,46 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Config.Update'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+          x-field-uid: 1
+        default:
+          $ref: '#/components/responses/Failure'
+          x-field-uid: 2
+  /config/append:
+    patch:
+      tags:
+      - Configuration
+      operationId: append_config
+      description: |-
+        Append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. A failed append might leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the appended resources, it is expected that the user fix the error and  restart from SetConfig operation. The fetched configuration shall also reflect the new configuration applied successfully.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config.Append'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+          x-field-uid: 1
+        default:
+          $ref: '#/components/responses/Failure'
+          x-field-uid: 2
+  /config/delete:
+    patch:
+      tags:
+      - Configuration
+      operationId: delete_config
+      description: |-
+        Delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. A failed delete will leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the deleted  resources, it is expected that the user fix the error and restart from SetConfig operation. On successful deletion the fetched configuration shall not reflect the removed configuration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config.Delete'
       responses:
         '200':
           $ref: '#/components/responses/Success'
@@ -17317,6 +17357,70 @@ components:
           items:
             $ref: '#/components/schemas/Flow'
           x-field-uid: 2
+    Config.Append:
+      description: |-
+        A container for all configuration resources of various types to be appended.
+      type: array
+      items:
+        $ref: '#/components/schemas/Config.AppendResources'
+      x-field-uid: 1
+    Config.AppendResources:
+      description: |-
+        A container for an existing resource to be appended.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            flows:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - flows
+        flows:
+          description: |-
+            The flows that will be added to existing configuration on the traffic generator.
+            The flow name must not already be used in existing configuration.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow'
+          x-field-uid: 2
+    Config.Delete:
+      description: |-
+        A container for all configuration resources of various types to be deleted.
+      type: array
+      items:
+        $ref: '#/components/schemas/Config.DeleteResources'
+      x-field-uid: 1
+    Config.DeleteResources:
+      description: |-
+        A container for an existing resource to be deleted.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            flows:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - flows
+        flows:
+          description: |
+            List of flows that will be deleted from existing configuration on the traffic generator.
+
+            x-constraint:
+            - /components/schemas/Flow/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Flow/properties/name
+          x-field-uid: 2
     Control.State:
       description: |-
         Request for setting operational state of configured resources.
@@ -18589,12 +18693,12 @@ components:
           x-field-uid: 1
         restart_after:
           description: |-
-            Once it receives Restarting TLV having RA bit set in a IIH PDU,  time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
+            Once it receives Restarting TLV having RA bit set in a IIH PDU and CSNP PDU, time (in seconds), after which IIH PDU, having Restart Tlv with RR bit unset, will be sent. This should result in IIH to be transmitted indicating restart is Completed,  not started i.e. RR bit is cleared and hold_timer is reset to normal.
           type: integer
           format: uint32
           maximum: 4096
           default: 10
-          minimum: 1
+          minimum: 0
           x-field-uid: 2
     Metrics.Request:
       description: |-
