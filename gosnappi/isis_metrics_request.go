@@ -279,9 +279,6 @@ type IsisMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // RouterNames returns a []string
 func (obj *isisMetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -291,9 +288,6 @@ func (obj *isisMetricsRequest) RouterNames() []string {
 }
 
 // The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
@@ -339,6 +333,10 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
 	L2_LSP_SENT                       IsisMetricsRequestColumnNamesEnum
 	L2_LSP_RECEIVED                   IsisMetricsRequestColumnNamesEnum
+	GR_INITIATED                      IsisMetricsRequestColumnNamesEnum
+	GR_SUCCEEDED                      IsisMetricsRequestColumnNamesEnum
+	NEIGHBOR_GR_INITIATED             IsisMetricsRequestColumnNamesEnum
+	NEIGHBOR_GR_SUCCEEDED             IsisMetricsRequestColumnNamesEnum
 }{
 	L1_SESSIONS_UP:                    IsisMetricsRequestColumnNamesEnum("l1_sessions_up"),
 	L1_SESSION_FLAP:                   IsisMetricsRequestColumnNamesEnum("l1_session_flap"),
@@ -366,6 +364,10 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l2_csnp_received"),
 	L2_LSP_SENT:                       IsisMetricsRequestColumnNamesEnum("l2_lsp_sent"),
 	L2_LSP_RECEIVED:                   IsisMetricsRequestColumnNamesEnum("l2_lsp_received"),
+	GR_INITIATED:                      IsisMetricsRequestColumnNamesEnum("gr_initiated"),
+	GR_SUCCEEDED:                      IsisMetricsRequestColumnNamesEnum("gr_succeeded"),
+	NEIGHBOR_GR_INITIATED:             IsisMetricsRequestColumnNamesEnum("neighbor_gr_initiated"),
+	NEIGHBOR_GR_SUCCEEDED:             IsisMetricsRequestColumnNamesEnum("neighbor_gr_succeeded"),
 }
 
 func (obj *isisMetricsRequest) ColumnNames() []IsisMetricsRequestColumnNamesEnum {
