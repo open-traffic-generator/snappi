@@ -35,9 +35,9 @@ sdk_version = Version.version
 USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
-# supported values - branch name or None
+# supported values - branch name or None  
 USE_OPENAPIART_BRANCH = None
-USE_MODELS_BRANCH = None
+USE_MODELS_BRANCH = "dev-egress-only2"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
