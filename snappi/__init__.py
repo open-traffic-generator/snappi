@@ -1254,6 +1254,8 @@ from .snappi import Rocev2TxPortsIter
 from .snappi import Rocev2FlowsIter
 from .snappi import EgressOnlyTracking
 from .snappi import EgressOnlyTrackingMetricTags
+from .snappi import EgressOnlyTrackingTxOffset
+from .snappi import EgressOnlyTrackingTxOffsetCustom
 from .snappi import EgressOnlyTrackingMetricTagsIter
 from .snappi import EgressOnlyTrackingFilter
 from .snappi import EgressOnlyTrackingFilterIter

@@ -13,9 +13,10 @@ import (
 // ***** EgressOnlyTrackingMetricTags *****
 type egressOnlyTrackingMetricTags struct {
 	validation
-	obj          *otg.EgressOnlyTrackingMetricTags
-	marshaller   marshalEgressOnlyTrackingMetricTags
-	unMarshaller unMarshalEgressOnlyTrackingMetricTags
+	obj            *otg.EgressOnlyTrackingMetricTags
+	marshaller     marshalEgressOnlyTrackingMetricTags
+	unMarshaller   unMarshalEgressOnlyTrackingMetricTags
+	txOffsetHolder EgressOnlyTrackingTxOffset
 }
 
 func NewEgressOnlyTrackingMetricTags() EgressOnlyTrackingMetricTags {
@@ -29,7 +30,7 @@ func (obj *egressOnlyTrackingMetricTags) msg() *otg.EgressOnlyTrackingMetricTags
 }
 
 func (obj *egressOnlyTrackingMetricTags) setMsg(msg *otg.EgressOnlyTrackingMetricTags) EgressOnlyTrackingMetricTags {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalegressOnlyTrackingMetricTags) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalegressOnlyTrackingMetricTags) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalegressOnlyTrackingMetricTags) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *egressOnlyTrackingMetricTags) Clone() (EgressOnlyTrackingMetricTags, 
 	return newObj, nil
 }
 
+func (obj *egressOnlyTrackingMetricTags) setNil() {
+	obj.txOffsetHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // EgressOnlyTrackingMetricTags is metric Tag can be used to enable tracking portion of or all bits
 // in a corresponding header field for metrics per each applicable value.
 // These would appear as tagged metrics in corresponding egress_only_tracking metrics.
@@ -270,20 +278,29 @@ type EgressOnlyTrackingMetricTags interface {
 	Name() string
 	// SetName assigns string provided by user to EgressOnlyTrackingMetricTags
 	SetName(value string) EgressOnlyTrackingMetricTags
-	// Offset returns uint32, set in EgressOnlyTrackingMetricTags.
-	Offset() uint32
-	// SetOffset assigns uint32 provided by user to EgressOnlyTrackingMetricTags
-	SetOffset(value uint32) EgressOnlyTrackingMetricTags
+	// RxOffset returns uint32, set in EgressOnlyTrackingMetricTags.
+	RxOffset() uint32
+	// SetRxOffset assigns uint32 provided by user to EgressOnlyTrackingMetricTags
+	SetRxOffset(value uint32) EgressOnlyTrackingMetricTags
+	// TxOffset returns EgressOnlyTrackingTxOffset, set in EgressOnlyTrackingMetricTags.
+	// EgressOnlyTrackingTxOffset is a container of Tx offset properties.
+	TxOffset() EgressOnlyTrackingTxOffset
+	// SetTxOffset assigns EgressOnlyTrackingTxOffset provided by user to EgressOnlyTrackingMetricTags.
+	// EgressOnlyTrackingTxOffset is a container of Tx offset properties.
+	SetTxOffset(value EgressOnlyTrackingTxOffset) EgressOnlyTrackingMetricTags
+	// HasTxOffset checks if TxOffset has been set in EgressOnlyTrackingMetricTags
+	HasTxOffset() bool
 	// Length returns uint32, set in EgressOnlyTrackingMetricTags.
 	Length() uint32
 	// SetLength assigns uint32 provided by user to EgressOnlyTrackingMetricTags
 	SetLength(value uint32) EgressOnlyTrackingMetricTags
 	// HasLength checks if Length has been set in EgressOnlyTrackingMetricTags
 	HasLength() bool
+	setNil()
 }
 
-// The Name used to identify the metrics associated with the values applicable
-// for configured offset and length inside corresponding header field.
+// The name used to identify the metric tracked at configured Rx offset and of configured
+// length. Tx offset configuration is optional.
 // Name returns a string
 func (obj *egressOnlyTrackingMetricTags) Name() string {
 
@@ -291,8 +308,8 @@ func (obj *egressOnlyTrackingMetricTags) Name() string {
 
 }
 
-// The Name used to identify the metrics associated with the values applicable
-// for configured offset and length inside corresponding header field.
+// The name used to identify the metric tracked at configured Rx offset and of configured
+// length. Tx offset configuration is optional.
 // SetName sets the string value in the EgressOnlyTrackingMetricTags object
 func (obj *egressOnlyTrackingMetricTags) SetName(value string) EgressOnlyTrackingMetricTags {
 
@@ -300,19 +317,47 @@ func (obj *egressOnlyTrackingMetricTags) SetName(value string) EgressOnlyTrackin
 	return obj
 }
 
-// Offset in bits relative to start of the packet.
-// Offset returns a uint32
-func (obj *egressOnlyTrackingMetricTags) Offset() uint32 {
+// Rx Offset in bits relative to start of the packet.
+// RxOffset returns a uint32
+func (obj *egressOnlyTrackingMetricTags) RxOffset() uint32 {
 
-	return *obj.obj.Offset
+	return *obj.obj.RxOffset
 
 }
 
-// Offset in bits relative to start of the packet.
-// SetOffset sets the uint32 value in the EgressOnlyTrackingMetricTags object
-func (obj *egressOnlyTrackingMetricTags) SetOffset(value uint32) EgressOnlyTrackingMetricTags {
+// Rx Offset in bits relative to start of the packet.
+// SetRxOffset sets the uint32 value in the EgressOnlyTrackingMetricTags object
+func (obj *egressOnlyTrackingMetricTags) SetRxOffset(value uint32) EgressOnlyTrackingMetricTags {
 
-	obj.obj.Offset = &value
+	obj.obj.RxOffset = &value
+	return obj
+}
+
+// Tx Offset in bits relative to start of the packet.
+// TxOffset returns a EgressOnlyTrackingTxOffset
+func (obj *egressOnlyTrackingMetricTags) TxOffset() EgressOnlyTrackingTxOffset {
+	if obj.obj.TxOffset == nil {
+		obj.obj.TxOffset = NewEgressOnlyTrackingTxOffset().msg()
+	}
+	if obj.txOffsetHolder == nil {
+		obj.txOffsetHolder = &egressOnlyTrackingTxOffset{obj: obj.obj.TxOffset}
+	}
+	return obj.txOffsetHolder
+}
+
+// Tx Offset in bits relative to start of the packet.
+// TxOffset returns a EgressOnlyTrackingTxOffset
+func (obj *egressOnlyTrackingMetricTags) HasTxOffset() bool {
+	return obj.obj.TxOffset != nil
+}
+
+// Tx Offset in bits relative to start of the packet.
+// SetTxOffset sets the EgressOnlyTrackingTxOffset value in the EgressOnlyTrackingMetricTags object
+func (obj *egressOnlyTrackingMetricTags) SetTxOffset(value EgressOnlyTrackingTxOffset) EgressOnlyTrackingMetricTags {
+
+	obj.txOffsetHolder = nil
+	obj.obj.TxOffset = value.msg()
+
 	return obj
 }
 
@@ -351,9 +396,14 @@ func (obj *egressOnlyTrackingMetricTags) validateObj(vObj *validation, set_defau
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface EgressOnlyTrackingMetricTags")
 	}
 
-	// Offset is required
-	if obj.obj.Offset == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Offset is required field on interface EgressOnlyTrackingMetricTags")
+	// RxOffset is required
+	if obj.obj.RxOffset == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "RxOffset is required field on interface EgressOnlyTrackingMetricTags")
+	}
+
+	if obj.obj.TxOffset != nil {
+
+		obj.TxOffset().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Length != nil {
