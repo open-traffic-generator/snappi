@@ -250,7 +250,7 @@ func (obj *egressOnlyTrackingTxOffset) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// EgressOnlyTrackingTxOffset is a container of Tx offset properties.
+// EgressOnlyTrackingTxOffset is a container of Tx offset properties. Tx offset configuration is optional. It is relevant only when optional Tx statistics in egress only tracking are supported and when fetching egress only stats with "tx_metric" also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
 type EgressOnlyTrackingTxOffset interface {
 	Validation
 	// msg marshals EgressOnlyTrackingTxOffset to protobuf object *otg.EgressOnlyTrackingTxOffset
@@ -281,10 +281,10 @@ type EgressOnlyTrackingTxOffset interface {
 	// getter for Auto to set choice.
 	Auto()
 	// Custom returns EgressOnlyTrackingTxOffsetCustom, set in EgressOnlyTrackingTxOffset.
-	// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties.
+	// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties. Choose "custom" when the Tx and Rx offsets are different due to DUT adding/ modifying or deleting encapsulation protocol header e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx side have different configuration such that the MACSec header is added/modified or removed.
 	Custom() EgressOnlyTrackingTxOffsetCustom
 	// SetCustom assigns EgressOnlyTrackingTxOffsetCustom provided by user to EgressOnlyTrackingTxOffset.
-	// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties.
+	// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties. Choose "custom" when the Tx and Rx offsets are different due to DUT adding/ modifying or deleting encapsulation protocol header e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx side have different configuration such that the MACSec header is added/modified or removed.
 	SetCustom(value EgressOnlyTrackingTxOffsetCustom) EgressOnlyTrackingTxOffset
 	// HasCustom checks if Custom has been set in EgressOnlyTrackingTxOffset
 	HasCustom() bool
@@ -311,7 +311,7 @@ func (obj *egressOnlyTrackingTxOffset) Auto() {
 	obj.setChoice(EgressOnlyTrackingTxOffsetChoice.AUTO)
 }
 
-// Choose "auto" when optional Tx statistics in egress only tracking are required while fetching egress only stats by opting "tx_metric" in get_metrics - egress_only_tracking - tagged_metric - metric_names.  or both Tx and Rx offset of tracked field in packet is the same. Otherwise choose "custom" when the Tx and Rx offsets are different due to DUT adding/ modifying or deleting encapsulation protocol header e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx side have different configuration such that the MACSec header is added/modified or removed.
+// Choose "auto" when both offsets of tracked field in Tx/ Rx packets are the same. Otherwise choose "custom".
 // Choice returns a string
 func (obj *egressOnlyTrackingTxOffset) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -336,7 +336,6 @@ func (obj *egressOnlyTrackingTxOffset) setChoice(value EgressOnlyTrackingTxOffse
 	return obj
 }
 
-// A container of custom Tx offset.
 // Custom returns a EgressOnlyTrackingTxOffsetCustom
 func (obj *egressOnlyTrackingTxOffset) Custom() EgressOnlyTrackingTxOffsetCustom {
 	if obj.obj.Custom == nil {
@@ -348,13 +347,11 @@ func (obj *egressOnlyTrackingTxOffset) Custom() EgressOnlyTrackingTxOffsetCustom
 	return obj.customHolder
 }
 
-// A container of custom Tx offset.
 // Custom returns a EgressOnlyTrackingTxOffsetCustom
 func (obj *egressOnlyTrackingTxOffset) HasCustom() bool {
 	return obj.obj.Custom != nil
 }
 
-// A container of custom Tx offset.
 // SetCustom sets the EgressOnlyTrackingTxOffsetCustom value in the EgressOnlyTrackingTxOffset object
 func (obj *egressOnlyTrackingTxOffset) SetCustom(value EgressOnlyTrackingTxOffsetCustom) EgressOnlyTrackingTxOffset {
 	obj.setChoice(EgressOnlyTrackingTxOffsetChoice.CUSTOM)

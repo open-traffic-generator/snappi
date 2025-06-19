@@ -283,10 +283,10 @@ type EgressOnlyTrackingMetricTags interface {
 	// SetRxOffset assigns uint32 provided by user to EgressOnlyTrackingMetricTags
 	SetRxOffset(value uint32) EgressOnlyTrackingMetricTags
 	// TxOffset returns EgressOnlyTrackingTxOffset, set in EgressOnlyTrackingMetricTags.
-	// EgressOnlyTrackingTxOffset is a container of Tx offset properties.
+	// EgressOnlyTrackingTxOffset is a container of Tx offset properties. Tx offset configuration is optional. It is relevant only when optional Tx statistics in egress only tracking are supported and when fetching egress only stats with "tx_metric" also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
 	TxOffset() EgressOnlyTrackingTxOffset
 	// SetTxOffset assigns EgressOnlyTrackingTxOffset provided by user to EgressOnlyTrackingMetricTags.
-	// EgressOnlyTrackingTxOffset is a container of Tx offset properties.
+	// EgressOnlyTrackingTxOffset is a container of Tx offset properties. Tx offset configuration is optional. It is relevant only when optional Tx statistics in egress only tracking are supported and when fetching egress only stats with "tx_metric" also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
 	SetTxOffset(value EgressOnlyTrackingTxOffset) EgressOnlyTrackingMetricTags
 	// HasTxOffset checks if TxOffset has been set in EgressOnlyTrackingMetricTags
 	HasTxOffset() bool
@@ -300,7 +300,7 @@ type EgressOnlyTrackingMetricTags interface {
 }
 
 // The name used to identify the metric tracked at configured Rx offset and of configured
-// length. Tx offset configuration is optional.
+// length.
 // Name returns a string
 func (obj *egressOnlyTrackingMetricTags) Name() string {
 
@@ -309,7 +309,7 @@ func (obj *egressOnlyTrackingMetricTags) Name() string {
 }
 
 // The name used to identify the metric tracked at configured Rx offset and of configured
-// length. Tx offset configuration is optional.
+// length.
 // SetName sets the string value in the EgressOnlyTrackingMetricTags object
 func (obj *egressOnlyTrackingMetricTags) SetName(value string) EgressOnlyTrackingMetricTags {
 
@@ -317,7 +317,7 @@ func (obj *egressOnlyTrackingMetricTags) SetName(value string) EgressOnlyTrackin
 	return obj
 }
 
-// Rx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the received packet on the receiving port.
 // RxOffset returns a uint32
 func (obj *egressOnlyTrackingMetricTags) RxOffset() uint32 {
 
@@ -325,7 +325,7 @@ func (obj *egressOnlyTrackingMetricTags) RxOffset() uint32 {
 
 }
 
-// Rx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the received packet on the receiving port.
 // SetRxOffset sets the uint32 value in the EgressOnlyTrackingMetricTags object
 func (obj *egressOnlyTrackingMetricTags) SetRxOffset(value uint32) EgressOnlyTrackingMetricTags {
 
@@ -333,7 +333,7 @@ func (obj *egressOnlyTrackingMetricTags) SetRxOffset(value uint32) EgressOnlyTra
 	return obj
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // TxOffset returns a EgressOnlyTrackingTxOffset
 func (obj *egressOnlyTrackingMetricTags) TxOffset() EgressOnlyTrackingTxOffset {
 	if obj.obj.TxOffset == nil {
@@ -345,13 +345,13 @@ func (obj *egressOnlyTrackingMetricTags) TxOffset() EgressOnlyTrackingTxOffset {
 	return obj.txOffsetHolder
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // TxOffset returns a EgressOnlyTrackingTxOffset
 func (obj *egressOnlyTrackingMetricTags) HasTxOffset() bool {
 	return obj.obj.TxOffset != nil
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // SetTxOffset sets the EgressOnlyTrackingTxOffset value in the EgressOnlyTrackingMetricTags object
 func (obj *egressOnlyTrackingMetricTags) SetTxOffset(value EgressOnlyTrackingTxOffset) EgressOnlyTrackingMetricTags {
 

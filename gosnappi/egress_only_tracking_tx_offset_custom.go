@@ -242,7 +242,7 @@ func (obj *egressOnlyTrackingTxOffsetCustom) Clone() (EgressOnlyTrackingTxOffset
 	return newObj, nil
 }
 
-// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties.
+// EgressOnlyTrackingTxOffsetCustom is a container of custom Tx offset properties. Choose "custom" when the Tx and Rx offsets are different due to DUT adding/ modifying or deleting encapsulation protocol header e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx side have different configuration such that the MACSec header is added/modified or removed.
 type EgressOnlyTrackingTxOffsetCustom interface {
 	Validation
 	// msg marshals EgressOnlyTrackingTxOffsetCustom to protobuf object *otg.EgressOnlyTrackingTxOffsetCustom
@@ -272,7 +272,7 @@ type EgressOnlyTrackingTxOffsetCustom interface {
 	HasValue() bool
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // Value returns a uint32
 func (obj *egressOnlyTrackingTxOffsetCustom) Value() uint32 {
 
@@ -280,13 +280,13 @@ func (obj *egressOnlyTrackingTxOffsetCustom) Value() uint32 {
 
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // Value returns a uint32
 func (obj *egressOnlyTrackingTxOffsetCustom) HasValue() bool {
 	return obj.obj.Value != nil
 }
 
-// Tx Offset in bits relative to start of the packet.
+// Offset in bits relative to start of the transmitted packet from the transmitting port.
 // SetValue sets the uint32 value in the EgressOnlyTrackingTxOffsetCustom object
 func (obj *egressOnlyTrackingTxOffsetCustom) SetValue(value uint32) EgressOnlyTrackingTxOffsetCustom {
 

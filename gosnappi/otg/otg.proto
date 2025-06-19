@@ -12646,15 +12646,16 @@ message EgressOnlyTracking {
 message EgressOnlyTrackingMetricTags {
 
   // The name used to identify the metric tracked at configured Rx offset and of configured
-  // length. Tx offset configuration is optional.
+  // length.
   // required = true
   optional string name = 1;
 
-  // Rx Offset in bits relative to start of the packet.
+  // Offset in bits relative to start of the received packet on the receiving port.
   // required = true
   optional uint32 rx_offset = 2;
 
-  // Tx Offset in bits relative to start of the packet.
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
   EgressOnlyTrackingTxOffset tx_offset = 3;
 
   // Number of bits to track for metrics starting from configured offset
@@ -12663,7 +12664,9 @@ message EgressOnlyTrackingMetricTags {
   optional uint32 length = 4;
 }
 
-// A container of Tx offset properties.
+// A container of Tx offset properties. Tx offset configuration is optional. It is relevant
+// only when optional Tx statistics in egress only tracking are supported and when fetching
+// egress only stats with tx_metric also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
 message EgressOnlyTrackingTxOffset {
 
   message Choice {
@@ -12673,24 +12676,24 @@ message EgressOnlyTrackingTxOffset {
       custom = 2;
     }
   }
-  // Choose auto when optional Tx statistics in egress only tracking are required while
-  // fetching egress only stats by opting tx_metric in get_metrics - egress_only_tracking
-  // - tagged_metric - metric_names.  or both Tx and Rx offset of tracked field in packet
-  // is the same. Otherwise choose custom when the Tx and Rx offsets are different due
-  // to DUT adding/ modifying or deleting encapsulation protocol header e.g. when the
-  // egress-only tracked packets are MACsec encapulated and the Tx and Rx side have different
-  // configuration such that the MACSec header is added/modified or removed.
+  // Choose auto when both offsets of tracked field in Tx/ Rx packets are the same. Otherwise
+  // choose custom.
   // default = Choice.Enum.auto
   optional Choice.Enum choice = 1;
 
-  // A container of custom Tx offset.
+  // 
   EgressOnlyTrackingTxOffsetCustom custom = 2;
 }
 
-// A container of custom Tx offset properties.
+// A container of custom Tx offset properties. Choose custom when the Tx and Rx offsets
+// are different due to DUT adding/ modifying or deleting encapsulation protocol header
+// e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx
+// side have different configuration such that the MACSec header is added/modified or
+// removed.
 message EgressOnlyTrackingTxOffsetCustom {
 
-  // Tx Offset in bits relative to start of the packet.
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
   optional uint32 value = 1;
 }
 
