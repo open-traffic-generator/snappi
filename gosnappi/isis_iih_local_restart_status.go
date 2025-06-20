@@ -13,10 +13,10 @@ import (
 // ***** IsisIIHLocalRestartStatus *****
 type isisIIHLocalRestartStatus struct {
 	validation
-	obj                       *otg.IsisIIHLocalRestartStatus
-	marshaller                marshalIsisIIHLocalRestartStatus
-	unMarshaller              unMarshalIsisIIHLocalRestartStatus
-	lastAttemptedStatusHolder IsisIIHLocalGRLastAttemptStatus
+	obj                     *otg.IsisIIHLocalRestartStatus
+	marshaller              marshalIsisIIHLocalRestartStatus
+	unMarshaller            unMarshalIsisIIHLocalRestartStatus
+	lastAttemptStatusHolder IsisIIHLocalGRLastAttemptStatus
 }
 
 func NewIsisIIHLocalRestartStatus() IsisIIHLocalRestartStatus {
@@ -244,7 +244,7 @@ func (obj *isisIIHLocalRestartStatus) Clone() (IsisIIHLocalRestartStatus, error)
 }
 
 func (obj *isisIIHLocalRestartStatus) setNil() {
-	obj.lastAttemptedStatusHolder = nil
+	obj.lastAttemptStatusHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -278,22 +278,22 @@ type IsisIIHLocalRestartStatus interface {
 	SetState(value IsisIIHLocalRestartStatusStateEnum) IsisIIHLocalRestartStatus
 	// HasState checks if State has been set in IsisIIHLocalRestartStatus
 	HasState() bool
-	// LastAttemptedStatus returns IsisIIHLocalGRLastAttemptStatus, set in IsisIIHLocalRestartStatus.
+	// LastAttemptStatus returns IsisIIHLocalGRLastAttemptStatus, set in IsisIIHLocalRestartStatus.
 	// IsisIIHLocalGRLastAttemptStatus is this object contains the status of the last attempted Graceful Restart status of this router.
 	// - succeeded: Choice is set if the last Graceful Status is successful.
 	// - failed: The last Graceful Status is unsuccessful.
 	// - inprogress: The last Graceful Restart status is in progress.
 	// - unavailable: The last Graceful Restart status is not initiated.
-	LastAttemptedStatus() IsisIIHLocalGRLastAttemptStatus
-	// SetLastAttemptedStatus assigns IsisIIHLocalGRLastAttemptStatus provided by user to IsisIIHLocalRestartStatus.
+	LastAttemptStatus() IsisIIHLocalGRLastAttemptStatus
+	// SetLastAttemptStatus assigns IsisIIHLocalGRLastAttemptStatus provided by user to IsisIIHLocalRestartStatus.
 	// IsisIIHLocalGRLastAttemptStatus is this object contains the status of the last attempted Graceful Restart status of this router.
 	// - succeeded: Choice is set if the last Graceful Status is successful.
 	// - failed: The last Graceful Status is unsuccessful.
 	// - inprogress: The last Graceful Restart status is in progress.
 	// - unavailable: The last Graceful Restart status is not initiated.
-	SetLastAttemptedStatus(value IsisIIHLocalGRLastAttemptStatus) IsisIIHLocalRestartStatus
-	// HasLastAttemptedStatus checks if LastAttemptedStatus has been set in IsisIIHLocalRestartStatus
-	HasLastAttemptedStatus() bool
+	SetLastAttemptStatus(value IsisIIHLocalGRLastAttemptStatus) IsisIIHLocalRestartStatus
+	// HasLastAttemptStatus checks if LastAttemptStatus has been set in IsisIIHLocalRestartStatus
+	HasLastAttemptStatus() bool
 	setNil()
 }
 
@@ -337,29 +337,29 @@ func (obj *isisIIHLocalRestartStatus) SetState(value IsisIIHLocalRestartStatusSt
 }
 
 // This container holds the information of the last Graceful Restart initiated on this router.
-// LastAttemptedStatus returns a IsisIIHLocalGRLastAttemptStatus
-func (obj *isisIIHLocalRestartStatus) LastAttemptedStatus() IsisIIHLocalGRLastAttemptStatus {
-	if obj.obj.LastAttemptedStatus == nil {
-		obj.obj.LastAttemptedStatus = NewIsisIIHLocalGRLastAttemptStatus().msg()
+// LastAttemptStatus returns a IsisIIHLocalGRLastAttemptStatus
+func (obj *isisIIHLocalRestartStatus) LastAttemptStatus() IsisIIHLocalGRLastAttemptStatus {
+	if obj.obj.LastAttemptStatus == nil {
+		obj.obj.LastAttemptStatus = NewIsisIIHLocalGRLastAttemptStatus().msg()
 	}
-	if obj.lastAttemptedStatusHolder == nil {
-		obj.lastAttemptedStatusHolder = &isisIIHLocalGRLastAttemptStatus{obj: obj.obj.LastAttemptedStatus}
+	if obj.lastAttemptStatusHolder == nil {
+		obj.lastAttemptStatusHolder = &isisIIHLocalGRLastAttemptStatus{obj: obj.obj.LastAttemptStatus}
 	}
-	return obj.lastAttemptedStatusHolder
+	return obj.lastAttemptStatusHolder
 }
 
 // This container holds the information of the last Graceful Restart initiated on this router.
-// LastAttemptedStatus returns a IsisIIHLocalGRLastAttemptStatus
-func (obj *isisIIHLocalRestartStatus) HasLastAttemptedStatus() bool {
-	return obj.obj.LastAttemptedStatus != nil
+// LastAttemptStatus returns a IsisIIHLocalGRLastAttemptStatus
+func (obj *isisIIHLocalRestartStatus) HasLastAttemptStatus() bool {
+	return obj.obj.LastAttemptStatus != nil
 }
 
 // This container holds the information of the last Graceful Restart initiated on this router.
-// SetLastAttemptedStatus sets the IsisIIHLocalGRLastAttemptStatus value in the IsisIIHLocalRestartStatus object
-func (obj *isisIIHLocalRestartStatus) SetLastAttemptedStatus(value IsisIIHLocalGRLastAttemptStatus) IsisIIHLocalRestartStatus {
+// SetLastAttemptStatus sets the IsisIIHLocalGRLastAttemptStatus value in the IsisIIHLocalRestartStatus object
+func (obj *isisIIHLocalRestartStatus) SetLastAttemptStatus(value IsisIIHLocalGRLastAttemptStatus) IsisIIHLocalRestartStatus {
 
-	obj.lastAttemptedStatusHolder = nil
-	obj.obj.LastAttemptedStatus = value.msg()
+	obj.lastAttemptStatusHolder = nil
+	obj.obj.LastAttemptStatus = value.msg()
 
 	return obj
 }
@@ -369,9 +369,9 @@ func (obj *isisIIHLocalRestartStatus) validateObj(vObj *validation, set_default 
 		obj.setDefault()
 	}
 
-	if obj.obj.LastAttemptedStatus != nil {
+	if obj.obj.LastAttemptStatus != nil {
 
-		obj.LastAttemptedStatus().validateObj(vObj, set_default)
+		obj.LastAttemptStatus().validateObj(vObj, set_default)
 	}
 
 }

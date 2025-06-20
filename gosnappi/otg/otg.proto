@@ -19279,7 +19279,7 @@ message IsisIIHLocalRestartStatus {
 
   // This container holds the information of the last Graceful Restart initiated on this
   // router.
-  IsisIIHLocalGRLastAttemptStatus last_attempted_status = 2;
+  IsisIIHLocalGRLastAttemptStatus last_attempt_status = 2;
 }
 
 // This contains the Restarting/Starting/Running state of a neighbor router.
