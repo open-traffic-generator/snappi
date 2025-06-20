@@ -274,12 +274,12 @@ type Dhcpv6ClientOptionsMessageType interface {
 	Rebind()
 	// getter for Renew to set choice.
 	Renew()
+	// getter for Release to set choice.
+	Release()
 	// getter for Solicit to set choice.
 	Solicit()
 	// getter for Request to set choice.
 	Request()
-	// getter for Release to set choice.
-	Release()
 	// getter for InformRequest to set choice.
 	InformRequest()
 }
@@ -317,6 +317,11 @@ func (obj *dhcpv6ClientOptionsMessageType) Renew() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RENEW)
 }
 
+// getter for Release to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Release() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
+}
+
 // getter for Solicit to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.SOLICIT)
@@ -325,11 +330,6 @@ func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
 // getter for Request to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Request() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REQUEST)
-}
-
-// getter for Release to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Release() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
 }
 
 // getter for InformRequest to set choice
