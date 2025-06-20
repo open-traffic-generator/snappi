@@ -27078,16 +27078,21 @@ components:
             System ID of a neighbor in the hex format, e.g. '650000000001'.
           type: string
           x-field-uid: 1
+        interface_name:
+          description: |-
+            Interface name on which adjacency is created.
+          type: string
+          x-field-uid: 2
         local_state:
           description: |-
             Local adjacency state of this ISIS router.
           $ref: '#/components/schemas/IsisLocalIIH.State'
-          x-field-uid: 2
+          x-field-uid: 3
         neighbor_state:
           description: |-
             A IS-IS neighbor that are learned by this ISIS router.
           $ref: '#/components/schemas/IsisNeighborIIH.State'
-          x-field-uid: 3
+          x-field-uid: 4
     IsisLocalIIH.State:
       description: |-
         Information for a local adjacency.

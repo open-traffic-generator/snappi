@@ -280,6 +280,12 @@ type IsisLocalIIHAdjacencyStates interface {
 	SetNeighborSystemId(value string) IsisLocalIIHAdjacencyStates
 	// HasNeighborSystemId checks if NeighborSystemId has been set in IsisLocalIIHAdjacencyStates
 	HasNeighborSystemId() bool
+	// InterfaceName returns string, set in IsisLocalIIHAdjacencyStates.
+	InterfaceName() string
+	// SetInterfaceName assigns string provided by user to IsisLocalIIHAdjacencyStates
+	SetInterfaceName(value string) IsisLocalIIHAdjacencyStates
+	// HasInterfaceName checks if InterfaceName has been set in IsisLocalIIHAdjacencyStates
+	HasInterfaceName() bool
 	// LocalState returns IsisLocalIIHState, set in IsisLocalIIHAdjacencyStates.
 	// IsisLocalIIHState is information for a local adjacency.
 	LocalState() IsisLocalIIHState
@@ -318,6 +324,28 @@ func (obj *isisLocalIIHAdjacencyStates) HasNeighborSystemId() bool {
 func (obj *isisLocalIIHAdjacencyStates) SetNeighborSystemId(value string) IsisLocalIIHAdjacencyStates {
 
 	obj.obj.NeighborSystemId = &value
+	return obj
+}
+
+// Interface name on which adjacency is created.
+// InterfaceName returns a string
+func (obj *isisLocalIIHAdjacencyStates) InterfaceName() string {
+
+	return *obj.obj.InterfaceName
+
+}
+
+// Interface name on which adjacency is created.
+// InterfaceName returns a string
+func (obj *isisLocalIIHAdjacencyStates) HasInterfaceName() bool {
+	return obj.obj.InterfaceName != nil
+}
+
+// Interface name on which adjacency is created.
+// SetInterfaceName sets the string value in the IsisLocalIIHAdjacencyStates object
+func (obj *isisLocalIIHAdjacencyStates) SetInterfaceName(value string) IsisLocalIIHAdjacencyStates {
+
+	obj.obj.InterfaceName = &value
 	return obj
 }
 

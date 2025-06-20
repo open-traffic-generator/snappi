@@ -19204,11 +19204,14 @@ message IsisLocalIIHAdjacencyStates {
   // System ID of a neighbor in the hex format, e.g. '650000000001'.
   optional string neighbor_system_id = 1;
 
+  // Interface name on which adjacency is created.
+  optional string interface_name = 2;
+
   // Local adjacency state of this ISIS router.
-  IsisLocalIIHState local_state = 2;
+  IsisLocalIIHState local_state = 3;
 
   // A IS-IS neighbor that are learned by this ISIS router.
-  IsisNeighborIIHState neighbor_state = 3;
+  IsisNeighborIIHState neighbor_state = 4;
 }
 
 // Information for a local adjacency.
