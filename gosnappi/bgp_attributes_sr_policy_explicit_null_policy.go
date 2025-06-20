@@ -274,12 +274,12 @@ type BgpAttributesSrPolicyExplicitNullPolicy interface {
 	HasChoice() bool
 	// getter for PushIpv4AndIpv6 to set choice.
 	PushIpv4AndIpv6()
+	// getter for DonotPush to set choice.
+	DonotPush()
 	// getter for Unknown to set choice.
 	Unknown()
 	// getter for PushIpv6 to set choice.
 	PushIpv6()
-	// getter for DonotPush to set choice.
-	DonotPush()
 	// getter for PushIpv4 to set choice.
 	PushIpv4()
 }
@@ -310,6 +310,11 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4AndIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4_AND_IPV6)
 }
 
+// getter for DonotPush to set choice
+func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
+	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
+}
+
 // getter for Unknown to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Unknown() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.UNKNOWN)
@@ -318,11 +323,6 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Unknown() {
 // getter for PushIpv6 to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV6)
-}
-
-// getter for DonotPush to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
 }
 
 // getter for PushIpv4 to set choice

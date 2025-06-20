@@ -426,6 +426,30 @@ type IsisMetric interface {
 	SetL2LspReceived(value uint64) IsisMetric
 	// HasL2LspReceived checks if L2LspReceived has been set in IsisMetric
 	HasL2LspReceived() bool
+	// GrInitiated returns uint64, set in IsisMetric.
+	GrInitiated() uint64
+	// SetGrInitiated assigns uint64 provided by user to IsisMetric
+	SetGrInitiated(value uint64) IsisMetric
+	// HasGrInitiated checks if GrInitiated has been set in IsisMetric
+	HasGrInitiated() bool
+	// GrSucceeded returns uint64, set in IsisMetric.
+	GrSucceeded() uint64
+	// SetGrSucceeded assigns uint64 provided by user to IsisMetric
+	SetGrSucceeded(value uint64) IsisMetric
+	// HasGrSucceeded checks if GrSucceeded has been set in IsisMetric
+	HasGrSucceeded() bool
+	// NeighborGrInitiated returns uint64, set in IsisMetric.
+	NeighborGrInitiated() uint64
+	// SetNeighborGrInitiated assigns uint64 provided by user to IsisMetric
+	SetNeighborGrInitiated(value uint64) IsisMetric
+	// HasNeighborGrInitiated checks if NeighborGrInitiated has been set in IsisMetric
+	HasNeighborGrInitiated() bool
+	// NeighborGrSucceeded returns uint64, set in IsisMetric.
+	NeighborGrSucceeded() uint64
+	// SetNeighborGrSucceeded assigns uint64 provided by user to IsisMetric
+	SetNeighborGrSucceeded(value uint64) IsisMetric
+	// HasNeighborGrSucceeded checks if NeighborGrSucceeded has been set in IsisMetric
+	HasNeighborGrSucceeded() bool
 }
 
 // The name of a configured ISIS router.
@@ -1019,6 +1043,94 @@ func (obj *isisMetric) HasL2LspReceived() bool {
 func (obj *isisMetric) SetL2LspReceived(value uint64) IsisMetric {
 
 	obj.obj.L2LspReceived = &value
+	return obj
+}
+
+// Number of Graceful Restarts that were initiated by this router.
+// GrInitiated returns a uint64
+func (obj *isisMetric) GrInitiated() uint64 {
+
+	return *obj.obj.GrInitiated
+
+}
+
+// Number of Graceful Restarts that were initiated by this router.
+// GrInitiated returns a uint64
+func (obj *isisMetric) HasGrInitiated() bool {
+	return obj.obj.GrInitiated != nil
+}
+
+// Number of Graceful Restarts that were initiated by this router.
+// SetGrInitiated sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetGrInitiated(value uint64) IsisMetric {
+
+	obj.obj.GrInitiated = &value
+	return obj
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a this router. This counter is incremented if the Graceful Restart completes succesfully before the T3 timer expires. Timer T3 is maintained for the entire system after which  the router will declare that it has failed to achieve database synchronization.
+// GrSucceeded returns a uint64
+func (obj *isisMetric) GrSucceeded() uint64 {
+
+	return *obj.obj.GrSucceeded
+
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a this router. This counter is incremented if the Graceful Restart completes succesfully before the T3 timer expires. Timer T3 is maintained for the entire system after which  the router will declare that it has failed to achieve database synchronization.
+// GrSucceeded returns a uint64
+func (obj *isisMetric) HasGrSucceeded() bool {
+	return obj.obj.GrSucceeded != nil
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a this router. This counter is incremented if the Graceful Restart completes succesfully before the T3 timer expires. Timer T3 is maintained for the entire system after which  the router will declare that it has failed to achieve database synchronization.
+// SetGrSucceeded sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetGrSucceeded(value uint64) IsisMetric {
+
+	obj.obj.GrSucceeded = &value
+	return obj
+}
+
+// Number of Graceful Restarts that were initiated by a Neighbor. This counter is incremented for Restart TLV having RR bit set in the received IIH PDU.
+// NeighborGrInitiated returns a uint64
+func (obj *isisMetric) NeighborGrInitiated() uint64 {
+
+	return *obj.obj.NeighborGrInitiated
+
+}
+
+// Number of Graceful Restarts that were initiated by a Neighbor. This counter is incremented for Restart TLV having RR bit set in the received IIH PDU.
+// NeighborGrInitiated returns a uint64
+func (obj *isisMetric) HasNeighborGrInitiated() bool {
+	return obj.obj.NeighborGrInitiated != nil
+}
+
+// Number of Graceful Restarts that were initiated by a Neighbor. This counter is incremented for Restart TLV having RR bit set in the received IIH PDU.
+// SetNeighborGrInitiated sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetNeighborGrInitiated(value uint64) IsisMetric {
+
+	obj.obj.NeighborGrInitiated = &value
+	return obj
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a Neighbor. This counter is incremented when Restart TLV having RR bit unset in the received IIH PDU after the Graceful Restart was initiated by a Neighbor.
+// NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) NeighborGrSucceeded() uint64 {
+
+	return *obj.obj.NeighborGrSucceeded
+
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a Neighbor. This counter is incremented when Restart TLV having RR bit unset in the received IIH PDU after the Graceful Restart was initiated by a Neighbor.
+// NeighborGrSucceeded returns a uint64
+func (obj *isisMetric) HasNeighborGrSucceeded() bool {
+	return obj.obj.NeighborGrSucceeded != nil
+}
+
+// Number of Graceful Restarts succeeded that were initiated by a Neighbor. This counter is incremented when Restart TLV having RR bit unset in the received IIH PDU after the Graceful Restart was initiated by a Neighbor.
+// SetNeighborGrSucceeded sets the uint64 value in the IsisMetric object
+func (obj *isisMetric) SetNeighborGrSucceeded(value uint64) IsisMetric {
+
+	obj.obj.NeighborGrSucceeded = &value
 	return obj
 }
 
