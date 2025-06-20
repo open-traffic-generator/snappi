@@ -47,8 +47,6 @@ type marshalPatternFlowEthernetPauseEtherTypeMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowEthernetPauseEtherTypeMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowEthernetPauseEtherTypeMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowEthernetPauseEtherTypeMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowEthernetPauseEtherTypeMetricTag) FromYaml(value str
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowEthernetPauseEtherTypeMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowEthernetPauseEtherTypeMetricTag) ToJson() (string, error) {

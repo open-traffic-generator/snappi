@@ -50,8 +50,6 @@ type marshalPatternFlowMplsLabel interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowMplsLabel to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowMplsLabel to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowMplsLabel struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowMplsLabel) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowMplsLabel) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowMplsLabel) ToJson() (string, error) {

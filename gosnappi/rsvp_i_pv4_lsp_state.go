@@ -50,8 +50,6 @@ type marshalRsvpIPv4LspState interface {
 	ToYaml() (string, error)
 	// ToJson marshals RsvpIPv4LspState to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals RsvpIPv4LspState to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrsvpIPv4LspState struct {
@@ -169,23 +167,6 @@ func (m *unMarshalrsvpIPv4LspState) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalrsvpIPv4LspState) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalrsvpIPv4LspState) ToJson() (string, error) {

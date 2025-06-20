@@ -48,8 +48,6 @@ type marshalBgpV4Interface interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpV4Interface to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpV4Interface to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpV4Interface struct {
@@ -167,23 +165,6 @@ func (m *unMarshalbgpV4Interface) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpV4Interface) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpV4Interface) ToJson() (string, error) {
@@ -307,11 +288,6 @@ type BgpV4Interface interface {
 // - /components/schemas/Device.Ipv4Loopback/properties/name
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // Ipv4Name returns a string
 func (obj *bgpV4Interface) Ipv4Name() string {
 
@@ -320,11 +296,6 @@ func (obj *bgpV4Interface) Ipv4Name() string {
 }
 
 // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the source IP for this list of BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv4Loopback/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

@@ -50,8 +50,6 @@ type marshalPatternFlowArpHardwareType interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowArpHardwareType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowArpHardwareType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowArpHardwareType struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowArpHardwareType) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowArpHardwareType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowArpHardwareType) ToJson() (string, error) {

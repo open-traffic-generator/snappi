@@ -69,8 +69,6 @@ type marshalMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals MetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmetricsRequest struct {
@@ -188,23 +186,6 @@ func (m *unMarshalmetricsRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmetricsRequest) ToJson() (string, error) {
@@ -454,14 +435,10 @@ type MetricsRequest interface {
 	// Convergence returns ConvergenceRequest, set in MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	Convergence() ConvergenceRequest
 	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
 	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 	//
 	// Container for requesting control-plane and data-plane convergence time metrics for flows.
 	SetConvergence(value ConvergenceRequest) MetricsRequest

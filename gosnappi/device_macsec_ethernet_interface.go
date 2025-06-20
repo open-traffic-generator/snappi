@@ -48,8 +48,6 @@ type marshalDeviceMacsecEthernetInterface interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceMacsecEthernetInterface to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals DeviceMacsecEthernetInterface to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceMacsecEthernetInterface struct {
@@ -167,23 +165,6 @@ func (m *unMarshaldeviceMacsecEthernetInterface) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldeviceMacsecEthernetInterface) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldeviceMacsecEthernetInterface) ToJson() (string, error) {
@@ -309,9 +290,6 @@ type DeviceMacsecEthernetInterface interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthName returns a string
 func (obj *deviceMacsecEthernetInterface) EthName() string {
 
@@ -320,9 +298,6 @@ func (obj *deviceMacsecEthernetInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which MACsec is enabled.
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

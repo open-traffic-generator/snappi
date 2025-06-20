@@ -57,8 +57,6 @@ type marshalBgpV6EviVxlan interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpV6EviVxlan to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpV6EviVxlan to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpV6EviVxlan struct {
@@ -176,23 +174,6 @@ func (m *unMarshalbgpV6EviVxlan) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpV6EviVxlan) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpV6EviVxlan) ToJson() (string, error) {

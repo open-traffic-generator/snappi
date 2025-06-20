@@ -47,8 +47,6 @@ type marshalPatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter interfa
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter) 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathLabelRequestWithoutLabelRangeL3PidCounter) ToJson() (string, error) {

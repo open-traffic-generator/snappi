@@ -48,8 +48,6 @@ type marshalControlActionResponse interface {
 	ToYaml() (string, error)
 	// ToJson marshals ControlActionResponse to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ControlActionResponse to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalcontrolActionResponse struct {
@@ -167,23 +165,6 @@ func (m *unMarshalcontrolActionResponse) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalcontrolActionResponse) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalcontrolActionResponse) ToJson() (string, error) {

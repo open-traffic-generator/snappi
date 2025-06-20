@@ -47,8 +47,6 @@ type marshalPatternFlowRSVPPathRecordRouteType1LabelCType interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathRecordRouteType1LabelCType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathRecordRouteType1LabelCType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathRecordRouteType1LabelCType struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowRSVPPathRecordRouteType1LabelCType) FromYaml(value 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathRecordRouteType1LabelCType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathRecordRouteType1LabelCType) ToJson() (string, error) {

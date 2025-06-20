@@ -48,8 +48,6 @@ type marshalOspfv3LinkLsa interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3LinkLsa to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv3LinkLsa to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3LinkLsa struct {
@@ -167,23 +165,6 @@ func (m *unMarshalospfv3LinkLsa) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalospfv3LinkLsa) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalospfv3LinkLsa) ToJson() (string, error) {

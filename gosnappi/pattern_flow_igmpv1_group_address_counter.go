@@ -47,8 +47,6 @@ type marshalPatternFlowIgmpv1GroupAddressCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIgmpv1GroupAddressCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowIgmpv1GroupAddressCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIgmpv1GroupAddressCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowIgmpv1GroupAddressCounter) FromYaml(value string) e
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowIgmpv1GroupAddressCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowIgmpv1GroupAddressCounter) ToJson() (string, error) {

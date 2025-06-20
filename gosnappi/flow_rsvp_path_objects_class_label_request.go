@@ -49,8 +49,6 @@ type marshalFlowRSVPPathObjectsClassLabelRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathObjectsClassLabelRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRSVPPathObjectsClassLabelRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathObjectsClassLabelRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalflowRSVPPathObjectsClassLabelRequest) FromYaml(value string) e
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRSVPPathObjectsClassLabelRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathObjectsClassLabelRequest) ToJson() (string, error) {

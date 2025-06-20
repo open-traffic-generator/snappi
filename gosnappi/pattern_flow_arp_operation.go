@@ -50,8 +50,6 @@ type marshalPatternFlowArpOperation interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowArpOperation to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowArpOperation to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowArpOperation struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowArpOperation) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowArpOperation) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowArpOperation) ToJson() (string, error) {

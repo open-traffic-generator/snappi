@@ -47,8 +47,6 @@ type marshalPatternFlowPfcPauseEtherTypeCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowPfcPauseEtherTypeCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowPfcPauseEtherTypeCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowPfcPauseEtherTypeCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowPfcPauseEtherTypeCounter) FromYaml(value string) er
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowPfcPauseEtherTypeCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowPfcPauseEtherTypeCounter) ToJson() (string, error) {

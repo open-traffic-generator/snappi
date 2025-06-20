@@ -48,8 +48,6 @@ type marshalBgpAttributesCommunity interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesCommunity to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesCommunity to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesCommunity struct {
@@ -169,23 +167,6 @@ func (m *unMarshalbgpAttributesCommunity) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalbgpAttributesCommunity) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalbgpAttributesCommunity) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -299,14 +280,14 @@ type BgpAttributesCommunity interface {
 	setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity
 	// getter for LlgrStale to set choice.
 	LlgrStale()
-	// getter for NoExport to set choice.
-	NoExport()
 	// getter for NoExportSubconfed to set choice.
 	NoExportSubconfed()
-	// getter for NoAdvertised to set choice.
-	NoAdvertised()
 	// getter for NoLlgr to set choice.
 	NoLlgr()
+	// getter for NoExport to set choice.
+	NoExport()
+	// getter for NoAdvertised to set choice.
+	NoAdvertised()
 	// CustomCommunity returns BgpAttributesCustomCommunity, set in BgpAttributesCommunity.
 	// BgpAttributesCustomCommunity is user defined COMMUNITY attribute containing 2 byte AS and custom 2 byte value defined by the administrator of the domain.
 	CustomCommunity() BgpAttributesCustomCommunity
@@ -346,24 +327,24 @@ func (obj *bgpAttributesCommunity) LlgrStale() {
 	obj.setChoice(BgpAttributesCommunityChoice.LLGR_STALE)
 }
 
-// getter for NoExport to set choice
-func (obj *bgpAttributesCommunity) NoExport() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT)
-}
-
 // getter for NoExportSubconfed to set choice
 func (obj *bgpAttributesCommunity) NoExportSubconfed() {
 	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT_SUBCONFED)
 }
 
-// getter for NoAdvertised to set choice
-func (obj *bgpAttributesCommunity) NoAdvertised() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
-}
-
 // getter for NoLlgr to set choice
 func (obj *bgpAttributesCommunity) NoLlgr() {
 	obj.setChoice(BgpAttributesCommunityChoice.NO_LLGR)
+}
+
+// getter for NoExport to set choice
+func (obj *bgpAttributesCommunity) NoExport() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT)
+}
+
+// getter for NoAdvertised to set choice
+func (obj *bgpAttributesCommunity) NoAdvertised() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
 }
 
 func (obj *bgpAttributesCommunity) setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity {

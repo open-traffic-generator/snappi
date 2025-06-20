@@ -47,8 +47,6 @@ type marshalPatternFlowTcpSeqNumCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowTcpSeqNumCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowTcpSeqNumCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowTcpSeqNumCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowTcpSeqNumCounter) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowTcpSeqNumCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowTcpSeqNumCounter) ToJson() (string, error) {

@@ -47,8 +47,6 @@ type marshalMACRouteAddress interface {
 	ToYaml() (string, error)
 	// ToJson marshals MACRouteAddress to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MACRouteAddress to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmACRouteAddress struct {
@@ -166,23 +164,6 @@ func (m *unMarshalmACRouteAddress) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmACRouteAddress) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmACRouteAddress) ToJson() (string, error) {

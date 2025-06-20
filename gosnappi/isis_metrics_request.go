@@ -47,8 +47,6 @@ type marshalIsisMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalisisMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalisisMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalisisMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type IsisMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // RouterNames returns a []string
 func (obj *isisMetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -310,9 +288,6 @@ func (obj *isisMetricsRequest) RouterNames() []string {
 }
 
 // The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

@@ -47,8 +47,6 @@ type marshalOspfv2MetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2MetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv2MetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2MetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalospfv2MetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalospfv2MetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalospfv2MetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type Ospfv2MetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ospfv2/properties/name
-//
 // RouterNames returns a []string
 func (obj *ospfv2MetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -310,9 +288,6 @@ func (obj *ospfv2MetricsRequest) RouterNames() []string {
 }
 
 // The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-//
-// x-constraint:
-// - /components/schemas/Device.Ospfv2/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ospfv2/properties/name

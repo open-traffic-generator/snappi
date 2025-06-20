@@ -48,8 +48,6 @@ type marshalOspfv3InterfaceNetworkType interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3InterfaceNetworkType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv3InterfaceNetworkType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3InterfaceNetworkType struct {
@@ -167,23 +165,6 @@ func (m *unMarshalospfv3InterfaceNetworkType) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalospfv3InterfaceNetworkType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalospfv3InterfaceNetworkType) ToJson() (string, error) {

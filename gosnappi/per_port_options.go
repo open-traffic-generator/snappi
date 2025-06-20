@@ -48,8 +48,6 @@ type marshalPerPortOptions interface {
 	ToYaml() (string, error)
 	// ToJson marshals PerPortOptions to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PerPortOptions to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalperPortOptions struct {
@@ -167,23 +165,6 @@ func (m *unMarshalperPortOptions) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalperPortOptions) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalperPortOptions) ToJson() (string, error) {
@@ -307,9 +288,6 @@ type PerPortOptions interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *perPortOptions) PortName() string {
 
@@ -322,18 +300,12 @@ func (obj *perPortOptions) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *perPortOptions) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // The name of port for which this settings will be applied to.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

@@ -47,8 +47,6 @@ type marshalPatternFlowMplsBottomOfStackCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowMplsBottomOfStackCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowMplsBottomOfStackCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowMplsBottomOfStackCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowMplsBottomOfStackCounter) FromYaml(value string) er
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowMplsBottomOfStackCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowMplsBottomOfStackCounter) ToJson() (string, error) {

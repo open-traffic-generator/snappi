@@ -47,8 +47,6 @@ type marshalBgpAttributesBsidSrv6 interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesBsidSrv6 to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesBsidSrv6 to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesBsidSrv6 struct {
@@ -166,23 +164,6 @@ func (m *unMarshalbgpAttributesBsidSrv6) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesBsidSrv6) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesBsidSrv6) ToJson() (string, error) {

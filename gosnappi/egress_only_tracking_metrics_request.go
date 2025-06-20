@@ -48,8 +48,6 @@ type marshalEgressOnlyTrackingMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals EgressOnlyTrackingMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals EgressOnlyTrackingMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalegressOnlyTrackingMetricsRequest struct {
@@ -167,23 +165,6 @@ func (m *unMarshalegressOnlyTrackingMetricsRequest) FromYaml(value string) error
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalegressOnlyTrackingMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalegressOnlyTrackingMetricsRequest) ToJson() (string, error) {
@@ -313,9 +294,6 @@ type EgressOnlyTrackingMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/EgressOnlyTracking/properties/port_name
 //
-// x-constraint:
-// - /components/schemas/EgressOnlyTracking/properties/port_name
-//
 // PortNames returns a []string
 func (obj *egressOnlyTrackingMetricsRequest) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -327,9 +305,6 @@ func (obj *egressOnlyTrackingMetricsRequest) PortNames() []string {
 // Egress only tracking metrics will be retrieved for these port names.
 // If no port-names are provided, egress_only_tracking metrics will be returned for all ports
 // which have one or more egress_only_tracking enabled.
-//
-// x-constraint:
-// - /components/schemas/EgressOnlyTracking/properties/port_name
 //
 // x-constraint:
 // - /components/schemas/EgressOnlyTracking/properties/port_name

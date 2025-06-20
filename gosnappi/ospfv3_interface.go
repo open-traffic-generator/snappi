@@ -51,8 +51,6 @@ type marshalOspfv3Interface interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3Interface to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv3Interface to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3Interface struct {
@@ -170,23 +168,6 @@ func (m *unMarshalospfv3Interface) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalospfv3Interface) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalospfv3Interface) ToJson() (string, error) {
@@ -377,9 +358,6 @@ func (obj *ospfv3Interface) SetName(value string) Ospfv3Interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-//
 // Ipv6Name returns a string
 func (obj *ospfv3Interface) Ipv6Name() string {
 
@@ -388,9 +366,6 @@ func (obj *ospfv3Interface) Ipv6Name() string {
 }
 
 // The globally unique name of the IPv6 interface connected to the DUT.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

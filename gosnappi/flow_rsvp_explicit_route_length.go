@@ -47,8 +47,6 @@ type marshalFlowRSVPExplicitRouteLength interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPExplicitRouteLength to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRSVPExplicitRouteLength to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPExplicitRouteLength struct {
@@ -166,23 +164,6 @@ func (m *unMarshalflowRSVPExplicitRouteLength) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRSVPExplicitRouteLength) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRSVPExplicitRouteLength) ToJson() (string, error) {

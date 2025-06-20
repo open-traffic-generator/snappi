@@ -47,8 +47,6 @@ type marshalWarning interface {
 	ToYaml() (string, error)
 	// ToJson marshals Warning to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Warning to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalwarning struct {
@@ -166,23 +164,6 @@ func (m *unMarshalwarning) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalwarning) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalwarning) ToJson() (string, error) {

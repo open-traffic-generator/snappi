@@ -47,8 +47,6 @@ type marshalFlowRxTxRatioRxCount interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRxTxRatioRxCount to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRxTxRatioRxCount to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRxTxRatioRxCount struct {
@@ -166,23 +164,6 @@ func (m *unMarshalflowRxTxRatioRxCount) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRxTxRatioRxCount) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRxTxRatioRxCount) ToJson() (string, error) {

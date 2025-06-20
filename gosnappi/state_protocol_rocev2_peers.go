@@ -47,8 +47,6 @@ type marshalStateProtocolRocev2Peers interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateProtocolRocev2Peers to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateProtocolRocev2Peers to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateProtocolRocev2Peers struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateProtocolRocev2Peers) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateProtocolRocev2Peers) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateProtocolRocev2Peers) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -299,10 +280,6 @@ type StateProtocolRocev2Peers interface {
 // - /components/schemas/Rocev2.V4Peer/properties/name
 // - /components/schemas/Rocev2.V6Peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Rocev2.V4Peer/properties/name
-// - /components/schemas/Rocev2.V6Peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *stateProtocolRocev2Peers) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -312,10 +289,6 @@ func (obj *stateProtocolRocev2Peers) PeerNames() []string {
 }
 
 // The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
-//
-// x-constraint:
-// - /components/schemas/Rocev2.V4Peer/properties/name
-// - /components/schemas/Rocev2.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4Peer/properties/name

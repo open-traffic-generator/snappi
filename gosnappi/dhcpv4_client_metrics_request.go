@@ -47,8 +47,6 @@ type marshalDhcpv4ClientMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv4ClientMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv4ClientMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv4ClientMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshaldhcpv4ClientMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaldhcpv4ClientMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshaldhcpv4ClientMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type Dhcpv4ClientMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // ClientNames returns a []string
 func (obj *dhcpv4ClientMetricsRequest) ClientNames() []string {
 	if obj.obj.ClientNames == nil {
@@ -310,9 +288,6 @@ func (obj *dhcpv4ClientMetricsRequest) ClientNames() []string {
 }
 
 // The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name

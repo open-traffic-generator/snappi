@@ -48,8 +48,6 @@ type marshalFlowRSVPType1ExplicitRouteSubobjects interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPType1ExplicitRouteSubobjects to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRSVPType1ExplicitRouteSubobjects to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPType1ExplicitRouteSubobjects struct {
@@ -167,23 +165,6 @@ func (m *unMarshalflowRSVPType1ExplicitRouteSubobjects) FromYaml(value string) e
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRSVPType1ExplicitRouteSubobjects) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRSVPType1ExplicitRouteSubobjects) ToJson() (string, error) {

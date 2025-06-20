@@ -51,8 +51,6 @@ type marshalBgpAttributesMpUnreachNlri interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesMpUnreachNlri to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesMpUnreachNlri to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesMpUnreachNlri struct {
@@ -170,23 +168,6 @@ func (m *unMarshalbgpAttributesMpUnreachNlri) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesMpUnreachNlri) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesMpUnreachNlri) ToJson() (string, error) {

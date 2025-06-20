@@ -47,8 +47,6 @@ type marshalDhcpv4LeaseStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv4LeaseStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv4LeaseStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv4LeaseStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshaldhcpv4LeaseStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaldhcpv4LeaseStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshaldhcpv4LeaseStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type Dhcpv4LeaseStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4server/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4server/properties/name
-//
 // DhcpServerNames returns a []string
 func (obj *dhcpv4LeaseStateRequest) DhcpServerNames() []string {
 	if obj.obj.DhcpServerNames == nil {
@@ -306,9 +284,6 @@ func (obj *dhcpv4LeaseStateRequest) DhcpServerNames() []string {
 }
 
 // The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4server/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4server/properties/name

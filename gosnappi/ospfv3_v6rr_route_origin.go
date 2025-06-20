@@ -48,8 +48,6 @@ type marshalOspfv3V6RRRouteOrigin interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv3V6RRRouteOrigin to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv3V6RRRouteOrigin to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv3V6RRRouteOrigin struct {
@@ -169,23 +167,6 @@ func (m *unMarshalospfv3V6RRRouteOrigin) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalospfv3V6RRRouteOrigin) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalospfv3V6RRRouteOrigin) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -297,14 +278,14 @@ type Ospfv3V6RRRouteOrigin interface {
 	setChoice(value Ospfv3V6RRRouteOriginChoiceEnum) Ospfv3V6RRRouteOrigin
 	// HasChoice checks if Choice has been set in Ospfv3V6RRRouteOrigin
 	HasChoice() bool
-	// getter for IntraArea to set choice.
-	IntraArea()
 	// getter for InterArea to set choice.
 	InterArea()
-	// getter for ExternalType_1 to set choice.
-	ExternalType_1()
 	// getter for ExternalType_2 to set choice.
 	ExternalType_2()
+	// getter for ExternalType_1 to set choice.
+	ExternalType_1()
+	// getter for IntraArea to set choice.
+	IntraArea()
 	// NssaExternal returns Ospfv3V6RRNssaExternal, set in Ospfv3V6RRRouteOrigin.
 	// Ospfv3V6RRNssaExternal is container for the forwarding address of NSSA External route origin configuration.
 	NssaExternal() Ospfv3V6RRNssaExternal
@@ -337,14 +318,14 @@ func (obj *ospfv3V6RRRouteOrigin) Choice() Ospfv3V6RRRouteOriginChoiceEnum {
 	return Ospfv3V6RRRouteOriginChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IntraArea to set choice
-func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
-	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
-}
-
 // getter for InterArea to set choice
 func (obj *ospfv3V6RRRouteOrigin) InterArea() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTER_AREA)
+}
+
+// getter for ExternalType_2 to set choice
+func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
+	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_2)
 }
 
 // getter for ExternalType_1 to set choice
@@ -352,9 +333,9 @@ func (obj *ospfv3V6RRRouteOrigin) ExternalType_1() {
 	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_1)
 }
 
-// getter for ExternalType_2 to set choice
-func (obj *ospfv3V6RRRouteOrigin) ExternalType_2() {
-	obj.setChoice(Ospfv3V6RRRouteOriginChoice.EXTERNAL_TYPE_2)
+// getter for IntraArea to set choice
+func (obj *ospfv3V6RRRouteOrigin) IntraArea() {
+	obj.setChoice(Ospfv3V6RRRouteOriginChoice.INTRA_AREA)
 }
 
 // Supported types are: - intra_area: for Intra-Area. - inter_area: for Inter Area. - external_type_1: for Autonomous System (AS) External with internal AS metric. - external_type_2: for Autonomous System (AS) External with internal and external AS metric. - nssa_external: for type 7 Not-So-Stubby Area (NSSA) External.

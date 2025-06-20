@@ -49,8 +49,6 @@ type marshalPatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit struct {
@@ -168,23 +166,6 @@ func (m *unMarshalpatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit) FromYaml(
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathExplicitRouteType1Ipv4PrefixLBit) ToJson() (string, error) {

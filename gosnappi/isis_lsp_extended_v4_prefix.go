@@ -49,8 +49,6 @@ type marshalIsisLspExtendedV4Prefix interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspExtendedV4Prefix to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisLspExtendedV4Prefix to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspExtendedV4Prefix struct {
@@ -168,23 +166,6 @@ func (m *unMarshalisisLspExtendedV4Prefix) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalisisLspExtendedV4Prefix) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalisisLspExtendedV4Prefix) ToJson() (string, error) {

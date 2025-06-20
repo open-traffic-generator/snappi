@@ -49,8 +49,6 @@ type marshalActionProtocolBgp interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionProtocolBgp to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ActionProtocolBgp to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionProtocolBgp struct {
@@ -168,23 +166,6 @@ func (m *unMarshalactionProtocolBgp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalactionProtocolBgp) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalactionProtocolBgp) ToJson() (string, error) {

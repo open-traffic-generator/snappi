@@ -50,8 +50,6 @@ type marshalPatternFlowVxlanVni interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowVxlanVni to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowVxlanVni to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowVxlanVni struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowVxlanVni) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowVxlanVni) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowVxlanVni) ToJson() (string, error) {

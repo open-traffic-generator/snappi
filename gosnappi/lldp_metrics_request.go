@@ -47,8 +47,6 @@ type marshalLldpMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals LldpMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals LldpMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshallldpMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshallldpMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshallldpMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshallldpMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type LldpMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Lldp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lldp/properties/name
-//
 // LldpNames returns a []string
 func (obj *lldpMetricsRequest) LldpNames() []string {
 	if obj.obj.LldpNames == nil {
@@ -310,9 +288,6 @@ func (obj *lldpMetricsRequest) LldpNames() []string {
 }
 
 // The names of LLDP instances to return results for. An empty list will return results for all LLDP instances.
-//
-// x-constraint:
-// - /components/schemas/Lldp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lldp/properties/name

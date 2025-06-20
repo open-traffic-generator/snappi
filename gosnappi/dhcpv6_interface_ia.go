@@ -47,8 +47,6 @@ type marshalDhcpv6InterfaceIa interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6InterfaceIa to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv6InterfaceIa to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6InterfaceIa struct {
@@ -166,23 +164,6 @@ func (m *unMarshaldhcpv6InterfaceIa) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldhcpv6InterfaceIa) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldhcpv6InterfaceIa) ToJson() (string, error) {

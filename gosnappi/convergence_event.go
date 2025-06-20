@@ -47,8 +47,6 @@ type marshalConvergenceEvent interface {
 	ToYaml() (string, error)
 	// ToJson marshals ConvergenceEvent to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ConvergenceEvent to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalconvergenceEvent struct {
@@ -166,23 +164,6 @@ func (m *unMarshalconvergenceEvent) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalconvergenceEvent) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalconvergenceEvent) ToJson() (string, error) {
@@ -361,12 +342,6 @@ func (obj *convergenceEvent) SetType(value ConvergenceEventTypeEnum) Convergence
 // - /components/schemas/Device.Bgpv4Route/properties/name
 // - /components/schemas/Device.Bgpv6Route/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Flow/properties/name
-// - /components/schemas/Device.Bgpv4Route/properties/name
-// - /components/schemas/Device.Bgpv6Route/properties/name
-//
 // Source returns a string
 func (obj *convergenceEvent) Source() string {
 
@@ -384,12 +359,6 @@ func (obj *convergenceEvent) Source() string {
 // - /components/schemas/Device.Bgpv4Route/properties/name
 // - /components/schemas/Device.Bgpv6Route/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Flow/properties/name
-// - /components/schemas/Device.Bgpv4Route/properties/name
-// - /components/schemas/Device.Bgpv6Route/properties/name
-//
 // Source returns a string
 func (obj *convergenceEvent) HasSource() bool {
 	return obj.obj.Source != nil
@@ -398,12 +367,6 @@ func (obj *convergenceEvent) HasSource() bool {
 // The source of the event.
 // The source MUST be the value of one of the x-constraint paths,
 // which means the source MUST be a unique name in the configuration.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Flow/properties/name
-// - /components/schemas/Device.Bgpv4Route/properties/name
-// - /components/schemas/Device.Bgpv6Route/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

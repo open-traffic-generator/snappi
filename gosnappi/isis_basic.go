@@ -47,8 +47,6 @@ type marshalIsisBasic interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisBasic to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisBasic to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisBasic struct {
@@ -166,23 +164,6 @@ func (m *unMarshalisisBasic) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalisisBasic) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalisisBasic) ToJson() (string, error) {

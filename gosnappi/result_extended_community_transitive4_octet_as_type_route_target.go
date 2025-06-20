@@ -47,8 +47,6 @@ type marshalResultExtendedCommunityTransitive4OctetAsTypeRouteTarget interface {
 	ToYaml() (string, error)
 	// ToJson marshals ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ResultExtendedCommunityTransitive4OctetAsTypeRouteTarget to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalresultExtendedCommunityTransitive4OctetAsTypeRouteTarget struct {
@@ -166,23 +164,6 @@ func (m *unMarshalresultExtendedCommunityTransitive4OctetAsTypeRouteTarget) From
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalresultExtendedCommunityTransitive4OctetAsTypeRouteTarget) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalresultExtendedCommunityTransitive4OctetAsTypeRouteTarget) ToJson() (string, error) {

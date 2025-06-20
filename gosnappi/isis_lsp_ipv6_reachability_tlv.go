@@ -48,8 +48,6 @@ type marshalIsisLspIpv6ReachabilityTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspIpv6ReachabilityTlv to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisLspIpv6ReachabilityTlv to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspIpv6ReachabilityTlv struct {
@@ -167,23 +165,6 @@ func (m *unMarshalisisLspIpv6ReachabilityTlv) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalisisLspIpv6ReachabilityTlv) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalisisLspIpv6ReachabilityTlv) ToJson() (string, error) {

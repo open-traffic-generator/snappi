@@ -47,8 +47,6 @@ type marshalLldpConnection interface {
 	ToYaml() (string, error)
 	// ToJson marshals LldpConnection to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals LldpConnection to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshallldpConnection struct {
@@ -166,23 +164,6 @@ func (m *unMarshallldpConnection) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshallldpConnection) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshallldpConnection) ToJson() (string, error) {
@@ -334,9 +315,6 @@ func (obj *lldpConnection) setChoice(value LldpConnectionChoiceEnum) LldpConnect
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *lldpConnection) PortName() string {
 
@@ -353,18 +331,12 @@ func (obj *lldpConnection) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *lldpConnection) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // Name of the test port on which LLDP is configured on.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

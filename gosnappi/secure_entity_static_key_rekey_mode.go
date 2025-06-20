@@ -48,8 +48,6 @@ type marshalSecureEntityStaticKeyRekeyMode interface {
 	ToYaml() (string, error)
 	// ToJson marshals SecureEntityStaticKeyRekeyMode to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals SecureEntityStaticKeyRekeyMode to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalsecureEntityStaticKeyRekeyMode struct {
@@ -167,23 +165,6 @@ func (m *unMarshalsecureEntityStaticKeyRekeyMode) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalsecureEntityStaticKeyRekeyMode) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalsecureEntityStaticKeyRekeyMode) ToJson() (string, error) {

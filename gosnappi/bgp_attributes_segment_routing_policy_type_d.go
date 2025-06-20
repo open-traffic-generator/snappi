@@ -49,8 +49,6 @@ type marshalBgpAttributesSegmentRoutingPolicyTypeD interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesSegmentRoutingPolicyTypeD to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesSegmentRoutingPolicyTypeD to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesSegmentRoutingPolicyTypeD struct {
@@ -168,23 +166,6 @@ func (m *unMarshalbgpAttributesSegmentRoutingPolicyTypeD) FromYaml(value string)
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesSegmentRoutingPolicyTypeD) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesSegmentRoutingPolicyTypeD) ToJson() (string, error) {

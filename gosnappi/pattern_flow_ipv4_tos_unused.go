@@ -50,8 +50,6 @@ type marshalPatternFlowIpv4TosUnused interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4TosUnused to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowIpv4TosUnused to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4TosUnused struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowIpv4TosUnused) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowIpv4TosUnused) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4TosUnused) ToJson() (string, error) {

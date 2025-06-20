@@ -47,8 +47,6 @@ type marshalStateProtocolBgpPeers interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateProtocolBgpPeers to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateProtocolBgpPeers to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateProtocolBgpPeers struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateProtocolBgpPeers) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateProtocolBgpPeers) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateProtocolBgpPeers) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -299,10 +280,6 @@ type StateProtocolBgpPeers interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *stateProtocolBgpPeers) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -312,10 +289,6 @@ func (obj *stateProtocolBgpPeers) PeerNames() []string {
 }
 
 // The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name

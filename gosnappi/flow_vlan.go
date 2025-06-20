@@ -51,8 +51,6 @@ type marshalFlowVlan interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowVlan to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowVlan to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowVlan struct {
@@ -170,23 +168,6 @@ func (m *unMarshalflowVlan) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowVlan) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowVlan) ToJson() (string, error) {

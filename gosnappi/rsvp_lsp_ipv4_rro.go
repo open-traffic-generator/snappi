@@ -47,8 +47,6 @@ type marshalRsvpLspIpv4Rro interface {
 	ToYaml() (string, error)
 	// ToJson marshals RsvpLspIpv4Rro to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals RsvpLspIpv4Rro to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrsvpLspIpv4Rro struct {
@@ -166,23 +164,6 @@ func (m *unMarshalrsvpLspIpv4Rro) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalrsvpLspIpv4Rro) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalrsvpLspIpv4Rro) ToJson() (string, error) {

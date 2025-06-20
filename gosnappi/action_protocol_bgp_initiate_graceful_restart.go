@@ -48,8 +48,6 @@ type marshalActionProtocolBgpInitiateGracefulRestart interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionProtocolBgpInitiateGracefulRestart to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ActionProtocolBgpInitiateGracefulRestart to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionProtocolBgpInitiateGracefulRestart struct {
@@ -167,23 +165,6 @@ func (m *unMarshalactionProtocolBgpInitiateGracefulRestart) FromYaml(value strin
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalactionProtocolBgpInitiateGracefulRestart) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalactionProtocolBgpInitiateGracefulRestart) ToJson() (string, error) {
@@ -318,10 +299,6 @@ type ActionProtocolBgpInitiateGracefulRestart interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -331,10 +308,6 @@ func (obj *actionProtocolBgpInitiateGracefulRestart) PeerNames() []string {
 }
 
 // The names of device BGP peers objects to control.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name

@@ -47,8 +47,6 @@ type marshalStateTrafficFlowTransmit interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateTrafficFlowTransmit to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateTrafficFlowTransmit to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateTrafficFlowTransmit struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateTrafficFlowTransmit) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateTrafficFlowTransmit) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateTrafficFlowTransmit) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -299,9 +280,6 @@ type StateTrafficFlowTransmit interface {
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
-// x-constraint:
-// - /components/schemas/Flow/properties/name
-//
 // FlowNames returns a []string
 func (obj *stateTrafficFlowTransmit) FlowNames() []string {
 	if obj.obj.FlowNames == nil {
@@ -312,9 +290,6 @@ func (obj *stateTrafficFlowTransmit) FlowNames() []string {
 
 // The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
 // If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-//
-// x-constraint:
-// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

@@ -47,8 +47,6 @@ type marshalOspfv2V4RRExtdPrefixFlags interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2V4RRExtdPrefixFlags to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv2V4RRExtdPrefixFlags to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2V4RRExtdPrefixFlags struct {
@@ -166,23 +164,6 @@ func (m *unMarshalospfv2V4RRExtdPrefixFlags) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalospfv2V4RRExtdPrefixFlags) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalospfv2V4RRExtdPrefixFlags) ToJson() (string, error) {

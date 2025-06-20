@@ -47,8 +47,6 @@ type marshalPatternFlowEthernetPfcQueueCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowEthernetPfcQueueCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowEthernetPfcQueueCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowEthernetPfcQueueCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowEthernetPfcQueueCounter) FromYaml(value string) err
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowEthernetPfcQueueCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowEthernetPfcQueueCounter) ToJson() (string, error) {

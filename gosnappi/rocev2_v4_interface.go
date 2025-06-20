@@ -48,8 +48,6 @@ type marshalRocev2V4Interface interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2V4Interface to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Rocev2V4Interface to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2V4Interface struct {
@@ -167,23 +165,6 @@ func (m *unMarshalrocev2V4Interface) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalrocev2V4Interface) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalrocev2V4Interface) ToJson() (string, error) {
@@ -311,9 +292,6 @@ type Rocev2V4Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // Ipv4Name returns a string
 func (obj *rocev2V4Interface) Ipv4Name() string {
 
@@ -322,9 +300,6 @@ func (obj *rocev2V4Interface) Ipv4Name() string {
 }
 
 // The unique name of the IPv4 interface, used as the source IP for this list of RoCEv2 peers.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

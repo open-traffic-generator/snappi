@@ -47,8 +47,6 @@ type marshalDeviceIpv6Loopback interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceIpv6Loopback to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals DeviceIpv6Loopback to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceIpv6Loopback struct {
@@ -166,23 +164,6 @@ func (m *unMarshaldeviceIpv6Loopback) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldeviceIpv6Loopback) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldeviceIpv6Loopback) ToJson() (string, error) {
@@ -305,9 +286,6 @@ type DeviceIpv6Loopback interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthName returns a string
 func (obj *deviceIpv6Loopback) EthName() string {
 
@@ -317,9 +295,6 @@ func (obj *deviceIpv6Loopback) EthName() string {
 
 // The unique name of the Ethernet interface behind which this Loopback
 // interface will be created.
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

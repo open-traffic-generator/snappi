@@ -48,8 +48,6 @@ type marshalConvergenceMetric interface {
 	ToYaml() (string, error)
 	// ToJson marshals ConvergenceMetric to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ConvergenceMetric to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalconvergenceMetric struct {
@@ -169,23 +167,6 @@ func (m *unMarshalconvergenceMetric) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalconvergenceMetric) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalconvergenceMetric) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -270,8 +251,6 @@ func (obj *convergenceMetric) setNil() {
 }
 
 // ConvergenceMetric is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-//
-// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 //
 // The container for convergence metrics.
 type ConvergenceMetric interface {

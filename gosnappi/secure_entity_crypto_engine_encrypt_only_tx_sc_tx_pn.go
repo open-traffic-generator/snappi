@@ -49,8 +49,6 @@ type marshalSecureEntityCryptoEngineEncryptOnlyTxScTxPn interface {
 	ToYaml() (string, error)
 	// ToJson marshals SecureEntityCryptoEngineEncryptOnlyTxScTxPn to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals SecureEntityCryptoEngineEncryptOnlyTxScTxPn to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalsecureEntityCryptoEngineEncryptOnlyTxScTxPn struct {
@@ -170,23 +168,6 @@ func (m *unMarshalsecureEntityCryptoEngineEncryptOnlyTxScTxPn) FromYaml(value st
 	return nil
 }
 
-func (m *marshalsecureEntityCryptoEngineEncryptOnlyTxScTxPn) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalsecureEntityCryptoEngineEncryptOnlyTxScTxPn) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -299,10 +280,10 @@ type SecureEntityCryptoEngineEncryptOnlyTxScTxPn interface {
 	setChoice(value SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoiceEnum) SecureEntityCryptoEngineEncryptOnlyTxScTxPn
 	// HasChoice checks if Choice has been set in SecureEntityCryptoEngineEncryptOnlyTxScTxPn
 	HasChoice() bool
-	// getter for FixedPn to set choice.
-	FixedPn()
 	// getter for IncrementingPn to set choice.
 	IncrementingPn()
+	// getter for FixedPn to set choice.
+	FixedPn()
 	// Fixed returns SecureEntityCryptoEngineEncryptOnlyFixedPn, set in SecureEntityCryptoEngineEncryptOnlyTxScTxPn.
 	// SecureEntityCryptoEngineEncryptOnlyFixedPn is fixed packet number(PN) configuration.
 	Fixed() SecureEntityCryptoEngineEncryptOnlyFixedPn
@@ -337,14 +318,14 @@ func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) Choice() SecureEntityCry
 	return SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for FixedPn to set choice
-func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) FixedPn() {
-	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.FIXED_PN)
-}
-
 // getter for IncrementingPn to set choice
 func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) IncrementingPn() {
 	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.INCREMENTING_PN)
+}
+
+// getter for FixedPn to set choice
+func (obj *secureEntityCryptoEngineEncryptOnlyTxScTxPn) FixedPn() {
+	obj.setChoice(SecureEntityCryptoEngineEncryptOnlyTxScTxPnChoice.FIXED_PN)
 }
 
 // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets will be sent out with the configured fixed PN or lower half of configured fixed XPN. 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing PN or XPN.

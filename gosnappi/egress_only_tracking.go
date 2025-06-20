@@ -49,8 +49,6 @@ type marshalEgressOnlyTracking interface {
 	ToYaml() (string, error)
 	// ToJson marshals EgressOnlyTracking to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals EgressOnlyTracking to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalegressOnlyTracking struct {
@@ -168,23 +166,6 @@ func (m *unMarshalegressOnlyTracking) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalegressOnlyTracking) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalegressOnlyTracking) ToJson() (string, error) {
@@ -317,9 +298,6 @@ type EgressOnlyTracking interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *egressOnlyTracking) PortName() string {
 
@@ -328,9 +306,6 @@ func (obj *egressOnlyTracking) PortName() string {
 }
 
 // Name of the received port this egress tracking rule/specification has to be applied.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

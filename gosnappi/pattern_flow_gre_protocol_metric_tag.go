@@ -47,8 +47,6 @@ type marshalPatternFlowGreProtocolMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGreProtocolMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowGreProtocolMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGreProtocolMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowGreProtocolMetricTag) FromYaml(value string) error 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowGreProtocolMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowGreProtocolMetricTag) ToJson() (string, error) {

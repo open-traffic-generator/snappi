@@ -47,8 +47,6 @@ type marshalActionProtocolIpv4PingRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionProtocolIpv4PingRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ActionProtocolIpv4PingRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionProtocolIpv4PingRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalactionProtocolIpv4PingRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalactionProtocolIpv4PingRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalactionProtocolIpv4PingRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -263,8 +244,6 @@ func (obj *actionProtocolIpv4PingRequest) Clone() (ActionProtocolIpv4PingRequest
 
 // ActionProtocolIpv4PingRequest is under Review: Most ping request parameters are still TBD.
 //
-// Under Review: Most ping request parameters are still TBD.
-//
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 type ActionProtocolIpv4PingRequest interface {
@@ -307,9 +286,6 @@ type ActionProtocolIpv4PingRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 
@@ -322,18 +298,12 @@ func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) HasSrcName() bool {
 	return obj.obj.SrcName != nil
 }
 
 // Name of source IPv4 interface to be used.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

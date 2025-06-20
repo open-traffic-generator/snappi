@@ -47,8 +47,6 @@ type marshalPatternFlowPfcPauseControlOpCodeMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowPfcPauseControlOpCodeMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowPfcPauseControlOpCodeMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowPfcPauseControlOpCodeMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowPfcPauseControlOpCodeMetricTag) FromYaml(value stri
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowPfcPauseControlOpCodeMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowPfcPauseControlOpCodeMetricTag) ToJson() (string, error) {

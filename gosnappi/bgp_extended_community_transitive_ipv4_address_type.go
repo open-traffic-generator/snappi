@@ -49,8 +49,6 @@ type marshalBgpExtendedCommunityTransitiveIpv4AddressType interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpExtendedCommunityTransitiveIpv4AddressType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpExtendedCommunityTransitiveIpv4AddressType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpExtendedCommunityTransitiveIpv4AddressType struct {
@@ -168,23 +166,6 @@ func (m *unMarshalbgpExtendedCommunityTransitiveIpv4AddressType) FromYaml(value 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpExtendedCommunityTransitiveIpv4AddressType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpExtendedCommunityTransitiveIpv4AddressType) ToJson() (string, error) {

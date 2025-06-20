@@ -48,8 +48,6 @@ type marshalMkaBasicKeySource interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaBasicKeySource to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MkaBasicKeySource to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaBasicKeySource struct {
@@ -169,23 +167,6 @@ func (m *unMarshalmkaBasicKeySource) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalmkaBasicKeySource) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalmkaBasicKeySource) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -297,10 +278,10 @@ type MkaBasicKeySource interface {
 	setChoice(value MkaBasicKeySourceChoiceEnum) MkaBasicKeySource
 	// HasChoice checks if Choice has been set in MkaBasicKeySource
 	HasChoice() bool
-	// getter for Psk to set choice.
-	Psk()
 	// getter for Msk to set choice.
 	Msk()
+	// getter for Psk to set choice.
+	Psk()
 	// Psks returns MkaBasicKeySourceMkaBasicKeySourcePskIterIter, set in MkaBasicKeySource
 	Psks() MkaBasicKeySourceMkaBasicKeySourcePskIter
 	setNil()
@@ -321,14 +302,14 @@ func (obj *mkaBasicKeySource) Choice() MkaBasicKeySourceChoiceEnum {
 	return MkaBasicKeySourceChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Psk to set choice
-func (obj *mkaBasicKeySource) Psk() {
-	obj.setChoice(MkaBasicKeySourceChoice.PSK)
-}
-
 // getter for Msk to set choice
 func (obj *mkaBasicKeySource) Msk() {
 	obj.setChoice(MkaBasicKeySourceChoice.MSK)
+}
+
+// getter for Psk to set choice
+func (obj *mkaBasicKeySource) Psk() {
+	obj.setChoice(MkaBasicKeySourceChoice.PSK)
 }
 
 // Key source. Choose one from PSK or MSK.

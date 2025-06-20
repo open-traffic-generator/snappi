@@ -47,8 +47,6 @@ type marshalStateProtocolLacpAdmin interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateProtocolLacpAdmin to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateProtocolLacpAdmin to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateProtocolLacpAdmin struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateProtocolLacpAdmin) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateProtocolLacpAdmin) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateProtocolLacpAdmin) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type StateProtocolLacpAdmin interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // LagMemberNames returns a []string
 func (obj *stateProtocolLacpAdmin) LagMemberNames() []string {
 	if obj.obj.LagMemberNames == nil {
@@ -310,9 +288,6 @@ func (obj *stateProtocolLacpAdmin) LagMemberNames() []string {
 }
 
 // The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

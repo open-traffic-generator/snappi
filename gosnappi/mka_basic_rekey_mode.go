@@ -48,8 +48,6 @@ type marshalMkaBasicRekeyMode interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaBasicRekeyMode to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MkaBasicRekeyMode to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaBasicRekeyMode struct {
@@ -167,23 +165,6 @@ func (m *unMarshalmkaBasicRekeyMode) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmkaBasicRekeyMode) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmkaBasicRekeyMode) ToJson() (string, error) {

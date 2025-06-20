@@ -47,8 +47,6 @@ type marshalLldpNeighborsStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals LldpNeighborsStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals LldpNeighborsStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshallldpNeighborsStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshallldpNeighborsStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshallldpNeighborsStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshallldpNeighborsStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type LldpNeighborsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Lldp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lldp/properties/name
-//
 // LldpNames returns a []string
 func (obj *lldpNeighborsStateRequest) LldpNames() []string {
 	if obj.obj.LldpNames == nil {
@@ -310,9 +288,6 @@ func (obj *lldpNeighborsStateRequest) LldpNames() []string {
 }
 
 // The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.
-//
-// x-constraint:
-// - /components/schemas/Lldp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lldp/properties/name

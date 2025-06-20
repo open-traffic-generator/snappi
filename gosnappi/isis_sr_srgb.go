@@ -47,8 +47,6 @@ type marshalIsisSRSrgb interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisSRSrgb to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisSRSrgb to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisSRSrgb struct {
@@ -166,23 +164,6 @@ func (m *unMarshalisisSRSrgb) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalisisSRSrgb) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalisisSRSrgb) ToJson() (string, error) {

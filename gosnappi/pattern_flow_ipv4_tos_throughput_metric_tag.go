@@ -47,8 +47,6 @@ type marshalPatternFlowIpv4TosThroughputMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIpv4TosThroughputMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowIpv4TosThroughputMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIpv4TosThroughputMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowIpv4TosThroughputMetricTag) FromYaml(value string) 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowIpv4TosThroughputMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowIpv4TosThroughputMetricTag) ToJson() (string, error) {

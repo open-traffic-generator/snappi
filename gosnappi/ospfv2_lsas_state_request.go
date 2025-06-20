@@ -47,8 +47,6 @@ type marshalOspfv2LsasStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2LsasStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv2LsasStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2LsasStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalospfv2LsasStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalospfv2LsasStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalospfv2LsasStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type Ospfv2LsasStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ospfv2Router/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ospfv2Router/properties/name
-//
 // RouterNames returns a []string
 func (obj *ospfv2LsasStateRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -306,9 +284,6 @@ func (obj *ospfv2LsasStateRequest) RouterNames() []string {
 }
 
 // The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-//
-// x-constraint:
-// - /components/schemas/Device.Ospfv2Router/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ospfv2Router/properties/name

@@ -50,8 +50,6 @@ type marshalPatternFlowTcpEcnEcho interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowTcpEcnEcho to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowTcpEcnEcho to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowTcpEcnEcho struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowTcpEcnEcho) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowTcpEcnEcho) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowTcpEcnEcho) ToJson() (string, error) {

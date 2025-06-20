@@ -47,8 +47,6 @@ type marshalBgpExtendedCommunityTransitiveOpaqueTypeColor interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpExtendedCommunityTransitiveOpaqueTypeColor to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpExtendedCommunityTransitiveOpaqueTypeColor to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpExtendedCommunityTransitiveOpaqueTypeColor struct {
@@ -166,23 +164,6 @@ func (m *unMarshalbgpExtendedCommunityTransitiveOpaqueTypeColor) FromYaml(value 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpExtendedCommunityTransitiveOpaqueTypeColor) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpExtendedCommunityTransitiveOpaqueTypeColor) ToJson() (string, error) {

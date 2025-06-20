@@ -48,8 +48,6 @@ type marshalFlowMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowMetricsRequest struct {
@@ -167,23 +165,6 @@ func (m *unMarshalflowMetricsRequest) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowMetricsRequest) ToJson() (string, error) {
@@ -316,9 +297,6 @@ type FlowMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
-// x-constraint:
-// - /components/schemas/Flow/properties/name
-//
 // FlowNames returns a []string
 func (obj *flowMetricsRequest) FlowNames() []string {
 	if obj.obj.FlowNames == nil {
@@ -329,9 +307,6 @@ func (obj *flowMetricsRequest) FlowNames() []string {
 
 // Flow metrics will be retrieved for these flow names.
 // If no flow names are specified then all flows will be returned.
-//
-// x-constraint:
-// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

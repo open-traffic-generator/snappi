@@ -47,8 +47,6 @@ type marshalEthernetSimulatedLink interface {
 	ToYaml() (string, error)
 	// ToJson marshals EthernetSimulatedLink to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals EthernetSimulatedLink to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalethernetSimulatedLink struct {
@@ -166,23 +164,6 @@ func (m *unMarshalethernetSimulatedLink) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalethernetSimulatedLink) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalethernetSimulatedLink) ToJson() (string, error) {
@@ -304,9 +285,6 @@ type EthernetSimulatedLink interface {
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
-//
 // RemoteSimulatedLink returns a string
 func (obj *ethernetSimulatedLink) RemoteSimulatedLink() string {
 
@@ -321,9 +299,6 @@ func (obj *ethernetSimulatedLink) RemoteSimulatedLink() string {
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
-//
 // RemoteSimulatedLink returns a string
 func (obj *ethernetSimulatedLink) HasRemoteSimulatedLink() bool {
 	return obj.obj.RemoteSimulatedLink != nil
@@ -332,9 +307,6 @@ func (obj *ethernetSimulatedLink) HasRemoteSimulatedLink() bool {
 // Name of the remote end of the simulated interface which also must be a simulated_link on a device which might be acting either as an unconnected device in a simulated topology
 // ( all ethernet links of type simulated_link ) or an emulated device connected to the Device Under Test (has at atleast one ethernet interface with connection to the port or
 // lag connected to the DUT)
-//
-// x-constraint:
-// - #/components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - #/components/schemas/Device.Ethernet/properties/name

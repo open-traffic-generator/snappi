@@ -47,8 +47,6 @@ type marshalStatePortLink interface {
 	ToYaml() (string, error)
 	// ToJson marshals StatePortLink to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StatePortLink to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstatePortLink struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstatePortLink) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstatePortLink) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstatePortLink) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type StatePortLink interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *statePortLink) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -310,9 +288,6 @@ func (obj *statePortLink) PortNames() []string {
 }
 
 // The names of target ports. An empty or null list will target all ports.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

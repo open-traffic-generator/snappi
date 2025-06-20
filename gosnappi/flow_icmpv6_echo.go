@@ -52,8 +52,6 @@ type marshalFlowIcmpv6Echo interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowIcmpv6Echo to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowIcmpv6Echo to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowIcmpv6Echo struct {
@@ -171,23 +169,6 @@ func (m *unMarshalflowIcmpv6Echo) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowIcmpv6Echo) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowIcmpv6Echo) ToJson() (string, error) {

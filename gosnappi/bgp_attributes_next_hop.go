@@ -48,8 +48,6 @@ type marshalBgpAttributesNextHop interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesNextHop to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesNextHop to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesNextHop struct {
@@ -167,23 +165,6 @@ func (m *unMarshalbgpAttributesNextHop) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesNextHop) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesNextHop) ToJson() (string, error) {

@@ -47,8 +47,6 @@ type marshalPatternFlowPfcPausePauseClass4Counter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowPfcPausePauseClass4Counter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowPfcPausePauseClass4Counter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowPfcPausePauseClass4Counter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowPfcPausePauseClass4Counter) FromYaml(value string) 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowPfcPausePauseClass4Counter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowPfcPausePauseClass4Counter) ToJson() (string, error) {

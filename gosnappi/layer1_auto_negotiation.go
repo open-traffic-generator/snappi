@@ -47,8 +47,6 @@ type marshalLayer1AutoNegotiation interface {
 	ToYaml() (string, error)
 	// ToJson marshals Layer1AutoNegotiation to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Layer1AutoNegotiation to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshallayer1AutoNegotiation struct {
@@ -166,23 +164,6 @@ func (m *unMarshallayer1AutoNegotiation) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshallayer1AutoNegotiation) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshallayer1AutoNegotiation) ToJson() (string, error) {

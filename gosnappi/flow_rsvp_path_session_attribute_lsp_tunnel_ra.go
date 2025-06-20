@@ -49,8 +49,6 @@ type marshalFlowRSVPPathSessionAttributeLspTunnelRa interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathSessionAttributeLspTunnelRa to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRSVPPathSessionAttributeLspTunnelRa to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathSessionAttributeLspTunnelRa struct {
@@ -168,23 +166,6 @@ func (m *unMarshalflowRSVPPathSessionAttributeLspTunnelRa) FromYaml(value string
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRSVPPathSessionAttributeLspTunnelRa) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathSessionAttributeLspTunnelRa) ToJson() (string, error) {

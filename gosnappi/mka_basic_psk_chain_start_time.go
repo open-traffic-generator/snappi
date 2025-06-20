@@ -48,8 +48,6 @@ type marshalMkaBasicPskChainStartTime interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaBasicPskChainStartTime to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MkaBasicPskChainStartTime to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaBasicPskChainStartTime struct {
@@ -167,23 +165,6 @@ func (m *unMarshalmkaBasicPskChainStartTime) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmkaBasicPskChainStartTime) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmkaBasicPskChainStartTime) ToJson() (string, error) {

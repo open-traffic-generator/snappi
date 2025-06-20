@@ -47,8 +47,6 @@ type marshalStateProtocolOspfv3Routers interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateProtocolOspfv3Routers to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateProtocolOspfv3Routers to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateProtocolOspfv3Routers struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateProtocolOspfv3Routers) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateProtocolOspfv3Routers) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateProtocolOspfv3Routers) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type StateProtocolOspfv3Routers interface {
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
-//
 // RouterNames returns a []string
 func (obj *stateProtocolOspfv3Routers) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -310,9 +288,6 @@ func (obj *stateProtocolOspfv3Routers) RouterNames() []string {
 }
 
 // The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
-//
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name

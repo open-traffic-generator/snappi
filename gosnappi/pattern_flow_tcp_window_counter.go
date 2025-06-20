@@ -47,8 +47,6 @@ type marshalPatternFlowTcpWindowCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowTcpWindowCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowTcpWindowCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowTcpWindowCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowTcpWindowCounter) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowTcpWindowCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowTcpWindowCounter) ToJson() (string, error) {

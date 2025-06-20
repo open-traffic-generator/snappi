@@ -51,8 +51,6 @@ type marshalFlowEthernet interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowEthernet to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowEthernet to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowEthernet struct {
@@ -170,23 +168,6 @@ func (m *unMarshalflowEthernet) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowEthernet) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowEthernet) ToJson() (string, error) {

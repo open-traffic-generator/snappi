@@ -47,8 +47,6 @@ type marshalStateProtocolIsisRouters interface {
 	ToYaml() (string, error)
 	// ToJson marshals StateProtocolIsisRouters to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals StateProtocolIsisRouters to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalstateProtocolIsisRouters struct {
@@ -168,23 +166,6 @@ func (m *unMarshalstateProtocolIsisRouters) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalstateProtocolIsisRouters) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalstateProtocolIsisRouters) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type StateProtocolIsisRouters interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // RouterNames returns a []string
 func (obj *stateProtocolIsisRouters) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -310,9 +288,6 @@ func (obj *stateProtocolIsisRouters) RouterNames() []string {
 }
 
 // The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

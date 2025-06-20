@@ -47,8 +47,6 @@ type marshalPortMetric interface {
 	ToYaml() (string, error)
 	// ToJson marshals PortMetric to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PortMetric to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalportMetric struct {
@@ -166,23 +164,6 @@ func (m *unMarshalportMetric) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalportMetric) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalportMetric) ToJson() (string, error) {
@@ -374,9 +355,6 @@ type PortMetric interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // Name returns a string
 func (obj *portMetric) Name() string {
 
@@ -389,18 +367,12 @@ func (obj *portMetric) Name() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // Name returns a string
 func (obj *portMetric) HasName() bool {
 	return obj.obj.Name != nil
 }
 
 // The name of a configured port
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

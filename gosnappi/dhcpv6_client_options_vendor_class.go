@@ -48,8 +48,6 @@ type marshalDhcpv6ClientOptionsVendorClass interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6ClientOptionsVendorClass to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv6ClientOptionsVendorClass to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6ClientOptionsVendorClass struct {
@@ -167,23 +165,6 @@ func (m *unMarshaldhcpv6ClientOptionsVendorClass) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldhcpv6ClientOptionsVendorClass) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldhcpv6ClientOptionsVendorClass) ToJson() (string, error) {

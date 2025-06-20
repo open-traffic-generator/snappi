@@ -47,8 +47,6 @@ type marshalMkaTxSc interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaTxSc to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MkaTxSc to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaTxSc struct {
@@ -166,23 +164,6 @@ func (m *unMarshalmkaTxSc) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmkaTxSc) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmkaTxSc) ToJson() (string, error) {

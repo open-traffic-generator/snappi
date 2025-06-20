@@ -47,8 +47,6 @@ type marshalPatternFlowGtpv1SquenceNumberCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpv1SquenceNumberCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowGtpv1SquenceNumberCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpv1SquenceNumberCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowGtpv1SquenceNumberCounter) FromYaml(value string) e
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowGtpv1SquenceNumberCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpv1SquenceNumberCounter) ToJson() (string, error) {

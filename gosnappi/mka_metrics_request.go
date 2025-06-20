@@ -47,8 +47,6 @@ type marshalMkaMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals MkaMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MkaMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmkaMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalmkaMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalmkaMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalmkaMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type MkaMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Mka/properties/name
 //
-// x-constraint:
-// - /components/schemas/Mka/properties/name
-//
 // PeerNames returns a []string
 func (obj *mkaMetricsRequest) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -310,9 +288,6 @@ func (obj *mkaMetricsRequest) PeerNames() []string {
 }
 
 // The names of peers to return results for. An empty list will return results for all peers.
-//
-// x-constraint:
-// - /components/schemas/Mka/properties/name
 //
 // x-constraint:
 // - /components/schemas/Mka/properties/name

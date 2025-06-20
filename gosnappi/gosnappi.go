@@ -30,6 +30,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -249,8 +250,12 @@ type Api interface {
 	api
 	// SetConfig sets configuration resources on the traffic generator.
 	SetConfig(config Config) (Warning, error)
+	// streaming method for SetConfig
+	streamSetConfig(context.Context, []byte) (*otg.SetConfigResponse, error)
 	// GetConfig description is TBD
 	GetConfig() (Config, error)
+	// streaming method for GetConfig
+	streamGetConfig(context.Context, *emptypb.Empty) (Config, error)
 	// UpdateConfig updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
 	// The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
@@ -260,14 +265,24 @@ type Api interface {
 	DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	// SetControlState sets the operational state of configured resources.
 	SetControlState(controlState ControlState) (Warning, error)
+	// streaming method for SetControlState
+	streamSetControlState(context.Context, []byte) (*otg.SetControlStateResponse, error)
 	// SetControlAction triggers actions against configured resources.
 	SetControlAction(controlAction ControlAction) (ControlActionResponse, error)
+	// streaming method for SetControlAction
+	streamSetControlAction(context.Context, []byte) (*otg.SetControlActionResponse, error)
 	// GetMetrics description is TBD
 	GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error)
+	// streaming method for GetMetrics
+	streamGetMetrics(context.Context, *otg.GetMetricsRequest) (MetricsResponse, error)
 	// GetStates description is TBD
 	GetStates(statesRequest StatesRequest) (StatesResponse, error)
+	// streaming method for GetStates
+	streamGetStates(context.Context, *otg.GetStatesRequest) (StatesResponse, error)
 	// GetCapture description is TBD
 	GetCapture(captureRequest CaptureRequest) ([]byte, error)
+	// streaming method for GetCapture
+	streamGetCapture(context.Context, *otg.GetCaptureRequest) ([]byte, error)
 	// GetVersion description is TBD
 	GetVersion() (Version, error)
 	// GetLocalVersion provides version details of local client
@@ -374,18 +389,37 @@ func (api *gosnappiApi) CheckVersionCompatibility() error {
 	return nil
 }
 
+func (api *gosnappiApi) streamSetConfig(ctx context.Context, data []byte) (*otg.SetConfigResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetConfig(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 
 	if err := config.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing SetConfig")
-	jsonStr, err := config.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -398,7 +432,6 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetConfig", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", config.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -410,7 +443,18 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetConfig(ctx, &request)
+	var resp *otg.SetConfigResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(config.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetConfig(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetConfig(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -421,11 +465,35 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	ret := NewWarning()
 	if resp.GetWarning() != nil {
 		ret.setMsg(resp.GetWarning())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetConfig(ctx context.Context, req *emptypb.Empty) (Config, error) {
+	streamClient, err := api.grpcClient.StreamGetConfig(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewConfig()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetConfig() (Config, error) {
@@ -443,7 +511,6 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetConfig", trace.WithSpanKind(trace.SpanKindClient))
-
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -455,7 +522,14 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetConfig(ctx, &request)
+	var resp *otg.GetConfigResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetConfig(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetConfig(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -466,7 +540,6 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 	ret := NewConfig()
 	if resp.GetConfig() != nil {
 		ret.setMsg(resp.GetConfig())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
@@ -479,13 +552,6 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 		return nil, err
 	}
 
-	logs.Info().Msg("Executing UpdateConfig")
-	jsonStr, err := configUpdate.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
-
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
 	}
@@ -497,7 +563,6 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "UpdateConfig", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", configUpdate.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -509,7 +574,9 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.UpdateConfig(ctx, &request)
+
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -520,7 +587,6 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 	ret := NewWarning()
 	if resp.GetWarning() != nil {
 		ret.setMsg(resp.GetWarning())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
@@ -536,17 +602,30 @@ func (api *gosnappiApi) AppendConfig(configAppend ConfigAppend) (Warning, error)
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
 	}
+
 	if api.hasHttpTransport() {
 		return api.httpAppendConfig(configAppend)
 	}
+
+	// adding spans grpc transport for OTLP instrumentation
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "AppendConfig", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
 	request := otg.AppendConfigRequest{ConfigAppend: configAppend.msg()}
-	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	if newCtx == nil {
+		newCtx = context.Background()
+	}
+	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.AppendConfig(ctx, &request)
+
 	if err != nil {
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
 		}
@@ -554,7 +633,8 @@ func (api *gosnappiApi) AppendConfig(configAppend ConfigAppend) (Warning, error)
 	}
 	ret := NewWarning()
 	if resp.GetWarning() != nil {
-		return ret.setMsg(resp.GetWarning()), nil
+		ret.setMsg(resp.GetWarning())
+		return ret, nil
 	}
 
 	return ret, nil
@@ -569,17 +649,30 @@ func (api *gosnappiApi) DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
 	}
+
 	if api.hasHttpTransport() {
 		return api.httpDeleteConfig(configDelete)
 	}
+
+	// adding spans grpc transport for OTLP instrumentation
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "DeleteConfig", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+
 	if err := api.grpcConnect(); err != nil {
 		return nil, err
 	}
 	request := otg.DeleteConfigRequest{ConfigDelete: configDelete.msg()}
-	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	if newCtx == nil {
+		newCtx = context.Background()
+	}
+	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.DeleteConfig(ctx, &request)
+
 	if err != nil {
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
 		}
@@ -587,10 +680,37 @@ func (api *gosnappiApi) DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	}
 	ret := NewWarning()
 	if resp.GetWarning() != nil {
-		return ret.setMsg(resp.GetWarning()), nil
+		ret.setMsg(resp.GetWarning())
+		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamSetControlState(ctx context.Context, data []byte) (*otg.SetControlStateResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetControlState(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, error) {
@@ -598,13 +718,6 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	if err := controlState.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing SetControlState")
-	jsonStr, err := controlState.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -617,7 +730,6 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlState", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", controlState.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -629,7 +741,18 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetControlState(ctx, &request)
+	var resp *otg.SetControlStateResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(controlState.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetControlState(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetControlState(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -640,11 +763,36 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	ret := NewWarning()
 	if resp.GetWarning() != nil {
 		ret.setMsg(resp.GetWarning())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamSetControlAction(ctx context.Context, data []byte) (*otg.SetControlActionResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetControlAction(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	for i := 0; i < len(bytes); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = int32(chunkSize)
+		if i+chunkSize > len(bytes) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlActionResponse, error) {
@@ -652,13 +800,6 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	if err := controlAction.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing SetControlAction")
-	jsonStr, err := controlAction.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -671,7 +812,6 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlAction", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", controlAction.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -683,7 +823,18 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetControlAction(ctx, &request)
+	var resp *otg.SetControlActionResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(controlAction.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetControlAction(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetControlAction(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -694,11 +845,35 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	ret := NewControlActionResponse()
 	if resp.GetControlActionResponse() != nil {
 		ret.setMsg(resp.GetControlActionResponse())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (MetricsResponse, error) {
+	streamClient, err := api.grpcClient.StreamGetMetrics(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewMetricsResponse()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
@@ -706,13 +881,6 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	if err := metricsRequest.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing GetMetrics")
-	jsonStr, err := metricsRequest.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -725,7 +893,6 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetMetrics", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", metricsRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -737,7 +904,14 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetMetrics(ctx, &request)
+	var resp *otg.GetMetricsResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetMetrics(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetMetrics(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -748,11 +922,35 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	ret := NewMetricsResponse()
 	if resp.GetMetricsResponse() != nil {
 		ret.setMsg(resp.GetMetricsResponse())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetStates(ctx context.Context, req *otg.GetStatesRequest) (StatesResponse, error) {
+	streamClient, err := api.grpcClient.StreamGetStates(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewStatesResponse()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, error) {
@@ -760,13 +958,6 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	if err := statesRequest.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing GetStates")
-	jsonStr, err := statesRequest.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -779,7 +970,6 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetStates", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", statesRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -791,7 +981,14 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetStates(ctx, &request)
+	var resp *otg.GetStatesResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetStates(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetStates(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -802,11 +999,28 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	ret := NewStatesResponse()
 	if resp.GetStatesResponse() != nil {
 		ret.setMsg(resp.GetStatesResponse())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetCapture(ctx context.Context, req *otg.GetCaptureRequest) ([]byte, error) {
+	streamClient, err := api.grpcClient.StreamGetCapture(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			return bytes, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error) {
@@ -814,13 +1028,6 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	if err := captureRequest.validate(); err != nil {
 		return nil, err
 	}
-
-	logs.Info().Msg("Executing GetCapture")
-	jsonStr, err := captureRequest.Marshal().ToJsonRaw()
-	if err != nil {
-		return nil, err
-	}
-	logs.Debug().RawJSON("Request", []byte(jsonStr)).Msg("")
 
 	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
 		return nil, err
@@ -833,7 +1040,6 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetCapture", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST: %s", captureRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -845,7 +1051,14 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetCapture(ctx, &request)
+	var resp *otg.GetCaptureResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetCapture(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetCapture(ctx, &request)
+	}
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -854,7 +1067,6 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 		return nil, err
 	}
 	if resp.ResponseBytes != nil {
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", string(resp.ResponseBytes)))
 		return resp.ResponseBytes, nil
 	}
 	return nil, nil
@@ -871,7 +1083,6 @@ func (api *gosnappiApi) GetVersion() (Version, error) {
 	// adding spans grpc transport for OTLP instrumentation
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetVersion", trace.WithSpanKind(trace.SpanKindClient))
-
 	defer api.Telemetry().CloseSpan(span)
 
 	if err := api.grpcConnect(); err != nil {
@@ -883,7 +1094,9 @@ func (api *gosnappiApi) GetVersion() (Version, error) {
 	}
 	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetVersion(ctx, &request)
+
 	if err != nil {
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		if er, ok := fromGrpcError(err); ok {
@@ -894,7 +1107,6 @@ func (api *gosnappiApi) GetVersion() (Version, error) {
 	ret := NewVersion()
 	if resp.GetVersion() != nil {
 		ret.setMsg(resp.GetVersion())
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
 	}
 
@@ -908,7 +1120,6 @@ func (api *gosnappiApi) httpSetConfig(config Config) (Warning, error) {
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetConfig", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", config.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "config", configJson, "POST")
 
@@ -925,12 +1136,6 @@ func (api *gosnappiApi) httpSetConfig(config Config) (Warning, error) {
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -957,12 +1162,6 @@ func (api *gosnappiApi) httpGetConfig() (Config, error) {
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -978,7 +1177,6 @@ func (api *gosnappiApi) httpUpdateConfig(configUpdate ConfigUpdate) (Warning, er
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "UpdateConfig", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", configUpdate.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "config", configUpdateJson, "PATCH")
 
@@ -995,12 +1193,6 @@ func (api *gosnappiApi) httpUpdateConfig(configUpdate ConfigUpdate) (Warning, er
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1014,7 +1206,10 @@ func (api *gosnappiApi) httpAppendConfig(configAppend ConfigAppend) (Warning, er
 	if err != nil {
 		return nil, err
 	}
-	resp, err := api.httpSendRecv("config/append", configAppendJson, "PATCH")
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "AppendConfig", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+	resp, err := api.httpSendRecv(newCtx, "config/append", configAppendJson, "PATCH")
 
 	if err != nil {
 		return nil, err
@@ -1031,7 +1226,9 @@ func (api *gosnappiApi) httpAppendConfig(configAppend ConfigAppend) (Warning, er
 		}
 		return obj, nil
 	} else {
-		return nil, fromHttpError(resp.StatusCode, bodyBytes)
+		err := fromHttpError(resp.StatusCode, bodyBytes)
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
+		return nil, err
 	}
 }
 
@@ -1040,7 +1237,10 @@ func (api *gosnappiApi) httpDeleteConfig(configDelete ConfigDelete) (Warning, er
 	if err != nil {
 		return nil, err
 	}
-	resp, err := api.httpSendRecv("config/delete", configDeleteJson, "PATCH")
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "DeleteConfig", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+	resp, err := api.httpSendRecv(newCtx, "config/delete", configDeleteJson, "PATCH")
 
 	if err != nil {
 		return nil, err
@@ -1057,7 +1257,9 @@ func (api *gosnappiApi) httpDeleteConfig(configDelete ConfigDelete) (Warning, er
 		}
 		return obj, nil
 	} else {
-		return nil, fromHttpError(resp.StatusCode, bodyBytes)
+		err := fromHttpError(resp.StatusCode, bodyBytes)
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
+		return nil, err
 	}
 }
 
@@ -1068,7 +1270,6 @@ func (api *gosnappiApi) httpSetControlState(controlState ControlState) (Warning,
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlState", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", controlState.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "control/state", controlStateJson, "POST")
 
@@ -1085,12 +1286,6 @@ func (api *gosnappiApi) httpSetControlState(controlState ControlState) (Warning,
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1106,7 +1301,6 @@ func (api *gosnappiApi) httpSetControlAction(controlAction ControlAction) (Contr
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlAction", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", controlAction.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "control/action", controlActionJson, "POST")
 
@@ -1123,12 +1317,6 @@ func (api *gosnappiApi) httpSetControlAction(controlAction ControlAction) (Contr
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1144,7 +1332,6 @@ func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsRe
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetMetrics", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", metricsRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "monitor/metrics", metricsRequestJson, "POST")
 
@@ -1161,12 +1348,6 @@ func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsRe
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1182,7 +1363,6 @@ func (api *gosnappiApi) httpGetStates(statesRequest StatesRequest) (StatesRespon
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetStates", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", statesRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "monitor/states", statesRequestJson, "POST")
 
@@ -1199,12 +1379,6 @@ func (api *gosnappiApi) httpGetStates(statesRequest StatesRequest) (StatesRespon
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1220,7 +1394,6 @@ func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, e
 	}
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetCapture", trace.WithSpanKind(trace.SpanKindClient))
-	api.Telemetry().SetSpanEvent(span, fmt.Sprintf("REQUEST PAYLOAD: %s", captureRequest.String()))
 	defer api.Telemetry().CloseSpan(span)
 	resp, err := api.httpSendRecv(newCtx, "monitor/capture", captureRequestJson, "POST")
 
@@ -1234,7 +1407,6 @@ func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, e
 	}
 	if resp.StatusCode == 200 {
 		logs.Debug().Str("Response", string(bodyBytes)).Msg("")
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", string(bodyBytes)))
 		return bodyBytes, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
@@ -1261,12 +1433,6 @@ func (api *gosnappiApi) httpGetVersion() (Version, error) {
 		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
 			return nil, err
 		}
-		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", obj.String()))
-		jsonStr, err := obj.Marshal().ToJsonRaw()
-		if err != nil {
-			return nil, err
-		}
-		logs.Debug().RawJSON("Response", []byte(jsonStr)).Msg("")
 		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)

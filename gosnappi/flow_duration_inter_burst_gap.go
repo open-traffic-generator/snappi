@@ -47,8 +47,6 @@ type marshalFlowDurationInterBurstGap interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowDurationInterBurstGap to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowDurationInterBurstGap to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowDurationInterBurstGap struct {
@@ -166,23 +164,6 @@ func (m *unMarshalflowDurationInterBurstGap) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowDurationInterBurstGap) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowDurationInterBurstGap) ToJson() (string, error) {

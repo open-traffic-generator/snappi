@@ -47,8 +47,6 @@ type marshalIsisLspsStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspsStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisLspsStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspsStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalisisLspsStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalisisLspsStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalisisLspsStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type IsisLspsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
-//
 // IsisRouterNames returns a []string
 func (obj *isisLspsStateRequest) IsisRouterNames() []string {
 	if obj.obj.IsisRouterNames == nil {
@@ -306,9 +284,6 @@ func (obj *isisLspsStateRequest) IsisRouterNames() []string {
 }
 
 // The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

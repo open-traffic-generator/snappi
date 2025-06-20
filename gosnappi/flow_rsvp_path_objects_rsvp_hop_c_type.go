@@ -48,8 +48,6 @@ type marshalFlowRSVPPathObjectsRsvpHopCType interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowRSVPPathObjectsRsvpHopCType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowRSVPPathObjectsRsvpHopCType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowRSVPPathObjectsRsvpHopCType struct {
@@ -167,23 +165,6 @@ func (m *unMarshalflowRSVPPathObjectsRsvpHopCType) FromYaml(value string) error 
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowRSVPPathObjectsRsvpHopCType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowRSVPPathObjectsRsvpHopCType) ToJson() (string, error) {

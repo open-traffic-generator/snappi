@@ -54,8 +54,6 @@ type marshalActionProtocolBgpNotification interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionProtocolBgpNotification to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ActionProtocolBgpNotification to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionProtocolBgpNotification struct {
@@ -173,23 +171,6 @@ func (m *unMarshalactionProtocolBgpNotification) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalactionProtocolBgpNotification) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalactionProtocolBgpNotification) ToJson() (string, error) {
@@ -378,10 +359,6 @@ type ActionProtocolBgpNotification interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
-//
 // Names returns a []string
 func (obj *actionProtocolBgpNotification) Names() []string {
 	if obj.obj.Names == nil {
@@ -391,10 +368,6 @@ func (obj *actionProtocolBgpNotification) Names() []string {
 }
 
 // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name

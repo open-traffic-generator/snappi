@@ -48,8 +48,6 @@ type marshalRocev2Flows interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2Flows to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Rocev2Flows to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2Flows struct {
@@ -167,23 +165,6 @@ func (m *unMarshalrocev2Flows) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalrocev2Flows) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalrocev2Flows) ToJson() (string, error) {

@@ -47,8 +47,6 @@ type marshalPatternFlowIcmpv6EchoCodeCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowIcmpv6EchoCodeCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowIcmpv6EchoCodeCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowIcmpv6EchoCodeCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowIcmpv6EchoCodeCounter) FromYaml(value string) error
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowIcmpv6EchoCodeCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowIcmpv6EchoCodeCounter) ToJson() (string, error) {

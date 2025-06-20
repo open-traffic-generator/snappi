@@ -47,8 +47,6 @@ type marshalPatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter interf
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter)
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTemplateLspTunnelIpv4ReservedCounter) ToJson() (string, error) {

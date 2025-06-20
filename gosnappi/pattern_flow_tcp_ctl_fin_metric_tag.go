@@ -47,8 +47,6 @@ type marshalPatternFlowTcpCtlFinMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowTcpCtlFinMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowTcpCtlFinMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowTcpCtlFinMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowTcpCtlFinMetricTag) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowTcpCtlFinMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowTcpCtlFinMetricTag) ToJson() (string, error) {

@@ -49,8 +49,6 @@ type marshalDeviceRsvp interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceRsvp to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals DeviceRsvp to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceRsvp struct {
@@ -168,23 +166,6 @@ func (m *unMarshaldeviceRsvp) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldeviceRsvp) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldeviceRsvp) ToJson() (string, error) {

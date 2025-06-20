@@ -48,8 +48,6 @@ type marshalVxlanV6Tunnel interface {
 	ToYaml() (string, error)
 	// ToJson marshals VxlanV6Tunnel to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals VxlanV6Tunnel to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalvxlanV6Tunnel struct {
@@ -167,23 +165,6 @@ func (m *unMarshalvxlanV6Tunnel) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalvxlanV6Tunnel) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalvxlanV6Tunnel) ToJson() (string, error) {
@@ -320,10 +301,6 @@ type VxlanV6Tunnel interface {
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
-//
 // SourceInterface returns a string
 func (obj *vxlanV6Tunnel) SourceInterface() string {
 
@@ -332,10 +309,6 @@ func (obj *vxlanV6Tunnel) SourceInterface() string {
 }
 
 // Determines the source interface.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

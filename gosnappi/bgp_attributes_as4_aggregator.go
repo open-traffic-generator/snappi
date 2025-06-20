@@ -47,8 +47,6 @@ type marshalBgpAttributesAs4Aggregator interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesAs4Aggregator to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesAs4Aggregator to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesAs4Aggregator struct {
@@ -166,23 +164,6 @@ func (m *unMarshalbgpAttributesAs4Aggregator) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesAs4Aggregator) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesAs4Aggregator) ToJson() (string, error) {

@@ -47,8 +47,6 @@ type marshalNeighborsv6StatesRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Neighborsv6StatesRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Neighborsv6StatesRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalneighborsv6StatesRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalneighborsv6StatesRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalneighborsv6StatesRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalneighborsv6StatesRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type Neighborsv6StatesRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-//
 // EthernetNames returns a []string
 func (obj *neighborsv6StatesRequest) EthernetNames() []string {
 	if obj.obj.EthernetNames == nil {
@@ -306,9 +284,6 @@ func (obj *neighborsv6StatesRequest) EthernetNames() []string {
 }
 
 // The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

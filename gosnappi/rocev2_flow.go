@@ -48,8 +48,6 @@ type marshalRocev2Flow interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2Flow to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Rocev2Flow to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2Flow struct {
@@ -167,23 +165,6 @@ func (m *unMarshalrocev2Flow) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalrocev2Flow) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalrocev2Flow) ToJson() (string, error) {
@@ -333,9 +314,6 @@ type Rocev2Flow interface {
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
-// x-constraint:
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
 // TxEndpoint returns a string
 func (obj *rocev2Flow) TxEndpoint() string {
 
@@ -348,9 +326,6 @@ func (obj *rocev2Flow) TxEndpoint() string {
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
-// x-constraint:
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
 // SetTxEndpoint sets the string value in the Rocev2Flow object
 func (obj *rocev2Flow) SetTxEndpoint(value string) Rocev2Flow {
 
@@ -359,10 +334,6 @@ func (obj *rocev2Flow) SetTxEndpoint(value string) Rocev2Flow {
 }
 
 // The unique name of remote QP or port which be receiving the packets for the flow.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -381,20 +352,12 @@ func (obj *rocev2Flow) RxEndpoint() string {
 // - /components/schemas/Port/properties/name
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
-//
 // RxEndpoint returns a string
 func (obj *rocev2Flow) HasRxEndpoint() bool {
 	return obj.obj.RxEndpoint != nil
 }
 
 // The unique name of remote QP or port which be receiving the packets for the flow.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
-// - /components/schemas/Rocev2.QPs/properties/qp_name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

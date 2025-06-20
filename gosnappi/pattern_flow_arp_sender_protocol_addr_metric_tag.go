@@ -47,8 +47,6 @@ type marshalPatternFlowArpSenderProtocolAddrMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowArpSenderProtocolAddrMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowArpSenderProtocolAddrMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowArpSenderProtocolAddrMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowArpSenderProtocolAddrMetricTag) FromYaml(value stri
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowArpSenderProtocolAddrMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowArpSenderProtocolAddrMetricTag) ToJson() (string, error) {

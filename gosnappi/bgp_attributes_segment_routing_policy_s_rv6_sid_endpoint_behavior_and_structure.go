@@ -47,8 +47,6 @@ type marshalBgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure
 	ToYaml() (string, error)
 	// ToJson marshals BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure struct {
@@ -166,23 +164,6 @@ func (m *unMarshalbgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStr
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpAttributesSegmentRoutingPolicySRv6SIDEndpointBehaviorAndStructure) ToJson() (string, error) {

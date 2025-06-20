@@ -47,8 +47,6 @@ type marshalPatternFlowGtpExtensionExtensionLengthMetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpExtensionExtensionLengthMetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowGtpExtensionExtensionLengthMetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpExtensionExtensionLengthMetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowGtpExtensionExtensionLengthMetricTag) FromYaml(valu
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowGtpExtensionExtensionLengthMetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpExtensionExtensionLengthMetricTag) ToJson() (string, error) {

@@ -59,8 +59,6 @@ type marshalDevice interface {
 	ToYaml() (string, error)
 	// ToJson marshals Device to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Device to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldevice struct {
@@ -178,23 +176,6 @@ func (m *unMarshaldevice) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldevice) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldevice) ToJson() (string, error) {
@@ -366,14 +347,10 @@ type Device interface {
 	// Ospfv2 returns DeviceOspfv2Router, set in Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	Ospfv2() DeviceOspfv2Router
 	// SetOspfv2 assigns DeviceOspfv2Router provided by user to Device.
 	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 	//
 	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	SetOspfv2(value DeviceOspfv2Router) Device
@@ -390,14 +367,10 @@ type Device interface {
 	// Ospfv3 returns DeviceOspfv3Router, set in Device.
 	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
 	//
-	// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
 	// A container of properties for an OSPFv3 router.
 	Ospfv3() DeviceOspfv3Router
 	// SetOspfv3 assigns DeviceOspfv3Router provided by user to Device.
 	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 	//
 	// A container of properties for an OSPFv3 router.
 	SetOspfv3(value DeviceOspfv3Router) Device

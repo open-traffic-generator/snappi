@@ -48,8 +48,6 @@ type marshalSecureEntityCryptoEngine interface {
 	ToYaml() (string, error)
 	// ToJson marshals SecureEntityCryptoEngine to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals SecureEntityCryptoEngine to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalsecureEntityCryptoEngine struct {
@@ -167,23 +165,6 @@ func (m *unMarshalsecureEntityCryptoEngine) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalsecureEntityCryptoEngine) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalsecureEntityCryptoEngine) ToJson() (string, error) {

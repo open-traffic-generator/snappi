@@ -47,8 +47,6 @@ type marshalLagMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals LagMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals LagMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshallagMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshallagMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshallagMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshallagMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type LagMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
-// x-constraint:
-// - /components/schemas/Lag/properties/name
-//
 // LagNames returns a []string
 func (obj *lagMetricsRequest) LagNames() []string {
 	if obj.obj.LagNames == nil {
@@ -310,9 +288,6 @@ func (obj *lagMetricsRequest) LagNames() []string {
 }
 
 // The names of LAGs to return results for. An empty list will return results for all LAGs.
-//
-// x-constraint:
-// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name

@@ -47,8 +47,6 @@ type marshalPatternFlowGtpv1NextExtensionHeaderTypeCounter interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGtpv1NextExtensionHeaderTypeCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowGtpv1NextExtensionHeaderTypeCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGtpv1NextExtensionHeaderTypeCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowGtpv1NextExtensionHeaderTypeCounter) FromYaml(value
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowGtpv1NextExtensionHeaderTypeCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowGtpv1NextExtensionHeaderTypeCounter) ToJson() (string, error) {

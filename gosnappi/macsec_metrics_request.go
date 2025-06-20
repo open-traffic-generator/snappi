@@ -47,8 +47,6 @@ type marshalMacsecMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals MacsecMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MacsecMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmacsecMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalmacsecMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalmacsecMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalmacsecMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type MacsecMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Macsec/properties/name
 //
-// x-constraint:
-// - /components/schemas/Macsec/properties/name
-//
 // SecureEntityNames returns a []string
 func (obj *macsecMetricsRequest) SecureEntityNames() []string {
 	if obj.obj.SecureEntityNames == nil {
@@ -310,9 +288,6 @@ func (obj *macsecMetricsRequest) SecureEntityNames() []string {
 }
 
 // The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
-//
-// x-constraint:
-// - /components/schemas/Macsec/properties/name
 //
 // x-constraint:
 // - /components/schemas/Macsec/properties/name

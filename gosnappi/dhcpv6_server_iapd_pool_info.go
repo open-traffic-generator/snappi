@@ -47,8 +47,6 @@ type marshalDhcpv6ServerIapdPoolInfo interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6ServerIapdPoolInfo to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv6ServerIapdPoolInfo to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6ServerIapdPoolInfo struct {
@@ -166,23 +164,6 @@ func (m *unMarshaldhcpv6ServerIapdPoolInfo) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldhcpv6ServerIapdPoolInfo) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldhcpv6ServerIapdPoolInfo) ToJson() (string, error) {

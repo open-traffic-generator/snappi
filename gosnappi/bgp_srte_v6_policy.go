@@ -53,8 +53,6 @@ type marshalBgpSrteV6Policy interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrteV6Policy to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpSrteV6Policy to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrteV6Policy struct {
@@ -172,23 +170,6 @@ func (m *unMarshalbgpSrteV6Policy) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpSrteV6Policy) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpSrteV6Policy) ToJson() (string, error) {

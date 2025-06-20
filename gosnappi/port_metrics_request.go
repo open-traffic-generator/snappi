@@ -47,8 +47,6 @@ type marshalPortMetricsRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals PortMetricsRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PortMetricsRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalportMetricsRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalportMetricsRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalportMetricsRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalportMetricsRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type PortMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *portMetricsRequest) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -310,9 +288,6 @@ func (obj *portMetricsRequest) PortNames() []string {
 }
 
 // The names of objects to return results for. An empty list will return all port row results.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

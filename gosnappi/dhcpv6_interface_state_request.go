@@ -47,8 +47,6 @@ type marshalDhcpv6InterfaceStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv6InterfaceStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv6InterfaceStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv6InterfaceStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshaldhcpv6InterfaceStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaldhcpv6InterfaceStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshaldhcpv6InterfaceStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type Dhcpv6InterfaceStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
 // DhcpClientNames returns a []string
 func (obj *dhcpv6InterfaceStateRequest) DhcpClientNames() []string {
 	if obj.obj.DhcpClientNames == nil {
@@ -306,9 +284,6 @@ func (obj *dhcpv6InterfaceStateRequest) DhcpClientNames() []string {
 }
 
 // The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6client/properties/name

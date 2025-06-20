@@ -50,8 +50,6 @@ type marshalFlowIpv4Priority interface {
 	ToYaml() (string, error)
 	// ToJson marshals FlowIpv4Priority to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals FlowIpv4Priority to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalflowIpv4Priority struct {
@@ -169,23 +167,6 @@ func (m *unMarshalflowIpv4Priority) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalflowIpv4Priority) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalflowIpv4Priority) ToJson() (string, error) {

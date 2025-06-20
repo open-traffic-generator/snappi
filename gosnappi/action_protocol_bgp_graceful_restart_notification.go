@@ -54,8 +54,6 @@ type marshalActionProtocolBgpGracefulRestartNotification interface {
 	ToYaml() (string, error)
 	// ToJson marshals ActionProtocolBgpGracefulRestartNotification to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals ActionProtocolBgpGracefulRestartNotification to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalactionProtocolBgpGracefulRestartNotification struct {
@@ -173,23 +171,6 @@ func (m *unMarshalactionProtocolBgpGracefulRestartNotification) FromYaml(value s
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalactionProtocolBgpGracefulRestartNotification) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalactionProtocolBgpGracefulRestartNotification) ToJson() (string, error) {

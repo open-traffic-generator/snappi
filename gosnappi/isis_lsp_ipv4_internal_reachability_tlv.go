@@ -48,8 +48,6 @@ type marshalIsisLspIpv4InternalReachabilityTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals IsisLspIpv4InternalReachabilityTlv to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals IsisLspIpv4InternalReachabilityTlv to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalisisLspIpv4InternalReachabilityTlv struct {
@@ -167,23 +165,6 @@ func (m *unMarshalisisLspIpv4InternalReachabilityTlv) FromYaml(value string) err
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalisisLspIpv4InternalReachabilityTlv) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalisisLspIpv4InternalReachabilityTlv) ToJson() (string, error) {

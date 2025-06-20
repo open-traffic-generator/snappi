@@ -49,8 +49,6 @@ type marshalDeviceOspfv3Router interface {
 	ToYaml() (string, error)
 	// ToJson marshals DeviceOspfv3Router to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals DeviceOspfv3Router to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldeviceOspfv3Router struct {
@@ -170,23 +168,6 @@ func (m *unMarshaldeviceOspfv3Router) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaldeviceOspfv3Router) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshaldeviceOspfv3Router) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -272,8 +253,6 @@ func (obj *deviceOspfv3Router) setNil() {
 }
 
 // DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
-//
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 //
 // A container of properties for an OSPFv3 router.
 type DeviceOspfv3Router interface {

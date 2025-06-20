@@ -49,8 +49,6 @@ type marshalPatternFlowRSVPPathSenderTspecIntServParameter127Length interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTspecIntServParameter127Length to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathSenderTspecIntServParameter127Length to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTspecIntServParameter127Length struct {
@@ -168,23 +166,6 @@ func (m *unMarshalpatternFlowRSVPPathSenderTspecIntServParameter127Length) FromY
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameter127Length) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameter127Length) ToJson() (string, error) {

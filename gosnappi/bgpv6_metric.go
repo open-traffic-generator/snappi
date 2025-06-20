@@ -47,8 +47,6 @@ type marshalBgpv6Metric interface {
 	ToYaml() (string, error)
 	// ToJson marshals Bgpv6Metric to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Bgpv6Metric to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpv6Metric struct {
@@ -166,23 +164,6 @@ func (m *unMarshalbgpv6Metric) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpv6Metric) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpv6Metric) ToJson() (string, error) {

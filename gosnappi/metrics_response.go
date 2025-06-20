@@ -69,8 +69,6 @@ type marshalMetricsResponse interface {
 	ToYaml() (string, error)
 	// ToJson marshals MetricsResponse to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals MetricsResponse to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalmetricsResponse struct {
@@ -188,23 +186,6 @@ func (m *unMarshalmetricsResponse) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalmetricsResponse) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalmetricsResponse) ToJson() (string, error) {
@@ -341,12 +322,12 @@ type MetricsResponse interface {
 	HasChoice() bool
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
-	// getter for Dhcpv6Client to set choice.
-	Dhcpv6Client()
 	// getter for Dhcpv6Server to set choice.
 	Dhcpv6Server()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Client to set choice.
+	Dhcpv6Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -454,11 +435,6 @@ func (obj *metricsResponse) Dhcpv4Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
-// getter for Dhcpv6Client to set choice
-func (obj *metricsResponse) Dhcpv6Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
-}
-
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
@@ -467,6 +443,11 @@ func (obj *metricsResponse) Dhcpv6Server() {
 // getter for Dhcpv4Server to set choice
 func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+}
+
+// getter for Dhcpv6Client to set choice
+func (obj *metricsResponse) Dhcpv6Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
 // description is TBD

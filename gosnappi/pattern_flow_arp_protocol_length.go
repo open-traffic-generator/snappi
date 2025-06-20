@@ -50,8 +50,6 @@ type marshalPatternFlowArpProtocolLength interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowArpProtocolLength to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowArpProtocolLength to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowArpProtocolLength struct {
@@ -169,23 +167,6 @@ func (m *unMarshalpatternFlowArpProtocolLength) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowArpProtocolLength) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowArpProtocolLength) ToJson() (string, error) {

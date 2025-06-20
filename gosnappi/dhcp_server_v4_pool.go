@@ -48,8 +48,6 @@ type marshalDhcpServerV4Pool interface {
 	ToYaml() (string, error)
 	// ToJson marshals DhcpServerV4Pool to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals DhcpServerV4Pool to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpServerV4Pool struct {
@@ -167,23 +165,6 @@ func (m *unMarshaldhcpServerV4Pool) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshaldhcpServerV4Pool) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshaldhcpServerV4Pool) ToJson() (string, error) {

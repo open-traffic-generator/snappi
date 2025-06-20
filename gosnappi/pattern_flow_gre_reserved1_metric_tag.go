@@ -47,8 +47,6 @@ type marshalPatternFlowGreReserved1MetricTag interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowGreReserved1MetricTag to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowGreReserved1MetricTag to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowGreReserved1MetricTag struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowGreReserved1MetricTag) FromYaml(value string) error
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowGreReserved1MetricTag) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowGreReserved1MetricTag) ToJson() (string, error) {

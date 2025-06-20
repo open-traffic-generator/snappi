@@ -47,8 +47,6 @@ type marshalPatternFlowUdpDstPortRandom interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowUdpDstPortRandom to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowUdpDstPortRandom to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowUdpDstPortRandom struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowUdpDstPortRandom) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowUdpDstPortRandom) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowUdpDstPortRandom) ToJson() (string, error) {

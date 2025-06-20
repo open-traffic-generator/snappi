@@ -49,8 +49,6 @@ type marshalPatternFlowRSVPPathSenderTspecIntServMaximumPacketSize interface {
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathSenderTspecIntServMaximumPacketSize to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTspecIntServMaximumPacketSize struct {
@@ -168,23 +166,6 @@ func (m *unMarshalpatternFlowRSVPPathSenderTspecIntServMaximumPacketSize) FromYa
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathSenderTspecIntServMaximumPacketSize) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTspecIntServMaximumPacketSize) ToJson() (string, error) {

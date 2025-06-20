@@ -47,8 +47,6 @@ type marshalRocev2IPv4ColumnNames interface {
 	ToYaml() (string, error)
 	// ToJson marshals Rocev2IPv4ColumnNames to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Rocev2IPv4ColumnNames to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrocev2IPv4ColumnNames struct {
@@ -168,23 +166,6 @@ func (m *unMarshalrocev2IPv4ColumnNames) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalrocev2IPv4ColumnNames) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalrocev2IPv4ColumnNames) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -298,9 +279,6 @@ type Rocev2IPv4ColumnNames interface {
 // x-constraint:
 // - /components/schemas/Rocev2.V4peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Rocev2.V4peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -310,9 +288,6 @@ func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
 }
 
 // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
-//
-// x-constraint:
-// - /components/schemas/Rocev2.V4peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4peer/properties/name

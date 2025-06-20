@@ -47,8 +47,6 @@ type marshalDhcpv4InterfaceStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals Dhcpv4InterfaceStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Dhcpv4InterfaceStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshaldhcpv4InterfaceStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshaldhcpv4InterfaceStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaldhcpv4InterfaceStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshaldhcpv4InterfaceStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type Dhcpv4InterfaceStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // DhcpClientNames returns a []string
 func (obj *dhcpv4InterfaceStateRequest) DhcpClientNames() []string {
 	if obj.obj.DhcpClientNames == nil {
@@ -306,9 +284,6 @@ func (obj *dhcpv4InterfaceStateRequest) DhcpClientNames() []string {
 }
 
 // The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name

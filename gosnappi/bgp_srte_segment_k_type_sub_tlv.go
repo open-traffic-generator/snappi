@@ -48,8 +48,6 @@ type marshalBgpSrteSegmentKTypeSubTlv interface {
 	ToYaml() (string, error)
 	// ToJson marshals BgpSrteSegmentKTypeSubTlv to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals BgpSrteSegmentKTypeSubTlv to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalbgpSrteSegmentKTypeSubTlv struct {
@@ -167,23 +165,6 @@ func (m *unMarshalbgpSrteSegmentKTypeSubTlv) FromYaml(value string) error {
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalbgpSrteSegmentKTypeSubTlv) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalbgpSrteSegmentKTypeSubTlv) ToJson() (string, error) {

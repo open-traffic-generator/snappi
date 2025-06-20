@@ -47,8 +47,6 @@ type marshalPatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter inter
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter struct {
@@ -166,23 +164,6 @@ func (m *unMarshalpatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathSenderTspecIntServParameter127LengthCounter) ToJson() (string, error) {

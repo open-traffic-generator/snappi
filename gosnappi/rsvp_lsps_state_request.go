@@ -47,8 +47,6 @@ type marshalRsvpLspsStateRequest interface {
 	ToYaml() (string, error)
 	// ToJson marshals RsvpLspsStateRequest to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals RsvpLspsStateRequest to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalrsvpLspsStateRequest struct {
@@ -168,23 +166,6 @@ func (m *unMarshalrsvpLspsStateRequest) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalrsvpLspsStateRequest) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalrsvpLspsStateRequest) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -294,9 +275,6 @@ type RsvpLspsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Rsvp/properties/name
-//
 // RsvpRouterNames returns a []string
 func (obj *rsvpLspsStateRequest) RsvpRouterNames() []string {
 	if obj.obj.RsvpRouterNames == nil {
@@ -306,9 +284,6 @@ func (obj *rsvpLspsStateRequest) RsvpRouterNames() []string {
 }
 
 // The names of RSVP-TE routers for which learned information is requested. An empty list will return results for all RSVP=TE routers.
-//
-// x-constraint:
-// - /components/schemas/Device.Rsvp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name

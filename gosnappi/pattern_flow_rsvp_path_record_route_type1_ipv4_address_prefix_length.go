@@ -49,8 +49,6 @@ type marshalPatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength interface
 	ToYaml() (string, error)
 	// ToJson marshals PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals PatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalpatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength struct {
@@ -168,23 +166,6 @@ func (m *unMarshalpatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength) Fr
 		return vErr
 	}
 	return nil
-}
-
-func (m *marshalpatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
 }
 
 func (m *marshalpatternFlowRSVPPathRecordRouteType1Ipv4AddressPrefixLength) ToJson() (string, error) {

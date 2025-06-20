@@ -48,8 +48,6 @@ type marshalOspfv2InterfaceNetworkType interface {
 	ToYaml() (string, error)
 	// ToJson marshals Ospfv2InterfaceNetworkType to JSON text
 	ToJson() (string, error)
-	// ToJsonRaw marshals Ospfv2InterfaceNetworkType to raw JSON text
-	ToJsonRaw() (string, error)
 }
 
 type unMarshalospfv2InterfaceNetworkType struct {
@@ -169,23 +167,6 @@ func (m *unMarshalospfv2InterfaceNetworkType) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshalospfv2InterfaceNetworkType) ToJsonRaw() (string, error) {
-	vErr := m.obj.validateToAndFrom()
-	if vErr != nil {
-		return "", vErr
-	}
-	opts := protojson.MarshalOptions{
-		UseProtoNames:   true,
-		AllowPartial:    true,
-		EmitUnpopulated: false,
-	}
-	data, err := opts.Marshal(m.obj.msg())
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func (m *marshalospfv2InterfaceNetworkType) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
@@ -300,10 +281,10 @@ type Ospfv2InterfaceNetworkType interface {
 	setChoice(value Ospfv2InterfaceNetworkTypeChoiceEnum) Ospfv2InterfaceNetworkType
 	// HasChoice checks if Choice has been set in Ospfv2InterfaceNetworkType
 	HasChoice() bool
-	// getter for Broadcast to set choice.
-	Broadcast()
 	// getter for PointToPoint to set choice.
 	PointToPoint()
+	// getter for Broadcast to set choice.
+	Broadcast()
 	// PointToMultipoint returns Ospfv2InterfaceNetworkTypeOspfv2InterfaceNeighborIterIter, set in Ospfv2InterfaceNetworkType
 	PointToMultipoint() Ospfv2InterfaceNetworkTypeOspfv2InterfaceNeighborIter
 	setNil()
@@ -326,14 +307,14 @@ func (obj *ospfv2InterfaceNetworkType) Choice() Ospfv2InterfaceNetworkTypeChoice
 	return Ospfv2InterfaceNetworkTypeChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Broadcast to set choice
-func (obj *ospfv2InterfaceNetworkType) Broadcast() {
-	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.BROADCAST)
-}
-
 // getter for PointToPoint to set choice
 func (obj *ospfv2InterfaceNetworkType) PointToPoint() {
 	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.POINT_TO_POINT)
+}
+
+// getter for Broadcast to set choice
+func (obj *ospfv2InterfaceNetworkType) Broadcast() {
+	obj.setChoice(Ospfv2InterfaceNetworkTypeChoice.BROADCAST)
 }
 
 // description is TBD
