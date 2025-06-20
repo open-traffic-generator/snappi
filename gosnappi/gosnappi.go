@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.30.0
+/* Open Traffic Generator API 1.31.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  *
@@ -254,6 +254,10 @@ type Api interface {
 	// UpdateConfig updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
 	// The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
+	// AppendConfig append new attributes of resources to existing configuration on the traffic generator. Resource names should not be part of existing configuration of that resource type; it should be unique for the operation to succeed. A failed append might leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the appended resources, it is expected that the user fix the error and  restart from SetConfig operation. The fetched configuration shall also reflect the new configuration applied successfully.
+	AppendConfig(configAppend ConfigAppend) (Warning, error)
+	// DeleteConfig delete attributes of resources from existing configuration on the traffic generator. Resource names should already be part of existing configuration of that resource type; for the operation to succeed. A failed delete will leave the configuration in an undefined state and if the error is due to some invalid or unsupported configuration in the deleted  resources, it is expected that the user fix the error and restart from SetConfig operation. On successful deletion the fetched configuration shall not reflect the removed configuration.
+	DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	// SetControlState sets the operational state of configured resources.
 	SetControlState(controlState ControlState) (Warning, error)
 	// SetControlAction triggers actions against configured resources.
@@ -282,7 +286,7 @@ type Api interface {
 
 func (api *gosnappiApi) GetLocalVersion() Version {
 	if api.versionMeta.localVersion == nil {
-		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.30.0").SetSdkVersion("1.30.1")
+		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.31.0").SetSdkVersion("1.31.1")
 	}
 
 	return api.versionMeta.localVersion
@@ -518,6 +522,72 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 		ret.setMsg(resp.GetWarning())
 		api.Telemetry().SetSpanEvent(span, fmt.Sprintf("RESPONSE: %s", ret.String()))
 		return ret, nil
+	}
+
+	return ret, nil
+}
+
+func (api *gosnappiApi) AppendConfig(configAppend ConfigAppend) (Warning, error) {
+
+	if err := configAppend.validate(); err != nil {
+		return nil, err
+	}
+
+	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
+		return nil, err
+	}
+	if api.hasHttpTransport() {
+		return api.httpAppendConfig(configAppend)
+	}
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
+	}
+	request := otg.AppendConfigRequest{ConfigAppend: configAppend.msg()}
+	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	defer cancelFunc()
+	resp, err := api.grpcClient.AppendConfig(ctx, &request)
+	if err != nil {
+		if er, ok := fromGrpcError(err); ok {
+			return nil, er
+		}
+		return nil, err
+	}
+	ret := NewWarning()
+	if resp.GetWarning() != nil {
+		return ret.setMsg(resp.GetWarning()), nil
+	}
+
+	return ret, nil
+}
+
+func (api *gosnappiApi) DeleteConfig(configDelete ConfigDelete) (Warning, error) {
+
+	if err := configDelete.validate(); err != nil {
+		return nil, err
+	}
+
+	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
+		return nil, err
+	}
+	if api.hasHttpTransport() {
+		return api.httpDeleteConfig(configDelete)
+	}
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
+	}
+	request := otg.DeleteConfigRequest{ConfigDelete: configDelete.msg()}
+	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
+	defer cancelFunc()
+	resp, err := api.grpcClient.DeleteConfig(ctx, &request)
+	if err != nil {
+		if er, ok := fromGrpcError(err); ok {
+			return nil, er
+		}
+		return nil, err
+	}
+	ret := NewWarning()
+	if resp.GetWarning() != nil {
+		return ret.setMsg(resp.GetWarning()), nil
 	}
 
 	return ret, nil
@@ -936,6 +1006,58 @@ func (api *gosnappiApi) httpUpdateConfig(configUpdate ConfigUpdate) (Warning, er
 		err := fromHttpError(resp.StatusCode, bodyBytes)
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
 		return nil, err
+	}
+}
+
+func (api *gosnappiApi) httpAppendConfig(configAppend ConfigAppend) (Warning, error) {
+	configAppendJson, err := configAppend.Marshal().ToJson()
+	if err != nil {
+		return nil, err
+	}
+	resp, err := api.httpSendRecv("config/append", configAppendJson, "PATCH")
+
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := io.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == 200 {
+		obj := NewAppendConfigResponse().Warning()
+		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	} else {
+		return nil, fromHttpError(resp.StatusCode, bodyBytes)
+	}
+}
+
+func (api *gosnappiApi) httpDeleteConfig(configDelete ConfigDelete) (Warning, error) {
+	configDeleteJson, err := configDelete.Marshal().ToJson()
+	if err != nil {
+		return nil, err
+	}
+	resp, err := api.httpSendRecv("config/delete", configDeleteJson, "PATCH")
+
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := io.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == 200 {
+		obj := NewDeleteConfigResponse().Warning()
+		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	} else {
+		return nil, fromHttpError(resp.StatusCode, bodyBytes)
 	}
 }
 
