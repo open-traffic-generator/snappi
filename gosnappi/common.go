@@ -20,7 +20,7 @@ type grpcTransport struct {
 	requestTimeout      time.Duration
 	dialTimeout         time.Duration
 	enableGrpcStreaming bool
-	chunkSize           int
+	chunkSize           uint64
 }
 
 type GrpcTransport interface {
@@ -47,7 +47,7 @@ type GrpcTransport interface {
 	DisableGrpcStreaming() GrpcTransport
 	// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
 	// we accept value in MB so if you set 1 we will consider it as 1MB
-	SetStreamChunkSize(value int) GrpcTransport
+	SetStreamChunkSize(value uint64) GrpcTransport
 }
 
 // Location
@@ -106,7 +106,12 @@ func (obj *grpcTransport) DisableGrpcStreaming() GrpcTransport {
 }
 
 // SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
-func (obj *grpcTransport) SetStreamChunkSize(value int) GrpcTransport {
+// The value here is treated in MB so if someone provides 1 it means 1 MB
+func (obj *grpcTransport) SetStreamChunkSize(value uint64) GrpcTransport {
+	if value > 17592186044415 {
+		logs.Warn().Msg("The value of Chunk Size provided is more than what is supported, so will not be considered. falling back to default value of 4")
+		return obj
+	}
 	obj.chunkSize = value * 1024 * 1024
 	return obj
 }

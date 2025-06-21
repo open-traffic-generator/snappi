@@ -31850,7 +31850,7 @@ message Failure {
 
 // Data that needs to be streamed
 message Data {
-  int32 chunk_size = 1;
+  uint64 chunk_size = 1;
   bytes datum = 2;
 }
 
