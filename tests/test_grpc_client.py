@@ -44,5 +44,14 @@ def test_grpc_get_config(grpc_api):
     assert config.serialize() == response.serialize()
 
 
+def test_grpc_stream_config(grpc_api):
+    config = get_mock_config(grpc_api)
+    grpc_api.enable_grpc_streaming = True
+    response = grpc_api.set_config(config)
+    assert len(response.warnings) == 1
+    assert response.warnings[0] == "no"
+    grpc_api.enable_grpc_streaming = False
+
+
 if __name__ == "__main__":
     pytest.main(["-s", __file__])

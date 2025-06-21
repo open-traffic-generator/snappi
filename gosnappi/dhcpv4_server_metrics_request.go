@@ -279,9 +279,6 @@ type Dhcpv4ServerMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4Server/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4Server/properties/name
-//
 // ServerNames returns a []string
 func (obj *dhcpv4ServerMetricsRequest) ServerNames() []string {
 	if obj.obj.ServerNames == nil {
@@ -291,9 +288,6 @@ func (obj *dhcpv4ServerMetricsRequest) ServerNames() []string {
 }
 
 // The names of DHCPv4 Servers to return results for. An empty list will return results for all DHCPv4 Server.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4Server/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4Server/properties/name
