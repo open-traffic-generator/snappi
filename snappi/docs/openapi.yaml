@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.31.0
+  version: 1.32.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -22,6 +22,7 @@ paths:
       tags:
       - Configuration
       operationId: set_config
+      x-stream: client
       description: |-
         Sets configuration resources on the traffic generator.
       requestBody:
@@ -41,6 +42,7 @@ paths:
       tags:
       - Configuration
       operationId: get_config
+      x-stream: server
       responses:
         '200':
           description: |-
@@ -118,6 +120,7 @@ paths:
       tags:
       - Control
       operationId: set_control_state
+      x-stream: client
       description: |-
         Sets the operational state of configured resources.
       requestBody:
@@ -138,6 +141,7 @@ paths:
       tags:
       - Control
       operationId: set_control_action
+      x-stream: client
       description: |-
         Triggers actions against configured resources.
       requestBody:
@@ -165,6 +169,7 @@ paths:
       tags:
       - Monitor
       operationId: get_metrics
+      x-stream: server
       requestBody:
         description: |-
           Request to traffic generator for metrics of choice
@@ -192,6 +197,7 @@ paths:
       tags:
       - Monitor
       operationId: get_states
+      x-stream: server
       requestBody:
         description: |-
           Request to traffic generator for states of choice
@@ -219,6 +225,7 @@ paths:
       tags:
       - Monitor
       operationId: get_capture
+      x-stream: server
       requestBody:
         description: |-
           Capture results request to the traffic generator.
