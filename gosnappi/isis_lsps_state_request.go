@@ -275,6 +275,9 @@ type IsisLspsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
+//
 // IsisRouterNames returns a []string
 func (obj *isisLspsStateRequest) IsisRouterNames() []string {
 	if obj.obj.IsisRouterNames == nil {
@@ -284,6 +287,9 @@ func (obj *isisLspsStateRequest) IsisRouterNames() []string {
 }
 
 // The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
+//
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

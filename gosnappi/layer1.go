@@ -347,6 +347,9 @@ type Layer1 interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // PortNames returns a []string
 func (obj *layer1) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -357,6 +360,9 @@ func (obj *layer1) PortNames() []string {
 
 // A list of unique names of port objects that will share the
 // choice settings.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -522,6 +528,8 @@ func (obj *layer1) SetMtu(value uint32) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
+// Under Review: This field is currently under review for pending exploration on use cases
+//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -533,6 +541,8 @@ func (obj *layer1) IeeeMediaDefaults() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
+// Under Review: This field is currently under review for pending exploration on use cases
+//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -540,6 +550,8 @@ func (obj *layer1) HasIeeeMediaDefaults() bool {
 	return obj.obj.IeeeMediaDefaults != nil
 }
 
+// Under Review: This field is currently under review for pending exploration on use cases
+//
 // Under Review: This field is currently under review for pending exploration on use cases
 //
 // Set to true to override the auto_negotiate, link_training
@@ -553,6 +565,8 @@ func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
+// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) AutoNegotiate() bool {
@@ -563,12 +577,16 @@ func (obj *layer1) AutoNegotiate() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
+// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) HasAutoNegotiate() bool {
 	return obj.obj.AutoNegotiate != nil
 }
 
+// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
+//
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
 // Enable/disable auto negotiation.

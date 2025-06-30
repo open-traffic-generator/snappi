@@ -244,6 +244,8 @@ func (obj *actionProtocolIpv6PingRequest) Clone() (ActionProtocolIpv6PingRequest
 
 // ActionProtocolIpv6PingRequest is under Review: Most ping request parameters are still TBD.
 //
+// Under Review: Most ping request parameters are still TBD.
+//
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 type ActionProtocolIpv6PingRequest interface {
@@ -286,6 +288,9 @@ type ActionProtocolIpv6PingRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // SrcName returns a string
 func (obj *actionProtocolIpv6PingRequest) SrcName() string {
 
@@ -298,12 +303,18 @@ func (obj *actionProtocolIpv6PingRequest) SrcName() string {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // SrcName returns a string
 func (obj *actionProtocolIpv6PingRequest) HasSrcName() bool {
 	return obj.obj.SrcName != nil
 }
 
 // Name of source IPv6 interface to be used.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

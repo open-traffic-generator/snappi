@@ -275,6 +275,9 @@ type Neighborsv6StatesRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
+//
 // EthernetNames returns a []string
 func (obj *neighborsv6StatesRequest) EthernetNames() []string {
 	if obj.obj.EthernetNames == nil {
@@ -284,6 +287,9 @@ func (obj *neighborsv6StatesRequest) EthernetNames() []string {
 }
 
 // The names of Ethernet interfaces for which Neighbor state (NDISC cache entries) will be retrieved. If no names are specified then the results will contain Neighbor state (NDISC cache entries) for all available Ethernet interfaces.
+//
+// x-constraint:
+// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name

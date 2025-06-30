@@ -275,6 +275,9 @@ type Dhcpv4InterfaceStateRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Dhcpv4client/properties/name
+//
 // DhcpClientNames returns a []string
 func (obj *dhcpv4InterfaceStateRequest) DhcpClientNames() []string {
 	if obj.obj.DhcpClientNames == nil {
@@ -284,6 +287,9 @@ func (obj *dhcpv4InterfaceStateRequest) DhcpClientNames() []string {
 }
 
 // The names of DHCPv4 client to return results for. An empty list will return results for all DHCPv4 Client address information.
+//
+// x-constraint:
+// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name

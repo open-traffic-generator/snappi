@@ -272,14 +272,14 @@ type Dhcpv6ClientOptionsMessageType interface {
 	HasChoice() bool
 	// getter for InformRequest to set choice.
 	InformRequest()
-	// getter for Release to set choice.
-	Release()
-	// getter for Request to set choice.
-	Request()
-	// getter for Renew to set choice.
-	Renew()
 	// getter for Solicit to set choice.
 	Solicit()
+	// getter for Request to set choice.
+	Request()
+	// getter for Release to set choice.
+	Release()
+	// getter for Renew to set choice.
+	Renew()
 	// getter for Rebind to set choice.
 	Rebind()
 }
@@ -312,9 +312,9 @@ func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
 }
 
-// getter for Release to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Release() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
+// getter for Solicit to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.SOLICIT)
 }
 
 // getter for Request to set choice
@@ -322,14 +322,14 @@ func (obj *dhcpv6ClientOptionsMessageType) Request() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REQUEST)
 }
 
+// getter for Release to set choice
+func (obj *dhcpv6ClientOptionsMessageType) Release() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
+}
+
 // getter for Renew to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Renew() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RENEW)
-}
-
-// getter for Solicit to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.SOLICIT)
 }
 
 // getter for Rebind to set choice

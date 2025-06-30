@@ -283,6 +283,9 @@ type LacpMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
+// x-constraint:
+// - /components/schemas/Lag/properties/name
+//
 // LagNames returns a []string
 func (obj *lacpMetricsRequest) LagNames() []string {
 	if obj.obj.LagNames == nil {
@@ -292,6 +295,9 @@ func (obj *lacpMetricsRequest) LagNames() []string {
 }
 
 // The names of LAG (ports group) for which LACP metrics to be returned. An empty list will return metrics for all LAGs.
+//
+// x-constraint:
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name
@@ -312,6 +318,9 @@ func (obj *lacpMetricsRequest) SetLagNames(value []string) LacpMetricsRequest {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // LagMemberPortNames returns a []string
 func (obj *lacpMetricsRequest) LagMemberPortNames() []string {
 	if obj.obj.LagMemberPortNames == nil {
@@ -321,6 +330,9 @@ func (obj *lacpMetricsRequest) LagMemberPortNames() []string {
 }
 
 // The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

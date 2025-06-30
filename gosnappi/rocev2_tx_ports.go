@@ -294,6 +294,9 @@ type Rocev2TxPorts interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // PortName returns a string
 func (obj *rocev2TxPorts) PortName() string {
 
@@ -306,12 +309,18 @@ func (obj *rocev2TxPorts) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // PortName returns a string
 func (obj *rocev2TxPorts) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // The name of port for which this settings will be applied to.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
