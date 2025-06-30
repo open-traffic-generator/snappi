@@ -358,6 +358,9 @@ func (obj *ospfv3Interface) SetName(value string) Ospfv3Interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // Ipv6Name returns a string
 func (obj *ospfv3Interface) Ipv6Name() string {
 
@@ -366,6 +369,9 @@ func (obj *ospfv3Interface) Ipv6Name() string {
 }
 
 // The globally unique name of the IPv6 interface connected to the DUT.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

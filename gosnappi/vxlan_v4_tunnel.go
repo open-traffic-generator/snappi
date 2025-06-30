@@ -301,6 +301,10 @@ type VxlanV4Tunnel interface {
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
+//
 // SourceInterface returns a string
 func (obj *vxlanV4Tunnel) SourceInterface() string {
 
@@ -309,6 +313,10 @@ func (obj *vxlanV4Tunnel) SourceInterface() string {
 }
 
 // Determines the source interface.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

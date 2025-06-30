@@ -279,6 +279,9 @@ type StateProtocolLacpMemberPorts interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // LagMemberNames returns a []string
 func (obj *stateProtocolLacpMemberPorts) LagMemberNames() []string {
 	if obj.obj.LagMemberNames == nil {
@@ -288,6 +291,9 @@ func (obj *stateProtocolLacpMemberPorts) LagMemberNames() []string {
 }
 
 // The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

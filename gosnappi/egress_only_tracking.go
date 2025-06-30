@@ -298,6 +298,9 @@ type EgressOnlyTracking interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // PortName returns a string
 func (obj *egressOnlyTracking) PortName() string {
 
@@ -306,6 +309,9 @@ func (obj *egressOnlyTracking) PortName() string {
 }
 
 // Name of the received port this egress tracking rule/specification has to be applied.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

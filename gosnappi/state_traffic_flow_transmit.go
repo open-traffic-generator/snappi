@@ -280,6 +280,9 @@ type StateTrafficFlowTransmit interface {
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
+// x-constraint:
+// - /components/schemas/Flow/properties/name
+//
 // FlowNames returns a []string
 func (obj *stateTrafficFlowTransmit) FlowNames() []string {
 	if obj.obj.FlowNames == nil {
@@ -290,6 +293,9 @@ func (obj *stateTrafficFlowTransmit) FlowNames() []string {
 
 // The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
 // If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
+//
+// x-constraint:
+// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

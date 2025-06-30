@@ -280,6 +280,10 @@ type StateProtocolRocev2Peers interface {
 // - /components/schemas/Rocev2.V4Peer/properties/name
 // - /components/schemas/Rocev2.V6Peer/properties/name
 //
+// x-constraint:
+// - /components/schemas/Rocev2.V4Peer/properties/name
+// - /components/schemas/Rocev2.V6Peer/properties/name
+//
 // PeerNames returns a []string
 func (obj *stateProtocolRocev2Peers) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -289,6 +293,10 @@ func (obj *stateProtocolRocev2Peers) PeerNames() []string {
 }
 
 // The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
+//
+// x-constraint:
+// - /components/schemas/Rocev2.V4Peer/properties/name
+// - /components/schemas/Rocev2.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4Peer/properties/name

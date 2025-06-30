@@ -355,6 +355,9 @@ type PortMetric interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // Name returns a string
 func (obj *portMetric) Name() string {
 
@@ -367,12 +370,18 @@ func (obj *portMetric) Name() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // Name returns a string
 func (obj *portMetric) HasName() bool {
 	return obj.obj.Name != nil
 }
 
 // The name of a configured port
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

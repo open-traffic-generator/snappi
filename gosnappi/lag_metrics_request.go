@@ -279,6 +279,9 @@ type LagMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Lag/properties/name
 //
+// x-constraint:
+// - /components/schemas/Lag/properties/name
+//
 // LagNames returns a []string
 func (obj *lagMetricsRequest) LagNames() []string {
 	if obj.obj.LagNames == nil {
@@ -288,6 +291,9 @@ func (obj *lagMetricsRequest) LagNames() []string {
 }
 
 // The names of LAGs to return results for. An empty list will return results for all LAGs.
+//
+// x-constraint:
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lag/properties/name
