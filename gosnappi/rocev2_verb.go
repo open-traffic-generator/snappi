@@ -280,10 +280,10 @@ type Rocev2Verb interface {
 	setChoice(value Rocev2VerbChoiceEnum) Rocev2Verb
 	// HasChoice checks if Choice has been set in Rocev2Verb
 	HasChoice() bool
-	// getter for Read to set choice.
-	Read()
 	// getter for Send to set choice.
 	Send()
+	// getter for Read to set choice.
+	Read()
 	// getter for Write to set choice.
 	Write()
 	// WriteWithImmediate returns Rocev2ImmediateData, set in Rocev2Verb.
@@ -326,14 +326,14 @@ func (obj *rocev2Verb) Choice() Rocev2VerbChoiceEnum {
 	return Rocev2VerbChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Read to set choice
-func (obj *rocev2Verb) Read() {
-	obj.setChoice(Rocev2VerbChoice.READ)
-}
-
 // getter for Send to set choice
 func (obj *rocev2Verb) Send() {
 	obj.setChoice(Rocev2VerbChoice.SEND)
+}
+
+// getter for Read to set choice
+func (obj *rocev2Verb) Read() {
+	obj.setChoice(Rocev2VerbChoice.READ)
 }
 
 // getter for Write to set choice
