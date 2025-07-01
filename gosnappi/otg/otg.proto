@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.31.0
+/* Open Traffic Generator API 1.32.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -31885,6 +31885,12 @@ message Failure {
   Error error = 1;
 }
 
+// Data that needs to be streamed
+message Data {
+  uint64 chunk_size = 1;
+  bytes datum = 2;
+}
+
 message SetConfigRequest {
   Config config = 1;
 }
@@ -31975,8 +31981,12 @@ service Openapi {
 
   // Sets configuration resources on the traffic generator.
   rpc SetConfig(SetConfigRequest) returns (SetConfigResponse);
+  // streaming version of the rpc SetConfig
+  rpc streamSetConfig(stream Data) returns (SetConfigResponse);
   // Description missing in models
   rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
+  // streaming version of the rpc GetConfig
+  rpc streamGetConfig(google.protobuf.Empty) returns (stream Data);
   // Updates specific attributes of resources configured on the traffic generator. The
   // fetched configuration shall reflect the updates applied successfully.
   // The Response.Warnings in the Success response is available for implementers to disclose
@@ -32001,14 +32011,24 @@ service Openapi {
   rpc DeleteConfig(DeleteConfigRequest) returns (DeleteConfigResponse);
   // Sets the operational state of configured resources.
   rpc SetControlState(SetControlStateRequest) returns (SetControlStateResponse);
+  // streaming version of the rpc SetControlState
+  rpc streamSetControlState(stream Data) returns (SetControlStateResponse);
   // Triggers actions against configured resources.
   rpc SetControlAction(SetControlActionRequest) returns (SetControlActionResponse);
+  // streaming version of the rpc SetControlAction
+  rpc streamSetControlAction(stream Data) returns (SetControlActionResponse);
   // Description missing in models
   rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+  // streaming version of the rpc GetMetrics
+  rpc streamGetMetrics(GetMetricsRequest) returns (stream Data);
   // Description missing in models
   rpc GetStates(GetStatesRequest) returns (GetStatesResponse);
+  // streaming version of the rpc GetStates
+  rpc streamGetStates(GetStatesRequest) returns (stream Data);
   // Description missing in models
   rpc GetCapture(GetCaptureRequest) returns (GetCaptureResponse);
+  // streaming version of the rpc GetCapture
+  rpc streamGetCapture(GetCaptureRequest) returns (stream Data);
   // Description missing in models
   rpc GetVersion(google.protobuf.Empty) returns (GetVersionResponse);
 }

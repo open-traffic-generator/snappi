@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.31.0
+/* Open Traffic Generator API 1.32.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  *
@@ -25,6 +25,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -218,8 +219,12 @@ type Api interface {
 	api
 	// SetConfig sets configuration resources on the traffic generator.
 	SetConfig(config Config) (Warning, error)
+	// streaming method for SetConfig
+	streamSetConfig(context.Context, []byte) (*otg.SetConfigResponse, error)
 	// GetConfig description is TBD
 	GetConfig() (Config, error)
+	// streaming method for GetConfig
+	streamGetConfig(context.Context, *emptypb.Empty) (Config, error)
 	// UpdateConfig updates specific attributes of resources configured on the traffic generator. The fetched configuration shall reflect the updates applied successfully.
 	// The Response.Warnings in the Success response is available for implementers to disclose additional information about a state change including any implicit changes that are outside the scope of the state change.
 	UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
@@ -229,14 +234,24 @@ type Api interface {
 	DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	// SetControlState sets the operational state of configured resources.
 	SetControlState(controlState ControlState) (Warning, error)
+	// streaming method for SetControlState
+	streamSetControlState(context.Context, []byte) (*otg.SetControlStateResponse, error)
 	// SetControlAction triggers actions against configured resources.
 	SetControlAction(controlAction ControlAction) (ControlActionResponse, error)
+	// streaming method for SetControlAction
+	streamSetControlAction(context.Context, []byte) (*otg.SetControlActionResponse, error)
 	// GetMetrics description is TBD
 	GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error)
+	// streaming method for GetMetrics
+	streamGetMetrics(context.Context, *otg.GetMetricsRequest) (MetricsResponse, error)
 	// GetStates description is TBD
 	GetStates(statesRequest StatesRequest) (StatesResponse, error)
+	// streaming method for GetStates
+	streamGetStates(context.Context, *otg.GetStatesRequest) (StatesResponse, error)
 	// GetCapture description is TBD
 	GetCapture(captureRequest CaptureRequest) ([]byte, error)
+	// streaming method for GetCapture
+	streamGetCapture(context.Context, *otg.GetCaptureRequest) ([]byte, error)
 	// GetVersion description is TBD
 	GetVersion() (Version, error)
 	// GetLocalVersion provides version details of local client
@@ -255,7 +270,7 @@ type Api interface {
 
 func (api *gosnappiApi) GetLocalVersion() Version {
 	if api.versionMeta.localVersion == nil {
-		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.31.0").SetSdkVersion("1.31.1")
+		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.32.0").SetSdkVersion("1.32.0")
 	}
 
 	return api.versionMeta.localVersion
@@ -343,6 +358,33 @@ func (api *gosnappiApi) CheckVersionCompatibility() error {
 	return nil
 }
 
+func (api *gosnappiApi) streamSetConfig(ctx context.Context, data []byte) (*otg.SetConfigResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetConfig(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	var i uint64
+	for i = 0; i < uint64(len(bytes)); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = uint64(chunkSize)
+		if i+chunkSize > uint64(len(bytes)) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 
 	if err := config.validate(); err != nil {
@@ -361,7 +403,18 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	request := otg.SetConfigRequest{Config: config.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetConfig(ctx, &request)
+	var resp *otg.SetConfigResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(config.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetConfig(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetConfig(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -374,6 +427,31 @@ func (api *gosnappiApi) SetConfig(config Config) (Warning, error) {
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetConfig(ctx context.Context, req *emptypb.Empty) (Config, error) {
+	streamClient, err := api.grpcClient.StreamGetConfig(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewConfig()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetConfig() (Config, error) {
@@ -390,7 +468,14 @@ func (api *gosnappiApi) GetConfig() (Config, error) {
 	request := emptypb.Empty{}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetConfig(ctx, &request)
+	var resp *otg.GetConfigResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetConfig(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetConfig(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -423,7 +508,9 @@ func (api *gosnappiApi) UpdateConfig(configUpdate ConfigUpdate) (Warning, error)
 	request := otg.UpdateConfigRequest{ConfigUpdate: configUpdate.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.UpdateConfig(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -456,7 +543,9 @@ func (api *gosnappiApi) AppendConfig(configAppend ConfigAppend) (Warning, error)
 	request := otg.AppendConfigRequest{ConfigAppend: configAppend.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.AppendConfig(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -489,7 +578,9 @@ func (api *gosnappiApi) DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	request := otg.DeleteConfigRequest{ConfigDelete: configDelete.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.DeleteConfig(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -502,6 +593,33 @@ func (api *gosnappiApi) DeleteConfig(configDelete ConfigDelete) (Warning, error)
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamSetControlState(ctx context.Context, data []byte) (*otg.SetControlStateResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetControlState(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	var i uint64
+	for i = 0; i < uint64(len(bytes)); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = uint64(chunkSize)
+		if i+chunkSize > uint64(len(bytes)) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, error) {
@@ -522,7 +640,18 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	request := otg.SetControlStateRequest{ControlState: controlState.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetControlState(ctx, &request)
+	var resp *otg.SetControlStateResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(controlState.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetControlState(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetControlState(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -535,6 +664,33 @@ func (api *gosnappiApi) SetControlState(controlState ControlState) (Warning, err
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamSetControlAction(ctx context.Context, data []byte) (*otg.SetControlActionResponse, error) {
+	chunkSize := api.grpc.chunkSize
+	streamClient, err := api.grpcClient.StreamSetControlAction(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bytes := []byte(data)
+	var i uint64
+	for i = 0; i < uint64(len(bytes)); i += chunkSize {
+		data := &otg.Data{}
+		data.ChunkSize = uint64(chunkSize)
+		if i+chunkSize > uint64(len(bytes)) {
+			data.Datum = bytes[i:]
+		} else {
+			data.Datum = bytes[i : i+chunkSize]
+		}
+		if err := streamClient.Send(data); err != nil {
+			return nil, err
+		}
+	}
+	res, err := streamClient.CloseAndRecv()
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlActionResponse, error) {
@@ -555,7 +711,18 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	request := otg.SetControlActionRequest{ControlAction: controlAction.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.SetControlAction(ctx, &request)
+	var resp *otg.SetControlActionResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		str, er := proto.Marshal(controlAction.msg())
+		if er != nil {
+			return nil, er
+		}
+		resp, err = api.streamSetControlAction(ctx, str)
+	} else {
+
+		resp, err = api.grpcClient.SetControlAction(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -568,6 +735,31 @@ func (api *gosnappiApi) SetControlAction(controlAction ControlAction) (ControlAc
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetMetrics(ctx context.Context, req *otg.GetMetricsRequest) (MetricsResponse, error) {
+	streamClient, err := api.grpcClient.StreamGetMetrics(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewMetricsResponse()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsResponse, error) {
@@ -588,7 +780,14 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	request := otg.GetMetricsRequest{MetricsRequest: metricsRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetMetrics(ctx, &request)
+	var resp *otg.GetMetricsResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetMetrics(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetMetrics(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -601,6 +800,31 @@ func (api *gosnappiApi) GetMetrics(metricsRequest MetricsRequest) (MetricsRespon
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetStates(ctx context.Context, req *otg.GetStatesRequest) (StatesResponse, error) {
+	streamClient, err := api.grpcClient.StreamGetStates(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewStatesResponse()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, error) {
@@ -621,7 +845,14 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	request := otg.GetStatesRequest{StatesRequest: statesRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetStates(ctx, &request)
+	var resp *otg.GetStatesResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetStates(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetStates(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -634,6 +865,24 @@ func (api *gosnappiApi) GetStates(statesRequest StatesRequest) (StatesResponse, 
 	}
 
 	return ret, nil
+}
+
+func (api *gosnappiApi) streamGetCapture(ctx context.Context, req *otg.GetCaptureRequest) ([]byte, error) {
+	streamClient, err := api.grpcClient.StreamGetCapture(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			return bytes, nil
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
 }
 
 func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error) {
@@ -654,7 +903,14 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	request := otg.GetCaptureRequest{CaptureRequest: captureRequest.msg()}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
-	resp, err := api.grpcClient.GetCapture(ctx, &request)
+	var resp *otg.GetCaptureResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetCapture(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetCapture(ctx, &request)
+	}
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
@@ -678,7 +934,9 @@ func (api *gosnappiApi) GetVersion() (Version, error) {
 	request := emptypb.Empty{}
 	ctx, cancelFunc := context.WithTimeout(context.Background(), api.grpc.requestTimeout)
 	defer cancelFunc()
+
 	resp, err := api.grpcClient.GetVersion(ctx, &request)
+
 	if err != nil {
 		if er, ok := fromGrpcError(err); ok {
 			return nil, er
