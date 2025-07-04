@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.31.0
+/* Open Traffic Generator API 1.32.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  *
@@ -255,7 +255,7 @@ type Api interface {
 
 func (api *gosnappiApi) GetLocalVersion() Version {
 	if api.versionMeta.localVersion == nil {
-		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.31.0").SetSdkVersion("1.31.1")
+		api.versionMeta.localVersion = NewVersion().SetApiSpecVersion("1.32.0").SetSdkVersion("1.31.1")
 	}
 
 	return api.versionMeta.localVersion
