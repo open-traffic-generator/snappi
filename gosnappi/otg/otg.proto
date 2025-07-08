@@ -19335,12 +19335,6 @@ message IsisIIHLocalGRLastAttemptStatus {
 
   // Description missing in models
   IsisIIHLocalGRLastAttemptFailed failed = 3;
-
-  // Description missing in models
-  optional bool inprogress = 4;
-
-  // Description missing in models
-  optional bool unavailable = 5;
 }
 
 // This container contains the failure status of the last Graceful Restart initiated
@@ -19360,8 +19354,8 @@ message IsisIIHLocalGRLastAttemptSucceeded {
   // By this time, the CSNP list is cleared and all LSPs are collected by the neighbor(s).
   optional uint32 lsdb_syncup_time = 1;
 
-  // The time (in seconds) is is measured from when the Restart TLV with RR bit set is
-  // sent
+  // The time (in seconds) is measured from when the Restart TLV with RR bit set is sent
+  // 
   // in an IIH PDU upto the time when Restart TLV is sent with RR bit unset.
   optional uint32 adjacency_bring_up_time = 3;
 }
@@ -19391,12 +19385,6 @@ message IsisIIHNeighborGRLastAttemptStatus {
 
   // Description missing in models
   IsisIIHNeighborGRLastAttemptFailed failed = 3;
-
-  // Description missing in models
-  optional bool inprogress = 4;
-
-  // Description missing in models
-  optional bool unavailable = 5;
 }
 
 // This container contains the failure status of the last Graceful Restart initiated

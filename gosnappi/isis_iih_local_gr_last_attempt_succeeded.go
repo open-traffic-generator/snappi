@@ -303,7 +303,7 @@ func (obj *isisIIHLocalGRLastAttemptSucceeded) SetLsdbSyncupTime(value uint32) I
 	return obj
 }
 
-// The time (in seconds) is is measured from when the Restart TLV with RR bit set is sent
+// The time (in seconds) is measured from when the Restart TLV with RR bit set is sent
 // in an IIH PDU upto the time when Restart TLV is sent with RR bit unset.
 // AdjacencyBringUpTime returns a uint32
 func (obj *isisIIHLocalGRLastAttemptSucceeded) AdjacencyBringUpTime() uint32 {
@@ -312,14 +312,14 @@ func (obj *isisIIHLocalGRLastAttemptSucceeded) AdjacencyBringUpTime() uint32 {
 
 }
 
-// The time (in seconds) is is measured from when the Restart TLV with RR bit set is sent
+// The time (in seconds) is measured from when the Restart TLV with RR bit set is sent
 // in an IIH PDU upto the time when Restart TLV is sent with RR bit unset.
 // AdjacencyBringUpTime returns a uint32
 func (obj *isisIIHLocalGRLastAttemptSucceeded) HasAdjacencyBringUpTime() bool {
 	return obj.obj.AdjacencyBringUpTime != nil
 }
 
-// The time (in seconds) is is measured from when the Restart TLV with RR bit set is sent
+// The time (in seconds) is measured from when the Restart TLV with RR bit set is sent
 // in an IIH PDU upto the time when Restart TLV is sent with RR bit unset.
 // SetAdjacencyBringUpTime sets the uint32 value in the IsisIIHLocalGRLastAttemptSucceeded object
 func (obj *isisIIHLocalGRLastAttemptSucceeded) SetAdjacencyBringUpTime(value uint32) IsisIIHLocalGRLastAttemptSucceeded {

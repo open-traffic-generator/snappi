@@ -284,6 +284,10 @@ type IsisIIHNeighborGRLastAttemptStatus interface {
 	setChoice(value IsisIIHNeighborGRLastAttemptStatusChoiceEnum) IsisIIHNeighborGRLastAttemptStatus
 	// HasChoice checks if Choice has been set in IsisIIHNeighborGRLastAttemptStatus
 	HasChoice() bool
+	// getter for Unavailable to set choice.
+	Unavailable()
+	// getter for Inprogress to set choice.
+	Inprogress()
 	// Succeeded returns IsisIIHNeighborGRLastAttemptSucceeded, set in IsisIIHNeighborGRLastAttemptStatus.
 	// IsisIIHNeighborGRLastAttemptSucceeded is this object contains the result of a successful graceful restart status in the last attempted by a Neighbor.
 	Succeeded() IsisIIHNeighborGRLastAttemptSucceeded
@@ -300,18 +304,6 @@ type IsisIIHNeighborGRLastAttemptStatus interface {
 	SetFailed(value IsisIIHNeighborGRLastAttemptFailed) IsisIIHNeighborGRLastAttemptStatus
 	// HasFailed checks if Failed has been set in IsisIIHNeighborGRLastAttemptStatus
 	HasFailed() bool
-	// Inprogress returns bool, set in IsisIIHNeighborGRLastAttemptStatus.
-	Inprogress() bool
-	// SetInprogress assigns bool provided by user to IsisIIHNeighborGRLastAttemptStatus
-	SetInprogress(value bool) IsisIIHNeighborGRLastAttemptStatus
-	// HasInprogress checks if Inprogress has been set in IsisIIHNeighborGRLastAttemptStatus
-	HasInprogress() bool
-	// Unavailable returns bool, set in IsisIIHNeighborGRLastAttemptStatus.
-	Unavailable() bool
-	// SetUnavailable assigns bool provided by user to IsisIIHNeighborGRLastAttemptStatus
-	SetUnavailable(value bool) IsisIIHNeighborGRLastAttemptStatus
-	// HasUnavailable checks if Unavailable has been set in IsisIIHNeighborGRLastAttemptStatus
-	HasUnavailable() bool
 	setNil()
 }
 
@@ -334,6 +326,16 @@ func (obj *isisIIHNeighborGRLastAttemptStatus) Choice() IsisIIHNeighborGRLastAtt
 	return IsisIIHNeighborGRLastAttemptStatusChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for Unavailable to set choice
+func (obj *isisIIHNeighborGRLastAttemptStatus) Unavailable() {
+	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.UNAVAILABLE)
+}
+
+// getter for Inprogress to set choice
+func (obj *isisIIHNeighborGRLastAttemptStatus) Inprogress() {
+	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS)
+}
+
 // description is TBD
 // Choice returns a string
 func (obj *isisIIHNeighborGRLastAttemptStatus) HasChoice() bool {
@@ -349,8 +351,6 @@ func (obj *isisIIHNeighborGRLastAttemptStatus) setChoice(value IsisIIHNeighborGR
 	}
 	enumValue := otg.IsisIIHNeighborGRLastAttemptStatus_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.Unavailable = nil
-	obj.obj.Inprogress = nil
 	obj.obj.Failed = nil
 	obj.failedHolder = nil
 	obj.obj.Succeeded = nil
@@ -423,58 +423,6 @@ func (obj *isisIIHNeighborGRLastAttemptStatus) SetFailed(value IsisIIHNeighborGR
 	return obj
 }
 
-// description is TBD
-// Inprogress returns a bool
-func (obj *isisIIHNeighborGRLastAttemptStatus) Inprogress() bool {
-
-	if obj.obj.Inprogress == nil {
-		obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS)
-	}
-
-	return *obj.obj.Inprogress
-
-}
-
-// description is TBD
-// Inprogress returns a bool
-func (obj *isisIIHNeighborGRLastAttemptStatus) HasInprogress() bool {
-	return obj.obj.Inprogress != nil
-}
-
-// description is TBD
-// SetInprogress sets the bool value in the IsisIIHNeighborGRLastAttemptStatus object
-func (obj *isisIIHNeighborGRLastAttemptStatus) SetInprogress(value bool) IsisIIHNeighborGRLastAttemptStatus {
-	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS)
-	obj.obj.Inprogress = &value
-	return obj
-}
-
-// description is TBD
-// Unavailable returns a bool
-func (obj *isisIIHNeighborGRLastAttemptStatus) Unavailable() bool {
-
-	if obj.obj.Unavailable == nil {
-		obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.UNAVAILABLE)
-	}
-
-	return *obj.obj.Unavailable
-
-}
-
-// description is TBD
-// Unavailable returns a bool
-func (obj *isisIIHNeighborGRLastAttemptStatus) HasUnavailable() bool {
-	return obj.obj.Unavailable != nil
-}
-
-// description is TBD
-// SetUnavailable sets the bool value in the IsisIIHNeighborGRLastAttemptStatus object
-func (obj *isisIIHNeighborGRLastAttemptStatus) SetUnavailable(value bool) IsisIIHNeighborGRLastAttemptStatus {
-	obj.setChoice(IsisIIHNeighborGRLastAttemptStatusChoice.UNAVAILABLE)
-	obj.obj.Unavailable = &value
-	return obj
-}
-
 func (obj *isisIIHNeighborGRLastAttemptStatus) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -504,16 +452,6 @@ func (obj *isisIIHNeighborGRLastAttemptStatus) setDefault() {
 	if obj.obj.Failed != nil {
 		choices_set += 1
 		choice = IsisIIHNeighborGRLastAttemptStatusChoice.FAILED
-	}
-
-	if obj.obj.Inprogress != nil {
-		choices_set += 1
-		choice = IsisIIHNeighborGRLastAttemptStatusChoice.INPROGRESS
-	}
-
-	if obj.obj.Unavailable != nil {
-		choices_set += 1
-		choice = IsisIIHNeighborGRLastAttemptStatusChoice.UNAVAILABLE
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

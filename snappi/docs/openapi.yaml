@@ -27259,12 +27259,6 @@ components:
         failed:
           $ref: '#/components/schemas/IsisIIH.LocalGRLastAttemptFailed'
           x-field-uid: 3
-        inprogress:
-          type: boolean
-          x-field-uid: 4
-        unavailable:
-          type: boolean
-          x-field-uid: 5
     IsisIIH.LocalGRLastAttemptFailed:
       description: |-
         This container contains the failure status of the last Graceful Restart initiated by this router.
@@ -27288,9 +27282,9 @@ components:
           format: uint32
           x-field-uid: 1
         adjacency_bring_up_time:
-          description: "The time (in seconds) is is measured from when the Restart\
-            \ TLV with RR bit set is sent \nin an IIH PDU upto the time when Restart\
-            \ TLV is sent with RR bit unset."
+          description: "The time (in seconds) is measured from when the Restart TLV\
+            \ with RR bit set is sent \nin an IIH PDU upto the time when Restart TLV\
+            \ is sent with RR bit unset."
           type: integer
           format: uint32
           x-field-uid: 3
@@ -27326,12 +27320,6 @@ components:
         failed:
           $ref: '#/components/schemas/IsisIIH.NeighborGRLastAttemptFailed'
           x-field-uid: 3
-        inprogress:
-          type: boolean
-          x-field-uid: 4
-        unavailable:
-          type: boolean
-          x-field-uid: 5
     IsisIIH.NeighborGRLastAttemptFailed:
       description: |-
         This container contains the failure status of the last Graceful Restart initiated by this neighbor.
