@@ -16,10 +16,12 @@ import (
 )
 
 type grpcTransport struct {
-	clientConnection *grpc.ClientConn
-	location         string
-	requestTimeout   time.Duration
-	dialTimeout      time.Duration
+	clientConnection    *grpc.ClientConn
+	location            string
+	requestTimeout      time.Duration
+	dialTimeout         time.Duration
+	enableGrpcStreaming bool
+	chunkSize           uint64
 }
 
 type GrpcTransport interface {
@@ -40,6 +42,13 @@ type GrpcTransport interface {
 	SetClientConnection(con *grpc.ClientConn) GrpcTransport
 	// ClientConnection get grpc DialContext
 	ClientConnection() *grpc.ClientConn
+	// EnableGrpcStreaming enables streaming of data through GRPC channel
+	EnableGrpcStreaming() GrpcTransport
+	// DisableGrpcStreaming disables streaming of data through GRPC channel
+	DisableGrpcStreaming() GrpcTransport
+	// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
+	// we accept value in MB so if you set 1 we will consider it as 1MB
+	SetStreamChunkSize(value uint64) GrpcTransport
 }
 
 // Location
@@ -78,6 +87,29 @@ func (obj *grpcTransport) ClientConnection() *grpc.ClientConn {
 
 func (obj *grpcTransport) SetClientConnection(con *grpc.ClientConn) GrpcTransport {
 	obj.clientConnection = con
+	return obj
+}
+
+// EnableGrpcStreaming enables streaming of data through GRPC channel
+// By default its disabled
+func (obj *grpcTransport) EnableGrpcStreaming() GrpcTransport {
+	obj.enableGrpcStreaming = true
+	return obj
+}
+
+// DisableGrpcStreaming disables streaming of data through GRPC channel
+func (obj *grpcTransport) DisableGrpcStreaming() GrpcTransport {
+	obj.enableGrpcStreaming = false
+	return obj
+}
+
+// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
+func (obj *grpcTransport) SetStreamChunkSize(value uint64) GrpcTransport {
+	if value > 17592186044415 {
+		fmt.Println("The value of Chunk Size provided is more than what is supported, so will not be considered. falling back to default value of 4")
+		return obj
+	}
+	obj.chunkSize = value * 1024 * 1024
 	return obj
 }
 
@@ -139,9 +171,11 @@ type api interface {
 // NewGrpcTransport sets the underlying transport of the Api as grpc
 func (api *apiSt) NewGrpcTransport() GrpcTransport {
 	api.grpc = &grpcTransport{
-		location:       "localhost:5050",
-		requestTimeout: 10 * time.Second,
-		dialTimeout:    10 * time.Second,
+		location:            "localhost:5050",
+		requestTimeout:      10 * time.Second,
+		dialTimeout:         10 * time.Second,
+		enableGrpcStreaming: false,
+		chunkSize:           4000000,
 	}
 	api.http = nil
 	return api.grpc

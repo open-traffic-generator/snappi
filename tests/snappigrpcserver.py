@@ -46,6 +46,33 @@ class OpenapiServicer(pb2_grpc.OpenapiServicer):
         res_obj = json_format.Parse(response_200, pb2.SetConfigResponse())
         return res_obj
 
+    def streamSetConfig(self, request_iterator, context):
+        self._log("Executing SetConfig")
+        full_str = b""
+        for data in request_iterator:
+            full_str += data.datum
+            self._log("received ")
+
+        self._log("received all chunks ")
+        self._log(full_str)
+        obj = pb2.Config()
+        obj.ParseFromString(full_str)
+        self._log(obj)
+
+        response_200 = """
+                   {
+                       "warning" : {
+                           "warnings" : ["no"]
+                       }
+                   }
+                   """
+
+        self._config = json_format.MessageToDict(
+            obj, preserving_proto_field_name=True
+        )
+        res_obj = json_format.Parse(response_200, pb2.SetConfigResponse())
+        return res_obj
+
     def GetConfig(self, request, context):
         self._log("Executing GetConfig")
         if self._config is None:
