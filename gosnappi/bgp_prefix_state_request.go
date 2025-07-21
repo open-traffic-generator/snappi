@@ -295,6 +295,10 @@ type BgpPrefixStateRequest interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
+//
 // BgpPeerNames returns a []string
 func (obj *bgpPrefixStateRequest) BgpPeerNames() []string {
 	if obj.obj.BgpPeerNames == nil {
@@ -304,6 +308,10 @@ func (obj *bgpPrefixStateRequest) BgpPeerNames() []string {
 }
 
 // The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
+//
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name

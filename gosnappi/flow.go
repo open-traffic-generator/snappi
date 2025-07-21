@@ -459,6 +459,8 @@ func (obj *flowFlowHeaderIter) appendHolderSlice(item FlowHeader) FlowFlowHeader
 
 // Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
 //
+// Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
+//
 // The list of protocol headers defining the shape of all
 // intended packets in corresponding flow as it is received
 // by traffic-generator port.

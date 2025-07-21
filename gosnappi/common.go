@@ -106,10 +106,9 @@ func (obj *grpcTransport) DisableGrpcStreaming() GrpcTransport {
 }
 
 // SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
-// The value here is treated in MB so if someone provides 1 it means 1 MB
 func (obj *grpcTransport) SetStreamChunkSize(value uint64) GrpcTransport {
 	if value > 17592186044415 {
-		logs.Warn().Msg("The value of Chunk Size provided is more than what is supported, so will not be considered. falling back to default value of 4")
+		fmt.Println("The value of Chunk Size provided is more than what is supported, so will not be considered. falling back to default value of 4")
 		return obj
 	}
 	obj.chunkSize = value * 1024 * 1024

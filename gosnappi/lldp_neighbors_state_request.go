@@ -279,6 +279,9 @@ type LldpNeighborsStateRequest interface {
 // x-constraint:
 // - /components/schemas/Lldp/properties/name
 //
+// x-constraint:
+// - /components/schemas/Lldp/properties/name
+//
 // LldpNames returns a []string
 func (obj *lldpNeighborsStateRequest) LldpNames() []string {
 	if obj.obj.LldpNames == nil {
@@ -288,6 +291,9 @@ func (obj *lldpNeighborsStateRequest) LldpNames() []string {
 }
 
 // The names of LLDP instances for which neighbor information will be retrieved. If no names are specified then the results will contain neighbor information for all configured LLDP instances.
+//
+// x-constraint:
+// - /components/schemas/Lldp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Lldp/properties/name

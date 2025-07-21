@@ -279,6 +279,9 @@ type StateProtocolIsisRouters interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
+//
 // RouterNames returns a []string
 func (obj *stateProtocolIsisRouters) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -288,6 +291,9 @@ func (obj *stateProtocolIsisRouters) RouterNames() []string {
 }
 
 // The names of ISIS routers for which the state has to be applied. An empty or null list will control all ISIS routers.
+//
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

@@ -279,6 +279,9 @@ type RsvpMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Rsvp/properties/name
+//
 // RouterNames returns a []string
 func (obj *rsvpMetricsRequest) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -288,6 +291,9 @@ func (obj *rsvpMetricsRequest) RouterNames() []string {
 }
 
 // The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
+//
+// x-constraint:
+// - /components/schemas/Device.Rsvp/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Rsvp/properties/name
