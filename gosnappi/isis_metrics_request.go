@@ -333,6 +333,10 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED                  IsisMetricsRequestColumnNamesEnum
 	L2_LSP_SENT                       IsisMetricsRequestColumnNamesEnum
 	L2_LSP_RECEIVED                   IsisMetricsRequestColumnNamesEnum
+	GR_INITIATED                      IsisMetricsRequestColumnNamesEnum
+	GR_SUCCEEDED                      IsisMetricsRequestColumnNamesEnum
+	NEIGHBOR_GR_INITIATED             IsisMetricsRequestColumnNamesEnum
+	NEIGHBOR_GR_SUCCEEDED             IsisMetricsRequestColumnNamesEnum
 }{
 	L1_SESSIONS_UP:                    IsisMetricsRequestColumnNamesEnum("l1_sessions_up"),
 	L1_SESSION_FLAP:                   IsisMetricsRequestColumnNamesEnum("l1_session_flap"),
@@ -360,6 +364,10 @@ var IsisMetricsRequestColumnNames = struct {
 	L2_CSNP_RECEIVED:                  IsisMetricsRequestColumnNamesEnum("l2_csnp_received"),
 	L2_LSP_SENT:                       IsisMetricsRequestColumnNamesEnum("l2_lsp_sent"),
 	L2_LSP_RECEIVED:                   IsisMetricsRequestColumnNamesEnum("l2_lsp_received"),
+	GR_INITIATED:                      IsisMetricsRequestColumnNamesEnum("gr_initiated"),
+	GR_SUCCEEDED:                      IsisMetricsRequestColumnNamesEnum("gr_succeeded"),
+	NEIGHBOR_GR_INITIATED:             IsisMetricsRequestColumnNamesEnum("neighbor_gr_initiated"),
+	NEIGHBOR_GR_SUCCEEDED:             IsisMetricsRequestColumnNamesEnum("neighbor_gr_succeeded"),
 }
 
 func (obj *isisMetricsRequest) ColumnNames() []IsisMetricsRequestColumnNamesEnum {
