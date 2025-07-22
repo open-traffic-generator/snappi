@@ -279,9 +279,6 @@ type Dhcpv6ServerMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6Server/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6Server/properties/name
-//
 // ServerNames returns a []string
 func (obj *dhcpv6ServerMetricsRequest) ServerNames() []string {
 	if obj.obj.ServerNames == nil {
@@ -291,9 +288,6 @@ func (obj *dhcpv6ServerMetricsRequest) ServerNames() []string {
 }
 
 // The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv6Server/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv6Server/properties/name
