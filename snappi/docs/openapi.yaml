@@ -18679,11 +18679,17 @@ components:
           x-enum:
             unplanned:
               x-field-uid: 1
+            planned:
+              x-field-uid: 2
           enum:
           - unplanned
+          - planned
         unplanned:
           $ref: '#/components/schemas/Action.Protocol.Isis.UnplannedRestart'
           x-field-uid: 3
+        planned:
+          $ref: '#/components/schemas/Action.Protocol.Isis.PlannedRestart'
+          x-field-uid: 4
     Action.Protocol.Isis.UnplannedRestart:
       description: |-
         Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the unplanned "Restarting" mode, it sends an IIH PDU containing a Restart TLV with the RR (Restart Request) bit set and holding_time updated to as specified by user to indicate the maximum time within which this router  or routers will complete the graceful restart.  It waits for RA (Restart Acknowledge) in an IIH PDU from Neigbhor(s).  The timer T1 is maintained per interface and indicates the time after which an unacknowledged (re)start attempt will be repeated.

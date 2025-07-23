@@ -14089,6 +14089,7 @@ message ActionProtocolIsisInitiateRestart {
     enum Enum {
       unspecified = 0;
       unplanned = 1;
+      planned = 2;
     }
   }
   // Description missing in models
@@ -14097,6 +14098,9 @@ message ActionProtocolIsisInitiateRestart {
 
   // Description missing in models
   ActionProtocolIsisUnplannedRestart unplanned = 3;
+
+  // Description missing in models
+  ActionProtocolIsisPlannedRestart planned = 4;
 }
 
 // Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers.
