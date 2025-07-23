@@ -10720,7 +10720,8 @@ components:
             Routing metric associated with the interface..
           type: integer
           format: uint32
-          default: 0
+          maximum: 65535
+          default: 10
           x-field-uid: 3
         priority:
           description: "The Priority for (Backup) Designated Router election.    \
