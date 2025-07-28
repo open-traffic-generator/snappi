@@ -52,7 +52,7 @@ def test_grpc_stream_config(grpc_api):
 
     assert grpc_api.chunk_size == 2 * 1024 * 1024
     assert grpc_api.maximum_receive_buffer_size == 2 * 1024 * 1024
-    
+
     response = grpc_api.set_config(config)
     assert len(response.warnings) == 1
     assert response.warnings[0] == "no"
