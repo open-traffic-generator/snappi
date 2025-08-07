@@ -23,6 +23,7 @@ type flow struct {
 	rateHolder         FlowRate
 	durationHolder     FlowDuration
 	metricsHolder      FlowMetrics
+	payloadHolder      FlowPayload
 }
 
 func NewFlow() Flow {
@@ -257,6 +258,7 @@ func (obj *flow) setNil() {
 	obj.rateHolder = nil
 	obj.durationHolder = nil
 	obj.metricsHolder = nil
+	obj.payloadHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -332,6 +334,16 @@ type Flow interface {
 	Name() string
 	// SetName assigns string provided by user to Flow
 	SetName(value string) Flow
+	// Payload returns FlowPayload, set in Flow.
+	// FlowPayload is a container for different types of payload, which is
+	// the data in the frame after protocol headers and instrumentation bytes.
+	Payload() FlowPayload
+	// SetPayload assigns FlowPayload provided by user to Flow.
+	// FlowPayload is a container for different types of payload, which is
+	// the data in the frame after protocol headers and instrumentation bytes.
+	SetPayload(value FlowPayload) Flow
+	// HasPayload checks if Payload has been set in Flow
+	HasPayload() bool
 	setNil()
 }
 
@@ -457,8 +469,6 @@ func (obj *flowFlowHeaderIter) appendHolderSlice(item FlowHeader) FlowFlowHeader
 	return obj
 }
 
-// Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
-//
 // Under Review: The packet header schema for egress tracking currently exposes unwanted fields. The query structure for tagged metrics inside flows metrics requires documenting expected response format.
 //
 // The list of protocol headers defining the shape of all
@@ -605,6 +615,34 @@ func (obj *flow) SetName(value string) Flow {
 	return obj
 }
 
+// The data in the frame after protocol headers and instrumentation bytes.
+// Payload returns a FlowPayload
+func (obj *flow) Payload() FlowPayload {
+	if obj.obj.Payload == nil {
+		obj.obj.Payload = NewFlowPayload().msg()
+	}
+	if obj.payloadHolder == nil {
+		obj.payloadHolder = &flowPayload{obj: obj.obj.Payload}
+	}
+	return obj.payloadHolder
+}
+
+// The data in the frame after protocol headers and instrumentation bytes.
+// Payload returns a FlowPayload
+func (obj *flow) HasPayload() bool {
+	return obj.obj.Payload != nil
+}
+
+// The data in the frame after protocol headers and instrumentation bytes.
+// SetPayload sets the FlowPayload value in the Flow object
+func (obj *flow) SetPayload(value FlowPayload) Flow {
+
+	obj.payloadHolder = nil
+	obj.obj.Payload = value.msg()
+
+	return obj
+}
+
 func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -672,6 +710,12 @@ func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Flow")
 	}
+
+	if obj.obj.Payload != nil {
+
+		obj.Payload().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *flow) setDefault() {
