@@ -274,14 +274,14 @@ type Dhcpv6ClientOptionsMessageType interface {
 	Request()
 	// getter for InformRequest to set choice.
 	InformRequest()
+	// getter for Release to set choice.
+	Release()
 	// getter for Solicit to set choice.
 	Solicit()
 	// getter for Renew to set choice.
 	Renew()
 	// getter for Rebind to set choice.
 	Rebind()
-	// getter for Release to set choice.
-	Release()
 }
 
 type Dhcpv6ClientOptionsMessageTypeChoiceEnum string
@@ -317,6 +317,11 @@ func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
 }
 
+// getter for InformRequest to set choice
+func (obj *dhcpv6ClientOptionsMessageType) InformRequest() {
+	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.INFORM_REQUEST)
+}
+
 // getter for Solicit to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Solicit() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.SOLICIT)
@@ -330,11 +335,6 @@ func (obj *dhcpv6ClientOptionsMessageType) Renew() {
 // getter for Rebind to set choice
 func (obj *dhcpv6ClientOptionsMessageType) Rebind() {
 	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.REBIND)
-}
-
-// getter for Release to set choice
-func (obj *dhcpv6ClientOptionsMessageType) Release() {
-	obj.setChoice(Dhcpv6ClientOptionsMessageTypeChoice.RELEASE)
 }
 
 // The client message name where the option is included, by default it is all.

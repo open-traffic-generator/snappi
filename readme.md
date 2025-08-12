@@ -20,7 +20,7 @@ Test scripts written in `snappi`, an auto-generated python SDK, can be executed 
 python -m pip install --upgrade snappi 
 ```
 
-## Start Testing 
+## Start Testing
 
 ```python
 import datetime
