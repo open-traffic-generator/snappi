@@ -16202,8 +16202,10 @@ components:
         This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Flow.Payload:
-      description: "A container for different types of payload, which is \nthe data\
-        \ in the frame after protocol headers and instrumentation bytes. "
+      description: "A container for different types of payload, which is the data\
+        \ in the frame after protocol headers.\nSome part of the payload will be overwritten\
+        \ with instrumentation data, contents and placement of \nwhich could be implementation\
+        \ specific."
       type: object
       properties:
         choice:

@@ -250,8 +250,9 @@ func (obj *flowPayload) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowPayload is a container for different types of payload, which is
-// the data in the frame after protocol headers and instrumentation bytes.
+// FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
+// Some part of the payload will be overwritten with instrumentation data, contents and placement of
+// which could be implementation specific.
 type FlowPayload interface {
 	Validation
 	// msg marshals FlowPayload to protobuf object *otg.FlowPayload
@@ -279,14 +280,14 @@ type FlowPayload interface {
 	setChoice(value FlowPayloadChoiceEnum) FlowPayload
 	// HasChoice checks if Choice has been set in FlowPayload
 	HasChoice() bool
-	// getter for DecrementByte to set choice.
-	DecrementByte()
-	// getter for DecrementWord to set choice.
-	DecrementWord()
-	// getter for IncrementWord to set choice.
-	IncrementWord()
 	// getter for IncrementByte to set choice.
 	IncrementByte()
+	// getter for IncrementWord to set choice.
+	IncrementWord()
+	// getter for DecrementWord to set choice.
+	DecrementWord()
+	// getter for DecrementByte to set choice.
+	DecrementByte()
 	// Fixed returns FlowPayloadFixed, set in FlowPayload.
 	// FlowPayloadFixed is payload with fixed pattern.
 	Fixed() FlowPayloadFixed
@@ -319,14 +320,9 @@ func (obj *flowPayload) Choice() FlowPayloadChoiceEnum {
 	return FlowPayloadChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for DecrementByte to set choice
-func (obj *flowPayload) DecrementByte() {
-	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
-}
-
-// getter for DecrementWord to set choice
-func (obj *flowPayload) DecrementWord() {
-	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
+// getter for IncrementByte to set choice
+func (obj *flowPayload) IncrementByte() {
+	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
 }
 
 // getter for IncrementWord to set choice
@@ -334,9 +330,14 @@ func (obj *flowPayload) IncrementWord() {
 	obj.setChoice(FlowPayloadChoice.INCREMENT_WORD)
 }
 
-// getter for IncrementByte to set choice
-func (obj *flowPayload) IncrementByte() {
-	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
+// getter for DecrementWord to set choice
+func (obj *flowPayload) DecrementWord() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
+}
+
+// getter for DecrementByte to set choice
+func (obj *flowPayload) DecrementByte() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
 }
 
 // A choice used to determine the type of payload.
