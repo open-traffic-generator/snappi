@@ -10720,7 +10720,8 @@ components:
             Routing metric associated with the interface..
           type: integer
           format: uint32
-          default: 0
+          maximum: 65535
+          default: 10
           x-field-uid: 3
         priority:
           description: "The Priority for (Backup) Designated Router election.    \
@@ -18702,10 +18703,6 @@ components:
         router_names:
           description: |
             The names of device objects to control.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -27093,10 +27090,6 @@ components:
         isis_router_names:
           description: |
             The names of ISIS routers for which learned information is requested. An empty list will return results of IIH States for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name

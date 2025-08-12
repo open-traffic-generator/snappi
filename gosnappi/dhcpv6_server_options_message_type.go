@@ -276,10 +276,6 @@ type Dhcpv6ServerOptionsMessageType interface {
 	Advertise()
 	// getter for ReConfigure to set choice.
 	ReConfigure()
-	// getter for Reply to set choice.
-	Reply()
-	// getter for Advertise to set choice.
-	Advertise()
 }
 
 type Dhcpv6ServerOptionsMessageTypeChoiceEnum string

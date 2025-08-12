@@ -7964,7 +7964,7 @@ message Ospfv2InterfaceAdvanced {
   optional uint32 dead_interval = 2;
 
   // Routing metric associated with the interface..
-  // default = 0
+  // default = 10
   optional uint32 routing_metric = 3;
 
   // The Priority for (Backup) Designated Router election.
@@ -14120,10 +14120,6 @@ message ActionProtocolIsisInitiateRestart {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message Choice {
@@ -19222,10 +19218,6 @@ message IsisIIHsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results of IIH States for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
