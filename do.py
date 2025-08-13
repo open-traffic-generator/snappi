@@ -36,7 +36,7 @@ USE_OPENAPIART_DIR = None
 USE_MODELS_DIR = None
 
 # supported values - branch name or None
-USE_OPENAPIART_BRANCH = None
+USE_OPENAPIART_BRANCH = "move_logging_to_slog"
 USE_MODELS_BRANCH = "isis-gr-planned"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
