@@ -10,7 +10,7 @@ import hashlib
 
 
 BLACK_VERSION = "22.1.0"
-GO_VERSION = "1.21.0"
+GO_VERSION = "1.22.1"
 PROTOC_VERSION = "3.20.3"
 
 # this is where go and protoc shall be installed (and expected to be present)
@@ -223,7 +223,7 @@ def get_go_deps():
         [
             cmd + " -v google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0",
             cmd + " -v google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1",
-            cmd + " -v golang.org/x/tools/cmd/goimports@v0.6.0",
+            cmd + " -v golang.org/x/tools/cmd/goimports@v0.36.0",
             cmd + " -v github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.1",
         ]
     )
