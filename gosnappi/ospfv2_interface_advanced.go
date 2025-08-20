@@ -435,6 +435,16 @@ func (obj *ospfv2InterfaceAdvanced) validateObj(vObj *validation, set_default bo
 		obj.setDefault()
 	}
 
+	if obj.obj.RoutingMetric != nil {
+
+		if *obj.obj.RoutingMetric > 65535 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= Ospfv2InterfaceAdvanced.RoutingMetric <= 65535 but Got %d", *obj.obj.RoutingMetric))
+		}
+
+	}
+
 }
 
 func (obj *ospfv2InterfaceAdvanced) setDefault() {
@@ -445,7 +455,7 @@ func (obj *ospfv2InterfaceAdvanced) setDefault() {
 		obj.SetDeadInterval(40)
 	}
 	if obj.obj.RoutingMetric == nil {
-		obj.SetRoutingMetric(0)
+		obj.SetRoutingMetric(10)
 	}
 	if obj.obj.Priority == nil {
 		obj.SetPriority(0)
