@@ -1601,6 +1601,8 @@ from .snappi import IsisIIHRestartFlags
 from .snappi import IsisLocalIIHAdjacencyStatesIter
 from .snappi import IsisIIHsStateIter
 from .snappi import CaptureRequest
+from .snappi import CaptureRequestPackets
+from .snappi import CaptureRequestCaptureSlice
 from .snappi import Version
 from .snappi import Api
 from .snappi import Transport
