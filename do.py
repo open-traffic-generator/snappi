@@ -33,7 +33,7 @@ sdk_version = Version.version
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
-USE_MODELS_DIR = "C:\\Users\\waseebai\\Documents\\project\\GitHub\\models"
+USE_MODELS_DIR = None
 
 
 # supported values - branch name or None
