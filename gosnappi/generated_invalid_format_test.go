@@ -1022,7 +1022,7 @@ func TestEventLinkIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewEventLink()
+	object := gosnappi.NewEvent()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
@@ -1039,7 +1039,7 @@ func TestEventRxRateThresholdIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewEventRxRateThreshold()
+	object := gosnappi.NewEvent().CpEvents()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))
@@ -1056,7 +1056,7 @@ func TestEventRouteAdvertiseWithdrawIncorrectFormat(t *testing.T) {
 			"e_b" : 2
 	    }`
 
-	object := gosnappi.NewEventRouteAdvertiseWithdraw()
+	object := gosnappi.NewEvent().DpEvents()
 	assert.NotNil(t, object.Unmarshal().FromYaml(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromJson(incorrect_format))
 	assert.NotNil(t, object.Unmarshal().FromPbText(incorrect_format))

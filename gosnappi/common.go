@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -16,10 +15,12 @@ import (
 )
 
 type grpcTransport struct {
-	clientConnection *grpc.ClientConn
-	location         string
-	requestTimeout   time.Duration
-	dialTimeout      time.Duration
+	clientConnection    *grpc.ClientConn
+	location            string
+	requestTimeout      time.Duration
+	dialTimeout         time.Duration
+	enableGrpcStreaming bool
+	chunkSize           uint64
 }
 
 type GrpcTransport interface {
@@ -40,10 +41,18 @@ type GrpcTransport interface {
 	SetClientConnection(con *grpc.ClientConn) GrpcTransport
 	// ClientConnection get grpc DialContext
 	ClientConnection() *grpc.ClientConn
+	// EnableGrpcStreaming enables streaming of data through GRPC channel
+	EnableGrpcStreaming() GrpcTransport
+	// DisableGrpcStreaming disables streaming of data through GRPC channel
+	DisableGrpcStreaming() GrpcTransport
+	// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
+	// we accept value in MB so if you set 1 we will consider it as 1MB
+	SetStreamChunkSize(value uint64) GrpcTransport
 }
 
 // Location
 func (obj *grpcTransport) Location() string {
+	logs.Debug("", "Location ", obj.location)
 	return obj.location
 }
 
@@ -55,6 +64,7 @@ func (obj *grpcTransport) SetLocation(value string) GrpcTransport {
 
 // RequestTimeout returns the grpc request timeout in seconds
 func (obj *grpcTransport) RequestTimeout() time.Duration {
+	logs.Debug("", "RequestTimeout ", obj.requestTimeout.String())
 	return obj.requestTimeout
 }
 
@@ -64,6 +74,7 @@ func (obj *grpcTransport) SetRequestTimeout(value time.Duration) GrpcTransport {
 	return obj
 }
 func (obj *grpcTransport) DialTimeout() time.Duration {
+	logs.Debug("", "DialTimeout ", obj.dialTimeout.String())
 	return obj.dialTimeout
 }
 
@@ -78,6 +89,29 @@ func (obj *grpcTransport) ClientConnection() *grpc.ClientConn {
 
 func (obj *grpcTransport) SetClientConnection(con *grpc.ClientConn) GrpcTransport {
 	obj.clientConnection = con
+	return obj
+}
+
+// EnableGrpcStreaming enables streaming of data through GRPC channel
+// By default its disabled
+func (obj *grpcTransport) EnableGrpcStreaming() GrpcTransport {
+	obj.enableGrpcStreaming = true
+	return obj
+}
+
+// DisableGrpcStreaming disables streaming of data through GRPC channel
+func (obj *grpcTransport) DisableGrpcStreaming() GrpcTransport {
+	obj.enableGrpcStreaming = false
+	return obj
+}
+
+// SetStreamChunkSize sets the chunk size, basically this decides your data will be sliced into how many chunks before streaming it to the server
+func (obj *grpcTransport) SetStreamChunkSize(value uint64) GrpcTransport {
+	if value > 17592186044415 {
+		fmt.Println("The value of Chunk Size provided is more than what is supported, so will not be considered. falling back to default value of 4")
+		return obj
+	}
+	obj.chunkSize = value * 1024 * 1024
 	return obj
 }
 
@@ -96,6 +130,7 @@ type HttpTransport interface {
 
 // Location
 func (obj *httpTransport) Location() string {
+	logs.Debug("", "Location  ", obj.location)
 	return obj.location
 }
 
@@ -119,10 +154,13 @@ func (obj *httpTransport) SetVerify(value bool) HttpTransport {
 type apiSt struct {
 	grpc     *grpcTransport
 	http     *httpTransport
+	tracer   Telemetry
 	warnings string
 }
 
 type api interface {
+	Telemetry() Telemetry
+	SetCustomTelemetry(telObj Telemetry)
 	NewGrpcTransport() GrpcTransport
 	hasGrpcTransport() bool
 	NewHttpTransport() HttpTransport
@@ -139,9 +177,11 @@ type api interface {
 // NewGrpcTransport sets the underlying transport of the Api as grpc
 func (api *apiSt) NewGrpcTransport() GrpcTransport {
 	api.grpc = &grpcTransport{
-		location:       "localhost:5050",
-		requestTimeout: 10 * time.Second,
-		dialTimeout:    10 * time.Second,
+		location:            "localhost:5050",
+		requestTimeout:      10 * time.Second,
+		dialTimeout:         10 * time.Second,
+		enableGrpcStreaming: false,
+		chunkSize:           4000000,
 	}
 	api.http = nil
 	return api.grpc
@@ -176,18 +216,28 @@ func (api *apiSt) getWarnings() string {
 }
 
 func (api *apiSt) addWarnings(message string) {
-	fmt.Fprintf(os.Stderr, "[WARNING]: %s\n", message)
+	logs.Warn(message)
 	api.warnings = message
 }
 
 func (api *apiSt) deprecated(message string) {
 	api.warnings = message
-	fmt.Fprintf(os.Stderr, "warning: %s\n", message)
+	logs.Warn(message)
 }
 
 func (api *apiSt) under_review(message string) {
 	api.warnings = message
-	fmt.Fprintf(os.Stderr, "warning: %s\n", message)
+	logs.Warn(message)
+}
+
+// Returns instance of telemetry operations
+func (api *apiSt) Telemetry() Telemetry {
+	return api.tracer
+}
+
+// Returns instance of telemetry operations
+func (api *apiSt) SetCustomTelemetry(telObj Telemetry) {
+	api.tracer = telObj
 }
 
 // HttpRequestDoer will return True for HTTP transport
@@ -225,6 +275,7 @@ func (obj *validation) validationResult() error {
 	if len(obj.validationErrors) > 0 {
 		errors := strings.Join(obj.validationErrors, "\n")
 		obj.validationErrors = nil
+		logs.Error("", "Validation Errors ", errors)
 		return fmt.Errorf("%s", errors)
 	}
 	return nil
@@ -240,29 +291,31 @@ func (obj *validation) Warnings() []string {
 }
 
 func (obj *validation) addWarnings(message string) {
-	fmt.Fprintf(os.Stderr, "[WARNING]: %s\n", message)
+	logs.Warn(message)
 	obj.warnings = append(obj.warnings, message)
 }
 
 func (obj *validation) deprecated(message string) {
-	fmt.Fprintf(os.Stderr, "warning: %s\n", message)
+	logs.Warn(message)
 	obj.warnings = append(obj.warnings, message)
 }
 
 func (obj *validation) under_review(message string) {
-	fmt.Fprintf(os.Stderr, "warning: %s\n", message)
+	logs.Warn(message)
 	obj.warnings = append(obj.warnings, message)
 }
 
 func (obj *validation) validateMac(mac string) error {
 	macSlice := strings.Split(mac, ":")
 	if len(macSlice) != 6 {
+		logs.Error("", "Invalid Mac address ", mac)
 		return fmt.Errorf("Invalid Mac address %s", mac)
 	}
 	octInd := []string{"0th", "1st", "2nd", "3rd", "4th", "5th"}
 	for ind, val := range macSlice {
 		num, err := strconv.ParseUint(val, 16, 32)
 		if err != nil || num > 255 {
+			logs.Error("Invalid Mac address")
 			return fmt.Errorf("Invalid Mac address at %s octet in %s mac", octInd[ind], mac)
 		}
 	}
@@ -272,12 +325,14 @@ func (obj *validation) validateMac(mac string) error {
 func (obj *validation) validateIpv4(ip string) error {
 	ipSlice := strings.Split(ip, ".")
 	if len(ipSlice) != 4 {
+		logs.Error("", "Invalid Ipv4 address ", ip)
 		return fmt.Errorf("Invalid Ipv4 address %s", ip)
 	}
 	octInd := []string{"1st", "2nd", "3rd", "4th"}
 	for ind, val := range ipSlice {
 		num, err := strconv.ParseUint(val, 10, 32)
 		if err != nil || num > 255 {
+			logs.Error("Invalid Ipv4 address")
 			return fmt.Errorf("Invalid Ipv4 address at %s octet in %s ipv4", octInd[ind], ip)
 		}
 	}
@@ -289,12 +344,15 @@ func (obj *validation) validateIpv6(ip string) error {
 	if strings.Count(ip, " ") > 0 || strings.Count(ip, ":") > 7 ||
 		strings.Count(ip, "::") > 1 || strings.Count(ip, ":::") > 0 ||
 		strings.Count(ip, ":") == 0 {
+		logs.Error("", "Invalid Ipv4 address ", ip)
 		return fmt.Errorf("Invalid ipv6 address %s", ip)
 	}
 	if (string(ip[0]) == ":" && string(ip[:2]) != "::") || (string(ip[len(ip)-1]) == ":" && string(ip[len(ip)-2:]) != "::") {
+		logs.Error("", "Invalid Ipv4 address ", ip)
 		return fmt.Errorf("Invalid ipv6 address %s", ip)
 	}
 	if strings.Count(ip, "::") == 0 && strings.Count(ip, ":") != 7 {
+		logs.Error("", "Invalid Ipv4 address ", ip)
 		return fmt.Errorf("Invalid ipv6 address %s", ip)
 	}
 	if ip == "::" {
@@ -317,6 +375,7 @@ func (obj *validation) validateIpv6(ip string) error {
 	for ind, val := range ipSlice {
 		num, err := strconv.ParseUint(val, 16, 64)
 		if err != nil || num > 65535 {
+			logs.Error("Invalid Ipv4 address")
 			return fmt.Errorf("Invalid Ipv6 address at %s octet in %s ipv6", octInd[ind], ip)
 		}
 	}
@@ -460,17 +519,22 @@ func checkClientServerVersionCompatibility(clientVer string, serverVer string, c
 
 	c, err := semver.NewVersion(clientVer)
 	if err != nil {
+		message := "client " + componentName + " version " + clientVer + " is not a valid semver"
+		logs.Error("", "Message", message)
 		return fmt.Errorf("client %s version '%s' is not a valid semver", componentName, clientVer)
 	}
 
 	s, err := semver.NewConstraint(serverVer)
 	if err != nil {
+		message := "server " + componentName + " version " + serverVer + " is not a valid semver"
+		logs.Error("", "Message", message)
 		return fmt.Errorf("server %s version '%s' is not a valid semver constraint", componentName, serverVer)
 	}
 
 	err = fmt.Errorf("client %s version '%s' is not semver compatible with server %s version constraint '%s'", componentName, clientVer, componentName, serverVer)
 	valid, errs := s.Validate(c)
 	if len(errs) != 0 {
+		logs.Error("Client Server Version Compatibility Check Failed!")
 		return fmt.Errorf("%v: %v", err, errs)
 	}
 

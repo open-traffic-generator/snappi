@@ -46,8 +46,14 @@ setuptools.setup(
     python_requires=">=2.7, <4",
     install_requires=install_requires,
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==1.19.0"],
+        "ixnetwork": ["snappi_ixnetwork==1.31.0"],
         "trex": ["snappi_trex"],
         "testing": ["pytest", "flask"],
+        "telemetry": ["opentelemetry-api==1.17.0 ; python_version >= '3.7'",
+                      "opentelemetry-sdk ; python_version >= '3.7'",
+                      "opentelemetry-exporter-otlp-proto-http ; python_version >= '3.7'",
+                      "opentelemetry-exporter-otlp-proto-grpc ; python_version >= '3.7'",
+                      "opentelemetry-instrumentation-grpc ; python_version >= '3.7'",
+                      "opentelemetry-instrumentation-requests ; python_version >= '3.7'"]
     },
 )

@@ -10,75 +10,75 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-// ***** EventLink *****
-type eventLink struct {
+// ***** EventCPEvents *****
+type eventCPEvents struct {
 	validation
-	obj          *otg.EventLink
-	marshaller   marshalEventLink
-	unMarshaller unMarshalEventLink
+	obj          *otg.EventCPEvents
+	marshaller   marshalEventCPEvents
+	unMarshaller unMarshalEventCPEvents
 }
 
-func NewEventLink() EventLink {
-	obj := eventLink{obj: &otg.EventLink{}}
+func NewEventCPEvents() EventCPEvents {
+	obj := eventCPEvents{obj: &otg.EventCPEvents{}}
 	obj.setDefault()
 	return &obj
 }
 
-func (obj *eventLink) msg() *otg.EventLink {
+func (obj *eventCPEvents) msg() *otg.EventCPEvents {
 	return obj.obj
 }
 
-func (obj *eventLink) setMsg(msg *otg.EventLink) EventLink {
+func (obj *eventCPEvents) setMsg(msg *otg.EventCPEvents) EventCPEvents {
 
 	proto.Merge(obj.obj, msg)
 	return obj
 }
 
-type marshaleventLink struct {
-	obj *eventLink
+type marshaleventCPEvents struct {
+	obj *eventCPEvents
 }
 
-type marshalEventLink interface {
-	// ToProto marshals EventLink to protobuf object *otg.EventLink
-	ToProto() (*otg.EventLink, error)
-	// ToPbText marshals EventLink to protobuf text
+type marshalEventCPEvents interface {
+	// ToProto marshals EventCPEvents to protobuf object *otg.EventCPEvents
+	ToProto() (*otg.EventCPEvents, error)
+	// ToPbText marshals EventCPEvents to protobuf text
 	ToPbText() (string, error)
-	// ToYaml marshals EventLink to YAML text
+	// ToYaml marshals EventCPEvents to YAML text
 	ToYaml() (string, error)
-	// ToJson marshals EventLink to JSON text
+	// ToJson marshals EventCPEvents to JSON text
 	ToJson() (string, error)
 }
 
-type unMarshaleventLink struct {
-	obj *eventLink
+type unMarshaleventCPEvents struct {
+	obj *eventCPEvents
 }
 
-type unMarshalEventLink interface {
-	// FromProto unmarshals EventLink from protobuf object *otg.EventLink
-	FromProto(msg *otg.EventLink) (EventLink, error)
-	// FromPbText unmarshals EventLink from protobuf text
+type unMarshalEventCPEvents interface {
+	// FromProto unmarshals EventCPEvents from protobuf object *otg.EventCPEvents
+	FromProto(msg *otg.EventCPEvents) (EventCPEvents, error)
+	// FromPbText unmarshals EventCPEvents from protobuf text
 	FromPbText(value string) error
-	// FromYaml unmarshals EventLink from YAML text
+	// FromYaml unmarshals EventCPEvents from YAML text
 	FromYaml(value string) error
-	// FromJson unmarshals EventLink from JSON text
+	// FromJson unmarshals EventCPEvents from JSON text
 	FromJson(value string) error
 }
 
-func (obj *eventLink) Marshal() marshalEventLink {
+func (obj *eventCPEvents) Marshal() marshalEventCPEvents {
 	if obj.marshaller == nil {
-		obj.marshaller = &marshaleventLink{obj: obj}
+		obj.marshaller = &marshaleventCPEvents{obj: obj}
 	}
 	return obj.marshaller
 }
 
-func (obj *eventLink) Unmarshal() unMarshalEventLink {
+func (obj *eventCPEvents) Unmarshal() unMarshalEventCPEvents {
 	if obj.unMarshaller == nil {
-		obj.unMarshaller = &unMarshaleventLink{obj: obj}
+		obj.unMarshaller = &unMarshaleventCPEvents{obj: obj}
 	}
 	return obj.unMarshaller
 }
 
-func (m *marshaleventLink) ToProto() (*otg.EventLink, error) {
+func (m *marshaleventCPEvents) ToProto() (*otg.EventCPEvents, error) {
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (m *marshaleventLink) ToProto() (*otg.EventLink, error) {
 	return m.obj.msg(), nil
 }
 
-func (m *unMarshaleventLink) FromProto(msg *otg.EventLink) (EventLink, error) {
+func (m *unMarshaleventCPEvents) FromProto(msg *otg.EventCPEvents) (EventCPEvents, error) {
 	newObj := m.obj.setMsg(msg)
 	err := newObj.validateToAndFrom()
 	if err != nil {
@@ -95,7 +95,7 @@ func (m *unMarshaleventLink) FromProto(msg *otg.EventLink) (EventLink, error) {
 	return newObj, nil
 }
 
-func (m *marshaleventLink) ToPbText() (string, error) {
+func (m *marshaleventCPEvents) ToPbText() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -107,7 +107,7 @@ func (m *marshaleventLink) ToPbText() (string, error) {
 	return string(protoMarshal), nil
 }
 
-func (m *unMarshaleventLink) FromPbText(value string) error {
+func (m *unMarshaleventCPEvents) FromPbText(value string) error {
 	retObj := proto.Unmarshal([]byte(value), m.obj.msg())
 	if retObj != nil {
 		return retObj
@@ -120,7 +120,7 @@ func (m *unMarshaleventLink) FromPbText(value string) error {
 	return retObj
 }
 
-func (m *marshaleventLink) ToYaml() (string, error) {
+func (m *marshaleventCPEvents) ToYaml() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -141,7 +141,7 @@ func (m *marshaleventLink) ToYaml() (string, error) {
 	return string(data), nil
 }
 
-func (m *unMarshaleventLink) FromYaml(value string) error {
+func (m *unMarshaleventCPEvents) FromYaml(value string) error {
 	if value == "" {
 		value = "{}"
 	}
@@ -166,7 +166,7 @@ func (m *unMarshaleventLink) FromYaml(value string) error {
 	return nil
 }
 
-func (m *marshaleventLink) ToJson() (string, error) {
+func (m *marshaleventCPEvents) ToJson() (string, error) {
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return "", vErr
@@ -184,7 +184,7 @@ func (m *marshaleventLink) ToJson() (string, error) {
 	return string(data), nil
 }
 
-func (m *unMarshaleventLink) FromJson(value string) error {
+func (m *unMarshaleventCPEvents) FromJson(value string) error {
 	opts := protojson.UnmarshalOptions{
 		AllowPartial:   true,
 		DiscardUnknown: false,
@@ -205,19 +205,19 @@ func (m *unMarshaleventLink) FromJson(value string) error {
 	return nil
 }
 
-func (obj *eventLink) validateToAndFrom() error {
+func (obj *eventCPEvents) validateToAndFrom() error {
 	// emptyVars()
 	obj.validateObj(&obj.validation, true)
 	return obj.validationResult()
 }
 
-func (obj *eventLink) validate() error {
+func (obj *eventCPEvents) validate() error {
 	// emptyVars()
 	obj.validateObj(&obj.validation, false)
 	return obj.validationResult()
 }
 
-func (obj *eventLink) String() string {
+func (obj *eventCPEvents) String() string {
 	str, err := obj.Marshal().ToYaml()
 	if err != nil {
 		return err.Error()
@@ -225,12 +225,12 @@ func (obj *eventLink) String() string {
 	return str
 }
 
-func (obj *eventLink) Clone() (EventLink, error) {
+func (obj *eventCPEvents) Clone() (EventCPEvents, error) {
 	vErr := obj.validate()
 	if vErr != nil {
 		return nil, vErr
 	}
-	newObj := NewEventLink()
+	newObj := NewEventCPEvents()
 	data, err := proto.Marshal(obj.msg())
 	if err != nil {
 		return nil, err
@@ -242,66 +242,69 @@ func (obj *eventLink) Clone() (EventLink, error) {
 	return newObj, nil
 }
 
-// EventLink is the optional container for link up/down event configuration.
-type EventLink interface {
+// EventCPEvents is the optional container for control plane event configuration.
+type EventCPEvents interface {
 	Validation
-	// msg marshals EventLink to protobuf object *otg.EventLink
+	// msg marshals EventCPEvents to protobuf object *otg.EventCPEvents
 	// and doesn't set defaults
-	msg() *otg.EventLink
-	// setMsg unmarshals EventLink from protobuf object *otg.EventLink
+	msg() *otg.EventCPEvents
+	// setMsg unmarshals EventCPEvents from protobuf object *otg.EventCPEvents
 	// and doesn't set defaults
-	setMsg(*otg.EventLink) EventLink
+	setMsg(*otg.EventCPEvents) EventCPEvents
 	// provides marshal interface
-	Marshal() marshalEventLink
+	Marshal() marshalEventCPEvents
 	// provides unmarshal interface
-	Unmarshal() unMarshalEventLink
-	// validate validates EventLink
+	Unmarshal() unMarshalEventCPEvents
+	// validate validates EventCPEvents
 	validate() error
 	// A stringer function
 	String() string
 	// Clones the object
-	Clone() (EventLink, error)
+	Clone() (EventCPEvents, error)
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Enable returns bool, set in EventLink.
+	// Enable returns bool, set in EventCPEvents.
 	Enable() bool
-	// SetEnable assigns bool provided by user to EventLink
-	SetEnable(value bool) EventLink
-	// HasEnable checks if Enable has been set in EventLink
+	// SetEnable assigns bool provided by user to EventCPEvents
+	SetEnable(value bool) EventCPEvents
+	// HasEnable checks if Enable has been set in EventCPEvents
 	HasEnable() bool
 }
 
-// True to enable notifications when a link up/down event occurs.
+// Setting to true enables start and end time for control_plane events
+// associated with started flows to be recorded.
 // Enable returns a bool
-func (obj *eventLink) Enable() bool {
+func (obj *eventCPEvents) Enable() bool {
 
 	return *obj.obj.Enable
 
 }
 
-// True to enable notifications when a link up/down event occurs.
+// Setting to true enables start and end time for control_plane events
+// associated with started flows to be recorded.
 // Enable returns a bool
-func (obj *eventLink) HasEnable() bool {
+func (obj *eventCPEvents) HasEnable() bool {
 	return obj.obj.Enable != nil
 }
 
-// True to enable notifications when a link up/down event occurs.
-// SetEnable sets the bool value in the EventLink object
-func (obj *eventLink) SetEnable(value bool) EventLink {
+// Setting to true enables start and end time for control_plane events
+// associated with started flows to be recorded.
+// SetEnable sets the bool value in the EventCPEvents object
+func (obj *eventCPEvents) SetEnable(value bool) EventCPEvents {
 
 	obj.obj.Enable = &value
 	return obj
 }
 
-func (obj *eventLink) validateObj(vObj *validation, set_default bool) {
+func (obj *eventCPEvents) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
 
 }
 
-func (obj *eventLink) setDefault() {
+func (obj *eventCPEvents) setDefault() {
 	if obj.obj.Enable == nil {
 		obj.SetEnable(false)
 	}

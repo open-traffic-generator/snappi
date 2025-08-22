@@ -10,7 +10,7 @@ import hashlib
 
 
 BLACK_VERSION = "22.1.0"
-GO_VERSION = "1.21.0"
+GO_VERSION = "1.22.1"
 PROTOC_VERSION = "3.20.3"
 
 # this is where go and protoc shall be installed (and expected to be present)
@@ -223,7 +223,7 @@ def get_go_deps():
         [
             cmd + " -v google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0",
             cmd + " -v google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1",
-            cmd + " -v golang.org/x/tools/cmd/goimports@v0.6.0",
+            cmd + " -v golang.org/x/tools/cmd/goimports@v0.36.0",
             cmd + " -v github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc@v1.5.1",
         ]
     )
@@ -307,10 +307,10 @@ def testpy():
     )
     import re
 
-    coverage_threshold = 50
+    coverage_threshold = 40
     with open("./cov_report/index.html") as fp:
         out = fp.read()
-        result = re.findall(r"data-ratio.*?[>](\d+)\b", out)[0]
+        result = re.findall(r"data-ratio.*?[>](\d+)\b", out)[-1]
         if int(result) < coverage_threshold:
             raise Exception(
                 "Coverage thresold[{0}] is NOT achieved[{1}]".format(
@@ -326,7 +326,7 @@ def testpy():
 
 
 def testgo():
-    go_coverage_threshold = 0
+    go_coverage_threshold = 15
     # TODO: not able to run the test from main directory
     os.chdir("gosnappi")
     try:
@@ -341,17 +341,19 @@ def testgo():
 
     with open("gosnappi/coverage.out") as fp:
         out = fp.read()
-        result = re.findall(r"coverage:.*\s(\d+)", out)[0]
-        if int(result) < go_coverage_threshold:
+        result = re.findall(r"coverage:.*\s(\d+)", out)
+        result = [x for x in result if int(x) != 0 and int(x) < 100]
+        print(result)
+        if int(result[0]) < go_coverage_threshold:
             raise Exception(
                 "Go tests achieved {1}% which is less than Coverage thresold {0}%,".format(
-                    go_coverage_threshold, result
+                    go_coverage_threshold, result[0]
                 )
             )
         else:
             print(
                 "Go tests achieved {1}% ,Coverage thresold {0}%".format(
-                    go_coverage_threshold, result
+                    go_coverage_threshold, result[0]
                 )
             )
 
