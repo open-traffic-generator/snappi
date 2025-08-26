@@ -250,7 +250,7 @@ func (obj *captureRequestPackets) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// CaptureRequestPackets is the packets to be captured on the given port.
+// CaptureRequestPackets is packets to be captured on the given port.
 type CaptureRequestPackets interface {
 	Validation
 	// msg marshals CaptureRequestPackets to protobuf object *otg.CaptureRequestPackets
@@ -281,10 +281,20 @@ type CaptureRequestPackets interface {
 	// getter for All to set choice.
 	All()
 	// Slice returns CaptureRequestCaptureSlice, set in CaptureRequestPackets.
-	// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice through start index and packet count.
+	// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice i.e.
+	// position of first packet and count of packets to capture.
+	// To be noted,
+	// - definition of capture slice works in conjunction with capture filter parameters in set_config.
+	// - to get definitive outcome with large number of captured packets, 'overwrite' attribute in 'captures'
+	// settings of set_config should be disabled.
 	Slice() CaptureRequestCaptureSlice
 	// SetSlice assigns CaptureRequestCaptureSlice provided by user to CaptureRequestPackets.
-	// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice through start index and packet count.
+	// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice i.e.
+	// position of first packet and count of packets to capture.
+	// To be noted,
+	// - definition of capture slice works in conjunction with capture filter parameters in set_config.
+	// - to get definitive outcome with large number of captured packets, 'overwrite' attribute in 'captures'
+	// settings of set_config should be disabled.
 	SetSlice(value CaptureRequestCaptureSlice) CaptureRequestPackets
 	// HasSlice checks if Slice has been set in CaptureRequestPackets
 	HasSlice() bool

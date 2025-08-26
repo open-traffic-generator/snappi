@@ -250,7 +250,8 @@ func (obj *captureRequest) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// CaptureRequest is the capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
+// CaptureRequest is the capture result request to the traffic generator.
+// Stops the port capture on the port_name and returns the capture.
 type CaptureRequest interface {
 	Validation
 	// msg marshals CaptureRequest to protobuf object *otg.CaptureRequest
@@ -277,10 +278,10 @@ type CaptureRequest interface {
 	// SetPortName assigns string provided by user to CaptureRequest
 	SetPortName(value string) CaptureRequest
 	// Packets returns CaptureRequestPackets, set in CaptureRequest.
-	// CaptureRequestPackets is the packets to be captured on the given port.
+	// CaptureRequestPackets is packets to be captured on the given port.
 	Packets() CaptureRequestPackets
 	// SetPackets assigns CaptureRequestPackets provided by user to CaptureRequest.
-	// CaptureRequestPackets is the packets to be captured on the given port.
+	// CaptureRequestPackets is packets to be captured on the given port.
 	SetPackets(value CaptureRequestPackets) CaptureRequest
 	// HasPackets checks if Packets has been set in CaptureRequest
 	HasPackets() bool
@@ -311,7 +312,7 @@ func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	return obj
 }
 
-// Specification of which packets to be captured on the given port.
+// Specification of packets to be captured on the given port.
 // Packets returns a CaptureRequestPackets
 func (obj *captureRequest) Packets() CaptureRequestPackets {
 	if obj.obj.Packets == nil {
@@ -323,13 +324,13 @@ func (obj *captureRequest) Packets() CaptureRequestPackets {
 	return obj.packetsHolder
 }
 
-// Specification of which packets to be captured on the given port.
+// Specification of packets to be captured on the given port.
 // Packets returns a CaptureRequestPackets
 func (obj *captureRequest) HasPackets() bool {
 	return obj.obj.Packets != nil
 }
 
-// Specification of which packets to be captured on the given port.
+// Specification of packets to be captured on the given port.
 // SetPackets sets the CaptureRequestPackets value in the CaptureRequest object
 func (obj *captureRequest) SetPackets(value CaptureRequestPackets) CaptureRequest {
 

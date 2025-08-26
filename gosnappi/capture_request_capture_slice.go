@@ -13,9 +13,10 @@ import (
 // ***** CaptureRequestCaptureSlice *****
 type captureRequestCaptureSlice struct {
 	validation
-	obj          *otg.CaptureRequestCaptureSlice
-	marshaller   marshalCaptureRequestCaptureSlice
-	unMarshaller unMarshalCaptureRequestCaptureSlice
+	obj           *otg.CaptureRequestCaptureSlice
+	marshaller    marshalCaptureRequestCaptureSlice
+	unMarshaller  unMarshalCaptureRequestCaptureSlice
+	initialHolder CaptureRequestCaptureSliceInitial
 }
 
 func NewCaptureRequestCaptureSlice() CaptureRequestCaptureSlice {
@@ -29,7 +30,7 @@ func (obj *captureRequestCaptureSlice) msg() *otg.CaptureRequestCaptureSlice {
 }
 
 func (obj *captureRequestCaptureSlice) setMsg(msg *otg.CaptureRequestCaptureSlice) CaptureRequestCaptureSlice {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalcaptureRequestCaptureSlice) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalcaptureRequestCaptureSlice) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalcaptureRequestCaptureSlice) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,7 +243,19 @@ func (obj *captureRequestCaptureSlice) Clone() (CaptureRequestCaptureSlice, erro
 	return newObj, nil
 }
 
-// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice through start index and packet count.
+func (obj *captureRequestCaptureSlice) setNil() {
+	obj.initialHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice i.e.
+// position of first packet and count of packets to capture.
+// To be noted,
+// - definition of capture slice works in conjunction with capture filter parameters in set_config.
+// - to get definitive outcome with large number of captured packets, 'overwrite' attribute in 'captures'
+// settings of set_config should be disabled.
 type CaptureRequestCaptureSlice interface {
 	Validation
 	// msg marshals CaptureRequestCaptureSlice to protobuf object *otg.CaptureRequestCaptureSlice
@@ -264,61 +277,86 @@ type CaptureRequestCaptureSlice interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Start returns uint64, set in CaptureRequestCaptureSlice.
-	Start() uint64
-	// SetStart assigns uint64 provided by user to CaptureRequestCaptureSlice
-	SetStart(value uint64) CaptureRequestCaptureSlice
-	// HasStart checks if Start has been set in CaptureRequestCaptureSlice
-	HasStart() bool
-	// Count returns uint64, set in CaptureRequestCaptureSlice.
-	Count() uint64
-	// SetCount assigns uint64 provided by user to CaptureRequestCaptureSlice
-	SetCount(value uint64) CaptureRequestCaptureSlice
-	// HasCount checks if Count has been set in CaptureRequestCaptureSlice
-	HasCount() bool
+	// Choice returns CaptureRequestCaptureSliceChoiceEnum, set in CaptureRequestCaptureSlice
+	Choice() CaptureRequestCaptureSliceChoiceEnum
+	// setChoice assigns CaptureRequestCaptureSliceChoiceEnum provided by user to CaptureRequestCaptureSlice
+	setChoice(value CaptureRequestCaptureSliceChoiceEnum) CaptureRequestCaptureSlice
+	// HasChoice checks if Choice has been set in CaptureRequestCaptureSlice
+	HasChoice() bool
+	// Initial returns CaptureRequestCaptureSliceInitial, set in CaptureRequestCaptureSlice.
+	// CaptureRequestCaptureSliceInitial is specification of capture slice to capture packets from begining of captured packet sequence.
+	Initial() CaptureRequestCaptureSliceInitial
+	// SetInitial assigns CaptureRequestCaptureSliceInitial provided by user to CaptureRequestCaptureSlice.
+	// CaptureRequestCaptureSliceInitial is specification of capture slice to capture packets from begining of captured packet sequence.
+	SetInitial(value CaptureRequestCaptureSliceInitial) CaptureRequestCaptureSlice
+	// HasInitial checks if Initial has been set in CaptureRequestCaptureSlice
+	HasInitial() bool
+	setNil()
 }
 
-// Index of the packet in the generated packet sequence from where capture would start.
-// Start returns a uint64
-func (obj *captureRequestCaptureSlice) Start() uint64 {
+type CaptureRequestCaptureSliceChoiceEnum string
 
-	return *obj.obj.Start
-
+// Enum of Choice on CaptureRequestCaptureSlice
+var CaptureRequestCaptureSliceChoice = struct {
+	INITIAL CaptureRequestCaptureSliceChoiceEnum
+}{
+	INITIAL: CaptureRequestCaptureSliceChoiceEnum("initial"),
 }
 
-// Index of the packet in the generated packet sequence from where capture would start.
-// Start returns a uint64
-func (obj *captureRequestCaptureSlice) HasStart() bool {
-	return obj.obj.Start != nil
+func (obj *captureRequestCaptureSlice) Choice() CaptureRequestCaptureSliceChoiceEnum {
+	return CaptureRequestCaptureSliceChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Index of the packet in the generated packet sequence from where capture would start.
-// SetStart sets the uint64 value in the CaptureRequestCaptureSlice object
-func (obj *captureRequestCaptureSlice) SetStart(value uint64) CaptureRequestCaptureSlice {
+// description is TBD
+// Choice returns a string
+func (obj *captureRequestCaptureSlice) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
 
-	obj.obj.Start = &value
+func (obj *captureRequestCaptureSlice) setChoice(value CaptureRequestCaptureSliceChoiceEnum) CaptureRequestCaptureSlice {
+	intValue, ok := otg.CaptureRequestCaptureSlice_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on CaptureRequestCaptureSliceChoiceEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.CaptureRequestCaptureSlice_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.Initial = nil
+	obj.initialHolder = nil
+
+	if value == CaptureRequestCaptureSliceChoice.INITIAL {
+		obj.obj.Initial = NewCaptureRequestCaptureSliceInitial().msg()
+	}
+
 	return obj
 }
 
-// Number of packets to be captured from the start index.
-// Count returns a uint64
-func (obj *captureRequestCaptureSlice) Count() uint64 {
-
-	return *obj.obj.Count
-
+// description is TBD
+// Initial returns a CaptureRequestCaptureSliceInitial
+func (obj *captureRequestCaptureSlice) Initial() CaptureRequestCaptureSliceInitial {
+	if obj.obj.Initial == nil {
+		obj.setChoice(CaptureRequestCaptureSliceChoice.INITIAL)
+	}
+	if obj.initialHolder == nil {
+		obj.initialHolder = &captureRequestCaptureSliceInitial{obj: obj.obj.Initial}
+	}
+	return obj.initialHolder
 }
 
-// Number of packets to be captured from the start index.
-// Count returns a uint64
-func (obj *captureRequestCaptureSlice) HasCount() bool {
-	return obj.obj.Count != nil
+// description is TBD
+// Initial returns a CaptureRequestCaptureSliceInitial
+func (obj *captureRequestCaptureSlice) HasInitial() bool {
+	return obj.obj.Initial != nil
 }
 
-// Number of packets to be captured from the start index.
-// SetCount sets the uint64 value in the CaptureRequestCaptureSlice object
-func (obj *captureRequestCaptureSlice) SetCount(value uint64) CaptureRequestCaptureSlice {
+// description is TBD
+// SetInitial sets the CaptureRequestCaptureSliceInitial value in the CaptureRequestCaptureSlice object
+func (obj *captureRequestCaptureSlice) SetInitial(value CaptureRequestCaptureSliceInitial) CaptureRequestCaptureSlice {
+	obj.setChoice(CaptureRequestCaptureSliceChoice.INITIAL)
+	obj.initialHolder = nil
+	obj.obj.Initial = value.msg()
 
-	obj.obj.Count = &value
 	return obj
 }
 
@@ -327,14 +365,37 @@ func (obj *captureRequestCaptureSlice) validateObj(vObj *validation, set_default
 		obj.setDefault()
 	}
 
+	if obj.obj.Initial != nil {
+
+		obj.Initial().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *captureRequestCaptureSlice) setDefault() {
-	if obj.obj.Start == nil {
-		obj.SetStart(0)
+	var choices_set int = 0
+	var choice CaptureRequestCaptureSliceChoiceEnum
+
+	if obj.obj.Initial != nil {
+		choices_set += 1
+		choice = CaptureRequestCaptureSliceChoice.INITIAL
 	}
-	if obj.obj.Count == nil {
-		obj.SetCount(100)
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(CaptureRequestCaptureSliceChoice.INITIAL)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in CaptureRequestCaptureSlice")
+			}
+		} else {
+			intVal := otg.CaptureRequestCaptureSlice_Choice_Enum_value[string(choice)]
+			enumValue := otg.CaptureRequestCaptureSlice_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
 	}
 
 }
