@@ -17,7 +17,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"log/slog"
 	"net"
 	"net/http"
 	"net/url"
@@ -34,7 +33,8 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-var logs slog.Logger
+var loggerSt = &logger{}
+var logs = loggerSt.getLogger("otg")
 
 // function related to error handling
 func FromError(err error) (Error, bool) {
@@ -163,7 +163,6 @@ func NewApi() Api {
 	api := gosnappiApi{}
 	api.tracer = &telemetry{transport: "HTTP", serviceName: "go-snappi"}
 	api.versionMeta = &versionMeta{checkVersion: false}
-	logs = getLogger("otg")
 	return &api
 }
 
