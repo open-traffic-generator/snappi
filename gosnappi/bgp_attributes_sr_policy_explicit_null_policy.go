@@ -272,16 +272,16 @@ type BgpAttributesSrPolicyExplicitNullPolicy interface {
 	setChoice(value BgpAttributesSrPolicyExplicitNullPolicyChoiceEnum) BgpAttributesSrPolicyExplicitNullPolicy
 	// HasChoice checks if Choice has been set in BgpAttributesSrPolicyExplicitNullPolicy
 	HasChoice() bool
-	// getter for DonotPush to set choice.
-	DonotPush()
+	// getter for Unknown to set choice.
+	Unknown()
 	// getter for PushIpv4AndIpv6 to set choice.
 	PushIpv4AndIpv6()
 	// getter for PushIpv4 to set choice.
 	PushIpv4()
-	// getter for Unknown to set choice.
-	Unknown()
 	// getter for PushIpv6 to set choice.
 	PushIpv6()
+	// getter for DonotPush to set choice.
+	DonotPush()
 }
 
 type BgpAttributesSrPolicyExplicitNullPolicyChoiceEnum string
@@ -305,9 +305,9 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Choice() BgpAttributesSrPoli
 	return BgpAttributesSrPolicyExplicitNullPolicyChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for DonotPush to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
+// getter for Unknown to set choice
+func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Unknown() {
+	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.UNKNOWN)
 }
 
 // getter for PushIpv4AndIpv6 to set choice
@@ -320,14 +320,14 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4)
 }
 
-// getter for Unknown to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) Unknown() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.UNKNOWN)
-}
-
 // getter for PushIpv6 to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV6)
+}
+
+// getter for DonotPush to set choice
+func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
+	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
 }
 
 // The Explicit NULL Label policy.
