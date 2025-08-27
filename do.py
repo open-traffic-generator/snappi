@@ -369,7 +369,7 @@ def dist():
 
 
 def install():
-    wheel = "{}-{}-py2.py3-none-any.whl".format(*pkg())
+    wheel = "{}-{}-py3-none-any.whl".format(*pkg())
     run(
         [
             "{} -m pip install --upgrade --force-reinstall {}[testing]".format(
