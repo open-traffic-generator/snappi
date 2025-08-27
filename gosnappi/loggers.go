@@ -17,107 +17,127 @@ type logInfo struct {
 	maxLogBackups *int
 }
 
-var (
+type logger struct {
 	logSt       *logInfo
-	Logger      *slog.Logger
-	logLevel    slog.Level = slog.LevelWarn
+	logger      *slog.Logger
+	logLevel    slog.Level
 	levelVar    *slog.LevelVar
-	logToFile   bool = false
+	logToFile   bool
 	logFileName string
-	ModuleName  string
-)
+	moduleName  string
+}
 
-func initlog() error {
-	logSt = &logInfo{
+type LoggerInterface interface {
+	SetLogOutputToFile(bool) LoggerInterface
+	SetLogFileName(string) LoggerInterface
+	SetLogLevel(slog.Level) LoggerInterface
+}
+
+func (l *logger) initlog() error {
+	l.logSt = &logInfo{
 		rootDir:       new(string),
 		logDir:        new(string),
 		maxLogSizeMB:  new(int),
 		maxLogBackups: new(int),
 	}
-	*logSt.maxLogSizeMB = 25
-	*logSt.maxLogBackups = 5
-	if *logSt.rootDir = os.Getenv("SRC_ROOT"); *logSt.rootDir == "" {
-		*logSt.rootDir = "."
+	*l.logSt.maxLogSizeMB = 25
+	*l.logSt.maxLogBackups = 5
+	if *l.logSt.rootDir = os.Getenv("SRC_ROOT"); *l.logSt.rootDir == "" {
+		*l.logSt.rootDir = "."
 	}
-	*logSt.logDir = path.Join(*logSt.rootDir, "logs")
-	if levelVar == nil {
-		levelVar = new(slog.LevelVar)
+	*l.logSt.logDir = path.Join(*l.logSt.rootDir, "logs")
+	if l.levelVar == nil {
+		l.levelVar = new(slog.LevelVar)
 	}
-	Logger = nil
-	ModuleName = ""
+	l.logger = nil
+	l.logLevel = slog.LevelWarn
+	l.moduleName = ""
 	return nil
 }
 
-func SetLogOutputToFile(choice bool) {
-	logToFile = choice
-	logs = getLogger(ModuleName)
-}
-
-func SetLogLevel(level slog.Level) {
-	logLevel = level
-	if levelVar == nil {
-		levelVar = new(slog.LevelVar)
-	}
-	levelVar.Set(level)
-}
-
-func SetLogFileName(fileName string) {
-	logFileName = fileName
-}
-
-func getLogger(name string) slog.Logger {
-	if ModuleName == "" {
-		if err := initlog(); err != nil {
+func (l *logger) getLogger(name string) slog.Logger {
+	if l.moduleName == "" {
+		if err := l.initlog(); err != nil {
 			panic(fmt.Errorf("Logger helper set failed: %v", err))
 		}
 	}
-	ModuleName = name
-	if logFileName == "" {
-		logFileName = name
+	l.moduleName = name
+	if l.logFileName == "" {
+		l.logFileName = name
 	}
 	var localLogger *slog.Logger
 	var err error
-	if !logToFile {
-		levelVar.Set(logLevel)
+	if !l.logToFile {
+		l.levelVar.Set(l.logLevel)
 		handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
-			Level: levelVar,
+			Level: l.levelVar,
 		})
 		localLogger = slog.New(handler).With("Module", name)
 	} else {
-		localLogger, err = initFileLogger(name)
+		localLogger, err = l.initFileLogger(name)
 		if err != nil {
 			panic(fmt.Errorf("Logger init failed: %v", err))
 
 		}
 	}
-	Logger = localLogger
-	return *Logger
+	l.logger = localLogger
+	return *l.logger
 }
 
-func initLogger(name string) *slog.Logger {
+func (l *logger) initLogger(name string) *slog.Logger {
 	writer := &lumberjack.Logger{
-		Filename:   path.Join(*logSt.logDir, fmt.Sprintf("%s.log", logFileName)),
-		MaxSize:    *logSt.maxLogSizeMB,
-		MaxBackups: *logSt.maxLogBackups,
+		Filename:   path.Join(*l.logSt.logDir, fmt.Sprintf("%s.log", l.logFileName)),
+		MaxSize:    *l.logSt.maxLogSizeMB,
+		MaxBackups: *l.logSt.maxLogBackups,
 	}
 	// slog requires a handler. We'll use JSONHandler writing to lumberjack
 	handler := slog.NewJSONHandler(writer, &slog.HandlerOptions{
-		Level: levelVar,
+		Level: l.levelVar,
 	})
 
 	logger := slog.New(handler).With("Module", name)
 	return logger
 }
 
-func initFileLogger(name string) (*slog.Logger, error) {
-	if err := os.RemoveAll(*logSt.logDir); err != nil {
+func (l *logger) initFileLogger(name string) (*slog.Logger, error) {
+	if err := os.RemoveAll(*l.logSt.logDir); err != nil {
 		return nil, err
 	}
-	if err := os.MkdirAll(*logSt.logDir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(*l.logSt.logDir, os.ModePerm); err != nil {
 		return nil, err
 	}
-	if err := os.Chmod(*logSt.logDir, 0771); err != nil {
+	if err := os.Chmod(*l.logSt.logDir, 0771); err != nil {
 		return nil, err
 	}
-	return initLogger(name), nil
+	return l.initLogger(name), nil
+}
+
+// This instruncts the logging module to log to a File and not to console.
+// Please Note if you want to change the log file name first call SetLogFileName and then this fucntion to start logging to a file
+func (l *logger) SetLogOutputToFile(choice bool) LoggerInterface {
+	l.logToFile = choice
+	logs = l.getLogger(l.moduleName)
+	return l
+}
+
+// Set the log level for logging by default the log level is set to warnings
+func (l *logger) SetLogLevel(level slog.Level) LoggerInterface {
+	l.logLevel = level
+	if l.levelVar == nil {
+		l.levelVar = new(slog.LevelVar)
+	}
+	l.levelVar.Set(level)
+	return l
+}
+
+// The file name with which log is generated , please note the file will be present under the logs directory
+// By default the file name is same as the name of the module
+func (l *logger) SetLogFileName(fileName string) LoggerInterface {
+	l.logFileName = fileName
+	return l
+}
+
+// Provides you with the gosnappi logger functionality to customise logging
+func Logger() LoggerInterface {
+	return loggerSt
 }

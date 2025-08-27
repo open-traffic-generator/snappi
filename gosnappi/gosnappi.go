@@ -33,7 +33,8 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-var logs = getLogger("otg")
+var loggerSt = &logger{}
+var logs = loggerSt.getLogger("otg")
 
 // function related to error handling
 func FromError(err error) (Error, bool) {
