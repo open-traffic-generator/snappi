@@ -165,7 +165,7 @@ def generate_distribution_checksum():
     tar_sha = os.path.join("dist", tar_name + ".sha.txt")
     with open(tar_sha, "w") as f:
         f.write(generate_checksum(tar_file))
-    wheel_name = "{}-{}-py2.py3-none-any.whl".format(*pkg())
+    wheel_name = "{}-{}-py3-none-any.whl".format(*pkg())
     wheel_file = os.path.join("dist", wheel_name)
     wheel_sha = os.path.join("dist", wheel_name + ".sha.txt")
     with open(wheel_sha, "w") as f:

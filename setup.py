@@ -29,7 +29,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/open-traffic-generator/snappi",
-    author="ajbalogh",
+    author="Keysight Technologies",
     author_email="andy.balogh@keysight.com",
     license="MIT",
     classifiers=[
