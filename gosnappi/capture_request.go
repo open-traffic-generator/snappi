@@ -278,10 +278,10 @@ type CaptureRequest interface {
 	// SetPortName assigns string provided by user to CaptureRequest
 	SetPortName(value string) CaptureRequest
 	// Packets returns CaptureRequestPackets, set in CaptureRequest.
-	// CaptureRequestPackets is packets to be captured on the given port.
+	// CaptureRequestPackets is packets to be returned in the capture result from  the set of captured packets as per capture configuration.
 	Packets() CaptureRequestPackets
 	// SetPackets assigns CaptureRequestPackets provided by user to CaptureRequest.
-	// CaptureRequestPackets is packets to be captured on the given port.
+	// CaptureRequestPackets is packets to be returned in the capture result from  the set of captured packets as per capture configuration.
 	SetPackets(value CaptureRequestPackets) CaptureRequest
 	// HasPackets checks if Packets has been set in CaptureRequest
 	HasPackets() bool
@@ -312,7 +312,7 @@ func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	return obj
 }
 
-// Specification of packets to be captured on the given port.
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
 // Packets returns a CaptureRequestPackets
 func (obj *captureRequest) Packets() CaptureRequestPackets {
 	if obj.obj.Packets == nil {
@@ -324,13 +324,13 @@ func (obj *captureRequest) Packets() CaptureRequestPackets {
 	return obj.packetsHolder
 }
 
-// Specification of packets to be captured on the given port.
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
 // Packets returns a CaptureRequestPackets
 func (obj *captureRequest) HasPackets() bool {
 	return obj.obj.Packets != nil
 }
 
-// Specification of packets to be captured on the given port.
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
 // SetPackets sets the CaptureRequestPackets value in the CaptureRequest object
 func (obj *captureRequest) SetPackets(value CaptureRequestPackets) CaptureRequest {
 

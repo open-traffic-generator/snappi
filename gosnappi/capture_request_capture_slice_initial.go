@@ -242,7 +242,7 @@ func (obj *captureRequestCaptureSliceInitial) Clone() (CaptureRequestCaptureSlic
 	return newObj, nil
 }
 
-// CaptureRequestCaptureSliceInitial is specification of capture slice to capture packets from begining of captured packet sequence.
+// CaptureRequestCaptureSliceInitial is specification of capture slice to retrieve captured packets from begining of captured packet sequence.
 type CaptureRequestCaptureSliceInitial interface {
 	Validation
 	// msg marshals CaptureRequestCaptureSliceInitial to protobuf object *otg.CaptureRequestCaptureSliceInitial
@@ -278,7 +278,7 @@ type CaptureRequestCaptureSliceInitial interface {
 	HasCount() bool
 }
 
-// Position of the packet (Nth) in the generated packet sequence from where capture would start.
+// Position of the packet (Nth) in the captured packet sequence starting from which  packets would be returned as part of the capture result.
 // Start returns a uint64
 func (obj *captureRequestCaptureSliceInitial) Start() uint64 {
 
@@ -286,13 +286,13 @@ func (obj *captureRequestCaptureSliceInitial) Start() uint64 {
 
 }
 
-// Position of the packet (Nth) in the generated packet sequence from where capture would start.
+// Position of the packet (Nth) in the captured packet sequence starting from which  packets would be returned as part of the capture result.
 // Start returns a uint64
 func (obj *captureRequestCaptureSliceInitial) HasStart() bool {
 	return obj.obj.Start != nil
 }
 
-// Position of the packet (Nth) in the generated packet sequence from where capture would start.
+// Position of the packet (Nth) in the captured packet sequence starting from which  packets would be returned as part of the capture result.
 // SetStart sets the uint64 value in the CaptureRequestCaptureSliceInitial object
 func (obj *captureRequestCaptureSliceInitial) SetStart(value uint64) CaptureRequestCaptureSliceInitial {
 
@@ -300,7 +300,7 @@ func (obj *captureRequestCaptureSliceInitial) SetStart(value uint64) CaptureRequ
 	return obj
 }
 
-// Number of packets to be captured from the position of first packet.
+// Maximum number of packets to be returned as part of the capture result starting from the position of 'start' packet.
 // Count returns a uint64
 func (obj *captureRequestCaptureSliceInitial) Count() uint64 {
 
@@ -308,13 +308,13 @@ func (obj *captureRequestCaptureSliceInitial) Count() uint64 {
 
 }
 
-// Number of packets to be captured from the position of first packet.
+// Maximum number of packets to be returned as part of the capture result starting from the position of 'start' packet.
 // Count returns a uint64
 func (obj *captureRequestCaptureSliceInitial) HasCount() bool {
 	return obj.obj.Count != nil
 }
 
-// Number of packets to be captured from the position of first packet.
+// Maximum number of packets to be returned as part of the capture result starting from the position of 'start' packet.
 // SetCount sets the uint64 value in the CaptureRequestCaptureSliceInitial object
 func (obj *captureRequestCaptureSliceInitial) SetCount(value uint64) CaptureRequestCaptureSliceInitial {
 

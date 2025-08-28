@@ -27453,12 +27453,12 @@ components:
           x-field-uid: 1
         packets:
           description: |-
-            Specification of packets to be captured on the given port.
+            Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
           $ref: '#/components/schemas/CaptureRequest.Packets'
           x-field-uid: 2
     CaptureRequest.Packets:
       description: |-
-        Packets to be captured on the given port.
+        Packets to be returned in the capture result from  the set of captured packets as per capture configuration.
       type: object
       properties:
         choice:
@@ -27477,12 +27477,12 @@ components:
           $ref: '#/components/schemas/CaptureRequest.CaptureSlice'
           x-field-uid: 2
     CaptureRequest.CaptureSlice:
-      description: "Packets to be captured based on specification of capture slice\
-        \ i.e. \nposition of first packet and count of packets to capture.\nTo be\
-        \ noted,\n- definition of capture slice works in conjunction with capture\
-        \ filter parameters in set_config.\n- to get definitive outcome with large\
-        \ number of captured packets, 'overwrite' attribute in 'captures' \n  settings\
-        \ of set_config should be disabled."
+      description: "Packets to be returned as part of the capture result from the\
+        \ set of captured packets as per \ncapture configuration and specification\
+        \ of capture slice.\nTo be noted,\n- definition of capture slice works in\
+        \ conjunction with capture filter parameters in set_config.\n- if 'initial'\
+        \ set of packets is desired to be returned in the capture result, 'overwrite'\
+        \ attribute in 'captures' \n  settings of set_config should be disabled."
       type: object
       properties:
         choice:
@@ -27499,12 +27499,12 @@ components:
           x-field-uid: 2
     CaptureRequest.CaptureSliceInitial:
       description: |-
-        Specification of capture slice to capture packets from begining of captured packet sequence.
+        Specification of capture slice to retrieve captured packets from begining of captured packet sequence.
       type: object
       properties:
         start:
           description: |-
-            Position of the packet (Nth) in the generated packet sequence from where capture would start.
+            Position of the packet (Nth) in the captured packet sequence starting from which  packets would be returned as part of the capture result.
           type: integer
           format: uint64
           minimum: 1
@@ -27512,7 +27512,7 @@ components:
           x-field-uid: 1
         count:
           description: |-
-            Number of packets to be captured from the position of first packet.
+            Maximum number of packets to be returned as part of the capture result starting from the position of 'start' packet.
           type: integer
           format: uint64
           minimum: 1

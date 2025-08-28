@@ -19492,11 +19492,13 @@ message CaptureRequest {
   // required = true
   optional string port_name = 1;
 
-  // Specification of packets to be captured on the given port.
+  // Specification of the packets to be returned in the capture result from  the set of
+  // captured packets as per capture configuration.
   CaptureRequestPackets packets = 2;
 }
 
-// Packets to be captured on the given port.
+// Packets to be returned in the capture result from  the set of captured packets as
+// per capture configuration.
 message CaptureRequestPackets {
 
   message Choice {
@@ -19514,13 +19516,14 @@ message CaptureRequestPackets {
   CaptureRequestCaptureSlice slice = 2;
 }
 
-// Packets to be captured based on specification of capture slice i.e.
-// position of first packet and count of packets to capture.
+// Packets to be returned as part of the capture result from the set of captured packets
+// as per
+// capture configuration and specification of capture slice.
 // To be noted,
 // - definition of capture slice works in conjunction with capture filter parameters
 // in set_config.
-// - to get definitive outcome with large number of captured packets, 'overwrite' attribute
-// in 'captures'
+// - if 'initial' set of packets is desired to be returned in the capture result, 'overwrite'
+// attribute in 'captures'
 // settings of set_config should be disabled.
 message CaptureRequestCaptureSlice {
 
@@ -19538,16 +19541,17 @@ message CaptureRequestCaptureSlice {
   CaptureRequestCaptureSliceInitial initial = 2;
 }
 
-// Specification of capture slice to capture packets from begining of captured packet
-// sequence.
+// Specification of capture slice to retrieve captured packets from begining of captured
+// packet sequence.
 message CaptureRequestCaptureSliceInitial {
 
-  // Position of the packet (Nth) in the generated packet sequence from where capture
-  // would start.
+  // Position of the packet (Nth) in the captured packet sequence starting from which
+  // packets would be returned as part of the capture result.
   // default = 1
   optional uint64 start = 1;
 
-  // Number of packets to be captured from the position of first packet.
+  // Maximum number of packets to be returned as part of the capture result starting from
+  // the position of 'start' packet.
   // default = 100
   optional uint64 count = 2;
 }

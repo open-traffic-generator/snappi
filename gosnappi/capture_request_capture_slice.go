@@ -250,11 +250,11 @@ func (obj *captureRequestCaptureSlice) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// CaptureRequestCaptureSlice is packets to be captured based on specification of capture slice i.e.
-// position of first packet and count of packets to capture.
+// CaptureRequestCaptureSlice is packets to be returned as part of the capture result from the set of captured packets as per
+// capture configuration and specification of capture slice.
 // To be noted,
 // - definition of capture slice works in conjunction with capture filter parameters in set_config.
-// - to get definitive outcome with large number of captured packets, 'overwrite' attribute in 'captures'
+// - if 'initial' set of packets is desired to be returned in the capture result, 'overwrite' attribute in 'captures'
 // settings of set_config should be disabled.
 type CaptureRequestCaptureSlice interface {
 	Validation
@@ -284,10 +284,10 @@ type CaptureRequestCaptureSlice interface {
 	// HasChoice checks if Choice has been set in CaptureRequestCaptureSlice
 	HasChoice() bool
 	// Initial returns CaptureRequestCaptureSliceInitial, set in CaptureRequestCaptureSlice.
-	// CaptureRequestCaptureSliceInitial is specification of capture slice to capture packets from begining of captured packet sequence.
+	// CaptureRequestCaptureSliceInitial is specification of capture slice to retrieve captured packets from begining of captured packet sequence.
 	Initial() CaptureRequestCaptureSliceInitial
 	// SetInitial assigns CaptureRequestCaptureSliceInitial provided by user to CaptureRequestCaptureSlice.
-	// CaptureRequestCaptureSliceInitial is specification of capture slice to capture packets from begining of captured packet sequence.
+	// CaptureRequestCaptureSliceInitial is specification of capture slice to retrieve captured packets from begining of captured packet sequence.
 	SetInitial(value CaptureRequestCaptureSliceInitial) CaptureRequestCaptureSlice
 	// HasInitial checks if Initial has been set in CaptureRequestCaptureSlice
 	HasInitial() bool
