@@ -52,7 +52,7 @@ setuptools.setup(
     python_requires=">=3.7, <4",
     install_requires=install_requires,
     extras_require={
-        "ixnetwork": ["snappi_ixnetwork==1.31.0"],
+        "ixnetwork": ["snappi_ixnetwork==1.34.0"],
         "trex": ["snappi_trex"],
         "testing": ["pytest", "flask"],
         "telemetry": ["opentelemetry-api==1.17.0 ; python_version >= '3.7'",
