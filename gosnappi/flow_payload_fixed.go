@@ -242,7 +242,7 @@ func (obj *flowPayloadFixed) Clone() (FlowPayloadFixed, error) {
 	return newObj, nil
 }
 
-// FlowPayloadFixed is payload with fixed pattern.
+// FlowPayloadFixed is payload with user defined pattern.
 type FlowPayloadFixed interface {
 	Validation
 	// msg marshals FlowPayloadFixed to protobuf object *otg.FlowPayloadFixed
@@ -300,8 +300,8 @@ func (obj *flowPayloadFixed) SetPattern(value string) FlowPayloadFixed {
 	return obj
 }
 
-// If enabled, the given pattern would repeat till end of payload.
-// If disabled, after the pattern, rest of the payload will be zero-padded.
+// - If enabled, the given pattern would repeat till end of payload.
+// - If disabled, after the pattern, rest of the payload will be zero-padded.
 // Repeat returns a bool
 func (obj *flowPayloadFixed) Repeat() bool {
 
@@ -309,15 +309,15 @@ func (obj *flowPayloadFixed) Repeat() bool {
 
 }
 
-// If enabled, the given pattern would repeat till end of payload.
-// If disabled, after the pattern, rest of the payload will be zero-padded.
+// - If enabled, the given pattern would repeat till end of payload.
+// - If disabled, after the pattern, rest of the payload will be zero-padded.
 // Repeat returns a bool
 func (obj *flowPayloadFixed) HasRepeat() bool {
 	return obj.obj.Repeat != nil
 }
 
-// If enabled, the given pattern would repeat till end of payload.
-// If disabled, after the pattern, rest of the payload will be zero-padded.
+// - If enabled, the given pattern would repeat till end of payload.
+// - If disabled, after the pattern, rest of the payload will be zero-padded.
 // SetRepeat sets the bool value in the FlowPayloadFixed object
 func (obj *flowPayloadFixed) SetRepeat(value bool) FlowPayloadFixed {
 

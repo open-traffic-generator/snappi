@@ -336,13 +336,11 @@ type Flow interface {
 	SetName(value string) Flow
 	// Payload returns FlowPayload, set in Flow.
 	// FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
-	// Some part of the payload will be overwritten with instrumentation data, contents and placement of
-	// which could be implementation specific.
+	// Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
 	Payload() FlowPayload
 	// SetPayload assigns FlowPayload provided by user to Flow.
 	// FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
-	// Some part of the payload will be overwritten with instrumentation data, contents and placement of
-	// which could be implementation specific.
+	// Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
 	SetPayload(value FlowPayload) Flow
 	// HasPayload checks if Payload has been set in Flow
 	HasPayload() bool
@@ -617,7 +615,7 @@ func (obj *flow) SetName(value string) Flow {
 	return obj
 }
 
-// The data in the frame after protocol headers and instrumentation bytes.
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
 // Payload returns a FlowPayload
 func (obj *flow) Payload() FlowPayload {
 	if obj.obj.Payload == nil {
@@ -629,13 +627,13 @@ func (obj *flow) Payload() FlowPayload {
 	return obj.payloadHolder
 }
 
-// The data in the frame after protocol headers and instrumentation bytes.
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
 // Payload returns a FlowPayload
 func (obj *flow) HasPayload() bool {
 	return obj.obj.Payload != nil
 }
 
-// The data in the frame after protocol headers and instrumentation bytes.
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
 // SetPayload sets the FlowPayload value in the Flow object
 func (obj *flow) SetPayload(value FlowPayload) Flow {
 

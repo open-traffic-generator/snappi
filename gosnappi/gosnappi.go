@@ -17,7 +17,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io"
-	"log/slog"
 	"net"
 	"net/http"
 	"net/url"
@@ -164,7 +163,6 @@ func NewApi() Api {
 	api := gosnappiApi{}
 	api.tracer = &telemetry{transport: "HTTP", serviceName: "go-snappi"}
 	api.versionMeta = &versionMeta{checkVersion: false}
-	logs = getLogger("otg")
 	return &api
 }
 

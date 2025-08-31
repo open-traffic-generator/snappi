@@ -251,8 +251,7 @@ func (obj *flowPayload) setNil() {
 }
 
 // FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
-// Some part of the payload will be overwritten with instrumentation data, contents and placement of
-// which could be implementation specific.
+// Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
 type FlowPayload interface {
 	Validation
 	// msg marshals FlowPayload to protobuf object *otg.FlowPayload
@@ -280,19 +279,19 @@ type FlowPayload interface {
 	setChoice(value FlowPayloadChoiceEnum) FlowPayload
 	// HasChoice checks if Choice has been set in FlowPayload
 	HasChoice() bool
-	// getter for IncrementByte to set choice.
-	IncrementByte()
 	// getter for IncrementWord to set choice.
 	IncrementWord()
 	// getter for DecrementWord to set choice.
 	DecrementWord()
+	// getter for IncrementByte to set choice.
+	IncrementByte()
 	// getter for DecrementByte to set choice.
 	DecrementByte()
 	// Fixed returns FlowPayloadFixed, set in FlowPayload.
-	// FlowPayloadFixed is payload with fixed pattern.
+	// FlowPayloadFixed is payload with user defined pattern.
 	Fixed() FlowPayloadFixed
 	// SetFixed assigns FlowPayloadFixed provided by user to FlowPayload.
-	// FlowPayloadFixed is payload with fixed pattern.
+	// FlowPayloadFixed is payload with user defined pattern.
 	SetFixed(value FlowPayloadFixed) FlowPayload
 	// HasFixed checks if Fixed has been set in FlowPayload
 	HasFixed() bool
@@ -320,11 +319,6 @@ func (obj *flowPayload) Choice() FlowPayloadChoiceEnum {
 	return FlowPayloadChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for IncrementByte to set choice
-func (obj *flowPayload) IncrementByte() {
-	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
-}
-
 // getter for IncrementWord to set choice
 func (obj *flowPayload) IncrementWord() {
 	obj.setChoice(FlowPayloadChoice.INCREMENT_WORD)
@@ -335,12 +329,23 @@ func (obj *flowPayload) DecrementWord() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
 }
 
+// getter for IncrementByte to set choice
+func (obj *flowPayload) IncrementByte() {
+	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
+}
+
 // getter for DecrementByte to set choice
 func (obj *flowPayload) DecrementByte() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
 }
 
-// A choice used to determine the type of payload.
+// A choice used to determine the pattern of the bytes in the payload following the protocol headers.
+// Example of expected behaviour of each choice is as mentioned below,
+// - fixed: this would insert user defined pattern in the payload bytes.
+// - increment_byte: this would set the first byte as 00, second as 01 and so on, upto ff and then the pattern would be repeated.
+// - decrement_byte: this would set the first byte as ff, second as fe and so on, upto 00 and then the pattern would be repeated.
+// - increment_word: this would set the first 2 bytes as 00 00, second as 00 01 and so on, upto ff ff and then the pattern would be repeated.
+// - decrement_word: this would set the first 2 bytes as ff ff, second as ff fe and so on, upto 00 00 and then the pattern would be repeated.
 // Choice returns a string
 func (obj *flowPayload) HasChoice() bool {
 	return obj.obj.Choice != nil
