@@ -283,9 +283,6 @@ type ActionResponseProtocolIpv4PingResponse interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // SrcName returns a string
 func (obj *actionResponseProtocolIpv4PingResponse) SrcName() string {
 
@@ -294,9 +291,6 @@ func (obj *actionResponseProtocolIpv4PingResponse) SrcName() string {
 }
 
 // Name of source IPv4 interface used for ping.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

@@ -453,8 +453,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -722,10 +721,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -736,10 +731,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -747,11 +738,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -776,8 +762,7 @@ components:
             \ an unconnected device in a simulated topology \n( all ethernet links\
             \ of type simulated_link ) or an emulated device connected to the Device\
             \ Under Test (has at atleast one ethernet interface with connection to\
-            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
+            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
           x-constraint:
           - '#/components/schemas/Device.Ethernet/properties/name'
           x-field-uid: 1
@@ -920,10 +905,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1025,8 +1006,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1921,8 +1901,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -2016,8 +1995,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -2028,8 +2005,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -2237,8 +2212,6 @@ components:
       description: |-
         Under Review: There may be changes in filter configuration
 
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -2248,10 +2221,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -2693,10 +2662,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -4318,12 +4283,6 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -5263,8 +5222,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -5795,8 +5752,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -8829,12 +8784,6 @@ components:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -9153,11 +9102,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -9194,11 +9138,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -9408,7 +9347,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -9497,11 +9435,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -10079,10 +10012,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -10202,10 +10131,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 on which DHCPv6 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -10441,8 +10366,6 @@ components:
       description: |-
         Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 
-        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
       x-status:
         status: under_review
@@ -10647,8 +10570,7 @@ components:
           x-unique: global
         ipv4_name:
           description: "The globally unique name of the IPv4 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -11182,10 +11104,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which MACsec is enabled.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -12254,8 +12172,6 @@ components:
       description: |-
         Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 
-        Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv3 router.
       x-status:
         status: under_review
@@ -12417,8 +12333,7 @@ components:
           x-unique: global
         ipv6_name:
           description: "The globally unique name of the IPv6 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -12757,10 +12672,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12934,10 +12845,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -13017,10 +12924,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -13101,11 +13005,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -13115,14 +13014,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -13138,11 +13030,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -13255,22 +13142,6 @@ components:
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
           type: array
           items:
@@ -13302,22 +13173,6 @@ components:
           x-field-uid: 3
           description: |
             TBD
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -13389,6 +13244,8 @@ components:
               x-field-uid: 21
             macsec:
               x-field-uid: 22
+            lacp:
+              x-field-uid: 23
           enum:
           - custom
           - ethernet
@@ -13412,6 +13269,7 @@ components:
           - snmpv2c
           - rsvp
           - macsec
+          - lacp
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -13478,6 +13336,9 @@ components:
         macsec:
           $ref: '#/components/schemas/Flow.Macsec'
           x-field-uid: 23
+        lacp:
+          $ref: '#/components/schemas/Flow.Lacp'
+          x-field-uid: 24
     Flow.Custom:
       type: object
       description: |-
@@ -15762,6 +15623,205 @@ components:
               x-field-uid: 1
           enum:
           - auto
+    Flow.Lacp:
+      description: |-
+        Defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: lacpdu
+          x-field-uid: 1
+          x-enum:
+            lacpdu:
+              x-field-uid: 1
+          enum:
+          - lacpdu
+        version:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version'
+        lacpdu:
+          $ref: '#/components/schemas/Flow.Lacp.Lacpdu'
+          x-field-uid: 3
+    Flow.Lacp.Lacpdu:
+      description: |-
+        Defines the TLV fields of a Link Aggregation Control Protocol (LACP)
+        Data Unit (PDU) as specified by IEEE 802.3ad.
+      type: object
+      properties:
+        actor:
+          $ref: '#/components/schemas/Flow.Lacp.Actor'
+          x-field-uid: 1
+        partner:
+          $ref: '#/components/schemas/Flow.Lacp.Partner'
+          x-field-uid: 2
+        collector:
+          $ref: '#/components/schemas/Flow.Lacp.Collector'
+          x-field-uid: 3
+        terminator:
+          $ref: '#/components/schemas/Flow.Lacp.Terminator'
+          x-field-uid: 4
+    Flow.Lacp.Actor:
+      description: |-
+        Information about the local (actor) system.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Length'
+        system_priority:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemPriority'
+        system_id:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemId'
+        key:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Key'
+        port_priority:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortPriority'
+        port_number:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortNumber'
+        actor_state:
+          $ref: '#/components/schemas/Flow.Lacp.Actor.State'
+          x-field-uid: 8
+        reserved:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Reserved'
+    Flow.Lacp.Partner:
+      description: |-
+        Information about the remote (partner) system.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Length'
+        system_priority:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemPriority'
+        system_id:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemId'
+        key:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Key'
+        port_priority:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortPriority'
+        port_number:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortNumber'
+        partner_state:
+          $ref: '#/components/schemas/Flow.Lacp.Partner.State'
+          x-field-uid: 8
+        reserved:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Reserved'
+    Flow.Lacp.Collector:
+      description: |-
+        Information about frame collection parameters.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Length'
+        max_delay:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.MaxDelay'
+        reserved:
+          description: |-
+            Reserved field for future use in the Collector TLV. 12 bytes long and should be set to all zeros.
+          type: string
+          format: hex
+          default: '000000000000000000000000'
+          x-field-uid: 4
+    Flow.Lacp.Terminator:
+      description: |-
+        Marks the end of the LACPDU message.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Length'
+        reserved:
+          description: |-
+            Final block of reserved bytes to pad the PDU. It is 50 bytes long.
+          type: string
+          format: hex
+          default: '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+          x-field-uid: 3
+    Flow.Lacp.Actor.State:
+      description: |-
+        This field indicates the Actor's state.
+      type: object
+      properties:
+        activity:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Activity'
+        timeout:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Timeout'
+        aggregation:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Aggregation'
+        synchronization:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Synchronization'
+        collecting:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Collecting'
+        distributing:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Distributing'
+        defaulted:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Defaulted'
+        expired:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Expired'
+    Flow.Lacp.Partner.State:
+      description: |-
+        This field indicates the Partner's state.
+      type: object
+      properties:
+        activity:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Activity'
+        timeout:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Timeout'
+        aggregation:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Aggregation'
+        synchronization:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Synchronization'
+        collecting:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Collecting'
+        distributing:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Distributing'
+        defaulted:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Defaulted'
+        expired:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Expired'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -16343,11 +16403,10 @@ components:
         received across all Rx ports is a multiple of Rx port count and Tx packets.
     Event:
       description: "Under Review: Event configuration is currently under review for\
-        \ pending exploration on use cases.\n\nUnder Review: Event configuration is\
-        \ currently under review for pending exploration on use cases.\n\nThe optional\
-        \ container for event configuration.\nBoth cp_events.enable and dp_events.enable\
-        \ must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
-        \ metric values for convergence metrics."
+        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
+        Both cp_events.enable and dp_events.enable must be explicitly set to true\
+        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
+        \ metrics."
       x-status:
         status: under_review
         information: Event configuration is currently under review for pending exploration
@@ -16432,8 +16491,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -16537,10 +16595,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -16803,10 +16857,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -16864,10 +16914,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.QPs/properties/qp_name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -16875,11 +16921,6 @@ components:
         rx_endpoint:
           description: |
             The unique name of remote QP or port which be receiving the packets for the flow.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Rocev2.QPs/properties/qp_name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -16989,10 +17030,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -17079,10 +17116,6 @@ components:
         port_name:
           description: |
             The name of port for which this settings will be applied to.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -17595,10 +17628,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -17747,10 +17776,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -17784,10 +17809,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -17818,10 +17839,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -17893,15 +17910,6 @@ components:
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -17962,10 +17970,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -17994,10 +17998,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -18047,11 +18047,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -18109,10 +18104,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -18161,10 +18152,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers for which the state has to be applied. An empty or null list will control all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -18219,10 +18206,6 @@ components:
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
           type: array
           items:
             type: string
@@ -18271,11 +18254,6 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 peers for which the state has to be applied. An empty or null list will control all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4Peer/properties/name
-            - /components/schemas/Rocev2.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Rocev2.V4Peer/properties/name
@@ -18465,8 +18443,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -18477,10 +18453,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -18518,10 +18490,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -18600,8 +18568,6 @@ components:
       description: |-
         Under Review: Most ping request parameters are still TBD.
 
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
@@ -18612,10 +18578,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface to be used.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -18653,10 +18615,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -18720,11 +18678,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -18794,11 +18747,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -18921,10 +18869,6 @@ components:
         router_names:
           description: |
             The names of device objects to control.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -19339,10 +19283,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -19403,10 +19343,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19519,10 +19455,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -20043,10 +19975,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -20253,10 +20181,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -20460,10 +20384,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -20773,10 +20693,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -20828,10 +20744,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -20914,10 +20826,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -20927,10 +20835,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -21128,10 +21032,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -21219,10 +21119,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -21523,10 +21419,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -21626,10 +21518,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4Server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
           type: array
           items:
             type: string
@@ -21726,10 +21614,6 @@ components:
         client_names:
           description: |
             The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -21883,10 +21767,6 @@ components:
         server_names:
           description: |
             The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6Server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -22058,10 +21938,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -22393,8 +22269,6 @@ components:
       description: |-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Container for requesting control-plane and data-plane convergence time metrics for flows.
       x-status:
         status: under_review
@@ -22409,10 +22283,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -22421,8 +22291,6 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Under Review: Convergence metrics is currently under review for pending exploration on use cases.
 
         The container for convergence metrics.
@@ -22496,9 +22364,7 @@ components:
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
             \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
             - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n- /components/schemas/Flow/properties/name\n\
-            - /components/schemas/Device.Bgpv4Route/properties/name\n- /components/schemas/Device.Bgpv6Route/properties/name\n"
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -22526,10 +22392,6 @@ components:
         secure_entity_names:
           description: |
             The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
-
-            x-constraint:
-            - /components/schemas/Macsec/properties/name
-
 
             x-constraint:
             - /components/schemas/Macsec/properties/name
@@ -22747,10 +22609,6 @@ components:
 
             x-constraint:
             - /components/schemas/Mka/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Mka/properties/name
           type: array
           items:
             type: string
@@ -22881,10 +22739,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -23226,10 +23080,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
@@ -23419,10 +23269,6 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V6peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Rocev2.V6peer/properties/name
@@ -23923,10 +23769,6 @@ components:
 
             x-constraint:
             - /components/schemas/EgressOnlyTracking/properties/port_name
-
-
-            x-constraint:
-            - /components/schemas/EgressOnlyTracking/properties/port_name
           type: array
           items:
             type: string
@@ -24370,10 +24212,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -24416,10 +24254,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -24459,11 +24293,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -25197,10 +25026,6 @@ components:
         isis_router_names:
           description: |
             The names of ISIS routers for which learned information is requested. An empty list will return results for all ISIS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -25992,10 +25817,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -26231,10 +26052,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -26439,10 +26256,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -26502,10 +26315,6 @@ components:
         dhcp_server_names:
           description: |
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4server/properties/name
@@ -26587,10 +26396,6 @@ components:
         dhcp_client_names:
           description: |
             The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -26682,10 +26487,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6server/properties/name
           type: array
           items:
             type: string
@@ -26764,10 +26565,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2Router/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2Router/properties/name
@@ -27108,10 +26905,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -27495,10 +27288,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -27859,10 +27648,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -46196,6 +45981,2542 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Version.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Version:
+      description: |-
+        The LACP version number.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Actor.Type:
+      description: |-
+        TLV Type for Actor Information. The value 0x01 identifies this TLV as containing information about the sending device (the Actor).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 20
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Actor.Length:
+      description: |-
+        The length of the Actor Information TLV payload in bytes.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 20
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 20
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.SystemPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Actor.SystemPriority:
+      description: |-
+        The priority assigned to the Actor's system for use in aggregation. A lower numerical value indicates a higher priority. Used to select the active System ID when forming an aggregator.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.SystemId.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:00
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Lacp.Actor.SystemId:
+      description: |-
+        The Actor's System ID, which is a globally unique MAC address assigned to the system containing the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:00
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:00
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.SystemId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.Key.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Actor.Key:
+      description: |-
+        The operational Key value assigned to the Actor's port. The key is generated based on port configuration (e.g., speed, duplex, trunk ID) and is used to identify potential aggregation groups. Only links with the same key can be aggregated together.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Key.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Key.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.PortPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Actor.PortPriority:
+      description: |-
+        The priority assigned to the Actor's port. A lower numerical value indicates a higher priority. Used to prioritize ports for inclusion in a Link Aggregation Group (LAG) when the group is full.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.PortNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Actor.PortNumber:
+      description: |-
+        The port number assigned to the Actor's port. It is a unique identifier for the port within the system.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.PortNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Lacp.Actor.Reserved:
+      description: |-
+        Reserved field for future use in the Actor TLV. Should be set to all zeros.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 2
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Partner.Type:
+      description: |-
+        TLV Type for Partner Information. The value 0x02 identifies this TLV as containing information about the remote device (the Partner), as understood by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 2
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 2
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 20
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Partner.Length:
+      description: |-
+        The length of the Partner Information TLV payload in bytes.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 20
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 20
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.SystemPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Partner.SystemPriority:
+      description: |-
+        The priority of the Partner's system, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.SystemId.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:00
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Lacp.Partner.SystemId:
+      description: |-
+        The Partner's System ID (MAC address), as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:00
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:00
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.SystemId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.Key.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Partner.Key:
+      description: |-
+        The operational Key value of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Key.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Key.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.PortPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Partner.PortPriority:
+      description: |-
+        The priority of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.PortNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Partner.PortNumber:
+      description: |-
+        The port number of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.PortNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Lacp.Partner.Reserved:
+      description: |-
+        Reserved field for future use in the Partner TLV. Should be set to all zeros.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Collector.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 3
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Collector.Type:
+      description: |-
+        TLV Type for Collector Information. The value 0x03 identifies this TLV.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 3
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Collector.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 16
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Collector.Length:
+      description: |-
+        The length of the Collector Information TLV payload in bytes. The value must be 16 (0x10).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 16
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 16
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Collector.MaxDelay.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacp.Collector.MaxDelay:
+      description: |-
+        Indicates the maximum delay, in units of 10 microseconds, that the transmitting system's aggregator will take to buffer frames from its collector before emitting a frame.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.MaxDelay.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Collector.MaxDelay.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Terminator.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Terminator.Type:
+      description: |-
+        TLV Type for Terminator Information. The value 0x00 indicates the end of the TLV list.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Terminator.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Terminator.Length:
+      description: |-
+        The length of the Terminator TLV payload. The value must be 0.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Terminator.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Activity.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Activity:
+      description: |-
+        LACP Activity (1=Active, 0=Passive)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Activity.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Activity.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Timeout.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Timeout:
+      description: |-
+        LACP Timeout (1=Fast timeout, 0=Slow timeout)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Timeout.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Timeout.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Aggregation.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Aggregation:
+      description: |-
+        Aggregation (1=Aggregatable, 0=Individual)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Aggregation.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Aggregation.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Synchronization.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Synchronization:
+      description: |-
+        Synchronization (1=In Sync, 0=Out of Sync)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Synchronization.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Synchronization.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Collecting.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Collecting:
+      description: |-
+        Collecting (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Collecting.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Collecting.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Distributing.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Distributing:
+      description: |-
+        Distributing (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Distributing.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Distributing.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Defaulted.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Defaulted:
+      description: |-
+        Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Defaulted.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Defaulted.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Actor.State.Expired.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Actor.State.Expired:
+      description: |-
+        Expired (1=Expired, 0=Not Expired)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Expired.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Actor.State.Expired.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Activity.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Activity:
+      description: |-
+        LACP Activity (1=Active, 0=Passive)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Activity.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Activity.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Timeout.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Timeout:
+      description: |-
+        LACP Timeout (1=Fast timeout, 0=Slow timeout)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Timeout.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Timeout.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Aggregation.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Aggregation:
+      description: |-
+        Aggregation (1=Aggregatable, 0=Individual)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Aggregation.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Aggregation.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Synchronization.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Synchronization:
+      description: |-
+        Synchronization (1=In Sync, 0=Out of Sync)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Synchronization.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Synchronization.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Collecting.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Collecting:
+      description: |-
+        Collecting (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Collecting.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Collecting.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Distributing.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Distributing:
+      description: |-
+        Distributing (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Distributing.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Distributing.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Defaulted.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Defaulted:
+      description: |-
+        Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Defaulted.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Defaulted.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Partner.State.Expired.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacp.Partner.State.Expired:
+      description: |-
+        Expired (1=Expired, 0=Not Expired)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Expired.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Partner.State.Expired.Counter'
           x-field-uid: 6
     Version:
       description: |-
