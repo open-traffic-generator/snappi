@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.34.0
+  version: 1.35.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -12962,6 +12962,11 @@ components:
           type: string
           pattern: ^[\sa-zA-Z0-9-_()><\[\]]+$
           x-unique: global
+        payload:
+          description: |-
+            The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
+          $ref: '#/components/schemas/Flow.Payload'
+          x-field-uid: 8
     Flow.TxRx:
       description: "A container for different types of transmit and receive \nendpoint\
         \ containers."
@@ -16196,6 +16201,62 @@ components:
       description: |-
         This is for cases where one copy of Tx packet is received on all Rx ports and so the sum total of Rx packets
         received across all Rx ports is a multiple of Rx port count and Tx packets.
+    Flow.Payload:
+      description: |-
+        A container for different types of payload, which is the data in the frame after protocol headers.
+        Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
+      type: object
+      properties:
+        choice:
+          description: |-
+            A choice used to determine the pattern of the bytes in the payload following the protocol headers.
+            Example of expected behaviour of each choice is as mentioned below,
+            - fixed: this would insert user defined pattern in the payload bytes.
+            - increment_byte: this would set the first byte as 00, second as 01 and so on, upto ff and then the pattern would be repeated.
+            - decrement_byte: this would set the first byte as ff, second as fe and so on, upto 00 and then the pattern would be repeated.
+            - increment_word: this would set the first 2 bytes as 00 00, second as 00 01 and so on, upto ff ff and then the pattern would be repeated.
+            - decrement_word: this would set the first 2 bytes as ff ff, second as ff fe and so on, upto 00 00 and then the pattern would be repeated.
+          type: string
+          default: fixed
+          x-field-uid: 1
+          x-enum:
+            fixed:
+              x-field-uid: 1
+            increment_byte:
+              x-field-uid: 2
+            decrement_byte:
+              x-field-uid: 3
+            increment_word:
+              x-field-uid: 4
+            decrement_word:
+              x-field-uid: 5
+          enum:
+          - fixed
+          - increment_byte
+          - decrement_byte
+          - increment_word
+          - decrement_word
+        fixed:
+          $ref: '#/components/schemas/FlowPayload.Fixed'
+          x-field-uid: 2
+    FlowPayload.Fixed:
+      description: |-
+        Payload with user defined pattern.
+      type: object
+      properties:
+        pattern:
+          type: string
+          format: hex
+          default: '00'
+          minLength: 2
+          x-field-uid: 1
+        repeat:
+          description: |-
+            - If enabled, the given pattern would repeat till end of payload.
+            - If disabled, after the pattern, rest of the payload will be zero-padded.
+          type: boolean
+          default: true
+          x-field-uid: 2
     Event:
       description: "Under Review: Event configuration is currently under review for\
         \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\

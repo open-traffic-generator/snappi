@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.34.0
+/* Open Traffic Generator API 1.35.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -9482,6 +9482,10 @@ message Flow {
   // objects.
   // required = true
   optional string name = 7;
+
+  // The pattern of the bytes in the transmitted frames for the flow after the protocol
+  // headers.
+  FlowPayload payload = 8;
 }
 
 // A container for different types of transmit and receive
@@ -12148,6 +12152,54 @@ message FlowRxTxRatio {
 // the sum total of Rx packets
 // received across all Rx ports is a multiple of Rx port count and Tx packets.
 message FlowRxTxRatioRxCount {
+}
+
+// A container for different types of payload, which is the data in the frame after
+// protocol headers.
+// Some part of the payload could be overwritten with instrumentation data, contents
+// and placement of  which is implementation specific.
+message FlowPayload {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      fixed = 1;
+      increment_byte = 2;
+      decrement_byte = 3;
+      increment_word = 4;
+      decrement_word = 5;
+    }
+  }
+  // A choice used to determine the pattern of the bytes in the payload following the
+  // protocol headers.
+  // Example of expected behaviour of each choice is as mentioned below,
+  // - fixed: this would insert user defined pattern in the payload bytes.
+  // - increment_byte: this would set the first byte as 00, second as 01 and so on, upto
+  // ff and then the pattern would be repeated.
+  // - decrement_byte: this would set the first byte as ff, second as fe and so on, upto
+  // 00 and then the pattern would be repeated.
+  // - increment_word: this would set the first 2 bytes as 00 00, second as 00 01 and
+  // so on, upto ff ff and then the pattern would be repeated.
+  // - decrement_word: this would set the first 2 bytes as ff ff, second as ff fe and
+  // so on, upto 00 00 and then the pattern would be repeated.
+  // default = Choice.Enum.fixed
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowPayloadFixed fixed = 2;
+}
+
+// Payload with user defined pattern.
+message FlowPayloadFixed {
+
+  // Description missing in models
+  // default = 00
+  optional string pattern = 1;
+
+  // - If enabled, the given pattern would repeat till end of payload.
+  // - If disabled, after the pattern, rest of the payload will be zero-padded.
+  // default = True
+  optional bool repeat = 2;
 }
 
 // Under Review: Event configuration is currently under review for pending exploration
