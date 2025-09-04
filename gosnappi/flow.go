@@ -23,6 +23,7 @@ type flow struct {
 	rateHolder         FlowRate
 	durationHolder     FlowDuration
 	metricsHolder      FlowMetrics
+	payloadHolder      FlowPayload
 }
 
 func NewFlow() Flow {
@@ -257,6 +258,7 @@ func (obj *flow) setNil() {
 	obj.rateHolder = nil
 	obj.durationHolder = nil
 	obj.metricsHolder = nil
+	obj.payloadHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -332,6 +334,16 @@ type Flow interface {
 	Name() string
 	// SetName assigns string provided by user to Flow
 	SetName(value string) Flow
+	// Payload returns FlowPayload, set in Flow.
+	// FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
+	// Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
+	Payload() FlowPayload
+	// SetPayload assigns FlowPayload provided by user to Flow.
+	// FlowPayload is a container for different types of payload, which is the data in the frame after protocol headers.
+	// Some part of the payload could be overwritten with instrumentation data, contents and placement of  which is implementation specific.
+	SetPayload(value FlowPayload) Flow
+	// HasPayload checks if Payload has been set in Flow
+	HasPayload() bool
 	setNil()
 }
 
@@ -605,6 +617,34 @@ func (obj *flow) SetName(value string) Flow {
 	return obj
 }
 
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
+// Payload returns a FlowPayload
+func (obj *flow) Payload() FlowPayload {
+	if obj.obj.Payload == nil {
+		obj.obj.Payload = NewFlowPayload().msg()
+	}
+	if obj.payloadHolder == nil {
+		obj.payloadHolder = &flowPayload{obj: obj.obj.Payload}
+	}
+	return obj.payloadHolder
+}
+
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
+// Payload returns a FlowPayload
+func (obj *flow) HasPayload() bool {
+	return obj.obj.Payload != nil
+}
+
+// The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
+// SetPayload sets the FlowPayload value in the Flow object
+func (obj *flow) SetPayload(value FlowPayload) Flow {
+
+	obj.payloadHolder = nil
+	obj.obj.Payload = value.msg()
+
+	return obj
+}
+
 func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -672,6 +712,12 @@ func (obj *flow) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Flow")
 	}
+
+	if obj.obj.Payload != nil {
+
+		obj.Payload().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *flow) setDefault() {
