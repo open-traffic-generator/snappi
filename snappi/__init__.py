@@ -1296,6 +1296,8 @@ from .snappi import FlowRxTxRatio
 from .snappi import FlowRxTxRatioRxCount
 from .snappi import FlowLatencyMetrics
 from .snappi import FlowPredefinedTags
+from .snappi import FlowPayload
+from .snappi import FlowPayloadFixed
 from .snappi import FlowIter
 from .snappi import Event
 from .snappi import EventCPEvents

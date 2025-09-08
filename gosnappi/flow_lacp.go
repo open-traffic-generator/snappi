@@ -252,7 +252,7 @@ func (obj *flowLacp) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad.
+// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to AUTO, will be updated to '0x8809' and the destination address, if set to AUTO, will be updated to "01:80:C2:00:00:02" for "slow protocols".
 type FlowLacp interface {
 	Validation
 	// msg marshals FlowLacp to protobuf object *otg.FlowLacp

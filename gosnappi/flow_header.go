@@ -497,10 +497,10 @@ type FlowHeader interface {
 	// HasMacsec checks if Macsec has been set in FlowHeader
 	HasMacsec() bool
 	// Lacp returns FlowLacp, set in FlowHeader.
-	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad.
+	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to AUTO, will be updated to '0x8809' and the destination address, if set to AUTO, will be updated to "01:80:C2:00:00:02" for "slow protocols".
 	Lacp() FlowLacp
 	// SetLacp assigns FlowLacp provided by user to FlowHeader.
-	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad.
+	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to AUTO, will be updated to '0x8809' and the destination address, if set to AUTO, will be updated to "01:80:C2:00:00:02" for "slow protocols".
 	SetLacp(value FlowLacp) FlowHeader
 	// HasLacp checks if Lacp has been set in FlowHeader
 	HasLacp() bool
