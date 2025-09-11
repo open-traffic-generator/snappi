@@ -278,12 +278,12 @@ type BgpAttributesCommunity interface {
 	Choice() BgpAttributesCommunityChoiceEnum
 	// setChoice assigns BgpAttributesCommunityChoiceEnum provided by user to BgpAttributesCommunity
 	setChoice(value BgpAttributesCommunityChoiceEnum) BgpAttributesCommunity
-	// getter for NoAdvertised to set choice.
-	NoAdvertised()
-	// getter for NoExportSubconfed to set choice.
-	NoExportSubconfed()
 	// getter for NoLlgr to set choice.
 	NoLlgr()
+	// getter for NoExportSubconfed to set choice.
+	NoExportSubconfed()
+	// getter for NoAdvertised to set choice.
+	NoAdvertised()
 	// getter for NoExport to set choice.
 	NoExport()
 	// getter for LlgrStale to set choice.
@@ -322,9 +322,9 @@ func (obj *bgpAttributesCommunity) Choice() BgpAttributesCommunityChoiceEnum {
 	return BgpAttributesCommunityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for NoAdvertised to set choice
-func (obj *bgpAttributesCommunity) NoAdvertised() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
+// getter for NoLlgr to set choice
+func (obj *bgpAttributesCommunity) NoLlgr() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_LLGR)
 }
 
 // getter for NoExportSubconfed to set choice
@@ -332,9 +332,9 @@ func (obj *bgpAttributesCommunity) NoExportSubconfed() {
 	obj.setChoice(BgpAttributesCommunityChoice.NO_EXPORT_SUBCONFED)
 }
 
-// getter for NoLlgr to set choice
-func (obj *bgpAttributesCommunity) NoLlgr() {
-	obj.setChoice(BgpAttributesCommunityChoice.NO_LLGR)
+// getter for NoAdvertised to set choice
+func (obj *bgpAttributesCommunity) NoAdvertised() {
+	obj.setChoice(BgpAttributesCommunityChoice.NO_ADVERTISED)
 }
 
 // getter for NoExport to set choice
