@@ -23,6 +23,7 @@ type bgpV6RouteRange struct {
 	addPathHolder             BgpAddPath
 	extCommunitiesHolder      BgpV6RouteRangeBgpExtCommunityIter
 	extendedCommunitiesHolder BgpV6RouteRangeBgpExtendedCommunityIter
+	mplsLabelsHolder          BgpV6RouteRangeBgpMplsLabelBindingsIter
 }
 
 func NewBgpV6RouteRange() BgpV6RouteRange {
@@ -257,6 +258,7 @@ func (obj *bgpV6RouteRange) setNil() {
 	obj.addPathHolder = nil
 	obj.extCommunitiesHolder = nil
 	obj.extendedCommunitiesHolder = nil
+	obj.mplsLabelsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -344,6 +346,8 @@ type BgpV6RouteRange interface {
 	ExtCommunities() BgpV6RouteRangeBgpExtCommunityIter
 	// ExtendedCommunities returns BgpV6RouteRangeBgpExtendedCommunityIterIter, set in BgpV6RouteRange
 	ExtendedCommunities() BgpV6RouteRangeBgpExtendedCommunityIter
+	// MplsLabels returns BgpV6RouteRangeBgpMplsLabelBindingsIterIter, set in BgpV6RouteRange
+	MplsLabels() BgpV6RouteRangeBgpMplsLabelBindingsIter
 	setNil()
 }
 
@@ -739,8 +743,6 @@ func (obj *bgpV6RouteRange) SetName(value string) BgpV6RouteRange {
 
 // Deprecated: This property is deprecated in favor of property extended_communities
 //
-// Deprecated: This property is deprecated in favor of property extended_communities
-//
 // Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 // ExtCommunities returns a []BgpExtCommunity
 func (obj *bgpV6RouteRange) ExtCommunities() BgpV6RouteRangeBgpExtCommunityIter {
@@ -915,6 +917,95 @@ func (obj *bgpV6RouteRangeBgpExtendedCommunityIter) appendHolderSlice(item BgpEx
 	return obj
 }
 
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// For creating single Label, mpls_lebels under BGP capability is chosen as single_label. Single Label pattern for this route range is to be configure here.
+// The mpls_lebels under BGP capability is chosen as multiple_labels. Multiple Label patterns for this route range are to be configure here.
+// MplsLabels returns a []BgpMplsLabelBindings
+func (obj *bgpV6RouteRange) MplsLabels() BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	if len(obj.obj.MplsLabels) == 0 {
+		obj.obj.MplsLabels = []*otg.BgpMplsLabelBindings{}
+	}
+	if obj.mplsLabelsHolder == nil {
+		obj.mplsLabelsHolder = newBgpV6RouteRangeBgpMplsLabelBindingsIter(&obj.obj.MplsLabels).setMsg(obj)
+	}
+	return obj.mplsLabelsHolder
+}
+
+type bgpV6RouteRangeBgpMplsLabelBindingsIter struct {
+	obj                       *bgpV6RouteRange
+	bgpMplsLabelBindingsSlice []BgpMplsLabelBindings
+	fieldPtr                  *[]*otg.BgpMplsLabelBindings
+}
+
+func newBgpV6RouteRangeBgpMplsLabelBindingsIter(ptr *[]*otg.BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	return &bgpV6RouteRangeBgpMplsLabelBindingsIter{fieldPtr: ptr}
+}
+
+type BgpV6RouteRangeBgpMplsLabelBindingsIter interface {
+	setMsg(*bgpV6RouteRange) BgpV6RouteRangeBgpMplsLabelBindingsIter
+	Items() []BgpMplsLabelBindings
+	Add() BgpMplsLabelBindings
+	Append(items ...BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter
+	Set(index int, newObj BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter
+	Clear() BgpV6RouteRangeBgpMplsLabelBindingsIter
+	clearHolderSlice() BgpV6RouteRangeBgpMplsLabelBindingsIter
+	appendHolderSlice(item BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter
+}
+
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) setMsg(msg *bgpV6RouteRange) BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpMplsLabelBindings{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) Items() []BgpMplsLabelBindings {
+	return obj.bgpMplsLabelBindingsSlice
+}
+
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) Add() BgpMplsLabelBindings {
+	newObj := &otg.BgpMplsLabelBindings{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpMplsLabelBindings{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpMplsLabelBindingsSlice = append(obj.bgpMplsLabelBindingsSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) Append(items ...BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpMplsLabelBindingsSlice = append(obj.bgpMplsLabelBindingsSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) Set(index int, newObj BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpMplsLabelBindingsSlice[index] = newObj
+	return obj
+}
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) Clear() BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpMplsLabelBindings{}
+		obj.bgpMplsLabelBindingsSlice = []BgpMplsLabelBindings{}
+	}
+	return obj
+}
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) clearHolderSlice() BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	if len(obj.bgpMplsLabelBindingsSlice) > 0 {
+		obj.bgpMplsLabelBindingsSlice = []BgpMplsLabelBindings{}
+	}
+	return obj
+}
+func (obj *bgpV6RouteRangeBgpMplsLabelBindingsIter) appendHolderSlice(item BgpMplsLabelBindings) BgpV6RouteRangeBgpMplsLabelBindingsIter {
+	obj.bgpMplsLabelBindingsSlice = append(obj.bgpMplsLabelBindingsSlice, item)
+	return obj
+}
+
 func (obj *bgpV6RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1010,6 +1101,20 @@ func (obj *bgpV6RouteRange) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.ExtendedCommunities().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.MplsLabels) != 0 {
+
+		if set_default {
+			obj.MplsLabels().clearHolderSlice()
+			for _, item := range obj.obj.MplsLabels {
+				obj.MplsLabels().appendHolderSlice(&bgpMplsLabelBindings{obj: item})
+			}
+		}
+		for _, item := range obj.MplsLabels().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

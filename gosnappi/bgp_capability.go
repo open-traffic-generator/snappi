@@ -13,9 +13,10 @@ import (
 // ***** BgpCapability *****
 type bgpCapability struct {
 	validation
-	obj          *otg.BgpCapability
-	marshaller   marshalBgpCapability
-	unMarshaller unMarshalBgpCapability
+	obj              *otg.BgpCapability
+	marshaller       marshalBgpCapability
+	unMarshaller     unMarshalBgpCapability
+	mplsLebelsHolder BgpMPlsLabelBindingsCapabilities
 }
 
 func NewBgpCapability() BgpCapability {
@@ -29,7 +30,7 @@ func (obj *bgpCapability) msg() *otg.BgpCapability {
 }
 
 func (obj *bgpCapability) setMsg(msg *otg.BgpCapability) BgpCapability {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalbgpCapability) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalbgpCapability) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalbgpCapability) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -240,6 +241,13 @@ func (obj *bgpCapability) Clone() (BgpCapability, error) {
 		return nil, pbErr
 	}
 	return newObj, nil
+}
+
+func (obj *bgpCapability) setNil() {
+	obj.mplsLebelsHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // BgpCapability is configuration for BGP capability settings.
@@ -414,6 +422,15 @@ type BgpCapability interface {
 	SetIpv6UnicastAddPath(value bool) BgpCapability
 	// HasIpv6UnicastAddPath checks if Ipv6UnicastAddPath has been set in BgpCapability
 	HasIpv6UnicastAddPath() bool
+	// MplsLebels returns BgpMPlsLabelBindingsCapabilities, set in BgpCapability.
+	// BgpMPlsLabelBindingsCapabilities is container for configuring capabilities for carrying Label Information in BGP Open Message for RFC3107 and RFC8277 for MPLS label bindings.
+	MplsLebels() BgpMPlsLabelBindingsCapabilities
+	// SetMplsLebels assigns BgpMPlsLabelBindingsCapabilities provided by user to BgpCapability.
+	// BgpMPlsLabelBindingsCapabilities is container for configuring capabilities for carrying Label Information in BGP Open Message for RFC3107 and RFC8277 for MPLS label bindings.
+	SetMplsLebels(value BgpMPlsLabelBindingsCapabilities) BgpCapability
+	// HasMplsLebels checks if MplsLebels has been set in BgpCapability
+	HasMplsLebels() bool
+	setNil()
 }
 
 // Support for the IPv4 Unicast address family.
@@ -978,9 +995,42 @@ func (obj *bgpCapability) SetIpv6UnicastAddPath(value bool) BgpCapability {
 	return obj
 }
 
+// description is TBD
+// MplsLebels returns a BgpMPlsLabelBindingsCapabilities
+func (obj *bgpCapability) MplsLebels() BgpMPlsLabelBindingsCapabilities {
+	if obj.obj.MplsLebels == nil {
+		obj.obj.MplsLebels = NewBgpMPlsLabelBindingsCapabilities().msg()
+	}
+	if obj.mplsLebelsHolder == nil {
+		obj.mplsLebelsHolder = &bgpMPlsLabelBindingsCapabilities{obj: obj.obj.MplsLebels}
+	}
+	return obj.mplsLebelsHolder
+}
+
+// description is TBD
+// MplsLebels returns a BgpMPlsLabelBindingsCapabilities
+func (obj *bgpCapability) HasMplsLebels() bool {
+	return obj.obj.MplsLebels != nil
+}
+
+// description is TBD
+// SetMplsLebels sets the BgpMPlsLabelBindingsCapabilities value in the BgpCapability object
+func (obj *bgpCapability) SetMplsLebels(value BgpMPlsLabelBindingsCapabilities) BgpCapability {
+
+	obj.mplsLebelsHolder = nil
+	obj.obj.MplsLebels = value.msg()
+
+	return obj
+}
+
 func (obj *bgpCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.MplsLebels != nil {
+
+		obj.MplsLebels().validateObj(vObj, set_default)
 	}
 
 }
