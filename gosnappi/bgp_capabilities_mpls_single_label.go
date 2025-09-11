@@ -276,9 +276,21 @@ type BgpCapabilitiesMplsSingleLabel interface {
 	SetIpv6(value bool) BgpCapabilitiesMplsSingleLabel
 	// HasIpv6 checks if Ipv6 has been set in BgpCapabilitiesMplsSingleLabel
 	HasIpv6() bool
+	// VpnIpv4 returns bool, set in BgpCapabilitiesMplsSingleLabel.
+	VpnIpv4() bool
+	// SetVpnIpv4 assigns bool provided by user to BgpCapabilitiesMplsSingleLabel
+	SetVpnIpv4(value bool) BgpCapabilitiesMplsSingleLabel
+	// HasVpnIpv4 checks if VpnIpv4 has been set in BgpCapabilitiesMplsSingleLabel
+	HasVpnIpv4() bool
+	// VpnIpv6 returns bool, set in BgpCapabilitiesMplsSingleLabel.
+	VpnIpv6() bool
+	// SetVpnIpv6 assigns bool provided by user to BgpCapabilitiesMplsSingleLabel
+	SetVpnIpv6(value bool) BgpCapabilitiesMplsSingleLabel
+	// HasVpnIpv6 checks if VpnIpv6 has been set in BgpCapabilitiesMplsSingleLabel
+	HasVpnIpv6() bool
 }
 
-// Advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message.
+// For the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // Ipv4 returns a bool
 func (obj *bgpCapabilitiesMplsSingleLabel) Ipv4() bool {
 
@@ -286,13 +298,13 @@ func (obj *bgpCapabilitiesMplsSingleLabel) Ipv4() bool {
 
 }
 
-// Advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message.
+// For the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // Ipv4 returns a bool
 func (obj *bgpCapabilitiesMplsSingleLabel) HasIpv4() bool {
 	return obj.obj.Ipv4 != nil
 }
 
-// Advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message.
+// For the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // SetIpv4 sets the bool value in the BgpCapabilitiesMplsSingleLabel object
 func (obj *bgpCapabilitiesMplsSingleLabel) SetIpv4(value bool) BgpCapabilitiesMplsSingleLabel {
 
@@ -300,7 +312,7 @@ func (obj *bgpCapabilitiesMplsSingleLabel) SetIpv4(value bool) BgpCapabilitiesMp
 	return obj
 }
 
-// Advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message.
+// For the IPv6 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // Ipv6 returns a bool
 func (obj *bgpCapabilitiesMplsSingleLabel) Ipv6() bool {
 
@@ -308,17 +320,61 @@ func (obj *bgpCapabilitiesMplsSingleLabel) Ipv6() bool {
 
 }
 
-// Advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message.
+// For the IPv6 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // Ipv6 returns a bool
 func (obj *bgpCapabilitiesMplsSingleLabel) HasIpv6() bool {
 	return obj.obj.Ipv6 != nil
 }
 
-// Advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message.
+// For the IPv6 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
 // SetIpv6 sets the bool value in the BgpCapabilitiesMplsSingleLabel object
 func (obj *bgpCapabilitiesMplsSingleLabel) SetIpv6(value bool) BgpCapabilitiesMplsSingleLabel {
 
 	obj.obj.Ipv6 = &value
+	return obj
+}
+
+// For the VPN-IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 128) in BGP Open Message under the Multiprotocol  extensions capability.
+// VpnIpv4 returns a bool
+func (obj *bgpCapabilitiesMplsSingleLabel) VpnIpv4() bool {
+
+	return *obj.obj.VpnIpv4
+
+}
+
+// For the VPN-IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 128) in BGP Open Message under the Multiprotocol  extensions capability.
+// VpnIpv4 returns a bool
+func (obj *bgpCapabilitiesMplsSingleLabel) HasVpnIpv4() bool {
+	return obj.obj.VpnIpv4 != nil
+}
+
+// For the VPN-IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 128) in BGP Open Message under the Multiprotocol  extensions capability.
+// SetVpnIpv4 sets the bool value in the BgpCapabilitiesMplsSingleLabel object
+func (obj *bgpCapabilitiesMplsSingleLabel) SetVpnIpv4(value bool) BgpCapabilitiesMplsSingleLabel {
+
+	obj.obj.VpnIpv4 = &value
+	return obj
+}
+
+// For the VPN-IPv6 address prefix, BGP speak will advertise (AFI, SAFI) pair capability as (2, 128) in BGP Open Messag under the Multiprotocol  extensions capability.
+// VpnIpv6 returns a bool
+func (obj *bgpCapabilitiesMplsSingleLabel) VpnIpv6() bool {
+
+	return *obj.obj.VpnIpv6
+
+}
+
+// For the VPN-IPv6 address prefix, BGP speak will advertise (AFI, SAFI) pair capability as (2, 128) in BGP Open Messag under the Multiprotocol  extensions capability.
+// VpnIpv6 returns a bool
+func (obj *bgpCapabilitiesMplsSingleLabel) HasVpnIpv6() bool {
+	return obj.obj.VpnIpv6 != nil
+}
+
+// For the VPN-IPv6 address prefix, BGP speak will advertise (AFI, SAFI) pair capability as (2, 128) in BGP Open Messag under the Multiprotocol  extensions capability.
+// SetVpnIpv6 sets the bool value in the BgpCapabilitiesMplsSingleLabel object
+func (obj *bgpCapabilitiesMplsSingleLabel) SetVpnIpv6(value bool) BgpCapabilitiesMplsSingleLabel {
+
+	obj.obj.VpnIpv6 = &value
 	return obj
 }
 
@@ -335,6 +391,12 @@ func (obj *bgpCapabilitiesMplsSingleLabel) setDefault() {
 	}
 	if obj.obj.Ipv6 == nil {
 		obj.SetIpv6(true)
+	}
+	if obj.obj.VpnIpv4 == nil {
+		obj.SetVpnIpv4(true)
+	}
+	if obj.obj.VpnIpv6 == nil {
+		obj.SetVpnIpv6(true)
 	}
 
 }

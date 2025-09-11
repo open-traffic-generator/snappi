@@ -276,9 +276,21 @@ type BgpCapabilitiesMplsMultipleLabels interface {
 	SetIpv6LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels
 	// HasIpv6LabelCount checks if Ipv6LabelCount has been set in BgpCapabilitiesMplsMultipleLabels
 	HasIpv6LabelCount() bool
+	// VpnIpv4LabelCount returns uint32, set in BgpCapabilitiesMplsMultipleLabels.
+	VpnIpv4LabelCount() uint32
+	// SetVpnIpv4LabelCount assigns uint32 provided by user to BgpCapabilitiesMplsMultipleLabels
+	SetVpnIpv4LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels
+	// HasVpnIpv4LabelCount checks if VpnIpv4LabelCount has been set in BgpCapabilitiesMplsMultipleLabels
+	HasVpnIpv4LabelCount() bool
+	// VpnIpv6LabelCount returns uint32, set in BgpCapabilitiesMplsMultipleLabels.
+	VpnIpv6LabelCount() uint32
+	// SetVpnIpv6LabelCount assigns uint32 provided by user to BgpCapabilitiesMplsMultipleLabels
+	SetVpnIpv6LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels
+	// HasVpnIpv6LabelCount checks if VpnIpv6LabelCount has been set in BgpCapabilitiesMplsMultipleLabels
+	HasVpnIpv6LabelCount() bool
 }
 
-// Advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message  where n = ipv4_mpls_count.
+// For the IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability. where n = ipv4_mpls_count.
 // Ipv4LabelCount returns a uint32
 func (obj *bgpCapabilitiesMplsMultipleLabels) Ipv4LabelCount() uint32 {
 
@@ -286,13 +298,13 @@ func (obj *bgpCapabilitiesMplsMultipleLabels) Ipv4LabelCount() uint32 {
 
 }
 
-// Advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message  where n = ipv4_mpls_count.
+// For the IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability. where n = ipv4_mpls_count.
 // Ipv4LabelCount returns a uint32
 func (obj *bgpCapabilitiesMplsMultipleLabels) HasIpv4LabelCount() bool {
 	return obj.obj.Ipv4LabelCount != nil
 }
 
-// Advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message  where n = ipv4_mpls_count.
+// For the IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability. where n = ipv4_mpls_count.
 // SetIpv4LabelCount sets the uint32 value in the BgpCapabilitiesMplsMultipleLabels object
 func (obj *bgpCapabilitiesMplsMultipleLabels) SetIpv4LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels {
 
@@ -300,7 +312,7 @@ func (obj *bgpCapabilitiesMplsMultipleLabels) SetIpv4LabelCount(value uint32) Bg
 	return obj
 }
 
-// Advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message, where n = ipv4_mpls_count.
+// For the IPv6 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_count.
 // Ipv6LabelCount returns a uint32
 func (obj *bgpCapabilitiesMplsMultipleLabels) Ipv6LabelCount() uint32 {
 
@@ -308,17 +320,61 @@ func (obj *bgpCapabilitiesMplsMultipleLabels) Ipv6LabelCount() uint32 {
 
 }
 
-// Advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message, where n = ipv4_mpls_count.
+// For the IPv6 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_count.
 // Ipv6LabelCount returns a uint32
 func (obj *bgpCapabilitiesMplsMultipleLabels) HasIpv6LabelCount() bool {
 	return obj.obj.Ipv6LabelCount != nil
 }
 
-// Advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message, where n = ipv4_mpls_count.
+// For the IPv6 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_count.
 // SetIpv6LabelCount sets the uint32 value in the BgpCapabilitiesMplsMultipleLabels object
 func (obj *bgpCapabilitiesMplsMultipleLabels) SetIpv6LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels {
 
 	obj.obj.Ipv6LabelCount = &value
+	return obj
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv4_mpls_count.
+// VpnIpv4LabelCount returns a uint32
+func (obj *bgpCapabilitiesMplsMultipleLabels) VpnIpv4LabelCount() uint32 {
+
+	return *obj.obj.VpnIpv4LabelCount
+
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv4_mpls_count.
+// VpnIpv4LabelCount returns a uint32
+func (obj *bgpCapabilitiesMplsMultipleLabels) HasVpnIpv4LabelCount() bool {
+	return obj.obj.VpnIpv4LabelCount != nil
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv4_mpls_count.
+// SetVpnIpv4LabelCount sets the uint32 value in the BgpCapabilitiesMplsMultipleLabels object
+func (obj *bgpCapabilitiesMplsMultipleLabels) SetVpnIpv4LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels {
+
+	obj.obj.VpnIpv4LabelCount = &value
+	return obj
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv6_mpls_count.
+// VpnIpv6LabelCount returns a uint32
+func (obj *bgpCapabilitiesMplsMultipleLabels) VpnIpv6LabelCount() uint32 {
+
+	return *obj.obj.VpnIpv6LabelCount
+
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv6_mpls_count.
+// VpnIpv6LabelCount returns a uint32
+func (obj *bgpCapabilitiesMplsMultipleLabels) HasVpnIpv6LabelCount() bool {
+	return obj.obj.VpnIpv6LabelCount != nil
+}
+
+// For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = vpn_ipv6_mpls_count.
+// SetVpnIpv6LabelCount sets the uint32 value in the BgpCapabilitiesMplsMultipleLabels object
+func (obj *bgpCapabilitiesMplsMultipleLabels) SetVpnIpv6LabelCount(value uint32) BgpCapabilitiesMplsMultipleLabels {
+
+	obj.obj.VpnIpv6LabelCount = &value
 	return obj
 }
 
@@ -347,6 +403,26 @@ func (obj *bgpCapabilitiesMplsMultipleLabels) validateObj(vObj *validation, set_
 
 	}
 
+	if obj.obj.VpnIpv4LabelCount != nil {
+
+		if *obj.obj.VpnIpv4LabelCount < 2 || *obj.obj.VpnIpv4LabelCount > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapabilitiesMplsMultipleLabels.VpnIpv4LabelCount <= 255 but Got %d", *obj.obj.VpnIpv4LabelCount))
+		}
+
+	}
+
+	if obj.obj.VpnIpv6LabelCount != nil {
+
+		if *obj.obj.VpnIpv6LabelCount < 2 || *obj.obj.VpnIpv6LabelCount > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapabilitiesMplsMultipleLabels.VpnIpv6LabelCount <= 255 but Got %d", *obj.obj.VpnIpv6LabelCount))
+		}
+
+	}
+
 }
 
 func (obj *bgpCapabilitiesMplsMultipleLabels) setDefault() {
@@ -355,6 +431,12 @@ func (obj *bgpCapabilitiesMplsMultipleLabels) setDefault() {
 	}
 	if obj.obj.Ipv6LabelCount == nil {
 		obj.SetIpv6LabelCount(2)
+	}
+	if obj.obj.VpnIpv4LabelCount == nil {
+		obj.SetVpnIpv4LabelCount(2)
+	}
+	if obj.obj.VpnIpv6LabelCount == nil {
+		obj.SetVpnIpv6LabelCount(2)
 	}
 
 }

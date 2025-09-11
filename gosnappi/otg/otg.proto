@@ -3741,13 +3741,25 @@ message BgpMPlsLabelBindingsCapabilities {
 // Code,  a one-octet Capability length, and a variable-length Capability Value.
 message BgpCapabilitiesMplsSingleLabel {
 
-  // Advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message.
+  // For the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability
+  // as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
   // default = True
   optional bool ipv4 = 1;
 
-  // Advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message.
+  // For the IPv6 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability
+  // as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
   // default = True
   optional bool ipv6 = 2;
+
+  // For the VPN-IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability
+  // as (1, 128) in BGP Open Message under the Multiprotocol  extensions capability.
+  // default = True
+  optional bool vpn_ipv4 = 3;
+
+  // For the VPN-IPv6 address prefix, BGP speak will advertise (AFI, SAFI) pair capability
+  // as (2, 128) in BGP Open Messag under the Multiprotocol  extensions capability.
+  // default = True
+  optional bool vpn_ipv6 = 4;
 }
 
 // Container for configuring capabilities for multiple carrying Labels Information as
@@ -3755,15 +3767,29 @@ message BgpCapabilitiesMplsSingleLabel {
 // under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1.
 message BgpCapabilitiesMplsMultipleLabels {
 
-  // Advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message  where
-  // n = ipv4_mpls_count.
+  // For the IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1,
+  // SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability.
+  // where n = ipv4_mpls_count.
   // default = 2
   optional uint32 ipv4_label_count = 1;
 
-  // Advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message, where
-  // n = ipv4_mpls_count.
+  // For the IPv6 address prefix, BGP speak will advertise triple of the form <AFI=2,
+  // SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability,
+  // where n = ipv6_mpls_count.
   // default = 2
   optional uint32 ipv6_label_count = 2;
+
+  // For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=1,
+  // SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability,
+  // where n = vpn_ipv4_mpls_count.
+  // default = 2
+  optional uint32 vpn_ipv4_label_count = 3;
+
+  // For the VPN-IPv4 address prefix, BGP speak will advertise triple of the form <AFI=2,
+  // SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability,
+  // where n = vpn_ipv6_mpls_count.
+  // default = 2
+  optional uint32 vpn_ipv6_label_count = 4;
 }
 
 // Configuration for controlling storage of BGP learned information recieved from the
