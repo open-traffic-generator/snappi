@@ -11,7 +11,8 @@ dynamic = ["version", "dependencies"]
 description = "The Snappi Open Traffic Generator Python Package"
 readme = "readme.md"
 requires-python = ">=3.7,<4"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
   { name = "Keysight Technologies", email = "andy.balogh@keysight.com" }
 ]
@@ -20,7 +21,6 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
   "Topic :: Software Development :: Testing :: Traffic Generation",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
@@ -51,3 +51,6 @@ telemetry = [
   "opentelemetry-instrumentation-grpc    ; python_version >= '3.7'",
   "opentelemetry-instrumentation-requests; python_version >= '3.7'"
 ]
+
+[project.urls]
+Repository = "https://github.com/open-traffic-generator/snappi"
