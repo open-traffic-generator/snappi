@@ -26,6 +26,7 @@ type bgpV4Peer struct {
 	v6SrtePoliciesHolder           BgpV4PeerBgpSrteV6PolicyIter
 	gracefulRestartHolder          BgpGracefulRestart
 	replayUpdatesHolder            BgpUpdateReplay
+	srgbRangesHolder               BgpV4PeerDeviceBgpSrMplsSrgbIter
 }
 
 func NewBgpV4Peer() BgpV4Peer {
@@ -263,6 +264,7 @@ func (obj *bgpV4Peer) setNil() {
 	obj.v6SrtePoliciesHolder = nil
 	obj.gracefulRestartHolder = nil
 	obj.replayUpdatesHolder = nil
+	obj.srgbRangesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -362,6 +364,8 @@ type BgpV4Peer interface {
 	SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer
 	// HasReplayUpdates checks if ReplayUpdates has been set in BgpV4Peer
 	HasReplayUpdates() bool
+	// SrgbRanges returns BgpV4PeerDeviceBgpSrMplsSrgbIterIter, set in BgpV4Peer
+	SrgbRanges() BgpV4PeerDeviceBgpSrMplsSrgbIter
 	setNil()
 }
 
@@ -1066,6 +1070,93 @@ func (obj *bgpV4Peer) SetReplayUpdates(value BgpUpdateReplay) BgpV4Peer {
 	return obj
 }
 
+// This contains the list of SRGB that is advertised under PREFIX_SID Tlv 40.
+// SrgbRanges returns a []DeviceBgpSrMplsSrgb
+func (obj *bgpV4Peer) SrgbRanges() BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	if len(obj.obj.SrgbRanges) == 0 {
+		obj.obj.SrgbRanges = []*otg.DeviceBgpSrMplsSrgb{}
+	}
+	if obj.srgbRangesHolder == nil {
+		obj.srgbRangesHolder = newBgpV4PeerDeviceBgpSrMplsSrgbIter(&obj.obj.SrgbRanges).setMsg(obj)
+	}
+	return obj.srgbRangesHolder
+}
+
+type bgpV4PeerDeviceBgpSrMplsSrgbIter struct {
+	obj                      *bgpV4Peer
+	deviceBgpSrMplsSrgbSlice []DeviceBgpSrMplsSrgb
+	fieldPtr                 *[]*otg.DeviceBgpSrMplsSrgb
+}
+
+func newBgpV4PeerDeviceBgpSrMplsSrgbIter(ptr *[]*otg.DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	return &bgpV4PeerDeviceBgpSrMplsSrgbIter{fieldPtr: ptr}
+}
+
+type BgpV4PeerDeviceBgpSrMplsSrgbIter interface {
+	setMsg(*bgpV4Peer) BgpV4PeerDeviceBgpSrMplsSrgbIter
+	Items() []DeviceBgpSrMplsSrgb
+	Add() DeviceBgpSrMplsSrgb
+	Append(items ...DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter
+	Set(index int, newObj DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter
+	Clear() BgpV4PeerDeviceBgpSrMplsSrgbIter
+	clearHolderSlice() BgpV4PeerDeviceBgpSrMplsSrgbIter
+	appendHolderSlice(item DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter
+}
+
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) setMsg(msg *bgpV4Peer) BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&deviceBgpSrMplsSrgb{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) Items() []DeviceBgpSrMplsSrgb {
+	return obj.deviceBgpSrMplsSrgbSlice
+}
+
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) Add() DeviceBgpSrMplsSrgb {
+	newObj := &otg.DeviceBgpSrMplsSrgb{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &deviceBgpSrMplsSrgb{obj: newObj}
+	newLibObj.setDefault()
+	obj.deviceBgpSrMplsSrgbSlice = append(obj.deviceBgpSrMplsSrgbSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) Append(items ...DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.deviceBgpSrMplsSrgbSlice = append(obj.deviceBgpSrMplsSrgbSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) Set(index int, newObj DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.deviceBgpSrMplsSrgbSlice[index] = newObj
+	return obj
+}
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) Clear() BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.DeviceBgpSrMplsSrgb{}
+		obj.deviceBgpSrMplsSrgbSlice = []DeviceBgpSrMplsSrgb{}
+	}
+	return obj
+}
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) clearHolderSlice() BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	if len(obj.deviceBgpSrMplsSrgbSlice) > 0 {
+		obj.deviceBgpSrMplsSrgbSlice = []DeviceBgpSrMplsSrgb{}
+	}
+	return obj
+}
+func (obj *bgpV4PeerDeviceBgpSrMplsSrgbIter) appendHolderSlice(item DeviceBgpSrMplsSrgb) BgpV4PeerDeviceBgpSrMplsSrgbIter {
+	obj.deviceBgpSrMplsSrgbSlice = append(obj.deviceBgpSrMplsSrgbSlice, item)
+	return obj
+}
+
 func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1192,6 +1283,20 @@ func (obj *bgpV4Peer) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.ReplayUpdates != nil {
 
 		obj.ReplayUpdates().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.SrgbRanges) != 0 {
+
+		if set_default {
+			obj.SrgbRanges().clearHolderSlice()
+			for _, item := range obj.obj.SrgbRanges {
+				obj.SrgbRanges().appendHolderSlice(&deviceBgpSrMplsSrgb{obj: item})
+			}
+		}
+		for _, item := range obj.SrgbRanges().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

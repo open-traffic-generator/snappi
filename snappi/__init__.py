@@ -161,6 +161,11 @@ from .snappi import BgpExtendedCommunityNonTransitive2OctetAsType
 from .snappi import BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
 from .snappi import BgpExtendedCommunityCustomType
 from .snappi import BgpExtendedCommunityIter
+from .snappi import BgpMplsLabelBindings
+from .snappi import RouteMplsLabelValue
+from .snappi import RouteMplsLabelValueIter
+from .snappi import RouteMplsLabelIndex
+from .snappi import RouteMplsLabelIndexIter
 from .snappi import BgpV4RouteRangeIter
 from .snappi import BgpV6RouteRange
 from .snappi import BgpV6RouteRangeIter
@@ -268,6 +273,8 @@ from .snappi import BgpOneStructuredUpdateReplayIter
 from .snappi import BgpRawBytes
 from .snappi import BgpOneUpdateReplay
 from .snappi import BgpOneUpdateReplayIter
+from .snappi import DeviceBgpSrMplsSrgb
+from .snappi import DeviceBgpSrMplsSrgbIter
 from .snappi import BgpV4PeerIter
 from .snappi import BgpV4InterfaceIter
 from .snappi import BgpV6Interface

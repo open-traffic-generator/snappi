@@ -414,6 +414,42 @@ type BgpCapability interface {
 	SetIpv6UnicastAddPath(value bool) BgpCapability
 	// HasIpv6UnicastAddPath checks if Ipv6UnicastAddPath has been set in BgpCapability
 	HasIpv6UnicastAddPath() bool
+	// Ipv4Mpls returns bool, set in BgpCapability.
+	Ipv4Mpls() bool
+	// SetIpv4Mpls assigns bool provided by user to BgpCapability
+	SetIpv4Mpls(value bool) BgpCapability
+	// HasIpv4Mpls checks if Ipv4Mpls has been set in BgpCapability
+	HasIpv4Mpls() bool
+	// Ipv6Mpls returns bool, set in BgpCapability.
+	Ipv6Mpls() bool
+	// SetIpv6Mpls assigns bool provided by user to BgpCapability
+	SetIpv6Mpls(value bool) BgpCapability
+	// HasIpv6Mpls checks if Ipv6Mpls has been set in BgpCapability
+	HasIpv6Mpls() bool
+	// Ipv4MplsMulti returns uint32, set in BgpCapability.
+	Ipv4MplsMulti() uint32
+	// SetIpv4MplsMulti assigns uint32 provided by user to BgpCapability
+	SetIpv4MplsMulti(value uint32) BgpCapability
+	// HasIpv4MplsMulti checks if Ipv4MplsMulti has been set in BgpCapability
+	HasIpv4MplsMulti() bool
+	// Ipv6MplsMulti returns uint32, set in BgpCapability.
+	Ipv6MplsMulti() uint32
+	// SetIpv6MplsMulti assigns uint32 provided by user to BgpCapability
+	SetIpv6MplsMulti(value uint32) BgpCapability
+	// HasIpv6MplsMulti checks if Ipv6MplsMulti has been set in BgpCapability
+	HasIpv6MplsMulti() bool
+	// Ipv4MplsVpnMulti returns uint32, set in BgpCapability.
+	Ipv4MplsVpnMulti() uint32
+	// SetIpv4MplsVpnMulti assigns uint32 provided by user to BgpCapability
+	SetIpv4MplsVpnMulti(value uint32) BgpCapability
+	// HasIpv4MplsVpnMulti checks if Ipv4MplsVpnMulti has been set in BgpCapability
+	HasIpv4MplsVpnMulti() bool
+	// Ipv6MplsVpnMulti returns uint32, set in BgpCapability.
+	Ipv6MplsVpnMulti() uint32
+	// SetIpv6MplsVpnMulti assigns uint32 provided by user to BgpCapability
+	SetIpv6MplsVpnMulti(value uint32) BgpCapability
+	// HasIpv6MplsVpnMulti checks if Ipv6MplsVpnMulti has been set in BgpCapability
+	HasIpv6MplsVpnMulti() bool
 }
 
 // Support for the IPv4 Unicast address family.
@@ -978,9 +1014,181 @@ func (obj *bgpCapability) SetIpv6UnicastAddPath(value bool) BgpCapability {
 	return obj
 }
 
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// Ipv4Mpls returns a bool
+func (obj *bgpCapability) Ipv4Mpls() bool {
+
+	return *obj.obj.Ipv4Mpls
+
+}
+
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// Ipv4Mpls returns a bool
+func (obj *bgpCapability) HasIpv4Mpls() bool {
+	return obj.obj.Ipv4Mpls != nil
+}
+
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// SetIpv4Mpls sets the bool value in the BgpCapability object
+func (obj *bgpCapability) SetIpv4Mpls(value bool) BgpCapability {
+
+	obj.obj.Ipv4Mpls = &value
+	return obj
+}
+
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// Ipv6Mpls returns a bool
+func (obj *bgpCapability) Ipv6Mpls() bool {
+
+	return *obj.obj.Ipv6Mpls
+
+}
+
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// Ipv6Mpls returns a bool
+func (obj *bgpCapability) HasIpv6Mpls() bool {
+	return obj.obj.Ipv6Mpls != nil
+}
+
+// For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI, SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions capability.
+// SetIpv6Mpls sets the bool value in the BgpCapability object
+func (obj *bgpCapability) SetIpv6Mpls(value bool) BgpCapability {
+
+	obj.obj.Ipv6Mpls = &value
+	return obj
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// Ipv4MplsMulti returns a uint32
+func (obj *bgpCapability) Ipv4MplsMulti() uint32 {
+
+	return *obj.obj.Ipv4MplsMulti
+
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// Ipv4MplsMulti returns a uint32
+func (obj *bgpCapability) HasIpv4MplsMulti() bool {
+	return obj.obj.Ipv4MplsMulti != nil
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// SetIpv4MplsMulti sets the uint32 value in the BgpCapability object
+func (obj *bgpCapability) SetIpv4MplsMulti(value uint32) BgpCapability {
+
+	obj.obj.Ipv4MplsMulti = &value
+	return obj
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+// Ipv6MplsMulti returns a uint32
+func (obj *bgpCapability) Ipv6MplsMulti() uint32 {
+
+	return *obj.obj.Ipv6MplsMulti
+
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+// Ipv6MplsMulti returns a uint32
+func (obj *bgpCapability) HasIpv6MplsMulti() bool {
+	return obj.obj.Ipv6MplsMulti != nil
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+// SetIpv6MplsMulti sets the uint32 value in the BgpCapability object
+func (obj *bgpCapability) SetIpv6MplsMulti(value uint32) BgpCapability {
+
+	obj.obj.Ipv6MplsMulti = &value
+	return obj
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// Ipv4MplsVpnMulti returns a uint32
+func (obj *bgpCapability) Ipv4MplsVpnMulti() uint32 {
+
+	return *obj.obj.Ipv4MplsVpnMulti
+
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// Ipv4MplsVpnMulti returns a uint32
+func (obj *bgpCapability) HasIpv4MplsVpnMulti() bool {
+	return obj.obj.Ipv4MplsVpnMulti != nil
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv4 address prefix, BGP speaker will advertise triple of the form <AFI=1, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv4_mpls_multi, the numbers of labels.
+// SetIpv4MplsVpnMulti sets the uint32 value in the BgpCapability object
+func (obj *bgpCapability) SetIpv4MplsVpnMulti(value uint32) BgpCapability {
+
+	obj.obj.Ipv4MplsVpnMulti = &value
+	return obj
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_vpn_multi, the numbers of labels.
+// Ipv6MplsVpnMulti returns a uint32
+func (obj *bgpCapability) Ipv6MplsVpnMulti() uint32 {
+
+	return *obj.obj.Ipv6MplsVpnMulti
+
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_vpn_multi, the numbers of labels.
+// Ipv6MplsVpnMulti returns a uint32
+func (obj *bgpCapability) HasIpv6MplsVpnMulti() bool {
+	return obj.obj.Ipv6MplsVpnMulti != nil
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1. For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise triple of the form <AFI=2, SAFI=128, Count=n> in BGP Open Message under the Multiprotocol  extensions capability, where n = ipv6_mpls_vpn_multi, the numbers of labels.
+// SetIpv6MplsVpnMulti sets the uint32 value in the BgpCapability object
+func (obj *bgpCapability) SetIpv6MplsVpnMulti(value uint32) BgpCapability {
+
+	obj.obj.Ipv6MplsVpnMulti = &value
+	return obj
+}
+
 func (obj *bgpCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Ipv4MplsMulti != nil {
+
+		if *obj.obj.Ipv4MplsMulti < 2 || *obj.obj.Ipv4MplsMulti > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapability.Ipv4MplsMulti <= 255 but Got %d", *obj.obj.Ipv4MplsMulti))
+		}
+
+	}
+
+	if obj.obj.Ipv6MplsMulti != nil {
+
+		if *obj.obj.Ipv6MplsMulti < 2 || *obj.obj.Ipv6MplsMulti > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapability.Ipv6MplsMulti <= 255 but Got %d", *obj.obj.Ipv6MplsMulti))
+		}
+
+	}
+
+	if obj.obj.Ipv4MplsVpnMulti != nil {
+
+		if *obj.obj.Ipv4MplsVpnMulti < 2 || *obj.obj.Ipv4MplsVpnMulti > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapability.Ipv4MplsVpnMulti <= 255 but Got %d", *obj.obj.Ipv4MplsVpnMulti))
+		}
+
+	}
+
+	if obj.obj.Ipv6MplsVpnMulti != nil {
+
+		if *obj.obj.Ipv6MplsVpnMulti < 2 || *obj.obj.Ipv6MplsVpnMulti > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("2 <= BgpCapability.Ipv6MplsVpnMulti <= 255 but Got %d", *obj.obj.Ipv6MplsVpnMulti))
+		}
+
 	}
 
 }
@@ -1060,6 +1268,24 @@ func (obj *bgpCapability) setDefault() {
 	}
 	if obj.obj.Ipv6UnicastAddPath == nil {
 		obj.SetIpv6UnicastAddPath(false)
+	}
+	if obj.obj.Ipv4Mpls == nil {
+		obj.SetIpv4Mpls(false)
+	}
+	if obj.obj.Ipv6Mpls == nil {
+		obj.SetIpv6Mpls(false)
+	}
+	if obj.obj.Ipv4MplsMulti == nil {
+		obj.SetIpv4MplsMulti(2)
+	}
+	if obj.obj.Ipv6MplsMulti == nil {
+		obj.SetIpv6MplsMulti(2)
+	}
+	if obj.obj.Ipv4MplsVpnMulti == nil {
+		obj.SetIpv4MplsVpnMulti(2)
+	}
+	if obj.obj.Ipv6MplsVpnMulti == nil {
+		obj.SetIpv6MplsVpnMulti(2)
 	}
 
 }
