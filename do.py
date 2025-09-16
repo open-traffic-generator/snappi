@@ -41,7 +41,6 @@ USE_OPENAPIART_BRANCH = None
 USE_MODELS_BRANCH = None 
 
 
-
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
 OPENAPI_YAML_URL = "https://github.com/open-traffic-generator/models/releases/download/v{}/openapi.yaml".format(
