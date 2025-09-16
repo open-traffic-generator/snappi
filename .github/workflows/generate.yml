@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 1
       matrix:
@@ -68,7 +68,7 @@ jobs:
 
   python_tests:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       max-parallel: 6
       matrix:
@@ -97,7 +97,7 @@ jobs:
 
   go_tests:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -115,7 +115,7 @@ jobs:
   publish_python_package:
     if: github.ref == 'refs/heads/main'
     needs: [go_tests, python_tests]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -124,7 +124,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.8
       - uses: actions/download-artifact@v4
         with:
           name: generated-artifacts
