@@ -398,11 +398,11 @@ func (obj *flowCustom) validateObj(vObj *validation, set_default bool) {
 	}
 	if obj.obj.Bytes != nil {
 
-		if !regexp.MustCompile(`^[A-Fa-f0-9: ]+$`).MatchString(*obj.obj.Bytes) {
+		if !regexp.MustCompile(`^(?:0[xX])?[A-Fa-f0-9: ]+$`).MatchString(*obj.obj.Bytes) {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf(
-					"FlowCustom.Bytes should adhere to this regex pattern '%s', but Got %s", `^[A-Fa-f0-9: ]+$`, *obj.obj.Bytes))
+					"FlowCustom.Bytes should adhere to this regex pattern '%s', but Got %s", `^(?:0[xX])?[A-Fa-f0-9: ]+$`, *obj.obj.Bytes))
 		}
 
 	}

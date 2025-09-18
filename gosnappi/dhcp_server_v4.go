@@ -2,7 +2,6 @@ package gosnappi
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -427,16 +426,6 @@ func (obj *dhcpServerV4) validateObj(vObj *validation, set_default bool) {
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DhcpServerV4")
-	}
-	if obj.obj.Name != nil {
-
-		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.Name) {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf(
-					"DhcpServerV4.Name should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.Name))
-		}
-
 	}
 
 	// Ipv4Name is required

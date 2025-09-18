@@ -2,7 +2,6 @@ package gosnappi
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -342,16 +341,6 @@ func (obj *rocev2QPs) validateObj(vObj *validation, set_default bool) {
 	// QpName is required
 	if obj.obj.QpName == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "QpName is required field on interface Rocev2QPs")
-	}
-	if obj.obj.QpName != nil {
-
-		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.QpName) {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf(
-					"Rocev2QPs.QpName should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.QpName))
-		}
-
 	}
 
 	if obj.obj.ConnectionType != nil {

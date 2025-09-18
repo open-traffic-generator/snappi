@@ -2,7 +2,6 @@ package gosnappi
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -350,16 +349,6 @@ func (obj *egressOnlyTrackingMetricTags) validateObj(vObj *validation, set_defau
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface EgressOnlyTrackingMetricTags")
-	}
-	if obj.obj.Name != nil {
-
-		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.Name) {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf(
-					"EgressOnlyTrackingMetricTags.Name should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.Name))
-		}
-
 	}
 
 	// Offset is required
