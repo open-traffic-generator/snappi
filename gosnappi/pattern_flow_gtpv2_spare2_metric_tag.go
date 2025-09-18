@@ -2,6 +2,7 @@ package gosnappi
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -350,6 +351,16 @@ func (obj *patternFlowGtpv2Spare2MetricTag) validateObj(vObj *validation, set_de
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface PatternFlowGtpv2Spare2MetricTag")
+	}
+	if obj.obj.Name != nil {
+
+		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.Name) {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"PatternFlowGtpv2Spare2MetricTag.Name should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.Name))
+		}
+
 	}
 
 	if obj.obj.Offset != nil {

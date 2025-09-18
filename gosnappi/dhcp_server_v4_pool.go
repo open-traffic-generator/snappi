@@ -2,6 +2,7 @@ package gosnappi
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -474,6 +475,17 @@ func (obj *dhcpServerV4Pool) SetOptions(value DhcpServerV4PoolOption) DhcpServer
 func (obj *dhcpServerV4Pool) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.Name != nil {
+
+		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.Name) {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"DhcpServerV4Pool.Name should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.Name))
+		}
+
 	}
 
 	if obj.obj.LeaseTime != nil {

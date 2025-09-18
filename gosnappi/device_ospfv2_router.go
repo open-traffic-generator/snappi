@@ -2,6 +2,7 @@ package gosnappi
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/ghodss/yaml"
@@ -755,6 +756,16 @@ func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 	// Name is required
 	if obj.obj.Name == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface DeviceOspfv2Router")
+	}
+	if obj.obj.Name != nil {
+
+		if !regexp.MustCompile(`^[\sa-zA-Z0-9-_()><\[\]]+$`).MatchString(*obj.obj.Name) {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf(
+					"DeviceOspfv2Router.Name should adhere to this regex pattern '%s', but Got %s", `^[\sa-zA-Z0-9-_()><\[\]]+$`, *obj.obj.Name))
+		}
+
 	}
 
 	if obj.obj.RouterId != nil {
