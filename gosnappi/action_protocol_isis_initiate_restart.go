@@ -17,6 +17,7 @@ type actionProtocolIsisInitiateRestart struct {
 	marshaller      marshalActionProtocolIsisInitiateRestart
 	unMarshaller    unMarshalActionProtocolIsisInitiateRestart
 	unplannedHolder ActionProtocolIsisUnplannedRestart
+	plannedHolder   ActionProtocolIsisPlannedRestart
 }
 
 func NewActionProtocolIsisInitiateRestart() ActionProtocolIsisInitiateRestart {
@@ -245,6 +246,7 @@ func (obj *actionProtocolIsisInitiateRestart) Clone() (ActionProtocolIsisInitiat
 
 func (obj *actionProtocolIsisInitiateRestart) setNil() {
 	obj.unplannedHolder = nil
+	obj.plannedHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,14 @@ type ActionProtocolIsisInitiateRestart interface {
 	SetUnplanned(value ActionProtocolIsisUnplannedRestart) ActionProtocolIsisInitiateRestart
 	// HasUnplanned checks if Unplanned has been set in ActionProtocolIsisInitiateRestart
 	HasUnplanned() bool
+	// Planned returns ActionProtocolIsisPlannedRestart, set in ActionProtocolIsisInitiateRestart.
+	// ActionProtocolIsisPlannedRestart is initiates IS-IS Planned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the planned "Restarting" mode, it sends an IIH PDU containing a Restart TLV with the PR (Planned Restart Request) bit set and sets the Remaining Time with the restart_time greater than the expected control-plane restart time that is the maximum time within which this router or routers will complete the graceful restart. It waits for PA (Planned Restart Acknowledge) in an IIH PDU from Neighbor(s). The use of the PR bit provides a means to safely support restart periods that are significantly longer than standard Holding Times. The PR bit SHOULD remain set in IIHs until the restart is initiated. Reference: https://datatracker.ietf.org/doc/html/rfc8706#section-3.2.3. Once the Restarting Router receives the Restart Tlv with PA bit is set, it intiates the Restart Request with the RR bit is set. The holding_time is set as the Remaining Time as received in Restart Tlv or by the remaining time of restart_time that was sent in the Planned Restart Request Tlv. This is left to the choice of the implementation.
+	Planned() ActionProtocolIsisPlannedRestart
+	// SetPlanned assigns ActionProtocolIsisPlannedRestart provided by user to ActionProtocolIsisInitiateRestart.
+	// ActionProtocolIsisPlannedRestart is initiates IS-IS Planned Graceful Restart process for the selected IS-IS routers. If no name is specified then Graceful Restart will be sent to all configured IS-IS routers. When an emulated IS-IS router is in the planned "Restarting" mode, it sends an IIH PDU containing a Restart TLV with the PR (Planned Restart Request) bit set and sets the Remaining Time with the restart_time greater than the expected control-plane restart time that is the maximum time within which this router or routers will complete the graceful restart. It waits for PA (Planned Restart Acknowledge) in an IIH PDU from Neighbor(s). The use of the PR bit provides a means to safely support restart periods that are significantly longer than standard Holding Times. The PR bit SHOULD remain set in IIHs until the restart is initiated. Reference: https://datatracker.ietf.org/doc/html/rfc8706#section-3.2.3. Once the Restarting Router receives the Restart Tlv with PA bit is set, it intiates the Restart Request with the RR bit is set. The holding_time is set as the Remaining Time as received in Restart Tlv or by the remaining time of restart_time that was sent in the Planned Restart Request Tlv. This is left to the choice of the implementation.
+	SetPlanned(value ActionProtocolIsisPlannedRestart) ActionProtocolIsisInitiateRestart
+	// HasPlanned checks if Planned has been set in ActionProtocolIsisInitiateRestart
+	HasPlanned() bool
 	setNil()
 }
 
@@ -333,8 +343,10 @@ type ActionProtocolIsisInitiateRestartChoiceEnum string
 // Enum of Choice on ActionProtocolIsisInitiateRestart
 var ActionProtocolIsisInitiateRestartChoice = struct {
 	UNPLANNED ActionProtocolIsisInitiateRestartChoiceEnum
+	PLANNED   ActionProtocolIsisInitiateRestartChoiceEnum
 }{
 	UNPLANNED: ActionProtocolIsisInitiateRestartChoiceEnum("unplanned"),
+	PLANNED:   ActionProtocolIsisInitiateRestartChoiceEnum("planned"),
 }
 
 func (obj *actionProtocolIsisInitiateRestart) Choice() ActionProtocolIsisInitiateRestartChoiceEnum {
@@ -356,11 +368,17 @@ func (obj *actionProtocolIsisInitiateRestart) setChoice(value ActionProtocolIsis
 	}
 	enumValue := otg.ActionProtocolIsisInitiateRestart_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Planned = nil
+	obj.plannedHolder = nil
 	obj.obj.Unplanned = nil
 	obj.unplannedHolder = nil
 
 	if value == ActionProtocolIsisInitiateRestartChoice.UNPLANNED {
 		obj.obj.Unplanned = NewActionProtocolIsisUnplannedRestart().msg()
+	}
+
+	if value == ActionProtocolIsisInitiateRestartChoice.PLANNED {
+		obj.obj.Planned = NewActionProtocolIsisPlannedRestart().msg()
 	}
 
 	return obj
@@ -394,6 +412,34 @@ func (obj *actionProtocolIsisInitiateRestart) SetUnplanned(value ActionProtocolI
 	return obj
 }
 
+// description is TBD
+// Planned returns a ActionProtocolIsisPlannedRestart
+func (obj *actionProtocolIsisInitiateRestart) Planned() ActionProtocolIsisPlannedRestart {
+	if obj.obj.Planned == nil {
+		obj.setChoice(ActionProtocolIsisInitiateRestartChoice.PLANNED)
+	}
+	if obj.plannedHolder == nil {
+		obj.plannedHolder = &actionProtocolIsisPlannedRestart{obj: obj.obj.Planned}
+	}
+	return obj.plannedHolder
+}
+
+// description is TBD
+// Planned returns a ActionProtocolIsisPlannedRestart
+func (obj *actionProtocolIsisInitiateRestart) HasPlanned() bool {
+	return obj.obj.Planned != nil
+}
+
+// description is TBD
+// SetPlanned sets the ActionProtocolIsisPlannedRestart value in the ActionProtocolIsisInitiateRestart object
+func (obj *actionProtocolIsisInitiateRestart) SetPlanned(value ActionProtocolIsisPlannedRestart) ActionProtocolIsisInitiateRestart {
+	obj.setChoice(ActionProtocolIsisInitiateRestartChoice.PLANNED)
+	obj.plannedHolder = nil
+	obj.obj.Planned = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocolIsisInitiateRestart) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -402,6 +448,11 @@ func (obj *actionProtocolIsisInitiateRestart) validateObj(vObj *validation, set_
 	if obj.obj.Unplanned != nil {
 
 		obj.Unplanned().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Planned != nil {
+
+		obj.Planned().validateObj(vObj, set_default)
 	}
 
 }
@@ -413,6 +464,11 @@ func (obj *actionProtocolIsisInitiateRestart) setDefault() {
 	if obj.obj.Unplanned != nil {
 		choices_set += 1
 		choice = ActionProtocolIsisInitiateRestartChoice.UNPLANNED
+	}
+
+	if obj.obj.Planned != nil {
+		choices_set += 1
+		choice = ActionProtocolIsisInitiateRestartChoice.PLANNED
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.33.0
+/* Open Traffic Generator API 1.38.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -9482,6 +9482,10 @@ message Flow {
   // objects.
   // required = true
   optional string name = 7;
+
+  // The pattern of the bytes in the transmitted frames for the flow after the protocol
+  // headers.
+  FlowPayload payload = 8;
 }
 
 // A container for different types of transmit and receive
@@ -9665,6 +9669,7 @@ message FlowHeader {
       snmpv2c = 20;
       rsvp = 21;
       macsec = 22;
+      lacp = 23;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -9737,6 +9742,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowMacsec macsec = 23;
+
+  // Description missing in models
+  FlowLacp lacp = 24;
 }
 
 // Custom packet header
@@ -11714,6 +11722,197 @@ message FlowMacsec {
   optional Choice.Enum choice = 1;
 }
 
+// Defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU)
+// as specified by IEEE 802.3ad. The ethernet ether type, if set to auto, will be updated
+// to '0x8809' and the destination address, if set to auto, will be updated to 01:80:C2:00:00:02
+// for LACP. Flows[i].metrics.enable should be set to false to avoid insertion of additional
+// instrumentation bytes in the generated packets.
+message FlowLacp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lacpdu = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lacpdu
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowLacpVersion version = 2;
+
+  // Description missing in models
+  FlowLacpLacpdu lacpdu = 3;
+}
+
+// Defines the TLV fields of a Link Aggregation Control Protocol (LACP)
+// Data Unit (PDU) as specified by IEEE 802.3ad.
+message FlowLacpLacpdu {
+
+  // Description missing in models
+  FlowLacpduActor actor = 1;
+
+  // Description missing in models
+  FlowLacpduPartner partner = 2;
+
+  // Description missing in models
+  FlowLacpduCollector collector = 3;
+
+  // Description missing in models
+  FlowLacpduTerminator terminator = 4;
+}
+
+// Information about the local (actor) system.
+message FlowLacpduActor {
+
+  // Description missing in models
+  PatternFlowLacpduActorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduActorLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriority system_priority = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemId system_id = 4;
+
+  // Description missing in models
+  PatternFlowLacpduActorKey key = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriority port_priority = 6;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumber port_number = 7;
+
+  // Description missing in models
+  FlowLacpduActorState actor_state = 8;
+
+  // Description missing in models
+  PatternFlowLacpduActorReserved reserved = 9;
+}
+
+// Information about the remote (partner) system.
+message FlowLacpduPartner {
+
+  // Description missing in models
+  PatternFlowLacpduPartnerType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriority system_priority = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemId system_id = 4;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKey key = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriority port_priority = 6;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumber port_number = 7;
+
+  // Description missing in models
+  FlowLacpduPartnerState partner_state = 8;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReserved reserved = 9;
+}
+
+// Information about frame collection parameters.
+message FlowLacpduCollector {
+
+  // Description missing in models
+  PatternFlowLacpduCollectorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelay max_delay = 3;
+
+  // Reserved field for future use in the Collector TLV. 12 bytes long and should be set
+  // to all zeros.
+  // default = 000000000000000000000000
+  optional string reserved = 4;
+}
+
+// Marks the end of the LACPDU message.
+message FlowLacpduTerminator {
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLength length = 2;
+
+  // Final block of reserved bytes to pad the PDU. It is 50 bytes long.
+  // default = 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  optional string reserved = 3;
+}
+
+// This field indicates the Actor's state.
+message FlowLacpduActorState {
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivity activity = 1;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeout timeout = 2;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregation aggregation = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronization synchronization = 4;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollecting collecting = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributing distributing = 6;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaulted defaulted = 7;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpired expired = 8;
+}
+
+// This field indicates the Partner's state.
+message FlowLacpduPartnerState {
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivity activity = 1;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeout timeout = 2;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregation aggregation = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronization synchronization = 4;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollecting collecting = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributing distributing = 6;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaulted defaulted = 7;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpired expired = 8;
+}
+
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -12148,6 +12347,54 @@ message FlowRxTxRatio {
 // the sum total of Rx packets
 // received across all Rx ports is a multiple of Rx port count and Tx packets.
 message FlowRxTxRatioRxCount {
+}
+
+// A container for different types of payload, which is the data in the frame after
+// protocol headers.
+// Some part of the payload could be overwritten with instrumentation data, contents
+// and placement of  which is implementation specific.
+message FlowPayload {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      fixed = 1;
+      increment_byte = 2;
+      decrement_byte = 3;
+      increment_word = 4;
+      decrement_word = 5;
+    }
+  }
+  // A choice used to determine the pattern of the bytes in the payload following the
+  // protocol headers.
+  // Example of expected behaviour of each choice is as mentioned below,
+  // - fixed: this would insert user defined pattern in the payload bytes.
+  // - increment_byte: this would set the first byte as 00, second as 01 and so on, upto
+  // ff and then the pattern would be repeated.
+  // - decrement_byte: this would set the first byte as ff, second as fe and so on, upto
+  // 00 and then the pattern would be repeated.
+  // - increment_word: this would set the first 2 bytes as 00 00, second as 00 01 and
+  // so on, upto ff ff and then the pattern would be repeated.
+  // - decrement_word: this would set the first 2 bytes as ff ff, second as ff fe and
+  // so on, upto 00 00 and then the pattern would be repeated.
+  // default = Choice.Enum.fixed
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowPayloadFixed fixed = 2;
+}
+
+// Payload with user defined pattern.
+message FlowPayloadFixed {
+
+  // Description missing in models
+  // default = 00
+  optional string pattern = 1;
+
+  // - If enabled, the given pattern would repeat till end of payload.
+  // - If disabled, after the pattern, rest of the payload will be zero-padded.
+  // default = True
+  optional bool repeat = 2;
 }
 
 // Under Review: Event configuration is currently under review for pending exploration
@@ -14126,6 +14373,7 @@ message ActionProtocolIsisInitiateRestart {
     enum Enum {
       unspecified = 0;
       unplanned = 1;
+      planned = 2;
     }
   }
   // Description missing in models
@@ -14134,6 +14382,9 @@ message ActionProtocolIsisInitiateRestart {
 
   // Description missing in models
   ActionProtocolIsisUnplannedRestart unplanned = 3;
+
+  // Description missing in models
+  ActionProtocolIsisPlannedRestart planned = 4;
 }
 
 // Initiates IS-IS Unplanned Graceful Restart process for the selected IS-IS routers.
@@ -14158,6 +14409,36 @@ message ActionProtocolIsisUnplannedRestart {
   // not started i.e. RR bit is cleared and hold_timer is reset to normal.
   // default = 10
   optional uint32 restart_after = 2;
+}
+
+// Initiates IS-IS Planned Graceful Restart process for the selected IS-IS routers.
+// If no name is specified then Graceful Restart will be sent to all configured IS-IS
+// routers. When an emulated IS-IS router is in the planned Restarting mode, it sends
+// an IIH PDU containing a Restart TLV with the PR (Planned Restart Request) bit set
+// and sets the Remaining Time with the restart_time greater than the expected control-plane
+// restart time that is the maximum time within which this router or routers will complete
+// the graceful restart. It waits for PA (Planned Restart Acknowledge) in an IIH PDU
+// from Neighbor(s). The use of the PR bit provides a means to safely support restart
+// periods that are significantly longer than standard Holding Times. The PR bit SHOULD
+// remain set in IIHs until the restart is initiated. Reference: https://datatracker.ietf.org/doc/html/rfc8706#section-3.2.3.
+// Once the Restarting Router receives the Restart Tlv with PA bit is set, it intiates
+// the Restart Request with the RR bit is set. The holding_time is set as the Remaining
+// Time as received in Restart Tlv or by the remaining time of restart_time that was
+// sent in the Planned Restart Request Tlv. This is left to the choice of the implementation.
+message ActionProtocolIsisPlannedRestart {
+
+  // This is the estimated duration (in seconds) it will take for the IS-IS session to
+  // be re-established after a Planned Restart Request. The Remaining Time is set with
+  // the restart_time in the Restarting Tlv.
+  // default = 30
+  optional uint32 restart_time = 1;
+
+  // Once it receives Restarting TLV having PA bit set in a IIH PDU from a neighbor, the
+  // time (in seconds), after which IIH PDU, having Restart Tlv with RA & RR bits unset,
+  // will be sent. This should result in IIH to be transmitted indicating restart is Completed,
+  // and hold_timer is reset to normal.
+  // default = 10
+  optional uint32 restart_after = 3;
 }
 
 // Request to traffic generator for metrics of choice.
@@ -19483,8 +19764,8 @@ message IsisIIHRestartFlags {
   optional bool pa_bit = 5;
 }
 
-// The capture result request to the traffic generator. Stops the port capture on the
-// port_name and returns the capture.
+// The capture result request to the traffic generator.
+// Stops the port capture on the port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
@@ -19494,6 +19775,69 @@ message CaptureRequest {
   // 
   // required = true
   optional string port_name = 1;
+
+  // Specification of the packets to be returned in the capture result from  the set of
+  // captured packets as per capture configuration.
+  CaptureRequestPackets packets = 2;
+}
+
+// Packets to be returned in the capture result from  the set of captured packets as
+// per capture configuration.
+message CaptureRequestPackets {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      slice = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  CaptureRequestCaptureSlice slice = 2;
+}
+
+// Packets to be returned as part of the capture result from the set of captured packets
+// as per
+// capture configuration and specification of capture slice.
+// To be noted,
+// - definition of capture slice works in conjunction with capture filter parameters
+// in set_config.
+// - if 'initial' set of packets is desired to be returned in the capture result, 'overwrite'
+// attribute in 'captures'
+// settings of set_config should be disabled.
+message CaptureRequestCaptureSlice {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      initial = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.initial
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  CaptureRequestCaptureSliceInitial initial = 2;
+}
+
+// Specification of capture slice to retrieve captured packets from begining of captured
+// packet sequence.
+message CaptureRequestCaptureSliceInitial {
+
+  // Position of the packet (Nth) in the captured packet sequence starting from which
+  // packets would be returned as part of the capture result.
+  // default = 1
+  optional uint64 start = 1;
+
+  // Maximum number of packets to be returned as part of the capture result starting from
+  // the position of 'start' packet.
+  // default = 100
+  optional uint64 count = 2;
 }
 
 // mac counter pattern
@@ -32251,6 +32595,1805 @@ message PatternFlowRSVPPathObjectsCustomType {
 
   // Description missing in models
   PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpVersionCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The LACP version number.
+message PatternFlowLacpVersion {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpVersionCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpVersionCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorTypeCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Actor Information. The value 0x01 identifies this TLV as containing
+// information about the sending device (the Actor).
+message PatternFlowLacpduActorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorLengthCounter {
+
+  // Description missing in models
+  // default = 20
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Actor Information TLV payload in bytes.
+message PatternFlowLacpduActorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 20
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [20]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorSystemPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority assigned to the Actor's system for use in aggregation. A lower numerical
+// value indicates a higher priority. Used to select the active System ID when forming
+// an aggregator.
+message PatternFlowLacpduActorSystemPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriorityCounter decrement = 6;
+}
+
+// mac counter pattern
+message PatternFlowLacpduActorSystemIdCounter {
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:01
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Actor's System ID, which is a globally unique MAC address assigned to the system
+// containing the Actor.
+message PatternFlowLacpduActorSystemId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['00:00:00:00:00:00']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorKeyCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The operational Key value assigned to the Actor's port. The key is generated based
+// on port configuration (e.g., speed, duplex, trunk ID) and is used to identify potential
+// aggregation groups. Only links with the same key can be aggregated together.
+message PatternFlowLacpduActorKey {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorKeyCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorKeyCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorPortPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority assigned to the Actor's port. A lower numerical value indicates a higher
+// priority. Used to prioritize ports for inclusion in a Link Aggregation Group (LAG)
+// when the group is full.
+message PatternFlowLacpduActorPortPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriorityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorPortNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The port number assigned to the Actor's port. It is a unique identifier for the port
+// within the system.
+message PatternFlowLacpduActorPortNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field for future use in the Actor TLV. Should be set to all zeros.
+message PatternFlowLacpduActorReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerTypeCounter {
+
+  // Description missing in models
+  // default = 2
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Partner Information. The value 0x02 identifies this TLV as containing
+// information about the remote device (the Partner), as understood by the Actor.
+message PatternFlowLacpduPartnerType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 2
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [2]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerLengthCounter {
+
+  // Description missing in models
+  // default = 20
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Partner Information TLV payload in bytes.
+message PatternFlowLacpduPartnerLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 20
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [20]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerSystemPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority of the Partner's system, as received by the Actor.
+message PatternFlowLacpduPartnerSystemPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriorityCounter decrement = 6;
+}
+
+// mac counter pattern
+message PatternFlowLacpduPartnerSystemIdCounter {
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:01
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Partner's System ID (MAC address), as received by the Actor.
+message PatternFlowLacpduPartnerSystemId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['00:00:00:00:00:00']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerKeyCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The operational Key value of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerKey {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKeyCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKeyCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerPortPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerPortPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriorityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerPortNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The port number of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerPortNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field for future use in the Partner TLV. Should be set to all zeros.
+message PatternFlowLacpduPartnerReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorTypeCounter {
+
+  // Description missing in models
+  // default = 3
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Collector Information. The value 0x03 identifies this TLV.
+message PatternFlowLacpduCollectorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 3
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [3]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorLengthCounter {
+
+  // Description missing in models
+  // default = 16
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Collector Information TLV payload in bytes. The value must be 16
+// (0x10).
+message PatternFlowLacpduCollectorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 16
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [16]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorMaxDelayCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Indicates the maximum delay, in units of 10 microseconds, that the transmitting system's
+// aggregator will take to buffer frames from its collector before emitting a frame.
+message PatternFlowLacpduCollectorMaxDelay {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelayCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelayCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduTerminatorTypeCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Terminator Information. The value 0x00 indicates the end of the TLV
+// list.
+message PatternFlowLacpduTerminatorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduTerminatorLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Terminator TLV payload. The value must be 0.
+message PatternFlowLacpduTerminatorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateActivityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Activity (1=Active, 0=Passive)
+message PatternFlowLacpduActorStateActivity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateTimeoutCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Timeout (1=Fast timeout, 0=Slow timeout)
+message PatternFlowLacpduActorStateTimeout {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeoutCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeoutCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateAggregationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Aggregation (1=Aggregatable, 0=Individual)
+message PatternFlowLacpduActorStateAggregation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateSynchronizationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Synchronization (1=In Sync, 0=Out of Sync)
+message PatternFlowLacpduActorStateSynchronization {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronizationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronizationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateCollectingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Collecting (1=Enabled, 0=Disabled)
+message PatternFlowLacpduActorStateCollecting {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollectingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollectingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateDistributingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Distributing (1=Enabled, 0=Disabled)
+message PatternFlowLacpduActorStateDistributing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateDefaultedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+message PatternFlowLacpduActorStateDefaulted {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaultedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaultedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateExpiredCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Expired (1=Expired, 0=Not Expired)
+message PatternFlowLacpduActorStateExpired {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpiredCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpiredCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateActivityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Activity (1=Active, 0=Passive)
+message PatternFlowLacpduPartnerStateActivity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateTimeoutCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Timeout (1=Fast timeout, 0=Slow timeout)
+message PatternFlowLacpduPartnerStateTimeout {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeoutCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeoutCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateAggregationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Aggregation (1=Aggregatable, 0=Individual)
+message PatternFlowLacpduPartnerStateAggregation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateSynchronizationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Synchronization (1=In Sync, 0=Out of Sync)
+message PatternFlowLacpduPartnerStateSynchronization {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronizationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronizationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateCollectingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Collecting (1=Enabled, 0=Disabled)
+message PatternFlowLacpduPartnerStateCollecting {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollectingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollectingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateDistributingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Distributing (1=Enabled, 0=Disabled)
+message PatternFlowLacpduPartnerStateDistributing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateDefaultedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+message PatternFlowLacpduPartnerStateDefaulted {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaultedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaultedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateExpiredCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Expired (1=Expired, 0=Not Expired)
+message PatternFlowLacpduPartnerStateExpired {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpiredCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpiredCounter decrement = 6;
 }
 
 // Version details

@@ -38,6 +38,7 @@ type flowHeader struct {
 	snmpv2CHolder       FlowSnmpv2C
 	rsvpHolder          FlowRsvp
 	macsecHolder        FlowMacsec
+	lacpHolder          FlowLacp
 }
 
 func NewFlowHeader() FlowHeader {
@@ -287,6 +288,7 @@ func (obj *flowHeader) setNil() {
 	obj.snmpv2CHolder = nil
 	obj.rsvpHolder = nil
 	obj.macsecHolder = nil
+	obj.lacpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -494,6 +496,14 @@ type FlowHeader interface {
 	SetMacsec(value FlowMacsec) FlowHeader
 	// HasMacsec checks if Macsec has been set in FlowHeader
 	HasMacsec() bool
+	// Lacp returns FlowLacp, set in FlowHeader.
+	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to auto, will be updated to '0x8809' and the destination address, if set to auto, will be updated to "01:80:C2:00:00:02" for LACP. Flows[i].metrics.enable should be set to false to avoid insertion of additional instrumentation bytes in the generated packets.
+	Lacp() FlowLacp
+	// SetLacp assigns FlowLacp provided by user to FlowHeader.
+	// FlowLacp is defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to auto, will be updated to '0x8809' and the destination address, if set to auto, will be updated to "01:80:C2:00:00:02" for LACP. Flows[i].metrics.enable should be set to false to avoid insertion of additional instrumentation bytes in the generated packets.
+	SetLacp(value FlowLacp) FlowHeader
+	// HasLacp checks if Lacp has been set in FlowHeader
+	HasLacp() bool
 	setNil()
 }
 
@@ -523,6 +533,7 @@ var FlowHeaderChoice = struct {
 	SNMPV2C       FlowHeaderChoiceEnum
 	RSVP          FlowHeaderChoiceEnum
 	MACSEC        FlowHeaderChoiceEnum
+	LACP          FlowHeaderChoiceEnum
 }{
 	CUSTOM:        FlowHeaderChoiceEnum("custom"),
 	ETHERNET:      FlowHeaderChoiceEnum("ethernet"),
@@ -546,6 +557,7 @@ var FlowHeaderChoice = struct {
 	SNMPV2C:       FlowHeaderChoiceEnum("snmpv2c"),
 	RSVP:          FlowHeaderChoiceEnum("rsvp"),
 	MACSEC:        FlowHeaderChoiceEnum("macsec"),
+	LACP:          FlowHeaderChoiceEnum("lacp"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -568,6 +580,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Lacp = nil
+	obj.lacpHolder = nil
 	obj.obj.Macsec = nil
 	obj.macsecHolder = nil
 	obj.obj.Rsvp = nil
@@ -699,6 +713,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.MACSEC {
 		obj.obj.Macsec = NewFlowMacsec().msg()
+	}
+
+	if value == FlowHeaderChoice.LACP {
+		obj.obj.Lacp = NewFlowLacp().msg()
 	}
 
 	return obj
@@ -1320,6 +1338,34 @@ func (obj *flowHeader) SetMacsec(value FlowMacsec) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Lacp returns a FlowLacp
+func (obj *flowHeader) Lacp() FlowLacp {
+	if obj.obj.Lacp == nil {
+		obj.setChoice(FlowHeaderChoice.LACP)
+	}
+	if obj.lacpHolder == nil {
+		obj.lacpHolder = &flowLacp{obj: obj.obj.Lacp}
+	}
+	return obj.lacpHolder
+}
+
+// description is TBD
+// Lacp returns a FlowLacp
+func (obj *flowHeader) HasLacp() bool {
+	return obj.obj.Lacp != nil
+}
+
+// description is TBD
+// SetLacp sets the FlowLacp value in the FlowHeader object
+func (obj *flowHeader) SetLacp(value FlowLacp) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.LACP)
+	obj.lacpHolder = nil
+	obj.obj.Lacp = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1433,6 +1479,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Macsec != nil {
 
 		obj.Macsec().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Lacp != nil {
+
+		obj.Lacp().validateObj(vObj, set_default)
 	}
 
 }
@@ -1549,6 +1600,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Macsec != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.MACSEC
+	}
+
+	if obj.obj.Lacp != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.LACP
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

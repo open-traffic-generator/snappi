@@ -13,9 +13,10 @@ import (
 // ***** CaptureRequest *****
 type captureRequest struct {
 	validation
-	obj          *otg.CaptureRequest
-	marshaller   marshalCaptureRequest
-	unMarshaller unMarshalCaptureRequest
+	obj           *otg.CaptureRequest
+	marshaller    marshalCaptureRequest
+	unMarshaller  unMarshalCaptureRequest
+	packetsHolder CaptureRequestPackets
 }
 
 func NewCaptureRequest() CaptureRequest {
@@ -29,7 +30,7 @@ func (obj *captureRequest) msg() *otg.CaptureRequest {
 }
 
 func (obj *captureRequest) setMsg(msg *otg.CaptureRequest) CaptureRequest {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalcaptureRequest) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalcaptureRequest) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalcaptureRequest) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,7 +243,15 @@ func (obj *captureRequest) Clone() (CaptureRequest, error) {
 	return newObj, nil
 }
 
-// CaptureRequest is the capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
+func (obj *captureRequest) setNil() {
+	obj.packetsHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
+// CaptureRequest is the capture result request to the traffic generator.
+// Stops the port capture on the port_name and returns the capture.
 type CaptureRequest interface {
 	Validation
 	// msg marshals CaptureRequest to protobuf object *otg.CaptureRequest
@@ -268,6 +277,15 @@ type CaptureRequest interface {
 	PortName() string
 	// SetPortName assigns string provided by user to CaptureRequest
 	SetPortName(value string) CaptureRequest
+	// Packets returns CaptureRequestPackets, set in CaptureRequest.
+	// CaptureRequestPackets is packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+	Packets() CaptureRequestPackets
+	// SetPackets assigns CaptureRequestPackets provided by user to CaptureRequest.
+	// CaptureRequestPackets is packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+	SetPackets(value CaptureRequestPackets) CaptureRequest
+	// HasPackets checks if Packets has been set in CaptureRequest
+	HasPackets() bool
+	setNil()
 }
 
 // The name of a port a capture is started on.
@@ -294,6 +312,34 @@ func (obj *captureRequest) SetPortName(value string) CaptureRequest {
 	return obj
 }
 
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+// Packets returns a CaptureRequestPackets
+func (obj *captureRequest) Packets() CaptureRequestPackets {
+	if obj.obj.Packets == nil {
+		obj.obj.Packets = NewCaptureRequestPackets().msg()
+	}
+	if obj.packetsHolder == nil {
+		obj.packetsHolder = &captureRequestPackets{obj: obj.obj.Packets}
+	}
+	return obj.packetsHolder
+}
+
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+// Packets returns a CaptureRequestPackets
+func (obj *captureRequest) HasPackets() bool {
+	return obj.obj.Packets != nil
+}
+
+// Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+// SetPackets sets the CaptureRequestPackets value in the CaptureRequest object
+func (obj *captureRequest) SetPackets(value CaptureRequestPackets) CaptureRequest {
+
+	obj.packetsHolder = nil
+	obj.obj.Packets = value.msg()
+
+	return obj
+}
+
 func (obj *captureRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -303,6 +349,12 @@ func (obj *captureRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.PortName == nil {
 		vObj.validationErrors = append(vObj.validationErrors, "PortName is required field on interface CaptureRequest")
 	}
+
+	if obj.obj.Packets != nil {
+
+		obj.Packets().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *captureRequest) setDefault() {
