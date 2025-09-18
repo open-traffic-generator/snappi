@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.35.0
+  version: 1.36.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -13394,6 +13394,8 @@ components:
               x-field-uid: 21
             macsec:
               x-field-uid: 22
+            lacp:
+              x-field-uid: 23
           enum:
           - custom
           - ethernet
@@ -13417,6 +13419,7 @@ components:
           - snmpv2c
           - rsvp
           - macsec
+          - lacp
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -13483,6 +13486,9 @@ components:
         macsec:
           $ref: '#/components/schemas/Flow.Macsec'
           x-field-uid: 23
+        lacp:
+          $ref: '#/components/schemas/Flow.Lacp'
+          x-field-uid: 24
     Flow.Custom:
       type: object
       description: |-
@@ -15767,6 +15773,205 @@ components:
               x-field-uid: 1
           enum:
           - auto
+    Flow.Lacp:
+      description: |-
+        Defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU) as specified by IEEE 802.3ad. The ethernet ether type, if set to auto, will be updated to '0x8809' and the destination address, if set to auto, will be updated to "01:80:C2:00:00:02" for LACP. Flows[i].metrics.enable should be set to false to avoid insertion of additional instrumentation bytes in the generated packets.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: lacpdu
+          x-field-uid: 1
+          x-enum:
+            lacpdu:
+              x-field-uid: 1
+          enum:
+          - lacpdu
+        version:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version'
+        lacpdu:
+          $ref: '#/components/schemas/Flow.Lacp.Lacpdu'
+          x-field-uid: 3
+    Flow.Lacp.Lacpdu:
+      description: |-
+        Defines the TLV fields of a Link Aggregation Control Protocol (LACP)
+        Data Unit (PDU) as specified by IEEE 802.3ad.
+      type: object
+      properties:
+        actor:
+          $ref: '#/components/schemas/Flow.Lacpdu.Actor'
+          x-field-uid: 1
+        partner:
+          $ref: '#/components/schemas/Flow.Lacpdu.Partner'
+          x-field-uid: 2
+        collector:
+          $ref: '#/components/schemas/Flow.Lacpdu.Collector'
+          x-field-uid: 3
+        terminator:
+          $ref: '#/components/schemas/Flow.Lacpdu.Terminator'
+          x-field-uid: 4
+    Flow.Lacpdu.Actor:
+      description: |-
+        Information about the local (actor) system.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Length'
+        system_priority:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemPriority'
+        system_id:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemId'
+        key:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Key'
+        port_priority:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortPriority'
+        port_number:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortNumber'
+        actor_state:
+          $ref: '#/components/schemas/Flow.Lacpdu.Actor.State'
+          x-field-uid: 8
+        reserved:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Reserved'
+    Flow.Lacpdu.Partner:
+      description: |-
+        Information about the remote (partner) system.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Length'
+        system_priority:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemPriority'
+        system_id:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemId'
+        key:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Key'
+        port_priority:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortPriority'
+        port_number:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortNumber'
+        partner_state:
+          $ref: '#/components/schemas/Flow.Lacpdu.Partner.State'
+          x-field-uid: 8
+        reserved:
+          x-field-uid: 9
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Reserved'
+    Flow.Lacpdu.Collector:
+      description: |-
+        Information about frame collection parameters.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Length'
+        max_delay:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.MaxDelay'
+        reserved:
+          description: |-
+            Reserved field for future use in the Collector TLV. 12 bytes long and should be set to all zeros.
+          type: string
+          format: hex
+          default: '000000000000000000000000'
+          x-field-uid: 4
+    Flow.Lacpdu.Terminator:
+      description: |-
+        Marks the end of the LACPDU message.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Length'
+        reserved:
+          description: |-
+            Final block of reserved bytes to pad the PDU. It is 50 bytes long.
+          type: string
+          format: hex
+          default: '0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+          x-field-uid: 3
+    Flow.Lacpdu.Actor.State:
+      description: |-
+        This field indicates the Actor's state.
+      type: object
+      properties:
+        activity:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Activity'
+        timeout:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Timeout'
+        aggregation:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Aggregation'
+        synchronization:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Synchronization'
+        collecting:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Collecting'
+        distributing:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Distributing'
+        defaulted:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Defaulted'
+        expired:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Expired'
+    Flow.Lacpdu.Partner.State:
+      description: |-
+        This field indicates the Partner's state.
+      type: object
+      properties:
+        activity:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Activity'
+        timeout:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Timeout'
+        aggregation:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Aggregation'
+        synchronization:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Synchronization'
+        collecting:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Collecting'
+        distributing:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Distributing'
+        defaulted:
+          x-field-uid: 7
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Defaulted'
+        expired:
+          x-field-uid: 8
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Expired'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -46257,6 +46462,2542 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.RSVP.PathObjectsCustom.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacp.Version.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacp.Version:
+      description: |-
+        The LACP version number.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacp.Version.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Actor.Type:
+      description: |-
+        TLV Type for Actor Information. The value 0x01 identifies this TLV as containing information about the sending device (the Actor).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 20
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Actor.Length:
+      description: |-
+        The length of the Actor Information TLV payload in bytes.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 20
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 20
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.SystemPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Actor.SystemPriority:
+      description: |-
+        The priority assigned to the Actor's system for use in aggregation. A lower numerical value indicates a higher priority. Used to select the active System ID when forming an aggregator.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.SystemId.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:00
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Lacpdu.Actor.SystemId:
+      description: |-
+        The Actor's System ID, which is a globally unique MAC address assigned to the system containing the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:00
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:00
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.SystemId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.Key.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Actor.Key:
+      description: |-
+        The operational Key value assigned to the Actor's port. The key is generated based on port configuration (e.g., speed, duplex, trunk ID) and is used to identify potential aggregation groups. Only links with the same key can be aggregated together.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Key.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Key.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.PortPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Actor.PortPriority:
+      description: |-
+        The priority assigned to the Actor's port. A lower numerical value indicates a higher priority. Used to prioritize ports for inclusion in a Link Aggregation Group (LAG) when the group is full.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.PortNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Actor.PortNumber:
+      description: |-
+        The port number assigned to the Actor's port. It is a unique identifier for the port within the system.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.PortNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Lacpdu.Actor.Reserved:
+      description: |-
+        Reserved field for future use in the Actor TLV. Should be set to all zeros.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 2
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Partner.Type:
+      description: |-
+        TLV Type for Partner Information. The value 0x02 identifies this TLV as containing information about the remote device (the Partner), as understood by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 2
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 2
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 20
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Partner.Length:
+      description: |-
+        The length of the Partner Information TLV payload in bytes.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 20
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 20
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.SystemPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Partner.SystemPriority:
+      description: |-
+        The priority of the Partner's system, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.SystemId.Counter:
+      description: |-
+        mac counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 00:00:00:00:00:00
+          format: mac
+        step:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:01
+          format: mac
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Lacpdu.Partner.SystemId:
+      description: |-
+        The Partner's System ID (MAC address), as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 00:00:00:00:00:00
+          format: mac
+        values:
+          type: array
+          items:
+            type: string
+            format: mac
+          x-field-uid: 3
+          default:
+          - 00:00:00:00:00:00
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.SystemId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.Key.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Partner.Key:
+      description: |-
+        The operational Key value of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Key.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Key.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.PortPriority.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Partner.PortPriority:
+      description: |-
+        The priority of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortPriority.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortPriority.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.PortNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Partner.PortNumber:
+      description: |-
+        The port number of the Partner's port, as received by the Actor.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.PortNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 16777215
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 16777215
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16777215
+    Pattern.Flow.Lacpdu.Partner.Reserved:
+      description: |-
+        Reserved field for future use in the Partner TLV. Should be set to all zeros.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 16777215
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 16777215
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Collector.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 3
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Collector.Type:
+      description: |-
+        TLV Type for Collector Information. The value 0x03 identifies this TLV.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 3
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Collector.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 16
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Collector.Length:
+      description: |-
+        The length of the Collector Information TLV payload in bytes. The value must be 16 (0x10).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 16
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 16
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Collector.MaxDelay.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65535
+    Pattern.Flow.Lacpdu.Collector.MaxDelay:
+      description: |-
+        Indicates the maximum delay, in units of 10 microseconds, that the transmitting system's aggregator will take to buffer frames from its collector before emitting a frame.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.MaxDelay.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Collector.MaxDelay.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Terminator.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Terminator.Type:
+      description: |-
+        TLV Type for Terminator Information. The value 0x00 indicates the end of the TLV list.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Type.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Type.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Terminator.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 255
+    Pattern.Flow.Lacpdu.Terminator.Length:
+      description: |-
+        The length of the Terminator TLV payload. The value must be 0.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Length.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Terminator.Length.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Activity.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Activity:
+      description: |-
+        LACP Activity (1=Active, 0=Passive)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Activity.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Activity.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Timeout.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Timeout:
+      description: |-
+        LACP Timeout (1=Fast timeout, 0=Slow timeout)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Timeout.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Timeout.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Aggregation.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Aggregation:
+      description: |-
+        Aggregation (1=Aggregatable, 0=Individual)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Aggregation.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Aggregation.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Synchronization.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Synchronization:
+      description: |-
+        Synchronization (1=In Sync, 0=Out of Sync)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Synchronization.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Synchronization.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Collecting.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Collecting:
+      description: |-
+        Collecting (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Collecting.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Collecting.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Distributing.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Distributing:
+      description: |-
+        Distributing (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Distributing.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Distributing.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Defaulted.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Defaulted:
+      description: |-
+        Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Defaulted.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Defaulted.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Actor.State.Expired.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Actor.State.Expired:
+      description: |-
+        Expired (1=Expired, 0=Not Expired)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Expired.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Actor.State.Expired.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Activity.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Activity:
+      description: |-
+        LACP Activity (1=Active, 0=Passive)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Activity.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Activity.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Timeout.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Timeout:
+      description: |-
+        LACP Timeout (1=Fast timeout, 0=Slow timeout)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Timeout.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Timeout.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Aggregation.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Aggregation:
+      description: |-
+        Aggregation (1=Aggregatable, 0=Individual)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Aggregation.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Aggregation.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Synchronization.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Synchronization:
+      description: |-
+        Synchronization (1=In Sync, 0=Out of Sync)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Synchronization.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Synchronization.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Collecting.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Collecting:
+      description: |-
+        Collecting (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Collecting.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Collecting.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Distributing.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Distributing:
+      description: |-
+        Distributing (1=Enabled, 0=Disabled)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Distributing.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Distributing.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Defaulted.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Defaulted:
+      description: |-
+        Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Defaulted.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Defaulted.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Lacpdu.Partner.State.Expired.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 1
+    Pattern.Flow.Lacpdu.Partner.State.Expired:
+      description: |-
+        Expired (1=Expired, 0=Not Expired)
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Expired.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Expired.Counter'
           x-field-uid: 6
     Version:
       description: |-
