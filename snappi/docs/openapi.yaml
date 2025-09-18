@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.36.0
+  version: 1.37.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -28117,7 +28117,8 @@ components:
           x-field-uid: 5
     Capture.Request:
       description: |-
-        The capture result request to the traffic generator. Stops the port capture on the port_name and returns the capture.
+        The capture result request to the traffic generator.
+        Stops the port capture on the port_name and returns the capture.
       type: object
       required:
       - port_name
@@ -28136,6 +28137,73 @@ components:
           x-constraint:
           - /components/schemas/Port/properties/name
           x-field-uid: 1
+        packets:
+          description: |-
+            Specification of the packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+          $ref: '#/components/schemas/CaptureRequest.Packets'
+          x-field-uid: 2
+    CaptureRequest.Packets:
+      description: |-
+        Packets to be returned in the capture result from  the set of captured packets as per capture configuration.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: all
+          x-field-uid: 1
+          x-enum:
+            all:
+              x-field-uid: 1
+            slice:
+              x-field-uid: 2
+          enum:
+          - all
+          - slice
+        slice:
+          $ref: '#/components/schemas/CaptureRequest.CaptureSlice'
+          x-field-uid: 2
+    CaptureRequest.CaptureSlice:
+      description: "Packets to be returned as part of the capture result from the\
+        \ set of captured packets as per \ncapture configuration and specification\
+        \ of capture slice.\nTo be noted,\n- definition of capture slice works in\
+        \ conjunction with capture filter parameters in set_config.\n- if 'initial'\
+        \ set of packets is desired to be returned in the capture result, 'overwrite'\
+        \ attribute in 'captures' \n  settings of set_config should be disabled."
+      type: object
+      properties:
+        choice:
+          type: string
+          default: initial
+          x-field-uid: 1
+          x-enum:
+            initial:
+              x-field-uid: 1
+          enum:
+          - initial
+        initial:
+          $ref: '#/components/schemas/CaptureRequest.CaptureSliceInitial'
+          x-field-uid: 2
+    CaptureRequest.CaptureSliceInitial:
+      description: |-
+        Specification of capture slice to retrieve captured packets from begining of captured packet sequence.
+      type: object
+      properties:
+        start:
+          description: |-
+            Position of the packet (Nth) in the captured packet sequence starting from which  packets would be returned as part of the capture result.
+          type: integer
+          format: uint64
+          minimum: 1
+          default: 1
+          x-field-uid: 1
+        count:
+          description: |-
+            Maximum number of packets to be returned as part of the capture result starting from the position of 'start' packet.
+          type: integer
+          format: uint64
+          minimum: 1
+          default: 100
+          x-field-uid: 2
     Pattern.Flow.Ethernet.Dst.Counter:
       description: |-
         mac counter pattern
