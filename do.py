@@ -360,9 +360,18 @@ def testgo():
 
 def dist():
     clean()
+    with open("models-release", "w") as out:
+        out.write("v" + models_version)
+    with open("version.txt", "w") as out:
+        out.write("v" + sdk_version)
+    with open("requirements.txt", 'r') as f_in:
+        lines = f_in.readlines()
+    # Write all lines back to the file except the first one
+    with open("requirements.txt", 'w') as f_out:
+        f_out.writelines(lines[1:])
     run(
         [
-            py() + " setup.py sdist bdist_wheel",
+            py() + " -m build",
         ]
     )
     print(os.listdir("dist"))
@@ -400,6 +409,7 @@ def clean():
         ".pytype",
         "dist",
         "build",
+        "version.txt",
         "*.egg-info",
     ]
     recursive_patterns = [

@@ -1,3 +1,4 @@
 --prefer-binary
 requests
-openapiart==0.3.31
+openapiart==0.3.33
+build
