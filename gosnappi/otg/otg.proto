@@ -139,10 +139,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -315,17 +311,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -334,11 +322,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -363,10 +346,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -472,10 +451,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -546,10 +521,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1263,10 +1234,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1318,16 +1285,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1468,17 +1429,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1821,10 +1776,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -3005,12 +2956,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -3770,8 +3715,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -4231,8 +4174,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6596,12 +6537,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6863,11 +6798,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6891,11 +6821,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7059,10 +6984,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -7124,11 +7045,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7558,10 +7474,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7634,10 +7546,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7811,8 +7719,6 @@ message DhcpV6ServerSecondaryDns {
 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -7950,10 +7856,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8344,10 +8246,6 @@ message DeviceMacsec {
 message DeviceMacsecEthernetInterface {
 
   // The unique name of the Ethernet interface on which MACsec is enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -9039,8 +8937,6 @@ message SecureEntityStaticKeyRxSc {
 
 // Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
 
@@ -9141,10 +9037,6 @@ message Ospfv3Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv6 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9394,10 +9286,6 @@ message Rocev2V4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -9513,10 +9401,6 @@ message Rocev2V6Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -9571,10 +9455,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -9645,16 +9525,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -9663,19 +9536,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9756,41 +9619,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -9839,6 +9670,7 @@ message FlowHeader {
       rsvp = 21;
       macsec = 22;
       lacp = 23;
+      ipv6_extension_header = 24;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -9914,6 +9746,10 @@ message FlowHeader {
 
   // Description missing in models
   FlowLacp lacp = 24;
+
+  // Ipv6 extension packet headers. For routing extension headers the IPv6 next header
+  // is 43.
+  repeated FlowIpv6ExtHeader ipv6_extension_header = 25;
 }
 
 // Custom packet header
@@ -12082,6 +11918,200 @@ message FlowLacpduPartnerState {
   PatternFlowLacpduPartnerStateExpired expired = 8;
 }
 
+// Ipv6 extension packet headers.
+message FlowIpv6ExtHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeader next_header = 2;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLen hdr_ext_len = 3;
+
+  // Description missing in models
+  FlowIpv6Routing routing = 4;
+}
+
+// Ipv6 routing packet headers.
+message FlowIpv6Routing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      segment_routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.segment_routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIpv6SegmentRouting segment_routing = 2;
+}
+
+// Defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type
+// 4. This header is an IPv6 Routing header used to specify a source-routed path for
+// a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically
+// IPv6 addresses.
+message FlowIpv6SegmentRouting {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeft segments_left = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntry last_entry = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingFlags flags = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTag tag = 4;
+
+  // 128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment
+  // List is encoded starting from the last segment of the SR Policy. That is, the first
+  // element of the Segment List (Segment List[0]) contains the last segment of the SR
+  // Policy, the second element contains the penultimate segment of the SR Policy, and
+  // so on.
+  repeated FlowIpv6SegmentRoutingSegment segment_list = 5;
+
+  // Description missing in models
+  repeated FlowIpv6SegmentRoutingTlvs tlvs = 6;
+}
+
+// Description missing in models
+message FlowIpv6SegmentRoutingSegment {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegment segment = 1;
+}
+
+// A list of optional Type-Length-Value (TLV) objects that carry metadata for segment
+// processing. TLVs are only present if the Hdr Ext Len is greater than what is required
+// for the fixed header and the segment list.
+message FlowIpv6SegmentRoutingTlvs {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ingress = 1;
+      egress = 2;
+      opaque = 3;
+      padding = 4;
+      path_trace = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ingress
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvsLength length = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingTlvIngressNode ingress = 3;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingTlvEgressNode egress = 4;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingTlvOpaqueContainer opaque = 5;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingTlvPad padding = 6;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingTlvPathTrace path_trace = 7;
+}
+
+// An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
+// drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+message FlowIpv6SegmentRoutingFlags {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtected protected = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOam oam = 2;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsHmac hmac = 4;
+}
+
+// Padding TLV used when more than one byte of padding is required to align subsequent
+// TLVs or pad the header to an 8-octet boundary.
+message FlowIpv6SegmentRoutingTlvPad {
+
+  // Variable-length padding bytes. Must be set to 0 on transmission.
+  // default = 00
+  optional string padding = 1;
+}
+
+// A TLV that may be used to carry the IPv6 address of the ingress node of the SR domain.
+message FlowIpv6SegmentRoutingTlvIngressNode {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeReserved reserved = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeFlags flags = 2;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeValue value = 3;
+}
+
+// A TLV that identifies the egress node of the SR policy.
+message FlowIpv6SegmentRoutingTlvEgressNode {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeReserved reserved = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeFlags flags = 2;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeValue value = 3;
+}
+
+// A TLV used to carry opaque data across the SR domain.
+message FlowIpv6SegmentRoutingTlvOpaqueContainer {
+
+  // The variable-length opaque data carried by the TLV.
+  // default = 00
+  optional string value = 1;
+}
+
+// A TLV used for path tracing and performance monitoring within the SR domain.
+message FlowIpv6SegmentRoutingTlvPathTrace {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceId interface_id = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceLoad interface_load = 2;
+
+  // Timestamp indicating when the measurement was taken.
+  // default = 00
+  optional string timestamp = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSessionId session_id = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSequenceNumber sequence_number = 5;
+}
+
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -12569,9 +12599,6 @@ message FlowPayloadFixed {
 // Under Review: Event configuration is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -12633,12 +12660,6 @@ message EventRequest {
 
   // Constrain the events being returned by specifying event sources.
   // If the list is empty then all event sources will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12721,10 +12742,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12937,10 +12954,6 @@ message Rocev2TxPorts {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 1;
 
   // Description missing in models
@@ -12983,19 +12996,10 @@ message Rocev2Flow {
   // x-constraint:
   // - /components/schemas/Rocev2.QPs/properties/qp_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // required = true
   optional string tx_endpoint = 1;
 
   // The unique name of remote QP or port which be receiving the packets for the flow.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13075,10 +13079,6 @@ message EgressOnlyTracking {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -13144,10 +13144,6 @@ message EgressOnlyTrackingFilter {
 message PerPortOptions {
 
   // The name of port for which this settings will be applied to.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13527,10 +13523,6 @@ message ConfigDeleteResources {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flows = 2;
 }
 
@@ -13649,10 +13641,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -13678,10 +13666,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -13703,10 +13687,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -13770,15 +13750,6 @@ message StateProtocolRoute {
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -13823,10 +13794,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -13848,10 +13815,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13892,11 +13855,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -13945,10 +13903,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -13988,10 +13942,6 @@ message StateProtocolOspfv2Routers {
 
   // The names of OSPFv2 routers for which the state has to be applied. An empty or null
   // list will control all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -14039,10 +13989,6 @@ message StateProtocolOspfv3Routers {
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -14082,11 +14028,6 @@ message StateProtocolRocev2Peers {
 
   // The names of RoCEv2 peers for which the state has to be applied. An empty or null
   // list will control all RoCEv2 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4Peer/properties/name
-  // - /components/schemas/Rocev2.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V4Peer/properties/name
@@ -14246,18 +14187,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -14279,10 +14214,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -14349,18 +14280,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -14382,10 +14307,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -14446,11 +14367,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -14506,11 +14422,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14614,10 +14525,6 @@ message ActionProtocolIsis {
 message ActionProtocolIsisInitiateRestart {
 
   // The names of device objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -14907,10 +14814,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -14940,10 +14843,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -15022,10 +14921,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -15340,10 +15235,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -15470,10 +15361,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -15596,10 +15483,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -15759,10 +15642,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -15789,10 +15668,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -15847,18 +15722,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -15979,10 +15846,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -16041,10 +15904,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -16205,10 +16064,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -16266,10 +16121,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -16323,10 +16174,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -16408,10 +16255,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -16501,10 +16344,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -16666,9 +16505,6 @@ message Ospfv2Metric {
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -16679,16 +16515,9 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
@@ -16748,13 +16577,6 @@ message ConvergenceEvent {
   // - /components/schemas/Device.Bgpv4Route/properties/name
   // - /components/schemas/Device.Bgpv6Route/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   optional string source = 2;
 
   // The timestamp(nanoseconds) of the starting event that triggers convergence.
@@ -16769,10 +16591,6 @@ message MacsecMetricsRequest {
 
   // The names of secure entities(secYs) to return results for. An empty list will return
   // results for all secYs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Macsec/properties/name
@@ -16890,10 +16708,6 @@ message MkaMetricsRequest {
   // x-constraint:
   // - /components/schemas/Mka/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -16967,10 +16781,6 @@ message Ospfv3MetricsRequest {
 
   // The names of OSPFv3 routers to return results for. An empty list will return results
   // for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -17147,10 +16957,6 @@ message Rocev2IPv4ColumnNames {
   // x-constraint:
   // - /components/schemas/Rocev2.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -17255,10 +17061,6 @@ message Rocev2IPv6ColumnNames {
 
   // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
   // results for all RoCEv2 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V6peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V6peer/properties/name
@@ -17514,10 +17316,6 @@ message EgressOnlyTrackingMetricsRequest {
   // If no port-names are provided, egress_only_tracking metrics will be returned for
   // all ports
   // which have one or more egress_only_tracking enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/EgressOnlyTracking/properties/port_name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/EgressOnlyTracking/properties/port_name
@@ -17806,10 +17604,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -17839,10 +17633,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -17868,11 +17658,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -18426,10 +18211,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -18970,10 +18751,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -19137,10 +18914,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -19275,10 +19048,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -19312,10 +19081,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -19366,10 +19131,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -19425,10 +19186,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -19476,10 +19233,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -19686,10 +19439,6 @@ message Ospfv3LsasStateRequest {
 
   // The names of OSPFv3 routers for which learned information is requested. An empty
   // list will return results for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -19912,10 +19661,6 @@ message IsisIIHsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results of IIH States for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -20186,10 +19931,6 @@ message IsisIIHRestartFlags {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -34815,6 +34556,1041 @@ message PatternFlowLacpduPartnerStateExpired {
 
   // Description missing in models
   PatternFlowLacpduPartnerStateExpiredCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderNextHeaderCounter {
+
+  // Description missing in models
+  // default = 59
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit selector that identifies the type of header immediately following the SRH.
+// It uses the same values as the IPv4 Protocol field. For TCP and UDP the values are
+// 6 and 17 respectively. For other headers refer RFC 8200.
+message PatternFlowIpv6ExtHeaderNextHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 59
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [59]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 59
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderHdrExtLenCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer specifying the length of the SRH in 8-octet units, not including
+// the first 8 octets of the SRH itself. When AUTO is assigned it is set to the correct
+// value.
+message PatternFlowIpv6ExtHeaderHdrExtLen {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentsLeftCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer containing the number of remaining segments to be visited
+// before the packet reaches its final destination. It is decremented at each segment
+// endpoint. It points to the current active segment in the Segment List. This should
+// not be more than the number of segment specified in the segment list. When AUTO is
+// assigned the value is set to the number of segment specified.
+message PatternFlowIpv6SegmentRoutingSegmentsLeft {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingLastEntryCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer that contains the zero-based index of the last element in
+// the Segment List array. For example, if the Segment List contains 3 addresses (at
+// indices 0, 1, 2), the value of Last Entry is 2. When AUTO is assigned the value is
+// set to one less than the number of segment specified.
+message PatternFlowIpv6SegmentRoutingLastEntry {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 16-bit field used to tag a packet as part of a class or group, enabling shared properties
+// or policy treatment. If not used, it MUST be set to zero.
+message PatternFlowIpv6SegmentRoutingTag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
+
+  // Description missing in models
+  // default = ::0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 128-bit IPv6 address segment.
+message PatternFlowIpv6SegmentRoutingSegmentSegment {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvsLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the TLV value in bytes.
+message PatternFlowIpv6SegmentRoutingTlvsLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvsLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvsLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsProtectedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Protected Flag. Indicates if the segment is protected by a Fast Re-Route (FRR) mechanism.
+message PatternFlowIpv6SegmentRoutingFlagsProtected {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
+// (OAM) packet.
+message PatternFlowIpv6SegmentRoutingFlagsOam {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsAlertCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Alert Flag. Indicates the presence of important TLVs that must be inspected.
+message PatternFlowIpv6SegmentRoutingFlagsAlert {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsHmacCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// HMAC Flag. Indicates the presence of the HMAC TLV for verification.
+message PatternFlowIpv6SegmentRoutingFlagsHmac {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsHmacCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsHmacCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field. Must be 0.
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit flags field for this TLV.
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeFlagsCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeValueCounter {
+
+  // Description missing in models
+  // default = ::
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The 128-bit IPv6 address of the ingress node.
+message PatternFlowIpv6SegmentRoutingTlvIngressNodeValue {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeValueCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvIngressNodeValueCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field. Must be 0.
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeFlagsCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit flags field for this TLV.
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeFlags {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeFlagsCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeFlagsCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeValueCounter {
+
+  // Description missing in models
+  // default = ::
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The 128-bit IPv6 address of the egress node.
+message PatternFlowIpv6SegmentRoutingTlvEgressNodeValue {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeValueCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvEgressNodeValueCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceIdCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Identifier of the interface where the measurement was taken.
+message PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceLoadCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Load on the interface at the time of measurement.
+message PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceLoad {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceLoadCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceInterfaceLoadCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvPathTraceSessionIdCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Identifier for the monitoring session.
+message PatternFlowIpv6SegmentRoutingTlvPathTraceSessionId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSessionIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSessionIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTlvPathTraceSequenceNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Sequence number for the packet within the monitoring session.
+message PatternFlowIpv6SegmentRoutingTlvPathTraceSequenceNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSequenceNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTlvPathTraceSequenceNumberCounter decrement = 6;
 }
 
 // Version details
