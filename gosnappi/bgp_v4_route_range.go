@@ -23,6 +23,7 @@ type bgpV4RouteRange struct {
 	addPathHolder             BgpAddPath
 	extCommunitiesHolder      BgpV4RouteRangeBgpExtCommunityIter
 	extendedCommunitiesHolder BgpV4RouteRangeBgpExtendedCommunityIter
+	mplsLabelsHolder          BgpMplsLabelBindings
 }
 
 func NewBgpV4RouteRange() BgpV4RouteRange {
@@ -257,6 +258,7 @@ func (obj *bgpV4RouteRange) setNil() {
 	obj.addPathHolder = nil
 	obj.extCommunitiesHolder = nil
 	obj.extendedCommunitiesHolder = nil
+	obj.mplsLabelsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -344,6 +346,24 @@ type BgpV4RouteRange interface {
 	ExtCommunities() BgpV4RouteRangeBgpExtCommunityIter
 	// ExtendedCommunities returns BgpV4RouteRangeBgpExtendedCommunityIterIter, set in BgpV4RouteRange
 	ExtendedCommunities() BgpV4RouteRangeBgpExtendedCommunityIter
+	// MplsLabels returns BgpMplsLabelBindings, set in BgpV4RouteRange.
+	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
+	// to a particular address prefix.
+	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
+	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
+	// References: https://datatracker.ietf.org/doc/html/rfc3107
+	// & https://datatracker.ietf.org/doc/html/rfc8277.
+	MplsLabels() BgpMplsLabelBindings
+	// SetMplsLabels assigns BgpMplsLabelBindings provided by user to BgpV4RouteRange.
+	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
+	// to a particular address prefix.
+	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
+	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
+	// References: https://datatracker.ietf.org/doc/html/rfc3107
+	// & https://datatracker.ietf.org/doc/html/rfc8277.
+	SetMplsLabels(value BgpMplsLabelBindings) BgpV4RouteRange
+	// HasMplsLabels checks if MplsLabels has been set in BgpV4RouteRange
+	HasMplsLabels() bool
 	setNil()
 }
 
@@ -739,8 +759,6 @@ func (obj *bgpV4RouteRange) SetName(value string) BgpV4RouteRange {
 
 // Deprecated: This property is deprecated in favor of property extended_communities
 //
-// Deprecated: This property is deprecated in favor of property extended_communities
-//
 // Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
 // ExtCommunities returns a []BgpExtCommunity
 func (obj *bgpV4RouteRange) ExtCommunities() BgpV4RouteRangeBgpExtCommunityIter {
@@ -915,6 +933,34 @@ func (obj *bgpV4RouteRangeBgpExtendedCommunityIter) appendHolderSlice(item BgpEx
 	return obj
 }
 
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// MplsLabels returns a BgpMplsLabelBindings
+func (obj *bgpV4RouteRange) MplsLabels() BgpMplsLabelBindings {
+	if obj.obj.MplsLabels == nil {
+		obj.obj.MplsLabels = NewBgpMplsLabelBindings().msg()
+	}
+	if obj.mplsLabelsHolder == nil {
+		obj.mplsLabelsHolder = &bgpMplsLabelBindings{obj: obj.obj.MplsLabels}
+	}
+	return obj.mplsLabelsHolder
+}
+
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// MplsLabels returns a BgpMplsLabelBindings
+func (obj *bgpV4RouteRange) HasMplsLabels() bool {
+	return obj.obj.MplsLabels != nil
+}
+
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// SetMplsLabels sets the BgpMplsLabelBindings value in the BgpV4RouteRange object
+func (obj *bgpV4RouteRange) SetMplsLabels(value BgpMplsLabelBindings) BgpV4RouteRange {
+
+	obj.mplsLabelsHolder = nil
+	obj.obj.MplsLabels = value.msg()
+
+	return obj
+}
+
 func (obj *bgpV4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1013,6 +1059,11 @@ func (obj *bgpV4RouteRange) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.MplsLabels != nil {
+
+		obj.MplsLabels().validateObj(vObj, set_default)
 	}
 
 }
