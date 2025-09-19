@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6ExtHeaderHdrExtLen) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6ExtHeaderHdrExtLen is 8-bit unsigned integer specifying the length of the SRH in 8-octet units, not including the first 8 octets of the SRH itself. When AUTO is assigned it is set to the correct value.
+// PatternFlowIpv6ExtHeaderHdrExtLen is the length of the IPv6 Extension header in 8 octet units, not including the first 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned it is set to the correct value.
 type PatternFlowIpv6ExtHeaderHdrExtLen interface {
 	Validation
 	// msg marshals PatternFlowIpv6ExtHeaderHdrExtLen to protobuf object *otg.PatternFlowIpv6ExtHeaderHdrExtLen

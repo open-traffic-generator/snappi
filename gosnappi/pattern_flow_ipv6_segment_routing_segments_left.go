@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingSegmentsLeft) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When AUTO is assigned the value is set to the number of segment specified.
+// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When auto is assigned the value is set to the number of segment specified.
 type PatternFlowIpv6SegmentRoutingSegmentsLeft interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingSegmentsLeft to protobuf object *otg.PatternFlowIpv6SegmentRoutingSegmentsLeft

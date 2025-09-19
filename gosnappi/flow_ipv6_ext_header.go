@@ -254,7 +254,7 @@ func (obj *flowIpv6ExtHeader) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6ExtHeader is ipv6 extension packet headers.
+// FlowIpv6ExtHeader is iPv6 extension packet headers.
 type FlowIpv6ExtHeader interface {
 	Validation
 	// msg marshals FlowIpv6ExtHeader to protobuf object *otg.FlowIpv6ExtHeader
@@ -283,26 +283,26 @@ type FlowIpv6ExtHeader interface {
 	// HasChoice checks if Choice has been set in FlowIpv6ExtHeader
 	HasChoice() bool
 	// NextHeader returns PatternFlowIpv6ExtHeaderNextHeader, set in FlowIpv6ExtHeader.
-	// PatternFlowIpv6ExtHeaderNextHeader is 8-bit selector that identifies the type of header immediately following the SRH. It uses the same values as the IPv4 Protocol field. For TCP and UDP the values are 6 and 17 respectively. For other headers refer RFC 8200.
+	// PatternFlowIpv6ExtHeaderNextHeader is the next header that identifies the type of header immediately following this IPv6 Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of 59 indicates that there are no further IPv6 Extension headers and that the payload will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
 	NextHeader() PatternFlowIpv6ExtHeaderNextHeader
 	// SetNextHeader assigns PatternFlowIpv6ExtHeaderNextHeader provided by user to FlowIpv6ExtHeader.
-	// PatternFlowIpv6ExtHeaderNextHeader is 8-bit selector that identifies the type of header immediately following the SRH. It uses the same values as the IPv4 Protocol field. For TCP and UDP the values are 6 and 17 respectively. For other headers refer RFC 8200.
+	// PatternFlowIpv6ExtHeaderNextHeader is the next header that identifies the type of header immediately following this IPv6 Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of 59 indicates that there are no further IPv6 Extension headers and that the payload will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
 	SetNextHeader(value PatternFlowIpv6ExtHeaderNextHeader) FlowIpv6ExtHeader
 	// HasNextHeader checks if NextHeader has been set in FlowIpv6ExtHeader
 	HasNextHeader() bool
 	// HdrExtLen returns PatternFlowIpv6ExtHeaderHdrExtLen, set in FlowIpv6ExtHeader.
-	// PatternFlowIpv6ExtHeaderHdrExtLen is 8-bit unsigned integer specifying the length of the SRH in 8-octet units, not including the first 8 octets of the SRH itself. When AUTO is assigned it is set to the correct value.
+	// PatternFlowIpv6ExtHeaderHdrExtLen is the length of the IPv6 Extension header in 8 octet units, not including the first 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned it is set to the correct value.
 	HdrExtLen() PatternFlowIpv6ExtHeaderHdrExtLen
 	// SetHdrExtLen assigns PatternFlowIpv6ExtHeaderHdrExtLen provided by user to FlowIpv6ExtHeader.
-	// PatternFlowIpv6ExtHeaderHdrExtLen is 8-bit unsigned integer specifying the length of the SRH in 8-octet units, not including the first 8 octets of the SRH itself. When AUTO is assigned it is set to the correct value.
+	// PatternFlowIpv6ExtHeaderHdrExtLen is the length of the IPv6 Extension header in 8 octet units, not including the first 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned it is set to the correct value.
 	SetHdrExtLen(value PatternFlowIpv6ExtHeaderHdrExtLen) FlowIpv6ExtHeader
 	// HasHdrExtLen checks if HdrExtLen has been set in FlowIpv6ExtHeader
 	HasHdrExtLen() bool
 	// Routing returns FlowIpv6Routing, set in FlowIpv6ExtHeader.
-	// FlowIpv6Routing is ipv6 routing packet headers.
+	// FlowIpv6Routing is iPv6 routing packet headers.
 	Routing() FlowIpv6Routing
 	// SetRouting assigns FlowIpv6Routing provided by user to FlowIpv6ExtHeader.
-	// FlowIpv6Routing is ipv6 routing packet headers.
+	// FlowIpv6Routing is iPv6 routing packet headers.
 	SetRouting(value FlowIpv6Routing) FlowIpv6ExtHeader
 	// HasRouting checks if Routing has been set in FlowIpv6ExtHeader
 	HasRouting() bool

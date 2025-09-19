@@ -1378,7 +1378,7 @@ func (obj *flowHeader) SetLacp(value FlowLacp) FlowHeader {
 	return obj
 }
 
-// Ipv6 extension packet headers. For routing extension headers the IPv6 next header is 43.
+// IPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension headers and the next_header in that preceding header should be set to the correct value depending on the type of extension header configured. This will be autometically handled by implementation if next_header choice is set to auto. For Routing Extension header this value is 43.
 // Ipv6ExtensionHeader returns a []FlowIpv6ExtHeader
 func (obj *flowHeader) Ipv6ExtensionHeader() FlowHeaderFlowIpv6ExtHeaderIter {
 	if len(obj.obj.Ipv6ExtensionHeader) == 0 {

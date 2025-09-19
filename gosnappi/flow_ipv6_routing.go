@@ -250,7 +250,7 @@ func (obj *flowIpv6Routing) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6Routing is ipv6 routing packet headers.
+// FlowIpv6Routing is iPv6 routing packet headers.
 type FlowIpv6Routing interface {
 	Validation
 	// msg marshals FlowIpv6Routing to protobuf object *otg.FlowIpv6Routing

@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingTlvsLength) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes.
+// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes. If auto is selected the implementation should automatically set the length field to the correct value as per the selected TLV and attributes.
 type PatternFlowIpv6SegmentRoutingTlvsLength interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingTlvsLength to protobuf object *otg.PatternFlowIpv6SegmentRoutingTlvsLength

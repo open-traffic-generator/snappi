@@ -13300,7 +13300,7 @@ components:
           x-field-uid: 24
         ipv6_extension_header:
           description: |-
-            Ipv6 extension packet headers. For routing extension headers the IPv6 next header is 43.
+            IPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension headers and the next_header in that preceding header should be set to the correct value depending on the type of extension header configured. This will be autometically handled by implementation if next_header choice is set to auto. For Routing Extension header this value is 43.
           type: array
           items:
             $ref: '#/components/schemas/Flow.Ipv6ExtHeader'
@@ -15789,7 +15789,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Lacpdu.Partner.State.Expired'
     Flow.Ipv6ExtHeader:
       description: |-
-        Ipv6 extension packet headers.
+        IPv6 extension packet headers.
       type: object
       properties:
         choice:
@@ -15812,7 +15812,7 @@ components:
           x-field-uid: 4
     Flow.Ipv6Routing:
       description: |-
-        Ipv6 routing packet headers.
+        IPv6 routing packet headers.
       type: object
       properties:
         choice:
@@ -48719,7 +48719,7 @@ components:
         sctp: 132
     Pattern.Flow.Ipv6ExtHeader.NextHeader:
       description: |-
-        8-bit selector that identifies the type of header immediately following the SRH. It uses the same values as the IPv4 Protocol field. For TCP and UDP the values are 6 and 17 respectively. For other headers refer RFC 8200.
+        The next header that identifies the type of header immediately following this IPv6 Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of 59 indicates that there are no further IPv6 Extension headers and that the payload will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
       type: object
       properties:
         choice:
@@ -48812,7 +48812,7 @@ components:
           maximum: 255
     Pattern.Flow.Ipv6ExtHeader.HdrExtLen:
       description: |-
-        8-bit unsigned integer specifying the length of the SRH in 8-octet units, not including the first 8 octets of the SRH itself. When AUTO is assigned it is set to the correct value.
+        The length of the IPv6 Extension header in 8 octet units, not including the first 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned it is set to the correct value.
       type: object
       properties:
         choice:
@@ -48892,7 +48892,7 @@ components:
           maximum: 255
     Pattern.Flow.Ipv6SegmentRouting.SegmentsLeft:
       description: |-
-        8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When AUTO is assigned the value is set to the number of segment specified.
+        8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When auto is assigned the value is set to the number of segment specified.
       type: object
       properties:
         choice:
@@ -48972,7 +48972,7 @@ components:
           maximum: 255
     Pattern.Flow.Ipv6SegmentRouting.LastEntry:
       description: |-
-        8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When AUTO is assigned the value is set to one less than the number of segment specified.
+        8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value is set to one less than the number of segment specified.
       type: object
       properties:
         choice:
@@ -49181,7 +49181,7 @@ components:
           maximum: 255
     Pattern.Flow.Ipv6SegmentRouting.Tlvs.Length:
       description: |-
-        The length of the TLV value in bytes.
+        The length of the TLV value in bytes. If auto is selected the implementation should automatically set the length field to the correct value as per the selected TLV and attributes.
       type: object
       properties:
         choice:

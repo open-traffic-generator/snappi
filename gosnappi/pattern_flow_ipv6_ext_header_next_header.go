@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6ExtHeaderNextHeader) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6ExtHeaderNextHeader is 8-bit selector that identifies the type of header immediately following the SRH. It uses the same values as the IPv4 Protocol field. For TCP and UDP the values are 6 and 17 respectively. For other headers refer RFC 8200.
+// PatternFlowIpv6ExtHeaderNextHeader is the next header that identifies the type of header immediately following this IPv6 Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of 59 indicates that there are no further IPv6 Extension headers and that the payload will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
 type PatternFlowIpv6ExtHeaderNextHeader interface {
 	Validation
 	// msg marshals PatternFlowIpv6ExtHeaderNextHeader to protobuf object *otg.PatternFlowIpv6ExtHeaderNextHeader

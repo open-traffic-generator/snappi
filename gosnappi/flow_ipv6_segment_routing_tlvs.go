@@ -289,10 +289,10 @@ type FlowIpv6SegmentRoutingTlvs interface {
 	// HasChoice checks if Choice has been set in FlowIpv6SegmentRoutingTlvs
 	HasChoice() bool
 	// Length returns PatternFlowIpv6SegmentRoutingTlvsLength, set in FlowIpv6SegmentRoutingTlvs.
-	// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes.
+	// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes. If auto is selected the implementation should automatically set the length field to the correct value as per the selected TLV and attributes.
 	Length() PatternFlowIpv6SegmentRoutingTlvsLength
 	// SetLength assigns PatternFlowIpv6SegmentRoutingTlvsLength provided by user to FlowIpv6SegmentRoutingTlvs.
-	// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes.
+	// PatternFlowIpv6SegmentRoutingTlvsLength is the length of the TLV value in bytes. If auto is selected the implementation should automatically set the length field to the correct value as per the selected TLV and attributes.
 	SetLength(value PatternFlowIpv6SegmentRoutingTlvsLength) FlowIpv6SegmentRoutingTlvs
 	// HasLength checks if Length has been set in FlowIpv6SegmentRoutingTlvs
 	HasLength() bool

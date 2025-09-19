@@ -283,18 +283,18 @@ type FlowIpv6SegmentRouting interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// SegmentsLeft returns PatternFlowIpv6SegmentRoutingSegmentsLeft, set in FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When AUTO is assigned the value is set to the number of segment specified.
+	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When auto is assigned the value is set to the number of segment specified.
 	SegmentsLeft() PatternFlowIpv6SegmentRoutingSegmentsLeft
 	// SetSegmentsLeft assigns PatternFlowIpv6SegmentRoutingSegmentsLeft provided by user to FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When AUTO is assigned the value is set to the number of segment specified.
+	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segment specified in the segment list. When auto is assigned the value is set to the number of segment specified.
 	SetSegmentsLeft(value PatternFlowIpv6SegmentRoutingSegmentsLeft) FlowIpv6SegmentRouting
 	// HasSegmentsLeft checks if SegmentsLeft has been set in FlowIpv6SegmentRouting
 	HasSegmentsLeft() bool
 	// LastEntry returns PatternFlowIpv6SegmentRoutingLastEntry, set in FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When AUTO is assigned the value is set to one less than the number of segment specified.
+	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value is set to one less than the number of segment specified.
 	LastEntry() PatternFlowIpv6SegmentRoutingLastEntry
 	// SetLastEntry assigns PatternFlowIpv6SegmentRoutingLastEntry provided by user to FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When AUTO is assigned the value is set to one less than the number of segment specified.
+	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value is set to one less than the number of segment specified.
 	SetLastEntry(value PatternFlowIpv6SegmentRoutingLastEntry) FlowIpv6SegmentRouting
 	// HasLastEntry checks if LastEntry has been set in FlowIpv6SegmentRouting
 	HasLastEntry() bool
