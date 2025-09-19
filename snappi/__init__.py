@@ -139,6 +139,8 @@ from .snappi import BgpV4EvpnEvisIter
 from .snappi import BgpV4EthernetSegmentIter
 from .snappi import BgpAdvanced
 from .snappi import BgpCapability
+from .snappi import BgpCapabilityIpv4MplsMulti
+from .snappi import BgpCapabilityIpv6MplsMulti
 from .snappi import BgpLearnedInformationFilter
 from .snappi import BgpV4RouteRange
 from .snappi import BgpAddPath
@@ -161,6 +163,9 @@ from .snappi import BgpExtendedCommunityNonTransitive2OctetAsType
 from .snappi import BgpExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth
 from .snappi import BgpExtendedCommunityCustomType
 from .snappi import BgpExtendedCommunityIter
+from .snappi import BgpMplsLabelBindings
+from .snappi import RouteMplsLabelValue
+from .snappi import RouteMplsLabelValueIter
 from .snappi import BgpV4RouteRangeIter
 from .snappi import BgpV6RouteRange
 from .snappi import BgpV6RouteRangeIter
