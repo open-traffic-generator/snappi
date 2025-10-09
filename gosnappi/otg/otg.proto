@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.38.0
+/* Open Traffic Generator API 1.40.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -9765,6 +9765,7 @@ message FlowHeader {
       rsvp = 21;
       macsec = 22;
       lacp = 23;
+      ipv6_extension_header = 24;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -9840,6 +9841,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowLacp lacp = 24;
+
+  // Description missing in models
+  FlowIpv6ExtHeader ipv6_extension_header = 25;
 }
 
 // Custom packet header
@@ -12008,6 +12012,97 @@ message FlowLacpduPartnerState {
   PatternFlowLacpduPartnerStateExpired expired = 8;
 }
 
+// IPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension
+// headers and the next_header in that preceding header should be set to the correct
+// value depending on the type of extension header configured. This will be automatically
+// handled by implementation if next_header choice is set to auto. For Routing Extension
+// header this value is 43.
+message FlowIpv6ExtHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeader next_header = 2;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLen hdr_ext_len = 3;
+
+  // Description missing in models
+  FlowIpv6Routing routing = 4;
+}
+
+// IPv6 routing packet headers.
+message FlowIpv6Routing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      segment_routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.segment_routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIpv6SegmentRouting segment_routing = 2;
+}
+
+// Defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type
+// 4. This header is an IPv6 Routing header used to specify a source-routed path for
+// a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically
+// IPv6 addresses.
+message FlowIpv6SegmentRouting {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeft segments_left = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntry last_entry = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingFlags flags = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTag tag = 4;
+
+  // 128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment
+  // List is encoded starting from the last segment of the SR Policy. That is, the first
+  // element of the Segment List (Segment List[0]) contains the last segment of the SR
+  // Policy, the second element contains the penultimate segment of the SR Policy, and
+  // so on.
+  repeated FlowIpv6SegmentRoutingSegment segment_list = 5;
+}
+
+// Description missing in models
+message FlowIpv6SegmentRoutingSegment {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegment segment = 1;
+}
+
+// An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
+// drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+message FlowIpv6SegmentRoutingFlags {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtected protected = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOam oam = 2;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+}
+
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -13001,19 +13096,56 @@ message EgressOnlyTracking {
 // These would appear as tagged metrics in corresponding egress_only_tracking metrics.
 message EgressOnlyTrackingMetricTags {
 
-  // The Name used to identify the metrics associated with the values applicable
-  // for configured offset and length inside corresponding header field.
+  // The name used to identify the metric tracked at configured Rx offset and of configured
+  // length.
   // required = true
   optional string name = 1;
 
-  // Offset in bits relative to start of the packet.
+  // Offset in bits relative to start of the received packet on the receiving port.
   // required = true
-  optional uint32 offset = 2;
+  optional uint32 rx_offset = 2;
+
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
+  EgressOnlyTrackingTxOffset tx_offset = 3;
 
   // Number of bits to track for metrics starting from configured offset
   // from start of the packet.
   // default = 1
-  optional uint32 length = 3;
+  optional uint32 length = 4;
+}
+
+// A container of Tx offset properties. Tx offset configuration is optional. It is relevant
+// only when optional Tx statistics in egress only tracking are supported and when fetching
+// egress only stats with tx_metric also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
+message EgressOnlyTrackingTxOffset {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      custom = 2;
+    }
+  }
+  // Choose auto when both offsets of tracked field in Tx/ Rx packets are the same. Otherwise
+  // choose custom.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // 
+  EgressOnlyTrackingTxOffsetCustom custom = 2;
+}
+
+// A container of custom Tx offset properties. Choose custom when the Tx and Rx offsets
+// are different due to DUT adding/ modifying or deleting encapsulation protocol header
+// e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx
+// side have different configuration such that the MACSec header is added/modified or
+// removed.
+message EgressOnlyTrackingTxOffsetCustom {
+
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
+  optional uint32 value = 1;
 }
 
 // Description missing in models
@@ -34452,6 +34584,472 @@ message PatternFlowLacpduPartnerStateExpired {
 
   // Description missing in models
   PatternFlowLacpduPartnerStateExpiredCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderNextHeaderCounter {
+
+  // Description missing in models
+  // default = 59
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The next header that identifies the type of header immediately following this IPv6
+// Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of
+// 59 indicates that there are no further IPv6 Extension headers and that the payload
+// will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
+message PatternFlowIpv6ExtHeaderNextHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 59
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [59]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 59
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderHdrExtLenCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the IPv6 Extension header in 8 octet units, not including the first
+// 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned
+// the implementation should automatically set it to the correct value.
+message PatternFlowIpv6ExtHeaderHdrExtLen {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentsLeftCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer containing the number of remaining segments to be visited
+// before the packet reaches its final destination. It is decremented at each segment
+// endpoint. It points to the current active segment in the Segment List. This should
+// not be more than the number of segments specified in the segment list. When auto
+// is assigned the value is set to the number of segments specified.
+message PatternFlowIpv6SegmentRoutingSegmentsLeft {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingLastEntryCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer that contains the zero-based index of the last element in
+// the Segment List array. For example, if the Segment List contains 3 addresses (at
+// indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should
+// be automatically set by the implementation to one less than the number of segments
+// specified.
+message PatternFlowIpv6SegmentRoutingLastEntry {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 16-bit field used to tag a packet as part of a class or group, enabling shared properties
+// or policy treatment. If not used, it MUST be set to zero.
+message PatternFlowIpv6SegmentRoutingTag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
+
+  // Description missing in models
+  // default = ::0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 128-bit IPv6 address segment.
+message PatternFlowIpv6SegmentRoutingSegmentSegment {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsProtectedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Protected Flag. Indicates if the segment is protected by a Fast Re-Route (FRR) mechanism.
+message PatternFlowIpv6SegmentRoutingFlagsProtected {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
+// (OAM) packet.
+message PatternFlowIpv6SegmentRoutingFlagsOam {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsAlertCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Alert Flag. Indicates the presence of important TLVs that must be inspected.
+message PatternFlowIpv6SegmentRoutingFlagsAlert {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter decrement = 6;
 }
 
 // Version details

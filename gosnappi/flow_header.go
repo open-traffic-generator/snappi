@@ -13,32 +13,33 @@ import (
 // ***** FlowHeader *****
 type flowHeader struct {
 	validation
-	obj                 *otg.FlowHeader
-	marshaller          marshalFlowHeader
-	unMarshaller        unMarshalFlowHeader
-	customHolder        FlowCustom
-	ethernetHolder      FlowEthernet
-	vlanHolder          FlowVlan
-	vxlanHolder         FlowVxlan
-	ipv4Holder          FlowIpv4
-	ipv6Holder          FlowIpv6
-	pfcpauseHolder      FlowPfcPause
-	ethernetpauseHolder FlowEthernetPause
-	tcpHolder           FlowTcp
-	udpHolder           FlowUdp
-	greHolder           FlowGre
-	gtpv1Holder         FlowGtpv1
-	gtpv2Holder         FlowGtpv2
-	arpHolder           FlowArp
-	icmpHolder          FlowIcmp
-	icmpv6Holder        FlowIcmpv6
-	pppHolder           FlowPpp
-	igmpv1Holder        FlowIgmpv1
-	mplsHolder          FlowMpls
-	snmpv2CHolder       FlowSnmpv2C
-	rsvpHolder          FlowRsvp
-	macsecHolder        FlowMacsec
-	lacpHolder          FlowLacp
+	obj                       *otg.FlowHeader
+	marshaller                marshalFlowHeader
+	unMarshaller              unMarshalFlowHeader
+	customHolder              FlowCustom
+	ethernetHolder            FlowEthernet
+	vlanHolder                FlowVlan
+	vxlanHolder               FlowVxlan
+	ipv4Holder                FlowIpv4
+	ipv6Holder                FlowIpv6
+	pfcpauseHolder            FlowPfcPause
+	ethernetpauseHolder       FlowEthernetPause
+	tcpHolder                 FlowTcp
+	udpHolder                 FlowUdp
+	greHolder                 FlowGre
+	gtpv1Holder               FlowGtpv1
+	gtpv2Holder               FlowGtpv2
+	arpHolder                 FlowArp
+	icmpHolder                FlowIcmp
+	icmpv6Holder              FlowIcmpv6
+	pppHolder                 FlowPpp
+	igmpv1Holder              FlowIgmpv1
+	mplsHolder                FlowMpls
+	snmpv2CHolder             FlowSnmpv2C
+	rsvpHolder                FlowRsvp
+	macsecHolder              FlowMacsec
+	lacpHolder                FlowLacp
+	ipv6ExtensionHeaderHolder FlowIpv6ExtHeader
 }
 
 func NewFlowHeader() FlowHeader {
@@ -289,6 +290,7 @@ func (obj *flowHeader) setNil() {
 	obj.rsvpHolder = nil
 	obj.macsecHolder = nil
 	obj.lacpHolder = nil
+	obj.ipv6ExtensionHeaderHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -504,6 +506,14 @@ type FlowHeader interface {
 	SetLacp(value FlowLacp) FlowHeader
 	// HasLacp checks if Lacp has been set in FlowHeader
 	HasLacp() bool
+	// Ipv6ExtensionHeader returns FlowIpv6ExtHeader, set in FlowHeader.
+	// FlowIpv6ExtHeader is iPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension headers and the next_header in that preceding header should be set to the correct value depending on the type of extension header configured. This will be automatically handled by implementation if next_header choice is set to auto. For Routing Extension header this value is 43.
+	Ipv6ExtensionHeader() FlowIpv6ExtHeader
+	// SetIpv6ExtensionHeader assigns FlowIpv6ExtHeader provided by user to FlowHeader.
+	// FlowIpv6ExtHeader is iPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension headers and the next_header in that preceding header should be set to the correct value depending on the type of extension header configured. This will be automatically handled by implementation if next_header choice is set to auto. For Routing Extension header this value is 43.
+	SetIpv6ExtensionHeader(value FlowIpv6ExtHeader) FlowHeader
+	// HasIpv6ExtensionHeader checks if Ipv6ExtensionHeader has been set in FlowHeader
+	HasIpv6ExtensionHeader() bool
 	setNil()
 }
 
@@ -511,53 +521,55 @@ type FlowHeaderChoiceEnum string
 
 // Enum of Choice on FlowHeader
 var FlowHeaderChoice = struct {
-	CUSTOM        FlowHeaderChoiceEnum
-	ETHERNET      FlowHeaderChoiceEnum
-	VLAN          FlowHeaderChoiceEnum
-	VXLAN         FlowHeaderChoiceEnum
-	IPV4          FlowHeaderChoiceEnum
-	IPV6          FlowHeaderChoiceEnum
-	PFCPAUSE      FlowHeaderChoiceEnum
-	ETHERNETPAUSE FlowHeaderChoiceEnum
-	TCP           FlowHeaderChoiceEnum
-	UDP           FlowHeaderChoiceEnum
-	GRE           FlowHeaderChoiceEnum
-	GTPV1         FlowHeaderChoiceEnum
-	GTPV2         FlowHeaderChoiceEnum
-	ARP           FlowHeaderChoiceEnum
-	ICMP          FlowHeaderChoiceEnum
-	ICMPV6        FlowHeaderChoiceEnum
-	PPP           FlowHeaderChoiceEnum
-	IGMPV1        FlowHeaderChoiceEnum
-	MPLS          FlowHeaderChoiceEnum
-	SNMPV2C       FlowHeaderChoiceEnum
-	RSVP          FlowHeaderChoiceEnum
-	MACSEC        FlowHeaderChoiceEnum
-	LACP          FlowHeaderChoiceEnum
+	CUSTOM                FlowHeaderChoiceEnum
+	ETHERNET              FlowHeaderChoiceEnum
+	VLAN                  FlowHeaderChoiceEnum
+	VXLAN                 FlowHeaderChoiceEnum
+	IPV4                  FlowHeaderChoiceEnum
+	IPV6                  FlowHeaderChoiceEnum
+	PFCPAUSE              FlowHeaderChoiceEnum
+	ETHERNETPAUSE         FlowHeaderChoiceEnum
+	TCP                   FlowHeaderChoiceEnum
+	UDP                   FlowHeaderChoiceEnum
+	GRE                   FlowHeaderChoiceEnum
+	GTPV1                 FlowHeaderChoiceEnum
+	GTPV2                 FlowHeaderChoiceEnum
+	ARP                   FlowHeaderChoiceEnum
+	ICMP                  FlowHeaderChoiceEnum
+	ICMPV6                FlowHeaderChoiceEnum
+	PPP                   FlowHeaderChoiceEnum
+	IGMPV1                FlowHeaderChoiceEnum
+	MPLS                  FlowHeaderChoiceEnum
+	SNMPV2C               FlowHeaderChoiceEnum
+	RSVP                  FlowHeaderChoiceEnum
+	MACSEC                FlowHeaderChoiceEnum
+	LACP                  FlowHeaderChoiceEnum
+	IPV6_EXTENSION_HEADER FlowHeaderChoiceEnum
 }{
-	CUSTOM:        FlowHeaderChoiceEnum("custom"),
-	ETHERNET:      FlowHeaderChoiceEnum("ethernet"),
-	VLAN:          FlowHeaderChoiceEnum("vlan"),
-	VXLAN:         FlowHeaderChoiceEnum("vxlan"),
-	IPV4:          FlowHeaderChoiceEnum("ipv4"),
-	IPV6:          FlowHeaderChoiceEnum("ipv6"),
-	PFCPAUSE:      FlowHeaderChoiceEnum("pfcpause"),
-	ETHERNETPAUSE: FlowHeaderChoiceEnum("ethernetpause"),
-	TCP:           FlowHeaderChoiceEnum("tcp"),
-	UDP:           FlowHeaderChoiceEnum("udp"),
-	GRE:           FlowHeaderChoiceEnum("gre"),
-	GTPV1:         FlowHeaderChoiceEnum("gtpv1"),
-	GTPV2:         FlowHeaderChoiceEnum("gtpv2"),
-	ARP:           FlowHeaderChoiceEnum("arp"),
-	ICMP:          FlowHeaderChoiceEnum("icmp"),
-	ICMPV6:        FlowHeaderChoiceEnum("icmpv6"),
-	PPP:           FlowHeaderChoiceEnum("ppp"),
-	IGMPV1:        FlowHeaderChoiceEnum("igmpv1"),
-	MPLS:          FlowHeaderChoiceEnum("mpls"),
-	SNMPV2C:       FlowHeaderChoiceEnum("snmpv2c"),
-	RSVP:          FlowHeaderChoiceEnum("rsvp"),
-	MACSEC:        FlowHeaderChoiceEnum("macsec"),
-	LACP:          FlowHeaderChoiceEnum("lacp"),
+	CUSTOM:                FlowHeaderChoiceEnum("custom"),
+	ETHERNET:              FlowHeaderChoiceEnum("ethernet"),
+	VLAN:                  FlowHeaderChoiceEnum("vlan"),
+	VXLAN:                 FlowHeaderChoiceEnum("vxlan"),
+	IPV4:                  FlowHeaderChoiceEnum("ipv4"),
+	IPV6:                  FlowHeaderChoiceEnum("ipv6"),
+	PFCPAUSE:              FlowHeaderChoiceEnum("pfcpause"),
+	ETHERNETPAUSE:         FlowHeaderChoiceEnum("ethernetpause"),
+	TCP:                   FlowHeaderChoiceEnum("tcp"),
+	UDP:                   FlowHeaderChoiceEnum("udp"),
+	GRE:                   FlowHeaderChoiceEnum("gre"),
+	GTPV1:                 FlowHeaderChoiceEnum("gtpv1"),
+	GTPV2:                 FlowHeaderChoiceEnum("gtpv2"),
+	ARP:                   FlowHeaderChoiceEnum("arp"),
+	ICMP:                  FlowHeaderChoiceEnum("icmp"),
+	ICMPV6:                FlowHeaderChoiceEnum("icmpv6"),
+	PPP:                   FlowHeaderChoiceEnum("ppp"),
+	IGMPV1:                FlowHeaderChoiceEnum("igmpv1"),
+	MPLS:                  FlowHeaderChoiceEnum("mpls"),
+	SNMPV2C:               FlowHeaderChoiceEnum("snmpv2c"),
+	RSVP:                  FlowHeaderChoiceEnum("rsvp"),
+	MACSEC:                FlowHeaderChoiceEnum("macsec"),
+	LACP:                  FlowHeaderChoiceEnum("lacp"),
+	IPV6_EXTENSION_HEADER: FlowHeaderChoiceEnum("ipv6_extension_header"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -580,6 +592,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Ipv6ExtensionHeader = nil
+	obj.ipv6ExtensionHeaderHolder = nil
 	obj.obj.Lacp = nil
 	obj.lacpHolder = nil
 	obj.obj.Macsec = nil
@@ -717,6 +731,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.LACP {
 		obj.obj.Lacp = NewFlowLacp().msg()
+	}
+
+	if value == FlowHeaderChoice.IPV6_EXTENSION_HEADER {
+		obj.obj.Ipv6ExtensionHeader = NewFlowIpv6ExtHeader().msg()
 	}
 
 	return obj
@@ -1366,6 +1384,34 @@ func (obj *flowHeader) SetLacp(value FlowLacp) FlowHeader {
 	return obj
 }
 
+// description is TBD
+// Ipv6ExtensionHeader returns a FlowIpv6ExtHeader
+func (obj *flowHeader) Ipv6ExtensionHeader() FlowIpv6ExtHeader {
+	if obj.obj.Ipv6ExtensionHeader == nil {
+		obj.setChoice(FlowHeaderChoice.IPV6_EXTENSION_HEADER)
+	}
+	if obj.ipv6ExtensionHeaderHolder == nil {
+		obj.ipv6ExtensionHeaderHolder = &flowIpv6ExtHeader{obj: obj.obj.Ipv6ExtensionHeader}
+	}
+	return obj.ipv6ExtensionHeaderHolder
+}
+
+// description is TBD
+// Ipv6ExtensionHeader returns a FlowIpv6ExtHeader
+func (obj *flowHeader) HasIpv6ExtensionHeader() bool {
+	return obj.obj.Ipv6ExtensionHeader != nil
+}
+
+// description is TBD
+// SetIpv6ExtensionHeader sets the FlowIpv6ExtHeader value in the FlowHeader object
+func (obj *flowHeader) SetIpv6ExtensionHeader(value FlowIpv6ExtHeader) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.IPV6_EXTENSION_HEADER)
+	obj.ipv6ExtensionHeaderHolder = nil
+	obj.obj.Ipv6ExtensionHeader = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1484,6 +1530,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Lacp != nil {
 
 		obj.Lacp().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Ipv6ExtensionHeader != nil {
+
+		obj.Ipv6ExtensionHeader().validateObj(vObj, set_default)
 	}
 
 }
@@ -1605,6 +1656,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Lacp != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.LACP
+	}
+
+	if obj.obj.Ipv6ExtensionHeader != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.IPV6_EXTENSION_HEADER
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
