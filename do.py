@@ -33,11 +33,11 @@ sdk_version = Version.version
 
 # supported values - local openapiart path or None
 USE_OPENAPIART_DIR = None
-USE_MODELS_DIR = "bmp"
+USE_MODELS_DIR = None
 
 # supported values - branch name or None
 USE_OPENAPIART_BRANCH = None
-USE_MODELS_BRANCH = None
+USE_MODELS_BRANCH = "bmp"
 
 OPENAPIART_REPO = "https://github.com/open-traffic-generator/openapiart.git"
 MODELS_REPO = "https://github.com/open-traffic-generator/models.git"
