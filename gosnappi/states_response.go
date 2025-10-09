@@ -29,6 +29,7 @@ type statesResponse struct {
 	ospfv2LsasHolder       StatesResponseOspfv2LsaStateIter
 	ospfv3LsasHolder       StatesResponseOspfv3LsaStateIter
 	isisAdjacenciesHolder  StatesResponseIsisIIHsStateIter
+	bmpServersHolder       StatesResponseBmpServerStateIter
 }
 
 func NewStatesResponse() StatesResponse {
@@ -269,6 +270,7 @@ func (obj *statesResponse) setNil() {
 	obj.ospfv2LsasHolder = nil
 	obj.ospfv3LsasHolder = nil
 	obj.isisAdjacenciesHolder = nil
+	obj.bmpServersHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -328,6 +330,8 @@ type StatesResponse interface {
 	Ospfv3Lsas() StatesResponseOspfv3LsaStateIter
 	// IsisAdjacencies returns StatesResponseIsisIIHsStateIterIter, set in StatesResponse
 	IsisAdjacencies() StatesResponseIsisIIHsStateIter
+	// BmpServers returns StatesResponseBmpServerStateIterIter, set in StatesResponse
+	BmpServers() StatesResponseBmpServerStateIter
 	setNil()
 }
 
@@ -348,6 +352,7 @@ var StatesResponseChoice = struct {
 	OSPFV2_LSAS       StatesResponseChoiceEnum
 	OSPFV3_LSAS       StatesResponseChoiceEnum
 	ISIS_ADJACENCIES  StatesResponseChoiceEnum
+	BMP_SERVERS       StatesResponseChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesResponseChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesResponseChoiceEnum("ipv6_neighbors"),
@@ -362,6 +367,7 @@ var StatesResponseChoice = struct {
 	OSPFV2_LSAS:       StatesResponseChoiceEnum("ospfv2_lsas"),
 	OSPFV3_LSAS:       StatesResponseChoiceEnum("ospfv3_lsas"),
 	ISIS_ADJACENCIES:  StatesResponseChoiceEnum("isis_adjacencies"),
+	BMP_SERVERS:       StatesResponseChoiceEnum("bmp_servers"),
 }
 
 func (obj *statesResponse) Choice() StatesResponseChoiceEnum {
@@ -383,6 +389,8 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 	}
 	enumValue := otg.StatesResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.BmpServers = nil
+	obj.bmpServersHolder = nil
 	obj.obj.IsisAdjacencies = nil
 	obj.isisAdjacenciesHolder = nil
 	obj.obj.Ospfv3Lsas = nil
@@ -460,6 +468,10 @@ func (obj *statesResponse) setChoice(value StatesResponseChoiceEnum) StatesRespo
 
 	if value == StatesResponseChoice.ISIS_ADJACENCIES {
 		obj.obj.IsisAdjacencies = []*otg.IsisIIHsState{}
+	}
+
+	if value == StatesResponseChoice.BMP_SERVERS {
+		obj.obj.BmpServers = []*otg.BmpServerState{}
 	}
 
 	return obj
@@ -1596,6 +1608,93 @@ func (obj *statesResponseIsisIIHsStateIter) appendHolderSlice(item IsisIIHsState
 	return obj
 }
 
+// description is TBD
+// BmpServers returns a []BmpServerState
+func (obj *statesResponse) BmpServers() StatesResponseBmpServerStateIter {
+	if len(obj.obj.BmpServers) == 0 {
+		obj.setChoice(StatesResponseChoice.BMP_SERVERS)
+	}
+	if obj.bmpServersHolder == nil {
+		obj.bmpServersHolder = newStatesResponseBmpServerStateIter(&obj.obj.BmpServers).setMsg(obj)
+	}
+	return obj.bmpServersHolder
+}
+
+type statesResponseBmpServerStateIter struct {
+	obj                 *statesResponse
+	bmpServerStateSlice []BmpServerState
+	fieldPtr            *[]*otg.BmpServerState
+}
+
+func newStatesResponseBmpServerStateIter(ptr *[]*otg.BmpServerState) StatesResponseBmpServerStateIter {
+	return &statesResponseBmpServerStateIter{fieldPtr: ptr}
+}
+
+type StatesResponseBmpServerStateIter interface {
+	setMsg(*statesResponse) StatesResponseBmpServerStateIter
+	Items() []BmpServerState
+	Add() BmpServerState
+	Append(items ...BmpServerState) StatesResponseBmpServerStateIter
+	Set(index int, newObj BmpServerState) StatesResponseBmpServerStateIter
+	Clear() StatesResponseBmpServerStateIter
+	clearHolderSlice() StatesResponseBmpServerStateIter
+	appendHolderSlice(item BmpServerState) StatesResponseBmpServerStateIter
+}
+
+func (obj *statesResponseBmpServerStateIter) setMsg(msg *statesResponse) StatesResponseBmpServerStateIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bmpServerState{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *statesResponseBmpServerStateIter) Items() []BmpServerState {
+	return obj.bmpServerStateSlice
+}
+
+func (obj *statesResponseBmpServerStateIter) Add() BmpServerState {
+	newObj := &otg.BmpServerState{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bmpServerState{obj: newObj}
+	newLibObj.setDefault()
+	obj.bmpServerStateSlice = append(obj.bmpServerStateSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *statesResponseBmpServerStateIter) Append(items ...BmpServerState) StatesResponseBmpServerStateIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bmpServerStateSlice = append(obj.bmpServerStateSlice, item)
+	}
+	return obj
+}
+
+func (obj *statesResponseBmpServerStateIter) Set(index int, newObj BmpServerState) StatesResponseBmpServerStateIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bmpServerStateSlice[index] = newObj
+	return obj
+}
+func (obj *statesResponseBmpServerStateIter) Clear() StatesResponseBmpServerStateIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BmpServerState{}
+		obj.bmpServerStateSlice = []BmpServerState{}
+	}
+	return obj
+}
+func (obj *statesResponseBmpServerStateIter) clearHolderSlice() StatesResponseBmpServerStateIter {
+	if len(obj.bmpServerStateSlice) > 0 {
+		obj.bmpServerStateSlice = []BmpServerState{}
+	}
+	return obj
+}
+func (obj *statesResponseBmpServerStateIter) appendHolderSlice(item BmpServerState) StatesResponseBmpServerStateIter {
+	obj.bmpServerStateSlice = append(obj.bmpServerStateSlice, item)
+	return obj
+}
+
 func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1783,6 +1882,20 @@ func (obj *statesResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.BmpServers) != 0 {
+
+		if set_default {
+			obj.BmpServers().clearHolderSlice()
+			for _, item := range obj.obj.BmpServers {
+				obj.BmpServers().appendHolderSlice(&bmpServerState{obj: item})
+			}
+		}
+		for _, item := range obj.BmpServers().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *statesResponse) setDefault() {
@@ -1852,6 +1965,11 @@ func (obj *statesResponse) setDefault() {
 	if len(obj.obj.IsisAdjacencies) > 0 {
 		choices_set += 1
 		choice = StatesResponseChoice.ISIS_ADJACENCIES
+	}
+
+	if len(obj.obj.BmpServers) > 0 {
+		choices_set += 1
+		choice = StatesResponseChoice.BMP_SERVERS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

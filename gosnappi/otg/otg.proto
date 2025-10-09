@@ -139,10 +139,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -315,17 +311,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -334,11 +322,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -363,10 +346,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -472,10 +451,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -546,10 +521,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1263,10 +1234,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1318,16 +1285,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1468,17 +1429,11 @@ message Layer1Ieee8021qbb {
 
 // Under Review: There may be changes in filter configuration
 // 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1746,6 +1701,9 @@ message Device {
 
   // Configuration for RoCEv2.
   DeviceRocev2Peer rocev2 = 13;
+
+  // Configuration for BMP.
+  DeviceBmp bmp = 14;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -1821,10 +1779,6 @@ message IsisInterface {
   // or simulated interface. A simulated ethernet interface can be assumed to be connected
   // by  a primary (internal to a simulated topology)  or a secondary link (connected
   // to a device behind a different simulated topology).
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -3005,12 +2959,6 @@ message BgpV4Interface {
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -3770,8 +3718,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -4231,8 +4177,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6596,12 +6540,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -6863,11 +6801,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -6891,11 +6824,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7059,10 +6987,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -7124,11 +7048,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7558,10 +7477,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7634,10 +7549,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7811,8 +7722,6 @@ message DhcpV6ServerSecondaryDns {
 
 // Under Review: OSPFv2 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -7950,10 +7859,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8344,10 +8249,6 @@ message DeviceMacsec {
 message DeviceMacsecEthernetInterface {
 
   // The unique name of the Ethernet interface on which MACsec is enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -9039,8 +8940,6 @@ message SecureEntityStaticKeyRxSc {
 
 // Under Review: OSPFv3 is currently under review for pending exploration on use cases.
 // 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
 
@@ -9141,10 +9040,6 @@ message Ospfv3Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv6 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -9394,10 +9289,6 @@ message Rocev2V4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -9513,10 +9404,6 @@ message Rocev2V6Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -9548,6 +9435,150 @@ message Rocev2V6Peer {
   repeated Rocev2QPs qps = 3;
 }
 
+// Top-level container for BGP Monitoring Protocol (BMP) configuration. BMP, as defined
+// in RFC 7854, provides a mechanism to monitor BGP sessions. This configuration pertains
+// to the device when acting as a BMP Monitor /server, listening for connections from
+// BGP speakers (routers) acting as BMP clients. BMP is unidirectional, meaning the
+// monitoring station only receives information; it doesn't send commands to or control
+// the monitored router.
+message DeviceBmp {
+
+  // This contains an array of references to IPv4 interfaces, each of which will have
+  // one or more BMP Servers configured, each BMP Server will have a connection to a different
+  // monitored router.
+  repeated DeviceBmpV4Interface ipv4_interfaces = 1;
+
+  // This contains an array of references to IPv6 interfaces, each of which will have
+  // one or more BMP Servers configured, each BMP Server will have a connection to a different
+  // monitored router.
+  repeated DeviceBmpV6Interface ipv6_interfaces = 2;
+}
+
+// Configuration for BMP Servers on a single IPv4 interface.
+message DeviceBmpV4Interface {
+
+  // The unique name of the IPv4 interface used as the source IP for the BMP Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 1;
+
+  // This contains the configuration of BMP Servers configured on this IPv4 interface.
+  repeated DeviceBmpServerV4 servers = 2;
+}
+
+// Configuration for BMP Servers on a single IPv6 interface.
+message DeviceBmpV6Interface {
+
+  // The unique name of the IPv6 interface used as the source IP for BMP Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 1;
+
+  // This contains the configuration of BMP Servers configured on this IPv6 interface.
+  repeated DeviceBmpServerV6 servers = 2;
+}
+
+// Configuration for a BMP Server for a specific IPv4 BMP client.
+message DeviceBmpServerV4 {
+
+  // The IPv4 address of the BMP client from which connections will be accepted from or
+  // initiated with by this BMP Server.
+  // required = true
+  optional string client_ip = 1;
+
+  // Optional object containing information about whether the BMP Server should operate
+  // in passive or active mode and corresponding information depending on the mode.
+  // 
+  DeviceBmpServerConnection connection = 2;
+
+  // If enabled, discard the BGP route information sent by the remote BMP client in BMP
+  // Monitoring messages.
+  // default = False
+  optional bool discard_adj_rib = 3;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 4;
+}
+
+// Configuration for a BMP Server connected to a specific IPv6 BMP client.
+message DeviceBmpServerV6 {
+
+  // The IPv6 address of the BMP client from which connections will be accepted from or
+  // initiated with by this BMP Server.
+  // required = true
+  optional string client_ip = 1;
+
+  // Optional object containing information about whether the BMP Server should operate
+  // in passive or active mode and corresponding information depending on the mode.
+  // 
+  DeviceBmpServerConnection connection = 2;
+
+  // If enabled, discard the BGP route information sent by the remote BMP client in BMP
+  // Monitoring messages.
+  // default = False
+  optional bool discard_adj_rib = 3;
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 4;
+}
+
+// Container of information about whether the BMP Server should operate in passive or
+// active mode and corresponding information depending on the mode.
+message DeviceBmpServerConnection {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      passive = 1;
+      active = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.passive
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceBmpServerPassiveConnection passive = 2;
+
+  // Description missing in models
+  DeviceBmpServerActiveConnection active = 3;
+}
+
+// Container of information when BMP Server is configured in passive mode. This means
+// that BMP Server will not initiate the TCP connection but wait for the BMP client
+// it is configured to accept connection from  to initiate the connection.  Note that
+// in this case it is required to configure the BMP client in active mode otherwise
+// BMP connection will not be intiated by either end.
+message DeviceBmpServerPassiveConnection {
+
+  // The TCP port number on which to listen for TCP connections from the remote BMP client
+  // router.
+  // default = 11019
+  optional uint32 listen_port = 1;
+}
+
+// Container of information when BMP Server is configured in active mode. This means
+// that BMP Server will initiate the TCP connection to the remote BMP client .
+// Note that in this case it is required to configure the BMP client in passive mode
+// for the BMP session to not be rejected from both ends.
+message DeviceBmpServerActiveConnection {
+
+  // The TCP port number on which to initiate BMP connection to the remote BMP client
+  // router.
+  // default = 11019
+  optional uint32 remote_port = 1;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -9571,10 +9602,6 @@ message Flow {
   // one ethernet packet header.
   repeated FlowHeader packet = 2;
 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // Under Review: The packet header schema for egress tracking currently exposes unwanted
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
@@ -9645,16 +9672,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -9663,19 +9683,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -9756,41 +9766,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -12664,9 +12642,6 @@ message FlowPayloadFixed {
 // Under Review: Event configuration is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -12728,12 +12703,6 @@ message EventRequest {
 
   // Constrain the events being returned by specifying event sources.
   // If the list is empty then all event sources will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -12816,10 +12785,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13032,10 +12997,6 @@ message Rocev2TxPorts {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 1;
 
   // Description missing in models
@@ -13078,19 +13039,10 @@ message Rocev2Flow {
   // x-constraint:
   // - /components/schemas/Rocev2.QPs/properties/qp_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // required = true
   optional string tx_endpoint = 1;
 
   // The unique name of remote QP or port which be receiving the packets for the flow.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13166,10 +13118,6 @@ message Rocev2ImmediateData {
 message EgressOnlyTracking {
 
   // Name of the received port this egress tracking rule/specification has to be applied.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13276,10 +13224,6 @@ message EgressOnlyTrackingFilter {
 message PerPortOptions {
 
   // The name of port for which this settings will be applied to.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13659,10 +13603,6 @@ message ConfigDeleteResources {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flows = 2;
 }
 
@@ -13781,10 +13721,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -13810,10 +13746,6 @@ message StatePortCapture {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -13835,10 +13767,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -13902,15 +13830,6 @@ message StateProtocolRoute {
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -13955,10 +13874,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -13980,10 +13895,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14024,11 +13935,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14077,10 +13983,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -14120,10 +14022,6 @@ message StateProtocolOspfv2Routers {
 
   // The names of OSPFv2 routers for which the state has to be applied. An empty or null
   // list will control all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -14171,10 +14069,6 @@ message StateProtocolOspfv3Routers {
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -14214,11 +14108,6 @@ message StateProtocolRocev2Peers {
 
   // The names of RoCEv2 peers for which the state has to be applied. An empty or null
   // list will control all RoCEv2 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4Peer/properties/name
-  // - /components/schemas/Rocev2.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V4Peer/properties/name
@@ -14378,18 +14267,12 @@ message ActionProtocolIpv4Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv4PingRequest {
 
   // Name of source IPv4 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -14411,10 +14294,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -14481,18 +14360,12 @@ message ActionProtocolIpv6Ping {
 
 // Under Review: Most ping request parameters are still TBD.
 // 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
 message ActionProtocolIpv6PingRequest {
 
   // Name of source IPv6 interface to be used.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -14514,10 +14387,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -14578,11 +14447,6 @@ message ActionProtocolBgpNotification {
   // - /components/schemas/Bgp.V4Peer/properties/name
   // - /components/schemas/Bgp.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   repeated string names = 1;
 
   message Choice {
@@ -14638,11 +14502,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14750,10 +14609,6 @@ message ActionProtocolIsisInitiateRestart {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message Choice {
@@ -14856,6 +14711,7 @@ message MetricsRequest {
       rocev2_ipv6 = 20;
       rocev2_flow = 21;
       egress_only_tracking = 22;
+      bmp_server = 23;
     }
   }
   // Description missing in models
@@ -14927,6 +14783,9 @@ message MetricsRequest {
 
   // Description missing in models
   EgressOnlyTrackingMetricsRequest egress_only_tracking = 23;
+
+  // Description missing in models
+  BmpServerMetricsRequest bmp_server = 24;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -14957,6 +14816,7 @@ message MetricsResponse {
       rocev2_ipv6_per_peer_metrics = 20;
       rocev2_flow_per_qp_metrics = 21;
       egress_only_tracking_metrics = 22;
+      bmp_server_metrics = 23;
     }
   }
   // Description missing in models
@@ -15028,6 +14888,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated EgressOnlyTrackingMetric egress_only_tracking_metrics = 23;
+
+  // Description missing in models
+  repeated BmpServerMetric bmp_server_metrics = 24;
 }
 
 // The port result request to the traffic generator
@@ -15035,10 +14898,6 @@ message PortMetricsRequest {
 
   // The names of objects to return results for. An empty list will return all port row
   // results.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -15072,10 +14931,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -15154,10 +15009,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -15472,10 +15323,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -15602,10 +15449,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -15728,10 +15571,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -15891,10 +15730,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -15921,10 +15756,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -15979,18 +15810,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -16111,10 +15934,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -16173,10 +15992,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -16337,10 +16152,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -16398,10 +16209,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -16455,10 +16262,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -16540,10 +16343,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -16633,10 +16432,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -16798,9 +16593,6 @@ message Ospfv2Metric {
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -16811,16 +16603,9 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Under Review: Convergence metrics is currently under review for pending exploration
 // on use cases.
 // 
@@ -16880,13 +16665,6 @@ message ConvergenceEvent {
   // - /components/schemas/Device.Bgpv4Route/properties/name
   // - /components/schemas/Device.Bgpv6Route/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   optional string source = 2;
 
   // The timestamp(nanoseconds) of the starting event that triggers convergence.
@@ -16901,10 +16679,6 @@ message MacsecMetricsRequest {
 
   // The names of secure entities(secYs) to return results for. An empty list will return
   // results for all secYs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Macsec/properties/name
@@ -17022,10 +16796,6 @@ message MkaMetricsRequest {
   // x-constraint:
   // - /components/schemas/Mka/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -17099,10 +16869,6 @@ message Ospfv3MetricsRequest {
 
   // The names of OSPFv3 routers to return results for. An empty list will return results
   // for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -17279,10 +17045,6 @@ message Rocev2IPv4ColumnNames {
   // x-constraint:
   // - /components/schemas/Rocev2.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -17387,10 +17149,6 @@ message Rocev2IPv6ColumnNames {
 
   // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
   // results for all RoCEv2 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V6peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V6peer/properties/name
@@ -17650,10 +17408,6 @@ message EgressOnlyTrackingMetricsRequest {
   // x-constraint:
   // - /components/schemas/EgressOnlyTracking/properties/port_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/EgressOnlyTracking/properties/port_name
-  // 
   repeated string port_names = 1;
 
   // Description missing in models
@@ -17798,6 +17552,87 @@ message EgressOnlyTrackingTxMetrics {
   optional float tx_rate_mbps = 10;
 }
 
+// The request to retrieve per BMP Server metrics/statistics.
+message BmpServerMetricsRequest {
+
+  // The names of BMP Servers to return results for. An empty list will return results
+  // for all BMP Servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
+  // 
+  repeated string server_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      flap_count = 2;
+      route_monitoring_messages_received = 3;
+      statistics_messages_received = 4;
+      peer_down_messages_received = 5;
+      peer_up_messages_received = 6;
+      initiation_messages_received = 7;
+      route_mirroring_messages_received = 8;
+      termination_messages_received = 9;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the BMP Server cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// BMP Server statistics information.
+message BmpServerMetric {
+
+  // The name of the configured BMP server.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. The session goes to 'up' state when a BMP monitored
+  // client router sends a Initiation message to the BMP Server. The session goes to 'down'
+  // state when a BMP monitored client router sends a Termination message to the BMP Server
+  // or the TCP connection is lost. On initial start, the state as reported as 'down'.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of times the BMP session with the BMP client went from Up to Down state.
+  optional uint64 flap_count = 3;
+
+  // Number of BMP Route Monitoring Messages received from the BMP client from the time
+  // the BMP session last went to 'up' state.
+  optional uint64 route_monitoring_messages_received = 4;
+
+  // Number of BMP Route Statistics Messages received from the BMP client from the time
+  // the BMP session last went to 'up' state.
+  optional uint64 statistics_messages_received = 5;
+
+  // Number of BMP Peer Down Messages received from the BMP client from the time the BMP
+  // session last went to 'up' state.
+  optional uint64 peer_down_messages_received = 6;
+
+  // Number of BMP Peer Up Messages received from the BMP client from the time the BMP
+  // session last went to 'up' state.
+  optional uint64 peer_up_messages_received = 7;
+
+  // Number of BMP Initiation Messages received from the BMP client .
+  optional uint64 initiation_messages_received = 8;
+
+  // Number of BMP Route Mirroring Messages received from the BMP client from the time
+  // the BMP session last went to 'up' state.
+  optional uint64 route_mirroring_messages_received = 9;
+
+  // Number of BMP Termination Messages received from the BMP client.
+  optional uint64 termination_messages_received = 10;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -17817,6 +17652,7 @@ message StatesRequest {
       ospfv2_lsas = 11;
       ospfv3_lsas = 12;
       isis_adjacencies = 13;
+      bmp_servers = 14;
     }
   }
   // Description missing in models
@@ -17861,6 +17697,9 @@ message StatesRequest {
 
   // Description missing in models
   IsisIIHsStateRequest isis_adjacencies = 14;
+
+  // Description missing in models
+  BmpServersStateRequest bmp_servers = 15;
 }
 
 // Response containing chosen traffic generator states
@@ -17882,6 +17721,7 @@ message StatesResponse {
       ospfv2_lsas = 11;
       ospfv3_lsas = 12;
       isis_adjacencies = 13;
+      bmp_servers = 14;
     }
   }
   // Description missing in models
@@ -17926,6 +17766,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated IsisIIHsState isis_adjacencies = 14;
+
+  // Description missing in models
+  repeated BmpServerState bmp_servers = 15;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -17934,10 +17777,6 @@ message Neighborsv4StatesRequest {
   // The names of Ethernet interfaces for which Neighbor state (ARP cache entries) will
   // be retrieved. If no names are specified then the results will contain Neighbor state
   // (ARP cache entries) for all available Ethernet interfaces.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -17971,10 +17810,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -18000,11 +17835,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -18558,10 +18388,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -19102,10 +18928,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -19269,10 +19091,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -19407,10 +19225,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -19444,10 +19258,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -19498,10 +19308,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -19557,10 +19363,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -19608,10 +19410,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -19818,10 +19616,6 @@ message Ospfv3LsasStateRequest {
 
   // The names of OSPFv3 routers for which learned information is requested. An empty
   // list will return results for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -20044,10 +19838,6 @@ message IsisIIHsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results of IIH States for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -20313,15 +20103,364 @@ message IsisIIHRestartFlags {
   optional bool pa_bit = 5;
 }
 
+// The request for BMP server information.
+message BmpServersStateRequest {
+
+  // The names of the BMP Servers  to return results for. An empty list will return results
+  // for all BMP Servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.Server/properties/name
+  // 
+  repeated string bmp_server_names = 1;
+}
+
+// The information learned by a specific BMP Server.
+message BmpServerState {
+
+  // The name of the BMP Server configured for which the information is being returned.
+  optional string bmp_server_name = 1;
+
+  // The IPv4 Router ID of the BMP client to which this BMP Server is connected. Note
+  // that each BMP Server is connected to a single BMP client, though multiple BMP Servers
+  // can be configured on the  same IPv4 or IPv6 interface , each connected to a different
+  // BMP client.  Each BMP client can in turn report information about multiple BGP sessions
+  // on that router.
+  optional string client_router_id = 2;
+
+  // Description missing in models
+  repeated BmpServerPeerState peers = 3;
+}
+
+// The information returned by a BMP client to the BMP Server related to a specific
+// BGP session on the router.
+message BmpServerPeerState {
+
+  message SessionIpType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // Whether the peer is of type BGPv4 or BGPv6. If the type is ipv4 the session_ipv4_information
+  // object should be included to convey the local and remote IPv4 address for the peer.
+  // If the type is ipv6 the session_ipv6_information object should be included to convey
+  // the local and remote IPv6 address for the peer.
+  optional SessionIpType.Enum session_ip_type = 1;
+
+  // This object is included if session_ip_type is of type ipv4.
+  BmpServerPeerSessionIpv4Information session_ipv4_information = 2;
+
+  // This object is included if session_ip_type is of type ipv6.
+  BmpServerPeerSessionIpv6Information session_ipv6_information = 3;
+
+  // The BGP Identifier of the peer.
+  optional string peer_bgp_id = 4;
+
+  message Status {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The current state of the BGP session.  Note that per peer stats and rib information
+  // might be empty if the peer state is down.
+  optional Status.Enum status = 5;
+
+  // The last set of BMP stats sent by the BMP client for this peer. The set of supported
+  // stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It
+  // might be all zeroed or empty if no stats have been received yet or peer is still
+  // in down state.
+  BmpServerPeerStats stats = 6;
+
+  // The set of routes received from this peer as reported using BMP Route Monitoring
+  // messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound
+  // policies were applied. This is determined by checking that the L flag is not set
+  // in the Per-Peer Header in the received Route Monitoring message. It should also be
+  // ensured that the O flag as defined in RFC8671 is not set in the flags. (indicates
+  // Adj-RIB-Out)  Note that routes which have been advertised initially and currently
+  // in withdrawn state can be included in the returned set of routes by setting the status
+  // of that specific route to 'withdrawn'. Routes which have been received from this
+  // peer and part of current Pre-Policy In-Rib DB should have the status set to 'advertised'.
+  // Note that if discard_adj_rib is explicitly set to true in BMP Server configuration,
+  // no BGP routes will be stored and the pre_policy_in_rib will not be present in the
+  // response.
+  BmpServerPeerPrePolicyInRib pre_policy_in_rib = 7;
+
+  // The set of routes received from this peer as reported using BMP Route Monitoring
+  // messages by the BMP client  which are part of the Adj-RIB-In database *after* inbound
+  // policies were applied. This is determined by checking that the L flag is set in the
+  // Per-Peer Header in the received Route Monitoring message. It should also be ensured
+  // that the O flag as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)
+  // Note that routes which have been advertised initially and currently in withdrawn
+  // state can be included in the returned set of routes by setting the status of that
+  // specific route to 'withdrawn'. Routes which have been received from this peer and
+  // part of current Post-Policy In-Rib DB should have the status set to 'advertised'.
+  // Note that if discard_adj_rib is explicitly set to true in BMP Server configuration,
+  // no BGP routes will be stored and the pre_policy_in_rib will not be present in the
+  // response.
+  BmpServerPeerPostPolicyInRib post_policy_in_rib = 8;
+}
+
+// This object is included if session_ip_type is of type ipv4.
+message BmpServerPeerSessionIpv4Information {
+
+  // The local IPv4 address associated with the BGPv4 peer.
+  optional string local_address = 1;
+
+  // The remote IPv4 address associated with the BGPv4 peer.
+  optional string remote_address = 2;
+}
+
+// This object is included if session_ip_type is of type ipv6.
+message BmpServerPeerSessionIpv6Information {
+
+  // The local IPv6 address associated with the BGPv6 peer.
+  optional string local_address = 1;
+
+  // The remote IPv6 address associated with the BGPv6 peer.
+  optional string remote_address = 2;
+}
+
+// Container for periodic per peer stats sent by BMP client to a BMP Server.
+message BmpServerPeerStats {
+
+  // Number of prefixes rejected by inbound policy.
+  optional uint32 rejected_prefixes = 1;
+
+  // Number of (known) duplicate prefix advertisements.
+  optional uint32 duplicate_prefixes = 2;
+
+  // Number of (known) duplicate withdraws.
+  optional uint32 duplicate_withdraws = 3;
+
+  // Number of updates invalidated due to CLUSTER_LIST loop.
+  optional uint32 cluster_list_invalidated_updates = 4;
+
+  // Number of updates invalidated due to AS_PATH loop.
+  optional uint32 as_path_invalidated_updates = 5;
+
+  // Number of updates invalidated due to ORIGINATOR_ID.
+  optional uint32 originator_id_invalidated_updates = 6;
+
+  // Number of updates invalidated due to AS_CONFED loop.
+  optional uint32 as_confed_invalidated_updates = 7;
+
+  // Number of routes in Adj-RIBs-In.
+  optional uint64 adj_rib_routes = 8;
+
+  // Number of routes in Loc-RIB.
+  optional uint64 local_rib_routes = 9;
+
+  // Number of updates subjected to treat-as-withdraw treatment [RFC7606].
+  optional uint32 withdraw_updates_received = 10;
+
+  // Number of prefixes  subjected to treat-as-withdraw treatment [RFC7606].
+  optional uint32 withdraw_prefixes_received = 11;
+
+  // Number of duplicate update messages received.
+  optional uint32 duplicate_updates = 12;
+}
+
+// The set of routes received from this peer as reported using BMP Route Monitoring
+// messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound
+// policies were applied. This is determined by checking that the L flag is not set
+// in the Per-Peer Header in the received Route Monitoring message. It should also be
+// ensured that the O flag as defined in RFC8671 is not set in the flags. (indicates
+// Adj-RIB-Out)  Note that routes which have been advertised initially and currently
+// in withdrawn state can be included in the returned set of routes by setting the status
+// of that specific route to 'withdrawn'. Routes which have been received from this
+// peer and part of current Pre-Policy In-Rib DB should have the status set to 'advertised'.
+// Note that if discard_adj_rib is explicitly set to true in BMP Server configuration,
+// no BGP routes will be stored and the pre_policy_in_rib will not be present in the
+// response.
+message BmpServerPeerPrePolicyInRib {
+
+  // Description missing in models
+  repeated BmpPrefixIpv4UnicastState ipv4_unicast_prefixes = 1;
+
+  // Description missing in models
+  repeated BmpPrefixIpv6UnicastState ipv6_unicast_prefixes = 2;
+}
+
+// The set of routes received from this peer as reported using BMP Route Monitoring
+// messages by the BMP client  which are part of the Adj-RIB-In database *after* inbound
+// policies were applied. This is determined by checking that the L flag is set in the
+// Per-Peer Header in the received Route Monitoring message. It should also be ensured
+// that the O flag as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)
+// Note that routes which have been advertised initially and currently in withdrawn
+// state can be included in the returned set of routes by setting the status of that
+// specific route to 'withdrawn'. Routes which have been received from this peer and
+// part of current Post-Policy In-Rib DB should have the status set to 'advertised'.
+// Note that if discard_adj_rib is explicitly set to true in BMP Server configuration,
+// no BGP routes will be stored and the pre_policy_in_rib will not be present in the
+// response.
+message BmpServerPeerPostPolicyInRib {
+
+  // Description missing in models
+  repeated BmpPrefixIpv4UnicastState ipv4_unicast_prefixes = 1;
+
+  // Description missing in models
+  repeated BmpPrefixIpv6UnicastState ipv6_unicast_prefixes = 2;
+}
+
+// IPv4 unicast prefix.
+message BmpPrefixIpv4UnicastState {
+
+  // An IPv4 unicast address.
+  optional string ipv4_address = 1;
+
+  // The length of the IPv4 prefix.
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  message RouteState {
+    enum Enum {
+      unspecified = 0;
+      advertised = 1;
+      withdrawn = 2;
+    }
+  }
+  // The state of the route , either advertised or withdrawn. If route is in withdrawn
+  // state, only the prefix, prefix_length, origin and path_id (if applicable) may be
+  // present.
+  optional RouteState.Enum route_state = 5;
+
+  message NextHopType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // The next hop type , ipv4 or ipv6 .  If type is ipv4, then the ipv4_next_hop should
+  // be included. If type is ipv6, then the ipv6_next_hop should be included.
+  // 
+  optional NextHopType.Enum next_hop_type = 6;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 7;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 8;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 9;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 10;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 11;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 12;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 13;
+}
+
+// IPv6 unicast prefix.
+message BmpPrefixIpv6UnicastState {
+
+  // An IPv6 unicast address.
+  optional string ipv6_address = 1;
+
+  // The length of the IPv6 prefix.
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  message RouteState {
+    enum Enum {
+      unspecified = 0;
+      advertised = 1;
+      withdrawn = 2;
+    }
+  }
+  // The state of the route , either advertised or withdrawn. If route is in withdrawn
+  // state, only the prefix, prefix_length, origin and path_id (if applicable) may be
+  // present.
+  optional RouteState.Enum route_state = 5;
+
+  message NextHopType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // The next hop type , ipv4 or ipv6 .  If type is ipv4, then the ipv4_next_hop should
+  // be included. If type is ipv6, then the ipv6_next_hop should be included.
+  // 
+  optional NextHopType.Enum next_hop_type = 6;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 7;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 8;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 9;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 10;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 11;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 12;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 13;
+}
+
 // The capture result request to the traffic generator.
 // Stops the port capture on the port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
