@@ -215,7 +215,7 @@ func (api *gosnappiApi) httpConnect() error {
 	return nil
 }
 
-func (api *gosnappiApi) httpSendRecv(ctx context.Context, urlPath string, jsonBody string, method string) (*http.Response, error) {
+func (api *gosnappiApi) httpSendRecv(ctx context.Context, urlPath string, jsonBody string, method string, isBytes bool) (*http.Response, error) {
 	err := api.httpConnect()
 	if err != nil {
 		return nil, err
@@ -228,7 +228,11 @@ func (api *gosnappiApi) httpSendRecv(ctx context.Context, urlPath string, jsonBo
 	}
 	queryUrl, _ = queryUrl.Parse(urlPath)
 	req, _ := http.NewRequest(method, queryUrl.String(), bodyReader)
-	req.Header.Set("Content-Type", "application/json")
+	if isBytes {
+		req.Header.Set("Content-Type", "application/octet-stream")
+	} else {
+		req.Header.Set("Content-Type", "application/json")
+	}
 	if ctx != nil {
 		req = req.WithContext(ctx)
 	} else {
@@ -1118,7 +1122,7 @@ func (api *gosnappiApi) httpSetConfig(config Config) (Warning, error) {
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetConfig", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "config", configJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "config", configJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1145,7 +1149,7 @@ func (api *gosnappiApi) httpGetConfig() (Config, error) {
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetConfig", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "config", "", "GET")
+	resp, err := api.httpSendRecv(newCtx, "config", "", "GET", false)
 	if err != nil {
 		return nil, err
 	}
@@ -1175,7 +1179,7 @@ func (api *gosnappiApi) httpUpdateConfig(configUpdate ConfigUpdate) (Warning, er
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "UpdateConfig", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "config", configUpdateJson, "PATCH")
+	resp, err := api.httpSendRecv(newCtx, "config", configUpdateJson, "PATCH", false)
 
 	if err != nil {
 		return nil, err
@@ -1206,7 +1210,7 @@ func (api *gosnappiApi) httpAppendConfig(configAppend ConfigAppend) (Warning, er
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "AppendConfig", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "config/append", configAppendJson, "PATCH")
+	resp, err := api.httpSendRecv(newCtx, "config/append", configAppendJson, "PATCH", false)
 
 	if err != nil {
 		return nil, err
@@ -1237,7 +1241,7 @@ func (api *gosnappiApi) httpDeleteConfig(configDelete ConfigDelete) (Warning, er
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "DeleteConfig", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "config/delete", configDeleteJson, "PATCH")
+	resp, err := api.httpSendRecv(newCtx, "config/delete", configDeleteJson, "PATCH", false)
 
 	if err != nil {
 		return nil, err
@@ -1268,7 +1272,7 @@ func (api *gosnappiApi) httpSetControlState(controlState ControlState) (Warning,
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlState", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "control/state", controlStateJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "control/state", controlStateJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1299,7 +1303,7 @@ func (api *gosnappiApi) httpSetControlAction(controlAction ControlAction) (Contr
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "SetControlAction", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "control/action", controlActionJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "control/action", controlActionJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1330,7 +1334,7 @@ func (api *gosnappiApi) httpGetMetrics(metricsRequest MetricsRequest) (MetricsRe
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetMetrics", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "monitor/metrics", metricsRequestJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "monitor/metrics", metricsRequestJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1361,7 +1365,7 @@ func (api *gosnappiApi) httpGetStates(statesRequest StatesRequest) (StatesRespon
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetStates", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "monitor/states", statesRequestJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "monitor/states", statesRequestJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1392,7 +1396,7 @@ func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, e
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetCapture", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "monitor/capture", captureRequestJson, "POST")
+	resp, err := api.httpSendRecv(newCtx, "monitor/capture", captureRequestJson, "POST", false)
 
 	if err != nil {
 		return nil, err
@@ -1416,7 +1420,7 @@ func (api *gosnappiApi) httpGetVersion() (Version, error) {
 	parentCtx := api.Telemetry().getRootContext()
 	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetVersion", trace.WithSpanKind(trace.SpanKindClient))
 	defer api.Telemetry().CloseSpan(span)
-	resp, err := api.httpSendRecv(newCtx, "capabilities/version", "", "GET")
+	resp, err := api.httpSendRecv(newCtx, "capabilities/version", "", "GET", false)
 	if err != nil {
 		return nil, err
 	}
