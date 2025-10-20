@@ -260,8 +260,6 @@ func (obj *deviceOspfv2Router) setNil() {
 
 // DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
 //
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-//
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 type DeviceOspfv2Router interface {
 	Validation
