@@ -279,10 +279,10 @@ type FlowPayload interface {
 	setChoice(value FlowPayloadChoiceEnum) FlowPayload
 	// HasChoice checks if Choice has been set in FlowPayload
 	HasChoice() bool
-	// getter for DecrementByte to set choice.
-	DecrementByte()
 	// getter for DecrementWord to set choice.
 	DecrementWord()
+	// getter for DecrementByte to set choice.
+	DecrementByte()
 	// getter for IncrementWord to set choice.
 	IncrementWord()
 	// getter for IncrementByte to set choice.
@@ -319,14 +319,14 @@ func (obj *flowPayload) Choice() FlowPayloadChoiceEnum {
 	return FlowPayloadChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for DecrementByte to set choice
-func (obj *flowPayload) DecrementByte() {
-	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
-}
-
 // getter for DecrementWord to set choice
 func (obj *flowPayload) DecrementWord() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
+}
+
+// getter for DecrementByte to set choice
+func (obj *flowPayload) DecrementByte() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
 }
 
 // getter for IncrementWord to set choice
