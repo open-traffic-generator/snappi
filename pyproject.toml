@@ -10,7 +10,7 @@ dynamic = ["version", "dependencies"]
 # Metadata
 description = "The Snappi Open Traffic Generator Python Package"
 readme = "readme.md"
-requires-python = ">=3.7,<4"
+requires-python = ">=3.8,<4"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [
@@ -22,7 +22,6 @@ classifiers = [
   "Intended Audience :: Developers",
   "Topic :: Software Development :: Testing :: Traffic Generation",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
