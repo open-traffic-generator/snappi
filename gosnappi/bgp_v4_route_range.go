@@ -23,6 +23,7 @@ type bgpV4RouteRange struct {
 	addPathHolder             BgpAddPath
 	extCommunitiesHolder      BgpV4RouteRangeBgpExtCommunityIter
 	extendedCommunitiesHolder BgpV4RouteRangeBgpExtendedCommunityIter
+	mplsLabelsHolder          BgpMplsLabelBindings
 }
 
 func NewBgpV4RouteRange() BgpV4RouteRange {
@@ -257,6 +258,7 @@ func (obj *bgpV4RouteRange) setNil() {
 	obj.addPathHolder = nil
 	obj.extCommunitiesHolder = nil
 	obj.extendedCommunitiesHolder = nil
+	obj.mplsLabelsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -344,6 +346,24 @@ type BgpV4RouteRange interface {
 	ExtCommunities() BgpV4RouteRangeBgpExtCommunityIter
 	// ExtendedCommunities returns BgpV4RouteRangeBgpExtendedCommunityIterIter, set in BgpV4RouteRange
 	ExtendedCommunities() BgpV4RouteRangeBgpExtendedCommunityIter
+	// MplsLabels returns BgpMplsLabelBindings, set in BgpV4RouteRange.
+	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
+	// to a particular address prefix.
+	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
+	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
+	// References: https://datatracker.ietf.org/doc/html/rfc3107
+	// & https://datatracker.ietf.org/doc/html/rfc8277.
+	MplsLabels() BgpMplsLabelBindings
+	// SetMplsLabels assigns BgpMplsLabelBindings provided by user to BgpV4RouteRange.
+	// BgpMplsLabelBindings is bGP may be used to advertise that a particular node (N) has bound a particular MPLS label, or a particular sequence of MPLS labels,
+	// to a particular address prefix.
+	// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI attribute.
+	// The Network Address of Next Hop field of that attribute contains an IP address of node N.
+	// References: https://datatracker.ietf.org/doc/html/rfc3107
+	// & https://datatracker.ietf.org/doc/html/rfc8277.
+	SetMplsLabels(value BgpMplsLabelBindings) BgpV4RouteRange
+	// HasMplsLabels checks if MplsLabels has been set in BgpV4RouteRange
+	HasMplsLabels() bool
 	setNil()
 }
 
@@ -915,6 +935,34 @@ func (obj *bgpV4RouteRangeBgpExtendedCommunityIter) appendHolderSlice(item BgpEx
 	return obj
 }
 
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// MplsLabels returns a BgpMplsLabelBindings
+func (obj *bgpV4RouteRange) MplsLabels() BgpMplsLabelBindings {
+	if obj.obj.MplsLabels == nil {
+		obj.obj.MplsLabels = NewBgpMplsLabelBindings().msg()
+	}
+	if obj.mplsLabelsHolder == nil {
+		obj.mplsLabelsHolder = &bgpMplsLabelBindings{obj: obj.obj.MplsLabels}
+	}
+	return obj.mplsLabelsHolder
+}
+
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// MplsLabels returns a BgpMplsLabelBindings
+func (obj *bgpV4RouteRange) HasMplsLabels() bool {
+	return obj.obj.MplsLabels != nil
+}
+
+// Optional configuration for a BGP speaker to Bind an Address Prefix to One or More MPLS Labels.
+// SetMplsLabels sets the BgpMplsLabelBindings value in the BgpV4RouteRange object
+func (obj *bgpV4RouteRange) SetMplsLabels(value BgpMplsLabelBindings) BgpV4RouteRange {
+
+	obj.mplsLabelsHolder = nil
+	obj.obj.MplsLabels = value.msg()
+
+	return obj
+}
+
 func (obj *bgpV4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1013,6 +1061,11 @@ func (obj *bgpV4RouteRange) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.MplsLabels != nil {
+
+		obj.MplsLabels().validateObj(vObj, set_default)
 	}
 
 }

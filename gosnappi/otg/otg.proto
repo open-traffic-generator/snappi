@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.40.0
+/* Open Traffic Generator API 1.41.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -2409,6 +2409,23 @@ message MACRouteAddress {
   optional uint32 step = 4;
 }
 
+// A container of MPLS Prefix Label Value/Index in the address range.
+message RouteMplsLabelValue {
+
+  // The starting Label Value/Index.
+  // default = 16
+  optional uint32 start = 1;
+
+  // The maximum value of Label Value/Index in the range after which next Label will start
+  // from the 'start' Label.
+  // default = 1048575
+  optional uint32 max = 2;
+
+  // Increments the Label Value/Index within a route range where multiple routes are present.
+  // default = 1
+  optional uint32 step = 3;
+}
+
 // This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
 // Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
 message IsisSRPrefixSid {
@@ -3691,6 +3708,48 @@ message BgpCapability {
   // Support for IPv6 Unicast Add Path Capability.
   // default = False
   optional bool ipv6_unicast_add_path = 25;
+
+  // For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI,
+  // SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions
+  // capability.
+  // default = False
+  optional bool ipv4_mpls = 26;
+
+  // For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI,
+  // SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions
+  // capability.
+  // default = False
+  optional bool ipv6_mpls = 27;
+
+  // Support for Multiple Labels binding to the IPv4 address prefix.
+  BgpCapabilityIpv4MplsMulti multiple_ipv4_mpls = 28;
+
+  // Support for Multiple Labels binding to the IPv6 address prefix.
+  BgpCapabilityIpv6MplsMulti multiple_ipv6_mpls = 29;
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple
+// Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1.
+// For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise
+// triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol
+// extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+message BgpCapabilityIpv4MplsMulti {
+
+  // Number of Labels (n) in the triplet format <AFI=2, SAFI=4, Count=n>.
+  // default = 2
+  optional uint32 label_count = 1;
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple
+// Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1.
+// For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise
+// triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol
+// extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+message BgpCapabilityIpv6MplsMulti {
+
+  // Number of Labels (n) in the triplet format <AFI=2, SAFI=4, Count=n>.
+  // default = 2
+  optional uint32 label_count = 1;
 }
 
 // Configuration for controlling storage of BGP learned information recieved from the
@@ -3811,6 +3870,10 @@ message BgpV4RouteRange {
   // defined by the type and sub-type field. Extended communities provide a larger range
   // for grouping or categorizing communities.
   repeated BgpExtendedCommunity extended_communities = 12;
+
+  // Optional configuration for a BGP speaker to Bind an Address Prefix to One or More
+  // MPLS Labels.
+  BgpMplsLabelBindings mpls_labels = 13;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -4171,6 +4234,34 @@ message BgpExtendedCommunityCustomType {
   optional string value = 3;
 }
 
+// BGP may be used to advertise that a particular node (N) has bound a particular MPLS
+// label, or a particular sequence of MPLS labels,
+// to a particular address prefix.
+// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI
+// attribute.
+// The Network Address of Next Hop field of that attribute contains an IP address of
+// node N.
+// References: https://datatracker.ietf.org/doc/html/rfc3107
+// & https://datatracker.ietf.org/doc/html/rfc8277.
+message BgpMplsLabelBindings {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      labels = 1;
+    }
+  }
+  // Bind one or more MPLS Labels or SR indices to Address Prefixes.
+  // To advertise multiple labels for an address prefix, the BGP capabilities device.bgp.capablity.ipv4_mpls_multi/bgp.capablity.ipv6_mpls_multi
+  // etc. to be configured first.
+  // - labels: One or more Label Values are to be configured here.
+  // default = Choice.Enum.labels
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  repeated RouteMplsLabelValue labels = 2;
+}
+
 // Emulated BGPv6 route range.
 message BgpV6RouteRange {
 
@@ -4274,6 +4365,10 @@ message BgpV6RouteRange {
   // defined by the type and sub-type field. Extended communities provide a larger range
   // for grouping or categorizing communities.
   repeated BgpExtendedCommunity extended_communities = 12;
+
+  // Optional configuration for a BGP speaker to Bind an Address Prefix to One or More
+  // MPLS Labels.
+  BgpMplsLabelBindings mpls_labels = 13;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
