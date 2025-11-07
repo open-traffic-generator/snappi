@@ -29,6 +29,7 @@ type statesRequest struct {
 	ospfv2LsasHolder       Ospfv2LsasStateRequest
 	ospfv3LsasHolder       Ospfv3LsasStateRequest
 	isisAdjacenciesHolder  IsisIIHsStateRequest
+	bmpServersHolder       BmpServersStateRequest
 }
 
 func NewStatesRequest() StatesRequest {
@@ -269,6 +270,7 @@ func (obj *statesRequest) setNil() {
 	obj.ospfv2LsasHolder = nil
 	obj.ospfv3LsasHolder = nil
 	obj.isisAdjacenciesHolder = nil
+	obj.bmpServersHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -406,6 +408,14 @@ type StatesRequest interface {
 	SetIsisAdjacencies(value IsisIIHsStateRequest) StatesRequest
 	// HasIsisAdjacencies checks if IsisAdjacencies has been set in StatesRequest
 	HasIsisAdjacencies() bool
+	// BmpServers returns BmpServersStateRequest, set in StatesRequest.
+	// BmpServersStateRequest is the request for BMP server information.
+	BmpServers() BmpServersStateRequest
+	// SetBmpServers assigns BmpServersStateRequest provided by user to StatesRequest.
+	// BmpServersStateRequest is the request for BMP server information.
+	SetBmpServers(value BmpServersStateRequest) StatesRequest
+	// HasBmpServers checks if BmpServers has been set in StatesRequest
+	HasBmpServers() bool
 	setNil()
 }
 
@@ -426,6 +436,7 @@ var StatesRequestChoice = struct {
 	OSPFV2_LSAS       StatesRequestChoiceEnum
 	OSPFV3_LSAS       StatesRequestChoiceEnum
 	ISIS_ADJACENCIES  StatesRequestChoiceEnum
+	BMP_SERVERS       StatesRequestChoiceEnum
 }{
 	IPV4_NEIGHBORS:    StatesRequestChoiceEnum("ipv4_neighbors"),
 	IPV6_NEIGHBORS:    StatesRequestChoiceEnum("ipv6_neighbors"),
@@ -440,6 +451,7 @@ var StatesRequestChoice = struct {
 	OSPFV2_LSAS:       StatesRequestChoiceEnum("ospfv2_lsas"),
 	OSPFV3_LSAS:       StatesRequestChoiceEnum("ospfv3_lsas"),
 	ISIS_ADJACENCIES:  StatesRequestChoiceEnum("isis_adjacencies"),
+	BMP_SERVERS:       StatesRequestChoiceEnum("bmp_servers"),
 }
 
 func (obj *statesRequest) Choice() StatesRequestChoiceEnum {
@@ -461,6 +473,8 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 	}
 	enumValue := otg.StatesRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.BmpServers = nil
+	obj.bmpServersHolder = nil
 	obj.obj.IsisAdjacencies = nil
 	obj.isisAdjacenciesHolder = nil
 	obj.obj.Ospfv3Lsas = nil
@@ -538,6 +552,10 @@ func (obj *statesRequest) setChoice(value StatesRequestChoiceEnum) StatesRequest
 
 	if value == StatesRequestChoice.ISIS_ADJACENCIES {
 		obj.obj.IsisAdjacencies = NewIsisIIHsStateRequest().msg()
+	}
+
+	if value == StatesRequestChoice.BMP_SERVERS {
+		obj.obj.BmpServers = NewBmpServersStateRequest().msg()
 	}
 
 	return obj
@@ -907,6 +925,34 @@ func (obj *statesRequest) SetIsisAdjacencies(value IsisIIHsStateRequest) StatesR
 	return obj
 }
 
+// description is TBD
+// BmpServers returns a BmpServersStateRequest
+func (obj *statesRequest) BmpServers() BmpServersStateRequest {
+	if obj.obj.BmpServers == nil {
+		obj.setChoice(StatesRequestChoice.BMP_SERVERS)
+	}
+	if obj.bmpServersHolder == nil {
+		obj.bmpServersHolder = &bmpServersStateRequest{obj: obj.obj.BmpServers}
+	}
+	return obj.bmpServersHolder
+}
+
+// description is TBD
+// BmpServers returns a BmpServersStateRequest
+func (obj *statesRequest) HasBmpServers() bool {
+	return obj.obj.BmpServers != nil
+}
+
+// description is TBD
+// SetBmpServers sets the BmpServersStateRequest value in the StatesRequest object
+func (obj *statesRequest) SetBmpServers(value BmpServersStateRequest) StatesRequest {
+	obj.setChoice(StatesRequestChoice.BMP_SERVERS)
+	obj.bmpServersHolder = nil
+	obj.obj.BmpServers = value.msg()
+
+	return obj
+}
+
 func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -975,6 +1021,11 @@ func (obj *statesRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.IsisAdjacencies != nil {
 
 		obj.IsisAdjacencies().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.BmpServers != nil {
+
+		obj.BmpServers().validateObj(vObj, set_default)
 	}
 
 }
@@ -1046,6 +1097,11 @@ func (obj *statesRequest) setDefault() {
 	if obj.obj.IsisAdjacencies != nil {
 		choices_set += 1
 		choice = StatesRequestChoice.ISIS_ADJACENCIES
+	}
+
+	if obj.obj.BmpServers != nil {
+		choices_set += 1
+		choice = StatesRequestChoice.BMP_SERVERS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
