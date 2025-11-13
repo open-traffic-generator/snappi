@@ -18,8 +18,7 @@ type bmpServerPeerState struct {
 	unMarshaller                 unMarshalBmpServerPeerState
 	sessionIpv4InformationHolder BmpServerPeerSessionIpv4Information
 	sessionIpv6InformationHolder BmpServerPeerSessionIpv6Information
-	prePolicyStatsHolder         BmpServerPeerStats
-	postPolicyStatsHolder        BmpServerPeerStats
+	statsHolder                  BmpServerPeerStats
 	prePolicyInRibHolder         BmpServerPeerPrePolicyInRib
 	postPolicyInRibHolder        BmpServerPeerPostPolicyInRib
 }
@@ -251,8 +250,7 @@ func (obj *bmpServerPeerState) Clone() (BmpServerPeerState, error) {
 func (obj *bmpServerPeerState) setNil() {
 	obj.sessionIpv4InformationHolder = nil
 	obj.sessionIpv6InformationHolder = nil
-	obj.prePolicyStatsHolder = nil
-	obj.postPolicyStatsHolder = nil
+	obj.statsHolder = nil
 	obj.prePolicyInRibHolder = nil
 	obj.postPolicyInRibHolder = nil
 	obj.validationErrors = nil
@@ -316,22 +314,14 @@ type BmpServerPeerState interface {
 	SetStatus(value BmpServerPeerStateStatusEnum) BmpServerPeerState
 	// HasStatus checks if Status has been set in BmpServerPeerState
 	HasStatus() bool
-	// PrePolicyStats returns BmpServerPeerStats, set in BmpServerPeerState.
+	// Stats returns BmpServerPeerStats, set in BmpServerPeerState.
 	// BmpServerPeerStats is container for periodic per peer stats sent by BMP client to a BMP Server.
-	PrePolicyStats() BmpServerPeerStats
-	// SetPrePolicyStats assigns BmpServerPeerStats provided by user to BmpServerPeerState.
+	Stats() BmpServerPeerStats
+	// SetStats assigns BmpServerPeerStats provided by user to BmpServerPeerState.
 	// BmpServerPeerStats is container for periodic per peer stats sent by BMP client to a BMP Server.
-	SetPrePolicyStats(value BmpServerPeerStats) BmpServerPeerState
-	// HasPrePolicyStats checks if PrePolicyStats has been set in BmpServerPeerState
-	HasPrePolicyStats() bool
-	// PostPolicyStats returns BmpServerPeerStats, set in BmpServerPeerState.
-	// BmpServerPeerStats is container for periodic per peer stats sent by BMP client to a BMP Server.
-	PostPolicyStats() BmpServerPeerStats
-	// SetPostPolicyStats assigns BmpServerPeerStats provided by user to BmpServerPeerState.
-	// BmpServerPeerStats is container for periodic per peer stats sent by BMP client to a BMP Server.
-	SetPostPolicyStats(value BmpServerPeerStats) BmpServerPeerState
-	// HasPostPolicyStats checks if PostPolicyStats has been set in BmpServerPeerState
-	HasPostPolicyStats() bool
+	SetStats(value BmpServerPeerStats) BmpServerPeerState
+	// HasStats checks if Stats has been set in BmpServerPeerState
+	HasStats() bool
 	// PrePolicyInRib returns BmpServerPeerPrePolicyInRib, set in BmpServerPeerState.
 	// BmpServerPeerPrePolicyInRib is the set of routes received from this peer as reported using BMP Route Monitoring messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound policies were applied. This is determined by checking that the L flag is not set in the Per-Peer Header in the received Route Monitoring message. It should also be ensured that the O flag as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)  Note that routes which have been advertised initially and currently in withdrawn state can be included in the returned set of routes by setting the status of that specific route to 'withdrawn'. Routes which have been received from this peer and part of current Pre-Policy In-Rib DB should have the status set to 'advertised'. Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard is configured or exceptions in the prefix_storage are specified such that all incoming routes are filtered, the corresponding prefix database list will be empty.
 	PrePolicyInRib() BmpServerPeerPrePolicyInRib
@@ -497,58 +487,30 @@ func (obj *bmpServerPeerState) SetStatus(value BmpServerPeerStateStatusEnum) Bmp
 	return obj
 }
 
-// The last set of BMP stats sent by the BMP client for this peer with the L flag unset (indicating absence of application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no pre-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// PrePolicyStats returns a BmpServerPeerStats
-func (obj *bmpServerPeerState) PrePolicyStats() BmpServerPeerStats {
-	if obj.obj.PrePolicyStats == nil {
-		obj.obj.PrePolicyStats = NewBmpServerPeerStats().msg()
+// The last set of BMP stats sent by the BMP client for this peer as per  https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no BMP Statistics message have been received yet or peer is still in down state. If the BMP client has sent a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
+// Stats returns a BmpServerPeerStats
+func (obj *bmpServerPeerState) Stats() BmpServerPeerStats {
+	if obj.obj.Stats == nil {
+		obj.obj.Stats = NewBmpServerPeerStats().msg()
 	}
-	if obj.prePolicyStatsHolder == nil {
-		obj.prePolicyStatsHolder = &bmpServerPeerStats{obj: obj.obj.PrePolicyStats}
+	if obj.statsHolder == nil {
+		obj.statsHolder = &bmpServerPeerStats{obj: obj.obj.Stats}
 	}
-	return obj.prePolicyStatsHolder
+	return obj.statsHolder
 }
 
-// The last set of BMP stats sent by the BMP client for this peer with the L flag unset (indicating absence of application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no pre-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// PrePolicyStats returns a BmpServerPeerStats
-func (obj *bmpServerPeerState) HasPrePolicyStats() bool {
-	return obj.obj.PrePolicyStats != nil
+// The last set of BMP stats sent by the BMP client for this peer as per  https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no BMP Statistics message have been received yet or peer is still in down state. If the BMP client has sent a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
+// Stats returns a BmpServerPeerStats
+func (obj *bmpServerPeerState) HasStats() bool {
+	return obj.obj.Stats != nil
 }
 
-// The last set of BMP stats sent by the BMP client for this peer with the L flag unset (indicating absence of application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no pre-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// SetPrePolicyStats sets the BmpServerPeerStats value in the BmpServerPeerState object
-func (obj *bmpServerPeerState) SetPrePolicyStats(value BmpServerPeerStats) BmpServerPeerState {
+// The last set of BMP stats sent by the BMP client for this peer as per  https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no BMP Statistics message have been received yet or peer is still in down state. If the BMP client has sent a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
+// SetStats sets the BmpServerPeerStats value in the BmpServerPeerState object
+func (obj *bmpServerPeerState) SetStats(value BmpServerPeerStats) BmpServerPeerState {
 
-	obj.prePolicyStatsHolder = nil
-	obj.obj.PrePolicyStats = value.msg()
-
-	return obj
-}
-
-// The last set of BMP stats sent by the BMP client for this peerwith the L flag set (indicating application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no post-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// PostPolicyStats returns a BmpServerPeerStats
-func (obj *bmpServerPeerState) PostPolicyStats() BmpServerPeerStats {
-	if obj.obj.PostPolicyStats == nil {
-		obj.obj.PostPolicyStats = NewBmpServerPeerStats().msg()
-	}
-	if obj.postPolicyStatsHolder == nil {
-		obj.postPolicyStatsHolder = &bmpServerPeerStats{obj: obj.obj.PostPolicyStats}
-	}
-	return obj.postPolicyStatsHolder
-}
-
-// The last set of BMP stats sent by the BMP client for this peerwith the L flag set (indicating application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no post-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// PostPolicyStats returns a BmpServerPeerStats
-func (obj *bmpServerPeerState) HasPostPolicyStats() bool {
-	return obj.obj.PostPolicyStats != nil
-}
-
-// The last set of BMP stats sent by the BMP client for this peerwith the L flag set (indicating application of in-bound policy on the advertised prefixes). The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be all zeroed or empty if no post-policy stats have been received yet or peer is still in down state. If the BMP client sends a subset of the various statistic counters, only those should be set and the remaining counters should be set to 0 when returning the result.
-// SetPostPolicyStats sets the BmpServerPeerStats value in the BmpServerPeerState object
-func (obj *bmpServerPeerState) SetPostPolicyStats(value BmpServerPeerStats) BmpServerPeerState {
-
-	obj.postPolicyStatsHolder = nil
-	obj.obj.PostPolicyStats = value.msg()
+	obj.statsHolder = nil
+	obj.obj.Stats = value.msg()
 
 	return obj
 }
@@ -633,14 +595,9 @@ func (obj *bmpServerPeerState) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.PrePolicyStats != nil {
+	if obj.obj.Stats != nil {
 
-		obj.PrePolicyStats().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.PostPolicyStats != nil {
-
-		obj.PostPolicyStats().validateObj(vObj, set_default)
+		obj.Stats().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.PrePolicyInRib != nil {

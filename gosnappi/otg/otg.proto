@@ -20420,7 +20420,8 @@ message BmpServersStateRequest {
   // for all BMP Servers.
   // 
   // x-constraint:
-  // - /components/schemas/Device.Bmp.Server/properties/name
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
   // 
   repeated string bmp_server_names = 1;
 }
@@ -20475,23 +20476,12 @@ message BmpServerPeerState {
   // might be empty if the peer state is down.
   optional Status.Enum status = 5;
 
-  // The last set of BMP stats sent by the BMP client for this peer with the L flag unset
-  // (indicating absence of application of in-bound policy on the advertised prefixes).
-  // The set of supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8.
-  // It might be all zeroed or empty if no pre-policy stats have been received yet or
-  // peer is still in down state. If the BMP client sends a subset of the various statistic
-  // counters, only those should be set and the remaining counters should be set to 0
-  // when returning the result.
-  BmpServerPeerStats pre_policy_stats = 6;
-
-  // The last set of BMP stats sent by the BMP client for this peerwith the L flag set
-  // (indicating application of in-bound policy on the advertised prefixes). The set of
-  // supported stats are available at https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8.
-  // It might be all zeroed or empty if no post-policy stats have been received yet or
-  // peer is still in down state. If the BMP client sends a subset of the various statistic
-  // counters, only those should be set and the remaining counters should be set to 0
-  // when returning the result.
-  BmpServerPeerStats post_policy_stats = 7;
+  // The last set of BMP stats sent by the BMP client for this peer as per  https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8.
+  // It might be all zeroed or empty if no BMP Statistics message have been received yet
+  // or peer is still in down state. If the BMP client has sent a subset of the various
+  // statistic counters, only those should be set and the remaining counters should be
+  // set to 0 when returning the result.
+  BmpServerPeerStats stats = 6;
 
   // The set of routes received from this peer as reported using BMP Route Monitoring
   // messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound
@@ -20505,7 +20495,7 @@ message BmpServerPeerState {
   // Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
   // is configured or exceptions in the prefix_storage are specified such that all incoming
   // routes are filtered, the prefix database list will be empty.
-  BmpServerPeerPrePolicyInRib pre_policy_in_rib = 8;
+  BmpServerPeerPrePolicyInRib pre_policy_in_rib = 7;
 
   // The set of routes received from this peer as reported using BMP Route Monitoring
   // messages by the BMP client  which are part of the Adj-RIB-In database *after* inbound
@@ -20519,7 +20509,7 @@ message BmpServerPeerState {
   // Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
   // is configured or exceptions in the prefix_storage are specified such that all incoming
   // routes are filtered, the prefix database list will be empty.
-  BmpServerPeerPostPolicyInRib post_policy_in_rib = 9;
+  BmpServerPeerPostPolicyInRib post_policy_in_rib = 8;
 }
 
 // This object is included if session_ip_type is of type ipv4.
