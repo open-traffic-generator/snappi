@@ -336,6 +336,15 @@ func (obj *bmpServerPeerSessionIpv6Information) validateObj(vObj *validation, se
 
 	}
 
+	if obj.obj.RemoteAddress != nil {
+
+		err := obj.validateIpv6(obj.RemoteAddress())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on BmpServerPeerSessionIpv6Information.RemoteAddress"))
+		}
+
+	}
+
 }
 
 func (obj *bmpServerPeerSessionIpv6Information) setDefault() {

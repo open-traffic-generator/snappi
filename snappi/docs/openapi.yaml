@@ -28603,6 +28603,7 @@ components:
           description: |-
             The remote IPv4 address associated with the BGPv4 peer.
           type: string
+          format: ipv4
           x-field-uid: 2
     BmpServerPeer.SessionIpv6Information:
       description: |-
@@ -28619,6 +28620,7 @@ components:
           description: |-
             The remote IPv6 address associated with the BGPv6 peer.
           type: string
+          format: ipv6
           x-field-uid: 2
     BmpServerPeer.Stats:
       description: |-
