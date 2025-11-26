@@ -1542,6 +1542,10 @@ from .snappi import BgpPrefixIpv4UnicastFilter
 from .snappi import BgpPrefixIpv4UnicastFilterIter
 from .snappi import BgpPrefixIpv6UnicastFilter
 from .snappi import BgpPrefixIpv6UnicastFilterIter
+from .snappi import BgpPrefixIpv4MplsUnicastFilter
+from .snappi import BgpPrefixIpv4MplsUnicastFilterIter
+from .snappi import BgpPrefixIpv6MplsUnicastFilter
+from .snappi import BgpPrefixIpv6MplsUnicastFilterIter
 from .snappi import IsisLspsStateRequest
 from .snappi import LldpNeighborsStateRequest
 from .snappi import RsvpLspsStateRequest
@@ -1584,6 +1588,10 @@ from .snappi import ResultBgpAsPathSegmentIter
 from .snappi import BgpPrefixIpv4UnicastStateIter
 from .snappi import BgpPrefixIpv6UnicastState
 from .snappi import BgpPrefixIpv6UnicastStateIter
+from .snappi import BgpPrefixIpv4MplsUnicastState
+from .snappi import BgpPrefixIpv4MplsUnicastStateIter
+from .snappi import BgpPrefixIpv6MplsUnicastState
+from .snappi import BgpPrefixIpv6MplsUnicastStateIter
 from .snappi import BgpPrefixesStateIter
 from .snappi import IsisLspsState
 from .snappi import IsisLspState

@@ -279,9 +279,6 @@ type Dhcpv4ClientMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
-//
 // ClientNames returns a []string
 func (obj *dhcpv4ClientMetricsRequest) ClientNames() []string {
 	if obj.obj.ClientNames == nil {
@@ -291,9 +288,6 @@ func (obj *dhcpv4ClientMetricsRequest) ClientNames() []string {
 }
 
 // The names of DHCPv4 clients to return results for. An empty list will return results for all DHCPv4 client.
-//
-// x-constraint:
-// - /components/schemas/Device.Dhcpv4client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Dhcpv4client/properties/name

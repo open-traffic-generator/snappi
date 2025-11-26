@@ -13,11 +13,13 @@ import (
 // ***** BgpPrefixStateRequest *****
 type bgpPrefixStateRequest struct {
 	validation
-	obj                      *otg.BgpPrefixStateRequest
-	marshaller               marshalBgpPrefixStateRequest
-	unMarshaller             unMarshalBgpPrefixStateRequest
-	ipv4UnicastFiltersHolder BgpPrefixStateRequestBgpPrefixIpv4UnicastFilterIter
-	ipv6UnicastFiltersHolder BgpPrefixStateRequestBgpPrefixIpv6UnicastFilterIter
+	obj                          *otg.BgpPrefixStateRequest
+	marshaller                   marshalBgpPrefixStateRequest
+	unMarshaller                 unMarshalBgpPrefixStateRequest
+	ipv4UnicastFiltersHolder     BgpPrefixStateRequestBgpPrefixIpv4UnicastFilterIter
+	ipv6UnicastFiltersHolder     BgpPrefixStateRequestBgpPrefixIpv6UnicastFilterIter
+	ipv4MplsUnicastFiltersHolder BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	ipv6MplsUnicastFiltersHolder BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
 }
 
 func NewBgpPrefixStateRequest() BgpPrefixStateRequest {
@@ -247,6 +249,8 @@ func (obj *bgpPrefixStateRequest) Clone() (BgpPrefixStateRequest, error) {
 func (obj *bgpPrefixStateRequest) setNil() {
 	obj.ipv4UnicastFiltersHolder = nil
 	obj.ipv6UnicastFiltersHolder = nil
+	obj.ipv4MplsUnicastFiltersHolder = nil
+	obj.ipv6MplsUnicastFiltersHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -286,14 +290,14 @@ type BgpPrefixStateRequest interface {
 	Ipv4UnicastFilters() BgpPrefixStateRequestBgpPrefixIpv4UnicastFilterIter
 	// Ipv6UnicastFilters returns BgpPrefixStateRequestBgpPrefixIpv6UnicastFilterIterIter, set in BgpPrefixStateRequest
 	Ipv6UnicastFilters() BgpPrefixStateRequestBgpPrefixIpv6UnicastFilterIter
+	// Ipv4MplsUnicastFilters returns BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIterIter, set in BgpPrefixStateRequest
+	Ipv4MplsUnicastFilters() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	// Ipv6MplsUnicastFilters returns BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIterIter, set in BgpPrefixStateRequest
+	Ipv6MplsUnicastFilters() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
 	setNil()
 }
 
 // The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name
@@ -308,10 +312,6 @@ func (obj *bgpPrefixStateRequest) BgpPeerNames() []string {
 }
 
 // The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V4Peer/properties/name
-// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name
@@ -332,11 +332,15 @@ type BgpPrefixStateRequestPrefixFiltersEnum string
 
 // Enum of PrefixFilters on BgpPrefixStateRequest
 var BgpPrefixStateRequestPrefixFilters = struct {
-	IPV4_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
-	IPV6_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV4_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
+	IPV4_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
 }{
-	IPV4_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
-	IPV6_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
+	IPV4_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
+	IPV6_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
+	IPV4_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_mpls_unicast"),
+	IPV6_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_mpls_unicast"),
 }
 
 func (obj *bgpPrefixStateRequest) PrefixFilters() []BgpPrefixStateRequestPrefixFiltersEnum {
@@ -534,6 +538,180 @@ func (obj *bgpPrefixStateRequestBgpPrefixIpv6UnicastFilterIter) appendHolderSlic
 	return obj
 }
 
+// The IPv4 MPLS unicast results can be filtered by specifying additional prefix search criteria. If the ipv4_mpls_unicast_filters property is missing or empty then all IPv4 MPLS unicast prefixes will be returned.
+// Ipv4MplsUnicastFilters returns a []BgpPrefixIpv4MplsUnicastFilter
+func (obj *bgpPrefixStateRequest) Ipv4MplsUnicastFilters() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	if len(obj.obj.Ipv4MplsUnicastFilters) == 0 {
+		obj.obj.Ipv4MplsUnicastFilters = []*otg.BgpPrefixIpv4MplsUnicastFilter{}
+	}
+	if obj.ipv4MplsUnicastFiltersHolder == nil {
+		obj.ipv4MplsUnicastFiltersHolder = newBgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter(&obj.obj.Ipv4MplsUnicastFilters).setMsg(obj)
+	}
+	return obj.ipv4MplsUnicastFiltersHolder
+}
+
+type bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter struct {
+	obj                                 *bgpPrefixStateRequest
+	bgpPrefixIpv4MplsUnicastFilterSlice []BgpPrefixIpv4MplsUnicastFilter
+	fieldPtr                            *[]*otg.BgpPrefixIpv4MplsUnicastFilter
+}
+
+func newBgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter(ptr *[]*otg.BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	return &bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter{fieldPtr: ptr}
+}
+
+type BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter interface {
+	setMsg(*bgpPrefixStateRequest) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	Items() []BgpPrefixIpv4MplsUnicastFilter
+	Add() BgpPrefixIpv4MplsUnicastFilter
+	Append(items ...BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	Set(index int, newObj BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	Clear() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	clearHolderSlice() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+	appendHolderSlice(item BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) setMsg(msg *bgpPrefixStateRequest) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpPrefixIpv4MplsUnicastFilter{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) Items() []BgpPrefixIpv4MplsUnicastFilter {
+	return obj.bgpPrefixIpv4MplsUnicastFilterSlice
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) Add() BgpPrefixIpv4MplsUnicastFilter {
+	newObj := &otg.BgpPrefixIpv4MplsUnicastFilter{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpPrefixIpv4MplsUnicastFilter{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpPrefixIpv4MplsUnicastFilterSlice = append(obj.bgpPrefixIpv4MplsUnicastFilterSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) Append(items ...BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpPrefixIpv4MplsUnicastFilterSlice = append(obj.bgpPrefixIpv4MplsUnicastFilterSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) Set(index int, newObj BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpPrefixIpv4MplsUnicastFilterSlice[index] = newObj
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) Clear() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpPrefixIpv4MplsUnicastFilter{}
+		obj.bgpPrefixIpv4MplsUnicastFilterSlice = []BgpPrefixIpv4MplsUnicastFilter{}
+	}
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) clearHolderSlice() BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	if len(obj.bgpPrefixIpv4MplsUnicastFilterSlice) > 0 {
+		obj.bgpPrefixIpv4MplsUnicastFilterSlice = []BgpPrefixIpv4MplsUnicastFilter{}
+	}
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter) appendHolderSlice(item BgpPrefixIpv4MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv4MplsUnicastFilterIter {
+	obj.bgpPrefixIpv4MplsUnicastFilterSlice = append(obj.bgpPrefixIpv4MplsUnicastFilterSlice, item)
+	return obj
+}
+
+// The IPv6 MPLS unicast results can be filtered by specifying additional prefix search criteria. If the ipv6_mpls_unicast_filters property is missing or empty then all IPv6 MPLS unicast prefixes will be returned.
+// Ipv6MplsUnicastFilters returns a []BgpPrefixIpv6MplsUnicastFilter
+func (obj *bgpPrefixStateRequest) Ipv6MplsUnicastFilters() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	if len(obj.obj.Ipv6MplsUnicastFilters) == 0 {
+		obj.obj.Ipv6MplsUnicastFilters = []*otg.BgpPrefixIpv6MplsUnicastFilter{}
+	}
+	if obj.ipv6MplsUnicastFiltersHolder == nil {
+		obj.ipv6MplsUnicastFiltersHolder = newBgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter(&obj.obj.Ipv6MplsUnicastFilters).setMsg(obj)
+	}
+	return obj.ipv6MplsUnicastFiltersHolder
+}
+
+type bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter struct {
+	obj                                 *bgpPrefixStateRequest
+	bgpPrefixIpv6MplsUnicastFilterSlice []BgpPrefixIpv6MplsUnicastFilter
+	fieldPtr                            *[]*otg.BgpPrefixIpv6MplsUnicastFilter
+}
+
+func newBgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter(ptr *[]*otg.BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	return &bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter{fieldPtr: ptr}
+}
+
+type BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter interface {
+	setMsg(*bgpPrefixStateRequest) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+	Items() []BgpPrefixIpv6MplsUnicastFilter
+	Add() BgpPrefixIpv6MplsUnicastFilter
+	Append(items ...BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+	Set(index int, newObj BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+	Clear() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+	clearHolderSlice() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+	appendHolderSlice(item BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) setMsg(msg *bgpPrefixStateRequest) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bgpPrefixIpv6MplsUnicastFilter{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) Items() []BgpPrefixIpv6MplsUnicastFilter {
+	return obj.bgpPrefixIpv6MplsUnicastFilterSlice
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) Add() BgpPrefixIpv6MplsUnicastFilter {
+	newObj := &otg.BgpPrefixIpv6MplsUnicastFilter{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bgpPrefixIpv6MplsUnicastFilter{obj: newObj}
+	newLibObj.setDefault()
+	obj.bgpPrefixIpv6MplsUnicastFilterSlice = append(obj.bgpPrefixIpv6MplsUnicastFilterSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) Append(items ...BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bgpPrefixIpv6MplsUnicastFilterSlice = append(obj.bgpPrefixIpv6MplsUnicastFilterSlice, item)
+	}
+	return obj
+}
+
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) Set(index int, newObj BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bgpPrefixIpv6MplsUnicastFilterSlice[index] = newObj
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) Clear() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BgpPrefixIpv6MplsUnicastFilter{}
+		obj.bgpPrefixIpv6MplsUnicastFilterSlice = []BgpPrefixIpv6MplsUnicastFilter{}
+	}
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) clearHolderSlice() BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	if len(obj.bgpPrefixIpv6MplsUnicastFilterSlice) > 0 {
+		obj.bgpPrefixIpv6MplsUnicastFilterSlice = []BgpPrefixIpv6MplsUnicastFilter{}
+	}
+	return obj
+}
+func (obj *bgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter) appendHolderSlice(item BgpPrefixIpv6MplsUnicastFilter) BgpPrefixStateRequestBgpPrefixIpv6MplsUnicastFilterIter {
+	obj.bgpPrefixIpv6MplsUnicastFilterSlice = append(obj.bgpPrefixIpv6MplsUnicastFilterSlice, item)
+	return obj
+}
+
 func (obj *bgpPrefixStateRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -562,6 +740,34 @@ func (obj *bgpPrefixStateRequest) validateObj(vObj *validation, set_default bool
 			}
 		}
 		for _, item := range obj.Ipv6UnicastFilters().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Ipv4MplsUnicastFilters) != 0 {
+
+		if set_default {
+			obj.Ipv4MplsUnicastFilters().clearHolderSlice()
+			for _, item := range obj.obj.Ipv4MplsUnicastFilters {
+				obj.Ipv4MplsUnicastFilters().appendHolderSlice(&bgpPrefixIpv4MplsUnicastFilter{obj: item})
+			}
+		}
+		for _, item := range obj.Ipv4MplsUnicastFilters().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Ipv6MplsUnicastFilters) != 0 {
+
+		if set_default {
+			obj.Ipv6MplsUnicastFilters().clearHolderSlice()
+			for _, item := range obj.obj.Ipv6MplsUnicastFilters {
+				obj.Ipv6MplsUnicastFilters().appendHolderSlice(&bgpPrefixIpv6MplsUnicastFilter{obj: item})
+			}
+		}
+		for _, item := range obj.Ipv6MplsUnicastFilters().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
