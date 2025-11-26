@@ -38,6 +38,7 @@ type metricsResponse struct {
 	rocev2Ipv6PerPeerMetricsHolder  MetricsResponseRocev2IPv6MetricPerPeerIter
 	rocev2FlowPerQpMetricsHolder    MetricsResponseRocev2FlowMetricPerQPIter
 	egressOnlyTrackingMetricsHolder MetricsResponseEgressOnlyTrackingMetricIter
+	bmpServerMetricsHolder          MetricsResponseBmpServerMetricIter
 }
 
 func NewMetricsResponse() MetricsResponse {
@@ -287,6 +288,7 @@ func (obj *metricsResponse) setNil() {
 	obj.rocev2Ipv6PerPeerMetricsHolder = nil
 	obj.rocev2FlowPerQpMetricsHolder = nil
 	obj.egressOnlyTrackingMetricsHolder = nil
+	obj.bmpServerMetricsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -320,14 +322,14 @@ type MetricsResponse interface {
 	setChoice(value MetricsResponseChoiceEnum) MetricsResponse
 	// HasChoice checks if Choice has been set in MetricsResponse
 	HasChoice() bool
-	// getter for Dhcpv4Client to set choice.
-	Dhcpv4Client()
 	// getter for Dhcpv6Client to set choice.
 	Dhcpv6Client()
-	// getter for Dhcpv6Server to set choice.
-	Dhcpv6Server()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Server to set choice.
+	Dhcpv6Server()
+	// getter for Dhcpv4Client to set choice.
+	Dhcpv4Client()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -372,6 +374,8 @@ type MetricsResponse interface {
 	Rocev2FlowPerQpMetrics() MetricsResponseRocev2FlowMetricPerQPIter
 	// EgressOnlyTrackingMetrics returns MetricsResponseEgressOnlyTrackingMetricIterIter, set in MetricsResponse
 	EgressOnlyTrackingMetrics() MetricsResponseEgressOnlyTrackingMetricIter
+	// BmpServerMetrics returns MetricsResponseBmpServerMetricIterIter, set in MetricsResponse
+	BmpServerMetrics() MetricsResponseBmpServerMetricIter
 	setNil()
 }
 
@@ -401,6 +405,7 @@ var MetricsResponseChoice = struct {
 	ROCEV2_IPV6_PER_PEER_METRICS MetricsResponseChoiceEnum
 	ROCEV2_FLOW_PER_QP_METRICS   MetricsResponseChoiceEnum
 	EGRESS_ONLY_TRACKING_METRICS MetricsResponseChoiceEnum
+	BMP_SERVER_METRICS           MetricsResponseChoiceEnum
 }{
 	FLOW_METRICS:                 MetricsResponseChoiceEnum("flow_metrics"),
 	PORT_METRICS:                 MetricsResponseChoiceEnum("port_metrics"),
@@ -424,15 +429,11 @@ var MetricsResponseChoice = struct {
 	ROCEV2_IPV6_PER_PEER_METRICS: MetricsResponseChoiceEnum("rocev2_ipv6_per_peer_metrics"),
 	ROCEV2_FLOW_PER_QP_METRICS:   MetricsResponseChoiceEnum("rocev2_flow_per_qp_metrics"),
 	EGRESS_ONLY_TRACKING_METRICS: MetricsResponseChoiceEnum("egress_only_tracking_metrics"),
+	BMP_SERVER_METRICS:           MetricsResponseChoiceEnum("bmp_server_metrics"),
 }
 
 func (obj *metricsResponse) Choice() MetricsResponseChoiceEnum {
 	return MetricsResponseChoiceEnum(obj.obj.Choice.Enum().String())
-}
-
-// getter for Dhcpv4Client to set choice
-func (obj *metricsResponse) Dhcpv4Client() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // getter for Dhcpv6Client to set choice
@@ -440,14 +441,19 @@ func (obj *metricsResponse) Dhcpv6Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_CLIENT)
 }
 
+// getter for Dhcpv4Server to set choice
+func (obj *metricsResponse) Dhcpv4Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+}
+
 // getter for Dhcpv6Server to set choice
 func (obj *metricsResponse) Dhcpv6Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
-// getter for Dhcpv4Server to set choice
-func (obj *metricsResponse) Dhcpv4Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+// getter for Dhcpv4Client to set choice
+func (obj *metricsResponse) Dhcpv4Client() {
+	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
 // description is TBD
@@ -465,6 +471,8 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 	}
 	enumValue := otg.MetricsResponse_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.BmpServerMetrics = nil
+	obj.bmpServerMetricsHolder = nil
 	obj.obj.EgressOnlyTrackingMetrics = nil
 	obj.egressOnlyTrackingMetricsHolder = nil
 	obj.obj.Rocev2FlowPerQpMetrics = nil
@@ -572,6 +580,10 @@ func (obj *metricsResponse) setChoice(value MetricsResponseChoiceEnum) MetricsRe
 
 	if value == MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS {
 		obj.obj.EgressOnlyTrackingMetrics = []*otg.EgressOnlyTrackingMetric{}
+	}
+
+	if value == MetricsResponseChoice.BMP_SERVER_METRICS {
+		obj.obj.BmpServerMetrics = []*otg.BmpServerMetric{}
 	}
 
 	return obj
@@ -2491,6 +2503,93 @@ func (obj *metricsResponseEgressOnlyTrackingMetricIter) appendHolderSlice(item E
 	return obj
 }
 
+// description is TBD
+// BmpServerMetrics returns a []BmpServerMetric
+func (obj *metricsResponse) BmpServerMetrics() MetricsResponseBmpServerMetricIter {
+	if len(obj.obj.BmpServerMetrics) == 0 {
+		obj.setChoice(MetricsResponseChoice.BMP_SERVER_METRICS)
+	}
+	if obj.bmpServerMetricsHolder == nil {
+		obj.bmpServerMetricsHolder = newMetricsResponseBmpServerMetricIter(&obj.obj.BmpServerMetrics).setMsg(obj)
+	}
+	return obj.bmpServerMetricsHolder
+}
+
+type metricsResponseBmpServerMetricIter struct {
+	obj                  *metricsResponse
+	bmpServerMetricSlice []BmpServerMetric
+	fieldPtr             *[]*otg.BmpServerMetric
+}
+
+func newMetricsResponseBmpServerMetricIter(ptr *[]*otg.BmpServerMetric) MetricsResponseBmpServerMetricIter {
+	return &metricsResponseBmpServerMetricIter{fieldPtr: ptr}
+}
+
+type MetricsResponseBmpServerMetricIter interface {
+	setMsg(*metricsResponse) MetricsResponseBmpServerMetricIter
+	Items() []BmpServerMetric
+	Add() BmpServerMetric
+	Append(items ...BmpServerMetric) MetricsResponseBmpServerMetricIter
+	Set(index int, newObj BmpServerMetric) MetricsResponseBmpServerMetricIter
+	Clear() MetricsResponseBmpServerMetricIter
+	clearHolderSlice() MetricsResponseBmpServerMetricIter
+	appendHolderSlice(item BmpServerMetric) MetricsResponseBmpServerMetricIter
+}
+
+func (obj *metricsResponseBmpServerMetricIter) setMsg(msg *metricsResponse) MetricsResponseBmpServerMetricIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&bmpServerMetric{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *metricsResponseBmpServerMetricIter) Items() []BmpServerMetric {
+	return obj.bmpServerMetricSlice
+}
+
+func (obj *metricsResponseBmpServerMetricIter) Add() BmpServerMetric {
+	newObj := &otg.BmpServerMetric{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &bmpServerMetric{obj: newObj}
+	newLibObj.setDefault()
+	obj.bmpServerMetricSlice = append(obj.bmpServerMetricSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *metricsResponseBmpServerMetricIter) Append(items ...BmpServerMetric) MetricsResponseBmpServerMetricIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.bmpServerMetricSlice = append(obj.bmpServerMetricSlice, item)
+	}
+	return obj
+}
+
+func (obj *metricsResponseBmpServerMetricIter) Set(index int, newObj BmpServerMetric) MetricsResponseBmpServerMetricIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.bmpServerMetricSlice[index] = newObj
+	return obj
+}
+func (obj *metricsResponseBmpServerMetricIter) Clear() MetricsResponseBmpServerMetricIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.BmpServerMetric{}
+		obj.bmpServerMetricSlice = []BmpServerMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseBmpServerMetricIter) clearHolderSlice() MetricsResponseBmpServerMetricIter {
+	if len(obj.bmpServerMetricSlice) > 0 {
+		obj.bmpServerMetricSlice = []BmpServerMetric{}
+	}
+	return obj
+}
+func (obj *metricsResponseBmpServerMetricIter) appendHolderSlice(item BmpServerMetric) MetricsResponseBmpServerMetricIter {
+	obj.bmpServerMetricSlice = append(obj.bmpServerMetricSlice, item)
+	return obj
+}
+
 func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -2804,6 +2903,20 @@ func (obj *metricsResponse) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if len(obj.obj.BmpServerMetrics) != 0 {
+
+		if set_default {
+			obj.BmpServerMetrics().clearHolderSlice()
+			for _, item := range obj.obj.BmpServerMetrics {
+				obj.BmpServerMetrics().appendHolderSlice(&bmpServerMetric{obj: item})
+			}
+		}
+		for _, item := range obj.BmpServerMetrics().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
 }
 
 func (obj *metricsResponse) setDefault() {
@@ -2898,6 +3011,11 @@ func (obj *metricsResponse) setDefault() {
 	if len(obj.obj.EgressOnlyTrackingMetrics) > 0 {
 		choices_set += 1
 		choice = MetricsResponseChoice.EGRESS_ONLY_TRACKING_METRICS
+	}
+
+	if len(obj.obj.BmpServerMetrics) > 0 {
+		choices_set += 1
+		choice = MetricsResponseChoice.BMP_SERVER_METRICS
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

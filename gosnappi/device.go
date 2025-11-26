@@ -28,6 +28,7 @@ type device struct {
 	macsecHolder        DeviceMacsec
 	ospfv3Holder        DeviceOspfv3Router
 	rocev2Holder        DeviceRocev2Peer
+	bmpHolder           DeviceBmp
 }
 
 func NewDevice() Device {
@@ -267,6 +268,7 @@ func (obj *device) setNil() {
 	obj.macsecHolder = nil
 	obj.ospfv3Holder = nil
 	obj.rocev2Holder = nil
+	obj.bmpHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -392,6 +394,14 @@ type Device interface {
 	SetRocev2(value DeviceRocev2Peer) Device
 	// HasRocev2 checks if Rocev2 has been set in Device
 	HasRocev2() bool
+	// Bmp returns DeviceBmp, set in Device.
+	// DeviceBmp is top-level container for BGP Monitoring Protocol (BMP) configuration. BMP, as defined in RFC 7854, provides a mechanism to monitor BGP sessions. This configuration pertains to the device when acting as a BMP Monitor /server, listening for connections from BGP speakers (routers) acting as BMP clients. BMP is unidirectional, meaning the monitoring station only receives information; it doesn't send commands to or control the monitored router.
+	Bmp() DeviceBmp
+	// SetBmp assigns DeviceBmp provided by user to Device.
+	// DeviceBmp is top-level container for BGP Monitoring Protocol (BMP) configuration. BMP, as defined in RFC 7854, provides a mechanism to monitor BGP sessions. This configuration pertains to the device when acting as a BMP Monitor /server, listening for connections from BGP speakers (routers) acting as BMP clients. BMP is unidirectional, meaning the monitoring station only receives information; it doesn't send commands to or control the monitored router.
+	SetBmp(value DeviceBmp) Device
+	// HasBmp checks if Bmp has been set in Device
+	HasBmp() bool
 	setNil()
 }
 
@@ -924,6 +934,34 @@ func (obj *device) SetRocev2(value DeviceRocev2Peer) Device {
 	return obj
 }
 
+// Configuration for BMP.
+// Bmp returns a DeviceBmp
+func (obj *device) Bmp() DeviceBmp {
+	if obj.obj.Bmp == nil {
+		obj.obj.Bmp = NewDeviceBmp().msg()
+	}
+	if obj.bmpHolder == nil {
+		obj.bmpHolder = &deviceBmp{obj: obj.obj.Bmp}
+	}
+	return obj.bmpHolder
+}
+
+// Configuration for BMP.
+// Bmp returns a DeviceBmp
+func (obj *device) HasBmp() bool {
+	return obj.obj.Bmp != nil
+}
+
+// Configuration for BMP.
+// SetBmp sets the DeviceBmp value in the Device object
+func (obj *device) SetBmp(value DeviceBmp) Device {
+
+	obj.bmpHolder = nil
+	obj.obj.Bmp = value.msg()
+
+	return obj
+}
+
 func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1019,6 +1057,11 @@ func (obj *device) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rocev2 != nil {
 
 		obj.Rocev2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Bmp != nil {
+
+		obj.Bmp().validateObj(vObj, set_default)
 	}
 
 }
