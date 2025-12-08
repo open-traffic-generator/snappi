@@ -3,6 +3,7 @@ package controllers
 
 import (
 	"errors"
+	"io"
 	"log"
 	"net/http"
 
@@ -21,7 +22,76 @@ func NewHttpCapabilitiesController(handler interfaces.CapabilitiesHandler) inter
 
 func (ctrl *capabilitiesController) Routes() []httpapi.Route {
 	return []httpapi.Route{
+		{Path: "/capabilities/capabilities", Method: "POST", Name: "GetCapabilities", Handler: ctrl.GetCapabilities},
 		{Path: "/capabilities/version", Method: "GET", Name: "GetVersion", Handler: ctrl.GetVersion},
+	}
+}
+
+/*
+GetCapabilities: POST /capabilities/capabilities
+Description:
+*/
+func (ctrl *capabilitiesController) GetCapabilities(w http.ResponseWriter, r *http.Request) {
+	var item gosnappi.CapabilitiesRequest
+	if r.Body != nil {
+		body, readError := io.ReadAll(r.Body)
+		if body != nil {
+			item = gosnappi.NewCapabilitiesRequest()
+			err := item.Unmarshal().FromJson(string(body))
+			if err != nil {
+				ctrl.responseGetCapabilitiesError(w, "validation", err)
+				return
+			}
+		} else {
+			ctrl.responseGetCapabilitiesError(w, "validation", readError)
+			return
+		}
+	} else {
+		bodyError := errors.New("Request does not have a body")
+		ctrl.responseGetCapabilitiesError(w, "validation", bodyError)
+		return
+	}
+	result, err := ctrl.handler.GetCapabilities(item, r)
+	if err != nil {
+		ctrl.responseGetCapabilitiesError(w, "internal", err)
+		return
+	}
+
+	if result.HasCapabilitiesResponse() {
+		if _, err := httpapi.WriteJSONResponse(w, 200, result.CapabilitiesResponse().Marshal()); err != nil {
+			log.Print(err.Error())
+		}
+		return
+	}
+	ctrl.responseGetCapabilitiesError(w, "internal", errors.New("Unknown error"))
+}
+
+func (ctrl *capabilitiesController) responseGetCapabilitiesError(w http.ResponseWriter, errorKind gosnappi.ErrorKindEnum, rsp_err error) {
+	var result gosnappi.Error
+	var statusCode int32
+	if errorKind == "validation" {
+		statusCode = 400
+	} else if errorKind == "internal" {
+		statusCode = 500
+	}
+
+	if rErr, ok := rsp_err.(gosnappi.Error); ok {
+		result = rErr
+	} else {
+		result = gosnappi.NewError()
+		err := result.Unmarshal().FromJson(rsp_err.Error())
+		if err != nil {
+			_ = result.SetCode(statusCode)
+			err = result.SetKind(errorKind)
+			if err != nil {
+				log.Print(err.Error())
+			}
+			_ = result.SetErrors([]string{rsp_err.Error()})
+		}
+	}
+
+	if _, err := httpapi.WriteJSONResponse(w, int(result.Code()), result.Marshal()); err != nil {
+		log.Print(err.Error())
 	}
 }
 

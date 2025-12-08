@@ -1762,6 +1762,13 @@ from .snappi import CaptureRequest
 from .snappi import CaptureRequestPackets
 from .snappi import CaptureRequestCaptureSlice
 from .snappi import CaptureRequestCaptureSliceInitial
+from .snappi import CapabilitiesRequest
+from .snappi import CapabilitiesPortType
+from .snappi import CapabilitiesResponse
+from .snappi import CapabilitiesPortTypeCapability
+from .snappi import CapabilitiesPath
+from .snappi import CapabilitiesPathIter
+from .snappi import CapabilitiesPortTypeCapabilityIter
 from .snappi import Version
 from .snappi import Api
 from .snappi import Transport

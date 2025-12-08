@@ -285,6 +285,10 @@ type Api interface {
 	GetCapture(captureRequest CaptureRequest) ([]byte, error)
 	// streaming method for GetCapture
 	streamGetCapture(context.Context, *otg.GetCaptureRequest) ([]byte, error)
+	// GetCapabilities description is TBD
+	GetCapabilities(capabilitiesRequest CapabilitiesRequest) (CapabilitiesResponse, error)
+	// streaming method for GetCapabilities
+	streamGetCapabilities(context.Context, *otg.GetCapabilitiesRequest) (CapabilitiesResponse, error)
 	// GetVersion description is TBD
 	GetVersion() (Version, error)
 	// GetLocalVersion provides version details of local client
@@ -1075,6 +1079,83 @@ func (api *gosnappiApi) GetCapture(captureRequest CaptureRequest) ([]byte, error
 	return nil, nil
 }
 
+func (api *gosnappiApi) streamGetCapabilities(ctx context.Context, req *otg.GetCapabilitiesRequest) (CapabilitiesResponse, error) {
+	streamClient, err := api.grpcClient.StreamGetCapabilities(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	var bytes []byte
+	for {
+		resp, err := streamClient.Recv()
+		if err == io.EOF {
+			res := NewCapabilitiesResponse()
+			m_err := proto.Unmarshal(bytes, res.msg())
+			if m_err != nil {
+				return nil, m_err
+			} else {
+				return res, nil
+			}
+
+		}
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, resp.Datum...)
+	}
+}
+
+func (api *gosnappiApi) GetCapabilities(capabilitiesRequest CapabilitiesRequest) (CapabilitiesResponse, error) {
+
+	if err := capabilitiesRequest.validate(); err != nil {
+		return nil, err
+	}
+
+	if err := api.checkLocalRemoteVersionCompatibilityOnce(); err != nil {
+		return nil, err
+	}
+
+	if api.hasHttpTransport() {
+		return api.httpGetCapabilities(capabilitiesRequest)
+	}
+
+	// adding spans grpc transport for OTLP instrumentation
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetCapabilities", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+
+	if err := api.grpcConnect(); err != nil {
+		return nil, err
+	}
+	request := otg.GetCapabilitiesRequest{CapabilitiesRequest: capabilitiesRequest.msg()}
+	if newCtx == nil {
+		newCtx = context.Background()
+	}
+	ctx, cancelFunc := context.WithTimeout(newCtx, api.grpc.requestTimeout)
+	defer cancelFunc()
+	var resp *otg.GetCapabilitiesResponse
+	var err error
+	if api.grpc.enableGrpcStreaming {
+		return api.streamGetCapabilities(ctx, &request)
+	} else {
+
+		resp, err = api.grpcClient.GetCapabilities(ctx, &request)
+	}
+	if err != nil {
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
+		if er, ok := fromGrpcError(err); ok {
+			return nil, er
+		}
+		return nil, err
+	}
+	ret := NewCapabilitiesResponse()
+	if resp.GetCapabilitiesResponse() != nil {
+		ret.setMsg(resp.GetCapabilitiesResponse())
+		return ret, nil
+	}
+
+	return ret, nil
+}
+
 func (api *gosnappiApi) GetVersion() (Version, error) {
 
 	if api.hasHttpTransport() {
@@ -1409,6 +1490,37 @@ func (api *gosnappiApi) httpGetCapture(captureRequest CaptureRequest) ([]byte, e
 	if resp.StatusCode == 200 {
 
 		return bodyBytes, nil
+	} else {
+		err := fromHttpError(resp.StatusCode, bodyBytes)
+		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())
+		return nil, err
+	}
+}
+
+func (api *gosnappiApi) httpGetCapabilities(capabilitiesRequest CapabilitiesRequest) (CapabilitiesResponse, error) {
+	capabilitiesRequestJson, err := capabilitiesRequest.Marshal().ToJson()
+	if err != nil {
+		return nil, err
+	}
+	parentCtx := api.Telemetry().getRootContext()
+	newCtx, span := api.Telemetry().NewSpan(parentCtx, "GetCapabilities", trace.WithSpanKind(trace.SpanKindClient))
+	defer api.Telemetry().CloseSpan(span)
+	resp, err := api.httpSendRecv(newCtx, "capabilities/capabilities", capabilitiesRequestJson, "POST", false)
+
+	if err != nil {
+		return nil, err
+	}
+	bodyBytes, err := io.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == 200 {
+		obj := NewGetCapabilitiesResponse().CapabilitiesResponse()
+		if err := obj.Unmarshal().FromJson(string(bodyBytes)); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	} else {
 		err := fromHttpError(resp.StatusCode, bodyBytes)
 		api.Telemetry().SetSpanStatus(span, codes.Error, err.Error())

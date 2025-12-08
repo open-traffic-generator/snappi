@@ -10,11 +10,17 @@ import (
 
 type CapabilitiesController interface {
 	Routes() []httpapi.Route
+	GetCapabilities(w http.ResponseWriter, r *http.Request)
 	GetVersion(w http.ResponseWriter, r *http.Request)
 }
 
 type CapabilitiesHandler interface {
 	GetController() CapabilitiesController
+	/*
+		GetCapabilities: POST /capabilities/capabilities
+		Description:
+	*/
+	GetCapabilities(rbody gosnappi.CapabilitiesRequest, r *http.Request) (gosnappi.GetCapabilitiesResponse, error)
 	/*
 		GetVersion: GET /capabilities/version
 		Description:

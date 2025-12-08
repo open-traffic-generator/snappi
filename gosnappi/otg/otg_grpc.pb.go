@@ -75,6 +75,10 @@ type OpenapiClient interface {
 	// streaming version of the rpc GetCapture
 	StreamGetCapture(ctx context.Context, in *GetCaptureRequest, opts ...grpc.CallOption) (Openapi_StreamGetCaptureClient, error)
 	// Description missing in models
+	GetCapabilities(ctx context.Context, in *GetCapabilitiesRequest, opts ...grpc.CallOption) (*GetCapabilitiesResponse, error)
+	// streaming version of the rpc GetCapabilities
+	StreamGetCapabilities(ctx context.Context, in *GetCapabilitiesRequest, opts ...grpc.CallOption) (Openapi_StreamGetCapabilitiesClient, error)
+	// Description missing in models
 	GetVersion(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetVersionResponse, error)
 }
 
@@ -406,6 +410,47 @@ func (x *openapiStreamGetCaptureClient) Recv() (*Data, error) {
 	return m, nil
 }
 
+func (c *openapiClient) GetCapabilities(ctx context.Context, in *GetCapabilitiesRequest, opts ...grpc.CallOption) (*GetCapabilitiesResponse, error) {
+	out := new(GetCapabilitiesResponse)
+	err := c.cc.Invoke(ctx, "/otg.Openapi/GetCapabilities", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *openapiClient) StreamGetCapabilities(ctx context.Context, in *GetCapabilitiesRequest, opts ...grpc.CallOption) (Openapi_StreamGetCapabilitiesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Openapi_ServiceDesc.Streams[7], "/otg.Openapi/streamGetCapabilities", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &openapiStreamGetCapabilitiesClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Openapi_StreamGetCapabilitiesClient interface {
+	Recv() (*Data, error)
+	grpc.ClientStream
+}
+
+type openapiStreamGetCapabilitiesClient struct {
+	grpc.ClientStream
+}
+
+func (x *openapiStreamGetCapabilitiesClient) Recv() (*Data, error) {
+	m := new(Data)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *openapiClient) GetVersion(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetVersionResponse, error) {
 	out := new(GetVersionResponse)
 	err := c.cc.Invoke(ctx, "/otg.Openapi/GetVersion", in, out, opts...)
@@ -470,6 +515,10 @@ type OpenapiServer interface {
 	// streaming version of the rpc GetCapture
 	StreamGetCapture(*GetCaptureRequest, Openapi_StreamGetCaptureServer) error
 	// Description missing in models
+	GetCapabilities(context.Context, *GetCapabilitiesRequest) (*GetCapabilitiesResponse, error)
+	// streaming version of the rpc GetCapabilities
+	StreamGetCapabilities(*GetCapabilitiesRequest, Openapi_StreamGetCapabilitiesServer) error
+	// Description missing in models
 	GetVersion(context.Context, *emptypb.Empty) (*GetVersionResponse, error)
 	mustEmbedUnimplementedOpenapiServer()
 }
@@ -528,6 +577,12 @@ func (UnimplementedOpenapiServer) GetCapture(context.Context, *GetCaptureRequest
 }
 func (UnimplementedOpenapiServer) StreamGetCapture(*GetCaptureRequest, Openapi_StreamGetCaptureServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamGetCapture not implemented")
+}
+func (UnimplementedOpenapiServer) GetCapabilities(context.Context, *GetCapabilitiesRequest) (*GetCapabilitiesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCapabilities not implemented")
+}
+func (UnimplementedOpenapiServer) StreamGetCapabilities(*GetCapabilitiesRequest, Openapi_StreamGetCapabilitiesServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamGetCapabilities not implemented")
 }
 func (UnimplementedOpenapiServer) GetVersion(context.Context, *emptypb.Empty) (*GetVersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVersion not implemented")
@@ -887,6 +942,45 @@ func (x *openapiStreamGetCaptureServer) Send(m *Data) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Openapi_GetCapabilities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCapabilitiesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenapiServer).GetCapabilities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/otg.Openapi/GetCapabilities",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenapiServer).GetCapabilities(ctx, req.(*GetCapabilitiesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Openapi_StreamGetCapabilities_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetCapabilitiesRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(OpenapiServer).StreamGetCapabilities(m, &openapiStreamGetCapabilitiesServer{stream})
+}
+
+type Openapi_StreamGetCapabilitiesServer interface {
+	Send(*Data) error
+	grpc.ServerStream
+}
+
+type openapiStreamGetCapabilitiesServer struct {
+	grpc.ServerStream
+}
+
+func (x *openapiStreamGetCapabilitiesServer) Send(m *Data) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 func _Openapi_GetVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -953,6 +1047,10 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Openapi_GetCapture_Handler,
 		},
 		{
+			MethodName: "GetCapabilities",
+			Handler:    _Openapi_GetCapabilities_Handler,
+		},
+		{
 			MethodName: "GetVersion",
 			Handler:    _Openapi_GetVersion_Handler,
 		},
@@ -991,6 +1089,11 @@ var Openapi_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "streamGetCapture",
 			Handler:       _Openapi_StreamGetCapture_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "streamGetCapabilities",
+			Handler:       _Openapi_StreamGetCapabilities_Handler,
 			ServerStreams: true,
 		},
 	},
