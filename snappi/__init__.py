@@ -1399,6 +1399,9 @@ from .snappi import EgressOnlyTrackingMetricTagsIter
 from .snappi import EgressOnlyTrackingFilter
 from .snappi import EgressOnlyTrackingFilterIter
 from .snappi import EgressOnlyTrackingIter
+from .snappi import ConfigMetadata
+from .snappi import ConfigTagValuePair
+from .snappi import ConfigTagValuePairIter
 from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
