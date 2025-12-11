@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.42.0
+  version: 1.42.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -19315,16 +19315,9 @@ components:
           x-field-uid: 1
     Action.Protocol.Ipv4.PingRequest:
       description: |-
-        Under Review: Most ping request parameters are still TBD.
-
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
-      x-status:
-        status: under_review
-        information: Most ping request parameters are still TBD.
       properties:
         src_name:
           description: |
@@ -19332,13 +19325,16 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
+          - /components/schemas/Device.Ipv4Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -19373,13 +19369,16 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
+          - /components/schemas/Device.Ipv4Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -19450,16 +19449,9 @@ components:
           x-field-uid: 1
     Action.Protocol.Ipv6.PingRequest:
       description: |-
-        Under Review: Most ping request parameters are still TBD.
-
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
-      x-status:
-        status: under_review
-        information: Most ping request parameters are still TBD.
       properties:
         src_name:
           description: |
@@ -19467,13 +19459,16 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
+          - /components/schemas/Device.Ipv6Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -19508,13 +19503,16 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
 
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
+          - /components/schemas/Device.Ipv6Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-

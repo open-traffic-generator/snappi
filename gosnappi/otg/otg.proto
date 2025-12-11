@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.42.0
+/* Open Traffic Generator API 1.42.1
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14815,10 +14815,6 @@ message ActionProtocolIpv4Ping {
   repeated ActionProtocolIpv4PingRequest requests = 1;
 }
 
-// Under Review: Most ping request parameters are still TBD.
-// 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -14828,10 +14824,12 @@ message ActionProtocolIpv4PingRequest {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   optional string src_name = 1;
 
@@ -14853,10 +14851,12 @@ message ActionResponseProtocolIpv4PingResponse {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // required = true
   optional string src_name = 1;
@@ -14918,10 +14918,6 @@ message ActionProtocolIpv6Ping {
   repeated ActionProtocolIpv6PingRequest requests = 1;
 }
 
-// Under Review: Most ping request parameters are still TBD.
-// 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -14931,10 +14927,12 @@ message ActionProtocolIpv6PingRequest {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   optional string src_name = 1;
 
@@ -14956,10 +14954,12 @@ message ActionResponseProtocolIpv6PingResponse {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // required = true
   optional string src_name = 1;
