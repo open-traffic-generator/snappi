@@ -18467,9 +18467,9 @@ components:
           enum:
           - start
           - stop
-    Action.Port.Reset:
+    Action.Port.Reboot:
       description: |-
-        Resets the configured ports to default state.
+        Resets the configured ports to initialized state.
       type: object
       properties:
         port_names:
@@ -19063,13 +19063,13 @@ components:
         choice:
           type: string
           x-enum:
-            reset:
+            reboot:
               x-field-uid: 1
           x-field-uid: 1
           enum:
-          - reset
-        reset:
-          $ref: '#/components/schemas/Action.Port.Reset'
+          - reboot
+        reboot:
+          $ref: '#/components/schemas/Action.Port.Reboot'
           x-field-uid: 2
     Action.Protocol.Ipv4:
       description: |-

@@ -1457,7 +1457,7 @@ from .snappi import ActionProtocolIsisInitiateRestart
 from .snappi import ActionProtocolIsisUnplannedRestart
 from .snappi import ActionProtocolIsisPlannedRestart
 from .snappi import ActionPort
-from .snappi import ActionPortReset
+from .snappi import ActionPortReboot
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol

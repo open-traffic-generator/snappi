@@ -16,7 +16,7 @@ type actionPort struct {
 	obj          *otg.ActionPort
 	marshaller   marshalActionPort
 	unMarshaller unMarshalActionPort
-	resetHolder  ActionPortReset
+	rebootHolder ActionPortReboot
 }
 
 func NewActionPort() ActionPort {
@@ -244,7 +244,7 @@ func (obj *actionPort) Clone() (ActionPort, error) {
 }
 
 func (obj *actionPort) setNil() {
-	obj.resetHolder = nil
+	obj.rebootHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -276,14 +276,14 @@ type ActionPort interface {
 	Choice() ActionPortChoiceEnum
 	// setChoice assigns ActionPortChoiceEnum provided by user to ActionPort
 	setChoice(value ActionPortChoiceEnum) ActionPort
-	// Reset returns ActionPortReset, set in ActionPort.
-	// ActionPortReset is resets the configured ports to default state.
-	Reset() ActionPortReset
-	// SetReset assigns ActionPortReset provided by user to ActionPort.
-	// ActionPortReset is resets the configured ports to default state.
-	SetReset(value ActionPortReset) ActionPort
-	// HasReset checks if Reset has been set in ActionPort
-	HasReset() bool
+	// Reboot returns ActionPortReboot, set in ActionPort.
+	// ActionPortReboot is resets the configured ports to initialized state.
+	Reboot() ActionPortReboot
+	// SetReboot assigns ActionPortReboot provided by user to ActionPort.
+	// ActionPortReboot is resets the configured ports to initialized state.
+	SetReboot(value ActionPortReboot) ActionPort
+	// HasReboot checks if Reboot has been set in ActionPort
+	HasReboot() bool
 	setNil()
 }
 
@@ -291,9 +291,9 @@ type ActionPortChoiceEnum string
 
 // Enum of Choice on ActionPort
 var ActionPortChoice = struct {
-	RESET ActionPortChoiceEnum
+	REBOOT ActionPortChoiceEnum
 }{
-	RESET: ActionPortChoiceEnum("reset"),
+	REBOOT: ActionPortChoiceEnum("reboot"),
 }
 
 func (obj *actionPort) Choice() ActionPortChoiceEnum {
@@ -309,40 +309,40 @@ func (obj *actionPort) setChoice(value ActionPortChoiceEnum) ActionPort {
 	}
 	enumValue := otg.ActionPort_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.Reset = nil
-	obj.resetHolder = nil
+	obj.obj.Reboot = nil
+	obj.rebootHolder = nil
 
-	if value == ActionPortChoice.RESET {
-		obj.obj.Reset = NewActionPortReset().msg()
+	if value == ActionPortChoice.REBOOT {
+		obj.obj.Reboot = NewActionPortReboot().msg()
 	}
 
 	return obj
 }
 
 // description is TBD
-// Reset returns a ActionPortReset
-func (obj *actionPort) Reset() ActionPortReset {
-	if obj.obj.Reset == nil {
-		obj.setChoice(ActionPortChoice.RESET)
+// Reboot returns a ActionPortReboot
+func (obj *actionPort) Reboot() ActionPortReboot {
+	if obj.obj.Reboot == nil {
+		obj.setChoice(ActionPortChoice.REBOOT)
 	}
-	if obj.resetHolder == nil {
-		obj.resetHolder = &actionPortReset{obj: obj.obj.Reset}
+	if obj.rebootHolder == nil {
+		obj.rebootHolder = &actionPortReboot{obj: obj.obj.Reboot}
 	}
-	return obj.resetHolder
+	return obj.rebootHolder
 }
 
 // description is TBD
-// Reset returns a ActionPortReset
-func (obj *actionPort) HasReset() bool {
-	return obj.obj.Reset != nil
+// Reboot returns a ActionPortReboot
+func (obj *actionPort) HasReboot() bool {
+	return obj.obj.Reboot != nil
 }
 
 // description is TBD
-// SetReset sets the ActionPortReset value in the ActionPort object
-func (obj *actionPort) SetReset(value ActionPortReset) ActionPort {
-	obj.setChoice(ActionPortChoice.RESET)
-	obj.resetHolder = nil
-	obj.obj.Reset = value.msg()
+// SetReboot sets the ActionPortReboot value in the ActionPort object
+func (obj *actionPort) SetReboot(value ActionPortReboot) ActionPort {
+	obj.setChoice(ActionPortChoice.REBOOT)
+	obj.rebootHolder = nil
+	obj.obj.Reboot = value.msg()
 
 	return obj
 }
@@ -357,9 +357,9 @@ func (obj *actionPort) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Choice is required field on interface ActionPort")
 	}
 
-	if obj.obj.Reset != nil {
+	if obj.obj.Reboot != nil {
 
-		obj.Reset().validateObj(vObj, set_default)
+		obj.Reboot().validateObj(vObj, set_default)
 	}
 
 }
@@ -368,9 +368,9 @@ func (obj *actionPort) setDefault() {
 	var choices_set int = 0
 	var choice ActionPortChoiceEnum
 
-	if obj.obj.Reset != nil {
+	if obj.obj.Reboot != nil {
 		choices_set += 1
-		choice = ActionPortChoice.RESET
+		choice = ActionPortChoice.REBOOT
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

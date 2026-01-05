@@ -14044,8 +14044,8 @@ message StatePortCapture {
   optional State.Enum state = 2;
 }
 
-// Resets the configured ports to default state.
-message ActionPortReset {
+// Resets the configured ports to initialized state.
+message ActionPortReboot {
 
   // The names of target ports. An empty or null list will target all ports.
   // 
@@ -14529,7 +14529,7 @@ message ActionPort {
   message Choice {
     enum Enum {
       unspecified = 0;
-      reset = 1;
+      reboot = 1;
     }
   }
   // Description missing in models
@@ -14537,7 +14537,7 @@ message ActionPort {
   optional Choice.Enum choice = 1;
 
   // Description missing in models
-  ActionPortReset reset = 2;
+  ActionPortReboot reboot = 2;
 }
 
 // Actions associated with IPv4 on configured resources.
