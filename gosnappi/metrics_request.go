@@ -435,14 +435,10 @@ type MetricsRequest interface {
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
 	// Convergence returns ConvergenceRequest, set in MetricsRequest.
-	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	// ConvergenceRequest is container for requesting control-plane and data-plane convergence time metrics for flows.
 	Convergence() ConvergenceRequest
 	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
-	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	// ConvergenceRequest is container for requesting control-plane and data-plane convergence time metrics for flows.
 	SetConvergence(value ConvergenceRequest) MetricsRequest
 	// HasConvergence checks if Convergence has been set in MetricsRequest
 	HasConvergence() bool

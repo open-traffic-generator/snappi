@@ -2194,12 +2194,7 @@ components:
           default: 7
           x-field-uid: 9
     Capture:
-      x-status:
-        status: under_review
-        information: There may be changes in filter configuration
       description: |-
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -10451,13 +10446,7 @@ components:
           x-field-uid: 1
     Device.Ospfv2Router:
       description: |-
-        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
-      x-status:
-        status: under_review
-        information: OSPFv2 is currently under review for pending exploration on use
-          cases.
       type: object
       required:
       - interfaces
@@ -12252,13 +12241,7 @@ components:
           x-field-uid: 4
     Device.Ospfv3Router:
       description: |-
-        Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv3 router.
-      x-status:
-        status: under_review
-        information: OSPFv3 is currently under review for pending exploration on use
-          cases.
       type: object
       required:
       - instances
@@ -17005,15 +16988,9 @@ components:
           default: true
           x-field-uid: 2
     Event:
-      description: "Under Review: Event configuration is currently under review for\
-        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
-        Both cp_events.enable and dp_events.enable must be explicitly set to true\
-        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
-        \ metrics."
-      x-status:
-        status: under_review
-        information: Event configuration is currently under review for pending exploration
-          on use cases.
+      description: "The optional container for event configuration.\nBoth cp_events.enable\
+        \ and dp_events.enable must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
+        \ metric values for convergence metrics."
       type: object
       properties:
         cp_events:
@@ -22959,13 +22936,7 @@ components:
           x-field-uid: 34
     Convergence.Request:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Container for requesting control-plane and data-plane convergence time metrics for flows.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
       type: object
       properties:
         flow_names:
@@ -22983,13 +22954,7 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         The container for convergence metrics.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
       type: object
       properties:
         name:

@@ -250,9 +250,7 @@ func (obj *convergenceMetric) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// ConvergenceMetric is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-//
-// The container for convergence metrics.
+// ConvergenceMetric is the container for convergence metrics.
 type ConvergenceMetric interface {
 	Validation
 	// msg marshals ConvergenceMetric to protobuf object *otg.ConvergenceMetric
@@ -475,8 +473,6 @@ func (obj *convergenceMetric) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("ConvergenceMetric is under review, Convergence metrics is currently under review for pending exploration on use cases.")
 
 	if len(obj.obj.Events) != 0 {
 

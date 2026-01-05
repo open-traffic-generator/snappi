@@ -1427,8 +1427,6 @@ message Layer1Ieee8021qbb {
   optional uint32 pfc_class_7 = 9;
 }
 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
@@ -7815,8 +7813,6 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -9033,8 +9029,6 @@ message SecureEntityStaticKeyRxSc {
   repeated SecureEntityStaticKeySak saks = 4;
 }
 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
 
@@ -12923,9 +12917,6 @@ message FlowPayloadFixed {
   optional bool repeat = 2;
 }
 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -16906,9 +16897,6 @@ message Ospfv2Metric {
   optional uint64 opaque_domain_received = 34;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -16922,9 +16910,6 @@ message ConvergenceRequest {
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // The container for convergence metrics.
 message ConvergenceMetric {
 

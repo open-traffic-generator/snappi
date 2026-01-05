@@ -1,7 +1,7 @@
 PyYAML
-protobuf~=5.29.5
+requests
 grpcio-tools~=1.70.0
 grpcio~=1.70.0
-requests
+protobuf~=5.29.5
 semantic_version
 urllib3
