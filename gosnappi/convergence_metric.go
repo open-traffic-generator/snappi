@@ -252,8 +252,6 @@ func (obj *convergenceMetric) setNil() {
 
 // ConvergenceMetric is under Review: Convergence metrics is currently under review for pending exploration on use cases.
 //
-// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-//
 // The container for convergence metrics.
 type ConvergenceMetric interface {
 	Validation
