@@ -39,7 +39,7 @@ version      = { file = "version.txt" }
 dependencies = { file = "requirements.txt" }
 
 [project.optional-dependencies]
-ixnetwork = ["snappi_ixnetwork == 1.34.0"]
+ixnetwork = ["snappi_ixnetwork == 1.42.1"]
 trex      = ["snappi_trex"]
 testing   = ["pytest", "flask"]
 telemetry = [
