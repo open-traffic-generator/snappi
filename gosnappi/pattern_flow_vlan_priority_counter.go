@@ -377,10 +377,10 @@ func (obj *patternFlowVlanPriorityCounter) validateObj(vObj *validation, set_def
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 7 {
+		if *obj.obj.Count > 8 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowVlanPriorityCounter.Count <= 7 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowVlanPriorityCounter.Count <= 8 but Got %d", *obj.obj.Count))
 		}
 
 	}

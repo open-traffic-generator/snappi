@@ -377,10 +377,10 @@ func (obj *patternFlowIpv6VersionCounter) validateObj(vObj *validation, set_defa
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 15 {
+		if *obj.obj.Count > 16 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv6VersionCounter.Count <= 15 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIpv6VersionCounter.Count <= 16 but Got %d", *obj.obj.Count))
 		}
 
 	}

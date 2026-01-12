@@ -377,10 +377,10 @@ func (obj *patternFlowIpv4FragmentOffsetCounter) validateObj(vObj *validation, s
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 31 {
+		if *obj.obj.Count > 32 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Count <= 31 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIpv4FragmentOffsetCounter.Count <= 32 but Got %d", *obj.obj.Count))
 		}
 
 	}

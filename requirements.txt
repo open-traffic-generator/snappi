@@ -1,7 +1,7 @@
-PyYAML
 requests
 grpcio~=1.70.0
 grpcio-tools~=1.70.0
 protobuf~=5.29.5
-urllib3
+PyYAML
 semantic_version
+urllib3
