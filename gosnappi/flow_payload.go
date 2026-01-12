@@ -279,14 +279,14 @@ type FlowPayload interface {
 	setChoice(value FlowPayloadChoiceEnum) FlowPayload
 	// HasChoice checks if Choice has been set in FlowPayload
 	HasChoice() bool
-	// getter for DecrementWord to set choice.
-	DecrementWord()
 	// getter for IncrementByte to set choice.
 	IncrementByte()
 	// getter for IncrementWord to set choice.
 	IncrementWord()
 	// getter for DecrementByte to set choice.
 	DecrementByte()
+	// getter for DecrementWord to set choice.
+	DecrementWord()
 	// Fixed returns FlowPayloadFixed, set in FlowPayload.
 	// FlowPayloadFixed is payload with user defined pattern.
 	Fixed() FlowPayloadFixed
@@ -319,11 +319,6 @@ func (obj *flowPayload) Choice() FlowPayloadChoiceEnum {
 	return FlowPayloadChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for DecrementWord to set choice
-func (obj *flowPayload) DecrementWord() {
-	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
-}
-
 // getter for IncrementByte to set choice
 func (obj *flowPayload) IncrementByte() {
 	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
@@ -337,6 +332,11 @@ func (obj *flowPayload) IncrementWord() {
 // getter for DecrementByte to set choice
 func (obj *flowPayload) DecrementByte() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
+}
+
+// getter for DecrementWord to set choice
+func (obj *flowPayload) DecrementWord() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
 }
 
 // A choice used to determine the pattern of the bytes in the payload following the protocol headers.
