@@ -250,11 +250,7 @@ func (obj *capture) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Capture is under Review: There may be changes in filter configuration
-//
-// Under Review: There may be changes in filter configuration
-//
-// Configuration for capture settings.
+// Capture is configuration for capture settings.
 type Capture interface {
 	Validation
 	// msg marshals Capture to protobuf object *otg.Capture
@@ -312,9 +308,6 @@ type Capture interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *capture) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -324,9 +317,6 @@ func (obj *capture) PortNames() []string {
 }
 
 // The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -528,8 +518,6 @@ func (obj *capture) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("Capture is under review, There may be changes in filter configuration")
 
 	if len(obj.obj.Filters) != 0 {
 

@@ -305,20 +305,12 @@ type Config interface {
 	// Flows returns ConfigFlowIterIter, set in Config
 	Flows() ConfigFlowIter
 	// Events returns Event, set in Config.
-	// Event is under Review: Event configuration is currently under review for pending exploration on use cases.
-	//
-	// Under Review: Event configuration is currently under review for pending exploration on use cases.
-	//
-	// The optional container for event configuration.
+	// Event is the optional container for event configuration.
 	// Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 	// control_plane_data_plane_convergence_us metric values for convergence metrics.
 	Events() Event
 	// SetEvents assigns Event provided by user to Config.
-	// Event is under Review: Event configuration is currently under review for pending exploration on use cases.
-	//
-	// Under Review: Event configuration is currently under review for pending exploration on use cases.
-	//
-	// The optional container for event configuration.
+	// Event is the optional container for event configuration.
 	// Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 	// control_plane_data_plane_convergence_us metric values for convergence metrics.
 	SetEvents(value Event) Config
