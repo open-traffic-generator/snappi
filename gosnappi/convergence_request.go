@@ -242,11 +242,7 @@ func (obj *convergenceRequest) Clone() (ConvergenceRequest, error) {
 	return newObj, nil
 }
 
-// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-//
-// Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-//
-// Container for requesting control-plane and data-plane convergence time metrics for flows.
+// ConvergenceRequest is container for requesting control-plane and data-plane convergence time metrics for flows.
 type ConvergenceRequest interface {
 	Validation
 	// msg marshals ConvergenceRequest to protobuf object *otg.ConvergenceRequest
@@ -315,8 +311,6 @@ func (obj *convergenceRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("ConvergenceRequest is under review, Convergence metrics is currently under review for pending exploration on use cases.")
 
 }
 

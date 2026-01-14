@@ -377,10 +377,10 @@ func (obj *patternFlowRSVPPathSenderTspecIntServReserved1Counter) validateObj(vO
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 4095 {
+		if *obj.obj.Count > 4096 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowRSVPPathSenderTspecIntServReserved1Counter.Count <= 4095 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowRSVPPathSenderTspecIntServReserved1Counter.Count <= 4096 but Got %d", *obj.obj.Count))
 		}
 
 	}

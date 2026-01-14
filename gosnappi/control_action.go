@@ -17,6 +17,7 @@ type controlAction struct {
 	marshaller     marshalControlAction
 	unMarshaller   unMarshalControlAction
 	protocolHolder ActionProtocol
+	portHolder     ActionPort
 }
 
 func NewControlAction() ControlAction {
@@ -245,6 +246,7 @@ func (obj *controlAction) Clone() (ControlAction, error) {
 
 func (obj *controlAction) setNil() {
 	obj.protocolHolder = nil
+	obj.portHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -284,6 +286,14 @@ type ControlAction interface {
 	SetProtocol(value ActionProtocol) ControlAction
 	// HasProtocol checks if Protocol has been set in ControlAction
 	HasProtocol() bool
+	// Port returns ActionPort, set in ControlAction.
+	// ActionPort is actions associated with ports on configured resources.
+	Port() ActionPort
+	// SetPort assigns ActionPort provided by user to ControlAction.
+	// ActionPort is actions associated with ports on configured resources.
+	SetPort(value ActionPort) ControlAction
+	// HasPort checks if Port has been set in ControlAction
+	HasPort() bool
 	setNil()
 }
 
@@ -292,8 +302,10 @@ type ControlActionChoiceEnum string
 // Enum of Choice on ControlAction
 var ControlActionChoice = struct {
 	PROTOCOL ControlActionChoiceEnum
+	PORT     ControlActionChoiceEnum
 }{
 	PROTOCOL: ControlActionChoiceEnum("protocol"),
+	PORT:     ControlActionChoiceEnum("port"),
 }
 
 func (obj *controlAction) Choice() ControlActionChoiceEnum {
@@ -309,11 +321,17 @@ func (obj *controlAction) setChoice(value ControlActionChoiceEnum) ControlAction
 	}
 	enumValue := otg.ControlAction_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Port = nil
+	obj.portHolder = nil
 	obj.obj.Protocol = nil
 	obj.protocolHolder = nil
 
 	if value == ControlActionChoice.PROTOCOL {
 		obj.obj.Protocol = NewActionProtocol().msg()
+	}
+
+	if value == ControlActionChoice.PORT {
+		obj.obj.Port = NewActionPort().msg()
 	}
 
 	return obj
@@ -347,6 +365,34 @@ func (obj *controlAction) SetProtocol(value ActionProtocol) ControlAction {
 	return obj
 }
 
+// description is TBD
+// Port returns a ActionPort
+func (obj *controlAction) Port() ActionPort {
+	if obj.obj.Port == nil {
+		obj.setChoice(ControlActionChoice.PORT)
+	}
+	if obj.portHolder == nil {
+		obj.portHolder = &actionPort{obj: obj.obj.Port}
+	}
+	return obj.portHolder
+}
+
+// description is TBD
+// Port returns a ActionPort
+func (obj *controlAction) HasPort() bool {
+	return obj.obj.Port != nil
+}
+
+// description is TBD
+// SetPort sets the ActionPort value in the ControlAction object
+func (obj *controlAction) SetPort(value ActionPort) ControlAction {
+	obj.setChoice(ControlActionChoice.PORT)
+	obj.portHolder = nil
+	obj.obj.Port = value.msg()
+
+	return obj
+}
+
 func (obj *controlAction) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -362,6 +408,11 @@ func (obj *controlAction) validateObj(vObj *validation, set_default bool) {
 		obj.Protocol().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Port != nil {
+
+		obj.Port().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *controlAction) setDefault() {
@@ -371,6 +422,11 @@ func (obj *controlAction) setDefault() {
 	if obj.obj.Protocol != nil {
 		choices_set += 1
 		choice = ControlActionChoice.PROTOCOL
+	}
+
+	if obj.obj.Port != nil {
+		choices_set += 1
+		choice = ControlActionChoice.PORT
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

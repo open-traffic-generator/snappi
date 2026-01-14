@@ -377,10 +377,10 @@ func (obj *patternFlowTcpDataOffsetCounter) validateObj(vObj *validation, set_de
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 15 {
+		if *obj.obj.Count > 16 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowTcpDataOffsetCounter.Count <= 15 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowTcpDataOffsetCounter.Count <= 16 but Got %d", *obj.obj.Count))
 		}
 
 	}

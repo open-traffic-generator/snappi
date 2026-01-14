@@ -377,10 +377,10 @@ func (obj *patternFlowGtpv1PnFlagCounter) validateObj(vObj *validation, set_defa
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 1 {
+		if *obj.obj.Count > 2 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowGtpv1PnFlagCounter.Count <= 1 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowGtpv1PnFlagCounter.Count <= 2 but Got %d", *obj.obj.Count))
 		}
 
 	}

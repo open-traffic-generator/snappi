@@ -377,10 +377,10 @@ func (obj *patternFlowUdpLengthCounter) validateObj(vObj *validation, set_defaul
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 65535 {
+		if *obj.obj.Count > 65536 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowUdpLengthCounter.Count <= 65535 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowUdpLengthCounter.Count <= 65536 but Got %d", *obj.obj.Count))
 		}
 
 	}

@@ -377,10 +377,10 @@ func (obj *patternFlowLacpduTerminatorLengthCounter) validateObj(vObj *validatio
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 255 {
+		if *obj.obj.Count > 256 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowLacpduTerminatorLengthCounter.Count <= 255 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowLacpduTerminatorLengthCounter.Count <= 256 but Got %d", *obj.obj.Count))
 		}
 
 	}

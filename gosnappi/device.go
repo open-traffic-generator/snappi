@@ -347,18 +347,10 @@ type Device interface {
 	// HasDhcpServer checks if DhcpServer has been set in Device
 	HasDhcpServer() bool
 	// Ospfv2 returns DeviceOspfv2Router, set in Device.
-	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+	// DeviceOspfv2Router is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	Ospfv2() DeviceOspfv2Router
 	// SetOspfv2 assigns DeviceOspfv2Router provided by user to Device.
-	// DeviceOspfv2Router is under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-	//
-	// A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
+	// DeviceOspfv2Router is a container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 	SetOspfv2(value DeviceOspfv2Router) Device
 	// HasOspfv2 checks if Ospfv2 has been set in Device
 	HasOspfv2() bool
@@ -371,18 +363,10 @@ type Device interface {
 	// HasMacsec checks if Macsec has been set in Device
 	HasMacsec() bool
 	// Ospfv3 returns DeviceOspfv3Router, set in Device.
-	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
-	// A container of properties for an OSPFv3 router.
+	// DeviceOspfv3Router is a container of properties for an OSPFv3 router.
 	Ospfv3() DeviceOspfv3Router
 	// SetOspfv3 assigns DeviceOspfv3Router provided by user to Device.
-	// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
-	// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-	//
-	// A container of properties for an OSPFv3 router.
+	// DeviceOspfv3Router is a container of properties for an OSPFv3 router.
 	SetOspfv3(value DeviceOspfv3Router) Device
 	// HasOspfv3 checks if Ospfv3 has been set in Device
 	HasOspfv3() bool

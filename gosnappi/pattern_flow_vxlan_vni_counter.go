@@ -377,10 +377,10 @@ func (obj *patternFlowVxlanVniCounter) validateObj(vObj *validation, set_default
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 16777215 {
+		if *obj.obj.Count > 16777216 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowVxlanVniCounter.Count <= 16777215 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowVxlanVniCounter.Count <= 16777216 but Got %d", *obj.obj.Count))
 		}
 
 	}

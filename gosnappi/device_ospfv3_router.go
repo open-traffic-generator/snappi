@@ -252,11 +252,7 @@ func (obj *deviceOspfv3Router) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// DeviceOspfv3Router is under Review: OSPFv3 is currently under review for pending exploration on use cases.
-//
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-//
-// A container of properties for an OSPFv3 router.
+// DeviceOspfv3Router is a container of properties for an OSPFv3 router.
 type DeviceOspfv3Router interface {
 	Validation
 	// msg marshals DeviceOspfv3Router to protobuf object *otg.DeviceOspfv3Router
@@ -410,8 +406,6 @@ func (obj *deviceOspfv3Router) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("DeviceOspfv3Router is under review, OSPFv3 is currently under review for pending exploration on use cases.")
 
 	if obj.obj.RouterId != nil {
 

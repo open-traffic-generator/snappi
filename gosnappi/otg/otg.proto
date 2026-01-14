@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.42.1
+/* Open Traffic Generator API 1.43.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1466,10 +1466,6 @@ message Layer1Ieee8021qbb {
   optional uint32 pfc_class_7 = 9;
 }
 
-// Under Review: There may be changes in filter configuration
-// 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
@@ -7907,10 +7903,6 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -9135,10 +9127,6 @@ message SecureEntityStaticKeyRxSc {
   repeated SecureEntityStaticKeySak saks = 4;
 }
 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
 
@@ -13100,12 +13088,6 @@ message FlowPayloadFixed {
   optional bool repeat = 2;
 }
 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -14267,6 +14249,21 @@ message StatePortCapture {
   optional State.Enum state = 2;
 }
 
+// Resets the configured ports to initialized state.
+message ActionPortReboot {
+
+  // The names of target ports. An empty or null list will target all ports.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 1;
+}
+
 // Provides state control of flow transmission.
 message StateTrafficFlowTransmit {
 
@@ -14687,6 +14684,7 @@ message ControlAction {
     enum Enum {
       unspecified = 0;
       protocol = 1;
+      port = 2;
     }
   }
   // Description missing in models
@@ -14695,6 +14693,9 @@ message ControlAction {
 
   // Description missing in models
   ActionProtocol protocol = 2;
+
+  // Description missing in models
+  ActionPort port = 3;
 }
 
 // Response for action triggered against configured resources along with warnings.
@@ -14772,6 +14773,23 @@ message ActionResponseProtocol {
 
   // Description missing in models
   ActionResponseProtocolIpv6 ipv6 = 3;
+}
+
+// Actions associated with ports on configured resources.
+message ActionPort {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reboot = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ActionPortReboot reboot = 2;
 }
 
 // Actions associated with IPv4 on configured resources.
@@ -17242,12 +17260,6 @@ message Ospfv2Metric {
   optional uint64 opaque_domain_received = 34;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -17265,12 +17277,6 @@ message ConvergenceRequest {
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // The container for convergence metrics.
 message ConvergenceMetric {
 
