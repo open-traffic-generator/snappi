@@ -283,10 +283,10 @@ type FlowPayload interface {
 	IncrementWord()
 	// getter for IncrementByte to set choice.
 	IncrementByte()
-	// getter for DecrementWord to set choice.
-	DecrementWord()
 	// getter for DecrementByte to set choice.
 	DecrementByte()
+	// getter for DecrementWord to set choice.
+	DecrementWord()
 	// Fixed returns FlowPayloadFixed, set in FlowPayload.
 	// FlowPayloadFixed is payload with user defined pattern.
 	Fixed() FlowPayloadFixed
@@ -329,14 +329,14 @@ func (obj *flowPayload) IncrementByte() {
 	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
 }
 
-// getter for DecrementWord to set choice
-func (obj *flowPayload) DecrementWord() {
-	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
-}
-
 // getter for DecrementByte to set choice
 func (obj *flowPayload) DecrementByte() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
+}
+
+// getter for DecrementWord to set choice
+func (obj *flowPayload) DecrementWord() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
 }
 
 // A choice used to determine the pattern of the bytes in the payload following the protocol headers.

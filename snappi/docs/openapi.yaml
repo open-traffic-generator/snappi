@@ -19942,23 +19942,23 @@ components:
                 x-field-uid: 5
               frames_rx:
                 x-field-uid: 6
-              data_integrity_frames_rx:
-                x-field-uid: 7
-              data_integrity_errors:
-                x-field-uid: 8
               bytes_tx:
-                x-field-uid: 9
+                x-field-uid: 7
               bytes_rx:
-                x-field-uid: 10
+                x-field-uid: 8
               frames_tx_rate:
-                x-field-uid: 11
+                x-field-uid: 9
               frames_rx_rate:
-                x-field-uid: 12
+                x-field-uid: 10
               bytes_tx_rate:
-                x-field-uid: 13
+                x-field-uid: 11
               bytes_rx_rate:
-                x-field-uid: 14
+                x-field-uid: 12
               last_change:
+                x-field-uid: 13
+              data_integrity_frames_rx:
+                x-field-uid: 14
+              data_integrity_errors:
                 x-field-uid: 15
             enum:
             - transmit
@@ -19967,8 +19967,6 @@ components:
             - capture
             - frames_tx
             - frames_rx
-            - data_integrity_frames_rx
-            - data_integrity_errors
             - bytes_tx
             - bytes_rx
             - frames_tx_rate
@@ -19976,6 +19974,8 @@ components:
             - bytes_tx_rate
             - bytes_rx_rate
             - last_change
+            - data_integrity_frames_rx
+            - data_integrity_errors
           x-field-uid: 2
     Port.Metric:
       type: object
@@ -20033,55 +20033,43 @@ components:
           type: integer
           format: uint64
           x-field-uid: 6
-        data_integrity_frames_rx:
-          description: |-
-            The current total number of valid frames received with payload intact
-          type: integer
-          format: uint64
-          x-field-uid: 7
-        data_integrity_errors:
-          description: |-
-            The current total number of valid frames received with payload modified
-          type: integer
-          format: uint64
-          x-field-uid: 8
         bytes_tx:
           description: |-
             The current total number of bytes transmitted
           type: integer
           format: uint64
-          x-field-uid: 9
+          x-field-uid: 7
         bytes_rx:
           description: |-
             The current total number of valid bytes received
           type: integer
           format: uint64
-          x-field-uid: 10
+          x-field-uid: 8
         frames_tx_rate:
           description: |-
             The current rate of frames transmitted
           type: number
-          x-field-uid: 11
+          x-field-uid: 9
         frames_rx_rate:
           description: |-
             The current rate of valid frames received
           type: number
-          x-field-uid: 12
+          x-field-uid: 10
         bytes_tx_rate:
           description: |-
             The current rate of bytes transmitted
           type: number
-          x-field-uid: 13
+          x-field-uid: 11
         bytes_rx_rate:
           description: |-
             The current rate of bytes received
           type: number
-          x-field-uid: 14
+          x-field-uid: 12
         transmit:
           description: |-
             The transmit state of the flow.
           type: string
-          x-field-uid: 15
+          x-field-uid: 13
           x-enum:
             started:
               x-field-uid: 1
@@ -20095,6 +20083,18 @@ components:
             \ state change of the test port (e.g., up-to-down transition).\n\nThe\
             \ value is the timestamp in nanoseconds relative to\nthe Unix Epoch (Jan\
             \ 1, 1970 00:00:00 UTC)."
+          type: integer
+          format: uint64
+          x-field-uid: 14
+        data_integrity_frames_rx:
+          description: |-
+            The current total number of valid frames received with payload intact
+          type: integer
+          format: uint64
+          x-field-uid: 15
+        data_integrity_errors:
+          description: |-
+            The current total number of valid frames received with payload modified
           type: integer
           format: uint64
           x-field-uid: 16

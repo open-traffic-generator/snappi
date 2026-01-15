@@ -300,18 +300,6 @@ type PortMetric interface {
 	SetFramesRx(value uint64) PortMetric
 	// HasFramesRx checks if FramesRx has been set in PortMetric
 	HasFramesRx() bool
-	// DataIntegrityFramesRx returns uint64, set in PortMetric.
-	DataIntegrityFramesRx() uint64
-	// SetDataIntegrityFramesRx assigns uint64 provided by user to PortMetric
-	SetDataIntegrityFramesRx(value uint64) PortMetric
-	// HasDataIntegrityFramesRx checks if DataIntegrityFramesRx has been set in PortMetric
-	HasDataIntegrityFramesRx() bool
-	// DataIntegrityErrors returns uint64, set in PortMetric.
-	DataIntegrityErrors() uint64
-	// SetDataIntegrityErrors assigns uint64 provided by user to PortMetric
-	SetDataIntegrityErrors(value uint64) PortMetric
-	// HasDataIntegrityErrors checks if DataIntegrityErrors has been set in PortMetric
-	HasDataIntegrityErrors() bool
 	// BytesTx returns uint64, set in PortMetric.
 	BytesTx() uint64
 	// SetBytesTx assigns uint64 provided by user to PortMetric
@@ -360,6 +348,18 @@ type PortMetric interface {
 	SetLastChange(value uint64) PortMetric
 	// HasLastChange checks if LastChange has been set in PortMetric
 	HasLastChange() bool
+	// DataIntegrityFramesRx returns uint64, set in PortMetric.
+	DataIntegrityFramesRx() uint64
+	// SetDataIntegrityFramesRx assigns uint64 provided by user to PortMetric
+	SetDataIntegrityFramesRx(value uint64) PortMetric
+	// HasDataIntegrityFramesRx checks if DataIntegrityFramesRx has been set in PortMetric
+	HasDataIntegrityFramesRx() bool
+	// DataIntegrityErrors returns uint64, set in PortMetric.
+	DataIntegrityErrors() uint64
+	// SetDataIntegrityErrors assigns uint64 provided by user to PortMetric
+	SetDataIntegrityErrors(value uint64) PortMetric
+	// HasDataIntegrityErrors checks if DataIntegrityErrors has been set in PortMetric
+	HasDataIntegrityErrors() bool
 }
 
 // The name of a configured port
@@ -527,50 +527,6 @@ func (obj *portMetric) HasFramesRx() bool {
 func (obj *portMetric) SetFramesRx(value uint64) PortMetric {
 
 	obj.obj.FramesRx = &value
-	return obj
-}
-
-// The current total number of valid frames received with payload intact
-// DataIntegrityFramesRx returns a uint64
-func (obj *portMetric) DataIntegrityFramesRx() uint64 {
-
-	return *obj.obj.DataIntegrityFramesRx
-
-}
-
-// The current total number of valid frames received with payload intact
-// DataIntegrityFramesRx returns a uint64
-func (obj *portMetric) HasDataIntegrityFramesRx() bool {
-	return obj.obj.DataIntegrityFramesRx != nil
-}
-
-// The current total number of valid frames received with payload intact
-// SetDataIntegrityFramesRx sets the uint64 value in the PortMetric object
-func (obj *portMetric) SetDataIntegrityFramesRx(value uint64) PortMetric {
-
-	obj.obj.DataIntegrityFramesRx = &value
-	return obj
-}
-
-// The current total number of valid frames received with payload modified
-// DataIntegrityErrors returns a uint64
-func (obj *portMetric) DataIntegrityErrors() uint64 {
-
-	return *obj.obj.DataIntegrityErrors
-
-}
-
-// The current total number of valid frames received with payload modified
-// DataIntegrityErrors returns a uint64
-func (obj *portMetric) HasDataIntegrityErrors() bool {
-	return obj.obj.DataIntegrityErrors != nil
-}
-
-// The current total number of valid frames received with payload modified
-// SetDataIntegrityErrors sets the uint64 value in the PortMetric object
-func (obj *portMetric) SetDataIntegrityErrors(value uint64) PortMetric {
-
-	obj.obj.DataIntegrityErrors = &value
 	return obj
 }
 
@@ -771,6 +727,50 @@ func (obj *portMetric) HasLastChange() bool {
 func (obj *portMetric) SetLastChange(value uint64) PortMetric {
 
 	obj.obj.LastChange = &value
+	return obj
+}
+
+// The current total number of valid frames received with payload intact
+// DataIntegrityFramesRx returns a uint64
+func (obj *portMetric) DataIntegrityFramesRx() uint64 {
+
+	return *obj.obj.DataIntegrityFramesRx
+
+}
+
+// The current total number of valid frames received with payload intact
+// DataIntegrityFramesRx returns a uint64
+func (obj *portMetric) HasDataIntegrityFramesRx() bool {
+	return obj.obj.DataIntegrityFramesRx != nil
+}
+
+// The current total number of valid frames received with payload intact
+// SetDataIntegrityFramesRx sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetDataIntegrityFramesRx(value uint64) PortMetric {
+
+	obj.obj.DataIntegrityFramesRx = &value
+	return obj
+}
+
+// The current total number of valid frames received with payload modified
+// DataIntegrityErrors returns a uint64
+func (obj *portMetric) DataIntegrityErrors() uint64 {
+
+	return *obj.obj.DataIntegrityErrors
+
+}
+
+// The current total number of valid frames received with payload modified
+// DataIntegrityErrors returns a uint64
+func (obj *portMetric) HasDataIntegrityErrors() bool {
+	return obj.obj.DataIntegrityErrors != nil
+}
+
+// The current total number of valid frames received with payload modified
+// SetDataIntegrityErrors sets the uint64 value in the PortMetric object
+func (obj *portMetric) SetDataIntegrityErrors(value uint64) PortMetric {
+
+	obj.obj.DataIntegrityErrors = &value
 	return obj
 }
 
