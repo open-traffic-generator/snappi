@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.42.1
+  version: 1.43.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -18450,6 +18450,23 @@ components:
           enum:
           - start
           - stop
+    Action.Port.Reboot:
+      description: |-
+        Resets the configured ports to initialized state.
+      type: object
+      properties:
+        port_names:
+          description: |
+            The names of target ports. An empty or null list will target all ports.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
     State.Traffic.FlowTransmit:
       description: |-
         Provides state control of flow transmission.
@@ -18914,12 +18931,18 @@ components:
           x-enum:
             protocol:
               x-field-uid: 1
+            port:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - protocol
+          - port
         protocol:
           $ref: '#/components/schemas/Action.Protocol'
           x-field-uid: 2
+        port:
+          $ref: '#/components/schemas/Action.Port'
+          x-field-uid: 3
     Control.Action.Response:
       description: |-
         Response for action triggered against configured resources along with warnings.
@@ -19013,6 +19036,24 @@ components:
         ipv6:
           $ref: '#/components/schemas/Action.Response.Protocol.Ipv6'
           x-field-uid: 3
+    Action.Port:
+      description: |-
+        Actions associated with ports on configured resources.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            reboot:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - reboot
+        reboot:
+          $ref: '#/components/schemas/Action.Port.Reboot'
+          x-field-uid: 2
     Action.Protocol.Ipv4:
       description: |-
         Actions associated with IPv4 on configured resources.
