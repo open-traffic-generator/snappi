@@ -38,6 +38,7 @@ type metricsRequest struct {
 	rocev2Ipv6Holder         Rocev2IPv6MetricsRequest
 	rocev2FlowHolder         Rocev2FlowMetricsRequest
 	egressOnlyTrackingHolder EgressOnlyTrackingMetricsRequest
+	bmpServerHolder          BmpServerMetricsRequest
 }
 
 func NewMetricsRequest() MetricsRequest {
@@ -287,6 +288,7 @@ func (obj *metricsRequest) setNil() {
 	obj.rocev2Ipv6Holder = nil
 	obj.rocev2FlowHolder = nil
 	obj.egressOnlyTrackingHolder = nil
+	obj.bmpServerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -433,14 +435,10 @@ type MetricsRequest interface {
 	// HasOspfv2 checks if Ospfv2 has been set in MetricsRequest
 	HasOspfv2() bool
 	// Convergence returns ConvergenceRequest, set in MetricsRequest.
-	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	// ConvergenceRequest is container for requesting control-plane and data-plane convergence time metrics for flows.
 	Convergence() ConvergenceRequest
 	// SetConvergence assigns ConvergenceRequest provided by user to MetricsRequest.
-	// ConvergenceRequest is under Review: Convergence metrics is currently under review for pending exploration on use cases.
-	//
-	// Container for requesting control-plane and data-plane convergence time metrics for flows.
+	// ConvergenceRequest is container for requesting control-plane and data-plane convergence time metrics for flows.
 	SetConvergence(value ConvergenceRequest) MetricsRequest
 	// HasConvergence checks if Convergence has been set in MetricsRequest
 	HasConvergence() bool
@@ -500,6 +498,14 @@ type MetricsRequest interface {
 	SetEgressOnlyTracking(value EgressOnlyTrackingMetricsRequest) MetricsRequest
 	// HasEgressOnlyTracking checks if EgressOnlyTracking has been set in MetricsRequest
 	HasEgressOnlyTracking() bool
+	// BmpServer returns BmpServerMetricsRequest, set in MetricsRequest.
+	// BmpServerMetricsRequest is the request to retrieve per BMP Server metrics/statistics.
+	BmpServer() BmpServerMetricsRequest
+	// SetBmpServer assigns BmpServerMetricsRequest provided by user to MetricsRequest.
+	// BmpServerMetricsRequest is the request to retrieve per BMP Server metrics/statistics.
+	SetBmpServer(value BmpServerMetricsRequest) MetricsRequest
+	// HasBmpServer checks if BmpServer has been set in MetricsRequest
+	HasBmpServer() bool
 	setNil()
 }
 
@@ -529,6 +535,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_IPV6          MetricsRequestChoiceEnum
 	ROCEV2_FLOW          MetricsRequestChoiceEnum
 	EGRESS_ONLY_TRACKING MetricsRequestChoiceEnum
+	BMP_SERVER           MetricsRequestChoiceEnum
 }{
 	PORT:                 MetricsRequestChoiceEnum("port"),
 	FLOW:                 MetricsRequestChoiceEnum("flow"),
@@ -552,6 +559,7 @@ var MetricsRequestChoice = struct {
 	ROCEV2_IPV6:          MetricsRequestChoiceEnum("rocev2_ipv6"),
 	ROCEV2_FLOW:          MetricsRequestChoiceEnum("rocev2_flow"),
 	EGRESS_ONLY_TRACKING: MetricsRequestChoiceEnum("egress_only_tracking"),
+	BMP_SERVER:           MetricsRequestChoiceEnum("bmp_server"),
 }
 
 func (obj *metricsRequest) Choice() MetricsRequestChoiceEnum {
@@ -573,6 +581,8 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 	}
 	enumValue := otg.MetricsRequest_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.BmpServer = nil
+	obj.bmpServerHolder = nil
 	obj.obj.EgressOnlyTracking = nil
 	obj.egressOnlyTrackingHolder = nil
 	obj.obj.Rocev2Flow = nil
@@ -704,6 +714,10 @@ func (obj *metricsRequest) setChoice(value MetricsRequestChoiceEnum) MetricsRequ
 
 	if value == MetricsRequestChoice.EGRESS_ONLY_TRACKING {
 		obj.obj.EgressOnlyTracking = NewEgressOnlyTrackingMetricsRequest().msg()
+	}
+
+	if value == MetricsRequestChoice.BMP_SERVER {
+		obj.obj.BmpServer = NewBmpServerMetricsRequest().msg()
 	}
 
 	return obj
@@ -1325,6 +1339,34 @@ func (obj *metricsRequest) SetEgressOnlyTracking(value EgressOnlyTrackingMetrics
 	return obj
 }
 
+// description is TBD
+// BmpServer returns a BmpServerMetricsRequest
+func (obj *metricsRequest) BmpServer() BmpServerMetricsRequest {
+	if obj.obj.BmpServer == nil {
+		obj.setChoice(MetricsRequestChoice.BMP_SERVER)
+	}
+	if obj.bmpServerHolder == nil {
+		obj.bmpServerHolder = &bmpServerMetricsRequest{obj: obj.obj.BmpServer}
+	}
+	return obj.bmpServerHolder
+}
+
+// description is TBD
+// BmpServer returns a BmpServerMetricsRequest
+func (obj *metricsRequest) HasBmpServer() bool {
+	return obj.obj.BmpServer != nil
+}
+
+// description is TBD
+// SetBmpServer sets the BmpServerMetricsRequest value in the MetricsRequest object
+func (obj *metricsRequest) SetBmpServer(value BmpServerMetricsRequest) MetricsRequest {
+	obj.setChoice(MetricsRequestChoice.BMP_SERVER)
+	obj.bmpServerHolder = nil
+	obj.obj.BmpServer = value.msg()
+
+	return obj
+}
+
 func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1438,6 +1480,11 @@ func (obj *metricsRequest) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.EgressOnlyTracking != nil {
 
 		obj.EgressOnlyTracking().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.BmpServer != nil {
+
+		obj.BmpServer().validateObj(vObj, set_default)
 	}
 
 }
@@ -1554,6 +1601,11 @@ func (obj *metricsRequest) setDefault() {
 	if obj.obj.EgressOnlyTracking != nil {
 		choices_set += 1
 		choice = MetricsRequestChoice.EGRESS_ONLY_TRACKING
+	}
+
+	if obj.obj.BmpServer != nil {
+		choices_set += 1
+		choice = MetricsRequestChoice.BMP_SERVER
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

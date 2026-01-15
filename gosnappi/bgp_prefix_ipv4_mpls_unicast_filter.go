@@ -268,24 +268,6 @@ type BgpPrefixIpv4MplsUnicastFilter interface {
 	Addresses() []string
 	// SetAddresses assigns []string provided by user to BgpPrefixIpv4MplsUnicastFilter
 	SetAddresses(value []string) BgpPrefixIpv4MplsUnicastFilter
-	// PrefixLength returns uint32, set in BgpPrefixIpv4MplsUnicastFilter.
-	PrefixLength() uint32
-	// SetPrefixLength assigns uint32 provided by user to BgpPrefixIpv4MplsUnicastFilter
-	SetPrefixLength(value uint32) BgpPrefixIpv4MplsUnicastFilter
-	// HasPrefixLength checks if PrefixLength has been set in BgpPrefixIpv4MplsUnicastFilter
-	HasPrefixLength() bool
-	// Origin returns BgpPrefixIpv4MplsUnicastFilterOriginEnum, set in BgpPrefixIpv4MplsUnicastFilter
-	Origin() BgpPrefixIpv4MplsUnicastFilterOriginEnum
-	// SetOrigin assigns BgpPrefixIpv4MplsUnicastFilterOriginEnum provided by user to BgpPrefixIpv4MplsUnicastFilter
-	SetOrigin(value BgpPrefixIpv4MplsUnicastFilterOriginEnum) BgpPrefixIpv4MplsUnicastFilter
-	// HasOrigin checks if Origin has been set in BgpPrefixIpv4MplsUnicastFilter
-	HasOrigin() bool
-	// PathId returns uint32, set in BgpPrefixIpv4MplsUnicastFilter.
-	PathId() uint32
-	// SetPathId assigns uint32 provided by user to BgpPrefixIpv4MplsUnicastFilter
-	SetPathId(value uint32) BgpPrefixIpv4MplsUnicastFilter
-	// HasPathId checks if PathId has been set in BgpPrefixIpv4MplsUnicastFilter
-	HasPathId() bool
 }
 
 // The addresses to match. If the addresses property is missing or empty then all addresses will match.
@@ -309,86 +291,6 @@ func (obj *bgpPrefixIpv4MplsUnicastFilter) SetAddresses(value []string) BgpPrefi
 	return obj
 }
 
-// The prefix length to match. If the prefix length is missing then all prefix lengths will match.
-// PrefixLength returns a uint32
-func (obj *bgpPrefixIpv4MplsUnicastFilter) PrefixLength() uint32 {
-
-	return *obj.obj.PrefixLength
-
-}
-
-// The prefix length to match. If the prefix length is missing then all prefix lengths will match.
-// PrefixLength returns a uint32
-func (obj *bgpPrefixIpv4MplsUnicastFilter) HasPrefixLength() bool {
-	return obj.obj.PrefixLength != nil
-}
-
-// The prefix length to match. If the prefix length is missing then all prefix lengths will match.
-// SetPrefixLength sets the uint32 value in the BgpPrefixIpv4MplsUnicastFilter object
-func (obj *bgpPrefixIpv4MplsUnicastFilter) SetPrefixLength(value uint32) BgpPrefixIpv4MplsUnicastFilter {
-
-	obj.obj.PrefixLength = &value
-	return obj
-}
-
-type BgpPrefixIpv4MplsUnicastFilterOriginEnum string
-
-// Enum of Origin on BgpPrefixIpv4MplsUnicastFilter
-var BgpPrefixIpv4MplsUnicastFilterOrigin = struct {
-	IGP        BgpPrefixIpv4MplsUnicastFilterOriginEnum
-	EGP        BgpPrefixIpv4MplsUnicastFilterOriginEnum
-	INCOMPLETE BgpPrefixIpv4MplsUnicastFilterOriginEnum
-}{
-	IGP:        BgpPrefixIpv4MplsUnicastFilterOriginEnum("igp"),
-	EGP:        BgpPrefixIpv4MplsUnicastFilterOriginEnum("egp"),
-	INCOMPLETE: BgpPrefixIpv4MplsUnicastFilterOriginEnum("incomplete"),
-}
-
-func (obj *bgpPrefixIpv4MplsUnicastFilter) Origin() BgpPrefixIpv4MplsUnicastFilterOriginEnum {
-	return BgpPrefixIpv4MplsUnicastFilterOriginEnum(obj.obj.Origin.Enum().String())
-}
-
-// The origin to match. If the origin is missing then all origins will match.
-// Origin returns a string
-func (obj *bgpPrefixIpv4MplsUnicastFilter) HasOrigin() bool {
-	return obj.obj.Origin != nil
-}
-
-func (obj *bgpPrefixIpv4MplsUnicastFilter) SetOrigin(value BgpPrefixIpv4MplsUnicastFilterOriginEnum) BgpPrefixIpv4MplsUnicastFilter {
-	intValue, ok := otg.BgpPrefixIpv4MplsUnicastFilter_Origin_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on BgpPrefixIpv4MplsUnicastFilterOriginEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.BgpPrefixIpv4MplsUnicastFilter_Origin_Enum(intValue)
-	obj.obj.Origin = &enumValue
-
-	return obj
-}
-
-// The path id to match. If the path id is missing then all path ids will match.
-// PathId returns a uint32
-func (obj *bgpPrefixIpv4MplsUnicastFilter) PathId() uint32 {
-
-	return *obj.obj.PathId
-
-}
-
-// The path id to match. If the path id is missing then all path ids will match.
-// PathId returns a uint32
-func (obj *bgpPrefixIpv4MplsUnicastFilter) HasPathId() bool {
-	return obj.obj.PathId != nil
-}
-
-// The path id to match. If the path id is missing then all path ids will match.
-// SetPathId sets the uint32 value in the BgpPrefixIpv4MplsUnicastFilter object
-func (obj *bgpPrefixIpv4MplsUnicastFilter) SetPathId(value uint32) BgpPrefixIpv4MplsUnicastFilter {
-
-	obj.obj.PathId = &value
-	return obj
-}
-
 func (obj *bgpPrefixIpv4MplsUnicastFilter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -399,16 +301,6 @@ func (obj *bgpPrefixIpv4MplsUnicastFilter) validateObj(vObj *validation, set_def
 		err := obj.validateIpv4Slice(obj.Addresses())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on BgpPrefixIpv4MplsUnicastFilter.Addresses"))
-		}
-
-	}
-
-	if obj.obj.PrefixLength != nil {
-
-		if *obj.obj.PrefixLength > 128 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= BgpPrefixIpv4MplsUnicastFilter.PrefixLength <= 128 but Got %d", *obj.obj.PrefixLength))
 		}
 
 	}

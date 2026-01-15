@@ -282,6 +282,7 @@ type ActionResponseProtocolIpv4PingResponse interface {
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // SrcName returns a string
 func (obj *actionResponseProtocolIpv4PingResponse) SrcName() string {
@@ -294,6 +295,7 @@ func (obj *actionResponseProtocolIpv4PingResponse) SrcName() string {
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // SetSrcName sets the string value in the ActionResponseProtocolIpv4PingResponse object
 func (obj *actionResponseProtocolIpv4PingResponse) SetSrcName(value string) ActionResponseProtocolIpv4PingResponse {

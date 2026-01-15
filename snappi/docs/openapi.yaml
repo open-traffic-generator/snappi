@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.41.0
+  version: 1.42.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -2194,12 +2194,7 @@ components:
           default: 7
           x-field-uid: 9
     Capture:
-      x-status:
-        status: under_review
-        information: There may be changes in filter configuration
       description: |-
-        Under Review: There may be changes in filter configuration
-
         Configuration for capture settings.
       type: object
       required:
@@ -2530,6 +2525,11 @@ components:
             Configuration for RoCEv2.
           $ref: '#/components/schemas/Device.Rocev2Peer'
           x-field-uid: 13
+        bmp:
+          description: |-
+            Configuration for BMP.
+          $ref: '#/components/schemas/Device.Bmp'
+          x-field-uid: 14
       required:
       - name
     Protocol.Options:
@@ -5195,6 +5195,18 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
+        ipv4_mpls_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        ipv6_mpls_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 4
     Bgp.V4RouteRange:
       description: |-
         Emulated BGPv4 route range.
@@ -10446,13 +10458,7 @@ components:
           x-field-uid: 1
     Device.Ospfv2Router:
       description: |-
-        Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
-      x-status:
-        status: under_review
-        information: OSPFv2 is currently under review for pending exploration on use
-          cases.
       type: object
       required:
       - interfaces
@@ -12247,13 +12253,7 @@ components:
           x-field-uid: 4
     Device.Ospfv3Router:
       description: |-
-        Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-
         A container of properties for an OSPFv3 router.
-      x-status:
-        status: under_review
-        information: OSPFv3 is currently under review for pending exploration on use
-          cases.
       type: object
       required:
       - instances
@@ -12964,6 +12964,383 @@ components:
           items:
             $ref: '#/components/schemas/Rocev2.QPs'
           x-field-uid: 3
+    Device.Bmp:
+      description: |-
+        Top-level container for BGP Monitoring Protocol (BMP) configuration. BMP, as defined in RFC 7854, provides a mechanism to monitor BGP sessions. This configuration pertains to the device when acting as a BMP Monitor /server, listening for connections from BGP speakers (routers) acting as BMP clients. BMP is unidirectional, meaning the monitoring station only receives information; it doesn't send commands to or control the monitored router.
+      type: object
+      properties:
+        ipv4_interfaces:
+          description: "This contains an array of references to IPv4 interfaces, each\
+            \ of which will have one or more BMP Servers configured, each BMP Server\
+            \ will have a connection to a different monitored router.   "
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Bmp.V4Interface'
+          x-field-uid: 1
+        ipv6_interfaces:
+          description: |-
+            This contains an array of references to IPv6 interfaces, each of which will have one or more BMP Servers configured, each BMP Server will have a connection to a different monitored router.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Bmp.V6Interface'
+          x-field-uid: 2
+    Device.Bmp.V4Interface:
+      description: |-
+        Configuration for BMP Servers on a single IPv4 interface.
+      type: object
+      required:
+      - ipv4_name
+      - servers
+      properties:
+        ipv4_name:
+          description: |
+            The unique name of the IPv4 interface used as the source IP for the BMP Server.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv4/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv4/properties/name
+          x-field-uid: 1
+        servers:
+          description: |-
+            This contains the configuration of BMP Servers configured on this IPv4 interface.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Bmp.ServerV4'
+          x-field-uid: 2
+    Device.Bmp.V6Interface:
+      description: |-
+        Configuration for BMP Servers on a single IPv6 interface.
+      type: object
+      required:
+      - ipv6_name
+      - servers
+      properties:
+        ipv6_name:
+          description: |
+            The unique name of the IPv6 interface used as the source IP for BMP Server.
+
+            x-constraint:
+            - /components/schemas/Device.Ipv6/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Device.Ipv6/properties/name
+          x-field-uid: 1
+        servers:
+          description: |-
+            This contains the configuration of BMP Servers configured on this IPv6 interface.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.Bmp.ServerV6'
+          x-field-uid: 2
+    Device.Bmp.ServerV4:
+      description: |-
+        Configuration for a BMP Server for a specific IPv4 BMP client.
+      type: object
+      required:
+      - name
+      - client_ip
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        client_ip:
+          description: |-
+            The IPv4 address of the BMP client from which connections will be accepted from or initiated with by this BMP Server.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+        connection:
+          description: "Optional object containing information about whether the BMP\
+            \ Server should operate in passive or active mode and corresponding information\
+            \ depending on the mode.           "
+          $ref: '#/components/schemas/Device.BmpServer.Connection'
+          x-field-uid: 3
+        prefix_storage:
+          description: |-
+            Optional object containing information about whether IPv4 and IPv6 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same.  If the object is not included, by default IPv4 and IPv6 unicast prefixes are not stored by the BMP server and only received metrics are incremented on receipt of IPv4 / IPv6 unicast prefixes within  BMP Monitor messages.
+          $ref: '#/components/schemas/Device.BmpServer.PrefixStorage'
+          x-field-uid: 4
+    Device.Bmp.ServerV6:
+      description: |-
+        Configuration for a BMP Server connected to a specific IPv6 BMP client.
+      type: object
+      required:
+      - name
+      - client_ip
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        client_ip:
+          description: |-
+            The IPv6 address of the BMP client from which connections will be accepted from or initiated with by this BMP Server.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+        connection:
+          description: "Optional object containing information about whether the BMP\
+            \ Server should operate in passive or active mode and corresponding information\
+            \ depending on the mode.           "
+          x-field-uid: 3
+          $ref: '#/components/schemas/Device.BmpServer.Connection'
+        prefix_storage:
+          description: |-
+            Optional object containing information about whether IPv4 and IPv6 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same.  If the object is not included, by default IPv4 and IPv6 unicast prefixes are not stored by the BMP server and only received metrics are incremented on receipt of IPv4 / IPv6 unicast prefixes within  BMP Monitor messages.
+          $ref: '#/components/schemas/Device.BmpServer.PrefixStorage'
+          x-field-uid: 4
+    Device.BmpServer.Connection:
+      description: "Container of information about whether the BMP Server should operate\
+        \ in passive or active mode and corresponding information depending on the\
+        \ mode. "
+      type: object
+      properties:
+        choice:
+          type: string
+          default: passive
+          x-enum:
+            passive:
+              x-field-uid: 1
+            active:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - passive
+          - active
+        passive:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Device.BmpServer.PassiveConnection'
+        active:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Device.BmpServer.ActiveConnection'
+    Device.BmpServer.PassiveConnection:
+      description: "Container of information when BMP Server is configured in passive\
+        \ mode. This means that BMP Server will not initiate the TCP connection but\
+        \ wait for the BMP client it is configured to accept connection from  to initiate\
+        \ the connection.  Note that in this case it is required to configure the\
+        \ BMP client in active mode otherwise BMP connection will not be intiated\
+        \ by either end.        "
+      type: object
+      properties:
+        listen_port:
+          description: |-
+            The TCP port number on which to listen for TCP connections from the remote BMP client router.
+          type: integer
+          format: uint32
+          default: 11019
+          maximum: 65535
+          x-field-uid: 1
+    Device.BmpServer.ActiveConnection:
+      description: "Container of information when BMP Server is configured in active\
+        \ mode. This means that BMP Server will initiate the TCP connection to the\
+        \ remote BMP client .         Note that in this case it is required to configure\
+        \ the BMP client in passive mode for the BMP session to not be rejected from\
+        \ both ends. "
+      type: object
+      properties:
+        remote_port:
+          description: |-
+            The TCP port number on which to initiate BMP connection to the remote BMP client router.
+          type: integer
+          format: uint32
+          default: 11019
+          maximum: 65535
+          x-field-uid: 1
+    Device.BmpServer.PrefixStorage:
+      description: |-
+        Optional object containing information about whether IPv4 and IPv6 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same. If the object is not included, by default IPv4 and IPv6 Unicast Prefixes are not stored by the BMP server and only received metrics  are incremented on receipt of IPv4 / IPv6 Unicast routes via BMP Monitor messages.
+      type: object
+      properties:
+        ipv4_unicast:
+          description: |-
+            Optional object containing information about whether IPv4 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same. If the object is not included, by default IPv4 unicast prefixes are not stored by the BMP server.
+          x-field-uid: 1
+          $ref: '#/components/schemas/Device.BmpServer.Ipv4UnicastPrefixStorage'
+        ipv6_unicast:
+          description: "Optional object containing information about whether IPv6\
+            \ unicast prefixes learned from the BMP client should be stored or not\
+            \ for future retrieval using get_states and  exceptions to the configured\
+            \ choice for the same. If the object is not included, by default IPv6\
+            \ unicast prefixes are not stored by the BMP server.            "
+          x-field-uid: 2
+          $ref: '#/components/schemas/Device.BmpServer.Ipv6UnicastPrefixStorage'
+    Device.BmpServer.Ipv4UnicastPrefixStorage:
+      description: |-
+        Optional object containing information about whether IPv4 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same. If the object is not included, by default IPv4 unicast prefixes are not stored by the BMP server.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: discard
+          x-enum:
+            discard:
+              x-field-uid: 1
+            store:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - discard
+          - store
+        discard:
+          description: "If this option is chosen, IPv4 unicast prefixes learned from\
+            \ the BMP client will not be stored by the BMP server. Exception list\
+            \ can be used to create exceptions to allow only some subset of the learned\
+            \ Ipv4 unicast prefixes to be stored while the remaining learned prefixes\
+            \ are discarded. This can be useful when only some prefixes need to be\
+            \ verified amongst a large number of learned prefixes.            "
+          x-field-uid: 2
+          $ref: '#/components/schemas/Device.BmpServer.Ipv4UnicastPrefixDiscard'
+        store:
+          description: "If this option is chosen, IPv4 unicast prefixes learned from\
+            \ the BMP client will be stored by the BMP server. Exception list can\
+            \ be used to create exceptions to store all the learned Ipv4 unicast prefixes\
+            \ except some subset of the learned IPv4 unicast prefixes. This can be\
+            \ useful when only some prefixes need to be verified amongst a large number\
+            \ of learned prefixes.            "
+          x-field-uid: 3
+          $ref: '#/components/schemas/Device.BmpServer.Ipv4UnicastPrefixStore'
+    Device.BmpServer.Ipv4UnicastPrefixDiscard:
+      description: "The exception list can be used to specify exceptions to the specification\
+        \ to discard all IPv4 unicast prefixes. It is expected that when required,\
+        \ there would normally be a limited number of exceptions.    "
+      type: object
+      properties:
+        exceptions:
+          description: |-
+            This contains an array of exceptions to the discard IPv4 unicast prefixes specification i.e. prefixes matching the exceptions would be stored instead. One exception to the specification is specified by a combination of an IPv4 prefix and a prefix length.  If the received prefix masked upto the exception's prefix length matches the prefix specified in the exception, the received prefix is deemed as having matched the specified exception e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24 would match specified exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24 would not.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BmpServer.Ipv4UnicastPrefixException'
+          x-field-uid: 1
+    Device.BmpServer.Ipv4UnicastPrefixStore:
+      description: "The exception list can be used to specify exceptions to the specification\
+        \ to store all IPv4 unicast prefixes. It is expected that when required, there\
+        \ would normally be a limited number of exceptions.    "
+      type: object
+      properties:
+        exceptions:
+          description: |-
+            This contains an array of exceptions to the store IPv4 unicast prefixes specification i.e. prefixes matching the exceptions would be discarded instead. One exception to the specification is specified by a combination of an IPv4 prefix and a prefix length.  If the received prefix masked upto the exception's prefix length matches the prefix specified in the exception, the received prefix is deemed as having matched the specified exception e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24 would match specified exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24 would not.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BmpServer.Ipv4UnicastPrefixException'
+          x-field-uid: 1
+    Device.BmpServer.Ipv4UnicastPrefixException:
+      description: "One exception to the specification is specified by a combination\
+        \ of an IPv4 prefix and a prefix length.  If the received prefix masked upto\
+        \ the exception's prefix length matches the prefix specified in the exception,\
+        \ the received prefix is deemed as having matched the specified exception\
+        \ e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24 would match specified\
+        \ exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24 would not. "
+      type: object
+      properties:
+        ipv4_prefix:
+          description: "The IPv4 prefix which, combined with the prefix_length, is\
+            \ used to determine if received IPv4 unicast prefix matches this exception\
+            \ or not. "
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 1
+        prefix_length:
+          description: "The prefix length which, combined with the ipv4_prefix, is\
+            \ used to determine if received IPv4 unicast prefix matches this exception\
+            \ or not. "
+          type: integer
+          format: uint32
+          default: 16
+          maximum: 32
+          x-field-uid: 2
+    Device.BmpServer.Ipv6UnicastPrefixStorage:
+      description: |-
+        Optional object containing information about whether IPv6 unicast prefixes learned from the BMP client should be stored or not for future retrieval using get_states and  exceptions to the configured choice for the same. If the object is not included, by default IPv6 unicast prefixes are not stored by the BMP server.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: discard
+          x-enum:
+            discard:
+              x-field-uid: 1
+            store:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - discard
+          - store
+        discard:
+          description: "If this option is chosen, IPv6 unicast prefixes learned from\
+            \ the BMP client will not be stored by the BMP server. Exception list\
+            \ can be used to create exceptions to allow only some subset of the learned\
+            \ IPv6 unicast prefixes to be stored while the remaining learned prefixes\
+            \ are discarded. This can be useful when only some prefixes need to be\
+            \ verified amongst a large number of learned prefixes.            "
+          x-field-uid: 2
+          $ref: '#/components/schemas/Device.BmpServer.Ipv6UnicastPrefixDiscard'
+        store:
+          description: "If this option is chosen, IPv6 unicast prefixes learned from\
+            \ the BMP client will be stored by the BMP server. Exception list can\
+            \ be used to create exceptions to store all the learned Ipv6 unicast prefixes\
+            \ except some subset of the learned IPv6 unicast prefixes. This can be\
+            \ useful when only some prefixes need to be verified amongst a large number\
+            \ of learned prefixes.            "
+          x-field-uid: 3
+          $ref: '#/components/schemas/Device.BmpServer.Ipv6UnicastPrefixStore'
+    Device.BmpServer.Ipv6UnicastPrefixDiscard:
+      description: "The exception list can be used to specify exceptions to the specification\
+        \ to discard all IPv6 unicast prefixes. It is expected that when required,\
+        \ there would normally be a limited number of exceptions.    "
+      type: object
+      properties:
+        exceptions:
+          description: |-
+            This contains an array of exceptions to the discard IPv6 unicast prefixes specification i.e. prefixes matching the exceptions would be stored instead. One exception to the specification is specified by a combination of an IPv6 prefix and a prefix length.  If the received prefix masked upto the exception's prefix length matches the prefix specified in the exception, the received prefix is deemed as having matched the specified exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64 would match specified exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would not.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BmpServer.Ipv6UnicastPrefixException'
+          x-field-uid: 1
+    Device.BmpServer.Ipv6UnicastPrefixStore:
+      description: "The exception list can be used to specify exceptions to the specification\
+        \ to store all IPv6 unicast prefixes. It is expected that when required, there\
+        \ would normally be a limited number of exceptions.    "
+      type: object
+      properties:
+        exceptions:
+          description: |-
+            This contains an array of exceptions to the store IPv6 unicast prefixes specification i.e. prefixes matching the exceptions would be discarded instead. One exception to the specification is specified by a combination of an IPv6 prefix and a prefix length.  If the received prefix masked upto the exception's prefix length matches the prefix specified in the exception, the received prefix is deemed as having matched the specified exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64 would match specified exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would not.
+          type: array
+          items:
+            $ref: '#/components/schemas/Device.BmpServer.Ipv6UnicastPrefixException'
+          x-field-uid: 1
+    Device.BmpServer.Ipv6UnicastPrefixException:
+      description: |-
+        One exception to the specification is specified by a combination of an IPv6 prefix and a prefix length.  If the received prefix masked upto the exception's prefix length matches the prefix specified in the exception, the received prefix is deemed as having matched the specified exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64 would match specified exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would not.
+      type: object
+      properties:
+        ipv6_prefix:
+          description: "The IPv6 prefix which, combined with the prefix_length, is\
+            \ used to determine if received IPv6 unicast prefix matches this exception\
+            \ or not. "
+          type: string
+          format: ipv6
+          default: '::'
+          x-field-uid: 1
+        prefix_length:
+          description: "The prefix length which, combined with the ipv6_prefix, is\
+            \ used to determine if received IPv6 unicast prefix matches this exception\
+            \ or not. "
+          type: integer
+          format: uint32
+          default: 48
+          maximum: 128
+          x-field-uid: 2
     Flow:
       description: |-
         A high level data plane traffic flow.
@@ -16623,15 +17000,9 @@ components:
           default: true
           x-field-uid: 2
     Event:
-      description: "Under Review: Event configuration is currently under review for\
-        \ pending exploration on use cases.\n\nThe optional container for event configuration.\n\
-        Both cp_events.enable and dp_events.enable must be explicitly set to true\
-        \ to get \ncontrol_plane_data_plane_convergence_us metric values for convergence\
-        \ metrics."
-      x-status:
-        status: under_review
-        information: Event configuration is currently under review for pending exploration
-          on use cases.
+      description: "The optional container for event configuration.\nBoth cp_events.enable\
+        \ and dp_events.enable must be explicitly set to true to get \ncontrol_plane_data_plane_convergence_us\
+        \ metric values for convergence metrics."
       type: object
       properties:
         cp_events:
@@ -18698,14 +19069,9 @@ components:
           x-field-uid: 1
     Action.Protocol.Ipv4.PingRequest:
       description: |-
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
-      x-status:
-        status: under_review
-        information: Most ping request parameters are still TBD.
       properties:
         src_name:
           description: |
@@ -18713,9 +19079,11 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
+          - /components/schemas/Device.Ipv4Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -18750,9 +19118,11 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
+            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
+          - /components/schemas/Device.Ipv4Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -18823,14 +19193,9 @@ components:
           x-field-uid: 1
     Action.Protocol.Ipv6.PingRequest:
       description: |-
-        Under Review: Most ping request parameters are still TBD.
-
         Request for initiating ping between a single source and destination pair.
         For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
       type: object
-      x-status:
-        status: under_review
-        information: Most ping request parameters are still TBD.
       properties:
         src_name:
           description: |
@@ -18838,9 +19203,11 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
+          - /components/schemas/Device.Ipv6Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -18875,9 +19242,11 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
+            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
+          - /components/schemas/Device.Ipv6Loopback/properties/name
           x-field-uid: 1
         dst_ip:
           description: |-
@@ -19253,6 +19622,8 @@ components:
               x-field-uid: 21
             egress_only_tracking:
               x-field-uid: 22
+            bmp_server:
+              x-field-uid: 23
           enum:
           - port
           - flow
@@ -19276,6 +19647,7 @@ components:
           - rocev2_ipv6
           - rocev2_flow
           - egress_only_tracking
+          - bmp_server
         port:
           $ref: '#/components/schemas/Port.Metrics.Request'
           x-field-uid: 2
@@ -19342,6 +19714,9 @@ components:
         egress_only_tracking:
           $ref: '#/components/schemas/EgressOnlyTracking.Metrics.Request'
           x-field-uid: 23
+        bmp_server:
+          $ref: '#/components/schemas/BmpServer.Metrics.Request'
+          x-field-uid: 24
     Metrics.Response:
       description: |-
         Response containing chosen traffic generator metrics.
@@ -19396,6 +19771,8 @@ components:
               x-field-uid: 21
             egress_only_tracking_metrics:
               x-field-uid: 22
+            bmp_server_metrics:
+              x-field-uid: 23
           enum:
           - flow_metrics
           - port_metrics
@@ -19419,6 +19796,7 @@ components:
           - rocev2_ipv6_per_peer_metrics
           - rocev2_flow_per_qp_metrics
           - egress_only_tracking_metrics
+          - bmp_server_metrics
         port_metrics:
           type: array
           items:
@@ -19529,6 +19907,11 @@ components:
           items:
             $ref: '#/components/schemas/EgressOnlyTracking.Metric'
           x-field-uid: 23
+        bmp_server_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpServer.Metric'
+          x-field-uid: 24
     Port.Metrics.Request:
       description: |-
         The port result request to the traffic generator
@@ -22524,13 +22907,7 @@ components:
           x-field-uid: 34
     Convergence.Request:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         Container for requesting control-plane and data-plane convergence time metrics for flows.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
       type: object
       properties:
         flow_names:
@@ -22548,13 +22925,7 @@ components:
           x-field-uid: 1
     Convergence.Metric:
       description: |-
-        Under Review: Convergence metrics is currently under review for pending exploration on use cases.
-
         The container for convergence metrics.
-      x-status:
-        status: under_review
-        information: Convergence metrics is currently under review for pending exploration
-          on use cases.
       type: object
       properties:
         name:
@@ -24254,6 +24625,168 @@ components:
             The transmission rate in Megabits per second.
           type: number
           x-field-uid: 10
+    BmpServer.Metrics.Request:
+      description: |-
+        The request to retrieve per BMP Server metrics/statistics.
+      type: object
+      properties:
+        server_names:
+          description: |
+            The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.
+
+            x-constraint:
+            - /components/schemas/Device.Bmp.ServerV4/properties/name
+            - /components/schemas/Device.Bmp.ServerV6/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Bmp.ServerV4/properties/name
+          - /components/schemas/Device.Bmp.ServerV6/properties/name
+          x-field-uid: 1
+        column_names:
+          description: |-
+            The list of column names that the returned result set will contain. If the list is empty then all columns will be returned except for any result_groups. The name of the BMP Server cannot be excluded.
+          type: array
+          items:
+            type: string
+            x-enum:
+              session_state:
+                x-field-uid: 1
+              flap_count:
+                x-field-uid: 2
+              route_monitoring_messages_received:
+                x-field-uid: 3
+              statistics_messages_received:
+                x-field-uid: 4
+              peer_down_messages_received:
+                x-field-uid: 5
+              peer_up_messages_received:
+                x-field-uid: 6
+              initiation_messages_received:
+                x-field-uid: 7
+              route_mirroring_messages_received:
+                x-field-uid: 8
+              termination_messages_received:
+                x-field-uid: 9
+              pre_policy_ipv4_unicast_routes_received:
+                x-field-uid: 10
+              post_policy_ipv4_unicast_routes_received:
+                x-field-uid: 11
+              pre_policy_ipv6_unicast_routes_received:
+                x-field-uid: 12
+              post_policy_ipv6_unicast_routes_received:
+                x-field-uid: 13
+            enum:
+            - session_state
+            - flap_count
+            - route_monitoring_messages_received
+            - statistics_messages_received
+            - peer_down_messages_received
+            - peer_up_messages_received
+            - initiation_messages_received
+            - route_mirroring_messages_received
+            - termination_messages_received
+            - pre_policy_ipv4_unicast_routes_received
+            - post_policy_ipv4_unicast_routes_received
+            - pre_policy_ipv6_unicast_routes_received
+            - post_policy_ipv6_unicast_routes_received
+          x-field-uid: 2
+    BmpServer.Metric:
+      description: |-
+        BMP Server statistics information.
+      type: object
+      properties:
+        name:
+          description: |-
+            The name of the configured BMP server.
+          type: string
+          x-field-uid: 1
+        session_state:
+          description: |-
+            Session state as up or down. The session goes to 'up' state when a BMP monitored client router sends a Initiation message to the BMP Server. The session goes to 'down' state when a BMP monitored client router sends a Termination message to the BMP Server or the TCP connection is lost. On initial start, the state as reported as 'down'.
+          type: string
+          x-field-uid: 2
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+        flap_count:
+          description: |-
+            Number of times the BMP session with the BMP client went from Up to Down state.
+          type: integer
+          format: uint64
+          x-field-uid: 3
+        route_monitoring_messages_received:
+          description: |-
+            Number of BMP Route Monitoring Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 4
+        statistics_messages_received:
+          description: |-
+            Number of BMP Route Statistics Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 5
+        peer_down_messages_received:
+          description: |-
+            Number of BMP Peer Down Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 6
+        peer_up_messages_received:
+          description: |-
+            Number of BMP Peer Up Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 7
+        initiation_messages_received:
+          description: |-
+            Number of BMP Initiation Messages received from the BMP client from the time the BMP server was started .
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        route_mirroring_messages_received:
+          description: |-
+            Number of BMP Route Mirroring Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        termination_messages_received:
+          description: |-
+            Number of BMP Termination Messages received from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 10
+        pre_policy_ipv4_unicast_routes_received:
+          description: |-
+            Number of IPv4 Unicast prefixes received within BMP Monitor messages with L flag unset (indicating absence of application on in-bound policy on the advertised prefix)  from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 11
+        post_policy_ipv4_unicast_routes_received:
+          description: |-
+            Number of IPv4 Unicast prefixes received within BMP Monitor messages with L flag set (indicating application of in-bound policy on the advertised prefix)  from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 12
+        pre_policy_ipv6_unicast_routes_received:
+          description: |-
+            Number of IPv6 Unicast prefixes received within BMP Monitor messages with L flag unset (indicating absence of application on in-bound policy on the advertised prefix)  from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 13
+        post_policy_ipv6_unicast_routes_received:
+          description: |-
+            Number of IPv6 Unicast prefixes received within BMP Monitor messages with L flag set (indicating application of in-bound policy on the advertised prefix)  from the BMP client from the time the BMP server was started.
+          type: integer
+          format: uint64
+          x-field-uid: 14
     States.Request:
       description: |-
         Request to traffic generator for states of choice
@@ -24290,6 +24823,8 @@ components:
               x-field-uid: 12
             isis_adjacencies:
               x-field-uid: 13
+            bmp_servers:
+              x-field-uid: 14
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -24304,6 +24839,7 @@ components:
           - ospfv2_lsas
           - ospfv3_lsas
           - isis_adjacencies
+          - bmp_servers
         ipv4_neighbors:
           $ref: '#/components/schemas/Neighborsv4.States.Request'
           x-field-uid: 2
@@ -24343,6 +24879,9 @@ components:
         isis_adjacencies:
           $ref: '#/components/schemas/IsisIIHs.State.Request'
           x-field-uid: 14
+        bmp_servers:
+          $ref: '#/components/schemas/BmpServers.State.Request'
+          x-field-uid: 15
     States.Response:
       description: |-
         Response containing chosen traffic generator states
@@ -24379,6 +24918,8 @@ components:
               x-field-uid: 12
             isis_adjacencies:
               x-field-uid: 13
+            bmp_servers:
+              x-field-uid: 14
           enum:
           - ipv4_neighbors
           - ipv6_neighbors
@@ -24393,6 +24934,7 @@ components:
           - ospfv2_lsas
           - ospfv3_lsas
           - isis_adjacencies
+          - bmp_servers
         ipv4_neighbors:
           type: array
           items:
@@ -24458,6 +25000,11 @@ components:
           items:
             $ref: '#/components/schemas/IsisIIHs.State'
           x-field-uid: 14
+        bmp_servers:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpServer.State'
+          x-field-uid: 15
     Neighborsv4.States.Request:
       description: |-
         The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -24701,35 +25248,6 @@ components:
             type: string
             format: ipv4
           x-field-uid: 1
-        prefix_length:
-          x-field-uid: 2
-          description: |-
-            The prefix length to match. If the prefix length is missing then all prefix lengths will match.
-          type: integer
-          format: uint32
-          maximum: 128
-        origin:
-          x-field-uid: 3
-          description: |-
-            The origin to match. If the origin is missing then all origins will match.
-          type: string
-          x-enum:
-            igp:
-              x-field-uid: 1
-            egp:
-              x-field-uid: 2
-            incomplete:
-              x-field-uid: 3
-          enum:
-          - igp
-          - egp
-          - incomplete
-        path_id:
-          x-field-uid: 4
-          description: |-
-            The path id to match. If the path id is missing then all path ids will match.
-          type: integer
-          format: uint32
     BgpPrefix.Ipv6MplsUnicast.Filter:
       type: object
       properties:
@@ -24741,35 +25259,6 @@ components:
             type: string
             format: ipv6
           x-field-uid: 1
-        prefix_length:
-          x-field-uid: 2
-          description: |-
-            The prefix length to match. If the prefix length is missing then all prefix lengths will match.
-          type: integer
-          format: uint32
-          maximum: 128
-        origin:
-          x-field-uid: 3
-          description: |-
-            The origin to match. If the origin is missing then all origins will match.
-          type: string
-          x-enum:
-            igp:
-              x-field-uid: 1
-            egp:
-              x-field-uid: 2
-            incomplete:
-              x-field-uid: 3
-          enum:
-          - igp
-          - egp
-          - incomplete
-        path_id:
-          x-field-uid: 4
-          description: |-
-            The path id to match. If the path id is missing then all path ids will match.
-          type: integer
-          format: uint32
     BgpPrefixes.State:
       description: |-
         BGP peer prefixes.
@@ -28181,6 +28670,510 @@ components:
             Planned Pestart Acknowledgement.
           type: boolean
           x-field-uid: 5
+    BmpServers.State.Request:
+      description: |-
+        The request for BMP server information.
+      type: object
+      properties:
+        bmp_server_names:
+          description: |
+            The names of the BMP Servers  to return results for. An empty list will return results for all BMP Servers.
+
+            x-constraint:
+            - /components/schemas/Device.Bmp.ServerV4/properties/name
+            - /components/schemas/Device.Bmp.ServerV6/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.Bmp.ServerV4/properties/name
+          - /components/schemas/Device.Bmp.ServerV6/properties/name
+          x-field-uid: 1
+    BmpServer.State:
+      description: |-
+        The information learned by a specific BMP Server. Note that each BMP Server is connected to a single BMP client, though multiple BMP Servers can be configured on the  same IPv4 or IPv6 interface , each connected to a different BMP client. Each BMP client can in turn report information about multiple BGP sessions on that router.
+      type: object
+      properties:
+        bmp_server_name:
+          description: |-
+            The name of the BMP Server configured for which the information is being returned.
+          type: string
+          x-field-uid: 1
+        peers:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpServerPeer.State'
+          x-field-uid: 2
+    BmpServerPeer.State:
+      description: |-
+        The information returned by a BMP client to the BMP Server related to a specific BGP session on the router.
+      type: object
+      properties:
+        session_ip_type:
+          description: |-
+            Whether the peer is of type BGPv4 or BGPv6. If the type is ipv4 the session_ipv4_information object should be included to convey the local and remote IPv4 address for the peer. If the type is ipv6 the session_ipv6_information object should be included to convey the local and remote IPv6 address for the peer.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        session_ipv4_information:
+          description: "This object is included if session_ip_type is of type ipv4.\
+            \          "
+          x-field-uid: 2
+          $ref: '#/components/schemas/BmpServerPeer.SessionIpv4Information'
+        session_ipv6_information:
+          description: |-
+            This object is included if session_ip_type is of type ipv6.
+          x-field-uid: 3
+          $ref: '#/components/schemas/BmpServerPeer.SessionIpv6Information'
+        peer_bgp_id:
+          description: |-
+            The BGP Identifier of the peer.
+          type: string
+          format: ipv4
+          x-field-uid: 4
+        status:
+          description: |-
+            The current state of the BGP session.  Note that per peer stats and rib information might be empty if the peer state is down.
+          type: string
+          x-field-uid: 5
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          enum:
+          - up
+          - down
+        stats:
+          description: |-
+            The last set of BMP stats sent by the BMP client for this peer as per the message format defined in https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be absent if no BMP Statistics message have been received yet or peer is still in down state. If the BMP client has sent a subset of the various statistic counters, only those should be set when returning the result.
+          $ref: '#/components/schemas/BmpServerPeer.Stats'
+          x-field-uid: 6
+        pre_policy_in_rib:
+          description: "The set of routes received from this peer as reported using\
+            \ BMP Route Monitoring messages by the BMP client  which are part of the\
+            \ Adj-RIB-In database *before* inbound policies were applied. This is\
+            \ determined by checking that the L flag is not set in the Per-Peer Header\
+            \ in the received Route Monitoring message. It should also be ensured\
+            \ that the O flag as defined in RFC8671 is not set in the flags. (indicates\
+            \ Adj-RIB-Out)  Note that routes which have been advertised initially\
+            \ and currently in withdrawn state can be included in the returned set\
+            \ of routes by setting the status of that specific route to 'withdrawn'.\
+            \ Routes which have been received from this peer and part of current Pre-Policy\
+            \ In-Rib DB should have the status set to 'advertised'.             Note\
+            \ that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard\
+            \ is configured or exceptions in the prefix_storage are specified such\
+            \ that all incoming routes are filtered, the prefix database list will\
+            \ be empty. "
+          $ref: '#/components/schemas/BmpServerPeer.PrePolicyInRib'
+          x-field-uid: 7
+        post_policy_in_rib:
+          description: "The set of routes received from this peer as reported using\
+            \ BMP Route Monitoring messages by the BMP client  which are part of the\
+            \ Adj-RIB-In database *after* inbound policies were applied. This is determined\
+            \ by checking that the L flag is set in the Per-Peer Header in the received\
+            \ Route Monitoring message. It should also be ensured that the O flag\
+            \ as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)\
+            \  Note that routes which have been advertised initially and currently\
+            \ in withdrawn state can be included in the returned set of routes by\
+            \ setting the status of that specific route to 'withdrawn'. Routes which\
+            \ have been received from this peer and part of current Post-Policy In-Rib\
+            \ DB should have the status set to 'advertised'. Note that if prefix_storage.ipv4_unicast.discard\
+            \ or/and prefix_storage.ipv6_unicast.discard is configured or exceptions\
+            \ in the prefix_storage are specified such that all incoming routes are\
+            \ filtered, the prefix database list will be empty. "
+          $ref: '#/components/schemas/BmpServerPeer.PostPolicyInRib'
+          x-field-uid: 8
+    BmpServerPeer.SessionIpv4Information:
+      description: |-
+        This object is included if session_ip_type is of type ipv4.
+      type: object
+      properties:
+        local_address:
+          description: |-
+            The local IPv4 address associated with the BGPv4 peer.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        remote_address:
+          description: |-
+            The remote IPv4 address associated with the BGPv4 peer.
+          type: string
+          format: ipv4
+          x-field-uid: 2
+    BmpServerPeer.SessionIpv6Information:
+      description: |-
+        This object is included if session_ip_type is of type ipv6.
+      type: object
+      properties:
+        local_address:
+          description: |-
+            The local IPv6 address associated with the BGPv6 peer.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        remote_address:
+          description: |-
+            The remote IPv6 address associated with the BGPv6 peer.
+          type: string
+          format: ipv6
+          x-field-uid: 2
+    BmpServerPeer.Stats:
+      description: |-
+        The last set of BMP stats sent by the BMP client for this peer as per the message format defined in https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might be absent if no BMP Statistics message have been received yet or peer is still in down state. If the BMP client has sent a subset of the various statistic counters, only those should be set when returning the result.
+      type: object
+      properties:
+        rejected_prefixes:
+          description: |-
+            Number of prefixes rejected by inbound policy.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        duplicate_prefixes:
+          description: |-
+            Number of (known) duplicate prefix advertisements.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        duplicate_withdraws:
+          description: |-
+            Number of (known) duplicate withdraws.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        cluster_list_invalidated_updates:
+          description: |-
+            Number of updates invalidated due to CLUSTER_LIST loop.
+          type: integer
+          format: uint32
+          x-field-uid: 4
+        as_path_invalidated_updates:
+          description: |-
+            Number of updates invalidated due to AS_PATH loop.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+        originator_id_invalidated_updates:
+          description: |-
+            Number of updates invalidated due to ORIGINATOR_ID.
+          type: integer
+          format: uint32
+          x-field-uid: 6
+        as_confed_invalidated_updates:
+          description: |-
+            Number of updates invalidated due to AS_CONFED loop.
+          type: integer
+          format: uint32
+          x-field-uid: 7
+        adj_rib_routes:
+          description: |-
+            Number of routes in Adj-RIBs-In.
+          type: integer
+          format: uint64
+          x-field-uid: 8
+        local_rib_routes:
+          description: |-
+            Number of routes in Loc-RIB.
+          type: integer
+          format: uint64
+          x-field-uid: 9
+        withdraw_updates_received:
+          description: |-
+            Number of updates subjected to treat-as-withdraw treatment [RFC7606].
+          type: integer
+          format: uint32
+          x-field-uid: 10
+        withdraw_prefixes_received:
+          description: |-
+            Number of prefixes  subjected to treat-as-withdraw treatment [RFC7606].
+          type: integer
+          format: uint32
+          x-field-uid: 11
+        duplicate_updates:
+          description: |-
+            Number of duplicate update messages received.
+          type: integer
+          format: uint32
+          x-field-uid: 12
+    BmpServerPeer.PrePolicyInRib:
+      description: "The set of routes received from this peer as reported using BMP\
+        \ Route Monitoring messages by the BMP client  which are part of the Adj-RIB-In\
+        \ database *before* inbound policies were applied. This is determined by checking\
+        \ that the L flag is not set in the Per-Peer Header in the received Route\
+        \ Monitoring message. It should also be ensured that the O flag as defined\
+        \ in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)  Note that routes\
+        \ which have been advertised initially and currently in withdrawn state can\
+        \ be included in the returned set of routes by setting the status of that\
+        \ specific route to 'withdrawn'. Routes which have been received from this\
+        \ peer and part of current Pre-Policy In-Rib DB should have the status set\
+        \ to 'advertised'. Note that if prefix_storage.ipv4_unicast.discard or/and\
+        \ prefix_storage.ipv6_unicast.discard is configured or exceptions in the prefix_storage\
+        \ are specified such that all incoming routes are filtered, the corresponding\
+        \ prefix database list will be empty. "
+      type: object
+      properties:
+        ipv4_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpPrefixIpv4Unicast.State'
+          x-field-uid: 1
+        ipv6_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpPrefixIpv6Unicast.State'
+          x-field-uid: 2
+    BmpServerPeer.PostPolicyInRib:
+      description: "The set of routes received from this peer as reported using BMP\
+        \ Route Monitoring messages by the BMP client  which are part of the Adj-RIB-In\
+        \ database *after* inbound policies were applied. This is determined by checking\
+        \ that the L flag is set in the Per-Peer Header in the received Route Monitoring\
+        \ message. It should also be ensured that the O flag as defined in RFC8671\
+        \ is not set in the flags. (indicates Adj-RIB-Out)  Note that routes which\
+        \ have been advertised initially and currently in withdrawn state can be included\
+        \ in the returned set of routes by setting the status of that specific route\
+        \ to 'withdrawn'. Routes which have been received from this peer and part\
+        \ of current Post-Policy In-Rib DB should have the status set to 'advertised'.\
+        \ Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard\
+        \ is configured or exceptions in the prefix_storage are specified such that\
+        \ all incoming routes are filtered, the corresponding prefix database list\
+        \ will be empty. .         "
+      type: object
+      properties:
+        ipv4_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpPrefixIpv4Unicast.State'
+          x-field-uid: 1
+        ipv6_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BmpPrefixIpv6Unicast.State'
+          x-field-uid: 2
+    BmpPrefixIpv4Unicast.State:
+      description: |-
+        IPv4 unicast prefix.
+      type: object
+      properties:
+        ipv4_address:
+          description: |-
+            An IPv4 unicast address.
+          type: string
+          format: ipv4
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The length of the IPv4 prefix.
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 2
+        origin:
+          x-field-uid: 3
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 4
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        route_state:
+          x-field-uid: 5
+          description: "The state of the route , either advertised or withdrawn. If\
+            \ route is in withdrawn state, only the prefix, prefix_length, origin\
+            \ and path_id (if applicable) may be present. "
+          type: string
+          x-enum:
+            advertised:
+              x-field-uid: 1
+            withdrawn:
+              x-field-uid: 2
+          enum:
+          - advertised
+          - withdrawn
+        next_hop_type:
+          x-field-uid: 6
+          description: "The next hop type , ipv4 or ipv6 .  If type is ipv4, then\
+            \ the ipv4_next_hop should be included. If type is ipv6, then the ipv6_next_hop\
+            \ should be included.             "
+          type: string
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        ipv4_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 8
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BmpPrefixIpv6Unicast.State:
+      description: |-
+        IPv6 unicast prefix.
+      type: object
+      properties:
+        ipv6_address:
+          description: |-
+            An IPv6 unicast address.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            The length of the IPv6 prefix.
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 2
+        origin:
+          x-field-uid: 3
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 4
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        route_state:
+          x-field-uid: 5
+          description: "The state of the route , either advertised or withdrawn. If\
+            \ route is in withdrawn state, only the prefix, prefix_length, origin\
+            \ and path_id (if applicable) may be present. "
+          type: string
+          x-enum:
+            advertised:
+              x-field-uid: 1
+            withdrawn:
+              x-field-uid: 2
+          enum:
+          - advertised
+          - withdrawn
+        next_hop_type:
+          x-field-uid: 6
+          description: "The next hop type , ipv4 or ipv6 .  If type is ipv4, then\
+            \ the ipv4_next_hop should be included. If type is ipv6, then the ipv6_next_hop\
+            \ should be included.             "
+          type: string
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          enum:
+          - ipv4
+          - ipv6
+        ipv4_next_hop:
+          x-field-uid: 7
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 8
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        communities:
+          x-field-uid: 9
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 10
+        as_path:
+          x-field-uid: 11
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 12
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 13
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     Capture.Request:
       description: |-
         The capture result request to the traffic generator.
