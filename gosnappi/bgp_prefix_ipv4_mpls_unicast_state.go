@@ -489,7 +489,7 @@ func (obj *bgpPrefixIpv4MplsUnicastState) SetIpv6NextHop(value string) BgpPrefix
 	return obj
 }
 
-// Address Prefix that is bounded to One or More MPLS Labels.
+// One or more MPLS Label 24 bit values bound to this address prefix.
 // Labels returns a []uint32
 func (obj *bgpPrefixIpv4MplsUnicastState) Labels() []uint32 {
 	if obj.obj.Labels == nil {
@@ -498,7 +498,7 @@ func (obj *bgpPrefixIpv4MplsUnicastState) Labels() []uint32 {
 	return obj.obj.Labels
 }
 
-// Address Prefix that is bounded to One or More MPLS Labels.
+// One or more MPLS Label 24 bit values bound to this address prefix.
 // SetLabels sets the []uint32 value in the BgpPrefixIpv4MplsUnicastState object
 func (obj *bgpPrefixIpv4MplsUnicastState) SetLabels(value []uint32) BgpPrefixIpv4MplsUnicastState {
 

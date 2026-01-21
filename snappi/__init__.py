@@ -1456,6 +1456,8 @@ from .snappi import ActionProtocolIsis
 from .snappi import ActionProtocolIsisInitiateRestart
 from .snappi import ActionProtocolIsisUnplannedRestart
 from .snappi import ActionProtocolIsisPlannedRestart
+from .snappi import ActionPort
+from .snappi import ActionPortReboot
 from .snappi import ControlActionResponse
 from .snappi import ActionResponse
 from .snappi import ActionResponseProtocol
@@ -1568,10 +1570,6 @@ from .snappi import BgpPrefixIpv4UnicastFilter
 from .snappi import BgpPrefixIpv4UnicastFilterIter
 from .snappi import BgpPrefixIpv6UnicastFilter
 from .snappi import BgpPrefixIpv6UnicastFilterIter
-from .snappi import BgpPrefixIpv4MplsUnicastFilter
-from .snappi import BgpPrefixIpv4MplsUnicastFilterIter
-from .snappi import BgpPrefixIpv6MplsUnicastFilter
-from .snappi import BgpPrefixIpv6MplsUnicastFilterIter
 from .snappi import IsisLspsStateRequest
 from .snappi import LldpNeighborsStateRequest
 from .snappi import RsvpLspsStateRequest

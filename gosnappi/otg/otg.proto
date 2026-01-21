@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.42.1
+/* Open Traffic Generator API 1.43.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14045,6 +14045,17 @@ message StatePortCapture {
   optional State.Enum state = 2;
 }
 
+// Resets the configured ports to initialized state.
+message ActionPortReboot {
+
+  // The names of target ports. An empty or null list will target all ports.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 1;
+}
+
 // Provides state control of flow transmission.
 message StateTrafficFlowTransmit {
 
@@ -14422,6 +14433,7 @@ message ControlAction {
     enum Enum {
       unspecified = 0;
       protocol = 1;
+      port = 2;
     }
   }
   // Description missing in models
@@ -14430,6 +14442,9 @@ message ControlAction {
 
   // Description missing in models
   ActionProtocol protocol = 2;
+
+  // Description missing in models
+  ActionPort port = 3;
 }
 
 // Response for action triggered against configured resources along with warnings.
@@ -14507,6 +14522,23 @@ message ActionResponseProtocol {
 
   // Description missing in models
   ActionResponseProtocolIpv6 ipv6 = 3;
+}
+
+// Actions associated with ports on configured resources.
+message ActionPort {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reboot = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ActionPortReboot reboot = 2;
 }
 
 // Actions associated with IPv4 on configured resources.
@@ -18169,16 +18201,6 @@ message BgpPrefixStateRequest {
   // If the ipv6_unicast_filters property is missing or empty then all IPv6 prefixes will
   // be returned.
   repeated BgpPrefixIpv6UnicastFilter ipv6_unicast_filters = 4;
-
-  // The IPv4 MPLS unicast results can be filtered by specifying additional prefix search
-  // criteria. If the ipv4_mpls_unicast_filters property is missing or empty then all
-  // IPv4 MPLS unicast prefixes will be returned.
-  repeated BgpPrefixIpv4MplsUnicastFilter ipv4_mpls_unicast_filters = 5;
-
-  // The IPv6 MPLS unicast results can be filtered by specifying additional prefix search
-  // criteria. If the ipv6_mpls_unicast_filters property is missing or empty then all
-  // IPv6 MPLS unicast prefixes will be returned.
-  repeated BgpPrefixIpv6MplsUnicastFilter ipv6_mpls_unicast_filters = 6;
 }
 
 // Description missing in models
@@ -18231,22 +18253,6 @@ message BgpPrefixIpv6UnicastFilter {
 
   // The path id to match. If the path id is missing then all path ids will match.
   optional uint32 path_id = 4;
-}
-
-// Description missing in models
-message BgpPrefixIpv4MplsUnicastFilter {
-
-  // The addresses to match. If the addresses property is missing or empty then all addresses
-  // will match.
-  repeated string addresses = 1;
-}
-
-// Description missing in models
-message BgpPrefixIpv6MplsUnicastFilter {
-
-  // The addresses to match. If the addresses property is missing or empty then all addresses
-  // will match.
-  repeated string addresses = 1;
 }
 
 // BGP peer prefixes.
@@ -18686,7 +18692,7 @@ message BgpPrefixIpv4MplsUnicastState {
   // The IPv6 address of the egress interface.
   optional string ipv6_next_hop = 6;
 
-  // Address Prefix that is bounded to One or More MPLS Labels.
+  // One or more MPLS Label 24 bit values bound to this address prefix.
   repeated uint32 labels = 7;
 
   // Optional community attributes.
@@ -18740,7 +18746,7 @@ message BgpPrefixIpv6MplsUnicastState {
   // The IPv6 address of the egress interface.
   optional string ipv6_next_hop = 6;
 
-  // Address Prefix that is bounded to One or More MPLS Labels.
+  // One or more MPLS Label 24 bit values bound to this address prefix.
   repeated uint32 labels = 7;
 
   // Optional community attributes.

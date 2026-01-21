@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.42.1
+  version: 1.43.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -18456,6 +18456,23 @@ components:
           enum:
           - start
           - stop
+    Action.Port.Reboot:
+      description: |-
+        Resets the configured ports to initialized state.
+      type: object
+      properties:
+        port_names:
+          description: |
+            The names of target ports. An empty or null list will target all ports.
+
+            x-constraint:
+            - /components/schemas/Port/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Port/properties/name
+          x-field-uid: 1
     State.Traffic.FlowTransmit:
       description: |-
         Provides state control of flow transmission.
@@ -18920,12 +18937,18 @@ components:
           x-enum:
             protocol:
               x-field-uid: 1
+            port:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - protocol
+          - port
         protocol:
           $ref: '#/components/schemas/Action.Protocol'
           x-field-uid: 2
+        port:
+          $ref: '#/components/schemas/Action.Port'
+          x-field-uid: 3
     Control.Action.Response:
       description: |-
         Response for action triggered against configured resources along with warnings.
@@ -19019,6 +19042,24 @@ components:
         ipv6:
           $ref: '#/components/schemas/Action.Response.Protocol.Ipv6'
           x-field-uid: 3
+    Action.Port:
+      description: |-
+        Actions associated with ports on configured resources.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            reboot:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - reboot
+        reboot:
+          $ref: '#/components/schemas/Action.Port.Reboot'
+          x-field-uid: 2
     Action.Protocol.Ipv4:
       description: |-
         Actions associated with IPv4 on configured resources.
@@ -25143,20 +25184,6 @@ components:
           items:
             $ref: '#/components/schemas/BgpPrefix.Ipv6Unicast.Filter'
           x-field-uid: 4
-        ipv4_mpls_unicast_filters:
-          description: |-
-            The IPv4 MPLS unicast results can be filtered by specifying additional prefix search criteria. If the ipv4_mpls_unicast_filters property is missing or empty then all IPv4 MPLS unicast prefixes will be returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/BgpPrefix.Ipv4MplsUnicast.Filter'
-          x-field-uid: 5
-        ipv6_mpls_unicast_filters:
-          description: |-
-            The IPv6 MPLS unicast results can be filtered by specifying additional prefix search criteria. If the ipv6_mpls_unicast_filters property is missing or empty then all IPv6 MPLS unicast prefixes will be returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/BgpPrefix.Ipv6MplsUnicast.Filter'
-          x-field-uid: 6
     BgpPrefix.Ipv4Unicast.Filter:
       type: object
       properties:
@@ -25237,28 +25264,6 @@ components:
             The path id to match. If the path id is missing then all path ids will match.
           type: integer
           format: uint32
-    BgpPrefix.Ipv4MplsUnicast.Filter:
-      type: object
-      properties:
-        addresses:
-          description: |-
-            The addresses to match. If the addresses property is missing or empty then all addresses will match.
-          type: array
-          items:
-            type: string
-            format: ipv4
-          x-field-uid: 1
-    BgpPrefix.Ipv6MplsUnicast.Filter:
-      type: object
-      properties:
-        addresses:
-          description: |-
-            The addresses to match. If the addresses property is missing or empty then all addresses will match.
-          type: array
-          items:
-            type: string
-            format: ipv6
-          x-field-uid: 1
     BgpPrefixes.State:
       description: |-
         BGP peer prefixes.
@@ -25840,7 +25845,7 @@ components:
           format: ipv6
         labels:
           description: |-
-            Address Prefix that is bounded to One or More MPLS Labels.
+            One or more MPLS Label 24 bit values bound to this address prefix.
           type: array
           items:
             type: integer
@@ -25928,7 +25933,7 @@ components:
           format: ipv6
         labels:
           description: |-
-            Address Prefix that is bounded to One or More MPLS Labels.
+            One or more MPLS Label 24 bit values bound to this address prefix.
           type: array
           items:
             type: integer
