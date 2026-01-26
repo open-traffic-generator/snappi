@@ -1613,6 +1613,10 @@ from .snappi import ResultBgpAsPathSegmentIter
 from .snappi import BgpPrefixIpv4UnicastStateIter
 from .snappi import BgpPrefixIpv6UnicastState
 from .snappi import BgpPrefixIpv6UnicastStateIter
+from .snappi import BgpPrefixIpv4MplsUnicastState
+from .snappi import BgpPrefixIpv4MplsUnicastStateIter
+from .snappi import BgpPrefixIpv6MplsUnicastState
+from .snappi import BgpPrefixIpv6MplsUnicastStateIter
 from .snappi import BgpPrefixesStateIter
 from .snappi import IsisLspsState
 from .snappi import IsisLspState
