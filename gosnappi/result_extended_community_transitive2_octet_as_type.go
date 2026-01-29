@@ -13,11 +13,12 @@ import (
 // ***** ResultExtendedCommunityTransitive2OctetAsType *****
 type resultExtendedCommunityTransitive2OctetAsType struct {
 	validation
-	obj                      *otg.ResultExtendedCommunityTransitive2OctetAsType
-	marshaller               marshalResultExtendedCommunityTransitive2OctetAsType
-	unMarshaller             unMarshalResultExtendedCommunityTransitive2OctetAsType
-	routeTargetSubtypeHolder ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget
-	routeOriginSubtypeHolder ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+	obj                        *otg.ResultExtendedCommunityTransitive2OctetAsType
+	marshaller                 marshalResultExtendedCommunityTransitive2OctetAsType
+	unMarshaller               unMarshalResultExtendedCommunityTransitive2OctetAsType
+	routeTargetSubtypeHolder   ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget
+	routeOriginSubtypeHolder   ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+	linkBandwidthSubtypeHolder ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
 }
 
 func NewResultExtendedCommunityTransitive2OctetAsType() ResultExtendedCommunityTransitive2OctetAsType {
@@ -247,6 +248,7 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) Clone() (ResultExtende
 func (obj *resultExtendedCommunityTransitive2OctetAsType) setNil() {
 	obj.routeTargetSubtypeHolder = nil
 	obj.routeOriginSubtypeHolder = nil
+	obj.linkBandwidthSubtypeHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,14 @@ type ResultExtendedCommunityTransitive2OctetAsType interface {
 	SetRouteOriginSubtype(value ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin) ResultExtendedCommunityTransitive2OctetAsType
 	// HasRouteOriginSubtype checks if RouteOriginSubtype has been set in ResultExtendedCommunityTransitive2OctetAsType
 	HasRouteOriginSubtype() bool
+	// LinkBandwidthSubtype returns ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth, set in ResultExtendedCommunityTransitive2OctetAsType.
+	// ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth is the Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+	LinkBandwidthSubtype() ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+	// SetLinkBandwidthSubtype assigns ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth provided by user to ResultExtendedCommunityTransitive2OctetAsType.
+	// ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth is the Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+	SetLinkBandwidthSubtype(value ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth) ResultExtendedCommunityTransitive2OctetAsType
+	// HasLinkBandwidthSubtype checks if LinkBandwidthSubtype has been set in ResultExtendedCommunityTransitive2OctetAsType
+	HasLinkBandwidthSubtype() bool
 	setNil()
 }
 
@@ -303,11 +313,13 @@ type ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum string
 
 // Enum of Choice on ResultExtendedCommunityTransitive2OctetAsType
 var ResultExtendedCommunityTransitive2OctetAsTypeChoice = struct {
-	ROUTE_TARGET_SUBTYPE ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum
-	ROUTE_ORIGIN_SUBTYPE ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	ROUTE_TARGET_SUBTYPE   ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	ROUTE_ORIGIN_SUBTYPE   ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	LINK_BANDWIDTH_SUBTYPE ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum
 }{
-	ROUTE_TARGET_SUBTYPE: ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_target_subtype"),
-	ROUTE_ORIGIN_SUBTYPE: ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_origin_subtype"),
+	ROUTE_TARGET_SUBTYPE:   ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_target_subtype"),
+	ROUTE_ORIGIN_SUBTYPE:   ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_origin_subtype"),
+	LINK_BANDWIDTH_SUBTYPE: ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum("link_bandwidth_subtype"),
 }
 
 func (obj *resultExtendedCommunityTransitive2OctetAsType) Choice() ResultExtendedCommunityTransitive2OctetAsTypeChoiceEnum {
@@ -329,6 +341,8 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) setChoice(value Result
 	}
 	enumValue := otg.ResultExtendedCommunityTransitive2OctetAsType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.LinkBandwidthSubtype = nil
+	obj.linkBandwidthSubtypeHolder = nil
 	obj.obj.RouteOriginSubtype = nil
 	obj.routeOriginSubtypeHolder = nil
 	obj.obj.RouteTargetSubtype = nil
@@ -340,6 +354,10 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) setChoice(value Result
 
 	if value == ResultExtendedCommunityTransitive2OctetAsTypeChoice.ROUTE_ORIGIN_SUBTYPE {
 		obj.obj.RouteOriginSubtype = NewResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin().msg()
+	}
+
+	if value == ResultExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE {
+		obj.obj.LinkBandwidthSubtype = NewResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth().msg()
 	}
 
 	return obj
@@ -401,6 +419,34 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) SetRouteOriginSubtype(
 	return obj
 }
 
+// description is TBD
+// LinkBandwidthSubtype returns a ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+func (obj *resultExtendedCommunityTransitive2OctetAsType) LinkBandwidthSubtype() ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+	if obj.obj.LinkBandwidthSubtype == nil {
+		obj.setChoice(ResultExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+	}
+	if obj.linkBandwidthSubtypeHolder == nil {
+		obj.linkBandwidthSubtypeHolder = &resultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth{obj: obj.obj.LinkBandwidthSubtype}
+	}
+	return obj.linkBandwidthSubtypeHolder
+}
+
+// description is TBD
+// LinkBandwidthSubtype returns a ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+func (obj *resultExtendedCommunityTransitive2OctetAsType) HasLinkBandwidthSubtype() bool {
+	return obj.obj.LinkBandwidthSubtype != nil
+}
+
+// description is TBD
+// SetLinkBandwidthSubtype sets the ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth value in the ResultExtendedCommunityTransitive2OctetAsType object
+func (obj *resultExtendedCommunityTransitive2OctetAsType) SetLinkBandwidthSubtype(value ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth) ResultExtendedCommunityTransitive2OctetAsType {
+	obj.setChoice(ResultExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+	obj.linkBandwidthSubtypeHolder = nil
+	obj.obj.LinkBandwidthSubtype = value.msg()
+
+	return obj
+}
+
 func (obj *resultExtendedCommunityTransitive2OctetAsType) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -414,6 +460,11 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) validateObj(vObj *vali
 	if obj.obj.RouteOriginSubtype != nil {
 
 		obj.RouteOriginSubtype().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.LinkBandwidthSubtype != nil {
+
+		obj.LinkBandwidthSubtype().validateObj(vObj, set_default)
 	}
 
 }
@@ -430,6 +481,11 @@ func (obj *resultExtendedCommunityTransitive2OctetAsType) setDefault() {
 	if obj.obj.RouteOriginSubtype != nil {
 		choices_set += 1
 		choice = ResultExtendedCommunityTransitive2OctetAsTypeChoice.ROUTE_ORIGIN_SUBTYPE
+	}
+
+	if obj.obj.LinkBandwidthSubtype != nil {
+		choices_set += 1
+		choice = ResultExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
