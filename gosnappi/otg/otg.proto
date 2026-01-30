@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.43.0
+/* Open Traffic Generator API 1.44.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -3964,6 +3964,23 @@ message BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
   optional uint32 local_4byte_admin = 2;
 }
 
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with
+// sub-type as 0x04.
+message BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  // default = 100
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  // default = 0
+  optional float bandwidth = 2;
+}
+
 // The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
 // 
 message BgpExtendedCommunityTransitive2OctetAsType {
@@ -3973,6 +3990,7 @@ message BgpExtendedCommunityTransitive2OctetAsType {
       unspecified = 0;
       route_target_subtype = 1;
       route_origin_subtype = 2;
+      link_bandwidth_subtype = 3;
     }
   }
   // Description missing in models
@@ -3984,6 +4002,9 @@ message BgpExtendedCommunityTransitive2OctetAsType {
 
   // Description missing in models
   BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+
+  // Description missing in models
+  BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 4;
 }
 
 // The Route Origin Community identifies one or more routers that inject a set of routes
@@ -18856,6 +18877,21 @@ message ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
   optional uint32 local_4byte_admin = 2;
 }
 
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with
+// sub-type as 0x04.
+message ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  optional float bandwidth = 2;
+}
+
 // The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
 // 
 message ResultExtendedCommunityTransitive2OctetAsType {
@@ -18865,6 +18901,7 @@ message ResultExtendedCommunityTransitive2OctetAsType {
       unspecified = 0;
       route_target_subtype = 1;
       route_origin_subtype = 2;
+      link_bandwidth_subtype = 3;
     }
   }
   // Description missing in models
@@ -18875,6 +18912,9 @@ message ResultExtendedCommunityTransitive2OctetAsType {
 
   // Description missing in models
   ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 4;
 }
 
 // The Route Origin Community identifies one or more routers that inject a set of routes
