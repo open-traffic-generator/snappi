@@ -276,6 +276,10 @@ type BmpServersStateRequest interface {
 // - /components/schemas/Device.Bmp.ServerV4/properties/name
 // - /components/schemas/Device.Bmp.ServerV6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Bmp.ServerV4/properties/name
+// - /components/schemas/Device.Bmp.ServerV6/properties/name
+//
 // BmpServerNames returns a []string
 func (obj *bmpServersStateRequest) BmpServerNames() []string {
 	if obj.obj.BmpServerNames == nil {
@@ -285,6 +289,10 @@ func (obj *bmpServersStateRequest) BmpServerNames() []string {
 }
 
 // The names of the BMP Servers  to return results for. An empty list will return results for all BMP Servers.
+//
+// x-constraint:
+// - /components/schemas/Device.Bmp.ServerV4/properties/name
+// - /components/schemas/Device.Bmp.ServerV6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Bmp.ServerV4/properties/name

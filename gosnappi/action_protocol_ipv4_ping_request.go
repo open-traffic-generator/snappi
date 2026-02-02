@@ -285,6 +285,10 @@ type ActionProtocolIpv4PingRequest interface {
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
+//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 
@@ -298,12 +302,20 @@ func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 // - /components/schemas/Device.Ipv4/properties/name
 // - /components/schemas/Device.Ipv4Loopback/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
+//
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) HasSrcName() bool {
 	return obj.obj.SrcName != nil
 }
 
 // Name of source IPv4 interface to be used.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

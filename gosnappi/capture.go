@@ -308,6 +308,9 @@ type Capture interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+//
 // PortNames returns a []string
 func (obj *capture) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -317,6 +320,9 @@ func (obj *capture) PortNames() []string {
 }
 
 // The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

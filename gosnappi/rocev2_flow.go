@@ -314,6 +314,9 @@ type Rocev2Flow interface {
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
+// x-constraint:
+// - /components/schemas/Rocev2.QPs/properties/qp_name
+//
 // TxEndpoint returns a string
 func (obj *rocev2Flow) TxEndpoint() string {
 
@@ -326,6 +329,9 @@ func (obj *rocev2Flow) TxEndpoint() string {
 // x-constraint:
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
+// x-constraint:
+// - /components/schemas/Rocev2.QPs/properties/qp_name
+//
 // SetTxEndpoint sets the string value in the Rocev2Flow object
 func (obj *rocev2Flow) SetTxEndpoint(value string) Rocev2Flow {
 
@@ -334,6 +340,10 @@ func (obj *rocev2Flow) SetTxEndpoint(value string) Rocev2Flow {
 }
 
 // The unique name of remote QP or port which be receiving the packets for the flow.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Rocev2.QPs/properties/qp_name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -352,12 +362,20 @@ func (obj *rocev2Flow) RxEndpoint() string {
 // - /components/schemas/Port/properties/name
 // - /components/schemas/Rocev2.QPs/properties/qp_name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Rocev2.QPs/properties/qp_name
+//
 // RxEndpoint returns a string
 func (obj *rocev2Flow) HasRxEndpoint() bool {
 	return obj.obj.RxEndpoint != nil
 }
 
 // The unique name of remote QP or port which be receiving the packets for the flow.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Rocev2.QPs/properties/qp_name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

@@ -276,6 +276,9 @@ type ConvergenceRequest interface {
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
+// x-constraint:
+// - /components/schemas/Flow/properties/name
+//
 // FlowNames returns a []string
 func (obj *convergenceRequest) FlowNames() []string {
 	if obj.obj.FlowNames == nil {
@@ -286,6 +289,9 @@ func (obj *convergenceRequest) FlowNames() []string {
 
 // Convergence metrics will be retrieved for these flow names.
 // If no flow names are specified then convergence metrics for all flows will be returned.
+//
+// x-constraint:
+// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

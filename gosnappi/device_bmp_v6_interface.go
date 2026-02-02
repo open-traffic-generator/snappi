@@ -286,6 +286,9 @@ type DeviceBmpV6Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // Ipv6Name returns a string
 func (obj *deviceBmpV6Interface) Ipv6Name() string {
 
@@ -294,6 +297,9 @@ func (obj *deviceBmpV6Interface) Ipv6Name() string {
 }
 
 // The unique name of the IPv6 interface used as the source IP for BMP Server.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

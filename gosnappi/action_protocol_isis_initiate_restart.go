@@ -314,6 +314,9 @@ type ActionProtocolIsisInitiateRestart interface {
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
+//
 // RouterNames returns a []string
 func (obj *actionProtocolIsisInitiateRestart) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -323,6 +326,9 @@ func (obj *actionProtocolIsisInitiateRestart) RouterNames() []string {
 }
 
 // The names of device objects to control.
+//
+// x-constraint:
+// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name

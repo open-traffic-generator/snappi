@@ -286,6 +286,9 @@ type DeviceBmpV4Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
+//
 // Ipv4Name returns a string
 func (obj *deviceBmpV4Interface) Ipv4Name() string {
 
@@ -294,6 +297,9 @@ func (obj *deviceBmpV4Interface) Ipv4Name() string {
 }
 
 // The unique name of the IPv4 interface used as the source IP for the BMP Server.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

@@ -292,6 +292,10 @@ type FlowPort interface {
 // - /components/schemas/Port/properties/name
 // - /components/schemas/Lag/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
+//
 // TxName returns a string
 func (obj *flowPort) TxName() string {
 
@@ -300,6 +304,10 @@ func (obj *flowPort) TxName() string {
 }
 
 // The unique name of a port that is the transmit port.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -314,7 +322,13 @@ func (obj *flowPort) SetTxName(value string) FlowPort {
 
 // Deprecated: This property is deprecated in favor of property rx_names
 //
+// Deprecated: This property is deprecated in favor of property rx_names
+//
 // The unique name of a port that is the intended receive port.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -329,7 +343,13 @@ func (obj *flowPort) RxName() string {
 
 // Deprecated: This property is deprecated in favor of property rx_names
 //
+// Deprecated: This property is deprecated in favor of property rx_names
+//
 // The unique name of a port that is the intended receive port.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -342,7 +362,13 @@ func (obj *flowPort) HasRxName() bool {
 
 // Deprecated: This property is deprecated in favor of property rx_names
 //
+// Deprecated: This property is deprecated in favor of property rx_names
+//
 // The unique name of a port that is the intended receive port.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -361,6 +387,10 @@ func (obj *flowPort) SetRxName(value string) FlowPort {
 // - /components/schemas/Port/properties/name
 // - /components/schemas/Lag/properties/name
 //
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
+//
 // RxNames returns a []string
 func (obj *flowPort) RxNames() []string {
 	if obj.obj.RxNames == nil {
@@ -370,6 +400,10 @@ func (obj *flowPort) RxNames() []string {
 }
 
 // Unique name of ports or lags that are intended receive endpoints.
+//
+// x-constraint:
+// - /components/schemas/Port/properties/name
+// - /components/schemas/Lag/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

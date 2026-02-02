@@ -280,6 +280,10 @@ type BmpServerMetricsRequest interface {
 // - /components/schemas/Device.Bmp.ServerV4/properties/name
 // - /components/schemas/Device.Bmp.ServerV6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Bmp.ServerV4/properties/name
+// - /components/schemas/Device.Bmp.ServerV6/properties/name
+//
 // ServerNames returns a []string
 func (obj *bmpServerMetricsRequest) ServerNames() []string {
 	if obj.obj.ServerNames == nil {
@@ -289,6 +293,10 @@ func (obj *bmpServerMetricsRequest) ServerNames() []string {
 }
 
 // The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.
+//
+// x-constraint:
+// - /components/schemas/Device.Bmp.ServerV4/properties/name
+// - /components/schemas/Device.Bmp.ServerV6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Bmp.ServerV4/properties/name

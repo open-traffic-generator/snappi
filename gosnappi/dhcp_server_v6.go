@@ -328,6 +328,9 @@ func (obj *dhcpServerV6) SetName(value string) DhcpServerV6 {
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name
 //
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
+//
 // Ipv6Name returns a string
 func (obj *dhcpServerV6) Ipv6Name() string {
 
@@ -336,6 +339,9 @@ func (obj *dhcpServerV6) Ipv6Name() string {
 }
 
 // The unique name of the IPv6 on which DHCPv6 server will run.
+//
+// x-constraint:
+// - /components/schemas/Device.Ipv6/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

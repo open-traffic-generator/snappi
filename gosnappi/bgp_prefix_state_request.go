@@ -295,6 +295,10 @@ type BgpPrefixStateRequest interface {
 // - /components/schemas/Bgp.V4Peer/properties/name
 // - /components/schemas/Bgp.V6Peer/properties/name
 //
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
+//
 // BgpPeerNames returns a []string
 func (obj *bgpPrefixStateRequest) BgpPeerNames() []string {
 	if obj.obj.BgpPeerNames == nil {
@@ -304,6 +308,10 @@ func (obj *bgpPrefixStateRequest) BgpPeerNames() []string {
 }
 
 // The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
+//
+// x-constraint:
+// - /components/schemas/Bgp.V4Peer/properties/name
+// - /components/schemas/Bgp.V6Peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V4Peer/properties/name
@@ -324,15 +332,11 @@ type BgpPrefixStateRequestPrefixFiltersEnum string
 
 // Enum of PrefixFilters on BgpPrefixStateRequest
 var BgpPrefixStateRequestPrefixFilters = struct {
-	IPV4_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
-	IPV6_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
-	IPV4_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
-	IPV6_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV4_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
 }{
-	IPV4_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
-	IPV6_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
-	IPV4_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_mpls_unicast"),
-	IPV6_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_mpls_unicast"),
+	IPV4_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
+	IPV6_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
 }
 
 func (obj *bgpPrefixStateRequest) PrefixFilters() []BgpPrefixStateRequestPrefixFiltersEnum {
