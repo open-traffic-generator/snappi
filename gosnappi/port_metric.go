@@ -13,9 +13,10 @@ import (
 // ***** PortMetric *****
 type portMetric struct {
 	validation
-	obj          *otg.PortMetric
-	marshaller   marshalPortMetric
-	unMarshaller unMarshalPortMetric
+	obj                 *otg.PortMetric
+	marshaller          marshalPortMetric
+	unMarshaller        unMarshalPortMetric
+	dataIntegrityHolder MetricDataIntegrity
 }
 
 func NewPortMetric() PortMetric {
@@ -29,7 +30,7 @@ func (obj *portMetric) msg() *otg.PortMetric {
 }
 
 func (obj *portMetric) setMsg(msg *otg.PortMetric) PortMetric {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalportMetric) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalportMetric) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalportMetric) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -240,6 +241,13 @@ func (obj *portMetric) Clone() (PortMetric, error) {
 		return nil, pbErr
 	}
 	return newObj, nil
+}
+
+func (obj *portMetric) setNil() {
+	obj.dataIntegrityHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // PortMetric is description is TBD
@@ -348,12 +356,20 @@ type PortMetric interface {
 	SetLastChange(value uint64) PortMetric
 	// HasLastChange checks if LastChange has been set in PortMetric
 	HasLastChange() bool
+	// DataIntegrity returns MetricDataIntegrity, set in PortMetric.
+	// MetricDataIntegrity is the container for data integrity metrics.
+	// The container will be empty if the global option for data integrity check has not been enabled.
+	DataIntegrity() MetricDataIntegrity
+	// SetDataIntegrity assigns MetricDataIntegrity provided by user to PortMetric.
+	// MetricDataIntegrity is the container for data integrity metrics.
+	// The container will be empty if the global option for data integrity check has not been enabled.
+	SetDataIntegrity(value MetricDataIntegrity) PortMetric
+	// HasDataIntegrity checks if DataIntegrity has been set in PortMetric
+	HasDataIntegrity() bool
+	setNil()
 }
 
 // The name of a configured port
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -370,18 +386,12 @@ func (obj *portMetric) Name() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // Name returns a string
 func (obj *portMetric) HasName() bool {
 	return obj.obj.Name != nil
 }
 
 // The name of a configured port
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -727,9 +737,42 @@ func (obj *portMetric) SetLastChange(value uint64) PortMetric {
 	return obj
 }
 
+// description is TBD
+// DataIntegrity returns a MetricDataIntegrity
+func (obj *portMetric) DataIntegrity() MetricDataIntegrity {
+	if obj.obj.DataIntegrity == nil {
+		obj.obj.DataIntegrity = NewMetricDataIntegrity().msg()
+	}
+	if obj.dataIntegrityHolder == nil {
+		obj.dataIntegrityHolder = &metricDataIntegrity{obj: obj.obj.DataIntegrity}
+	}
+	return obj.dataIntegrityHolder
+}
+
+// description is TBD
+// DataIntegrity returns a MetricDataIntegrity
+func (obj *portMetric) HasDataIntegrity() bool {
+	return obj.obj.DataIntegrity != nil
+}
+
+// description is TBD
+// SetDataIntegrity sets the MetricDataIntegrity value in the PortMetric object
+func (obj *portMetric) SetDataIntegrity(value MetricDataIntegrity) PortMetric {
+
+	obj.dataIntegrityHolder = nil
+	obj.obj.DataIntegrity = value.msg()
+
+	return obj
+}
+
 func (obj *portMetric) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.DataIntegrity != nil {
+
+		obj.DataIntegrity().validateObj(vObj, set_default)
 	}
 
 }
