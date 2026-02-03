@@ -148,6 +148,7 @@ from .snappi import BgpExtendedCommunity
 from .snappi import BgpExtendedCommunityTransitive2OctetAsType
 from .snappi import BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget
 from .snappi import BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+from .snappi import BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
 from .snappi import BgpExtendedCommunityTransitiveIpv4AddressType
 from .snappi import BgpExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
 from .snappi import BgpExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin
@@ -1502,6 +1503,7 @@ from .snappi import EgressOnlyTrackingTaggedMetricsFilter
 from .snappi import BmpServerMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
+from .snappi import MetricDataIntegrity
 from .snappi import PortMetricIter
 from .snappi import FlowMetric
 from .snappi import MetricTimestamp
@@ -1595,6 +1597,7 @@ from .snappi import ResultExtendedCommunityStructured
 from .snappi import ResultExtendedCommunityTransitive2OctetAsType
 from .snappi import ResultExtendedCommunityTransitive2OctetAsTypeRouteTarget
 from .snappi import ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+from .snappi import ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
 from .snappi import ResultExtendedCommunityTransitiveIpv4AddressType
 from .snappi import ResultExtendedCommunityTransitiveIpv4AddressTypeRouteTarget
 from .snappi import ResultExtendedCommunityTransitiveIpv4AddressTypeRouteOrigin

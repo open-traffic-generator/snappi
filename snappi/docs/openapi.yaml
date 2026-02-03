@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.43.0
+  version: 1.44.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -411,7 +411,7 @@ components:
           x-field-uid: 1
         data_integrity:
           description: |-
-            Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows and if set to true, it is reported in port statistics with  frame count for both tarnished and untarnished payload.
+            Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows across all ports and if set to true, it is reported in data integrity in port statistics with frame count both for frames with unmodified payload as frames_rx and for frames which has payload modified during transit as errors.
           type: boolean
           default: false
           x-field-uid: 2
@@ -5420,6 +5420,26 @@ components:
           format: uint32
           default: 1
           x-field-uid: 2
+    Bgp.ExtendedCommunity.Transitive2OctetAsType.LinkBandwidth:
+      description: |-
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+          type: integer
+          format: uint32
+          default: 100
+          maximum: 65535
+          x-field-uid: 1
+        bandwidth:
+          description: |-
+            Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and 1 Mbps is 1000 Kbps per second )
+          type: number
+          format: float
+          default: 0
+          x-field-uid: 2
     Bgp.ExtendedCommunity.Transitive2OctetAsType:
       description: "The Transitive Two-Octet AS-Specific Extended Community is sent\
         \ as type 0x00 .         "
@@ -5433,16 +5453,22 @@ components:
               x-field-uid: 1
             route_origin_subtype:
               x-field-uid: 2
+            link_bandwidth_subtype:
+              x-field-uid: 3
           x-field-uid: 1
           enum:
           - route_target_subtype
           - route_origin_subtype
+          - link_bandwidth_subtype
         route_target_subtype:
           x-field-uid: 2
           $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteTarget'
         route_origin_subtype:
           x-field-uid: 3
           $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin'
+        link_bandwidth_subtype:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Bgp.ExtendedCommunity.Transitive2OctetAsType.LinkBandwidth'
     Bgp.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin:
       description: |-
         The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.
@@ -19997,10 +20023,6 @@ components:
                 x-field-uid: 12
               last_change:
                 x-field-uid: 13
-              data_integrity_frames_rx:
-                x-field-uid: 14
-              data_integrity_errors:
-                x-field-uid: 15
             enum:
             - transmit
             - location
@@ -20015,8 +20037,6 @@ components:
             - bytes_tx_rate
             - bytes_rx_rate
             - last_change
-            - data_integrity_frames_rx
-            - data_integrity_errors
           x-field-uid: 2
     Port.Metric:
       type: object
@@ -20127,18 +20147,27 @@ components:
           type: integer
           format: uint64
           x-field-uid: 14
-        data_integrity_frames_rx:
+        data_integrity:
+          $ref: '#/components/schemas/Metric.DataIntegrity'
+          x-field-uid: 15
+    Metric.DataIntegrity:
+      description: |-
+        The container for data integrity metrics.
+        The container will be empty if the global option for data integrity check has not been enabled.
+      type: object
+      properties:
+        frames_rx:
           description: |-
             The current total number of valid frames received with payload intact
           type: integer
           format: uint64
-          x-field-uid: 15
-        data_integrity_errors:
+          x-field-uid: 1
+        errors:
           description: |-
             The current total number of valid frames received with payload modified
           type: integer
           format: uint64
-          x-field-uid: 16
+          x-field-uid: 2
     Flow.Metrics.Request:
       description: |-
         The container for a flow metric request.
@@ -25549,6 +25578,24 @@ components:
           type: integer
           format: uint32
           x-field-uid: 2
+    Result.ExtendedCommunity.Transitive2OctetAsType.LinkBandwidth:
+      description: |-
+        The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+      type: object
+      properties:
+        global_2byte_as:
+          description: |-
+            The value of the Global Administrator subfield should represent the Autonomous System of the router that attaches the Link Bandwidth Community. If four octet AS numbering scheme is used, AS_TRANS (23456) should be used.
+          type: integer
+          format: uint32
+          maximum: 65535
+          x-field-uid: 1
+        bandwidth:
+          description: |-
+            Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and 1 Mbps is 1000 Kbps per second )
+          type: number
+          format: float
+          x-field-uid: 2
     Result.ExtendedCommunity.Transitive2OctetAsType:
       description: "The Transitive Two-Octet AS-Specific Extended Community is sent\
         \ as type 0x00 .         "
@@ -25561,16 +25608,22 @@ components:
               x-field-uid: 1
             route_origin_subtype:
               x-field-uid: 2
+            link_bandwidth_subtype:
+              x-field-uid: 3
           x-field-uid: 1
           enum:
           - route_target_subtype
           - route_origin_subtype
+          - link_bandwidth_subtype
         route_target_subtype:
           x-field-uid: 2
           $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType.RouteTarget'
         route_origin_subtype:
           x-field-uid: 3
           $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType.RouteOrigin'
+        link_bandwidth_subtype:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Result.ExtendedCommunity.Transitive2OctetAsType.LinkBandwidth'
     Result.ExtendedCommunity.TransitiveIpv4AddressType.RouteOrigin:
       description: |-
         The Route Origin Community identifies one or more routers that inject a set of routes (that carry this Community) into BGP It is sent with sub-type as 0x03.

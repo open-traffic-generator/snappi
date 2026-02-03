@@ -300,7 +300,7 @@ func (obj *portOptions) SetLocationPreemption(value bool) PortOptions {
 	return obj
 }
 
-// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows and if set to true, it is reported in port statistics with  frame count for both tarnished and untarnished payload.
+// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows across all ports and if set to true, it is reported in data integrity in port statistics with frame count both for frames with unmodified payload as frames_rx and for frames which has payload modified during transit as errors.
 // DataIntegrity returns a bool
 func (obj *portOptions) DataIntegrity() bool {
 
@@ -308,13 +308,13 @@ func (obj *portOptions) DataIntegrity() bool {
 
 }
 
-// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows and if set to true, it is reported in port statistics with  frame count for both tarnished and untarnished payload.
+// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows across all ports and if set to true, it is reported in data integrity in port statistics with frame count both for frames with unmodified payload as frames_rx and for frames which has payload modified during transit as errors.
 // DataIntegrity returns a bool
 func (obj *portOptions) HasDataIntegrity() bool {
 	return obj.obj.DataIntegrity != nil
 }
 
-// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows and if set to true, it is reported in port statistics with  frame count for both tarnished and untarnished payload.
+// Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows across all ports and if set to true, it is reported in data integrity in port statistics with frame count both for frames with unmodified payload as frames_rx and for frames which has payload modified during transit as errors.
 // SetDataIntegrity sets the bool value in the PortOptions object
 func (obj *portOptions) SetDataIntegrity(value bool) PortOptions {
 

@@ -307,37 +307,33 @@ type PortMetricsRequestColumnNamesEnum string
 
 // Enum of ColumnNames on PortMetricsRequest
 var PortMetricsRequestColumnNames = struct {
-	TRANSMIT                 PortMetricsRequestColumnNamesEnum
-	LOCATION                 PortMetricsRequestColumnNamesEnum
-	LINK                     PortMetricsRequestColumnNamesEnum
-	CAPTURE                  PortMetricsRequestColumnNamesEnum
-	FRAMES_TX                PortMetricsRequestColumnNamesEnum
-	FRAMES_RX                PortMetricsRequestColumnNamesEnum
-	BYTES_TX                 PortMetricsRequestColumnNamesEnum
-	BYTES_RX                 PortMetricsRequestColumnNamesEnum
-	FRAMES_TX_RATE           PortMetricsRequestColumnNamesEnum
-	FRAMES_RX_RATE           PortMetricsRequestColumnNamesEnum
-	BYTES_TX_RATE            PortMetricsRequestColumnNamesEnum
-	BYTES_RX_RATE            PortMetricsRequestColumnNamesEnum
-	LAST_CHANGE              PortMetricsRequestColumnNamesEnum
-	DATA_INTEGRITY_FRAMES_RX PortMetricsRequestColumnNamesEnum
-	DATA_INTEGRITY_ERRORS    PortMetricsRequestColumnNamesEnum
+	TRANSMIT       PortMetricsRequestColumnNamesEnum
+	LOCATION       PortMetricsRequestColumnNamesEnum
+	LINK           PortMetricsRequestColumnNamesEnum
+	CAPTURE        PortMetricsRequestColumnNamesEnum
+	FRAMES_TX      PortMetricsRequestColumnNamesEnum
+	FRAMES_RX      PortMetricsRequestColumnNamesEnum
+	BYTES_TX       PortMetricsRequestColumnNamesEnum
+	BYTES_RX       PortMetricsRequestColumnNamesEnum
+	FRAMES_TX_RATE PortMetricsRequestColumnNamesEnum
+	FRAMES_RX_RATE PortMetricsRequestColumnNamesEnum
+	BYTES_TX_RATE  PortMetricsRequestColumnNamesEnum
+	BYTES_RX_RATE  PortMetricsRequestColumnNamesEnum
+	LAST_CHANGE    PortMetricsRequestColumnNamesEnum
 }{
-	TRANSMIT:                 PortMetricsRequestColumnNamesEnum("transmit"),
-	LOCATION:                 PortMetricsRequestColumnNamesEnum("location"),
-	LINK:                     PortMetricsRequestColumnNamesEnum("link"),
-	CAPTURE:                  PortMetricsRequestColumnNamesEnum("capture"),
-	FRAMES_TX:                PortMetricsRequestColumnNamesEnum("frames_tx"),
-	FRAMES_RX:                PortMetricsRequestColumnNamesEnum("frames_rx"),
-	BYTES_TX:                 PortMetricsRequestColumnNamesEnum("bytes_tx"),
-	BYTES_RX:                 PortMetricsRequestColumnNamesEnum("bytes_rx"),
-	FRAMES_TX_RATE:           PortMetricsRequestColumnNamesEnum("frames_tx_rate"),
-	FRAMES_RX_RATE:           PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
-	BYTES_TX_RATE:            PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
-	BYTES_RX_RATE:            PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
-	LAST_CHANGE:              PortMetricsRequestColumnNamesEnum("last_change"),
-	DATA_INTEGRITY_FRAMES_RX: PortMetricsRequestColumnNamesEnum("data_integrity_frames_rx"),
-	DATA_INTEGRITY_ERRORS:    PortMetricsRequestColumnNamesEnum("data_integrity_errors"),
+	TRANSMIT:       PortMetricsRequestColumnNamesEnum("transmit"),
+	LOCATION:       PortMetricsRequestColumnNamesEnum("location"),
+	LINK:           PortMetricsRequestColumnNamesEnum("link"),
+	CAPTURE:        PortMetricsRequestColumnNamesEnum("capture"),
+	FRAMES_TX:      PortMetricsRequestColumnNamesEnum("frames_tx"),
+	FRAMES_RX:      PortMetricsRequestColumnNamesEnum("frames_rx"),
+	BYTES_TX:       PortMetricsRequestColumnNamesEnum("bytes_tx"),
+	BYTES_RX:       PortMetricsRequestColumnNamesEnum("bytes_rx"),
+	FRAMES_TX_RATE: PortMetricsRequestColumnNamesEnum("frames_tx_rate"),
+	FRAMES_RX_RATE: PortMetricsRequestColumnNamesEnum("frames_rx_rate"),
+	BYTES_TX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
+	BYTES_RX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
+	LAST_CHANGE:    PortMetricsRequestColumnNamesEnum("last_change"),
 }
 
 func (obj *portMetricsRequest) ColumnNames() []PortMetricsRequestColumnNamesEnum {
