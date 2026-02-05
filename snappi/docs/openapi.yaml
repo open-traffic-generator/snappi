@@ -4239,13 +4239,14 @@ components:
           x-field-uid: 8
           $ref: '#/components/schemas/Bgp.LearnedInformationFilter'
         traditional_nlri_for_ipv4_routes:
-          description: "If set to true , all IPv4 routes are advertised using traditional\
-            \ or REACH_NLRI and withdrawn using UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3\
-            \ . This is applicable only for BGPv4 peers. By default (when set to false),\
-            \ all IPv4 routes are advertise using MP_REACH NLRI and withdrawn using\
-            \ MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3. "
+          description: "If set to false, all IPv4 routes are advertised using MP_REACH\
+            \ NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\
+            \  By default ( when set to true) , all IPv4 routes are advertised using\
+            \ traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined\
+            \ in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This\
+            \ is applicable only for BGPv4 peers.            "
           type: boolean
-          default: false
+          default: true
           x-field-uid: 16
         v4_routes:
           x-field-uid: 9
