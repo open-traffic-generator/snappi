@@ -276,10 +276,10 @@ type Rocev2V4Peer interface {
 	Name() string
 	// SetName assigns string provided by user to Rocev2V4Peer
 	SetName(value string) Rocev2V4Peer
-	// DestinationIpAddress returns string, set in Rocev2V4Peer.
-	DestinationIpAddress() string
-	// SetDestinationIpAddress assigns string provided by user to Rocev2V4Peer
-	SetDestinationIpAddress(value string) Rocev2V4Peer
+	// DestinationIpAddress returns []string, set in Rocev2V4Peer.
+	DestinationIpAddress() []string
+	// SetDestinationIpAddress assigns []string provided by user to Rocev2V4Peer
+	SetDestinationIpAddress(value []string) Rocev2V4Peer
 	// Qps returns Rocev2V4PeerRocev2QPsIterIter, set in Rocev2V4Peer
 	Qps() Rocev2V4PeerRocev2QPsIter
 	setNil()
@@ -302,18 +302,23 @@ func (obj *rocev2V4Peer) SetName(value string) Rocev2V4Peer {
 }
 
 // Specify the destination ip address.
-// DestinationIpAddress returns a string
-func (obj *rocev2V4Peer) DestinationIpAddress() string {
-
-	return *obj.obj.DestinationIpAddress
-
+// DestinationIpAddress returns a []string
+func (obj *rocev2V4Peer) DestinationIpAddress() []string {
+	if obj.obj.DestinationIpAddress == nil {
+		obj.obj.DestinationIpAddress = make([]string, 0)
+	}
+	return obj.obj.DestinationIpAddress
 }
 
 // Specify the destination ip address.
-// SetDestinationIpAddress sets the string value in the Rocev2V4Peer object
-func (obj *rocev2V4Peer) SetDestinationIpAddress(value string) Rocev2V4Peer {
+// SetDestinationIpAddress sets the []string value in the Rocev2V4Peer object
+func (obj *rocev2V4Peer) SetDestinationIpAddress(value []string) Rocev2V4Peer {
 
-	obj.obj.DestinationIpAddress = &value
+	if obj.obj.DestinationIpAddress == nil {
+		obj.obj.DestinationIpAddress = make([]string, 0)
+	}
+	obj.obj.DestinationIpAddress = value
+
 	return obj
 }
 
@@ -414,13 +419,9 @@ func (obj *rocev2V4Peer) validateObj(vObj *validation, set_default bool) {
 		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface Rocev2V4Peer")
 	}
 
-	// DestinationIpAddress is required
-	if obj.obj.DestinationIpAddress == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "DestinationIpAddress is required field on interface Rocev2V4Peer")
-	}
 	if obj.obj.DestinationIpAddress != nil {
 
-		err := obj.validateIpv4(obj.DestinationIpAddress())
+		err := obj.validateIpv4Slice(obj.DestinationIpAddress())
 		if err != nil {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Rocev2V4Peer.DestinationIpAddress"))
 		}
