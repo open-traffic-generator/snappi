@@ -18,6 +18,7 @@ type secureEntityDataPlaneEncapsulation struct {
 	unMarshaller       unMarshalSecureEntityDataPlaneEncapsulation
 	txHolder           SecureEntityDataPlaneTx
 	rxHolder           SecureEntityDataPlaneRx
+	vlanOptionsHolder  SecureEntityVlanOptions
 	cryptoEngineHolder SecureEntityCryptoEngine
 }
 
@@ -248,6 +249,7 @@ func (obj *secureEntityDataPlaneEncapsulation) Clone() (SecureEntityDataPlaneEnc
 func (obj *secureEntityDataPlaneEncapsulation) setNil() {
 	obj.txHolder = nil
 	obj.rxHolder = nil
+	obj.vlanOptionsHolder = nil
 	obj.cryptoEngineHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -292,6 +294,14 @@ type SecureEntityDataPlaneEncapsulation interface {
 	SetRx(value SecureEntityDataPlaneRx) SecureEntityDataPlaneEncapsulation
 	// HasRx checks if Rx has been set in SecureEntityDataPlaneEncapsulation
 	HasRx() bool
+	// VlanOptions returns SecureEntityVlanOptions, set in SecureEntityDataPlaneEncapsulation.
+	// SecureEntityVlanOptions is a container for VLAN options of SecY.
+	VlanOptions() SecureEntityVlanOptions
+	// SetVlanOptions assigns SecureEntityVlanOptions provided by user to SecureEntityDataPlaneEncapsulation.
+	// SecureEntityVlanOptions is a container for VLAN options of SecY.
+	SetVlanOptions(value SecureEntityVlanOptions) SecureEntityDataPlaneEncapsulation
+	// HasVlanOptions checks if VlanOptions has been set in SecureEntityDataPlaneEncapsulation
+	HasVlanOptions() bool
 	// CryptoEngine returns SecureEntityCryptoEngine, set in SecureEntityDataPlaneEncapsulation.
 	// SecureEntityCryptoEngine is a container of crypto engine properties of a SecY.
 	CryptoEngine() SecureEntityCryptoEngine
@@ -357,6 +367,34 @@ func (obj *secureEntityDataPlaneEncapsulation) SetRx(value SecureEntityDataPlane
 	return obj
 }
 
+// VLAN options of SecY.
+// VlanOptions returns a SecureEntityVlanOptions
+func (obj *secureEntityDataPlaneEncapsulation) VlanOptions() SecureEntityVlanOptions {
+	if obj.obj.VlanOptions == nil {
+		obj.obj.VlanOptions = NewSecureEntityVlanOptions().msg()
+	}
+	if obj.vlanOptionsHolder == nil {
+		obj.vlanOptionsHolder = &secureEntityVlanOptions{obj: obj.obj.VlanOptions}
+	}
+	return obj.vlanOptionsHolder
+}
+
+// VLAN options of SecY.
+// VlanOptions returns a SecureEntityVlanOptions
+func (obj *secureEntityDataPlaneEncapsulation) HasVlanOptions() bool {
+	return obj.obj.VlanOptions != nil
+}
+
+// VLAN options of SecY.
+// SetVlanOptions sets the SecureEntityVlanOptions value in the SecureEntityDataPlaneEncapsulation object
+func (obj *secureEntityDataPlaneEncapsulation) SetVlanOptions(value SecureEntityVlanOptions) SecureEntityDataPlaneEncapsulation {
+
+	obj.vlanOptionsHolder = nil
+	obj.obj.VlanOptions = value.msg()
+
+	return obj
+}
+
 // Crypto engine properties of SecY.
 // CryptoEngine returns a SecureEntityCryptoEngine
 func (obj *secureEntityDataPlaneEncapsulation) CryptoEngine() SecureEntityCryptoEngine {
@@ -392,6 +430,11 @@ func (obj *secureEntityDataPlaneEncapsulation) validateObj(vObj *validation, set
 	if obj.obj.Rx != nil {
 
 		obj.Rx().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.VlanOptions != nil {
+
+		obj.VlanOptions().validateObj(vObj, set_default)
 	}
 
 	// CryptoEngine is required
