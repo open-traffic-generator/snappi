@@ -341,6 +341,10 @@ func (obj *validation) validateIpv4(ip string) error {
 
 func (obj *validation) validateIpv6(ip string) error {
 	ip = strings.Trim(ip, " \t")
+	// Check for IPv4-mapped IPv6 addresses (e.g., ::ffff:192.0.2.1)
+	if len(ip) > 7 && strings.EqualFold(ip[:7], "::ffff:") {
+		return obj.validateIpv4(ip[7:])
+	}
 	if strings.Count(ip, " ") > 0 || strings.Count(ip, ":") > 7 ||
 		strings.Count(ip, "::") > 1 || strings.Count(ip, ":::") > 0 ||
 		strings.Count(ip, ":") == 0 {
