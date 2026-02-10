@@ -15342,16 +15342,15 @@ message PortMetric {
   MetricDataIntegrity data_integrity = 15;
 }
 
-// The container for data integrity metrics.
-// The container will be empty if the global option for data integrity check has not
-// been enabled.
+// The container for data integrity metrics. The container will be empty if
+// options.port_options.data_integrity has not been enabled during set_config.
 message MetricDataIntegrity {
 
-  // The current total number of valid frames received with payload intact
-  optional uint64 frames_rx = 1;
+  // The total number of data integrity enabled frames received with payload intact
+  optional uint64 valid_frames_rx = 1;
 
-  // The current total number of valid frames received with payload modified
-  optional uint64 errors = 2;
+  // The total number of data integrity enabled frames received with payload modified
+  optional uint64 error_frames_rx = 2;
 }
 
 // The container for a flow metric request.

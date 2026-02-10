@@ -20151,20 +20151,20 @@ components:
           $ref: '#/components/schemas/Metric.DataIntegrity'
           x-field-uid: 15
     Metric.DataIntegrity:
-      description: |-
-        The container for data integrity metrics.
-        The container will be empty if the global option for data integrity check has not been enabled.
+      description: "The container for data integrity metrics. The container will be\
+        \ empty if \noptions.port_options.data_integrity has not been enabled during\
+        \ set_config."
       type: object
       properties:
-        frames_rx:
+        valid_frames_rx:
           description: |-
-            The current total number of valid frames received with payload intact
+            The total number of data integrity enabled frames received with payload intact
           type: integer
           format: uint64
           x-field-uid: 1
-        errors:
+        error_frames_rx:
           description: |-
-            The current total number of valid frames received with payload modified
+            The total number of data integrity enabled frames received with payload modified
           type: integer
           format: uint64
           x-field-uid: 2

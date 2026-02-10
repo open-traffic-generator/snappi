@@ -357,12 +357,12 @@ type PortMetric interface {
 	// HasLastChange checks if LastChange has been set in PortMetric
 	HasLastChange() bool
 	// DataIntegrity returns MetricDataIntegrity, set in PortMetric.
-	// MetricDataIntegrity is the container for data integrity metrics.
-	// The container will be empty if the global option for data integrity check has not been enabled.
+	// MetricDataIntegrity is the container for data integrity metrics. The container will be empty if
+	// options.port_options.data_integrity has not been enabled during set_config.
 	DataIntegrity() MetricDataIntegrity
 	// SetDataIntegrity assigns MetricDataIntegrity provided by user to PortMetric.
-	// MetricDataIntegrity is the container for data integrity metrics.
-	// The container will be empty if the global option for data integrity check has not been enabled.
+	// MetricDataIntegrity is the container for data integrity metrics. The container will be empty if
+	// options.port_options.data_integrity has not been enabled during set_config.
 	SetDataIntegrity(value MetricDataIntegrity) PortMetric
 	// HasDataIntegrity checks if DataIntegrity has been set in PortMetric
 	HasDataIntegrity() bool
