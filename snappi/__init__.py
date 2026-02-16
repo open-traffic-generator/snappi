@@ -1503,6 +1503,7 @@ from .snappi import EgressOnlyTrackingTaggedMetricsFilter
 from .snappi import BmpServerMetricsRequest
 from .snappi import MetricsResponse
 from .snappi import PortMetric
+from .snappi import MetricDataIntegrity
 from .snappi import PortMetricIter
 from .snappi import FlowMetric
 from .snappi import MetricTimestamp
