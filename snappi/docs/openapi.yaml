@@ -409,6 +409,12 @@ components:
           type: boolean
           default: false
           x-field-uid: 1
+        data_integrity:
+          description: |-
+            Check and validate that flow payload has not been modified when received on Rx port. It applies to all flows across all ports and if set to true, it is reported in data integrity in port statistics with frame count both for frames with unmodified payload as frames_rx and for frames which has payload modified during transit as errors.
+          type: boolean
+          default: false
+          x-field-uid: 2
     Lag:
       description: |-
         The container for LAG (ports group) - aggregation of multiple LAG members (ports)
@@ -20153,6 +20159,27 @@ components:
           type: integer
           format: uint64
           x-field-uid: 14
+        data_integrity:
+          $ref: '#/components/schemas/Metric.DataIntegrity'
+          x-field-uid: 15
+    Metric.DataIntegrity:
+      description: "The container for data integrity metrics. The container will be\
+        \ empty if \noptions.port_options.data_integrity has not been enabled during\
+        \ set_config."
+      type: object
+      properties:
+        total_frames_rx:
+          description: |-
+            The total number of data integrity enabled frames received
+          type: integer
+          format: uint64
+          x-field-uid: 1
+        error_frames_rx:
+          description: |-
+            The total number of data integrity enabled frames received with payload modified
+          type: integer
+          format: uint64
+          x-field-uid: 2
     Flow.Metrics.Request:
       description: |-
         The container for a flow metric request.

@@ -106,6 +106,13 @@ message PortOptions {
   // true, the test ports will be preempted.
   // default = False
   optional bool location_preemption = 1;
+
+  // Check and validate that flow payload has not been modified when received on Rx port.
+  // It applies to all flows across all ports and if set to true, it is reported in data
+  // integrity in port statistics with frame count both for frames with unmodified payload
+  // as frames_rx and for frames which has payload modified during transit as errors.
+  // default = False
+  optional bool data_integrity = 2;
 }
 
 // The container for LAG (ports group) - aggregation of multiple LAG members (ports)
@@ -15340,6 +15347,20 @@ message PortMetric {
   // The value is the timestamp in nanoseconds relative to
   // the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
   optional uint64 last_change = 14;
+
+  // Description missing in models
+  MetricDataIntegrity data_integrity = 15;
+}
+
+// The container for data integrity metrics. The container will be empty if
+// options.port_options.data_integrity has not been enabled during set_config.
+message MetricDataIntegrity {
+
+  // The total number of data integrity enabled frames received
+  optional uint64 total_frames_rx = 1;
+
+  // The total number of data integrity enabled frames received with payload modified
+  optional uint64 error_frames_rx = 2;
 }
 
 // The container for a flow metric request.
