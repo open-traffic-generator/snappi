@@ -265,12 +265,12 @@ type MetricDataIntegrity interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// ValidFramesRx returns uint64, set in MetricDataIntegrity.
-	ValidFramesRx() uint64
-	// SetValidFramesRx assigns uint64 provided by user to MetricDataIntegrity
-	SetValidFramesRx(value uint64) MetricDataIntegrity
-	// HasValidFramesRx checks if ValidFramesRx has been set in MetricDataIntegrity
-	HasValidFramesRx() bool
+	// TotalFramesRx returns uint64, set in MetricDataIntegrity.
+	TotalFramesRx() uint64
+	// SetTotalFramesRx assigns uint64 provided by user to MetricDataIntegrity
+	SetTotalFramesRx(value uint64) MetricDataIntegrity
+	// HasTotalFramesRx checks if TotalFramesRx has been set in MetricDataIntegrity
+	HasTotalFramesRx() bool
 	// ErrorFramesRx returns uint64, set in MetricDataIntegrity.
 	ErrorFramesRx() uint64
 	// SetErrorFramesRx assigns uint64 provided by user to MetricDataIntegrity
@@ -279,25 +279,25 @@ type MetricDataIntegrity interface {
 	HasErrorFramesRx() bool
 }
 
-// The total number of data integrity enabled frames received with payload intact
-// ValidFramesRx returns a uint64
-func (obj *metricDataIntegrity) ValidFramesRx() uint64 {
+// The total number of data integrity enabled frames received
+// TotalFramesRx returns a uint64
+func (obj *metricDataIntegrity) TotalFramesRx() uint64 {
 
-	return *obj.obj.ValidFramesRx
+	return *obj.obj.TotalFramesRx
 
 }
 
-// The total number of data integrity enabled frames received with payload intact
-// ValidFramesRx returns a uint64
-func (obj *metricDataIntegrity) HasValidFramesRx() bool {
-	return obj.obj.ValidFramesRx != nil
+// The total number of data integrity enabled frames received
+// TotalFramesRx returns a uint64
+func (obj *metricDataIntegrity) HasTotalFramesRx() bool {
+	return obj.obj.TotalFramesRx != nil
 }
 
-// The total number of data integrity enabled frames received with payload intact
-// SetValidFramesRx sets the uint64 value in the MetricDataIntegrity object
-func (obj *metricDataIntegrity) SetValidFramesRx(value uint64) MetricDataIntegrity {
+// The total number of data integrity enabled frames received
+// SetTotalFramesRx sets the uint64 value in the MetricDataIntegrity object
+func (obj *metricDataIntegrity) SetTotalFramesRx(value uint64) MetricDataIntegrity {
 
-	obj.obj.ValidFramesRx = &value
+	obj.obj.TotalFramesRx = &value
 	return obj
 }
 

@@ -20156,9 +20156,9 @@ components:
         \ set_config."
       type: object
       properties:
-        valid_frames_rx:
+        total_frames_rx:
           description: |-
-            The total number of data integrity enabled frames received with payload intact
+            The total number of data integrity enabled frames received
           type: integer
           format: uint64
           x-field-uid: 1

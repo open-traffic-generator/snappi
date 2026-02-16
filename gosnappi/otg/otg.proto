@@ -15346,8 +15346,8 @@ message PortMetric {
 // options.port_options.data_integrity has not been enabled during set_config.
 message MetricDataIntegrity {
 
-  // The total number of data integrity enabled frames received with payload intact
-  optional uint64 valid_frames_rx = 1;
+  // The total number of data integrity enabled frames received
+  optional uint64 total_frames_rx = 1;
 
   // The total number of data integrity enabled frames received with payload modified
   optional uint64 error_frames_rx = 2;
