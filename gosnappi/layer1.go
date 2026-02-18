@@ -284,6 +284,12 @@ type Layer1 interface {
 	SetSpeed(value Layer1SpeedEnum) Layer1
 	// HasSpeed checks if Speed has been set in Layer1
 	HasSpeed() bool
+	// Mode returns Layer1ModeEnum, set in Layer1
+	Mode() Layer1ModeEnum
+	// SetMode assigns Layer1ModeEnum provided by user to Layer1
+	SetMode(value Layer1ModeEnum) Layer1
+	// HasMode checks if Mode has been set in Layer1
+	HasMode() bool
 	// Media returns Layer1MediaEnum, set in Layer1
 	Media() Layer1MediaEnum
 	// SetMedia assigns Layer1MediaEnum provided by user to Layer1
@@ -347,9 +353,6 @@ type Layer1 interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *layer1) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -360,9 +363,6 @@ func (obj *layer1) PortNames() []string {
 
 // A list of unique names of port objects that will share the
 // choice settings.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name
@@ -431,6 +431,41 @@ func (obj *layer1) SetSpeed(value Layer1SpeedEnum) Layer1 {
 	}
 	enumValue := otg.Layer1_Speed_Enum(intValue)
 	obj.obj.Speed = &enumValue
+
+	return obj
+}
+
+type Layer1ModeEnum string
+
+// Enum of Mode on Layer1
+var Layer1Mode = struct {
+	MODE_MACSEC_128 Layer1ModeEnum
+	MODE_MACSEC_256 Layer1ModeEnum
+}{
+	MODE_MACSEC_128: Layer1ModeEnum("mode_macsec_128"),
+	MODE_MACSEC_256: Layer1ModeEnum("mode_macsec_256"),
+}
+
+func (obj *layer1) Mode() Layer1ModeEnum {
+	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
+}
+
+// Set the mode if supported. When no mode is explicitly set, the current
+// mode of underlying test interface shall be assumed.
+// Mode returns a string
+func (obj *layer1) HasMode() bool {
+	return obj.obj.Mode != nil
+}
+
+func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
+	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Layer1ModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Layer1_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
 
 	return obj
 }
@@ -528,8 +563,6 @@ func (obj *layer1) SetMtu(value uint32) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -541,8 +574,6 @@ func (obj *layer1) IeeeMediaDefaults() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases
 //
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Set to true to override the auto_negotiate, link_training
 // and rs_fec settings for gigabit ethernet interfaces.
 // IeeeMediaDefaults returns a bool
@@ -550,8 +581,6 @@ func (obj *layer1) HasIeeeMediaDefaults() bool {
 	return obj.obj.IeeeMediaDefaults != nil
 }
 
-// Under Review: This field is currently under review for pending exploration on use cases
-//
 // Under Review: This field is currently under review for pending exploration on use cases
 //
 // Set to true to override the auto_negotiate, link_training
@@ -565,8 +594,6 @@ func (obj *layer1) SetIeeeMediaDefaults(value bool) Layer1 {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) AutoNegotiate() bool {
@@ -577,16 +604,12 @@ func (obj *layer1) AutoNegotiate() bool {
 
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Enable/disable auto negotiation.
 // AutoNegotiate returns a bool
 func (obj *layer1) HasAutoNegotiate() bool {
 	return obj.obj.AutoNegotiate != nil
 }
 
-// Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-//
 // Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 //
 // Enable/disable auto negotiation.

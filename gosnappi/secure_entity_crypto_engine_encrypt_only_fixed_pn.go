@@ -339,11 +339,11 @@ func (obj *secureEntityCryptoEngineEncryptOnlyFixedPn) validateObj(vObj *validat
 
 	if obj.obj.Xpn != nil {
 
-		if len(*obj.obj.Xpn) < 1 || len(*obj.obj.Xpn) > 16 {
+		if len(*obj.obj.Xpn) < 1 || len(*obj.obj.Xpn) > 18 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf(
-					"1 <= length of SecureEntityCryptoEngineEncryptOnlyFixedPn.Xpn <= 16 but Got %d",
+					"1 <= length of SecureEntityCryptoEngineEncryptOnlyFixedPn.Xpn <= 18 but Got %d",
 					len(*obj.obj.Xpn)))
 		}
 
@@ -356,7 +356,7 @@ func (obj *secureEntityCryptoEngineEncryptOnlyFixedPn) setDefault() {
 		obj.SetPn(6)
 	}
 	if obj.obj.Xpn == nil {
-		obj.SetXpn("0x06")
+		obj.SetXpn("0x0000000000000006")
 	}
 
 }

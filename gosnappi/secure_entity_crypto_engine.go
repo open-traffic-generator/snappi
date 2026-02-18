@@ -13,10 +13,11 @@ import (
 // ***** SecureEntityCryptoEngine *****
 type secureEntityCryptoEngine struct {
 	validation
-	obj               *otg.SecureEntityCryptoEngine
-	marshaller        marshalSecureEntityCryptoEngine
-	unMarshaller      unMarshalSecureEntityCryptoEngine
-	encryptOnlyHolder SecureEntityCryptoEngineEncryptOnly
+	obj                  *otg.SecureEntityCryptoEngine
+	marshaller           marshalSecureEntityCryptoEngine
+	unMarshaller         unMarshalSecureEntityCryptoEngine
+	encryptOnlyHolder    SecureEntityCryptoEngineEncryptOnly
+	encryptDecryptHolder SecureEntityCryptoEngineEncryptDecrypt
 }
 
 func NewSecureEntityCryptoEngine() SecureEntityCryptoEngine {
@@ -245,6 +246,7 @@ func (obj *secureEntityCryptoEngine) Clone() (SecureEntityCryptoEngine, error) {
 
 func (obj *secureEntityCryptoEngine) setNil() {
 	obj.encryptOnlyHolder = nil
+	obj.encryptDecryptHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -286,6 +288,14 @@ type SecureEntityCryptoEngine interface {
 	SetEncryptOnly(value SecureEntityCryptoEngineEncryptOnly) SecureEntityCryptoEngine
 	// HasEncryptOnly checks if EncryptOnly has been set in SecureEntityCryptoEngine
 	HasEncryptOnly() bool
+	// EncryptDecrypt returns SecureEntityCryptoEngineEncryptDecrypt, set in SecureEntityCryptoEngine.
+	// SecureEntityCryptoEngineEncryptDecrypt is the container for encrypt and decrypt engine configuration.
+	EncryptDecrypt() SecureEntityCryptoEngineEncryptDecrypt
+	// SetEncryptDecrypt assigns SecureEntityCryptoEngineEncryptDecrypt provided by user to SecureEntityCryptoEngine.
+	// SecureEntityCryptoEngineEncryptDecrypt is the container for encrypt and decrypt engine configuration.
+	SetEncryptDecrypt(value SecureEntityCryptoEngineEncryptDecrypt) SecureEntityCryptoEngine
+	// HasEncryptDecrypt checks if EncryptDecrypt has been set in SecureEntityCryptoEngine
+	HasEncryptDecrypt() bool
 	setNil()
 }
 
@@ -293,16 +303,18 @@ type SecureEntityCryptoEngineChoiceEnum string
 
 // Enum of Choice on SecureEntityCryptoEngine
 var SecureEntityCryptoEngineChoice = struct {
-	ENCRYPT_ONLY SecureEntityCryptoEngineChoiceEnum
+	ENCRYPT_ONLY    SecureEntityCryptoEngineChoiceEnum
+	ENCRYPT_DECRYPT SecureEntityCryptoEngineChoiceEnum
 }{
-	ENCRYPT_ONLY: SecureEntityCryptoEngineChoiceEnum("encrypt_only"),
+	ENCRYPT_ONLY:    SecureEntityCryptoEngineChoiceEnum("encrypt_only"),
+	ENCRYPT_DECRYPT: SecureEntityCryptoEngineChoiceEnum("encrypt_decrypt"),
 }
 
 func (obj *secureEntityCryptoEngine) Choice() SecureEntityCryptoEngineChoiceEnum {
 	return SecureEntityCryptoEngineChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// Engine type based on encryption and/ or decryption capability. Supported types: encrypt_only - engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent.
+// Engine type based on encryption and/ or decryption capability. Supported types: 1) encrypt_only - engine can only encrypt transmitted packets but it cannot decrypt packets upon arrival. As the packets cannot be decrypted on arrival, such packets cannot be delivered to the receiving device. Hence only stateless traffic can be sent. 2) encrypt_decrypt - engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
 // Choice returns a string
 func (obj *secureEntityCryptoEngine) HasChoice() bool {
 	return obj.obj.Choice != nil
@@ -317,11 +329,17 @@ func (obj *secureEntityCryptoEngine) setChoice(value SecureEntityCryptoEngineCho
 	}
 	enumValue := otg.SecureEntityCryptoEngine_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.EncryptDecrypt = nil
+	obj.encryptDecryptHolder = nil
 	obj.obj.EncryptOnly = nil
 	obj.encryptOnlyHolder = nil
 
 	if value == SecureEntityCryptoEngineChoice.ENCRYPT_ONLY {
 		obj.obj.EncryptOnly = NewSecureEntityCryptoEngineEncryptOnly().msg()
+	}
+
+	if value == SecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT {
+		obj.obj.EncryptDecrypt = NewSecureEntityCryptoEngineEncryptDecrypt().msg()
 	}
 
 	return obj
@@ -355,6 +373,34 @@ func (obj *secureEntityCryptoEngine) SetEncryptOnly(value SecureEntityCryptoEngi
 	return obj
 }
 
+// description is TBD
+// EncryptDecrypt returns a SecureEntityCryptoEngineEncryptDecrypt
+func (obj *secureEntityCryptoEngine) EncryptDecrypt() SecureEntityCryptoEngineEncryptDecrypt {
+	if obj.obj.EncryptDecrypt == nil {
+		obj.setChoice(SecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT)
+	}
+	if obj.encryptDecryptHolder == nil {
+		obj.encryptDecryptHolder = &secureEntityCryptoEngineEncryptDecrypt{obj: obj.obj.EncryptDecrypt}
+	}
+	return obj.encryptDecryptHolder
+}
+
+// description is TBD
+// EncryptDecrypt returns a SecureEntityCryptoEngineEncryptDecrypt
+func (obj *secureEntityCryptoEngine) HasEncryptDecrypt() bool {
+	return obj.obj.EncryptDecrypt != nil
+}
+
+// description is TBD
+// SetEncryptDecrypt sets the SecureEntityCryptoEngineEncryptDecrypt value in the SecureEntityCryptoEngine object
+func (obj *secureEntityCryptoEngine) SetEncryptDecrypt(value SecureEntityCryptoEngineEncryptDecrypt) SecureEntityCryptoEngine {
+	obj.setChoice(SecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT)
+	obj.encryptDecryptHolder = nil
+	obj.obj.EncryptDecrypt = value.msg()
+
+	return obj
+}
+
 func (obj *secureEntityCryptoEngine) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,6 +409,11 @@ func (obj *secureEntityCryptoEngine) validateObj(vObj *validation, set_default b
 	if obj.obj.EncryptOnly != nil {
 
 		obj.EncryptOnly().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.EncryptDecrypt != nil {
+
+		obj.EncryptDecrypt().validateObj(vObj, set_default)
 	}
 
 }
@@ -374,6 +425,11 @@ func (obj *secureEntityCryptoEngine) setDefault() {
 	if obj.obj.EncryptOnly != nil {
 		choices_set += 1
 		choice = SecureEntityCryptoEngineChoice.ENCRYPT_ONLY
+	}
+
+	if obj.obj.EncryptDecrypt != nil {
+		choices_set += 1
+		choice = SecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

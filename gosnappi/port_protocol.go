@@ -17,6 +17,7 @@ type portProtocol struct {
 	marshaller   marshalPortProtocol
 	unMarshaller unMarshalPortProtocol
 	rocev2Holder Rocev2PerPortSettings
+	macsecHolder MacsecPerPortSettings
 }
 
 func NewPortProtocol() PortProtocol {
@@ -245,6 +246,7 @@ func (obj *portProtocol) Clone() (PortProtocol, error) {
 
 func (obj *portProtocol) setNil() {
 	obj.rocev2Holder = nil
+	obj.macsecHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -286,6 +288,14 @@ type PortProtocol interface {
 	SetRocev2(value Rocev2PerPortSettings) PortProtocol
 	// HasRocev2 checks if Rocev2 has been set in PortProtocol
 	HasRocev2() bool
+	// Macsec returns MacsecPerPortSettings, set in PortProtocol.
+	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port.
+	Macsec() MacsecPerPortSettings
+	// SetMacsec assigns MacsecPerPortSettings provided by user to PortProtocol.
+	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port.
+	SetMacsec(value MacsecPerPortSettings) PortProtocol
+	// HasMacsec checks if Macsec has been set in PortProtocol
+	HasMacsec() bool
 	setNil()
 }
 
@@ -294,8 +304,10 @@ type PortProtocolChoiceEnum string
 // Enum of Choice on PortProtocol
 var PortProtocolChoice = struct {
 	ROCEV2 PortProtocolChoiceEnum
+	MACSEC PortProtocolChoiceEnum
 }{
 	ROCEV2: PortProtocolChoiceEnum("rocev2"),
+	MACSEC: PortProtocolChoiceEnum("macsec"),
 }
 
 func (obj *portProtocol) Choice() PortProtocolChoiceEnum {
@@ -317,11 +329,17 @@ func (obj *portProtocol) setChoice(value PortProtocolChoiceEnum) PortProtocol {
 	}
 	enumValue := otg.PortProtocol_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Macsec = nil
+	obj.macsecHolder = nil
 	obj.obj.Rocev2 = nil
 	obj.rocev2Holder = nil
 
 	if value == PortProtocolChoice.ROCEV2 {
 		obj.obj.Rocev2 = NewRocev2PerPortSettings().msg()
+	}
+
+	if value == PortProtocolChoice.MACSEC {
+		obj.obj.Macsec = NewMacsecPerPortSettings().msg()
 	}
 
 	return obj
@@ -355,6 +373,34 @@ func (obj *portProtocol) SetRocev2(value Rocev2PerPortSettings) PortProtocol {
 	return obj
 }
 
+// description is TBD
+// Macsec returns a MacsecPerPortSettings
+func (obj *portProtocol) Macsec() MacsecPerPortSettings {
+	if obj.obj.Macsec == nil {
+		obj.setChoice(PortProtocolChoice.MACSEC)
+	}
+	if obj.macsecHolder == nil {
+		obj.macsecHolder = &macsecPerPortSettings{obj: obj.obj.Macsec}
+	}
+	return obj.macsecHolder
+}
+
+// description is TBD
+// Macsec returns a MacsecPerPortSettings
+func (obj *portProtocol) HasMacsec() bool {
+	return obj.obj.Macsec != nil
+}
+
+// description is TBD
+// SetMacsec sets the MacsecPerPortSettings value in the PortProtocol object
+func (obj *portProtocol) SetMacsec(value MacsecPerPortSettings) PortProtocol {
+	obj.setChoice(PortProtocolChoice.MACSEC)
+	obj.macsecHolder = nil
+	obj.obj.Macsec = value.msg()
+
+	return obj
+}
+
 func (obj *portProtocol) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,6 +409,11 @@ func (obj *portProtocol) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Rocev2 != nil {
 
 		obj.Rocev2().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Macsec != nil {
+
+		obj.Macsec().validateObj(vObj, set_default)
 	}
 
 }
@@ -374,6 +425,11 @@ func (obj *portProtocol) setDefault() {
 	if obj.obj.Rocev2 != nil {
 		choices_set += 1
 		choice = PortProtocolChoice.ROCEV2
+	}
+
+	if obj.obj.Macsec != nil {
+		choices_set += 1
+		choice = PortProtocolChoice.MACSEC
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

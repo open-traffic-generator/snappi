@@ -404,6 +404,7 @@ from .snappi import SecureEntityDataPlane
 from .snappi import SecureEntityDataPlaneEncapsulation
 from .snappi import SecureEntityDataPlaneTx
 from .snappi import SecureEntityDataPlaneRx
+from .snappi import SecureEntityVlanOptions
 from .snappi import SecureEntityCryptoEngine
 from .snappi import SecureEntityCryptoEngineEncryptOnly
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxSc
@@ -412,6 +413,9 @@ from .snappi import SecureEntityCryptoEngineEncryptOnlyFixedPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyIncrementingPn
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxScIter
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTrafficOptions
+from .snappi import SecureEntityCryptoEngineEncryptDecrypt
+from .snappi import SecureEntityCryptoEngineEncryptDecryptTxPn
+from .snappi import SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 from .snappi import DeviceMacsecEthernetInterfaceIter
 from .snappi import DeviceOspfv3Router
 from .snappi import Ospfv3RouterId
@@ -1368,6 +1372,13 @@ from .snappi import Rocev2AckAndNak
 from .snappi import Rocev2ACK
 from .snappi import Rocev2NAK
 from .snappi import Rocev2DCQCN
+from .snappi import MacsecPerPortSettings
+from .snappi import MacsecHardwareAcceleration
+from .snappi import MacsecHardwareAccelerationInlineCrypto
+from .snappi import MacsecHardwareAccelerationInlineCryptoTypeOfCa
+from .snappi import MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCa
+from .snappi import MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipleDutTxSc
+from .snappi import MacsecValidateFrames
 from .snappi import PortProtocolIter
 from .snappi import PerPortOptionsIter
 from .snappi import Lldp
