@@ -397,7 +397,7 @@ func (obj *secureEntityCryptoEngineEncryptOnlyIncrementingPn) setDefault() {
 		obj.SetStartingPn(10000)
 	}
 	if obj.obj.StartingXpn == nil {
-		obj.SetStartingXpn("0x0000000000010000")
+		obj.SetStartingXpn("0x010000")
 	}
 
 }

@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.45.0
+/* Open Traffic Generator API 1.45.1
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -8644,7 +8644,7 @@ message SecureEntityCryptoEngineEncryptOnlyFixedPn {
 
   // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
   // sent out.
-  // default = 0x0000000000000006
+  // default = 0x06
   optional string xpn = 2;
 }
 
@@ -8660,7 +8660,7 @@ message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
   optional uint32 starting_pn = 2;
 
   // The starting extended packet number(XPN).
-  // default = 0x0000000000010000
+  // default = 0x010000
   optional string starting_xpn = 3;
 }
 

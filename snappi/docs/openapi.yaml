@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.45.0
+  version: 1.45.1
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -11519,7 +11519,7 @@ components:
           minLength: 1
           maxLength: 16
           minimum: 1
-          default: '0x0000000000000006'
+          default: '0x06'
           x-field-uid: 2
     SecureEntity.CryptoEngine.EncryptOnly.IncrementingPn:
       description: |-
@@ -11550,7 +11550,7 @@ components:
           minLength: 1
           maxLength: 16
           minimum: 1
-          default: '0x0000000000010000'
+          default: '0x010000'
           x-field-uid: 3
     SecureEntity.CryptoEngine.EncryptOnly.TrafficOptions:
       description: |-
@@ -17728,7 +17728,7 @@ components:
           description: |-
             Unit of the transfer message size. Available options are Bytes, KiloBtyes (KB), NegaBytes (MB) and GigaBytes (GB).
           type: string
-          default: MB
+          default: mb
           x-enum:
             bytes:
               x-field-uid: 1
