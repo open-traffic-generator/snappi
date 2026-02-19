@@ -348,16 +348,16 @@ type Rocev2FlowMetricPerQP interface {
 	SetRxBytes(value uint64) Rocev2FlowMetricPerQP
 	// HasRxBytes checks if RxBytes has been set in Rocev2FlowMetricPerQP
 	HasRxBytes() bool
-	// DataTxRate returns uint64, set in Rocev2FlowMetricPerQP.
-	DataTxRate() uint64
-	// SetDataTxRate assigns uint64 provided by user to Rocev2FlowMetricPerQP
-	SetDataTxRate(value uint64) Rocev2FlowMetricPerQP
+	// DataTxRate returns float32, set in Rocev2FlowMetricPerQP.
+	DataTxRate() float32
+	// SetDataTxRate assigns float32 provided by user to Rocev2FlowMetricPerQP
+	SetDataTxRate(value float32) Rocev2FlowMetricPerQP
 	// HasDataTxRate checks if DataTxRate has been set in Rocev2FlowMetricPerQP
 	HasDataTxRate() bool
-	// DataRxRate returns uint64, set in Rocev2FlowMetricPerQP.
-	DataRxRate() uint64
-	// SetDataRxRate assigns uint64 provided by user to Rocev2FlowMetricPerQP
-	SetDataRxRate(value uint64) Rocev2FlowMetricPerQP
+	// DataRxRate returns float32, set in Rocev2FlowMetricPerQP.
+	DataRxRate() float32
+	// SetDataRxRate assigns float32 provided by user to Rocev2FlowMetricPerQP
+	SetDataRxRate(value float32) Rocev2FlowMetricPerQP
 	// HasDataRxRate checks if DataRxRate has been set in Rocev2FlowMetricPerQP
 	HasDataRxRate() bool
 	// MessageTx returns uint64, set in Rocev2FlowMetricPerQP.
@@ -767,44 +767,44 @@ func (obj *rocev2FlowMetricPerQP) SetRxBytes(value uint64) Rocev2FlowMetricPerQP
 }
 
 // Current rate at which data is transmitted in Gbps.
-// DataTxRate returns a uint64
-func (obj *rocev2FlowMetricPerQP) DataTxRate() uint64 {
+// DataTxRate returns a float32
+func (obj *rocev2FlowMetricPerQP) DataTxRate() float32 {
 
 	return *obj.obj.DataTxRate
 
 }
 
 // Current rate at which data is transmitted in Gbps.
-// DataTxRate returns a uint64
+// DataTxRate returns a float32
 func (obj *rocev2FlowMetricPerQP) HasDataTxRate() bool {
 	return obj.obj.DataTxRate != nil
 }
 
 // Current rate at which data is transmitted in Gbps.
-// SetDataTxRate sets the uint64 value in the Rocev2FlowMetricPerQP object
-func (obj *rocev2FlowMetricPerQP) SetDataTxRate(value uint64) Rocev2FlowMetricPerQP {
+// SetDataTxRate sets the float32 value in the Rocev2FlowMetricPerQP object
+func (obj *rocev2FlowMetricPerQP) SetDataTxRate(value float32) Rocev2FlowMetricPerQP {
 
 	obj.obj.DataTxRate = &value
 	return obj
 }
 
 // Current rate at which data is received in Gbps.
-// DataRxRate returns a uint64
-func (obj *rocev2FlowMetricPerQP) DataRxRate() uint64 {
+// DataRxRate returns a float32
+func (obj *rocev2FlowMetricPerQP) DataRxRate() float32 {
 
 	return *obj.obj.DataRxRate
 
 }
 
 // Current rate at which data is received in Gbps.
-// DataRxRate returns a uint64
+// DataRxRate returns a float32
 func (obj *rocev2FlowMetricPerQP) HasDataRxRate() bool {
 	return obj.obj.DataRxRate != nil
 }
 
 // Current rate at which data is received in Gbps.
-// SetDataRxRate sets the uint64 value in the Rocev2FlowMetricPerQP object
-func (obj *rocev2FlowMetricPerQP) SetDataRxRate(value uint64) Rocev2FlowMetricPerQP {
+// SetDataRxRate sets the float32 value in the Rocev2FlowMetricPerQP object
+func (obj *rocev2FlowMetricPerQP) SetDataRxRate(value float32) Rocev2FlowMetricPerQP {
 
 	obj.obj.DataRxRate = &value
 	return obj

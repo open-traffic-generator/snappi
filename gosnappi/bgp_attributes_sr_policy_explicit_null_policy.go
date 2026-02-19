@@ -278,10 +278,10 @@ type BgpAttributesSrPolicyExplicitNullPolicy interface {
 	Unknown()
 	// getter for PushIpv4 to set choice.
 	PushIpv4()
-	// getter for DonotPush to set choice.
-	DonotPush()
 	// getter for PushIpv6 to set choice.
 	PushIpv6()
+	// getter for DonotPush to set choice.
+	DonotPush()
 }
 
 type BgpAttributesSrPolicyExplicitNullPolicyChoiceEnum string
@@ -320,14 +320,14 @@ func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv4() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV4)
 }
 
-// getter for DonotPush to set choice
-func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
-	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
-}
-
 // getter for PushIpv6 to set choice
 func (obj *bgpAttributesSrPolicyExplicitNullPolicy) PushIpv6() {
 	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.PUSH_IPV6)
+}
+
+// getter for DonotPush to set choice
+func (obj *bgpAttributesSrPolicyExplicitNullPolicy) DonotPush() {
+	obj.setChoice(BgpAttributesSrPolicyExplicitNullPolicyChoice.DONOT_PUSH)
 }
 
 // The Explicit NULL Label policy.
