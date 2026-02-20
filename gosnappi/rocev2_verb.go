@@ -286,6 +286,8 @@ type Rocev2Verb interface {
 	Send()
 	// getter for Read to set choice.
 	Read()
+	// getter for Send to set choice.
+	Send()
 	// WriteWithImmediate returns Rocev2ImmediateData, set in Rocev2Verb.
 	// Rocev2ImmediateData is four bytes of immediate Data for SEND/WRITE with immediate.
 	WriteWithImmediate() Rocev2ImmediateData
@@ -339,6 +341,11 @@ func (obj *rocev2Verb) Send() {
 // getter for Read to set choice
 func (obj *rocev2Verb) Read() {
 	obj.setChoice(Rocev2VerbChoice.READ)
+}
+
+// getter for Send to set choice
+func (obj *rocev2Verb) Send() {
+	obj.setChoice(Rocev2VerbChoice.SEND)
 }
 
 // description is TBD

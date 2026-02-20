@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.45.1
+/* Open Traffic Generator API 1.46.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -17940,10 +17940,10 @@ message Rocev2FlowMetricPerQP {
   optional uint64 rx_bytes = 14;
 
   // Current rate at which data is transmitted in Gbps.
-  optional uint64 data_tx_rate = 15;
+  optional float data_tx_rate = 15;
 
   // Current rate at which data is received in Gbps.
-  optional uint64 data_rx_rate = 16;
+  optional float data_rx_rate = 16;
 
   // Current number of Message transmitted.
   optional uint64 message_tx = 17;
