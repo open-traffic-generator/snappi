@@ -153,8 +153,11 @@ message LagPort {
   LagPortLacp lacp = 2;
 
   // Description missing in models
+  LagPortMacsec macsec = 3;
+
+  // Description missing in models
   // required = true
-  DeviceEthernetBase ethernet = 3;
+  DeviceEthernetBase ethernet = 4;
 }
 
 // Description missing in models
@@ -235,6 +238,44 @@ message LagPortLacp {
   // This timer is used to detect whether received protocol information has expired
   // default = 0
   optional uint32 lacpdu_timeout = 5;
+}
+
+// Configuration of MACsec per LAG member port.
+message LagPortMacsec {
+
+  // This contains the properties of Secure Entity (SecY) per LAG member port.
+  // required = true
+  SecureEntity secure_entity = 1;
+
+  // Protocols excluded from MACsec encapsulation.
+  LagPortMacsecExcludeProtocols exclude_protocols = 2;
+}
+
+// Protocols excluded from MACsec encapsulation at Tx.
+message LagPortMacsecExcludeProtocols {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      per_protocol = 2;
+    }
+  }
+  // Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at
+  // Tx. Choose per_protocol to opt per protocol.
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  LagPortMacsecExcludeProtocolsPerProtocol per_protocol = 2;
+}
+
+// Per protocol choice to exclude from MACsec encapsulation at Tx.
+message LagPortMacsecExcludeProtocolsPerProtocol {
+
+  // Determines whether LACP should be excluded from MACsec encapsulation or not.
+  // default = True
+  optional bool lacp = 1;
 }
 
 // Base Ethernet interface.
@@ -1230,6 +1271,763 @@ message Dhcpv6ServerOptionsBootFileParams {
   // UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
   // required = true
   optional string parameter = 1;
+}
+
+// A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
+message DeviceMacsec {
+
+  // Ethernet Interfaces
+  repeated DeviceMacsecEthernetInterface ethernet_interfaces = 1;
+}
+
+// Configuration for single MACsec interface.
+message DeviceMacsecEthernetInterface {
+
+  // The unique name of the Ethernet interface on which MACsec is enabled.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ethernet/properties/name
+  // 
+  // required = true
+  optional string eth_name = 1;
+
+  // This contains the properties of Secure Entity (SecY).
+  // required = true
+  SecureEntity secure_entity = 2;
+}
+
+// Configuration of a Secure Entity (SecY).
+message SecureEntity {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // This contains the properties of key generation protocol of Secure Entity (SecY).
+  // required = true
+  SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
+
+  // This contains the properties of data plane of Secure Entity (SecY).
+  SecureEntityDataPlane data_plane = 3;
+}
+
+// Container of Key generation protocol configuration.
+message SecureEntityKeyGenerationProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      mka = 1;
+      static_key = 2;
+    }
+  }
+  // Key generation protocol choices. Choose mka for dynamic key distribution using MACsec
+  // key agreement(MKA) protocol. Choose static_key for static configuration of secure
+  // association key(SAK).
+  // default = Choice.Enum.mka
+  optional Choice.Enum choice = 1;
+
+  // This contains the properties of Key Agreement Entity (KaY) in MKA supplicant.
+  Mka mka = 2;
+
+  // Static key properties properties of SecY. Static key is used in absence MKA.
+  SecureEntityStaticKey static_key = 3;
+}
+
+// A container of data plane properties.
+message SecureEntityDataPlane {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      encapsulation = 1;
+      no_encapsulation = 2;
+    }
+  }
+  // Choose encapsulation so that data packets are sent with MACsec encapsulation. Choose
+  // no_encapsulation so that data packets are sent without MACsec encapsulation.
+  // default = Choice.Enum.encapsulation
+  optional Choice.Enum choice = 1;
+
+  // A container of encapsulation properties for a secure entity(SecY).
+  SecureEntityDataPlaneEncapsulation encapsulation = 2;
+}
+
+// A container of encapsulation properties for a secure entity(SecY).
+message SecureEntityDataPlaneEncapsulation {
+
+  // Tx properties of SecY.
+  SecureEntityDataPlaneTx tx = 1;
+
+  // Rx properties of SecY.
+  SecureEntityDataPlaneRx rx = 2;
+
+  // VLAN options of SecY.
+  SecureEntityVlanOptions vlan_options = 3;
+
+  // Crypto engine properties of SecY.
+  // required = true
+  SecureEntityCryptoEngine crypto_engine = 4;
+}
+
+// A container of Tx properties of SecY.
+message SecureEntityDataPlaneTx {
+
+  // End station on not.
+  // default = False
+  optional bool end_station = 1;
+
+  // Include SCI on not.
+  // default = False
+  optional bool include_sci = 2;
+}
+
+// A container for Rx settings of SecY.
+message SecureEntityDataPlaneRx {
+
+  // Enable replay protection on not.
+  // default = False
+  optional bool replay_protection = 1;
+
+  // Replay window size.
+  // default = 1
+  optional uint32 replay_window = 2;
+}
+
+// A container for VLAN options of SecY.
+message SecureEntityVlanOptions {
+
+  // Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
+  // default = True
+  optional bool encrypt_interface_vlans = 1;
+}
+
+// A container of crypto engine properties of a SecY.
+message SecureEntityCryptoEngine {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      encrypt_only = 1;
+      encrypt_decrypt = 2;
+    }
+  }
+  // Engine type based on encryption and/ or decryption capability. Supported types: 1)
+  // encrypt_only - engine can only encrypt transmitted packets but it cannot decrypt
+  // packets upon arrival. As the packets cannot be decrypted on arrival, such packets
+  // cannot be delivered to the receiving device. Hence only stateless traffic can be
+  // sent. 2) encrypt_decrypt - engine can both encrypt transmitted packets and decrypt
+  // packets on arrival. Such engine can have hardware acceleration for faster encryption/
+  // decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic
+  // can be sent/ received.
+  // default = Choice.Enum.encrypt_only
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptOnly encrypt_only = 2;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptDecrypt encrypt_decrypt = 3;
+}
+
+// The container for encrypt only engine configuration.
+message SecureEntityCryptoEngineEncryptOnly {
+
+  // Description missing in models
+  repeated SecureEntityCryptoEngineEncryptOnlyTxSc secure_channels = 1;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptOnlyTrafficOptions traffic_options = 2;
+}
+
+// The container for encrypt and decrypt engine configuration.
+message SecureEntityCryptoEngineEncryptDecrypt {
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptDecryptTxPn tx_pn = 1;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration hardware_acceleration = 2;
+}
+
+// The container for Tx secure channel configuration.
+message SecureEntityCryptoEngineEncryptOnlyTxSc {
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptOnlyTxScTxPn tx_pn = 1;
+}
+
+// Tx packet number(PN) configuration.
+message SecureEntityCryptoEngineEncryptOnlyTxScTxPn {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      fixed_pn = 1;
+      incrementing_pn = 2;
+    }
+  }
+  // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets
+  // will be sent out with the configured fixed PN or lower half of configured fixed XPN.
+  // 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing
+  // PN or XPN.
+  // default = Choice.Enum.fixed_pn
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptOnlyFixedPn fixed = 2;
+
+  // Description missing in models
+  SecureEntityCryptoEngineEncryptOnlyIncrementingPn incrementing = 3;
+}
+
+// Fixed packet number(PN) configuration.
+message SecureEntityCryptoEngineEncryptOnlyFixedPn {
+
+  // Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
+  // default = 6
+  optional uint32 pn = 1;
+
+  // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
+  // sent out.
+  // default = 0x0000000000000006
+  optional string xpn = 2;
+}
+
+// Incrementing packet number(PN) configuration.
+message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
+
+  // Count of packet numbers in series.
+  // default = 100
+  optional uint32 count = 1;
+
+  // The starting packet number(PN).
+  // default = 10000
+  optional uint32 starting_pn = 2;
+
+  // The starting extended packet number(XPN).
+  // default = 0x0000000000000001
+  optional string starting_xpn = 3;
+}
+
+// Encrypt only traffic options.
+message SecureEntityCryptoEngineEncryptOnlyTrafficOptions {
+
+  // Send gratuitous ARP or not.
+  // default = True
+  optional bool send_gratuitous_arp = 1;
+}
+
+// Tx packet number(PN) configuration.
+message SecureEntityCryptoEngineEncryptDecryptTxPn {
+
+  // The starting packet number(PN).
+  // default = 1
+  optional uint32 starting_pn = 1;
+
+  // The starting extended packet number(XPN).
+  // default = 0x0000000000000001
+  optional string starting_xpn = 2;
+}
+
+// Hardware acceleration configuration for offloading MACsec processing to hardware.
+message SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      inline_crypto = 2;
+    }
+  }
+  // Hardware acceleration types. Per port hardware acceleration configuration is availble
+  // at options -> per_port_options -> protocols -> macsec -> hardware_accelertation.
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+}
+
+// Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
+message Mka {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // This contains the basic properties of KaY.
+  // required = true
+  MkaBasic basic = 2;
+
+  // Key server attributes.
+  MkaKeyServer key_server = 3;
+
+  // Tx Properties.
+  // required = true
+  MkaTx tx = 4;
+}
+
+// A container of basic properties for a KaY.
+message MkaBasic {
+
+  message KeyDerivationFunction {
+    enum Enum {
+      unspecified = 0;
+      aes_cmac_128 = 1;
+      aes_cmac_256 = 2;
+    }
+  }
+  // Key Derivation Function.
+  // default = KeyDerivationFunction.Enum.aes_cmac_128
+  optional KeyDerivationFunction.Enum key_derivation_function = 1;
+
+  // Key source.
+  // required = true
+  MkaBasicKeySource key_source = 2;
+
+  // Actor priority.
+  // default = 70
+  optional string actor_priority = 3;
+
+  // Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
+  // default = True
+  optional bool macsec_desired = 4;
+
+  message MacsecCapability {
+    enum Enum {
+      unspecified = 0;
+      macsec_not_implemented = 1;
+      macsec_integrity_without_confidentiality = 2;
+      macsec_integrity_with_no_confidentiality_offset = 3;
+      macsec_integrity_with_confidentiality_offset = 4;
+    }
+  }
+  // MACSec Capability.
+  // default = MacsecCapability.Enum.macsec_integrity_with_confidentiality_offset
+  optional MacsecCapability.Enum macsec_capability = 5;
+
+  // Supported Cipher Suites.
+  MkaBasicSupportedCipherSuites supported_cipher_suites = 6;
+
+  // EAPOL Ethernet type.
+  // default = 888E
+  optional string eapol_ethernet_type = 7;
+
+  // MKA Version.
+  // default = 3
+  optional uint32 mka_version = 8;
+
+  // MKA Hello Time (msec).
+  // default = 2000
+  optional uint32 mka_hello_time = 9;
+
+  // MKA Life Time (sec).
+  // default = 6
+  optional uint32 mka_life_time = 10;
+
+  // Send ICV Indicator in MKPDU.
+  // default = True
+  optional bool send_icv_indicatior_in_mkpdu = 11;
+
+  // Delay Protect or not. When delay protect is enabled, it guards against delaying the
+  // delivery of MACsec encrypted frames by an attacker to the recipient.
+  // default = True
+  optional bool delay_protect = 12;
+
+  // Rekey Mode.
+  MkaBasicRekeyMode rekey_mode = 13;
+
+  // Description missing in models
+  MkaBasicPskChainStartTime psk_chain_start_time = 14;
+}
+
+// The container for supported cipher suites.
+message MkaBasicSupportedCipherSuites {
+
+  // GCM-AES-128.
+  // default = True
+  optional bool gcm_aes_128 = 1;
+
+  // GCM-AES-256.
+  // default = True
+  optional bool gcm_aes_256 = 2;
+
+  // GCM-AES-XPN-128.
+  // default = True
+  optional bool gcm_aes_xpn_128 = 3;
+
+  // GCM-AES-XPN-256.
+  // default = True
+  optional bool gcm_aes_xpn_256 = 4;
+}
+
+// The container for key source settings.
+message MkaBasicKeySource {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      psk = 1;
+      msk = 2;
+    }
+  }
+  // Key source. Choose one from PSK or MSK.
+  // default = Choice.Enum.psk
+  optional Choice.Enum choice = 1;
+
+  // PSK chain.
+  repeated MkaBasicKeySourcePsk psks = 2;
+}
+
+// The container for Pre-shared key(PSK).
+message MkaBasicKeySourcePsk {
+
+  // Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending
+  // on the chosen MKA key derivation function.
+  // default = F123456789ABCDEF0123456789ABCDEF
+  optional string cak_value = 1;
+
+  // Connectivity association key(CAK) name.
+  // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
+  optional string cak_name = 2;
+
+  // 
+  MkaBasicStartOffsetTime start_offset_time = 3;
+
+  // 
+  MkaBasicEndOffsetTime end_offset_time = 4;
+}
+
+// Key start offset time in HH:MM. This is relative to key chain start time.
+message MkaBasicStartOffsetTime {
+
+  // Hours in HH format.
+  // default = 0
+  optional uint32 hh = 1;
+
+  // Minutes in MM format.
+  // default = 0
+  optional uint32 mm = 2;
+}
+
+// Key end offset time in HH:MM. This is relative to key chain start time. A value of
+// 00:00 makes the key valid for lifetime.
+message MkaBasicEndOffsetTime {
+
+  // Hours in HH format.
+  // default = 0
+  optional uint32 hh = 1;
+
+  // Minutes in MM format.
+  // default = 0
+  optional uint32 mm = 2;
+}
+
+// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this
+// time is set, the key start time will be relative to this value. Otherwise if this
+// value is not set, key start time will be relative to test start time.
+message MkaBasicPskChainStartTime {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      utc = 1;
+    }
+  }
+  // Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
+  // default = Choice.Enum.utc
+  optional Choice.Enum choice = 1;
+
+  // Coordinated Universal Time(UTC) time.
+  MkaBasicTimeUtc utc = 2;
+}
+
+// Coordinated Universal Time(UTC).
+message MkaBasicTimeUtc {
+
+  // Day of the month in DD format.
+  optional uint32 day = 1;
+
+  // Month of the year in MM format.
+  optional uint32 month = 2;
+
+  // Year from the start of common era(CE) in YYYY format.
+  optional uint32 year = 3;
+
+  // Hour of the day in HH format.
+  optional uint32 hour = 4;
+
+  // Minute of the hour in MM format.
+  optional uint32 minute = 5;
+
+  // Second of the minute in SS format.
+  optional uint32 second = 6;
+}
+
+// Rekey mode.
+message MkaBasicRekeyMode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dont_rekey = 1;
+      timer_based = 2;
+      pn_based = 3;
+    }
+  }
+  // Mode choices.
+  // default = Choice.Enum.dont_rekey
+  optional Choice.Enum choice = 1;
+
+  // Container for timer based periodic rekey properties.
+  MkaBasicRekeyModeTimerBased timer_based = 2;
+}
+
+// Timer based periodic rekey properties.
+message MkaBasicRekeyModeTimerBased {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      continuous = 1;
+      fixed_count = 2;
+    }
+  }
+  // Periodic Rekey count.
+  // default = Choice.Enum.continuous
+  optional Choice.Enum choice = 1;
+
+  // Fixed rekey attempts.
+  // default = 10
+  optional uint32 fixed_count = 2;
+
+  // Periodic rekey interval (sec).
+  // default = 300
+  optional uint32 interval = 3;
+}
+
+// Key server attributes of a KaY.
+message MkaKeyServer {
+
+  message ConfidentialtyOffset {
+    enum Enum {
+      unspecified = 0;
+      no_confidentiality = 1;
+      no_confidentiality_offset = 2;
+      confidentiality_offset_30_octets = 3;
+      confidentiality_offset_50_octets = 4;
+    }
+  }
+  // Confidentiality Offset.
+  // default = ConfidentialtyOffset.Enum.no_confidentiality_offset
+  optional ConfidentialtyOffset.Enum confidentialty_offset = 1;
+
+  message CipherSuite {
+    enum Enum {
+      unspecified = 0;
+      gcm_aes_128 = 1;
+      gcm_aes_256 = 2;
+      gcm_aes_xpn_128 = 3;
+      gcm_aes_xpn_256 = 4;
+    }
+  }
+  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
+  // default = CipherSuite.Enum.gcm_aes_128
+  optional CipherSuite.Enum cipher_suite = 2;
+
+  // Starting Key Number.
+  // default = 1
+  optional uint32 starting_key_number = 3;
+
+  // Starting Distributed AN.
+  // default = 0
+  optional uint32 starting_distributed_an = 4;
+
+  // Determines the PN rekey threshold.
+  // default = C0000000
+  optional string rekey_threshold_pn = 5;
+
+  // Determines the XPN rekey threshold.
+  // default = C000000000000000
+  optional string rekey_threshold_xpn = 6;
+}
+
+// A container of Tx properties.
+message MkaTx {
+
+  // Tx secure channels.
+  repeated MkaTxSc secure_channels = 1;
+}
+
+// Tx secure channel(SC) properties.
+message MkaTxSc {
+
+  // Tx SC name.
+  // required = true
+  optional string name = 1;
+
+  // System ID.
+  // required = true
+  optional string system_id = 2;
+
+  // Port ID.
+  // default = 1
+  optional uint32 port_id = 3;
+
+  // Starting Message Number.
+  // default = 1
+  optional uint64 starting_message_number = 4;
+}
+
+// A container of static key properties for a secure entity(SecY). This configuration
+// is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA)
+// is configured. If MKA is configured, any static key configuration is not applicable.
+message SecureEntityStaticKey {
+
+  message CipherSuite {
+    enum Enum {
+      unspecified = 0;
+      gcm_aes_128 = 1;
+      gcm_aes_256 = 2;
+      gcm_aes_xpn_128 = 3;
+      gcm_aes_xpn_256 = 4;
+    }
+  }
+  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128
+  // GCM-AES-XPN-256
+  // default = CipherSuite.Enum.gcm_aes_128
+  optional CipherSuite.Enum cipher_suite = 1;
+
+  // Encrypt or not.
+  // default = True
+  optional bool confidentiality = 2;
+
+  message ConfidentialityOffset {
+    enum Enum {
+      unspecified = 0;
+      zero = 1;
+      thirty = 2;
+      fifty = 3;
+    }
+  }
+  // Confidentiality offset.
+  // default = ConfidentialityOffset.Enum.zero
+  optional ConfidentialityOffset.Enum confidentiality_offset = 3;
+
+  // Tx properties of SecY.
+  SecureEntityStaticKeyTx tx = 4;
+
+  // Rx properties of SecY.
+  SecureEntityStaticKeyRx rx = 5;
+}
+
+// Rekey mode.
+message SecureEntityStaticKeyRekeyMode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      dont_rekey = 1;
+      timer_based = 2;
+      pn_based = 3;
+    }
+  }
+  // Rekey mode choices.
+  // default = Choice.Enum.dont_rekey
+  optional Choice.Enum choice = 1;
+
+  // Container for timer based periodic rekey properties.
+  SecureEntityStaticKeyRekeyModeTimerBased timer_based = 2;
+}
+
+// Timer based periodic rekey properties.
+message SecureEntityStaticKeyRekeyModeTimerBased {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      continuous = 1;
+      fixed_count = 2;
+    }
+  }
+  // Periodic rekey attempt choices.
+  // default = Choice.Enum.continuous
+  optional Choice.Enum choice = 1;
+
+  // Fixed rekey attempts.
+  // default = 10
+  optional uint32 fixed_count = 2;
+
+  // Periodic rekey interval (sec).
+  // default = 300
+  optional uint32 interval = 3;
+}
+
+// The container for SAK.
+message SecureEntityStaticKeySak {
+
+  // Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending
+  // on the chosen cipher suite.
+  // default = F123456789ABCDEF0123456789ABCDEF
+  optional string sak = 1;
+
+  // 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
+  // default = 00000001
+  optional string ssci = 2;
+
+  // 12 bytes salt used in case of XPN cipher suites.
+  // default = 000000000000000000000001
+  optional string salt = 3;
+}
+
+// A container of static key Tx properties.
+message SecureEntityStaticKeyTx {
+
+  // Tx secure channels.
+  repeated SecureEntityStaticKeyTxSc secure_channels = 1;
+
+  // Description missing in models
+  SecureEntityStaticKeyRekeyMode rekey_mode = 2;
+}
+
+// Tx SC setting for static key.
+message SecureEntityStaticKeyTxSc {
+
+  // System ID.
+  optional string system_id = 1;
+
+  // Port ID.
+  // default = 1
+  optional uint32 port_id = 2;
+
+  // Tx SAK pool.
+  repeated SecureEntityStaticKeySak saks = 3;
+}
+
+// A container of static key Rx properties.
+message SecureEntityStaticKeyRx {
+
+  // Rx secure channels.
+  repeated SecureEntityStaticKeyRxSc secure_channels = 1;
+}
+
+// Rx SC settings.
+message SecureEntityStaticKeyRxSc {
+
+  // System ID in DUT SCI.
+  optional string dut_sci_system_id = 1;
+
+  // Port ID in DUT SCI.
+  // default = 1
+  optional uint32 dut_sci_port_id = 2;
+
+  // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
+  // construct the 64 bits XPN value when test starts.
+  // default = 0
+  optional uint32 dut_msb_xpn = 3;
+
+  // Rx SAK pool.
+  repeated SecureEntityStaticKeySak saks = 4;
 }
 
 // A container for layer1 settings.
@@ -8366,763 +9164,6 @@ message Ospfv2V4RRExtdPrefixFlags {
   // with a loopback address.
   // default = False
   optional bool n_flag = 2;
-}
-
-// A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
-message DeviceMacsec {
-
-  // Ethernet Interfaces
-  repeated DeviceMacsecEthernetInterface ethernet_interfaces = 1;
-}
-
-// Configuration for single MACsec interface.
-message DeviceMacsecEthernetInterface {
-
-  // The unique name of the Ethernet interface on which MACsec is enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
-  // required = true
-  optional string eth_name = 1;
-
-  // This contains the properties of Secure Entity (SecY).
-  // required = true
-  SecureEntity secure_entity = 2;
-}
-
-// Configuration of a Secure Entity (SecY).
-message SecureEntity {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // This contains the properties of key generation protocol of Secure Entity (SecY).
-  // required = true
-  SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
-
-  // This contains the properties of data plane of Secure Entity (SecY).
-  SecureEntityDataPlane data_plane = 3;
-}
-
-// Container of Key generation protocol configuration.
-message SecureEntityKeyGenerationProtocol {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      mka = 1;
-      static_key = 2;
-    }
-  }
-  // Key generation protocol choices. Choose mka for dynamic key distribution using MACsec
-  // key agreement(MKA) protocol. Choose static_key for static configuration of secure
-  // association key(SAK).
-  // default = Choice.Enum.mka
-  optional Choice.Enum choice = 1;
-
-  // This contains the properties of Key Agreement Entity (KaY) in MKA supplicant.
-  Mka mka = 2;
-
-  // Static key properties properties of SecY. Static key is used in absence MKA.
-  SecureEntityStaticKey static_key = 3;
-}
-
-// A container of data plane properties.
-message SecureEntityDataPlane {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encapsulation = 1;
-      no_encapsulation = 2;
-    }
-  }
-  // Choose encapsulation so that data packets are sent with MACsec encapsulation. Choose
-  // no_encapsulation so that data packets are sent without MACsec encapsulation.
-  // default = Choice.Enum.encapsulation
-  optional Choice.Enum choice = 1;
-
-  // A container of encapsulation properties for a secure entity(SecY).
-  SecureEntityDataPlaneEncapsulation encapsulation = 2;
-}
-
-// A container of encapsulation properties for a secure entity(SecY).
-message SecureEntityDataPlaneEncapsulation {
-
-  // Tx properties of SecY.
-  SecureEntityDataPlaneTx tx = 1;
-
-  // Rx properties of SecY.
-  SecureEntityDataPlaneRx rx = 2;
-
-  // VLAN options of SecY.
-  SecureEntityVlanOptions vlan_options = 3;
-
-  // Crypto engine properties of SecY.
-  // required = true
-  SecureEntityCryptoEngine crypto_engine = 4;
-}
-
-// A container of Tx properties of SecY.
-message SecureEntityDataPlaneTx {
-
-  // End station on not.
-  // default = False
-  optional bool end_station = 1;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 2;
-}
-
-// A container for Rx settings of SecY.
-message SecureEntityDataPlaneRx {
-
-  // Enable replay protection on not.
-  // default = False
-  optional bool replay_protection = 1;
-
-  // Replay window size.
-  // default = 1
-  optional uint32 replay_window = 2;
-}
-
-// A container for VLAN options of SecY.
-message SecureEntityVlanOptions {
-
-  // Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
-  // default = True
-  optional bool encrypt_interface_vlans = 1;
-}
-
-// A container of crypto engine properties of a SecY.
-message SecureEntityCryptoEngine {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      encrypt_only = 1;
-      encrypt_decrypt = 2;
-    }
-  }
-  // Engine type based on encryption and/ or decryption capability. Supported types: 1)
-  // encrypt_only - engine can only encrypt transmitted packets but it cannot decrypt
-  // packets upon arrival. As the packets cannot be decrypted on arrival, such packets
-  // cannot be delivered to the receiving device. Hence only stateless traffic can be
-  // sent. 2) encrypt_decrypt - engine can both encrypt transmitted packets and decrypt
-  // packets on arrival. Such engine can have hardware acceleration for faster encryption/
-  // decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic
-  // can be sent/ received.
-  // default = Choice.Enum.encrypt_only
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnly encrypt_only = 2;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecrypt encrypt_decrypt = 3;
-}
-
-// The container for encrypt only engine configuration.
-message SecureEntityCryptoEngineEncryptOnly {
-
-  // Description missing in models
-  repeated SecureEntityCryptoEngineEncryptOnlyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTrafficOptions traffic_options = 2;
-}
-
-// The container for encrypt and decrypt engine configuration.
-message SecureEntityCryptoEngineEncryptDecrypt {
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecryptTxPn tx_pn = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration hardware_acceleration = 2;
-}
-
-// The container for Tx secure channel configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxSc {
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyTxScTxPn tx_pn = 1;
-}
-
-// Tx packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyTxScTxPn {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      fixed_pn = 1;
-      incrementing_pn = 2;
-    }
-  }
-  // Types of Tx packet number(PN) series. Supported choices: 1) fixed PN - MACsec packets
-  // will be sent out with the configured fixed PN or lower half of configured fixed XPN.
-  // 2) incrementing PN - MACsec packets will be sent out by single device with an incrementing
-  // PN or XPN.
-  // default = Choice.Enum.fixed_pn
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyFixedPn fixed = 2;
-
-  // Description missing in models
-  SecureEntityCryptoEngineEncryptOnlyIncrementingPn incrementing = 3;
-}
-
-// Fixed packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyFixedPn {
-
-  // Fixed Tx packet number(PN). 4 bytes PN with which all packets will be sent out.
-  // default = 6
-  optional uint32 pn = 1;
-
-  // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
-  // sent out.
-  // default = 0x0000000000000006
-  optional string xpn = 2;
-}
-
-// Incrementing packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
-
-  // Count of packet numbers in series.
-  // default = 100
-  optional uint32 count = 1;
-
-  // The starting packet number(PN).
-  // default = 10000
-  optional uint32 starting_pn = 2;
-
-  // The starting extended packet number(XPN).
-  // default = 0x0000000000000001
-  optional string starting_xpn = 3;
-}
-
-// Encrypt only traffic options.
-message SecureEntityCryptoEngineEncryptOnlyTrafficOptions {
-
-  // Send gratuitous ARP or not.
-  // default = True
-  optional bool send_gratuitous_arp = 1;
-}
-
-// Tx packet number(PN) configuration.
-message SecureEntityCryptoEngineEncryptDecryptTxPn {
-
-  // The starting packet number(PN).
-  // default = 1
-  optional uint32 starting_pn = 1;
-
-  // The starting extended packet number(XPN).
-  // default = 0x0000000000000001
-  optional string starting_xpn = 2;
-}
-
-// Hardware acceleration configuration for offloading MACsec processing to hardware.
-message SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      none = 1;
-      inline_crypto = 2;
-    }
-  }
-  // Hardware acceleration types. Per port hardware acceleration configuration is availble
-  // at options -> per_port_options -> protocols -> macsec -> hardware_accelertation.
-  // default = Choice.Enum.none
-  optional Choice.Enum choice = 1;
-}
-
-// Configuration of a MKA Key Agreement Entity (KaY). Reference https://1.ieee802.org/security/802-1x/.
-message Mka {
-
-  // Globally unique name of an object. It also serves as the primary key for arrays of
-  // objects.
-  // required = true
-  optional string name = 1;
-
-  // This contains the basic properties of KaY.
-  // required = true
-  MkaBasic basic = 2;
-
-  // Key server attributes.
-  MkaKeyServer key_server = 3;
-
-  // Tx Properties.
-  // required = true
-  MkaTx tx = 4;
-}
-
-// A container of basic properties for a KaY.
-message MkaBasic {
-
-  message KeyDerivationFunction {
-    enum Enum {
-      unspecified = 0;
-      aes_cmac_128 = 1;
-      aes_cmac_256 = 2;
-    }
-  }
-  // Key Derivation Function.
-  // default = KeyDerivationFunction.Enum.aes_cmac_128
-  optional KeyDerivationFunction.Enum key_derivation_function = 1;
-
-  // Key source.
-  // required = true
-  MkaBasicKeySource key_source = 2;
-
-  // Actor priority.
-  // default = 70
-  optional string actor_priority = 3;
-
-  // Determines whether MACsec is desired or not. It is advertised in periodic Hellos.
-  // default = True
-  optional bool macsec_desired = 4;
-
-  message MacsecCapability {
-    enum Enum {
-      unspecified = 0;
-      macsec_not_implemented = 1;
-      macsec_integrity_without_confidentiality = 2;
-      macsec_integrity_with_no_confidentiality_offset = 3;
-      macsec_integrity_with_confidentiality_offset = 4;
-    }
-  }
-  // MACSec Capability.
-  // default = MacsecCapability.Enum.macsec_integrity_with_confidentiality_offset
-  optional MacsecCapability.Enum macsec_capability = 5;
-
-  // Supported Cipher Suites.
-  MkaBasicSupportedCipherSuites supported_cipher_suites = 6;
-
-  // EAPOL Ethernet type.
-  // default = 888E
-  optional string eapol_ethernet_type = 7;
-
-  // MKA Version.
-  // default = 3
-  optional uint32 mka_version = 8;
-
-  // MKA Hello Time (msec).
-  // default = 2000
-  optional uint32 mka_hello_time = 9;
-
-  // MKA Life Time (sec).
-  // default = 6
-  optional uint32 mka_life_time = 10;
-
-  // Send ICV Indicator in MKPDU.
-  // default = True
-  optional bool send_icv_indicatior_in_mkpdu = 11;
-
-  // Delay Protect or not. When delay protect is enabled, it guards against delaying the
-  // delivery of MACsec encrypted frames by an attacker to the recipient.
-  // default = True
-  optional bool delay_protect = 12;
-
-  // Rekey Mode.
-  MkaBasicRekeyMode rekey_mode = 13;
-
-  // Description missing in models
-  MkaBasicPskChainStartTime psk_chain_start_time = 14;
-}
-
-// The container for supported cipher suites.
-message MkaBasicSupportedCipherSuites {
-
-  // GCM-AES-128.
-  // default = True
-  optional bool gcm_aes_128 = 1;
-
-  // GCM-AES-256.
-  // default = True
-  optional bool gcm_aes_256 = 2;
-
-  // GCM-AES-XPN-128.
-  // default = True
-  optional bool gcm_aes_xpn_128 = 3;
-
-  // GCM-AES-XPN-256.
-  // default = True
-  optional bool gcm_aes_xpn_256 = 4;
-}
-
-// The container for key source settings.
-message MkaBasicKeySource {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      psk = 1;
-      msk = 2;
-    }
-  }
-  // Key source. Choose one from PSK or MSK.
-  // default = Choice.Enum.psk
-  optional Choice.Enum choice = 1;
-
-  // PSK chain.
-  repeated MkaBasicKeySourcePsk psks = 2;
-}
-
-// The container for Pre-shared key(PSK).
-message MkaBasicKeySourcePsk {
-
-  // Connectivity association key(CAK) value. It can be 128 bits or 256 bits long depending
-  // on the chosen MKA key derivation function.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string cak_value = 1;
-
-  // Connectivity association key(CAK) name.
-  // default = F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF
-  optional string cak_name = 2;
-
-  // 
-  MkaBasicStartOffsetTime start_offset_time = 3;
-
-  // 
-  MkaBasicEndOffsetTime end_offset_time = 4;
-}
-
-// Key start offset time in HH:MM. This is relative to key chain start time.
-message MkaBasicStartOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Key end offset time in HH:MM. This is relative to key chain start time. A value of
-// 00:00 makes the key valid for lifetime.
-message MkaBasicEndOffsetTime {
-
-  // Hours in HH format.
-  // default = 0
-  optional uint32 hh = 1;
-
-  // Minutes in MM format.
-  // default = 0
-  optional uint32 mm = 2;
-}
-
-// Pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this
-// time is set, the key start time will be relative to this value. Otherwise if this
-// value is not set, key start time will be relative to test start time.
-message MkaBasicPskChainStartTime {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      utc = 1;
-    }
-  }
-  // Timezone choice. Currently only Coordinated Universal Time(UTC) is supported.
-  // default = Choice.Enum.utc
-  optional Choice.Enum choice = 1;
-
-  // Coordinated Universal Time(UTC) time.
-  MkaBasicTimeUtc utc = 2;
-}
-
-// Coordinated Universal Time(UTC).
-message MkaBasicTimeUtc {
-
-  // Day of the month in DD format.
-  optional uint32 day = 1;
-
-  // Month of the year in MM format.
-  optional uint32 month = 2;
-
-  // Year from the start of common era(CE) in YYYY format.
-  optional uint32 year = 3;
-
-  // Hour of the day in HH format.
-  optional uint32 hour = 4;
-
-  // Minute of the hour in MM format.
-  optional uint32 minute = 5;
-
-  // Second of the minute in SS format.
-  optional uint32 second = 6;
-}
-
-// Rekey mode.
-message MkaBasicRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  MkaBasicRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message MkaBasicRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic Rekey count.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// Key server attributes of a KaY.
-message MkaKeyServer {
-
-  message ConfidentialtyOffset {
-    enum Enum {
-      unspecified = 0;
-      no_confidentiality = 1;
-      no_confidentiality_offset = 2;
-      confidentiality_offset_30_octets = 3;
-      confidentiality_offset_50_octets = 4;
-    }
-  }
-  // Confidentiality Offset.
-  // default = ConfidentialtyOffset.Enum.no_confidentiality_offset
-  optional ConfidentialtyOffset.Enum confidentialty_offset = 1;
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128 GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 2;
-
-  // Starting Key Number.
-  // default = 1
-  optional uint32 starting_key_number = 3;
-
-  // Starting Distributed AN.
-  // default = 0
-  optional uint32 starting_distributed_an = 4;
-
-  // Determines the PN rekey threshold.
-  // default = C0000000
-  optional string rekey_threshold_pn = 5;
-
-  // Determines the XPN rekey threshold.
-  // default = C000000000000000
-  optional string rekey_threshold_xpn = 6;
-}
-
-// A container of Tx properties.
-message MkaTx {
-
-  // Tx secure channels.
-  repeated MkaTxSc secure_channels = 1;
-}
-
-// Tx secure channel(SC) properties.
-message MkaTxSc {
-
-  // Tx SC name.
-  // required = true
-  optional string name = 1;
-
-  // System ID.
-  // required = true
-  optional string system_id = 2;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 3;
-
-  // Starting Message Number.
-  // default = 1
-  optional uint64 starting_message_number = 4;
-}
-
-// A container of static key properties for a secure entity(SecY). This configuration
-// is applicable when no dynamic key management protocol i.e. MACsec key agreement(MKA)
-// is configured. If MKA is configured, any static key configuration is not applicable.
-message SecureEntityStaticKey {
-
-  message CipherSuite {
-    enum Enum {
-      unspecified = 0;
-      gcm_aes_128 = 1;
-      gcm_aes_256 = 2;
-      gcm_aes_xpn_128 = 3;
-      gcm_aes_xpn_256 = 4;
-    }
-  }
-  // The cipher suite. Choose one from GCM-AES-128 GCM-AES-128 GCM-AES-256 GCM-AES-XPN-128
-  // GCM-AES-XPN-256
-  // default = CipherSuite.Enum.gcm_aes_128
-  optional CipherSuite.Enum cipher_suite = 1;
-
-  // Encrypt or not.
-  // default = True
-  optional bool confidentiality = 2;
-
-  message ConfidentialityOffset {
-    enum Enum {
-      unspecified = 0;
-      zero = 1;
-      thirty = 2;
-      fifty = 3;
-    }
-  }
-  // Confidentiality offset.
-  // default = ConfidentialityOffset.Enum.zero
-  optional ConfidentialityOffset.Enum confidentiality_offset = 3;
-
-  // Tx properties of SecY.
-  SecureEntityStaticKeyTx tx = 4;
-
-  // Rx properties of SecY.
-  SecureEntityStaticKeyRx rx = 5;
-}
-
-// Rekey mode.
-message SecureEntityStaticKeyRekeyMode {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      dont_rekey = 1;
-      timer_based = 2;
-      pn_based = 3;
-    }
-  }
-  // Rekey mode choices.
-  // default = Choice.Enum.dont_rekey
-  optional Choice.Enum choice = 1;
-
-  // Container for timer based periodic rekey properties.
-  SecureEntityStaticKeyRekeyModeTimerBased timer_based = 2;
-}
-
-// Timer based periodic rekey properties.
-message SecureEntityStaticKeyRekeyModeTimerBased {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      continuous = 1;
-      fixed_count = 2;
-    }
-  }
-  // Periodic rekey attempt choices.
-  // default = Choice.Enum.continuous
-  optional Choice.Enum choice = 1;
-
-  // Fixed rekey attempts.
-  // default = 10
-  optional uint32 fixed_count = 2;
-
-  // Periodic rekey interval (sec).
-  // default = 300
-  optional uint32 interval = 3;
-}
-
-// The container for SAK.
-message SecureEntityStaticKeySak {
-
-  // Secure association key(SAK) bits as hex string. Either 128 bits or 256 bits depending
-  // on the chosen cipher suite.
-  // default = F123456789ABCDEF0123456789ABCDEF
-  optional string sak = 1;
-
-  // 4 bytes short SCI(SSCI) used in case of XPN cipher suites.
-  // default = 00000001
-  optional string ssci = 2;
-
-  // 12 bytes salt used in case of XPN cipher suites.
-  // default = 000000000000000000000001
-  optional string salt = 3;
-}
-
-// A container of static key Tx properties.
-message SecureEntityStaticKeyTx {
-
-  // Tx secure channels.
-  repeated SecureEntityStaticKeyTxSc secure_channels = 1;
-
-  // Description missing in models
-  SecureEntityStaticKeyRekeyMode rekey_mode = 2;
-}
-
-// Tx SC setting for static key.
-message SecureEntityStaticKeyTxSc {
-
-  // System ID.
-  optional string system_id = 1;
-
-  // Port ID.
-  // default = 1
-  optional uint32 port_id = 2;
-
-  // Tx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 3;
-}
-
-// A container of static key Rx properties.
-message SecureEntityStaticKeyRx {
-
-  // Rx secure channels.
-  repeated SecureEntityStaticKeyRxSc secure_channels = 1;
-}
-
-// Rx SC settings.
-message SecureEntityStaticKeyRxSc {
-
-  // System ID in DUT SCI.
-  optional string dut_sci_system_id = 1;
-
-  // Port ID in DUT SCI.
-  // default = 1
-  optional uint32 dut_sci_port_id = 2;
-
-  // DUT MSB of XPN. The 32 most significant bits of the XPN that DUT will be using to
-  // construct the 64 bits XPN value when test starts.
-  // default = 0
-  optional uint32 dut_msb_xpn = 3;
-
-  // Rx SAK pool.
-  repeated SecureEntityStaticKeySak saks = 4;
 }
 
 // A container of properties for an OSPFv3 router.

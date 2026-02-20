@@ -270,10 +270,10 @@ type SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration interface {
 	setChoice(value SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum) SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	// HasChoice checks if Choice has been set in SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	HasChoice() bool
-	// getter for InlineCrypto to set choice.
-	InlineCrypto()
 	// getter for None to set choice.
 	None()
+	// getter for InlineCrypto to set choice.
+	InlineCrypto()
 }
 
 type SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum string
@@ -291,14 +291,14 @@ func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) Choice() 
 	return SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for InlineCrypto to set choice
-func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) InlineCrypto() {
-	obj.setChoice(SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
-}
-
 // getter for None to set choice
 func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) None() {
 	obj.setChoice(SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.NONE)
+}
+
+// getter for InlineCrypto to set choice
+func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) InlineCrypto() {
+	obj.setChoice(SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
 }
 
 // Hardware acceleration types. Per port hardware acceleration configuration is availble at options -> per_port_options -> protocols -> macsec -> hardware_accelertation.
