@@ -270,14 +270,14 @@ type MacsecValidateFrames interface {
 	setChoice(value MacsecValidateFramesChoiceEnum) MacsecValidateFrames
 	// HasChoice checks if Choice has been set in MacsecValidateFrames
 	HasChoice() bool
-	// getter for None to set choice.
-	None()
-	// getter for Disabled to set choice.
-	Disabled()
-	// getter for Strict to set choice.
-	Strict()
 	// getter for Check to set choice.
 	Check()
+	// getter for None to set choice.
+	None()
+	// getter for Strict to set choice.
+	Strict()
+	// getter for Disabled to set choice.
+	Disabled()
 }
 
 type MacsecValidateFramesChoiceEnum string
@@ -299,14 +299,14 @@ func (obj *macsecValidateFrames) Choice() MacsecValidateFramesChoiceEnum {
 	return MacsecValidateFramesChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
+// getter for Check to set choice
+func (obj *macsecValidateFrames) Check() {
+	obj.setChoice(MacsecValidateFramesChoice.CHECK)
+}
+
 // getter for None to set choice
 func (obj *macsecValidateFrames) None() {
 	obj.setChoice(MacsecValidateFramesChoice.NONE)
-}
-
-// getter for Disabled to set choice
-func (obj *macsecValidateFrames) Disabled() {
-	obj.setChoice(MacsecValidateFramesChoice.DISABLED)
 }
 
 // getter for Strict to set choice
@@ -314,9 +314,9 @@ func (obj *macsecValidateFrames) Strict() {
 	obj.setChoice(MacsecValidateFramesChoice.STRICT)
 }
 
-// getter for Check to set choice
-func (obj *macsecValidateFrames) Check() {
-	obj.setChoice(MacsecValidateFramesChoice.CHECK)
+// getter for Disabled to set choice
+func (obj *macsecValidateFrames) Disabled() {
+	obj.setChoice(MacsecValidateFramesChoice.DISABLED)
 }
 
 // Controls validation of received frames. disabled - disable validation, remove SecTAGs and ICVs (if present) from received frames. check - enable validation, do not discard invalid frames. strict - enable validation and discard invalid frames. none - no processing, do not remove SecTAGs or ICVs.
