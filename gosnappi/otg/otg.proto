@@ -2063,17 +2063,6 @@ message Layer1 {
   // speed of underlying test interface shall be assumed.
   optional Speed.Enum speed = 2;
 
-  message Mode {
-    enum Enum {
-      unspecified = 0;
-      mode_macsec_128 = 1;
-      mode_macsec_256 = 2;
-    }
-  }
-  // Set the mode if supported. When no mode is explicitly set, the current
-  // mode of underlying test interface shall be assumed.
-  optional Mode.Enum mode = 3;
-
   message Media {
     enum Enum {
       unspecified = 0;
@@ -2085,42 +2074,61 @@ message Layer1 {
   // Set the type of media for test interface if supported. When no media
   // type is explicitly set, the current media type of underlying test
   // interface shall be assumed.
-  optional Media.Enum media = 4;
+  optional Media.Enum media = 3;
 
   // Enable promiscuous mode on test interface. A warning shall be raised if
   // this field is set to `true`, even when it's not supported, ignoring
   // the setting altogether.
   // default = True
-  optional bool promiscuous = 5;
+  optional bool promiscuous = 4;
 
   // Set the maximum transmission unit size. A warning shall be raised if
   // the specified value is valid but not supported, ignoring the setting altogether.
   // default = 1500
-  optional uint32 mtu = 6;
+  optional uint32 mtu = 5;
 
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
-  optional bool ieee_media_defaults = 7;
+  optional bool ieee_media_defaults = 6;
 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
   // Enable/disable auto negotiation.
-  optional bool auto_negotiate = 8;
+  optional bool auto_negotiate = 7;
 
   // Description missing in models
-  Layer1AutoNegotiation auto_negotiation = 9;
+  Layer1AutoNegotiation auto_negotiation = 8;
 
   // Description missing in models
-  Layer1FlowControl flow_control = 10;
+  Layer1FlowControl flow_control = 9;
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
   // objects.
   // required = true
-  optional string name = 11;
+  optional string name = 10;
+
+  message Mode {
+    enum Enum {
+      unspecified = 0;
+      mode_no_change = 1;
+      mode_default = 2;
+      mode_macsec_128 = 3;
+      mode_macsec_256 = 4;
+    }
+  }
+  // Set the mode if supported. When no mode is explicitly set, mode_no_change applies
+  // i.e. the current
+  // mode of underlying test interface shall be assumed. Use mode_default to change to
+  // mode to default mode
+  // to which the hardware port boots up. Use mode_macsec_128 or mode_macsec_256 to choose
+  // 128-bit or 256-bit
+  // MACsec encryption respectively.
+  // default = Mode.Enum.mode_no_change
+  optional Mode.Enum mode = 11;
 }
 
 // Configuration for auto negotiation settings

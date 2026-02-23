@@ -3165,27 +3165,13 @@ components:
           - speed_200_gbps
           - speed_400_gbps
           - speed_800_gbps
-        mode:
-          description: |-
-            Set the mode if supported. When no mode is explicitly set, the current
-            mode of underlying test interface shall be assumed.
-          type: string
-          x-field-uid: 3
-          x-enum:
-            mode_macsec_128:
-              x-field-uid: 1
-            mode_macsec_256:
-              x-field-uid: 2
-          enum:
-          - mode_macsec_128
-          - mode_macsec_256
         media:
           description: |-
             Set the type of media for test interface if supported. When no media
             type is explicitly set, the current media type of underlying test
             interface shall be assumed.
           type: string
-          x-field-uid: 4
+          x-field-uid: 3
           x-enum:
             copper:
               x-field-uid: 1
@@ -3204,7 +3190,7 @@ components:
             the setting altogether.
           type: boolean
           default: true
-          x-field-uid: 5
+          x-field-uid: 4
         mtu:
           description: |-
             Set the maximum transmission unit size. A warning shall be raised if
@@ -3214,7 +3200,7 @@ components:
           minimum: 64
           maximum: 9000
           default: 1500
-          x-field-uid: 6
+          x-field-uid: 5
         ieee_media_defaults:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
@@ -3222,7 +3208,7 @@ components:
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
-          x-field-uid: 7
+          x-field-uid: 6
           x-status:
             status: under-review
             information: This field is currently under review for pending exploration
@@ -3233,7 +3219,7 @@ components:
 
             Enable/disable auto negotiation.
           type: boolean
-          x-field-uid: 8
+          x-field-uid: 7
           x-status:
             status: under-review
             information: This field is currently under review for pending exploration
@@ -3241,16 +3227,39 @@ components:
               already exists.
         auto_negotiation:
           $ref: '#/components/schemas/Layer1.AutoNegotiation'
-          x-field-uid: 9
+          x-field-uid: 8
         flow_control:
           $ref: '#/components/schemas/Layer1.FlowControl'
-          x-field-uid: 10
+          x-field-uid: 9
         name:
-          x-field-uid: 11
+          x-field-uid: 10
           description: |-
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
           type: string
           x-unique: global
+        mode:
+          description: |-
+            Set the mode if supported. When no mode is explicitly set, mode_no_change applies i.e. the current
+            mode of underlying test interface shall be assumed. Use mode_default to change to mode to default mode
+            to which the hardware port boots up. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
+            MACsec encryption respectively.
+          type: string
+          default: mode_no_change
+          x-field-uid: 11
+          x-enum:
+            mode_no_change:
+              x-field-uid: 1
+            mode_default:
+              x-field-uid: 2
+            mode_macsec_128:
+              x-field-uid: 3
+            mode_macsec_256:
+              x-field-uid: 4
+          enum:
+          - mode_no_change
+          - mode_default
+          - mode_macsec_128
+          - mode_macsec_256
     Layer1.AutoNegotiation:
       description: |-
         Configuration for auto negotiation settings

@@ -284,12 +284,6 @@ type Layer1 interface {
 	SetSpeed(value Layer1SpeedEnum) Layer1
 	// HasSpeed checks if Speed has been set in Layer1
 	HasSpeed() bool
-	// Mode returns Layer1ModeEnum, set in Layer1
-	Mode() Layer1ModeEnum
-	// SetMode assigns Layer1ModeEnum provided by user to Layer1
-	SetMode(value Layer1ModeEnum) Layer1
-	// HasMode checks if Mode has been set in Layer1
-	HasMode() bool
 	// Media returns Layer1MediaEnum, set in Layer1
 	Media() Layer1MediaEnum
 	// SetMedia assigns Layer1MediaEnum provided by user to Layer1
@@ -344,6 +338,12 @@ type Layer1 interface {
 	Name() string
 	// SetName assigns string provided by user to Layer1
 	SetName(value string) Layer1
+	// Mode returns Layer1ModeEnum, set in Layer1
+	Mode() Layer1ModeEnum
+	// SetMode assigns Layer1ModeEnum provided by user to Layer1
+	SetMode(value Layer1ModeEnum) Layer1
+	// HasMode checks if Mode has been set in Layer1
+	HasMode() bool
 	setNil()
 }
 
@@ -431,41 +431,6 @@ func (obj *layer1) SetSpeed(value Layer1SpeedEnum) Layer1 {
 	}
 	enumValue := otg.Layer1_Speed_Enum(intValue)
 	obj.obj.Speed = &enumValue
-
-	return obj
-}
-
-type Layer1ModeEnum string
-
-// Enum of Mode on Layer1
-var Layer1Mode = struct {
-	MODE_MACSEC_128 Layer1ModeEnum
-	MODE_MACSEC_256 Layer1ModeEnum
-}{
-	MODE_MACSEC_128: Layer1ModeEnum("mode_macsec_128"),
-	MODE_MACSEC_256: Layer1ModeEnum("mode_macsec_256"),
-}
-
-func (obj *layer1) Mode() Layer1ModeEnum {
-	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
-}
-
-// Set the mode if supported. When no mode is explicitly set, the current
-// mode of underlying test interface shall be assumed.
-// Mode returns a string
-func (obj *layer1) HasMode() bool {
-	return obj.obj.Mode != nil
-}
-
-func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
-	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on Layer1ModeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.Layer1_Mode_Enum(intValue)
-	obj.obj.Mode = &enumValue
 
 	return obj
 }
@@ -692,6 +657,47 @@ func (obj *layer1) SetName(value string) Layer1 {
 	return obj
 }
 
+type Layer1ModeEnum string
+
+// Enum of Mode on Layer1
+var Layer1Mode = struct {
+	MODE_NO_CHANGE  Layer1ModeEnum
+	MODE_DEFAULT    Layer1ModeEnum
+	MODE_MACSEC_128 Layer1ModeEnum
+	MODE_MACSEC_256 Layer1ModeEnum
+}{
+	MODE_NO_CHANGE:  Layer1ModeEnum("mode_no_change"),
+	MODE_DEFAULT:    Layer1ModeEnum("mode_default"),
+	MODE_MACSEC_128: Layer1ModeEnum("mode_macsec_128"),
+	MODE_MACSEC_256: Layer1ModeEnum("mode_macsec_256"),
+}
+
+func (obj *layer1) Mode() Layer1ModeEnum {
+	return Layer1ModeEnum(obj.obj.Mode.Enum().String())
+}
+
+// Set the mode if supported. When no mode is explicitly set, mode_no_change applies i.e. the current
+// mode of underlying test interface shall be assumed. Use mode_default to change to mode to default mode
+// to which the hardware port boots up. Use mode_macsec_128 or mode_macsec_256 to choose 128-bit or 256-bit
+// MACsec encryption respectively.
+// Mode returns a string
+func (obj *layer1) HasMode() bool {
+	return obj.obj.Mode != nil
+}
+
+func (obj *layer1) SetMode(value Layer1ModeEnum) Layer1 {
+	intValue, ok := otg.Layer1_Mode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on Layer1ModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.Layer1_Mode_Enum(intValue)
+	obj.obj.Mode = &enumValue
+
+	return obj
+}
+
 func (obj *layer1) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -729,6 +735,10 @@ func (obj *layer1) setDefault() {
 	}
 	if obj.obj.Mtu == nil {
 		obj.SetMtu(1500)
+	}
+	if obj.obj.Mode == nil {
+		obj.SetMode(Layer1Mode.MODE_NO_CHANGE)
+
 	}
 
 }
