@@ -94,7 +94,6 @@ def test_quickstart():
         print(metrics)
         if metrics.flow_metrics[0].transmit == metrics.flow_metrics[0].STOPPED:
             break
-        time.sleep(0.1)
-
+        time.sleep(0.1)\
 ```
 
