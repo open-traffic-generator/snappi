@@ -274,10 +274,10 @@ type MacsecValidateFrames interface {
 	Disabled()
 	// getter for Strict to set choice.
 	Strict()
-	// getter for None to set choice.
-	None()
 	// getter for Check to set choice.
 	Check()
+	// getter for None to set choice.
+	None()
 }
 
 type MacsecValidateFramesChoiceEnum string
@@ -309,14 +309,14 @@ func (obj *macsecValidateFrames) Strict() {
 	obj.setChoice(MacsecValidateFramesChoice.STRICT)
 }
 
-// getter for None to set choice
-func (obj *macsecValidateFrames) None() {
-	obj.setChoice(MacsecValidateFramesChoice.NONE)
-}
-
 // getter for Check to set choice
 func (obj *macsecValidateFrames) Check() {
 	obj.setChoice(MacsecValidateFramesChoice.CHECK)
+}
+
+// getter for None to set choice
+func (obj *macsecValidateFrames) None() {
+	obj.setChoice(MacsecValidateFramesChoice.NONE)
 }
 
 // Controls validation of received frames. disabled - disable validation, remove SecTAGs and ICVs (if present) from received frames. check - enable validation, do not discard invalid frames. strict - enable validation and discard invalid frames. none - no processing, do not remove SecTAGs or ICVs.
