@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.47.0
+/* Open Traffic Generator API 1.48.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -3779,6 +3779,16 @@ message BgpLearnedInformationFilter {
   // from the peer.
   // default = False
   optional bool unicast_ipv6_prefix = 2;
+
+  // If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved
+  // from the peer.
+  // default = False
+  optional bool ipv4_mpls_unicast_prefix = 3;
+
+  // If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved
+  // from the peer.
+  // default = False
+  optional bool ipv6_mpls_unicast_prefix = 4;
 }
 
 // Emulated BGPv4 route range.
@@ -18640,6 +18650,8 @@ message BgpPrefixStateRequest {
       unspecified = 0;
       ipv4_unicast = 1;
       ipv6_unicast = 2;
+      ipv4_mpls_unicast = 3;
+      ipv6_mpls_unicast = 4;
     }
   }
   // Specify which prefixes to return. If the list is empty or missing then all prefixes
@@ -18720,6 +18732,12 @@ message BgpPrefixesState {
 
   // Description missing in models
   repeated BgpPrefixIpv6UnicastState ipv6_unicast_prefixes = 3;
+
+  // Description missing in models
+  repeated BgpPrefixIpv4MplsUnicastState ipv4_mpls_unicast_prefixes = 4;
+
+  // Description missing in models
+  repeated BgpPrefixIpv6MplsUnicastState ipv6_mpls_unicast_prefixes = 5;
 }
 
 // IPv4 unicast prefix.
@@ -19128,6 +19146,114 @@ message ResultExtendedCommunityNonTransitive2OctetAsType {
 
   // Description missing in models
   ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
+}
+
+// IPv4 MPLS unicast prefix.
+message BgpPrefixIpv4MplsUnicastState {
+
+  // An IPv4 unicast address
+  optional string ipv4_address = 1;
+
+  // Description missing in models
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 5;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 6;
+
+  // One or more MPLS Label 24 bit values bound to this address prefix.
+  repeated uint32 labels = 7;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 8;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 9;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 10;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 11;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 12;
+}
+
+// IPv6 MPLS unicast prefix.
+message BgpPrefixIpv6MplsUnicastState {
+
+  // An IPv6 unicast address
+  optional string ipv6_address = 1;
+
+  // Description missing in models
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 5;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 6;
+
+  // One or more MPLS Label 24 bit values bound to this address prefix.
+  repeated uint32 labels = 7;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 8;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 9;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 10;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 11;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 12;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
