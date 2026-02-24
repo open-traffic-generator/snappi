@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.46.0
+  version: 1.47.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -4277,6 +4277,16 @@ components:
         learned_information_filter:
           x-field-uid: 8
           $ref: '#/components/schemas/Bgp.LearnedInformationFilter'
+        traditional_nlri_for_ipv4_routes:
+          description: "If set to false, all IPv4 routes are advertised using MP_REACH\
+            \ NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\
+            \  By default ( when set to true) , all IPv4 routes are advertised using\
+            \ traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined\
+            \ in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This\
+            \ is applicable only for BGPv4 peers.            "
+          type: boolean
+          default: true
+          x-field-uid: 16
         v4_routes:
           x-field-uid: 9
           description: |-

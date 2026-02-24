@@ -334,6 +334,12 @@ type BgpV4Peer interface {
 	SetLearnedInformationFilter(value BgpLearnedInformationFilter) BgpV4Peer
 	// HasLearnedInformationFilter checks if LearnedInformationFilter has been set in BgpV4Peer
 	HasLearnedInformationFilter() bool
+	// TraditionalNlriForIpv4Routes returns bool, set in BgpV4Peer.
+	TraditionalNlriForIpv4Routes() bool
+	// SetTraditionalNlriForIpv4Routes assigns bool provided by user to BgpV4Peer
+	SetTraditionalNlriForIpv4Routes(value bool) BgpV4Peer
+	// HasTraditionalNlriForIpv4Routes checks if TraditionalNlriForIpv4Routes has been set in BgpV4Peer
+	HasTraditionalNlriForIpv4Routes() bool
 	// V4Routes returns BgpV4PeerBgpV4RouteRangeIterIter, set in BgpV4Peer
 	V4Routes() BgpV4PeerBgpV4RouteRangeIter
 	// V6Routes returns BgpV4PeerBgpV6RouteRangeIterIter, set in BgpV4Peer
@@ -641,6 +647,28 @@ func (obj *bgpV4Peer) SetLearnedInformationFilter(value BgpLearnedInformationFil
 	obj.learnedInformationFilterHolder = nil
 	obj.obj.LearnedInformationFilter = value.msg()
 
+	return obj
+}
+
+// If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.  By default ( when set to true) , all IPv4 routes are advertised using traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This is applicable only for BGPv4 peers.
+// TraditionalNlriForIpv4Routes returns a bool
+func (obj *bgpV4Peer) TraditionalNlriForIpv4Routes() bool {
+
+	return *obj.obj.TraditionalNlriForIpv4Routes
+
+}
+
+// If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.  By default ( when set to true) , all IPv4 routes are advertised using traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This is applicable only for BGPv4 peers.
+// TraditionalNlriForIpv4Routes returns a bool
+func (obj *bgpV4Peer) HasTraditionalNlriForIpv4Routes() bool {
+	return obj.obj.TraditionalNlriForIpv4Routes != nil
+}
+
+// If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.  By default ( when set to true) , all IPv4 routes are advertised using traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This is applicable only for BGPv4 peers.
+// SetTraditionalNlriForIpv4Routes sets the bool value in the BgpV4Peer object
+func (obj *bgpV4Peer) SetTraditionalNlriForIpv4Routes(value bool) BgpV4Peer {
+
+	obj.obj.TraditionalNlriForIpv4Routes = &value
 	return obj
 }
 
@@ -1200,6 +1228,9 @@ func (obj *bgpV4Peer) setDefault() {
 	if obj.obj.AsNumberWidth == nil {
 		obj.SetAsNumberWidth(BgpV4PeerAsNumberWidth.FOUR)
 
+	}
+	if obj.obj.TraditionalNlriForIpv4Routes == nil {
+		obj.SetTraditionalNlriForIpv4Routes(true)
 	}
 
 }
