@@ -301,7 +301,7 @@ func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) None() {
 	obj.setChoice(SecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.NONE)
 }
 
-// Hardware acceleration types. Per port hardware acceleration configuration is availble at options -> per_port_options -> protocols -> macsec -> hardware_accelertation.
+// Hardware acceleration types. Per port global parameters for chosen hardware acceleration mode applicable for all MACsec sessions from the test port are available at options.per_port_options.protocols.macsec.hardware_acceleration.
 // Choice returns a string
 func (obj *secureEntityCryptoEngineEncryptDecryptHardwareAcceleration) HasChoice() bool {
 	return obj.obj.Choice != nil

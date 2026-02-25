@@ -303,7 +303,7 @@ func (obj *lagPortMacsecExcludeProtocolsPerProtocol) validateObj(vObj *validatio
 
 func (obj *lagPortMacsecExcludeProtocolsPerProtocol) setDefault() {
 	if obj.obj.Lacp == nil {
-		obj.SetLacp(true)
+		obj.SetLacp(false)
 	}
 
 }

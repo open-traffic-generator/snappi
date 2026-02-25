@@ -339,11 +339,11 @@ func (obj *secureEntityCryptoEngineEncryptDecryptTxPn) validateObj(vObj *validat
 
 	if obj.obj.StartingXpn != nil {
 
-		if len(*obj.obj.StartingXpn) < 1 || len(*obj.obj.StartingXpn) > 18 {
+		if len(*obj.obj.StartingXpn) < 1 || len(*obj.obj.StartingXpn) > 16 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf(
-					"1 <= length of SecureEntityCryptoEngineEncryptDecryptTxPn.StartingXpn <= 18 but Got %d",
+					"1 <= length of SecureEntityCryptoEngineEncryptDecryptTxPn.StartingXpn <= 16 but Got %d",
 					len(*obj.obj.StartingXpn)))
 		}
 
@@ -356,7 +356,7 @@ func (obj *secureEntityCryptoEngineEncryptDecryptTxPn) setDefault() {
 		obj.SetStartingPn(1)
 	}
 	if obj.obj.StartingXpn == nil {
-		obj.SetStartingXpn("0x0000000000000001")
+		obj.SetStartingXpn("01")
 	}
 
 }

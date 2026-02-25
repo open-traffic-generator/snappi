@@ -272,7 +272,7 @@ type SecureEntityVlanOptions interface {
 	HasEncryptInterfaceVlans() bool
 }
 
-// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
+// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext. If hardware_accelerated.inline_crypto mode is chosen, option related to offset must be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate place to handle cleartext VLAN in receive direction.
 // EncryptInterfaceVlans returns a bool
 func (obj *secureEntityVlanOptions) EncryptInterfaceVlans() bool {
 
@@ -280,13 +280,13 @@ func (obj *secureEntityVlanOptions) EncryptInterfaceVlans() bool {
 
 }
 
-// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
+// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext. If hardware_accelerated.inline_crypto mode is chosen, option related to offset must be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate place to handle cleartext VLAN in receive direction.
 // EncryptInterfaceVlans returns a bool
 func (obj *secureEntityVlanOptions) HasEncryptInterfaceVlans() bool {
 	return obj.obj.EncryptInterfaceVlans != nil
 }
 
-// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
+// Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext. If hardware_accelerated.inline_crypto mode is chosen, option related to offset must be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate place to handle cleartext VLAN in receive direction.
 // SetEncryptInterfaceVlans sets the bool value in the SecureEntityVlanOptions object
 func (obj *secureEntityVlanOptions) SetEncryptInterfaceVlans(value bool) SecureEntityVlanOptions {
 

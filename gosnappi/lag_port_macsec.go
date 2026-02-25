@@ -252,7 +252,7 @@ func (obj *lagPortMacsec) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// LagPortMacsec is configuration of MACsec per LAG member port.
+// LagPortMacsec is configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
 type LagPortMacsec interface {
 	Validation
 	// msg marshals LagPortMacsec to protobuf object *otg.LagPortMacsec
@@ -281,10 +281,10 @@ type LagPortMacsec interface {
 	// SecureEntity is configuration of a Secure Entity (SecY).
 	SetSecureEntity(value SecureEntity) LagPortMacsec
 	// ExcludeProtocols returns LagPortMacsecExcludeProtocols, set in LagPortMacsec.
-	// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx.
+	// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 	ExcludeProtocols() LagPortMacsecExcludeProtocols
 	// SetExcludeProtocols assigns LagPortMacsecExcludeProtocols provided by user to LagPortMacsec.
-	// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx.
+	// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 	SetExcludeProtocols(value LagPortMacsecExcludeProtocols) LagPortMacsec
 	// HasExcludeProtocols checks if ExcludeProtocols has been set in LagPortMacsec
 	HasExcludeProtocols() bool
@@ -313,7 +313,7 @@ func (obj *lagPortMacsec) SetSecureEntity(value SecureEntity) LagPortMacsec {
 	return obj
 }
 
-// Protocols excluded from MACsec encapsulation.
+// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 // ExcludeProtocols returns a LagPortMacsecExcludeProtocols
 func (obj *lagPortMacsec) ExcludeProtocols() LagPortMacsecExcludeProtocols {
 	if obj.obj.ExcludeProtocols == nil {
@@ -325,13 +325,13 @@ func (obj *lagPortMacsec) ExcludeProtocols() LagPortMacsecExcludeProtocols {
 	return obj.excludeProtocolsHolder
 }
 
-// Protocols excluded from MACsec encapsulation.
+// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 // ExcludeProtocols returns a LagPortMacsecExcludeProtocols
 func (obj *lagPortMacsec) HasExcludeProtocols() bool {
 	return obj.obj.ExcludeProtocols != nil
 }
 
-// Protocols excluded from MACsec encapsulation.
+// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 // SetExcludeProtocols sets the LagPortMacsecExcludeProtocols value in the LagPortMacsec object
 func (obj *lagPortMacsec) SetExcludeProtocols(value LagPortMacsecExcludeProtocols) LagPortMacsec {
 

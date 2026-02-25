@@ -250,7 +250,7 @@ func (obj *lagPortMacsecExcludeProtocols) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx.
+// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 type LagPortMacsecExcludeProtocols interface {
 	Validation
 	// msg marshals LagPortMacsecExcludeProtocols to protobuf object *otg.LagPortMacsecExcludeProtocols

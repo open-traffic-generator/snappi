@@ -4,6 +4,9 @@ from .snappi import PortIter
 from .snappi import Lag
 from .snappi import LagPort
 from .snappi import LagPortLacp
+from .snappi import DeviceEthernetBase
+from .snappi import DeviceVlan
+from .snappi import DeviceVlanIter
 from .snappi import LagPortMacsec
 from .snappi import SecureEntity
 from .snappi import SecureEntityKeyGenerationProtocol
@@ -52,9 +55,6 @@ from .snappi import SecureEntityCryptoEngineEncryptDecryptTxPn
 from .snappi import SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 from .snappi import LagPortMacsecExcludeProtocols
 from .snappi import LagPortMacsecExcludeProtocolsPerProtocol
-from .snappi import DeviceEthernetBase
-from .snappi import DeviceVlan
-from .snappi import DeviceVlanIter
 from .snappi import LagPortIter
 from .snappi import LagProtocol
 from .snappi import LagProtocolLacp

@@ -153,11 +153,11 @@ message LagPort {
   LagPortLacp lacp = 2;
 
   // Description missing in models
-  LagPortMacsec macsec = 3;
+  // required = true
+  DeviceEthernetBase ethernet = 3;
 
   // Description missing in models
-  // required = true
-  DeviceEthernetBase ethernet = 4;
+  LagPortMacsec macsec = 4;
 }
 
 // Description missing in models
@@ -240,18 +240,20 @@ message LagPortLacp {
   optional uint32 lacpdu_timeout = 5;
 }
 
-// Configuration of MACsec per LAG member port.
+// Configuration of MACsec per LAG member port. This MACsec configuration per LAG member
+// port and MACsec configuration in any Ethernet device a) on this port or b) on this
+// LAG are mutually exclusive.
 message LagPortMacsec {
 
   // This contains the properties of Secure Entity (SecY) per LAG member port.
   // required = true
   SecureEntity secure_entity = 1;
 
-  // Protocols excluded from MACsec encapsulation.
+  // Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
   LagPortMacsecExcludeProtocols exclude_protocols = 2;
 }
 
-// Protocols excluded from MACsec encapsulation at Tx.
+// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 message LagPortMacsecExcludeProtocols {
 
   message Choice {
@@ -274,7 +276,7 @@ message LagPortMacsecExcludeProtocols {
 message LagPortMacsecExcludeProtocolsPerProtocol {
 
   // Determines whether LACP should be excluded from MACsec encapsulation or not.
-  // default = True
+  // default = False
   optional bool lacp = 1;
 }
 
@@ -1399,6 +1401,9 @@ message SecureEntityDataPlaneRx {
 message SecureEntityVlanOptions {
 
   // Send interface VLANS as encrypted or not. If it is false, VLANs go in cleartext.
+  // If hardware_accelerated.inline_crypto mode is chosen, option related to offset must
+  // be changed from default 12 (to 16 for example for single cleartext VLAN) at appropriate
+  // place to handle cleartext VLAN in receive direction.
   // default = True
   optional bool encrypt_interface_vlans = 1;
 }
@@ -1491,7 +1496,7 @@ message SecureEntityCryptoEngineEncryptOnlyFixedPn {
 
   // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
   // sent out.
-  // default = 0x0000000000000006
+  // default = 06
   optional string xpn = 2;
 }
 
@@ -1507,7 +1512,7 @@ message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
   optional uint32 starting_pn = 2;
 
   // The starting extended packet number(XPN).
-  // default = 0x0000000000000001
+  // default = 01
   optional string starting_xpn = 3;
 }
 
@@ -1527,7 +1532,7 @@ message SecureEntityCryptoEngineEncryptDecryptTxPn {
   optional uint32 starting_pn = 1;
 
   // The starting extended packet number(XPN).
-  // default = 0x0000000000000001
+  // default = 01
   optional string starting_xpn = 2;
 }
 
@@ -1541,8 +1546,8 @@ message SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
       inline_crypto = 2;
     }
   }
-  // Hardware acceleration types. Per port hardware acceleration configuration is availble
-  // at options -> per_port_options -> protocols -> macsec -> hardware_accelertation.
+  // Hardware acceleration types. Per port global parameters for chosen hardware acceleration
+  // mode applicable for all MACsec sessions from the test port are available at options.per_port_options.protocols.macsec.hardware_acceleration.
   // default = Choice.Enum.none
   optional Choice.Enum choice = 1;
 }
@@ -1668,10 +1673,9 @@ message MkaBasicKeySource {
     enum Enum {
       unspecified = 0;
       psk = 1;
-      msk = 2;
     }
   }
-  // Key source. Choose one from PSK or MSK.
+  // Key source. Current choice is PSK only.
   // default = Choice.Enum.psk
   optional Choice.Enum choice = 1;
 
@@ -2110,25 +2114,6 @@ message Layer1 {
   // objects.
   // required = true
   optional string name = 10;
-
-  message Mode {
-    enum Enum {
-      unspecified = 0;
-      mode_no_change = 1;
-      mode_default = 2;
-      mode_macsec_128 = 3;
-      mode_macsec_256 = 4;
-    }
-  }
-  // Set the mode if supported. When no mode is explicitly set, mode_no_change applies
-  // i.e. the current
-  // mode of underlying test interface shall be assumed. Use mode_default to change to
-  // mode to default mode
-  // to which the hardware port boots up. Use mode_macsec_128 or mode_macsec_256 to choose
-  // 128-bit or 256-bit
-  // MACsec encryption respectively.
-  // default = Mode.Enum.mode_no_change
-  optional Mode.Enum mode = 11;
 }
 
 // Configuration for auto negotiation settings
