@@ -289,10 +289,10 @@ type PortProtocol interface {
 	// HasRocev2 checks if Rocev2 has been set in PortProtocol
 	HasRocev2() bool
 	// Macsec returns MacsecPerPortSettings, set in PortProtocol.
-	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port.
+	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
 	Macsec() MacsecPerPortSettings
 	// SetMacsec assigns MacsecPerPortSettings provided by user to PortProtocol.
-	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port.
+	// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
 	SetMacsec(value MacsecPerPortSettings) PortProtocol
 	// HasMacsec checks if Macsec has been set in PortProtocol
 	HasMacsec() bool

@@ -281,10 +281,10 @@ type LagPortMacsecExcludeProtocols interface {
 	// getter for None to set choice.
 	None()
 	// PerProtocol returns LagPortMacsecExcludeProtocolsPerProtocol, set in LagPortMacsecExcludeProtocols.
-	// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx.
+	// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member port.
 	PerProtocol() LagPortMacsecExcludeProtocolsPerProtocol
 	// SetPerProtocol assigns LagPortMacsecExcludeProtocolsPerProtocol provided by user to LagPortMacsecExcludeProtocols.
-	// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx.
+	// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member port.
 	SetPerProtocol(value LagPortMacsecExcludeProtocolsPerProtocol) LagPortMacsecExcludeProtocols
 	// HasPerProtocol checks if PerProtocol has been set in LagPortMacsecExcludeProtocols
 	HasPerProtocol() bool

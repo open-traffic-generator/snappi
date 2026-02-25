@@ -596,56 +596,6 @@ components:
           maximum: 65535
           default: 0
           x-field-uid: 5
-    Lag.Port.Macsec:
-      description: |-
-        Configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
-      type: object
-      required:
-      - secure_entity
-      properties:
-        secure_entity:
-          description: |-
-            This contains the properties of Secure Entity (SecY) per LAG member port.
-          $ref: '#/components/schemas/SecureEntity'
-          x-field-uid: 1
-        exclude_protocols:
-          description: |-
-            Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
-          $ref: '#/components/schemas/Lag.Port.Macsec.ExcludeProtocols'
-          x-field-uid: 2
-    Lag.Port.Macsec.ExcludeProtocols:
-      description: |-
-        Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
-      type: object
-      properties:
-        choice:
-          description: |-
-            Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at Tx. Choose per_protocol to opt per protocol.
-          type: string
-          default: none
-          x-field-uid: 1
-          x-enum:
-            none:
-              x-field-uid: 1
-            per_protocol:
-              x-field-uid: 2
-          enum:
-          - none
-          - per_protocol
-        per_protocol:
-          $ref: '#/components/schemas/Lag.Port.Macsec.ExcludeProtocols.PerProtocol'
-          x-field-uid: 2
-    Lag.Port.Macsec.ExcludeProtocols.PerProtocol:
-      description: |-
-        Per protocol choice to exclude from MACsec encapsulation at Tx.
-      type: object
-      properties:
-        lacp:
-          description: |-
-            Determines whether LACP should be excluded from MACsec encapsulation or not.
-          type: boolean
-          default: false
-          x-field-uid: 1
     Device.EthernetBase:
       description: |-
         Base Ethernet interface.
@@ -1939,6 +1889,80 @@ components:
             UTF-8 strings are parameters needed for booting, e.g., kernel parameters.
           type: string
           x-field-uid: 1
+    Lag.Port.Macsec:
+      description: |-
+        Configuration of MACsec per LAG member port. This MACsec configuration per LAG member port and MACsec configuration in any Ethernet device a) on this port or b) on this LAG are mutually exclusive.
+      type: object
+      required:
+      - secure_entity
+      properties:
+        secure_entity:
+          description: |-
+            This contains the properties of Secure Entity (SecY) per LAG member port.
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity'
+          x-field-uid: 1
+        exclude_protocols:
+          description: |-
+            Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
+          $ref: '#/components/schemas/Lag.Port.Macsec.ExcludeProtocols'
+          x-field-uid: 2
+    Lag.Port.Macsec.ExcludeProtocols:
+      description: |-
+        Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at Tx. Choose per_protocol to opt per protocol.
+          type: string
+          default: none
+          x-field-uid: 1
+          x-enum:
+            none:
+              x-field-uid: 1
+            per_protocol:
+              x-field-uid: 2
+          enum:
+          - none
+          - per_protocol
+        per_protocol:
+          $ref: '#/components/schemas/Lag.Port.Macsec.ExcludeProtocols.PerProtocol'
+          x-field-uid: 2
+    Lag.Port.Macsec.ExcludeProtocols.PerProtocol:
+      description: |-
+        Per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member port.
+      type: object
+      properties:
+        lacp:
+          description: |-
+            Determines whether LACP should be excluded from MACsec encapsulation or not.
+          type: boolean
+          default: false
+          x-field-uid: 1
+    Lag.Port.Macsec.SecureEntity:
+      description: |-
+        Configuration of Secure Entity (SecY) per LAG member port.
+      type: object
+      required:
+      - name
+      - key_generation_protocol
+      properties:
+        name:
+          x-field-uid: 1
+          description: |-
+            Globally unique name of an object. It also serves as the primary key for arrays of objects.
+          type: string
+          x-unique: global
+        key_generation_protocol:
+          description: |-
+            This contains the properties of key generation protocol of Secure Entity (SecY).
+          $ref: '#/components/schemas/SecureEntity.KeyGenerationProtocol'
+          x-field-uid: 2
+        data_plane:
+          description: |-
+            This contains the properties of data plane of Secure Entity (SecY).
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.DataPlane'
+          x-field-uid: 3
     Device.Macsec:
       description: |-
         A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
@@ -3098,6 +3122,194 @@ components:
           items:
             $ref: '#/components/schemas/SecureEntity.StaticKey.Sak'
           x-field-uid: 4
+    Lag.Port.Macsec.SecureEntity.DataPlane:
+      description: |-
+        A container of data plane properties.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Choose "encapsulation" so that data packets are sent with MACsec encapsulation. Choose "no_encapsulation" so that data packets are sent without MACsec encapsulation.
+          type: string
+          default: encapsulation
+          x-field-uid: 1
+          x-enum:
+            encapsulation:
+              x-field-uid: 1
+            no_encapsulation:
+              x-field-uid: 2
+          enum:
+          - encapsulation
+          - no_encapsulation
+        encapsulation:
+          description: |-
+            A container of encapsulation properties for a secure entity(SecY).
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.DataPlane.Encapsulation'
+          x-field-uid: 2
+    Lag.Port.Macsec.SecureEntity.DataPlane.Encapsulation:
+      description: |-
+        A container of encapsulation properties for a secure entity(SecY).
+      type: object
+      required:
+      - crypto_engine
+      properties:
+        tx:
+          description: |-
+            Tx properties of SecY.
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.DataPlane.Tx'
+          x-field-uid: 1
+        rx:
+          description: |-
+            Rx properties of SecY.
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.DataPlane.Rx'
+          x-field-uid: 2
+        crypto_engine:
+          description: |-
+            Crypto engine properties of SecY.
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.CryptoEngine'
+          x-field-uid: 3
+    Lag.Port.Macsec.SecureEntity.DataPlane.Tx:
+      description: |-
+        A container of Tx properties of SecY.
+      type: object
+      properties:
+        end_station:
+          description: |-
+            End station on not.
+          type: boolean
+          default: false
+          x-field-uid: 1
+        include_sci:
+          description: |-
+            Include SCI on not.
+          type: boolean
+          default: false
+          x-field-uid: 2
+    Lag.Port.Macsec.SecureEntity.DataPlane.Rx:
+      description: |-
+        A container for Rx settings of SecY.
+      type: object
+      properties:
+        replay_protection:
+          description: "Enable replay protection on not. "
+          type: boolean
+          default: false
+          x-field-uid: 1
+        replay_window:
+          description: "Replay window size. "
+          type: integer
+          format: uint32
+          minimum: 1
+          default: 1
+          x-field-uid: 2
+    Lag.Port.Macsec.SecureEntity.CryptoEngine:
+      description: |-
+        A container of crypto engine properties of a SecY.
+      type: object
+      properties:
+        encrypt_decrypt:
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt'
+          x-field-uid: 1
+    Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt:
+      description: |-
+        The container for configuration of crypto engine of encrypt and decrypt type. Such engine can both encrypt transmitted packets and decrypt packets on arrival. It can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+      type: object
+      properties:
+        tx_pn:
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt.TxPn'
+          x-field-uid: 1
+        hardware_acceleration:
+          $ref: '#/components/schemas/Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration'
+          x-field-uid: 2
+    Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt.TxPn:
+      description: |-
+        Tx packet number(PN) configuration.
+      type: object
+      properties:
+        starting_pn:
+          description: |-
+            The starting packet number(PN).
+          type: integer
+          format: uint32
+          minimum: 1
+          default: 1
+          x-field-uid: 1
+        starting_xpn:
+          description: |-
+            The starting extended packet number(XPN).
+          type: string
+          format: hex
+          minLength: 1
+          maxLength: 16
+          minimum: 1
+          default: '01'
+          x-field-uid: 2
+    Lag.Port.Macsec.SecureEntity.CryptoEngine.EncryptDecrypt.HardwareAcceleration:
+      description: |-
+        Hardware acceleration configuration for offloading MACsec processing to hardware.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Hardware acceleration types.
+          type: string
+          default: none
+          x-field-uid: 1
+          x-enum:
+            none:
+              x-field-uid: 1
+            inline_crypto:
+              x-field-uid: 2
+          enum:
+          - none
+          - inline_crypto
+        inline_crypto:
+          $ref: '#/components/schemas/Lag.Port.Macsec.HardwareAcceleration.InlineCrypto'
+          x-field-uid: 2
+        validate_frames:
+          $ref: '#/components/schemas/Lag.Port.Macsec.ValidateFrames'
+          x-field-uid: 3
+    Lag.Port.Macsec.ValidateFrames:
+      description: |-
+        Controls validation of received frames.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Controls validation of received frames. check - enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict - enable validation and discard invalid frames and increment in_pkts_not_valid stats.
+          type: string
+          default: check
+          x-field-uid: 1
+          x-enum:
+            check:
+              x-field-uid: 1
+            strict:
+              x-field-uid: 2
+          enum:
+          - check
+          - strict
+    Lag.Port.Macsec.HardwareAcceleration.InlineCrypto:
+      description: |-
+        Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
+      type: object
+      properties:
+        rx_sc_identifying_field:
+          description: |-
+            The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC based on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
+          type: string
+          default: source_mac
+          x-field-uid: 1
+          x-enum:
+            source_mac:
+              x-field-uid: 1
+            sci_sytem_id:
+              x-field-uid: 2
+            sci_port_id:
+              x-field-uid: 3
+          enum:
+          - source_mac
+          - sci_sytem_id
+          - sci_port_id
     Layer1:
       description: |-
         A container for layer1 settings.
@@ -18276,7 +18488,7 @@ components:
           x-field-uid: 14
     Macsec.PerPortSettings:
       description: |-
-        MACsec hardware acceleration settings of a test port.
+        MACsec hardware acceleration settings of a test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
       type: object
       properties:
         hardware_acceleration:
@@ -18314,24 +18526,18 @@ components:
       properties:
         choice:
           description: |-
-            Controls validation of received frames. disabled - disable validation, remove SecTAGs and ICVs (if present) from received frames. check - enable validation, do not discard invalid frames. strict - enable validation and discard invalid frames. none - no processing, do not remove SecTAGs or ICVs.
+            Controls validation of received frames. check - enable validation, do not discard invalid frames and increment in_pkts_invalid stats. strict - enable validation and discard invalid frames and increment in_pkts_not_valid stats.
           type: string
           default: check
           x-field-uid: 1
           x-enum:
-            disabled:
-              x-field-uid: 1
             check:
-              x-field-uid: 2
+              x-field-uid: 1
             strict:
-              x-field-uid: 3
-            none:
-              x-field-uid: 4
+              x-field-uid: 2
           enum:
-          - disabled
           - check
           - strict
-          - none
     Macsec.HardwareAcceleration.InlineCrypto:
       description: |-
         Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
@@ -18346,7 +18552,7 @@ components:
           x-field-uid: 1
         rx_sc_identifying_field:
           description: |-
-            The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
+            The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC based on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
           type: string
           default: source_mac
           x-field-uid: 2

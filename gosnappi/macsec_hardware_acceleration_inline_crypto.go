@@ -340,7 +340,7 @@ func (obj *macsecHardwareAccelerationInlineCrypto) RxScIdentifyingField() Macsec
 	return MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum(obj.obj.RxScIdentifyingField.Enum().String())
 }
 
-// The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
+// The field based on which secure channel(SC) will be identified by the receiving port. Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2) SCI system ID - identify SC based on SCI system ID field. 3) SCI port ID - identify based on SCI port ID field.
 // RxScIdentifyingField returns a string
 func (obj *macsecHardwareAccelerationInlineCrypto) HasRxScIdentifyingField() bool {
 	return obj.obj.RxScIdentifyingField != nil

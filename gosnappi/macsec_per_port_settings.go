@@ -252,7 +252,7 @@ func (obj *macsecPerPortSettings) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port.
+// MacsecPerPortSettings is mACsec hardware acceleration settings of a test port. These settings are applicable to all MACsec devices configured on this port. These settings are not applicable to MACsec configured on LAG member port.
 type MacsecPerPortSettings interface {
 	Validation
 	// msg marshals MacsecPerPortSettings to protobuf object *otg.MacsecPerPortSettings

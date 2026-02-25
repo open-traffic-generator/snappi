@@ -16,7 +16,7 @@ type lagPortMacsec struct {
 	obj                    *otg.LagPortMacsec
 	marshaller             marshalLagPortMacsec
 	unMarshaller           unMarshalLagPortMacsec
-	secureEntityHolder     SecureEntity
+	secureEntityHolder     LagPortMacsecSecureEntity
 	excludeProtocolsHolder LagPortMacsecExcludeProtocols
 }
 
@@ -274,12 +274,12 @@ type LagPortMacsec interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// SecureEntity returns SecureEntity, set in LagPortMacsec.
-	// SecureEntity is configuration of a Secure Entity (SecY).
-	SecureEntity() SecureEntity
-	// SetSecureEntity assigns SecureEntity provided by user to LagPortMacsec.
-	// SecureEntity is configuration of a Secure Entity (SecY).
-	SetSecureEntity(value SecureEntity) LagPortMacsec
+	// SecureEntity returns LagPortMacsecSecureEntity, set in LagPortMacsec.
+	// LagPortMacsecSecureEntity is configuration of Secure Entity (SecY) per LAG member port.
+	SecureEntity() LagPortMacsecSecureEntity
+	// SetSecureEntity assigns LagPortMacsecSecureEntity provided by user to LagPortMacsec.
+	// LagPortMacsecSecureEntity is configuration of Secure Entity (SecY) per LAG member port.
+	SetSecureEntity(value LagPortMacsecSecureEntity) LagPortMacsec
 	// ExcludeProtocols returns LagPortMacsecExcludeProtocols, set in LagPortMacsec.
 	// LagPortMacsecExcludeProtocols is protocols excluded from MACsec encapsulation at Tx from the LAG member port.
 	ExcludeProtocols() LagPortMacsecExcludeProtocols
@@ -292,20 +292,20 @@ type LagPortMacsec interface {
 }
 
 // This contains the properties of Secure Entity (SecY) per LAG member port.
-// SecureEntity returns a SecureEntity
-func (obj *lagPortMacsec) SecureEntity() SecureEntity {
+// SecureEntity returns a LagPortMacsecSecureEntity
+func (obj *lagPortMacsec) SecureEntity() LagPortMacsecSecureEntity {
 	if obj.obj.SecureEntity == nil {
-		obj.obj.SecureEntity = NewSecureEntity().msg()
+		obj.obj.SecureEntity = NewLagPortMacsecSecureEntity().msg()
 	}
 	if obj.secureEntityHolder == nil {
-		obj.secureEntityHolder = &secureEntity{obj: obj.obj.SecureEntity}
+		obj.secureEntityHolder = &lagPortMacsecSecureEntity{obj: obj.obj.SecureEntity}
 	}
 	return obj.secureEntityHolder
 }
 
 // This contains the properties of Secure Entity (SecY) per LAG member port.
-// SetSecureEntity sets the SecureEntity value in the LagPortMacsec object
-func (obj *lagPortMacsec) SetSecureEntity(value SecureEntity) LagPortMacsec {
+// SetSecureEntity sets the LagPortMacsecSecureEntity value in the LagPortMacsec object
+func (obj *lagPortMacsec) SetSecureEntity(value LagPortMacsecSecureEntity) LagPortMacsec {
 
 	obj.secureEntityHolder = nil
 	obj.obj.SecureEntity = value.msg()

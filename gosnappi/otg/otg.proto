@@ -240,46 +240,6 @@ message LagPortLacp {
   optional uint32 lacpdu_timeout = 5;
 }
 
-// Configuration of MACsec per LAG member port. This MACsec configuration per LAG member
-// port and MACsec configuration in any Ethernet device a) on this port or b) on this
-// LAG are mutually exclusive.
-message LagPortMacsec {
-
-  // This contains the properties of Secure Entity (SecY) per LAG member port.
-  // required = true
-  SecureEntity secure_entity = 1;
-
-  // Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
-  LagPortMacsecExcludeProtocols exclude_protocols = 2;
-}
-
-// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
-message LagPortMacsecExcludeProtocols {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      none = 1;
-      per_protocol = 2;
-    }
-  }
-  // Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at
-  // Tx. Choose per_protocol to opt per protocol.
-  // default = Choice.Enum.none
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  LagPortMacsecExcludeProtocolsPerProtocol per_protocol = 2;
-}
-
-// Per protocol choice to exclude from MACsec encapsulation at Tx.
-message LagPortMacsecExcludeProtocolsPerProtocol {
-
-  // Determines whether LACP should be excluded from MACsec encapsulation or not.
-  // default = False
-  optional bool lacp = 1;
-}
-
 // Base Ethernet interface.
 message DeviceEthernetBase {
 
@@ -1275,6 +1235,63 @@ message Dhcpv6ServerOptionsBootFileParams {
   optional string parameter = 1;
 }
 
+// Configuration of MACsec per LAG member port. This MACsec configuration per LAG member
+// port and MACsec configuration in any Ethernet device a) on this port or b) on this
+// LAG are mutually exclusive.
+message LagPortMacsec {
+
+  // This contains the properties of Secure Entity (SecY) per LAG member port.
+  // required = true
+  LagPortMacsecSecureEntity secure_entity = 1;
+
+  // Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
+  LagPortMacsecExcludeProtocols exclude_protocols = 2;
+}
+
+// Protocols excluded from MACsec encapsulation at Tx from the LAG member port.
+message LagPortMacsecExcludeProtocols {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      per_protocol = 2;
+    }
+  }
+  // Choose none to exclude no protocols i.e. all protocols are MACsec encapsulated at
+  // Tx. Choose per_protocol to opt per protocol.
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  LagPortMacsecExcludeProtocolsPerProtocol per_protocol = 2;
+}
+
+// Per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member
+// port.
+message LagPortMacsecExcludeProtocolsPerProtocol {
+
+  // Determines whether LACP should be excluded from MACsec encapsulation or not.
+  // default = False
+  optional bool lacp = 1;
+}
+
+// Configuration of Secure Entity (SecY) per LAG member port.
+message LagPortMacsecSecureEntity {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // This contains the properties of key generation protocol of Secure Entity (SecY).
+  // required = true
+  SecureEntityKeyGenerationProtocol key_generation_protocol = 2;
+
+  // This contains the properties of data plane of Secure Entity (SecY).
+  LagPortMacsecSecureEntityDataPlane data_plane = 3;
+}
+
 // A container of properties for a MACsec capable device. Reference https://1.ieee802.org/security/802-1ae/.
 message DeviceMacsec {
 
@@ -2032,6 +2049,154 @@ message SecureEntityStaticKeyRxSc {
 
   // Rx SAK pool.
   repeated SecureEntityStaticKeySak saks = 4;
+}
+
+// A container of data plane properties.
+message LagPortMacsecSecureEntityDataPlane {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      encapsulation = 1;
+      no_encapsulation = 2;
+    }
+  }
+  // Choose encapsulation so that data packets are sent with MACsec encapsulation. Choose
+  // no_encapsulation so that data packets are sent without MACsec encapsulation.
+  // default = Choice.Enum.encapsulation
+  optional Choice.Enum choice = 1;
+
+  // A container of encapsulation properties for a secure entity(SecY).
+  LagPortMacsecSecureEntityDataPlaneEncapsulation encapsulation = 2;
+}
+
+// A container of encapsulation properties for a secure entity(SecY).
+message LagPortMacsecSecureEntityDataPlaneEncapsulation {
+
+  // Tx properties of SecY.
+  LagPortMacsecSecureEntityDataPlaneTx tx = 1;
+
+  // Rx properties of SecY.
+  LagPortMacsecSecureEntityDataPlaneRx rx = 2;
+
+  // Crypto engine properties of SecY.
+  // required = true
+  LagPortMacsecSecureEntityCryptoEngine crypto_engine = 3;
+}
+
+// A container of Tx properties of SecY.
+message LagPortMacsecSecureEntityDataPlaneTx {
+
+  // End station on not.
+  // default = False
+  optional bool end_station = 1;
+
+  // Include SCI on not.
+  // default = False
+  optional bool include_sci = 2;
+}
+
+// A container for Rx settings of SecY.
+message LagPortMacsecSecureEntityDataPlaneRx {
+
+  // Enable replay protection on not.
+  // default = False
+  optional bool replay_protection = 1;
+
+  // Replay window size.
+  // default = 1
+  optional uint32 replay_window = 2;
+}
+
+// A container of crypto engine properties of a SecY.
+message LagPortMacsecSecureEntityCryptoEngine {
+
+  // Description missing in models
+  LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt encrypt_decrypt = 1;
+}
+
+// The container for configuration of crypto engine of encrypt and decrypt type. Such
+// engine can both encrypt transmitted packets and decrypt packets on arrival. It can
+// have hardware acceleration for faster encryption/ decryption. As both encryption
+// and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+message LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt {
+
+  // Description missing in models
+  LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn tx_pn = 1;
+
+  // Description missing in models
+  LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration hardware_acceleration = 2;
+}
+
+// Tx packet number(PN) configuration.
+message LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn {
+
+  // The starting packet number(PN).
+  // default = 1
+  optional uint32 starting_pn = 1;
+
+  // The starting extended packet number(XPN).
+  // default = 01
+  optional string starting_xpn = 2;
+}
+
+// Hardware acceleration configuration for offloading MACsec processing to hardware.
+message LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      none = 1;
+      inline_crypto = 2;
+    }
+  }
+  // Hardware acceleration types.
+  // default = Choice.Enum.none
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  LagPortMacsecHardwareAccelerationInlineCrypto inline_crypto = 2;
+
+  // Description missing in models
+  LagPortMacsecValidateFrames validate_frames = 3;
+}
+
+// Controls validation of received frames.
+message LagPortMacsecValidateFrames {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      check = 1;
+      strict = 2;
+    }
+  }
+  // Controls validation of received frames. check - enable validation, do not discard
+  // invalid frames and increment in_pkts_invalid stats. strict - enable validation and
+  // discard invalid frames and increment in_pkts_not_valid stats.
+  // default = Choice.Enum.check
+  optional Choice.Enum choice = 1;
+}
+
+// Inline cryto engine configuration. Encryption/ decryption are offloaded to hardware.
+// Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated
+// in MACsec header on transmit.
+message LagPortMacsecHardwareAccelerationInlineCrypto {
+
+  message RxScIdentifyingField {
+    enum Enum {
+      unspecified = 0;
+      source_mac = 1;
+      sci_sytem_id = 2;
+      sci_port_id = 3;
+    }
+  }
+  // The field based on which secure channel(SC) will be identified by the receiving port.
+  // Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2)
+  // SCI system ID - identify SC based on SCI system ID field. 3) SCI port ID - identify
+  // based on SCI port ID field.
+  // default = RxScIdentifyingField.Enum.source_mac
+  optional RxScIdentifyingField.Enum rx_sc_identifying_field = 1;
 }
 
 // A container for layer1 settings.
@@ -13910,7 +14075,9 @@ message Rocev2DCQCN {
   optional float hyper_increment_rate = 14;
 }
 
-// MACsec hardware acceleration settings of a test port.
+// MACsec hardware acceleration settings of a test port. These settings are applicable
+// to all MACsec devices configured on this port. These settings are not applicable
+// to MACsec configured on LAG member port.
 message MacsecPerPortSettings {
 
   // Description missing in models
@@ -13944,16 +14111,13 @@ message MacsecValidateFrames {
   message Choice {
     enum Enum {
       unspecified = 0;
-      disabled = 1;
-      check = 2;
-      strict = 3;
-      none = 4;
+      check = 1;
+      strict = 2;
     }
   }
-  // Controls validation of received frames. disabled - disable validation, remove SecTAGs
-  // and ICVs (if present) from received frames. check - enable validation, do not discard
-  // invalid frames. strict - enable validation and discard invalid frames. none - no
-  // processing, do not remove SecTAGs or ICVs.
+  // Controls validation of received frames. check - enable validation, do not discard
+  // invalid frames and increment in_pkts_invalid stats. strict - enable validation and
+  // discard invalid frames and increment in_pkts_not_valid stats.
   // default = Choice.Enum.check
   optional Choice.Enum choice = 1;
 }
@@ -13977,7 +14141,7 @@ message MacsecHardwareAccelerationInlineCrypto {
   }
   // The field based on which secure channel(SC) will be identified by the receiving port.
   // Supported fields are:- - 1) source MAC - identify SC based on source MAC field. 2)
-  // SCI system ID - identify SC bbased on SCI system ID field. 3) SCI port ID - identify
+  // SCI system ID - identify SC based on SCI system ID field. 3) SCI port ID - identify
   // based on SCI port ID field.
   // default = RxScIdentifyingField.Enum.source_mac
   optional RxScIdentifyingField.Enum rx_sc_identifying_field = 2;

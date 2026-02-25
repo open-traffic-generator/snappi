@@ -242,7 +242,7 @@ func (obj *lagPortMacsecExcludeProtocolsPerProtocol) Clone() (LagPortMacsecExclu
 	return newObj, nil
 }
 
-// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx.
+// LagPortMacsecExcludeProtocolsPerProtocol is per protocol choice to exclude from MACsec encapsulation at Tx from this LAG member port.
 type LagPortMacsecExcludeProtocolsPerProtocol interface {
 	Validation
 	// msg marshals LagPortMacsecExcludeProtocolsPerProtocol to protobuf object *otg.LagPortMacsecExcludeProtocolsPerProtocol
