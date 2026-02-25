@@ -278,6 +278,8 @@ type FlowIpv4Options interface {
 	setChoice(value FlowIpv4OptionsChoiceEnum) FlowIpv4Options
 	// HasChoice checks if Choice has been set in FlowIpv4Options
 	HasChoice() bool
+	// getter for Timestamp to set choice.
+	Timestamp()
 	// getter for RouterAlert to set choice.
 	RouterAlert()
 	// Custom returns FlowIpv4OptionsCustom, set in FlowIpv4Options.
@@ -297,13 +299,20 @@ type FlowIpv4OptionsChoiceEnum string
 var FlowIpv4OptionsChoice = struct {
 	ROUTER_ALERT FlowIpv4OptionsChoiceEnum
 	CUSTOM       FlowIpv4OptionsChoiceEnum
+	TIMESTAMP    FlowIpv4OptionsChoiceEnum
 }{
 	ROUTER_ALERT: FlowIpv4OptionsChoiceEnum("router_alert"),
 	CUSTOM:       FlowIpv4OptionsChoiceEnum("custom"),
+	TIMESTAMP:    FlowIpv4OptionsChoiceEnum("timestamp"),
 }
 
 func (obj *flowIpv4Options) Choice() FlowIpv4OptionsChoiceEnum {
 	return FlowIpv4OptionsChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for Timestamp to set choice
+func (obj *flowIpv4Options) Timestamp() {
+	obj.setChoice(FlowIpv4OptionsChoice.TIMESTAMP)
 }
 
 // getter for RouterAlert to set choice
