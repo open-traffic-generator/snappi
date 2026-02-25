@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.46.0
+  version: 1.48.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -5482,6 +5482,16 @@ components:
         learned_information_filter:
           x-field-uid: 8
           $ref: '#/components/schemas/Bgp.LearnedInformationFilter'
+        traditional_nlri_for_ipv4_routes:
+          description: "If set to false, all IPv4 routes are advertised using MP_REACH\
+            \ NLRI and withdrawn using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.\
+            \  By default ( when set to true) , all IPv4 routes are advertised using\
+            \ traditional or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined\
+            \ in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3 .  This\
+            \ is applicable only for BGPv4 peers.            "
+          type: boolean
+          default: true
+          x-field-uid: 16
         v4_routes:
           x-field-uid: 9
           description: |-
@@ -6439,6 +6449,18 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
+        ipv4_mpls_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 3
+        ipv6_mpls_unicast_prefix:
+          description: |-
+            If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved from the peer.
+          type: boolean
+          default: false
+          x-field-uid: 4
     Bgp.V4RouteRange:
       description: |-
         Emulated BGPv4 route range.
@@ -25541,9 +25563,15 @@ components:
                 x-field-uid: 1
               ipv6_unicast:
                 x-field-uid: 2
+              ipv4_mpls_unicast:
+                x-field-uid: 3
+              ipv6_mpls_unicast:
+                x-field-uid: 4
             enum:
             - ipv4_unicast
             - ipv6_unicast
+            - ipv4_mpls_unicast
+            - ipv6_mpls_unicast
           x-field-uid: 2
         ipv4_unicast_filters:
           description: |-
@@ -25659,6 +25687,16 @@ components:
           items:
             $ref: '#/components/schemas/BgpPrefixIpv6Unicast.State'
           x-field-uid: 3
+        ipv4_mpls_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv4MplsUnicast.State'
+          x-field-uid: 4
+        ipv6_mpls_unicast_prefixes:
+          type: array
+          items:
+            $ref: '#/components/schemas/BgpPrefixIpv6MplsUnicast.State'
+          x-field-uid: 5
     BgpPrefixIpv4Unicast.State:
       description: |-
         IPv4 unicast prefix.
@@ -26181,6 +26219,178 @@ components:
         link_bandwidth_subtype:
           x-field-uid: 2
           $ref: '#/components/schemas/Result.ExtendedCommunity.NonTransitive2OctetAsType.LinkBandwidth'
+    BgpPrefixIpv4MplsUnicast.State:
+      description: |-
+        IPv4 MPLS unicast prefix.
+      type: object
+      properties:
+        ipv4_address:
+          description: |-
+            An IPv4 unicast address
+          type: string
+          x-field-uid: 1
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 32
+          x-field-uid: 2
+        origin:
+          x-field-uid: 3
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 4
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 5
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        labels:
+          description: |-
+            One or more MPLS Label 24 bit values bound to this address prefix.
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 7
+        communities:
+          x-field-uid: 8
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 9
+        as_path:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 11
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 12
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
+    BgpPrefixIpv6MplsUnicast.State:
+      description: |-
+        IPv6 MPLS unicast prefix.
+      type: object
+      properties:
+        ipv6_address:
+          description: |-
+            An IPv6 unicast address
+          type: string
+          x-field-uid: 1
+        prefix_length:
+          type: integer
+          format: uint32
+          maximum: 128
+          x-field-uid: 2
+        origin:
+          x-field-uid: 3
+          description: |-
+            The origin of the prefix.
+          type: string
+          x-enum:
+            igp:
+              x-field-uid: 1
+            egp:
+              x-field-uid: 2
+            incomplete:
+              x-field-uid: 3
+          enum:
+          - igp
+          - egp
+          - incomplete
+        path_id:
+          x-field-uid: 4
+          description: |-
+            The path id.
+          type: integer
+          format: uint32
+        ipv4_next_hop:
+          x-field-uid: 5
+          description: |-
+            The IPv4 address of the egress interface.
+          type: string
+          format: ipv4
+        ipv6_next_hop:
+          x-field-uid: 6
+          description: |-
+            The IPv6 address of the egress interface.
+          type: string
+          format: ipv6
+        labels:
+          description: |-
+            One or more MPLS Label 24 bit values bound to this address prefix.
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 7
+        communities:
+          x-field-uid: 8
+          description: |-
+            Optional community attributes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.BgpCommunity'
+        extended_communities:
+          description: |-
+            Optional received Extended Community attributes. Each received Extended Community attribute is available for retrieval in two forms. Support of the 'raw' format in which all 8 bytes (16 hex characters) is always present and available for use. In addition, if supported by the implementation, the Extended Community attribute may also be retrieved in the  'structured' format which is an optional field.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result.ExtendedCommunity'
+          x-field-uid: 9
+        as_path:
+          x-field-uid: 10
+          $ref: '#/components/schemas/Result.BgpAsPath'
+        local_preference:
+          x-field-uid: 11
+          description: |-
+            The local preference is a well-known attribute and the value is used for route selection. The route with the highest local preference value is preferred.
+          type: integer
+          format: uint32
+        multi_exit_discriminator:
+          x-field-uid: 12
+          description: |-
+            The multi exit discriminator (MED) is an optional non-transitive attribute and the value is used for route selection. The route with the lowest MED value is preferred.
+          type: integer
+          format: uint32
     Result.BgpCommunity:
       description: |-
         BGP communities provide additional capability for tagging routes and  for modifying BGP routing policy on upstream and downstream routers. BGP community is a 32-bit number which is broken into 16-bit AS number and  a 16-bit custom value.
