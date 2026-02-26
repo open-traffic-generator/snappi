@@ -272,22 +272,66 @@ type LagPortMacsecSecureEntityCryptoEngine interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
+	// Choice returns LagPortMacsecSecureEntityCryptoEngineChoiceEnum, set in LagPortMacsecSecureEntityCryptoEngine
+	Choice() LagPortMacsecSecureEntityCryptoEngineChoiceEnum
+	// setChoice assigns LagPortMacsecSecureEntityCryptoEngineChoiceEnum provided by user to LagPortMacsecSecureEntityCryptoEngine
+	setChoice(value LagPortMacsecSecureEntityCryptoEngineChoiceEnum) LagPortMacsecSecureEntityCryptoEngine
+	// HasChoice checks if Choice has been set in LagPortMacsecSecureEntityCryptoEngine
+	HasChoice() bool
 	// EncryptDecrypt returns LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt, set in LagPortMacsecSecureEntityCryptoEngine.
-	// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type. Such engine can both encrypt transmitted packets and decrypt packets on arrival. It can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+	// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type.
 	EncryptDecrypt() LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
 	// SetEncryptDecrypt assigns LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt provided by user to LagPortMacsecSecureEntityCryptoEngine.
-	// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type. Such engine can both encrypt transmitted packets and decrypt packets on arrival. It can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+	// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type.
 	SetEncryptDecrypt(value LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt) LagPortMacsecSecureEntityCryptoEngine
 	// HasEncryptDecrypt checks if EncryptDecrypt has been set in LagPortMacsecSecureEntityCryptoEngine
 	HasEncryptDecrypt() bool
 	setNil()
 }
 
+type LagPortMacsecSecureEntityCryptoEngineChoiceEnum string
+
+// Enum of Choice on LagPortMacsecSecureEntityCryptoEngine
+var LagPortMacsecSecureEntityCryptoEngineChoice = struct {
+	ENCRYPT_DECRYPT LagPortMacsecSecureEntityCryptoEngineChoiceEnum
+}{
+	ENCRYPT_DECRYPT: LagPortMacsecSecureEntityCryptoEngineChoiceEnum("encrypt_decrypt"),
+}
+
+func (obj *lagPortMacsecSecureEntityCryptoEngine) Choice() LagPortMacsecSecureEntityCryptoEngineChoiceEnum {
+	return LagPortMacsecSecureEntityCryptoEngineChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// Engine type based on encryption and/ or decryption capability. Supported type: encrypt_decrypt - engine can both encrypt transmitted packets and decrypt packets on arrival. Such engine can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+// Choice returns a string
+func (obj *lagPortMacsecSecureEntityCryptoEngine) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
+
+func (obj *lagPortMacsecSecureEntityCryptoEngine) setChoice(value LagPortMacsecSecureEntityCryptoEngineChoiceEnum) LagPortMacsecSecureEntityCryptoEngine {
+	intValue, ok := otg.LagPortMacsecSecureEntityCryptoEngine_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on LagPortMacsecSecureEntityCryptoEngineChoiceEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.LagPortMacsecSecureEntityCryptoEngine_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.EncryptDecrypt = nil
+	obj.encryptDecryptHolder = nil
+
+	if value == LagPortMacsecSecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT {
+		obj.obj.EncryptDecrypt = NewLagPortMacsecSecureEntityCryptoEngineEncryptDecrypt().msg()
+	}
+
+	return obj
+}
+
 // description is TBD
 // EncryptDecrypt returns a LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
 func (obj *lagPortMacsecSecureEntityCryptoEngine) EncryptDecrypt() LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt {
 	if obj.obj.EncryptDecrypt == nil {
-		obj.obj.EncryptDecrypt = NewLagPortMacsecSecureEntityCryptoEngineEncryptDecrypt().msg()
+		obj.setChoice(LagPortMacsecSecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT)
 	}
 	if obj.encryptDecryptHolder == nil {
 		obj.encryptDecryptHolder = &lagPortMacsecSecureEntityCryptoEngineEncryptDecrypt{obj: obj.obj.EncryptDecrypt}
@@ -304,7 +348,7 @@ func (obj *lagPortMacsecSecureEntityCryptoEngine) HasEncryptDecrypt() bool {
 // description is TBD
 // SetEncryptDecrypt sets the LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt value in the LagPortMacsecSecureEntityCryptoEngine object
 func (obj *lagPortMacsecSecureEntityCryptoEngine) SetEncryptDecrypt(value LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt) LagPortMacsecSecureEntityCryptoEngine {
-
+	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT)
 	obj.encryptDecryptHolder = nil
 	obj.obj.EncryptDecrypt = value.msg()
 
@@ -324,5 +368,29 @@ func (obj *lagPortMacsecSecureEntityCryptoEngine) validateObj(vObj *validation, 
 }
 
 func (obj *lagPortMacsecSecureEntityCryptoEngine) setDefault() {
+	var choices_set int = 0
+	var choice LagPortMacsecSecureEntityCryptoEngineChoiceEnum
+
+	if obj.obj.EncryptDecrypt != nil {
+		choices_set += 1
+		choice = LagPortMacsecSecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT
+	}
+	if choices_set == 0 {
+		if obj.obj.Choice == nil {
+			obj.setChoice(LagPortMacsecSecureEntityCryptoEngineChoice.ENCRYPT_DECRYPT)
+
+		}
+
+	} else if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in LagPortMacsecSecureEntityCryptoEngine")
+			}
+		} else {
+			intVal := otg.LagPortMacsecSecureEntityCryptoEngine_Choice_Enum_value[string(choice)]
+			enumValue := otg.LagPortMacsecSecureEntityCryptoEngine_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

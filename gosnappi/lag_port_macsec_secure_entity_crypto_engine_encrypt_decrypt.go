@@ -252,7 +252,7 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecrypt) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type. Such engine can both encrypt transmitted packets and decrypt packets on arrival. It can have hardware acceleration for faster encryption/ decryption. As both encryption and decryption are possible, stateful (e.g. TCP) traffic can be sent/ received.
+// LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt is the container for configuration of crypto engine of encrypt and decrypt type.
 type LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt interface {
 	Validation
 	// msg marshals LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt to protobuf object *otg.LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
