@@ -41,12 +41,11 @@ from .snappi import LagPortMacsecSecureEntityDataPlane
 from .snappi import LagPortMacsecSecureEntityDataPlaneEncapsulation
 from .snappi import LagPortMacsecSecureEntityDataPlaneTx
 from .snappi import LagPortMacsecSecureEntityDataPlaneRx
+from .snappi import LagPortMacsecSecureEntityDataPlaneRxValidateFrames
 from .snappi import LagPortMacsecSecureEntityCryptoEngine
 from .snappi import LagPortMacsecSecureEntityCryptoEngineEncryptDecrypt
 from .snappi import LagPortMacsecSecureEntityCryptoEngineEncryptDecryptTxPn
 from .snappi import LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-from .snappi import LagPortMacsecHardwareAccelerationInlineCrypto
-from .snappi import LagPortMacsecValidateFrames
 from .snappi import LagPortMacsecExcludeProtocols
 from .snappi import LagPortMacsecExcludeProtocolsPerProtocol
 from .snappi import LagPortIter
@@ -418,7 +417,6 @@ from .snappi import SecureEntityDataPlane
 from .snappi import SecureEntityDataPlaneEncapsulation
 from .snappi import SecureEntityDataPlaneTx
 from .snappi import SecureEntityDataPlaneRx
-from .snappi import SecureEntityVlanOptions
 from .snappi import SecureEntityCryptoEngine
 from .snappi import SecureEntityCryptoEngineEncryptOnly
 from .snappi import SecureEntityCryptoEngineEncryptOnlyTxSc
@@ -430,6 +428,7 @@ from .snappi import SecureEntityCryptoEngineEncryptOnlyTrafficOptions
 from .snappi import SecureEntityCryptoEngineEncryptDecrypt
 from .snappi import SecureEntityCryptoEngineEncryptDecryptTxPn
 from .snappi import SecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+from .snappi import SecureEntityVlanOptions
 from .snappi import DeviceMacsecEthernetInterfaceIter
 from .snappi import DeviceOspfv3Router
 from .snappi import Ospfv3RouterId

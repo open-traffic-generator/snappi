@@ -13,9 +13,10 @@ import (
 // ***** LagPortMacsecSecureEntityDataPlaneRx *****
 type lagPortMacsecSecureEntityDataPlaneRx struct {
 	validation
-	obj          *otg.LagPortMacsecSecureEntityDataPlaneRx
-	marshaller   marshalLagPortMacsecSecureEntityDataPlaneRx
-	unMarshaller unMarshalLagPortMacsecSecureEntityDataPlaneRx
+	obj                  *otg.LagPortMacsecSecureEntityDataPlaneRx
+	marshaller           marshalLagPortMacsecSecureEntityDataPlaneRx
+	unMarshaller         unMarshalLagPortMacsecSecureEntityDataPlaneRx
+	validateFramesHolder LagPortMacsecSecureEntityDataPlaneRxValidateFrames
 }
 
 func NewLagPortMacsecSecureEntityDataPlaneRx() LagPortMacsecSecureEntityDataPlaneRx {
@@ -29,7 +30,7 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRx) msg() *otg.LagPortMacsecSecureE
 }
 
 func (obj *lagPortMacsecSecureEntityDataPlaneRx) setMsg(msg *otg.LagPortMacsecSecureEntityDataPlaneRx) LagPortMacsecSecureEntityDataPlaneRx {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshallagPortMacsecSecureEntityDataPlaneRx) FromPbText(value string)
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshallagPortMacsecSecureEntityDataPlaneRx) FromYaml(value string) e
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshallagPortMacsecSecureEntityDataPlaneRx) FromJson(value string) e
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRx) Clone() (LagPortMacsecSecureEnt
 	return newObj, nil
 }
 
+func (obj *lagPortMacsecSecureEntityDataPlaneRx) setNil() {
+	obj.validateFramesHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // LagPortMacsecSecureEntityDataPlaneRx is a container for Rx settings of SecY.
 type LagPortMacsecSecureEntityDataPlaneRx interface {
 	Validation
@@ -276,6 +284,15 @@ type LagPortMacsecSecureEntityDataPlaneRx interface {
 	SetReplayWindow(value uint32) LagPortMacsecSecureEntityDataPlaneRx
 	// HasReplayWindow checks if ReplayWindow has been set in LagPortMacsecSecureEntityDataPlaneRx
 	HasReplayWindow() bool
+	// ValidateFrames returns LagPortMacsecSecureEntityDataPlaneRxValidateFrames, set in LagPortMacsecSecureEntityDataPlaneRx.
+	// LagPortMacsecSecureEntityDataPlaneRxValidateFrames is controls validation of received frames.
+	ValidateFrames() LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+	// SetValidateFrames assigns LagPortMacsecSecureEntityDataPlaneRxValidateFrames provided by user to LagPortMacsecSecureEntityDataPlaneRx.
+	// LagPortMacsecSecureEntityDataPlaneRxValidateFrames is controls validation of received frames.
+	SetValidateFrames(value LagPortMacsecSecureEntityDataPlaneRxValidateFrames) LagPortMacsecSecureEntityDataPlaneRx
+	// HasValidateFrames checks if ValidateFrames has been set in LagPortMacsecSecureEntityDataPlaneRx
+	HasValidateFrames() bool
+	setNil()
 }
 
 // Enable replay protection on not.
@@ -322,6 +339,34 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRx) SetReplayWindow(value uint32) L
 	return obj
 }
 
+// description is TBD
+// ValidateFrames returns a LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+func (obj *lagPortMacsecSecureEntityDataPlaneRx) ValidateFrames() LagPortMacsecSecureEntityDataPlaneRxValidateFrames {
+	if obj.obj.ValidateFrames == nil {
+		obj.obj.ValidateFrames = NewLagPortMacsecSecureEntityDataPlaneRxValidateFrames().msg()
+	}
+	if obj.validateFramesHolder == nil {
+		obj.validateFramesHolder = &lagPortMacsecSecureEntityDataPlaneRxValidateFrames{obj: obj.obj.ValidateFrames}
+	}
+	return obj.validateFramesHolder
+}
+
+// description is TBD
+// ValidateFrames returns a LagPortMacsecSecureEntityDataPlaneRxValidateFrames
+func (obj *lagPortMacsecSecureEntityDataPlaneRx) HasValidateFrames() bool {
+	return obj.obj.ValidateFrames != nil
+}
+
+// description is TBD
+// SetValidateFrames sets the LagPortMacsecSecureEntityDataPlaneRxValidateFrames value in the LagPortMacsecSecureEntityDataPlaneRx object
+func (obj *lagPortMacsecSecureEntityDataPlaneRx) SetValidateFrames(value LagPortMacsecSecureEntityDataPlaneRxValidateFrames) LagPortMacsecSecureEntityDataPlaneRx {
+
+	obj.validateFramesHolder = nil
+	obj.obj.ValidateFrames = value.msg()
+
+	return obj
+}
+
 func (obj *lagPortMacsecSecureEntityDataPlaneRx) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -335,6 +380,11 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRx) validateObj(vObj *validation, s
 				fmt.Sprintf("1 <= LagPortMacsecSecureEntityDataPlaneRx.ReplayWindow <= 4294967295 but Got %d", *obj.obj.ReplayWindow))
 		}
 
+	}
+
+	if obj.obj.ValidateFrames != nil {
+
+		obj.ValidateFrames().validateObj(vObj, set_default)
 	}
 
 }

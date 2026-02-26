@@ -327,13 +327,13 @@ type MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum string
 
 // Enum of RxScIdentifyingField on MacsecHardwareAccelerationInlineCrypto
 var MacsecHardwareAccelerationInlineCryptoRxScIdentifyingField = struct {
-	SOURCE_MAC   MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
-	SCI_SYTEM_ID MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
-	SCI_PORT_ID  MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
+	SOURCE_MAC    MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
+	SCI_SYSTEM_ID MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
+	SCI_PORT_ID   MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum
 }{
-	SOURCE_MAC:   MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("source_mac"),
-	SCI_SYTEM_ID: MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("sci_sytem_id"),
-	SCI_PORT_ID:  MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("sci_port_id"),
+	SOURCE_MAC:    MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("source_mac"),
+	SCI_SYSTEM_ID: MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("sci_system_id"),
+	SCI_PORT_ID:   MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum("sci_port_id"),
 }
 
 func (obj *macsecHardwareAccelerationInlineCrypto) RxScIdentifyingField() MacsecHardwareAccelerationInlineCryptoRxScIdentifyingFieldEnum {

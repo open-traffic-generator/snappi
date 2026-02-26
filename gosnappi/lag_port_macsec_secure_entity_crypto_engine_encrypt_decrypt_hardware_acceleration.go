@@ -13,11 +13,9 @@ import (
 // ***** LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration *****
 type lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration struct {
 	validation
-	obj                  *otg.LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	marshaller           marshalLagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	unMarshaller         unMarshalLagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	inlineCryptoHolder   LagPortMacsecHardwareAccelerationInlineCrypto
-	validateFramesHolder LagPortMacsecValidateFrames
+	obj          *otg.LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+	marshaller   marshalLagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
+	unMarshaller unMarshalLagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 }
 
 func NewLagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration() LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
@@ -31,7 +29,7 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerati
 }
 
 func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) setMsg(msg *otg.LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -114,7 +112,7 @@ func (m *unMarshallagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcc
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -160,7 +158,7 @@ func (m *unMarshallagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcc
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -199,7 +197,7 @@ func (m *unMarshallagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcc
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -244,14 +242,6 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerati
 	return newObj, nil
 }
 
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) setNil() {
-	obj.inlineCryptoHolder = nil
-	obj.validateFramesHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration is hardware acceleration configuration for offloading MACsec processing to hardware.
 type LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration interface {
 	Validation
@@ -280,25 +270,10 @@ type LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration int
 	setChoice(value LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	// HasChoice checks if Choice has been set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	HasChoice() bool
+	// getter for InlineCrypto to set choice.
+	InlineCrypto()
 	// getter for None to set choice.
 	None()
-	// InlineCrypto returns LagPortMacsecHardwareAccelerationInlineCrypto, set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration.
-	// LagPortMacsecHardwareAccelerationInlineCrypto is inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
-	InlineCrypto() LagPortMacsecHardwareAccelerationInlineCrypto
-	// SetInlineCrypto assigns LagPortMacsecHardwareAccelerationInlineCrypto provided by user to LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration.
-	// LagPortMacsecHardwareAccelerationInlineCrypto is inline cryto engine configuration. Encryption/ decryption are offloaded to hardware. Also dynamic fields e.g. packet number(PN) and integrity check value(ICV) are updated in MACsec header on transmit.
-	SetInlineCrypto(value LagPortMacsecHardwareAccelerationInlineCrypto) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	// HasInlineCrypto checks if InlineCrypto has been set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	HasInlineCrypto() bool
-	// ValidateFrames returns LagPortMacsecValidateFrames, set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration.
-	// LagPortMacsecValidateFrames is controls validation of received frames.
-	ValidateFrames() LagPortMacsecValidateFrames
-	// SetValidateFrames assigns LagPortMacsecValidateFrames provided by user to LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration.
-	// LagPortMacsecValidateFrames is controls validation of received frames.
-	SetValidateFrames(value LagPortMacsecValidateFrames) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	// HasValidateFrames checks if ValidateFrames has been set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
-	HasValidateFrames() bool
-	setNil()
 }
 
 type LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum string
@@ -314,6 +289,11 @@ var LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoic
 
 func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) Choice() LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum {
 	return LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for InlineCrypto to set choice
+func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) InlineCrypto() {
+	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
 }
 
 // getter for None to set choice
@@ -336,68 +316,6 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerati
 	}
 	enumValue := otg.LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
-	obj.obj.InlineCrypto = nil
-	obj.inlineCryptoHolder = nil
-
-	if value == LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO {
-		obj.obj.InlineCrypto = NewLagPortMacsecHardwareAccelerationInlineCrypto().msg()
-	}
-
-	return obj
-}
-
-// description is TBD
-// InlineCrypto returns a LagPortMacsecHardwareAccelerationInlineCrypto
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) InlineCrypto() LagPortMacsecHardwareAccelerationInlineCrypto {
-	if obj.obj.InlineCrypto == nil {
-		obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
-	}
-	if obj.inlineCryptoHolder == nil {
-		obj.inlineCryptoHolder = &lagPortMacsecHardwareAccelerationInlineCrypto{obj: obj.obj.InlineCrypto}
-	}
-	return obj.inlineCryptoHolder
-}
-
-// description is TBD
-// InlineCrypto returns a LagPortMacsecHardwareAccelerationInlineCrypto
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) HasInlineCrypto() bool {
-	return obj.obj.InlineCrypto != nil
-}
-
-// description is TBD
-// SetInlineCrypto sets the LagPortMacsecHardwareAccelerationInlineCrypto value in the LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration object
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) SetInlineCrypto(value LagPortMacsecHardwareAccelerationInlineCrypto) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
-	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
-	obj.inlineCryptoHolder = nil
-	obj.obj.InlineCrypto = value.msg()
-
-	return obj
-}
-
-// description is TBD
-// ValidateFrames returns a LagPortMacsecValidateFrames
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) ValidateFrames() LagPortMacsecValidateFrames {
-	if obj.obj.ValidateFrames == nil {
-		obj.obj.ValidateFrames = NewLagPortMacsecValidateFrames().msg()
-	}
-	if obj.validateFramesHolder == nil {
-		obj.validateFramesHolder = &lagPortMacsecValidateFrames{obj: obj.obj.ValidateFrames}
-	}
-	return obj.validateFramesHolder
-}
-
-// description is TBD
-// ValidateFrames returns a LagPortMacsecValidateFrames
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) HasValidateFrames() bool {
-	return obj.obj.ValidateFrames != nil
-}
-
-// description is TBD
-// SetValidateFrames sets the LagPortMacsecValidateFrames value in the LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration object
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) SetValidateFrames(value LagPortMacsecValidateFrames) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration {
-
-	obj.validateFramesHolder = nil
-	obj.obj.ValidateFrames = value.msg()
 
 	return obj
 }
@@ -407,26 +325,11 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerati
 		obj.setDefault()
 	}
 
-	if obj.obj.InlineCrypto != nil {
-
-		obj.InlineCrypto().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.ValidateFrames != nil {
-
-		obj.ValidateFrames().validateObj(vObj, set_default)
-	}
-
 }
 
 func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) setDefault() {
 	var choices_set int = 0
 	var choice LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum
-
-	if obj.obj.InlineCrypto != nil {
-		choices_set += 1
-		choice = LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO
-	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
 			obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.NONE)
