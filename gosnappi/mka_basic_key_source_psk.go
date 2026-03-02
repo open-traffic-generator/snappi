@@ -445,7 +445,7 @@ func (obj *mkaBasicKeySourcePsk) setDefault() {
 		obj.SetCakValue("F123456789ABCDEF0123456789ABCDEF")
 	}
 	if obj.obj.CakName == nil {
-		obj.SetCakName("F123456789ABCDEF0123456789ABCDEFF123456789ABCDEF0123456789ABCDEF")
+		obj.SetCakName("AAAA")
 	}
 
 }
