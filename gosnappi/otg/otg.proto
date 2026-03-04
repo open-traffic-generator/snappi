@@ -10364,7 +10364,9 @@ message FlowIpv4 {
 // IPv4 options that exceeds 40 bytes and specify header length as auto, implementation
 // should throw error. Currently IP options supported are: 1. router_alert option allows
 // devices to intercept packets not addressed to them directly as defined in RFC2113.
-// 2. custom option is provided to configure user defined IP options as needed.
+// 2. custom option is provided to configure user defined IP options as needed. 3. timestamp
+// option allows routers to record their local timestamp and IP address for latency
+// measurement and path diagnostics as defined in RFC791.
 message FlowIpv4Options {
 
   message Choice {
@@ -10381,6 +10383,9 @@ message FlowIpv4Options {
 
   // Description missing in models
   FlowIpv4OptionsCustom custom = 2;
+
+  // Description missing in models
+  FlowIpv4OptionsTimestamp timestamp = 3;
 }
 
 // User defined IP options to be appended to the IPv4 header.
@@ -10435,6 +10440,90 @@ message FlowIpv4OptionsCustomLength {
   // Description missing in models
   // default = 0
   optional uint32 value = 3;
+}
+
+// IPv4 timestamp option to be appended to the IPv4 header.
+message FlowIpv4OptionsTimestamp {
+
+  // Description missing in models
+  FlowIpv4OptionsTimestampPointer pointer = 1;
+
+  // A counter that indicates the number of intermediate nodes that were unable to record
+  // a timestamp because the options data area was full.
+  PatternFlowIpv4OptionsTimestampOverflow overflow = 2;
+
+  // Description missing in models
+  FlowIpv4OptionsTimestampFormat format = 3;
+}
+
+// The attribute pointer indicates the octet offset where the next router should begin
+// recording its data.
+// Choices of input are,
+// 1. auto : The OTG implementation can provide a system generated value for this property.
+// If the implementation is unable to generate a value, the default value must be used.
+// 2. value: User can configure the pointer value.
+message FlowIpv4OptionsTimestampPointer {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 5
+  optional uint32 value = 2;
+}
+
+// The format field defines the structural layout of the options data area and the specific
+// recording logic routers must follow when appending timestamps and IP addresses.
+message FlowIpv4OptionsTimestampFormat {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      timestamps = 1;
+      address_and_timestamps = 2;
+      prespecified_address_and_timestamps = 3;
+    }
+  }
+  // Description missing in models
+  optional Choice.Enum choice = 1;
+
+  // A recording mode where routers append only their 32-bit universal timestamps sequentially
+  // into the options data area.
+  repeated FlowIpv4OptionsTimestampFormatTimestamp timestamps = 2;
+
+  // A recording mode where each router appends its 32-bit IPv4 address followed immediately
+  // by its 32-bit universal timestamp into the options data area.
+  repeated FlowIpv4OptionsTimestampFormatAddressAndTimestamp address_and_timestamps = 3;
+
+  // A selective recording mode where only routers whose IPv4 addresses match the pre-listed
+  // entries in the header record their 32-bit universal timestamps into the options data
+  // area.
+  repeated FlowIpv4OptionsTimestampFormatAddressAndTimestamp prespecified_address_and_timestamps = 4;
+}
+
+// Description missing in models
+message FlowIpv4OptionsTimestampFormatTimestamp {
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatTimestampTimestamp timestamp = 1;
+}
+
+// Description missing in models
+message FlowIpv4OptionsTimestampFormatAddressAndTimestamp {
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampAddress address = 1;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampTimestamp timestamp = 2;
 }
 
 // A container for ipv4 raw, tos, dscp ip priorities.
@@ -23061,6 +23150,198 @@ message PatternFlowIpv4OptionsCustomTypeOptionNumber {
 
   // Description missing in models
   PatternFlowIpv4OptionsCustomTypeOptionNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsTimestampOverflowCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A counter that indicates the number of intermediate nodes that were unable to record
+// a timestamp because the options data area was full.
+message PatternFlowIpv4OptionsTimestampOverflow {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampOverflowCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampOverflowCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsTimestampFormatTimestampTimestampCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 32-bit value representing the time of packet processing, recorded as the number
+// of milliseconds elapsed since midnight Universal Time (UT).
+message PatternFlowIpv4OptionsTimestampFormatTimestampTimestamp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatTimestampTimestampCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatTimestampTimestampCounter decrement = 6;
+}
+
+// ipv4 counter pattern
+message PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampAddressCounter {
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 0.0.0.1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// IPv4 address of the router interface that handled the packet, serving as a network
+// identifier for the corresponding timestamp entry.
+message PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampAddress {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0.0.0.0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['0.0.0.0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampAddressCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampAddressCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampTimestampCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 32-bit value representing the time of packet processing, recorded as the number
+// of milliseconds elapsed since midnight Universal Time (UT).
+message PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampTimestamp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampTimestampCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv4OptionsTimestampFormatAddressAndTimestampTimestampCounter decrement = 6;
 }
 
 // integer counter pattern
