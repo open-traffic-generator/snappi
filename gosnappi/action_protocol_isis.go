@@ -276,6 +276,8 @@ type ActionProtocolIsis interface {
 	Choice() ActionProtocolIsisChoiceEnum
 	// setChoice assigns ActionProtocolIsisChoiceEnum provided by user to ActionProtocolIsis
 	setChoice(value ActionProtocolIsisChoiceEnum) ActionProtocolIsis
+	// getter for OverloadBit to set choice.
+	OverloadBit()
 	// InitiateGracefulRestart returns ActionProtocolIsisInitiateRestart, set in ActionProtocolIsis.
 	// ActionProtocolIsisInitiateRestart is timers T1 and T2 are used both by a restarting router and a starting router. Timer T3 is used only by a restarting router.
 	// - Timer T1 is maintained per interface and indicates the time after which an unacknowledged (re)start attempt will be repeated. Its value is 3 seconds.
@@ -304,12 +306,19 @@ type ActionProtocolIsisChoiceEnum string
 // Enum of Choice on ActionProtocolIsis
 var ActionProtocolIsisChoice = struct {
 	INITIATE_GRACEFUL_RESTART ActionProtocolIsisChoiceEnum
+	OVERLOAD_BIT              ActionProtocolIsisChoiceEnum
 }{
 	INITIATE_GRACEFUL_RESTART: ActionProtocolIsisChoiceEnum("initiate_graceful_restart"),
+	OVERLOAD_BIT:              ActionProtocolIsisChoiceEnum("overload_bit"),
 }
 
 func (obj *actionProtocolIsis) Choice() ActionProtocolIsisChoiceEnum {
 	return ActionProtocolIsisChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// getter for OverloadBit to set choice
+func (obj *actionProtocolIsis) OverloadBit() {
+	obj.setChoice(ActionProtocolIsisChoice.OVERLOAD_BIT)
 }
 
 func (obj *actionProtocolIsis) setChoice(value ActionProtocolIsisChoiceEnum) ActionProtocolIsis {

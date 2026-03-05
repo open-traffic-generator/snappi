@@ -1424,6 +1424,7 @@ from .snappi import StateProtocolBgp
 from .snappi import StateProtocolBgpPeers
 from .snappi import StateProtocolIsis
 from .snappi import StateProtocolIsisRouters
+from .snappi import StateProtocolIsisSimLinks
 from .snappi import StateProtocolOspfv2
 from .snappi import StateProtocolOspfv2Routers
 from .snappi import StateProtocolOspfv3

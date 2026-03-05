@@ -13,10 +13,11 @@ import (
 // ***** StateProtocolIsis *****
 type stateProtocolIsis struct {
 	validation
-	obj           *otg.StateProtocolIsis
-	marshaller    marshalStateProtocolIsis
-	unMarshaller  unMarshalStateProtocolIsis
-	routersHolder StateProtocolIsisRouters
+	obj                  *otg.StateProtocolIsis
+	marshaller           marshalStateProtocolIsis
+	unMarshaller         unMarshalStateProtocolIsis
+	routersHolder        StateProtocolIsisRouters
+	simulatedLinksHolder StateProtocolIsisSimLinks
 }
 
 func NewStateProtocolIsis() StateProtocolIsis {
@@ -245,6 +246,7 @@ func (obj *stateProtocolIsis) Clone() (StateProtocolIsis, error) {
 
 func (obj *stateProtocolIsis) setNil() {
 	obj.routersHolder = nil
+	obj.simulatedLinksHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -284,6 +286,14 @@ type StateProtocolIsis interface {
 	SetRouters(value StateProtocolIsisRouters) StateProtocolIsis
 	// HasRouters checks if Routers has been set in StateProtocolIsis
 	HasRouters() bool
+	// SimulatedLinks returns StateProtocolIsisSimLinks, set in StateProtocolIsis.
+	// StateProtocolIsisSimLinks is sets the state of configured one or more Simulated Links (Interfaces)
+	SimulatedLinks() StateProtocolIsisSimLinks
+	// SetSimulatedLinks assigns StateProtocolIsisSimLinks provided by user to StateProtocolIsis.
+	// StateProtocolIsisSimLinks is sets the state of configured one or more Simulated Links (Interfaces)
+	SetSimulatedLinks(value StateProtocolIsisSimLinks) StateProtocolIsis
+	// HasSimulatedLinks checks if SimulatedLinks has been set in StateProtocolIsis
+	HasSimulatedLinks() bool
 	setNil()
 }
 
@@ -347,6 +357,34 @@ func (obj *stateProtocolIsis) SetRouters(value StateProtocolIsisRouters) StatePr
 	return obj
 }
 
+// description is TBD
+// SimulatedLinks returns a StateProtocolIsisSimLinks
+func (obj *stateProtocolIsis) SimulatedLinks() StateProtocolIsisSimLinks {
+	if obj.obj.SimulatedLinks == nil {
+		obj.obj.SimulatedLinks = NewStateProtocolIsisSimLinks().msg()
+	}
+	if obj.simulatedLinksHolder == nil {
+		obj.simulatedLinksHolder = &stateProtocolIsisSimLinks{obj: obj.obj.SimulatedLinks}
+	}
+	return obj.simulatedLinksHolder
+}
+
+// description is TBD
+// SimulatedLinks returns a StateProtocolIsisSimLinks
+func (obj *stateProtocolIsis) HasSimulatedLinks() bool {
+	return obj.obj.SimulatedLinks != nil
+}
+
+// description is TBD
+// SetSimulatedLinks sets the StateProtocolIsisSimLinks value in the StateProtocolIsis object
+func (obj *stateProtocolIsis) SetSimulatedLinks(value StateProtocolIsisSimLinks) StateProtocolIsis {
+
+	obj.simulatedLinksHolder = nil
+	obj.obj.SimulatedLinks = value.msg()
+
+	return obj
+}
+
 func (obj *stateProtocolIsis) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -360,6 +398,11 @@ func (obj *stateProtocolIsis) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Routers != nil {
 
 		obj.Routers().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.SimulatedLinks != nil {
+
+		obj.SimulatedLinks().validateObj(vObj, set_default)
 	}
 
 }
