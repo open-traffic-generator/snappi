@@ -14289,13 +14289,14 @@ message StateProtocolBgpPeers {
   optional State.Enum state = 2;
 }
 
-// Sets state of configured ISIS routers.
+// Sets state of configured ISIS routers and Links.
 message StateProtocolIsis {
 
   message Choice {
     enum Enum {
       unspecified = 0;
       routers = 1;
+      simulated_links = 2;
     }
   }
   // Description missing in models

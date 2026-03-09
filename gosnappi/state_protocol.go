@@ -325,10 +325,10 @@ type StateProtocol interface {
 	// HasBgp checks if Bgp has been set in StateProtocol
 	HasBgp() bool
 	// Isis returns StateProtocolIsis, set in StateProtocol.
-	// StateProtocolIsis is sets state of configured ISIS routers.
+	// StateProtocolIsis is sets state of configured ISIS routers and Links.
 	Isis() StateProtocolIsis
 	// SetIsis assigns StateProtocolIsis provided by user to StateProtocol.
-	// StateProtocolIsis is sets state of configured ISIS routers.
+	// StateProtocolIsis is sets state of configured ISIS routers and Links.
 	SetIsis(value StateProtocolIsis) StateProtocol
 	// HasIsis checks if Isis has been set in StateProtocol
 	HasIsis() bool

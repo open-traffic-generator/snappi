@@ -252,7 +252,7 @@ func (obj *stateProtocolIsis) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// StateProtocolIsis is sets state of configured ISIS routers.
+// StateProtocolIsis is sets state of configured ISIS routers and Links.
 type StateProtocolIsis interface {
 	Validation
 	// msg marshals StateProtocolIsis to protobuf object *otg.StateProtocolIsis
@@ -301,9 +301,11 @@ type StateProtocolIsisChoiceEnum string
 
 // Enum of Choice on StateProtocolIsis
 var StateProtocolIsisChoice = struct {
-	ROUTERS StateProtocolIsisChoiceEnum
+	ROUTERS         StateProtocolIsisChoiceEnum
+	SIMULATED_LINKS StateProtocolIsisChoiceEnum
 }{
-	ROUTERS: StateProtocolIsisChoiceEnum("routers"),
+	ROUTERS:         StateProtocolIsisChoiceEnum("routers"),
+	SIMULATED_LINKS: StateProtocolIsisChoiceEnum("simulated_links"),
 }
 
 func (obj *stateProtocolIsis) Choice() StateProtocolIsisChoiceEnum {
@@ -319,11 +321,17 @@ func (obj *stateProtocolIsis) setChoice(value StateProtocolIsisChoiceEnum) State
 	}
 	enumValue := otg.StateProtocolIsis_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SimulatedLinks = nil
+	obj.simulatedLinksHolder = nil
 	obj.obj.Routers = nil
 	obj.routersHolder = nil
 
 	if value == StateProtocolIsisChoice.ROUTERS {
 		obj.obj.Routers = NewStateProtocolIsisRouters().msg()
+	}
+
+	if value == StateProtocolIsisChoice.SIMULATED_LINKS {
+		obj.obj.SimulatedLinks = NewStateProtocolIsisSimLinks().msg()
 	}
 
 	return obj
@@ -361,7 +369,7 @@ func (obj *stateProtocolIsis) SetRouters(value StateProtocolIsisRouters) StatePr
 // SimulatedLinks returns a StateProtocolIsisSimLinks
 func (obj *stateProtocolIsis) SimulatedLinks() StateProtocolIsisSimLinks {
 	if obj.obj.SimulatedLinks == nil {
-		obj.obj.SimulatedLinks = NewStateProtocolIsisSimLinks().msg()
+		obj.setChoice(StateProtocolIsisChoice.SIMULATED_LINKS)
 	}
 	if obj.simulatedLinksHolder == nil {
 		obj.simulatedLinksHolder = &stateProtocolIsisSimLinks{obj: obj.obj.SimulatedLinks}
@@ -378,7 +386,7 @@ func (obj *stateProtocolIsis) HasSimulatedLinks() bool {
 // description is TBD
 // SetSimulatedLinks sets the StateProtocolIsisSimLinks value in the StateProtocolIsis object
 func (obj *stateProtocolIsis) SetSimulatedLinks(value StateProtocolIsisSimLinks) StateProtocolIsis {
-
+	obj.setChoice(StateProtocolIsisChoice.SIMULATED_LINKS)
 	obj.simulatedLinksHolder = nil
 	obj.obj.SimulatedLinks = value.msg()
 
@@ -414,6 +422,11 @@ func (obj *stateProtocolIsis) setDefault() {
 	if obj.obj.Routers != nil {
 		choices_set += 1
 		choice = StateProtocolIsisChoice.ROUTERS
+	}
+
+	if obj.obj.SimulatedLinks != nil {
+		choices_set += 1
+		choice = StateProtocolIsisChoice.SIMULATED_LINKS
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
