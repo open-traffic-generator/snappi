@@ -14954,7 +14954,6 @@ message ActionProtocolIsis {
     enum Enum {
       unspecified = 0;
       initiate_graceful_restart = 1;
-      overload_bit = 2;
     }
   }
   // Description missing in models

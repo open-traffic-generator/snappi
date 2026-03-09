@@ -19578,12 +19578,9 @@ components:
           x-enum:
             initiate_graceful_restart:
               x-field-uid: 1
-            overload_bit:
-              x-field-uid: 2
           x-field-uid: 1
           enum:
           - initiate_graceful_restart
-          - overload_bit
         initiate_graceful_restart:
           description: |-
             Configuration for the initiation of the IS-IS Graceful Restart.
