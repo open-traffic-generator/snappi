@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.48.0
+  version: 1.49.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -19705,6 +19705,16 @@ components:
         custom:
           $ref: '#/components/schemas/Device.Bgp.CustomError'
           x-field-uid: 9
+        fin_delay:
+          description: "Delay (in milliseconds) between generation of the Notification\
+            \ and transmission of FIN to close the \nTCP socket by the implementation.\
+            \ This is useful to ensure that the remote end has received and processed\n\
+            the Notification before closing the BGP session.            "
+          type: integer
+          format: uint32
+          maximum: 10000
+          default: 0
+          x-field-uid: 10
     Action.Protocol.Bgp.InitiateGracefulRestart:
       description: |-
         Initiates BGP Graceful Restart process for the selected BGP peers. If no name is specified then Graceful Restart will be sent to all configured BGP peers. To emulate scenarios where a peer sends a Notification and stops the session, an optional Notification object is included. If the remote peer and the local peer are both configured to perform Graceful Restart for Notification triggered session , this will result in  Graceful Restart scenario to be triggered as per RFC8538.
