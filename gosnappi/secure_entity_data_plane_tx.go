@@ -278,7 +278,7 @@ type SecureEntityDataPlaneTx interface {
 	HasIncludeSci() bool
 }
 
-// End station on not.
+// End station or not.
 // EndStation returns a bool
 func (obj *secureEntityDataPlaneTx) EndStation() bool {
 
@@ -286,13 +286,13 @@ func (obj *secureEntityDataPlaneTx) EndStation() bool {
 
 }
 
-// End station on not.
+// End station or not.
 // EndStation returns a bool
 func (obj *secureEntityDataPlaneTx) HasEndStation() bool {
 	return obj.obj.EndStation != nil
 }
 
-// End station on not.
+// End station or not.
 // SetEndStation sets the bool value in the SecureEntityDataPlaneTx object
 func (obj *secureEntityDataPlaneTx) SetEndStation(value bool) SecureEntityDataPlaneTx {
 
@@ -300,7 +300,7 @@ func (obj *secureEntityDataPlaneTx) SetEndStation(value bool) SecureEntityDataPl
 	return obj
 }
 
-// Include SCI on not.
+// Include SCI or not.
 // IncludeSci returns a bool
 func (obj *secureEntityDataPlaneTx) IncludeSci() bool {
 
@@ -308,13 +308,13 @@ func (obj *secureEntityDataPlaneTx) IncludeSci() bool {
 
 }
 
-// Include SCI on not.
+// Include SCI or not.
 // IncludeSci returns a bool
 func (obj *secureEntityDataPlaneTx) HasIncludeSci() bool {
 	return obj.obj.IncludeSci != nil
 }
 
-// Include SCI on not.
+// Include SCI or not.
 // SetIncludeSci sets the bool value in the SecureEntityDataPlaneTx object
 func (obj *secureEntityDataPlaneTx) SetIncludeSci(value bool) SecureEntityDataPlaneTx {
 
@@ -334,7 +334,7 @@ func (obj *secureEntityDataPlaneTx) setDefault() {
 		obj.SetEndStation(false)
 	}
 	if obj.obj.IncludeSci == nil {
-		obj.SetIncludeSci(false)
+		obj.SetIncludeSci(true)
 	}
 
 }

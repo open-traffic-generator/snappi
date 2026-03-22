@@ -270,15 +270,9 @@ type LagPortMacsecSecureEntityDataPlaneTx interface {
 	SetEndStation(value bool) LagPortMacsecSecureEntityDataPlaneTx
 	// HasEndStation checks if EndStation has been set in LagPortMacsecSecureEntityDataPlaneTx
 	HasEndStation() bool
-	// IncludeSci returns bool, set in LagPortMacsecSecureEntityDataPlaneTx.
-	IncludeSci() bool
-	// SetIncludeSci assigns bool provided by user to LagPortMacsecSecureEntityDataPlaneTx
-	SetIncludeSci(value bool) LagPortMacsecSecureEntityDataPlaneTx
-	// HasIncludeSci checks if IncludeSci has been set in LagPortMacsecSecureEntityDataPlaneTx
-	HasIncludeSci() bool
 }
 
-// End station on not.
+// End station or not.
 // EndStation returns a bool
 func (obj *lagPortMacsecSecureEntityDataPlaneTx) EndStation() bool {
 
@@ -286,39 +280,17 @@ func (obj *lagPortMacsecSecureEntityDataPlaneTx) EndStation() bool {
 
 }
 
-// End station on not.
+// End station or not.
 // EndStation returns a bool
 func (obj *lagPortMacsecSecureEntityDataPlaneTx) HasEndStation() bool {
 	return obj.obj.EndStation != nil
 }
 
-// End station on not.
+// End station or not.
 // SetEndStation sets the bool value in the LagPortMacsecSecureEntityDataPlaneTx object
 func (obj *lagPortMacsecSecureEntityDataPlaneTx) SetEndStation(value bool) LagPortMacsecSecureEntityDataPlaneTx {
 
 	obj.obj.EndStation = &value
-	return obj
-}
-
-// Include SCI on not.
-// IncludeSci returns a bool
-func (obj *lagPortMacsecSecureEntityDataPlaneTx) IncludeSci() bool {
-
-	return *obj.obj.IncludeSci
-
-}
-
-// Include SCI on not.
-// IncludeSci returns a bool
-func (obj *lagPortMacsecSecureEntityDataPlaneTx) HasIncludeSci() bool {
-	return obj.obj.IncludeSci != nil
-}
-
-// Include SCI on not.
-// SetIncludeSci sets the bool value in the LagPortMacsecSecureEntityDataPlaneTx object
-func (obj *lagPortMacsecSecureEntityDataPlaneTx) SetIncludeSci(value bool) LagPortMacsecSecureEntityDataPlaneTx {
-
-	obj.obj.IncludeSci = &value
 	return obj
 }
 
@@ -332,9 +304,6 @@ func (obj *lagPortMacsecSecureEntityDataPlaneTx) validateObj(vObj *validation, s
 func (obj *lagPortMacsecSecureEntityDataPlaneTx) setDefault() {
 	if obj.obj.EndStation == nil {
 		obj.SetEndStation(false)
-	}
-	if obj.obj.IncludeSci == nil {
-		obj.SetIncludeSci(false)
 	}
 
 }

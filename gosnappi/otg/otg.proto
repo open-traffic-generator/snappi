@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.48.0
+/* Open Traffic Generator API 1.49.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -1393,19 +1393,19 @@ message SecureEntityDataPlaneEncapsulation {
 // A container of Tx properties of SecY.
 message SecureEntityDataPlaneTx {
 
-  // End station on not.
+  // End station or not.
   // default = False
   optional bool end_station = 1;
 
-  // Include SCI on not.
-  // default = False
+  // Include SCI or not.
+  // default = True
   optional bool include_sci = 2;
 }
 
 // A container for Rx settings of SecY.
 message SecureEntityDataPlaneRx {
 
-  // Enable replay protection on not.
+  // Enable replay protection or not.
   // default = False
   optional bool replay_protection = 1;
 
@@ -2099,19 +2099,15 @@ message LagPortMacsecSecureEntityDataPlaneEncapsulation {
 // A container of Tx properties of SecY.
 message LagPortMacsecSecureEntityDataPlaneTx {
 
-  // End station on not.
+  // End station or not.
   // default = False
   optional bool end_station = 1;
-
-  // Include SCI on not.
-  // default = False
-  optional bool include_sci = 2;
 }
 
 // A container for Rx settings of SecY.
 message LagPortMacsecSecureEntityDataPlaneRx {
 
-  // Enable replay protection on not.
+  // Enable replay protection or not.
   // default = False
   optional bool replay_protection = 1;
 
@@ -15255,6 +15251,14 @@ message ActionProtocolBgpNotification {
 
   // Description missing in models
   DeviceBgpCustomError custom = 9;
+
+  // Delay (in milliseconds) between generation of the Notification and transmission of
+  // FIN to close the
+  // TCP socket by the implementation. This is useful to ensure that the remote end has
+  // received and processed
+  // the Notification before closing the BGP session.
+  // default = 0
+  optional uint32 fin_delay = 10;
 }
 
 // Initiates BGP Graceful Restart process for the selected BGP peers. If no name is

@@ -278,7 +278,7 @@ type SecureEntityDataPlaneRx interface {
 	HasReplayWindow() bool
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // ReplayProtection returns a bool
 func (obj *secureEntityDataPlaneRx) ReplayProtection() bool {
 
@@ -286,13 +286,13 @@ func (obj *secureEntityDataPlaneRx) ReplayProtection() bool {
 
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // ReplayProtection returns a bool
 func (obj *secureEntityDataPlaneRx) HasReplayProtection() bool {
 	return obj.obj.ReplayProtection != nil
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // SetReplayProtection sets the bool value in the SecureEntityDataPlaneRx object
 func (obj *secureEntityDataPlaneRx) SetReplayProtection(value bool) SecureEntityDataPlaneRx {
 

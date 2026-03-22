@@ -295,7 +295,7 @@ type LagPortMacsecSecureEntityDataPlaneRx interface {
 	setNil()
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // ReplayProtection returns a bool
 func (obj *lagPortMacsecSecureEntityDataPlaneRx) ReplayProtection() bool {
 
@@ -303,13 +303,13 @@ func (obj *lagPortMacsecSecureEntityDataPlaneRx) ReplayProtection() bool {
 
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // ReplayProtection returns a bool
 func (obj *lagPortMacsecSecureEntityDataPlaneRx) HasReplayProtection() bool {
 	return obj.obj.ReplayProtection != nil
 }
 
-// Enable replay protection on not.
+// Enable replay protection or not.
 // SetReplayProtection sets the bool value in the LagPortMacsecSecureEntityDataPlaneRx object
 func (obj *lagPortMacsecSecureEntityDataPlaneRx) SetReplayProtection(value bool) LagPortMacsecSecureEntityDataPlaneRx {
 
