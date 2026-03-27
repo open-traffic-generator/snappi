@@ -377,10 +377,10 @@ func (obj *patternFlowGreReserved0Counter) validateObj(vObj *validation, set_def
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 4095 {
+		if *obj.obj.Count > 4096 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowGreReserved0Counter.Count <= 4095 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowGreReserved0Counter.Count <= 4096 but Got %d", *obj.obj.Count))
 		}
 
 	}

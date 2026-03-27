@@ -377,10 +377,10 @@ func (obj *patternFlowGtpExtensionContentsCounter) validateObj(vObj *validation,
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 281474976710655 {
+		if *obj.obj.Count > 281474976710656 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowGtpExtensionContentsCounter.Count <= 281474976710655 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowGtpExtensionContentsCounter.Count <= 281474976710656 but Got %d", *obj.obj.Count))
 		}
 
 	}

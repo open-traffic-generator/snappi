@@ -676,10 +676,10 @@ func (obj *layer1) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.Mtu != nil {
 
-		if *obj.obj.Mtu < 64 || *obj.obj.Mtu > 9000 {
+		if *obj.obj.Mtu < 64 || *obj.obj.Mtu > 14000 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("64 <= Layer1.Mtu <= 9000 but Got %d", *obj.obj.Mtu))
+				fmt.Sprintf("64 <= Layer1.Mtu <= 14000 but Got %d", *obj.obj.Mtu))
 		}
 
 	}

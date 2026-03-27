@@ -377,10 +377,10 @@ func (obj *patternFlowIpv4DscpPhbCounter) validateObj(vObj *validation, set_defa
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 63 {
+		if *obj.obj.Count > 64 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4DscpPhbCounter.Count <= 63 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIpv4DscpPhbCounter.Count <= 64 but Got %d", *obj.obj.Count))
 		}
 
 	}

@@ -377,10 +377,10 @@ func (obj *patternFlowIgmpv1UnusedCounter) validateObj(vObj *validation, set_def
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 255 {
+		if *obj.obj.Count > 256 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIgmpv1UnusedCounter.Count <= 255 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIgmpv1UnusedCounter.Count <= 256 but Got %d", *obj.obj.Count))
 		}
 
 	}

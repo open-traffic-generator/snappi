@@ -250,11 +250,7 @@ func (obj *capture) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Capture is under Review: There may be changes in filter configuration
-//
-// Under Review: There may be changes in filter configuration
-//
-// Configuration for capture settings.
+// Capture is configuration for capture settings.
 type Capture interface {
 	Validation
 	// msg marshals Capture to protobuf object *otg.Capture
@@ -528,8 +524,6 @@ func (obj *capture) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("Capture is under review, There may be changes in filter configuration")
 
 	if len(obj.obj.Filters) != 0 {
 

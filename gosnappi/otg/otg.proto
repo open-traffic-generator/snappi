@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.35.0
+/* Open Traffic Generator API 1.50.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -106,6 +106,13 @@ message PortOptions {
   // true, the test ports will be preempted.
   // default = False
   optional bool location_preemption = 1;
+
+  // Check and validate that flow payload has not been modified when received on Rx port.
+  // It applies to all flows across all ports and if set to true, it is reported in data
+  // integrity in port statistics with frame count both for frames with unmodified payload
+  // as frames_rx and for frames which has payload modified during transit as errors.
+  // default = False
+  optional bool data_integrity = 2;
 }
 
 // The container for LAG (ports group) - aggregation of multiple LAG members (ports)
@@ -1466,10 +1473,6 @@ message Layer1Ieee8021qbb {
   optional uint32 pfc_class_7 = 9;
 }
 
-// Under Review: There may be changes in filter configuration
-// 
-// Under Review: There may be changes in filter configuration
-// 
 // Configuration for capture settings.
 message Capture {
 
@@ -1746,6 +1749,9 @@ message Device {
 
   // Configuration for RoCEv2.
   DeviceRocev2Peer rocev2 = 13;
+
+  // Configuration for BMP.
+  DeviceBmp bmp = 14;
 }
 
 // Common options that apply to all configured protocols and interfaces.
@@ -2409,6 +2415,23 @@ message MACRouteAddress {
   optional uint32 step = 4;
 }
 
+// A container of MPLS Prefix Label Value/Index in the address range.
+message RouteMplsLabelValue {
+
+  // The starting Label Value/Index.
+  // default = 16
+  optional uint32 start = 1;
+
+  // The maximum value of Label Value/Index in the range after which next Label will start
+  // from the 'start' Label.
+  // default = 1048575
+  optional uint32 max = 2;
+
+  // Increments the Label Value/Index within a route range where multiple routes are present.
+  // default = 1
+  optional uint32 step = 3;
+}
+
 // This contains the properties of IS-IS Prefix-SID and its attributes for  the extended
 // Ipv4 and Ipv6 reachability. Reference: https://datatracker.ietf.org/doc/html/rfc8667#name-prefix-segment-identifier-p.
 message IsisSRPrefixSid {
@@ -2964,6 +2987,14 @@ message BgpV4Peer {
 
   // Description missing in models
   BgpLearnedInformationFilter learned_information_filter = 8;
+
+  // If set to false, all IPv4 routes are advertised using MP_REACH NLRI and withdrawn
+  // using MP_UNREACH NLRI  as defined in https://datatracker.ietf.org/doc/html/rfc4760#section-3.
+  // By default ( when set to true) , all IPv4 routes are advertised using traditional
+  // or REACH_NLRI and withdrawn  using UNREACH_NLRI as defined in https://datatracker.ietf.org/doc/html/rfc4271#section-4.3
+  // .  This is applicable only for BGPv4 peers.
+  // default = True
+  optional bool traditional_nlri_for_ipv4_routes = 16;
 
   // Emulated BGPv4 route ranges.
   repeated BgpV4RouteRange v4_routes = 9;
@@ -3691,6 +3722,48 @@ message BgpCapability {
   // Support for IPv6 Unicast Add Path Capability.
   // default = False
   optional bool ipv6_unicast_add_path = 25;
+
+  // For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI,
+  // SAFI) pair capability as (1, 4) in BGP Open Message under the Multiprotocol  extensions
+  // capability.
+  // default = False
+  optional bool ipv4_mpls = 26;
+
+  // For Single Label binding to the IPv4 address prefix, BGP speaker will advertise (AFI,
+  // SAFI) pair capability as (2, 4) in BGP Open Message under the Multiprotocol  extensions
+  // capability.
+  // default = False
+  optional bool ipv6_mpls = 27;
+
+  // Support for Multiple Labels binding to the IPv4 address prefix.
+  BgpCapabilityIpv4MplsMulti multiple_ipv4_mpls = 28;
+
+  // Support for Multiple Labels binding to the IPv6 address prefix.
+  BgpCapabilityIpv6MplsMulti multiple_ipv6_mpls = 29;
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple
+// Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1.
+// For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise
+// triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol
+// extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+message BgpCapabilityIpv4MplsMulti {
+
+  // Number of Labels (n) in the triplet format <AFI=2, SAFI=4, Count=n>.
+  // default = 2
+  optional uint32 label_count = 1;
+}
+
+// The MPLS multiple Lable capability is advertised in Optional Capability under Multiple
+// Label Capability (code 8). Reference: https://datatracker.ietf.org/doc/html/rfc8277#section-2.1.
+// For Multiple Labels binding to the IPv6 address prefix, BGP speaker will advertise
+// triple of the form <AFI=2, SAFI=4, Count=n> in BGP Open Message under the Multiprotocol
+// extensions capability, where n = ipv6_mpls_multi, the numbers of labels.
+message BgpCapabilityIpv6MplsMulti {
+
+  // Number of Labels (n) in the triplet format <AFI=2, SAFI=4, Count=n>.
+  // default = 2
+  optional uint32 label_count = 1;
 }
 
 // Configuration for controlling storage of BGP learned information recieved from the
@@ -3706,6 +3779,16 @@ message BgpLearnedInformationFilter {
   // from the peer.
   // default = False
   optional bool unicast_ipv6_prefix = 2;
+
+  // If enabled, will store the information related to MPLS Unicast IPv4 Prefixes recieved
+  // from the peer.
+  // default = False
+  optional bool ipv4_mpls_unicast_prefix = 3;
+
+  // If enabled, will store the information related to MPLS Unicast IPv6 Prefixes recieved
+  // from the peer.
+  // default = False
+  optional bool ipv6_mpls_unicast_prefix = 4;
 }
 
 // Emulated BGPv4 route range.
@@ -3811,6 +3894,10 @@ message BgpV4RouteRange {
   // defined by the type and sub-type field. Extended communities provide a larger range
   // for grouping or categorizing communities.
   repeated BgpExtendedCommunity extended_communities = 12;
+
+  // Optional configuration for a BGP speaker to Bind an Address Prefix to One or More
+  // MPLS Labels.
+  BgpMplsLabelBindings mpls_labels = 13;
 }
 
 // The BGP Additional Paths feature is a BGP extension that allows the  advertisement
@@ -3902,6 +3989,23 @@ message BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
   optional uint32 local_4byte_admin = 2;
 }
 
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with
+// sub-type as 0x04.
+message BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  // default = 100
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  // default = 0
+  optional float bandwidth = 2;
+}
+
 // The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
 // 
 message BgpExtendedCommunityTransitive2OctetAsType {
@@ -3911,6 +4015,7 @@ message BgpExtendedCommunityTransitive2OctetAsType {
       unspecified = 0;
       route_target_subtype = 1;
       route_origin_subtype = 2;
+      link_bandwidth_subtype = 3;
     }
   }
   // Description missing in models
@@ -3922,6 +4027,9 @@ message BgpExtendedCommunityTransitive2OctetAsType {
 
   // Description missing in models
   BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+
+  // Description missing in models
+  BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 4;
 }
 
 // The Route Origin Community identifies one or more routers that inject a set of routes
@@ -4171,6 +4279,34 @@ message BgpExtendedCommunityCustomType {
   optional string value = 3;
 }
 
+// BGP may be used to advertise that a particular node (N) has bound a particular MPLS
+// label, or a particular sequence of MPLS labels,
+// to a particular address prefix.
+// This is done by sending a Multiprotocol BGP UPDATE message with with an MP_REACH_NLRI
+// attribute.
+// The Network Address of Next Hop field of that attribute contains an IP address of
+// node N.
+// References: https://datatracker.ietf.org/doc/html/rfc3107
+// & https://datatracker.ietf.org/doc/html/rfc8277.
+message BgpMplsLabelBindings {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      labels = 1;
+    }
+  }
+  // Bind one or more MPLS Labels or SR indices to Address Prefixes.
+  // To advertise multiple labels for an address prefix, the BGP capabilities device.bgp.capablity.ipv4_mpls_multi/bgp.capablity.ipv6_mpls_multi
+  // etc. to be configured first.
+  // - labels: One or more Label Values are to be configured here.
+  // default = Choice.Enum.labels
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  repeated RouteMplsLabelValue labels = 2;
+}
+
 // Emulated BGPv6 route range.
 message BgpV6RouteRange {
 
@@ -4274,6 +4410,10 @@ message BgpV6RouteRange {
   // defined by the type and sub-type field. Extended communities provide a larger range
   // for grouping or categorizing communities.
   repeated BgpExtendedCommunity extended_communities = 12;
+
+  // Optional configuration for a BGP speaker to Bind an Address Prefix to One or More
+  // MPLS Labels.
+  BgpMplsLabelBindings mpls_labels = 13;
 }
 
 // Configuration for BGP Segment Routing Traffic Engineering(SRTE)
@@ -7809,10 +7949,6 @@ message DhcpV6ServerSecondaryDns {
   optional string ip = 1;
 }
 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
-// Under Review: OSPFv2 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv2 router and its interfaces & Route Ranges.
 message DeviceOspfv2Router {
 
@@ -8526,7 +8662,7 @@ message SecureEntityCryptoEngineEncryptOnlyFixedPn {
 
   // Fixed Tx extended packet number(XPN). 8 bytes XPN with which all packets will be
   // sent out.
-  // default = 0x0000000000000006
+  // default = 0x06
   optional string xpn = 2;
 }
 
@@ -8542,7 +8678,7 @@ message SecureEntityCryptoEngineEncryptOnlyIncrementingPn {
   optional uint32 starting_pn = 2;
 
   // The starting extended packet number(XPN).
-  // default = 0x0000000000010000
+  // default = 0x010000
   optional string starting_xpn = 3;
 }
 
@@ -9037,10 +9173,6 @@ message SecureEntityStaticKeyRxSc {
   repeated SecureEntityStaticKeySak saks = 4;
 }
 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
-// Under Review: OSPFv3 is currently under review for pending exploration on use cases.
-// 
 // A container of properties for an OSPFv3 router.
 message DeviceOspfv3Router {
 
@@ -9548,6 +9680,347 @@ message Rocev2V6Peer {
   repeated Rocev2QPs qps = 3;
 }
 
+// Top-level container for BGP Monitoring Protocol (BMP) configuration. BMP, as defined
+// in RFC 7854, provides a mechanism to monitor BGP sessions. This configuration pertains
+// to the device when acting as a BMP Monitor /server, listening for connections from
+// BGP speakers (routers) acting as BMP clients. BMP is unidirectional, meaning the
+// monitoring station only receives information; it doesn't send commands to or control
+// the monitored router.
+message DeviceBmp {
+
+  // This contains an array of references to IPv4 interfaces, each of which will have
+  // one or more BMP Servers configured, each BMP Server will have a connection to a different
+  // monitored router.
+  repeated DeviceBmpV4Interface ipv4_interfaces = 1;
+
+  // This contains an array of references to IPv6 interfaces, each of which will have
+  // one or more BMP Servers configured, each BMP Server will have a connection to a different
+  // monitored router.
+  repeated DeviceBmpV6Interface ipv6_interfaces = 2;
+}
+
+// Configuration for BMP Servers on a single IPv4 interface.
+message DeviceBmpV4Interface {
+
+  // The unique name of the IPv4 interface used as the source IP for the BMP Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv4/properties/name
+  // 
+  // required = true
+  optional string ipv4_name = 1;
+
+  // This contains the configuration of BMP Servers configured on this IPv4 interface.
+  repeated DeviceBmpServerV4 servers = 2;
+}
+
+// Configuration for BMP Servers on a single IPv6 interface.
+message DeviceBmpV6Interface {
+
+  // The unique name of the IPv6 interface used as the source IP for BMP Server.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Ipv6/properties/name
+  // 
+  // required = true
+  optional string ipv6_name = 1;
+
+  // This contains the configuration of BMP Servers configured on this IPv6 interface.
+  repeated DeviceBmpServerV6 servers = 2;
+}
+
+// Configuration for a BMP Server for a specific IPv4 BMP client.
+message DeviceBmpServerV4 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The IPv4 address of the BMP client from which connections will be accepted from or
+  // initiated with by this BMP Server.
+  // required = true
+  optional string client_ip = 2;
+
+  // Optional object containing information about whether the BMP Server should operate
+  // in passive or active mode and corresponding information depending on the mode.
+  // 
+  DeviceBmpServerConnection connection = 3;
+
+  // Optional object containing information about whether IPv4 and IPv6 unicast prefixes
+  // learned from the BMP client should be stored or not for future retrieval using get_states
+  // and  exceptions to the configured choice for the same.  If the object is not included,
+  // by default IPv4 and IPv6 unicast prefixes are not stored by the BMP server and only
+  // received metrics are incremented on receipt of IPv4 / IPv6 unicast prefixes within
+  // BMP Monitor messages.
+  DeviceBmpServerPrefixStorage prefix_storage = 4;
+}
+
+// Configuration for a BMP Server connected to a specific IPv6 BMP client.
+message DeviceBmpServerV6 {
+
+  // Globally unique name of an object. It also serves as the primary key for arrays of
+  // objects.
+  // required = true
+  optional string name = 1;
+
+  // The IPv6 address of the BMP client from which connections will be accepted from or
+  // initiated with by this BMP Server.
+  // required = true
+  optional string client_ip = 2;
+
+  // Optional object containing information about whether the BMP Server should operate
+  // in passive or active mode and corresponding information depending on the mode.
+  // 
+  DeviceBmpServerConnection connection = 3;
+
+  // Optional object containing information about whether IPv4 and IPv6 unicast prefixes
+  // learned from the BMP client should be stored or not for future retrieval using get_states
+  // and  exceptions to the configured choice for the same.  If the object is not included,
+  // by default IPv4 and IPv6 unicast prefixes are not stored by the BMP server and only
+  // received metrics are incremented on receipt of IPv4 / IPv6 unicast prefixes within
+  // BMP Monitor messages.
+  DeviceBmpServerPrefixStorage prefix_storage = 4;
+}
+
+// Container of information about whether the BMP Server should operate in passive or
+// active mode and corresponding information depending on the mode.
+message DeviceBmpServerConnection {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      passive = 1;
+      active = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.passive
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  DeviceBmpServerPassiveConnection passive = 2;
+
+  // Description missing in models
+  DeviceBmpServerActiveConnection active = 3;
+}
+
+// Container of information when BMP Server is configured in passive mode. This means
+// that BMP Server will not initiate the TCP connection but wait for the BMP client
+// it is configured to accept connection from  to initiate the connection.  Note that
+// in this case it is required to configure the BMP client in active mode otherwise
+// BMP connection will not be intiated by either end.
+message DeviceBmpServerPassiveConnection {
+
+  // The TCP port number on which to listen for TCP connections from the remote BMP client
+  // router.
+  // default = 11019
+  optional uint32 listen_port = 1;
+}
+
+// Container of information when BMP Server is configured in active mode. This means
+// that BMP Server will initiate the TCP connection to the remote BMP client .
+// Note that in this case it is required to configure the BMP client in passive mode
+// for the BMP session to not be rejected from both ends.
+message DeviceBmpServerActiveConnection {
+
+  // The TCP port number on which to initiate BMP connection to the remote BMP client
+  // router.
+  // default = 11019
+  optional uint32 remote_port = 1;
+}
+
+// Optional object containing information about whether IPv4 and IPv6 unicast prefixes
+// learned from the BMP client should be stored or not for future retrieval using get_states
+// and  exceptions to the configured choice for the same. If the object is not included,
+// by default IPv4 and IPv6 Unicast Prefixes are not stored by the BMP server and only
+// received metrics  are incremented on receipt of IPv4 / IPv6 Unicast routes via BMP
+// Monitor messages.
+message DeviceBmpServerPrefixStorage {
+
+  // Optional object containing information about whether IPv4 unicast prefixes learned
+  // from the BMP client should be stored or not for future retrieval using get_states
+  // and  exceptions to the configured choice for the same. If the object is not included,
+  // by default IPv4 unicast prefixes are not stored by the BMP server.
+  DeviceBmpServerIpv4UnicastPrefixStorage ipv4_unicast = 1;
+
+  // Optional object containing information about whether IPv6 unicast prefixes learned
+  // from the BMP client should be stored or not for future retrieval using get_states
+  // and  exceptions to the configured choice for the same. If the object is not included,
+  // by default IPv6 unicast prefixes are not stored by the BMP server.
+  DeviceBmpServerIpv6UnicastPrefixStorage ipv6_unicast = 2;
+}
+
+// Optional object containing information about whether IPv4 unicast prefixes learned
+// from the BMP client should be stored or not for future retrieval using get_states
+// and  exceptions to the configured choice for the same. If the object is not included,
+// by default IPv4 unicast prefixes are not stored by the BMP server.
+message DeviceBmpServerIpv4UnicastPrefixStorage {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      discard = 1;
+      store = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.discard
+  optional Choice.Enum choice = 1;
+
+  // If this option is chosen, IPv4 unicast prefixes learned from the BMP client will
+  // not be stored by the BMP server. Exception list can be used to create exceptions
+  // to allow only some subset of the learned Ipv4 unicast prefixes to be stored while
+  // the remaining learned prefixes are discarded. This can be useful when only some prefixes
+  // need to be verified amongst a large number of learned prefixes.
+  DeviceBmpServerIpv4UnicastPrefixDiscard discard = 2;
+
+  // If this option is chosen, IPv4 unicast prefixes learned from the BMP client will
+  // be stored by the BMP server. Exception list can be used to create exceptions to store
+  // all the learned Ipv4 unicast prefixes except some subset of the learned IPv4 unicast
+  // prefixes. This can be useful when only some prefixes need to be verified amongst
+  // a large number of learned prefixes.
+  DeviceBmpServerIpv4UnicastPrefixStore store = 3;
+}
+
+// The exception list can be used to specify exceptions to the specification to discard
+// all IPv4 unicast prefixes. It is expected that when required, there would normally
+// be a limited number of exceptions.
+message DeviceBmpServerIpv4UnicastPrefixDiscard {
+
+  // This contains an array of exceptions to the discard IPv4 unicast prefixes specification
+  // i.e. prefixes matching the exceptions would be stored instead. One exception to the
+  // specification is specified by a combination of an IPv4 prefix and a prefix length.
+  // If the received prefix masked upto the exception's prefix length matches the prefix
+  // specified in the exception, the received prefix is deemed as having matched the specified
+  // exception e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24 would match specified
+  // exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24 would not.
+  repeated DeviceBmpServerIpv4UnicastPrefixException exceptions = 1;
+}
+
+// The exception list can be used to specify exceptions to the specification to store
+// all IPv4 unicast prefixes. It is expected that when required, there would normally
+// be a limited number of exceptions.
+message DeviceBmpServerIpv4UnicastPrefixStore {
+
+  // This contains an array of exceptions to the store IPv4 unicast prefixes specification
+  // i.e. prefixes matching the exceptions would be discarded instead. One exception to
+  // the specification is specified by a combination of an IPv4 prefix and a prefix length.
+  // If the received prefix masked upto the exception's prefix length matches the prefix
+  // specified in the exception, the received prefix is deemed as having matched the specified
+  // exception e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24 would match specified
+  // exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24 would not.
+  repeated DeviceBmpServerIpv4UnicastPrefixException exceptions = 1;
+}
+
+// One exception to the specification is specified by a combination of an IPv4 prefix
+// and a prefix length.  If the received prefix masked upto the exception's prefix length
+// matches the prefix specified in the exception, the received prefix is deemed as having
+// matched the specified exception e.g. received prefix 172.16.1.0/24 and 172.16.2.0/24
+// would match specified exception of 172.16.0.0/16 but 172.0.0.0/8 or 192.16.2.0/24
+// would not.
+message DeviceBmpServerIpv4UnicastPrefixException {
+
+  // The IPv4 prefix which, combined with the prefix_length, is used to determine if received
+  // IPv4 unicast prefix matches this exception or not.
+  // default = 0.0.0.0
+  optional string ipv4_prefix = 1;
+
+  // The prefix length which, combined with the ipv4_prefix, is used to determine if received
+  // IPv4 unicast prefix matches this exception or not.
+  // default = 16
+  optional uint32 prefix_length = 2;
+}
+
+// Optional object containing information about whether IPv6 unicast prefixes learned
+// from the BMP client should be stored or not for future retrieval using get_states
+// and  exceptions to the configured choice for the same. If the object is not included,
+// by default IPv6 unicast prefixes are not stored by the BMP server.
+message DeviceBmpServerIpv6UnicastPrefixStorage {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      discard = 1;
+      store = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.discard
+  optional Choice.Enum choice = 1;
+
+  // If this option is chosen, IPv6 unicast prefixes learned from the BMP client will
+  // not be stored by the BMP server. Exception list can be used to create exceptions
+  // to allow only some subset of the learned IPv6 unicast prefixes to be stored while
+  // the remaining learned prefixes are discarded. This can be useful when only some prefixes
+  // need to be verified amongst a large number of learned prefixes.
+  DeviceBmpServerIpv6UnicastPrefixDiscard discard = 2;
+
+  // If this option is chosen, IPv6 unicast prefixes learned from the BMP client will
+  // be stored by the BMP server. Exception list can be used to create exceptions to store
+  // all the learned Ipv6 unicast prefixes except some subset of the learned IPv6 unicast
+  // prefixes. This can be useful when only some prefixes need to be verified amongst
+  // a large number of learned prefixes.
+  DeviceBmpServerIpv6UnicastPrefixStore store = 3;
+}
+
+// The exception list can be used to specify exceptions to the specification to discard
+// all IPv6 unicast prefixes. It is expected that when required, there would normally
+// be a limited number of exceptions.
+message DeviceBmpServerIpv6UnicastPrefixDiscard {
+
+  // This contains an array of exceptions to the discard IPv6 unicast prefixes specification
+  // i.e. prefixes matching the exceptions would be stored instead. One exception to the
+  // specification is specified by a combination of an IPv6 prefix and a prefix length.
+  // If the received prefix masked upto the exception's prefix length matches the prefix
+  // specified in the exception, the received prefix is deemed as having matched the specified
+  // exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64 would match specified
+  // exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would not.
+  repeated DeviceBmpServerIpv6UnicastPrefixException exceptions = 1;
+}
+
+// The exception list can be used to specify exceptions to the specification to store
+// all IPv6 unicast prefixes. It is expected that when required, there would normally
+// be a limited number of exceptions.
+message DeviceBmpServerIpv6UnicastPrefixStore {
+
+  // This contains an array of exceptions to the store IPv6 unicast prefixes specification
+  // i.e. prefixes matching the exceptions would be discarded instead. One exception to
+  // the specification is specified by a combination of an IPv6 prefix and a prefix length.
+  // If the received prefix masked upto the exception's prefix length matches the prefix
+  // specified in the exception, the received prefix is deemed as having matched the specified
+  // exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64 would match specified
+  // exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would not.
+  repeated DeviceBmpServerIpv6UnicastPrefixException exceptions = 1;
+}
+
+// One exception to the specification is specified by a combination of an IPv6 prefix
+// and a prefix length.  If the received prefix masked upto the exception's prefix length
+// matches the prefix specified in the exception, the received prefix is deemed as having
+// matched the specified exception e.g. received prefix 1:1:1:1::/64  and 1:1:1:2::/64
+// would match specified exception of 1:1:1::/48 but 1:1::/16 or 2:2:2:2::/64 would
+// not.
+message DeviceBmpServerIpv6UnicastPrefixException {
+
+  // The IPv6 prefix which, combined with the prefix_length, is used to determine if received
+  // IPv6 unicast prefix matches this exception or not.
+  // default = ::
+  optional string ipv6_prefix = 1;
+
+  // The prefix length which, combined with the ipv6_prefix, is used to determine if received
+  // IPv6 unicast prefix matches this exception or not.
+  // default = 48
+  optional uint32 prefix_length = 2;
+}
+
 // A high level data plane traffic flow.
 message Flow {
 
@@ -9838,6 +10311,8 @@ message FlowHeader {
       snmpv2c = 20;
       rsvp = 21;
       macsec = 22;
+      lacp = 23;
+      ipv6_extension_header = 24;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -9910,6 +10385,12 @@ message FlowHeader {
 
   // Description missing in models
   FlowMacsec macsec = 23;
+
+  // Description missing in models
+  FlowLacp lacp = 24;
+
+  // Description missing in models
+  FlowIpv6ExtHeader ipv6_extension_header = 25;
 }
 
 // Custom packet header
@@ -11887,6 +12368,288 @@ message FlowMacsec {
   optional Choice.Enum choice = 1;
 }
 
+// Defines the fields of a Link Aggregation Control Protocol (LACP) Data Unit (PDU)
+// as specified by IEEE 802.3ad. The ethernet ether type, if set to auto, will be updated
+// to '0x8809' and the destination address, if set to auto, will be updated to 01:80:C2:00:00:02
+// for LACP. Flows[i].metrics.enable should be set to false to avoid insertion of additional
+// instrumentation bytes in the generated packets.
+message FlowLacp {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      lacpdu = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.lacpdu
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowLacpVersion version = 2;
+
+  // Description missing in models
+  FlowLacpLacpdu lacpdu = 3;
+}
+
+// Defines the TLV fields of a Link Aggregation Control Protocol (LACP)
+// Data Unit (PDU) as specified by IEEE 802.3ad.
+message FlowLacpLacpdu {
+
+  // Description missing in models
+  FlowLacpduActor actor = 1;
+
+  // Description missing in models
+  FlowLacpduPartner partner = 2;
+
+  // Description missing in models
+  FlowLacpduCollector collector = 3;
+
+  // Description missing in models
+  FlowLacpduTerminator terminator = 4;
+}
+
+// Information about the local (actor) system.
+message FlowLacpduActor {
+
+  // Description missing in models
+  PatternFlowLacpduActorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduActorLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriority system_priority = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemId system_id = 4;
+
+  // Description missing in models
+  PatternFlowLacpduActorKey key = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriority port_priority = 6;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumber port_number = 7;
+
+  // Description missing in models
+  FlowLacpduActorState actor_state = 8;
+
+  // Description missing in models
+  PatternFlowLacpduActorReserved reserved = 9;
+}
+
+// Information about the remote (partner) system.
+message FlowLacpduPartner {
+
+  // Description missing in models
+  PatternFlowLacpduPartnerType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriority system_priority = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemId system_id = 4;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKey key = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriority port_priority = 6;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumber port_number = 7;
+
+  // Description missing in models
+  FlowLacpduPartnerState partner_state = 8;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReserved reserved = 9;
+}
+
+// Information about frame collection parameters.
+message FlowLacpduCollector {
+
+  // Description missing in models
+  PatternFlowLacpduCollectorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLength length = 2;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelay max_delay = 3;
+
+  // Reserved field for future use in the Collector TLV. 12 bytes long and should be set
+  // to all zeros.
+  // default = 000000000000000000000000
+  optional string reserved = 4;
+}
+
+// Marks the end of the LACPDU message.
+message FlowLacpduTerminator {
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorType type = 1;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLength length = 2;
+
+  // Final block of reserved bytes to pad the PDU. It is 50 bytes long.
+  // default = 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  optional string reserved = 3;
+}
+
+// This field indicates the Actor's state.
+message FlowLacpduActorState {
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivity activity = 1;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeout timeout = 2;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregation aggregation = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronization synchronization = 4;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollecting collecting = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributing distributing = 6;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaulted defaulted = 7;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpired expired = 8;
+}
+
+// This field indicates the Partner's state.
+message FlowLacpduPartnerState {
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivity activity = 1;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeout timeout = 2;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregation aggregation = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronization synchronization = 4;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollecting collecting = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributing distributing = 6;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaulted defaulted = 7;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpired expired = 8;
+}
+
+// IPv6 Extension header should be preceded either by IPv6 header or other IPv6 Extension
+// headers and the next_header in that preceding header should be set to the correct
+// value depending on the type of extension header configured. This will be automatically
+// handled by implementation if next_header choice is set to auto. For Routing Extension
+// header this value is 43.
+message FlowIpv6ExtHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeader next_header = 2;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLen hdr_ext_len = 3;
+
+  // Description missing in models
+  FlowIpv6Routing routing = 4;
+}
+
+// IPv6 routing packet headers.
+message FlowIpv6Routing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      segment_routing = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.segment_routing
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowIpv6SegmentRouting segment_routing = 2;
+}
+
+// Defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type
+// 4. This header is an IPv6 Routing header used to specify a source-routed path for
+// a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically
+// IPv6 addresses.
+message FlowIpv6SegmentRouting {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeft segments_left = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntry last_entry = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingFlags flags = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTag tag = 4;
+
+  // 128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment
+  // List is encoded starting from the last segment of the SR Policy. That is, the first
+  // element of the Segment List (Segment List[0]) contains the last segment of the SR
+  // Policy, the second element contains the penultimate segment of the SR Policy, and
+  // so on.
+  repeated FlowIpv6SegmentRoutingSegment segment_list = 5;
+}
+
+// Description missing in models
+message FlowIpv6SegmentRoutingSegment {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegment segment = 1;
+}
+
+// An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
+// drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+message FlowIpv6SegmentRoutingFlags {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtected protected = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOam oam = 2;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+}
+
 // The frame size which overrides the total length of the packet
 message FlowSize {
 
@@ -12371,12 +13134,6 @@ message FlowPayloadFixed {
   optional bool repeat = 2;
 }
 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Event configuration is currently under review for pending exploration
-// on use cases.
-// 
 // The optional container for event configuration.
 // Both cp_events.enable and dp_events.enable must be explicitly set to true to get
 // 
@@ -12910,19 +13667,56 @@ message EgressOnlyTracking {
 // These would appear as tagged metrics in corresponding egress_only_tracking metrics.
 message EgressOnlyTrackingMetricTags {
 
-  // The Name used to identify the metrics associated with the values applicable
-  // for configured offset and length inside corresponding header field.
+  // The name used to identify the metric tracked at configured Rx offset and of configured
+  // length.
   // required = true
   optional string name = 1;
 
-  // Offset in bits relative to start of the packet.
+  // Offset in bits relative to start of the received packet on the receiving port.
   // required = true
-  optional uint32 offset = 2;
+  optional uint32 rx_offset = 2;
+
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
+  EgressOnlyTrackingTxOffset tx_offset = 3;
 
   // Number of bits to track for metrics starting from configured offset
   // from start of the packet.
   // default = 1
-  optional uint32 length = 3;
+  optional uint32 length = 4;
+}
+
+// A container of Tx offset properties. Tx offset configuration is optional. It is relevant
+// only when optional Tx statistics in egress only tracking are supported and when fetching
+// egress only stats with tx_metric also enabled in get_metrics/egress_only_tracking/tagged_metric/metric_names.
+message EgressOnlyTrackingTxOffset {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      custom = 2;
+    }
+  }
+  // Choose auto when both offsets of tracked field in Tx/ Rx packets are the same. Otherwise
+  // choose custom.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // 
+  EgressOnlyTrackingTxOffsetCustom custom = 2;
+}
+
+// A container of custom Tx offset properties. Choose custom when the Tx and Rx offsets
+// are different due to DUT adding/ modifying or deleting encapsulation protocol header
+// e.g. when the egress-only tracked packets are MACsec encapulated and the Tx and Rx
+// side have different configuration such that the MACSec header is added/modified or
+// removed.
+message EgressOnlyTrackingTxOffsetCustom {
+
+  // Offset in bits relative to start of the transmitted packet from the transmitting
+  // port.
+  optional uint32 value = 1;
 }
 
 // Description missing in models
@@ -13501,6 +14295,21 @@ message StatePortCapture {
   optional State.Enum state = 2;
 }
 
+// Resets the configured ports to initialized state.
+message ActionPortReboot {
+
+  // The names of target ports. An empty or null list will target all ports.
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Port/properties/name
+  // 
+  repeated string port_names = 1;
+}
+
 // Provides state control of flow transmission.
 message StateTrafficFlowTransmit {
 
@@ -13921,6 +14730,7 @@ message ControlAction {
     enum Enum {
       unspecified = 0;
       protocol = 1;
+      port = 2;
     }
   }
   // Description missing in models
@@ -13929,6 +14739,9 @@ message ControlAction {
 
   // Description missing in models
   ActionProtocol protocol = 2;
+
+  // Description missing in models
+  ActionPort port = 3;
 }
 
 // Response for action triggered against configured resources along with warnings.
@@ -14008,6 +14821,23 @@ message ActionResponseProtocol {
   ActionResponseProtocolIpv6 ipv6 = 3;
 }
 
+// Actions associated with ports on configured resources.
+message ActionPort {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      reboot = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ActionPortReboot reboot = 2;
+}
+
 // Actions associated with IPv4 on configured resources.
 message ActionProtocolIpv4 {
 
@@ -14049,10 +14879,6 @@ message ActionProtocolIpv4Ping {
   repeated ActionProtocolIpv4PingRequest requests = 1;
 }
 
-// Under Review: Most ping request parameters are still TBD.
-// 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -14062,10 +14888,12 @@ message ActionProtocolIpv4PingRequest {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   optional string src_name = 1;
 
@@ -14087,10 +14915,12 @@ message ActionResponseProtocolIpv4PingResponse {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
+  // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
   // required = true
   optional string src_name = 1;
@@ -14152,10 +14982,6 @@ message ActionProtocolIpv6Ping {
   repeated ActionProtocolIpv6PingRequest requests = 1;
 }
 
-// Under Review: Most ping request parameters are still TBD.
-// 
-// Under Review: Most ping request parameters are still TBD.
-// 
 // Request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv6 ICMP Echo Request shall be sent and wait for ping response
 // to either succeed or time out. The API wait timeout for each request shall be 300ms.
@@ -14165,10 +14991,12 @@ message ActionProtocolIpv6PingRequest {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   optional string src_name = 1;
 
@@ -14190,10 +15018,12 @@ message ActionResponseProtocolIpv6PingResponse {
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
+  // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
   // required = true
   optional string src_name = 1;
@@ -14300,6 +15130,14 @@ message ActionProtocolBgpNotification {
 
   // Description missing in models
   DeviceBgpCustomError custom = 9;
+
+  // Delay (in milliseconds) between generation of the Notification and transmission of
+  // FIN to close the
+  // TCP socket by the implementation. This is useful to ensure that the remote end has
+  // received and processed
+  // the Notification before closing the BGP session.
+  // default = 0
+  optional uint32 fin_delay = 10;
 }
 
 // Initiates BGP Graceful Restart process for the selected BGP peers. If no name is
@@ -14529,6 +15367,7 @@ message MetricsRequest {
       rocev2_ipv6 = 20;
       rocev2_flow = 21;
       egress_only_tracking = 22;
+      bmp_server = 23;
     }
   }
   // Description missing in models
@@ -14600,6 +15439,9 @@ message MetricsRequest {
 
   // Description missing in models
   EgressOnlyTrackingMetricsRequest egress_only_tracking = 23;
+
+  // Description missing in models
+  BmpServerMetricsRequest bmp_server = 24;
 }
 
 // Response containing chosen traffic generator metrics.
@@ -14630,6 +15472,7 @@ message MetricsResponse {
       rocev2_ipv6_per_peer_metrics = 20;
       rocev2_flow_per_qp_metrics = 21;
       egress_only_tracking_metrics = 22;
+      bmp_server_metrics = 23;
     }
   }
   // Description missing in models
@@ -14701,6 +15544,9 @@ message MetricsResponse {
 
   // Description missing in models
   repeated EgressOnlyTrackingMetric egress_only_tracking_metrics = 23;
+
+  // Description missing in models
+  repeated BmpServerMetric bmp_server_metrics = 24;
 }
 
 // The port result request to the traffic generator
@@ -14820,6 +15666,20 @@ message PortMetric {
   // The value is the timestamp in nanoseconds relative to
   // the Unix Epoch (Jan 1, 1970 00:00:00 UTC).
   optional uint64 last_change = 14;
+
+  // Description missing in models
+  MetricDataIntegrity data_integrity = 15;
+}
+
+// The container for data integrity metrics. The container will be empty if
+// options.port_options.data_integrity has not been enabled during set_config.
+message MetricDataIntegrity {
+
+  // The total number of data integrity enabled frames received
+  optional uint64 total_frames_rx = 1;
+
+  // The total number of data integrity enabled frames received with payload modified
+  optional uint64 error_frames_rx = 2;
 }
 
 // The container for a flow metric request.
@@ -16468,12 +17328,6 @@ message Ospfv2Metric {
   optional uint64 opaque_domain_received = 34;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // Container for requesting control-plane and data-plane convergence time metrics for
 // flows.
 message ConvergenceRequest {
@@ -16491,12 +17345,6 @@ message ConvergenceRequest {
   repeated string flow_names = 1;
 }
 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
-// Under Review: Convergence metrics is currently under review for pending exploration
-// on use cases.
-// 
 // The container for convergence metrics.
 message ConvergenceMetric {
 
@@ -17258,10 +18106,10 @@ message Rocev2FlowMetricPerQP {
   optional uint64 rx_bytes = 14;
 
   // Current rate at which data is transmitted in Gbps.
-  optional uint64 data_tx_rate = 15;
+  optional float data_tx_rate = 15;
 
   // Current rate at which data is received in Gbps.
-  optional uint64 data_rx_rate = 16;
+  optional float data_rx_rate = 16;
 
   // Current number of Message transmitted.
   optional uint64 message_tx = 17;
@@ -17471,6 +18319,118 @@ message EgressOnlyTrackingTxMetrics {
   optional float tx_rate_mbps = 10;
 }
 
+// The request to retrieve per BMP Server metrics/statistics.
+message BmpServerMetricsRequest {
+
+  // The names of BMP Servers to return results for. An empty list will return results
+  // for all BMP Servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
+  // 
+  repeated string server_names = 1;
+
+  message ColumnNames {
+    enum Enum {
+      unspecified = 0;
+      session_state = 1;
+      flap_count = 2;
+      route_monitoring_messages_received = 3;
+      statistics_messages_received = 4;
+      peer_down_messages_received = 5;
+      peer_up_messages_received = 6;
+      initiation_messages_received = 7;
+      route_mirroring_messages_received = 8;
+      termination_messages_received = 9;
+      pre_policy_ipv4_unicast_routes_received = 10;
+      post_policy_ipv4_unicast_routes_received = 11;
+      pre_policy_ipv6_unicast_routes_received = 12;
+      post_policy_ipv6_unicast_routes_received = 13;
+    }
+  }
+  // The list of column names that the returned result set will contain. If the list is
+  // empty then all columns will be returned except for any result_groups. The name of
+  // the BMP Server cannot be excluded.
+  repeated ColumnNames.Enum column_names = 2;
+}
+
+// BMP Server statistics information.
+message BmpServerMetric {
+
+  // The name of the configured BMP server.
+  optional string name = 1;
+
+  message SessionState {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // Session state as up or down. The session goes to 'up' state when a BMP monitored
+  // client router sends a Initiation message to the BMP Server. The session goes to 'down'
+  // state when a BMP monitored client router sends a Termination message to the BMP Server
+  // or the TCP connection is lost. On initial start, the state as reported as 'down'.
+  optional SessionState.Enum session_state = 2;
+
+  // Number of times the BMP session with the BMP client went from Up to Down state.
+  optional uint64 flap_count = 3;
+
+  // Number of BMP Route Monitoring Messages received from the BMP client from the time
+  // the BMP server was started.
+  optional uint64 route_monitoring_messages_received = 4;
+
+  // Number of BMP Route Statistics Messages received from the BMP client from the time
+  // the BMP server was started.
+  optional uint64 statistics_messages_received = 5;
+
+  // Number of BMP Peer Down Messages received from the BMP client from the time the BMP
+  // server was started.
+  optional uint64 peer_down_messages_received = 6;
+
+  // Number of BMP Peer Up Messages received from the BMP client from the time the BMP
+  // server was started.
+  optional uint64 peer_up_messages_received = 7;
+
+  // Number of BMP Initiation Messages received from the BMP client from the time the
+  // BMP server was started .
+  optional uint64 initiation_messages_received = 8;
+
+  // Number of BMP Route Mirroring Messages received from the BMP client from the time
+  // the BMP server was started.
+  optional uint64 route_mirroring_messages_received = 9;
+
+  // Number of BMP Termination Messages received from the BMP client from the time the
+  // BMP server was started.
+  optional uint64 termination_messages_received = 10;
+
+  // Number of IPv4 Unicast prefixes received within BMP Monitor messages with L flag
+  // unset (indicating absence of application on in-bound policy on the advertised prefix)
+  // from the BMP client from the time the BMP server was started.
+  optional uint64 pre_policy_ipv4_unicast_routes_received = 11;
+
+  // Number of IPv4 Unicast prefixes received within BMP Monitor messages with L flag
+  // set (indicating application of in-bound policy on the advertised prefix)  from the
+  // BMP client from the time the BMP server was started.
+  optional uint64 post_policy_ipv4_unicast_routes_received = 12;
+
+  // Number of IPv6 Unicast prefixes received within BMP Monitor messages with L flag
+  // unset (indicating absence of application on in-bound policy on the advertised prefix)
+  // from the BMP client from the time the BMP server was started.
+  optional uint64 pre_policy_ipv6_unicast_routes_received = 13;
+
+  // Number of IPv6 Unicast prefixes received within BMP Monitor messages with L flag
+  // set (indicating application of in-bound policy on the advertised prefix)  from the
+  // BMP client from the time the BMP server was started.
+  optional uint64 post_policy_ipv6_unicast_routes_received = 14;
+}
+
 // Request to traffic generator for states of choice
 message StatesRequest {
 
@@ -17490,6 +18450,7 @@ message StatesRequest {
       ospfv2_lsas = 11;
       ospfv3_lsas = 12;
       isis_adjacencies = 13;
+      bmp_servers = 14;
     }
   }
   // Description missing in models
@@ -17534,6 +18495,9 @@ message StatesRequest {
 
   // Description missing in models
   IsisIIHsStateRequest isis_adjacencies = 14;
+
+  // Description missing in models
+  BmpServersStateRequest bmp_servers = 15;
 }
 
 // Response containing chosen traffic generator states
@@ -17555,6 +18519,7 @@ message StatesResponse {
       ospfv2_lsas = 11;
       ospfv3_lsas = 12;
       isis_adjacencies = 13;
+      bmp_servers = 14;
     }
   }
   // Description missing in models
@@ -17599,6 +18564,9 @@ message StatesResponse {
 
   // Description missing in models
   repeated IsisIIHsState isis_adjacencies = 14;
+
+  // Description missing in models
+  repeated BmpServerState bmp_servers = 15;
 }
 
 // The request to retrieve IPv4 Neighbor state (ARP cache entries) of a network interface(s).
@@ -17690,6 +18658,8 @@ message BgpPrefixStateRequest {
       unspecified = 0;
       ipv4_unicast = 1;
       ipv6_unicast = 2;
+      ipv4_mpls_unicast = 3;
+      ipv6_mpls_unicast = 4;
     }
   }
   // Specify which prefixes to return. If the list is empty or missing then all prefixes
@@ -17770,6 +18740,12 @@ message BgpPrefixesState {
 
   // Description missing in models
   repeated BgpPrefixIpv6UnicastState ipv6_unicast_prefixes = 3;
+
+  // Description missing in models
+  repeated BgpPrefixIpv4MplsUnicastState ipv4_mpls_unicast_prefixes = 4;
+
+  // Description missing in models
+  repeated BgpPrefixIpv6MplsUnicastState ipv6_mpls_unicast_prefixes = 5;
 }
 
 // IPv4 unicast prefix.
@@ -17956,6 +18932,21 @@ message ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin {
   optional uint32 local_4byte_admin = 2;
 }
 
+// The Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth.
+// (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with
+// sub-type as 0x04.
+message ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+
+  // The value of the Global Administrator subfield should represent the Autonomous System
+  // of the router that attaches the Link Bandwidth Community. If four octet AS numbering
+  // scheme is used, AS_TRANS (23456) should be used.
+  optional uint32 global_2byte_as = 1;
+
+  // Bandwidth of the link in bytes per second. ( 1 Kbps is 1000 bytes per second and
+  // 1 Mbps is 1000 Kbps per second )
+  optional float bandwidth = 2;
+}
+
 // The Transitive Two-Octet AS-Specific Extended Community is sent as type 0x00 .
 // 
 message ResultExtendedCommunityTransitive2OctetAsType {
@@ -17965,6 +18956,7 @@ message ResultExtendedCommunityTransitive2OctetAsType {
       unspecified = 0;
       route_target_subtype = 1;
       route_origin_subtype = 2;
+      link_bandwidth_subtype = 3;
     }
   }
   // Description missing in models
@@ -17975,6 +18967,9 @@ message ResultExtendedCommunityTransitive2OctetAsType {
 
   // Description missing in models
   ResultExtendedCommunityTransitive2OctetAsTypeRouteOrigin route_origin_subtype = 3;
+
+  // Description missing in models
+  ResultExtendedCommunityTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 4;
 }
 
 // The Route Origin Community identifies one or more routers that inject a set of routes
@@ -18159,6 +19154,114 @@ message ResultExtendedCommunityNonTransitive2OctetAsType {
 
   // Description missing in models
   ResultExtendedCommunityNonTransitive2OctetAsTypeLinkBandwidth link_bandwidth_subtype = 2;
+}
+
+// IPv4 MPLS unicast prefix.
+message BgpPrefixIpv4MplsUnicastState {
+
+  // An IPv4 unicast address
+  optional string ipv4_address = 1;
+
+  // Description missing in models
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 5;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 6;
+
+  // One or more MPLS Label 24 bit values bound to this address prefix.
+  repeated uint32 labels = 7;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 8;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 9;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 10;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 11;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 12;
+}
+
+// IPv6 MPLS unicast prefix.
+message BgpPrefixIpv6MplsUnicastState {
+
+  // An IPv6 unicast address
+  optional string ipv6_address = 1;
+
+  // Description missing in models
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 5;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 6;
+
+  // One or more MPLS Label 24 bit values bound to this address prefix.
+  repeated uint32 labels = 7;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 8;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 9;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 10;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 11;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 12;
 }
 
 // BGP communities provide additional capability for tagging routes and  for modifying
@@ -19986,8 +21089,369 @@ message IsisIIHRestartFlags {
   optional bool pa_bit = 5;
 }
 
-// The capture result request to the traffic generator. Stops the port capture on the
-// port_name and returns the capture.
+// The request for BMP server information.
+message BmpServersStateRequest {
+
+  // The names of the BMP Servers  to return results for. An empty list will return results
+  // for all BMP Servers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.Bmp.ServerV4/properties/name
+  // - /components/schemas/Device.Bmp.ServerV6/properties/name
+  // 
+  repeated string bmp_server_names = 1;
+}
+
+// The information learned by a specific BMP Server. Note that each BMP Server is connected
+// to a single BMP client, though multiple BMP Servers can be configured on the  same
+// IPv4 or IPv6 interface , each connected to a different BMP client. Each BMP client
+// can in turn report information about multiple BGP sessions on that router.
+message BmpServerState {
+
+  // The name of the BMP Server configured for which the information is being returned.
+  optional string bmp_server_name = 1;
+
+  // Description missing in models
+  repeated BmpServerPeerState peers = 2;
+}
+
+// The information returned by a BMP client to the BMP Server related to a specific
+// BGP session on the router.
+message BmpServerPeerState {
+
+  message SessionIpType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // Whether the peer is of type BGPv4 or BGPv6. If the type is ipv4 the session_ipv4_information
+  // object should be included to convey the local and remote IPv4 address for the peer.
+  // If the type is ipv6 the session_ipv6_information object should be included to convey
+  // the local and remote IPv6 address for the peer.
+  optional SessionIpType.Enum session_ip_type = 1;
+
+  // This object is included if session_ip_type is of type ipv4.
+  BmpServerPeerSessionIpv4Information session_ipv4_information = 2;
+
+  // This object is included if session_ip_type is of type ipv6.
+  BmpServerPeerSessionIpv6Information session_ipv6_information = 3;
+
+  // The BGP Identifier of the peer.
+  optional string peer_bgp_id = 4;
+
+  message Status {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+    }
+  }
+  // The current state of the BGP session.  Note that per peer stats and rib information
+  // might be empty if the peer state is down.
+  optional Status.Enum status = 5;
+
+  // The last set of BMP stats sent by the BMP client for this peer as per the message
+  // format defined in https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might
+  // be absent if no BMP Statistics message have been received yet or peer is still in
+  // down state. If the BMP client has sent a subset of the various statistic counters,
+  // only those should be set when returning the result.
+  BmpServerPeerStats stats = 6;
+
+  // The set of routes received from this peer as reported using BMP Route Monitoring
+  // messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound
+  // policies were applied. This is determined by checking that the L flag is not set
+  // in the Per-Peer Header in the received Route Monitoring message. It should also be
+  // ensured that the O flag as defined in RFC8671 is not set in the flags. (indicates
+  // Adj-RIB-Out)  Note that routes which have been advertised initially and currently
+  // in withdrawn state can be included in the returned set of routes by setting the status
+  // of that specific route to 'withdrawn'. Routes which have been received from this
+  // peer and part of current Pre-Policy In-Rib DB should have the status set to 'advertised'.
+  // Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
+  // is configured or exceptions in the prefix_storage are specified such that all incoming
+  // routes are filtered, the prefix database list will be empty.
+  BmpServerPeerPrePolicyInRib pre_policy_in_rib = 7;
+
+  // The set of routes received from this peer as reported using BMP Route Monitoring
+  // messages by the BMP client  which are part of the Adj-RIB-In database *after* inbound
+  // policies were applied. This is determined by checking that the L flag is set in the
+  // Per-Peer Header in the received Route Monitoring message. It should also be ensured
+  // that the O flag as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)
+  // Note that routes which have been advertised initially and currently in withdrawn
+  // state can be included in the returned set of routes by setting the status of that
+  // specific route to 'withdrawn'. Routes which have been received from this peer and
+  // part of current Post-Policy In-Rib DB should have the status set to 'advertised'.
+  // Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
+  // is configured or exceptions in the prefix_storage are specified such that all incoming
+  // routes are filtered, the prefix database list will be empty.
+  BmpServerPeerPostPolicyInRib post_policy_in_rib = 8;
+}
+
+// This object is included if session_ip_type is of type ipv4.
+message BmpServerPeerSessionIpv4Information {
+
+  // The local IPv4 address associated with the BGPv4 peer.
+  optional string local_address = 1;
+
+  // The remote IPv4 address associated with the BGPv4 peer.
+  optional string remote_address = 2;
+}
+
+// This object is included if session_ip_type is of type ipv6.
+message BmpServerPeerSessionIpv6Information {
+
+  // The local IPv6 address associated with the BGPv6 peer.
+  optional string local_address = 1;
+
+  // The remote IPv6 address associated with the BGPv6 peer.
+  optional string remote_address = 2;
+}
+
+// The last set of BMP stats sent by the BMP client for this peer as per the message
+// format defined in https://www.rfc-editor.org/rfc/rfc7854.html#section-4.8. It might
+// be absent if no BMP Statistics message have been received yet or peer is still in
+// down state. If the BMP client has sent a subset of the various statistic counters,
+// only those should be set when returning the result.
+message BmpServerPeerStats {
+
+  // Number of prefixes rejected by inbound policy.
+  optional uint32 rejected_prefixes = 1;
+
+  // Number of (known) duplicate prefix advertisements.
+  optional uint32 duplicate_prefixes = 2;
+
+  // Number of (known) duplicate withdraws.
+  optional uint32 duplicate_withdraws = 3;
+
+  // Number of updates invalidated due to CLUSTER_LIST loop.
+  optional uint32 cluster_list_invalidated_updates = 4;
+
+  // Number of updates invalidated due to AS_PATH loop.
+  optional uint32 as_path_invalidated_updates = 5;
+
+  // Number of updates invalidated due to ORIGINATOR_ID.
+  optional uint32 originator_id_invalidated_updates = 6;
+
+  // Number of updates invalidated due to AS_CONFED loop.
+  optional uint32 as_confed_invalidated_updates = 7;
+
+  // Number of routes in Adj-RIBs-In.
+  optional uint64 adj_rib_routes = 8;
+
+  // Number of routes in Loc-RIB.
+  optional uint64 local_rib_routes = 9;
+
+  // Number of updates subjected to treat-as-withdraw treatment [RFC7606].
+  optional uint32 withdraw_updates_received = 10;
+
+  // Number of prefixes  subjected to treat-as-withdraw treatment [RFC7606].
+  optional uint32 withdraw_prefixes_received = 11;
+
+  // Number of duplicate update messages received.
+  optional uint32 duplicate_updates = 12;
+}
+
+// The set of routes received from this peer as reported using BMP Route Monitoring
+// messages by the BMP client  which are part of the Adj-RIB-In database *before* inbound
+// policies were applied. This is determined by checking that the L flag is not set
+// in the Per-Peer Header in the received Route Monitoring message. It should also be
+// ensured that the O flag as defined in RFC8671 is not set in the flags. (indicates
+// Adj-RIB-Out)  Note that routes which have been advertised initially and currently
+// in withdrawn state can be included in the returned set of routes by setting the status
+// of that specific route to 'withdrawn'. Routes which have been received from this
+// peer and part of current Pre-Policy In-Rib DB should have the status set to 'advertised'.
+// Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
+// is configured or exceptions in the prefix_storage are specified such that all incoming
+// routes are filtered, the corresponding prefix database list will be empty.
+message BmpServerPeerPrePolicyInRib {
+
+  // Description missing in models
+  repeated BmpPrefixIpv4UnicastState ipv4_unicast_prefixes = 1;
+
+  // Description missing in models
+  repeated BmpPrefixIpv6UnicastState ipv6_unicast_prefixes = 2;
+}
+
+// The set of routes received from this peer as reported using BMP Route Monitoring
+// messages by the BMP client  which are part of the Adj-RIB-In database *after* inbound
+// policies were applied. This is determined by checking that the L flag is set in the
+// Per-Peer Header in the received Route Monitoring message. It should also be ensured
+// that the O flag as defined in RFC8671 is not set in the flags. (indicates Adj-RIB-Out)
+// Note that routes which have been advertised initially and currently in withdrawn
+// state can be included in the returned set of routes by setting the status of that
+// specific route to 'withdrawn'. Routes which have been received from this peer and
+// part of current Post-Policy In-Rib DB should have the status set to 'advertised'.
+// Note that if prefix_storage.ipv4_unicast.discard or/and prefix_storage.ipv6_unicast.discard
+// is configured or exceptions in the prefix_storage are specified such that all incoming
+// routes are filtered, the corresponding prefix database list will be empty. .
+// 
+message BmpServerPeerPostPolicyInRib {
+
+  // Description missing in models
+  repeated BmpPrefixIpv4UnicastState ipv4_unicast_prefixes = 1;
+
+  // Description missing in models
+  repeated BmpPrefixIpv6UnicastState ipv6_unicast_prefixes = 2;
+}
+
+// IPv4 unicast prefix.
+message BmpPrefixIpv4UnicastState {
+
+  // An IPv4 unicast address.
+  optional string ipv4_address = 1;
+
+  // The length of the IPv4 prefix.
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  message RouteState {
+    enum Enum {
+      unspecified = 0;
+      advertised = 1;
+      withdrawn = 2;
+    }
+  }
+  // The state of the route , either advertised or withdrawn. If route is in withdrawn
+  // state, only the prefix, prefix_length, origin and path_id (if applicable) may be
+  // present.
+  optional RouteState.Enum route_state = 5;
+
+  message NextHopType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // The next hop type , ipv4 or ipv6 .  If type is ipv4, then the ipv4_next_hop should
+  // be included. If type is ipv6, then the ipv6_next_hop should be included.
+  // 
+  optional NextHopType.Enum next_hop_type = 6;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 7;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 8;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 9;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 10;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 11;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 12;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 13;
+}
+
+// IPv6 unicast prefix.
+message BmpPrefixIpv6UnicastState {
+
+  // An IPv6 unicast address.
+  optional string ipv6_address = 1;
+
+  // The length of the IPv6 prefix.
+  optional uint32 prefix_length = 2;
+
+  message Origin {
+    enum Enum {
+      unspecified = 0;
+      igp = 1;
+      egp = 2;
+      incomplete = 3;
+    }
+  }
+  // The origin of the prefix.
+  optional Origin.Enum origin = 3;
+
+  // The path id.
+  optional uint32 path_id = 4;
+
+  message RouteState {
+    enum Enum {
+      unspecified = 0;
+      advertised = 1;
+      withdrawn = 2;
+    }
+  }
+  // The state of the route , either advertised or withdrawn. If route is in withdrawn
+  // state, only the prefix, prefix_length, origin and path_id (if applicable) may be
+  // present.
+  optional RouteState.Enum route_state = 5;
+
+  message NextHopType {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // The next hop type , ipv4 or ipv6 .  If type is ipv4, then the ipv4_next_hop should
+  // be included. If type is ipv6, then the ipv6_next_hop should be included.
+  // 
+  optional NextHopType.Enum next_hop_type = 6;
+
+  // The IPv4 address of the egress interface.
+  optional string ipv4_next_hop = 7;
+
+  // The IPv6 address of the egress interface.
+  optional string ipv6_next_hop = 8;
+
+  // Optional community attributes.
+  repeated ResultBgpCommunity communities = 9;
+
+  // Optional received Extended Community attributes. Each received Extended Community
+  // attribute is available for retrieval in two forms. Support of the 'raw' format in
+  // which all 8 bytes (16 hex characters) is always present and available for use. In
+  // addition, if supported by the implementation, the Extended Community attribute may
+  // also be retrieved in the  'structured' format which is an optional field.
+  repeated ResultExtendedCommunity extended_communities = 10;
+
+  // Description missing in models
+  ResultBgpAsPath as_path = 11;
+
+  // The local preference is a well-known attribute and the value is used for route selection.
+  // The route with the highest local preference value is preferred.
+  optional uint32 local_preference = 12;
+
+  // The multi exit discriminator (MED) is an optional non-transitive attribute and the
+  // value is used for route selection. The route with the lowest MED value is preferred.
+  optional uint32 multi_exit_discriminator = 13;
+}
+
+// The capture result request to the traffic generator.
+// Stops the port capture on the port_name and returns the capture.
 message CaptureRequest {
 
   // The name of a port a capture is started on.
@@ -20001,6 +21465,69 @@ message CaptureRequest {
   // 
   // required = true
   optional string port_name = 1;
+
+  // Specification of the packets to be returned in the capture result from  the set of
+  // captured packets as per capture configuration.
+  CaptureRequestPackets packets = 2;
+}
+
+// Packets to be returned in the capture result from  the set of captured packets as
+// per capture configuration.
+message CaptureRequestPackets {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      all = 1;
+      slice = 2;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.all
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  CaptureRequestCaptureSlice slice = 2;
+}
+
+// Packets to be returned as part of the capture result from the set of captured packets
+// as per
+// capture configuration and specification of capture slice.
+// To be noted,
+// - definition of capture slice works in conjunction with capture filter parameters
+// in set_config.
+// - if 'initial' set of packets is desired to be returned in the capture result, 'overwrite'
+// attribute in 'captures'
+// settings of set_config should be disabled.
+message CaptureRequestCaptureSlice {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      initial = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.initial
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  CaptureRequestCaptureSliceInitial initial = 2;
+}
+
+// Specification of capture slice to retrieve captured packets from begining of captured
+// packet sequence.
+message CaptureRequestCaptureSliceInitial {
+
+  // Position of the packet (Nth) in the captured packet sequence starting from which
+  // packets would be returned as part of the capture result.
+  // default = 1
+  optional uint64 start = 1;
+
+  // Maximum number of packets to be returned as part of the capture result starting from
+  // the position of 'start' packet.
+  // default = 100
+  optional uint64 count = 2;
 }
 
 // mac counter pattern
@@ -32758,6 +34285,2271 @@ message PatternFlowRSVPPathObjectsCustomType {
 
   // Description missing in models
   PatternFlowRSVPPathObjectsCustomTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpVersionCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The LACP version number.
+message PatternFlowLacpVersion {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpVersionCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpVersionCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorTypeCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Actor Information. The value 0x01 identifies this TLV as containing
+// information about the sending device (the Actor).
+message PatternFlowLacpduActorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorLengthCounter {
+
+  // Description missing in models
+  // default = 20
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Actor Information TLV payload in bytes.
+message PatternFlowLacpduActorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 20
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [20]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorSystemPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority assigned to the Actor's system for use in aggregation. A lower numerical
+// value indicates a higher priority. Used to select the active System ID when forming
+// an aggregator.
+message PatternFlowLacpduActorSystemPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemPriorityCounter decrement = 6;
+}
+
+// mac counter pattern
+message PatternFlowLacpduActorSystemIdCounter {
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:01
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Actor's System ID, which is a globally unique MAC address assigned to the system
+// containing the Actor.
+message PatternFlowLacpduActorSystemId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['00:00:00:00:00:00']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorSystemIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorKeyCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The operational Key value assigned to the Actor's port. The key is generated based
+// on port configuration (e.g., speed, duplex, trunk ID) and is used to identify potential
+// aggregation groups. Only links with the same key can be aggregated together.
+message PatternFlowLacpduActorKey {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorKeyCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorKeyCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorPortPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority assigned to the Actor's port. A lower numerical value indicates a higher
+// priority. Used to prioritize ports for inclusion in a Link Aggregation Group (LAG)
+// when the group is full.
+message PatternFlowLacpduActorPortPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortPriorityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorPortNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The port number assigned to the Actor's port. It is a unique identifier for the port
+// within the system.
+message PatternFlowLacpduActorPortNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorPortNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field for future use in the Actor TLV. Should be set to all zeros.
+message PatternFlowLacpduActorReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerTypeCounter {
+
+  // Description missing in models
+  // default = 2
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Partner Information. The value 0x02 identifies this TLV as containing
+// information about the remote device (the Partner), as understood by the Actor.
+message PatternFlowLacpduPartnerType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 2
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [2]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerLengthCounter {
+
+  // Description missing in models
+  // default = 20
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Partner Information TLV payload in bytes.
+message PatternFlowLacpduPartnerLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 20
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [20]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerSystemPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority of the Partner's system, as received by the Actor.
+message PatternFlowLacpduPartnerSystemPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemPriorityCounter decrement = 6;
+}
+
+// mac counter pattern
+message PatternFlowLacpduPartnerSystemIdCounter {
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string start = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:01
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Partner's System ID (MAC address), as received by the Actor.
+message PatternFlowLacpduPartnerSystemId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 00:00:00:00:00:00
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['00:00:00:00:00:00']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerSystemIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerKeyCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The operational Key value of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerKey {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKeyCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerKeyCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerPortPriorityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The priority of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerPortPriority {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriorityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortPriorityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerPortNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The port number of the Partner's port, as received by the Actor.
+message PatternFlowLacpduPartnerPortNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerPortNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerReservedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Reserved field for future use in the Partner TLV. Should be set to all zeros.
+message PatternFlowLacpduPartnerReserved {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReservedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerReservedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorTypeCounter {
+
+  // Description missing in models
+  // default = 3
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Collector Information. The value 0x03 identifies this TLV.
+message PatternFlowLacpduCollectorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 3
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [3]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorLengthCounter {
+
+  // Description missing in models
+  // default = 16
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Collector Information TLV payload in bytes. The value must be 16
+// (0x10).
+message PatternFlowLacpduCollectorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 16
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [16]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduCollectorMaxDelayCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Indicates the maximum delay, in units of 10 microseconds, that the transmitting system's
+// aggregator will take to buffer frames from its collector before emitting a frame.
+message PatternFlowLacpduCollectorMaxDelay {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelayCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduCollectorMaxDelayCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduTerminatorTypeCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV Type for Terminator Information. The value 0x00 indicates the end of the TLV
+// list.
+message PatternFlowLacpduTerminatorType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorTypeCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorTypeCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduTerminatorLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the Terminator TLV payload. The value must be 0.
+message PatternFlowLacpduTerminatorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduTerminatorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateActivityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Activity (1=Active, 0=Passive)
+message PatternFlowLacpduActorStateActivity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateActivityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateTimeoutCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Timeout (1=Fast timeout, 0=Slow timeout)
+message PatternFlowLacpduActorStateTimeout {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeoutCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateTimeoutCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateAggregationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Aggregation (1=Aggregatable, 0=Individual)
+message PatternFlowLacpduActorStateAggregation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateAggregationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateSynchronizationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Synchronization (1=In Sync, 0=Out of Sync)
+message PatternFlowLacpduActorStateSynchronization {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronizationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateSynchronizationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateCollectingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Collecting (1=Enabled, 0=Disabled)
+message PatternFlowLacpduActorStateCollecting {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollectingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateCollectingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateDistributingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Distributing (1=Enabled, 0=Disabled)
+message PatternFlowLacpduActorStateDistributing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDistributingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateDefaultedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+message PatternFlowLacpduActorStateDefaulted {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaultedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateDefaultedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduActorStateExpiredCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Expired (1=Expired, 0=Not Expired)
+message PatternFlowLacpduActorStateExpired {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpiredCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduActorStateExpiredCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateActivityCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Activity (1=Active, 0=Passive)
+message PatternFlowLacpduPartnerStateActivity {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivityCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateActivityCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateTimeoutCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// LACP Timeout (1=Fast timeout, 0=Slow timeout)
+message PatternFlowLacpduPartnerStateTimeout {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeoutCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateTimeoutCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateAggregationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Aggregation (1=Aggregatable, 0=Individual)
+message PatternFlowLacpduPartnerStateAggregation {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateAggregationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateSynchronizationCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Synchronization (1=In Sync, 0=Out of Sync)
+message PatternFlowLacpduPartnerStateSynchronization {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronizationCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateSynchronizationCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateCollectingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Collecting (1=Enabled, 0=Disabled)
+message PatternFlowLacpduPartnerStateCollecting {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollectingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateCollectingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateDistributingCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Distributing (1=Enabled, 0=Disabled)
+message PatternFlowLacpduPartnerStateDistributing {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributingCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDistributingCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateDefaultedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Defaulted (1=Using defaulted partner info, 0=Using received partner info)
+message PatternFlowLacpduPartnerStateDefaulted {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaultedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateDefaultedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowLacpduPartnerStateExpiredCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Expired (1=Expired, 0=Not Expired)
+message PatternFlowLacpduPartnerStateExpired {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpiredCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowLacpduPartnerStateExpiredCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderNextHeaderCounter {
+
+  // Description missing in models
+  // default = 59
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The next header that identifies the type of header immediately following this IPv6
+// Extension header. For TCP and UDP the values are 6 and 17 respectively. A value of
+// 59 indicates that there are no further IPv6 Extension headers and that the payload
+// will be appended after this header. The available defined values are listed in https://www.iana.org/assignments/ipv6-parameters/ipv6-parameters.xhtml#extension-header
+message PatternFlowIpv6ExtHeaderNextHeader {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 59
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [59]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 59
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderNextHeaderCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6ExtHeaderHdrExtLenCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The length of the IPv6 Extension header in 8 octet units, not including the first
+// 8 octets of the Extension Header itself ( refer RFC 8200 ). When auto is assigned
+// the implementation should automatically set it to the correct value.
+message PatternFlowIpv6ExtHeaderHdrExtLen {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6ExtHeaderHdrExtLenCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentsLeftCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer containing the number of remaining segments to be visited
+// before the packet reaches its final destination. It is decremented at each segment
+// endpoint. It points to the current active segment in the Segment List. This should
+// not be more than the number of segments specified in the segment list. When auto
+// is assigned the value is set to the number of segments specified.
+message PatternFlowIpv6SegmentRoutingSegmentsLeft {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentsLeftCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingLastEntryCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit unsigned integer that contains the zero-based index of the last element in
+// the Segment List array. For example, if the Segment List contains 3 addresses (at
+// indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should
+// be automatically set by the implementation to one less than the number of segments
+// specified.
+message PatternFlowIpv6SegmentRoutingLastEntry {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingLastEntryCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingTagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 16-bit field used to tag a packet as part of a class or group, enabling shared properties
+// or policy treatment. If not used, it MUST be set to zero.
+message PatternFlowIpv6SegmentRoutingTag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingTagCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
+
+  // Description missing in models
+  // default = ::0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// A 128-bit IPv6 address segment.
+message PatternFlowIpv6SegmentRoutingSegmentSegment {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingSegmentSegmentCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsProtectedCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Protected Flag. Indicates if the segment is protected by a Fast Re-Route (FRR) mechanism.
+message PatternFlowIpv6SegmentRoutingFlagsProtected {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
+// (OAM) packet.
+message PatternFlowIpv6SegmentRoutingFlagsOam {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsOamCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingFlagsAlertCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Alert Flag. Indicates the presence of important TLVs that must be inspected.
+message PatternFlowIpv6SegmentRoutingFlagsAlert {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingFlagsAlertCounter decrement = 6;
 }
 
 // Version details

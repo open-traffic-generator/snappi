@@ -377,10 +377,10 @@ func (obj *patternFlowGtpv2PiggybackingFlagCounter) validateObj(vObj *validation
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 1 {
+		if *obj.obj.Count > 2 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowGtpv2PiggybackingFlagCounter.Count <= 1 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowGtpv2PiggybackingFlagCounter.Count <= 2 but Got %d", *obj.obj.Count))
 		}
 
 	}

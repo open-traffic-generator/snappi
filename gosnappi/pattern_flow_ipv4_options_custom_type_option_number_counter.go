@@ -377,10 +377,10 @@ func (obj *patternFlowIpv4OptionsCustomTypeOptionNumberCounter) validateObj(vObj
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 31 {
+		if *obj.obj.Count > 32 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowIpv4OptionsCustomTypeOptionNumberCounter.Count <= 31 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowIpv4OptionsCustomTypeOptionNumberCounter.Count <= 32 but Got %d", *obj.obj.Count))
 		}
 
 	}

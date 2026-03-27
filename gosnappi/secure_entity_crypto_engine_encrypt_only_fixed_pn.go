@@ -356,7 +356,7 @@ func (obj *secureEntityCryptoEngineEncryptOnlyFixedPn) setDefault() {
 		obj.SetPn(6)
 	}
 	if obj.obj.Xpn == nil {
-		obj.SetXpn("0x0000000000000006")
+		obj.SetXpn("0x06")
 	}
 
 }

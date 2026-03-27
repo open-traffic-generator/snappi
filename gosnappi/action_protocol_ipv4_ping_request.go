@@ -242,11 +242,7 @@ func (obj *actionProtocolIpv4PingRequest) Clone() (ActionProtocolIpv4PingRequest
 	return newObj, nil
 }
 
-// ActionProtocolIpv4PingRequest is under Review: Most ping request parameters are still TBD.
-//
-// Under Review: Most ping request parameters are still TBD.
-//
-// Request for initiating ping between a single source and destination pair.
+// ActionProtocolIpv4PingRequest is request for initiating ping between a single source and destination pair.
 // For ping request, 1 IPv4 ICMP Echo Request shall be sent and wait for ping response to either succeed or time out. The API wait timeout for each request shall be 300ms.
 type ActionProtocolIpv4PingRequest interface {
 	Validation
@@ -287,9 +283,11 @@ type ActionProtocolIpv4PingRequest interface {
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) SrcName() string {
@@ -302,9 +300,11 @@ func (obj *actionProtocolIpv4PingRequest) SrcName() string {
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // SrcName returns a string
 func (obj *actionProtocolIpv4PingRequest) HasSrcName() bool {
@@ -315,9 +315,11 @@ func (obj *actionProtocolIpv4PingRequest) HasSrcName() bool {
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
+// - /components/schemas/Device.Ipv4Loopback/properties/name
 //
 // SetSrcName sets the string value in the ActionProtocolIpv4PingRequest object
 func (obj *actionProtocolIpv4PingRequest) SetSrcName(value string) ActionProtocolIpv4PingRequest {
@@ -352,8 +354,6 @@ func (obj *actionProtocolIpv4PingRequest) validateObj(vObj *validation, set_defa
 	if set_default {
 		obj.setDefault()
 	}
-
-	obj.addWarnings("ActionProtocolIpv4PingRequest is under review, Most ping request parameters are still TBD.")
 
 	if obj.obj.DstIp != nil {
 

@@ -13,11 +13,12 @@ import (
 // ***** BgpExtendedCommunityTransitive2OctetAsType *****
 type bgpExtendedCommunityTransitive2OctetAsType struct {
 	validation
-	obj                      *otg.BgpExtendedCommunityTransitive2OctetAsType
-	marshaller               marshalBgpExtendedCommunityTransitive2OctetAsType
-	unMarshaller             unMarshalBgpExtendedCommunityTransitive2OctetAsType
-	routeTargetSubtypeHolder BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget
-	routeOriginSubtypeHolder BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+	obj                        *otg.BgpExtendedCommunityTransitive2OctetAsType
+	marshaller                 marshalBgpExtendedCommunityTransitive2OctetAsType
+	unMarshaller               unMarshalBgpExtendedCommunityTransitive2OctetAsType
+	routeTargetSubtypeHolder   BgpExtendedCommunityTransitive2OctetAsTypeRouteTarget
+	routeOriginSubtypeHolder   BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin
+	linkBandwidthSubtypeHolder BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
 }
 
 func NewBgpExtendedCommunityTransitive2OctetAsType() BgpExtendedCommunityTransitive2OctetAsType {
@@ -247,6 +248,7 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) Clone() (BgpExtendedCommu
 func (obj *bgpExtendedCommunityTransitive2OctetAsType) setNil() {
 	obj.routeTargetSubtypeHolder = nil
 	obj.routeOriginSubtypeHolder = nil
+	obj.linkBandwidthSubtypeHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,14 @@ type BgpExtendedCommunityTransitive2OctetAsType interface {
 	SetRouteOriginSubtype(value BgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin) BgpExtendedCommunityTransitive2OctetAsType
 	// HasRouteOriginSubtype checks if RouteOriginSubtype has been set in BgpExtendedCommunityTransitive2OctetAsType
 	HasRouteOriginSubtype() bool
+	// LinkBandwidthSubtype returns BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth, set in BgpExtendedCommunityTransitive2OctetAsType.
+	// BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth is the Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+	LinkBandwidthSubtype() BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+	// SetLinkBandwidthSubtype assigns BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth provided by user to BgpExtendedCommunityTransitive2OctetAsType.
+	// BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth is the Link Bandwidth Extended Community attribute is defined in draft-ietf-idr-link-bandwidth. (https://datatracker.ietf.org/doc/draft-ietf-idr-link-bandwidth) It is sent with sub-type as 0x04.
+	SetLinkBandwidthSubtype(value BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth) BgpExtendedCommunityTransitive2OctetAsType
+	// HasLinkBandwidthSubtype checks if LinkBandwidthSubtype has been set in BgpExtendedCommunityTransitive2OctetAsType
+	HasLinkBandwidthSubtype() bool
 	setNil()
 }
 
@@ -303,11 +313,13 @@ type BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum string
 
 // Enum of Choice on BgpExtendedCommunityTransitive2OctetAsType
 var BgpExtendedCommunityTransitive2OctetAsTypeChoice = struct {
-	ROUTE_TARGET_SUBTYPE BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum
-	ROUTE_ORIGIN_SUBTYPE BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	ROUTE_TARGET_SUBTYPE   BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	ROUTE_ORIGIN_SUBTYPE   BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum
+	LINK_BANDWIDTH_SUBTYPE BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum
 }{
-	ROUTE_TARGET_SUBTYPE: BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_target_subtype"),
-	ROUTE_ORIGIN_SUBTYPE: BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_origin_subtype"),
+	ROUTE_TARGET_SUBTYPE:   BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_target_subtype"),
+	ROUTE_ORIGIN_SUBTYPE:   BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum("route_origin_subtype"),
+	LINK_BANDWIDTH_SUBTYPE: BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum("link_bandwidth_subtype"),
 }
 
 func (obj *bgpExtendedCommunityTransitive2OctetAsType) Choice() BgpExtendedCommunityTransitive2OctetAsTypeChoiceEnum {
@@ -329,6 +341,8 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) setChoice(value BgpExtend
 	}
 	enumValue := otg.BgpExtendedCommunityTransitive2OctetAsType_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.LinkBandwidthSubtype = nil
+	obj.linkBandwidthSubtypeHolder = nil
 	obj.obj.RouteOriginSubtype = nil
 	obj.routeOriginSubtypeHolder = nil
 	obj.obj.RouteTargetSubtype = nil
@@ -340,6 +354,10 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) setChoice(value BgpExtend
 
 	if value == BgpExtendedCommunityTransitive2OctetAsTypeChoice.ROUTE_ORIGIN_SUBTYPE {
 		obj.obj.RouteOriginSubtype = NewBgpExtendedCommunityTransitive2OctetAsTypeRouteOrigin().msg()
+	}
+
+	if value == BgpExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE {
+		obj.obj.LinkBandwidthSubtype = NewBgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth().msg()
 	}
 
 	return obj
@@ -401,6 +419,34 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) SetRouteOriginSubtype(val
 	return obj
 }
 
+// description is TBD
+// LinkBandwidthSubtype returns a BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+func (obj *bgpExtendedCommunityTransitive2OctetAsType) LinkBandwidthSubtype() BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth {
+	if obj.obj.LinkBandwidthSubtype == nil {
+		obj.setChoice(BgpExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+	}
+	if obj.linkBandwidthSubtypeHolder == nil {
+		obj.linkBandwidthSubtypeHolder = &bgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth{obj: obj.obj.LinkBandwidthSubtype}
+	}
+	return obj.linkBandwidthSubtypeHolder
+}
+
+// description is TBD
+// LinkBandwidthSubtype returns a BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth
+func (obj *bgpExtendedCommunityTransitive2OctetAsType) HasLinkBandwidthSubtype() bool {
+	return obj.obj.LinkBandwidthSubtype != nil
+}
+
+// description is TBD
+// SetLinkBandwidthSubtype sets the BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth value in the BgpExtendedCommunityTransitive2OctetAsType object
+func (obj *bgpExtendedCommunityTransitive2OctetAsType) SetLinkBandwidthSubtype(value BgpExtendedCommunityTransitive2OctetAsTypeLinkBandwidth) BgpExtendedCommunityTransitive2OctetAsType {
+	obj.setChoice(BgpExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE)
+	obj.linkBandwidthSubtypeHolder = nil
+	obj.obj.LinkBandwidthSubtype = value.msg()
+
+	return obj
+}
+
 func (obj *bgpExtendedCommunityTransitive2OctetAsType) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -414,6 +460,11 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) validateObj(vObj *validat
 	if obj.obj.RouteOriginSubtype != nil {
 
 		obj.RouteOriginSubtype().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.LinkBandwidthSubtype != nil {
+
+		obj.LinkBandwidthSubtype().validateObj(vObj, set_default)
 	}
 
 }
@@ -430,6 +481,11 @@ func (obj *bgpExtendedCommunityTransitive2OctetAsType) setDefault() {
 	if obj.obj.RouteOriginSubtype != nil {
 		choices_set += 1
 		choice = BgpExtendedCommunityTransitive2OctetAsTypeChoice.ROUTE_ORIGIN_SUBTYPE
+	}
+
+	if obj.obj.LinkBandwidthSubtype != nil {
+		choices_set += 1
+		choice = BgpExtendedCommunityTransitive2OctetAsTypeChoice.LINK_BANDWIDTH_SUBTYPE
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {

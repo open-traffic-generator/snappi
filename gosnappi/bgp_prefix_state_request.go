@@ -332,11 +332,15 @@ type BgpPrefixStateRequestPrefixFiltersEnum string
 
 // Enum of PrefixFilters on BgpPrefixStateRequest
 var BgpPrefixStateRequestPrefixFilters = struct {
-	IPV4_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
-	IPV6_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV4_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_UNICAST      BgpPrefixStateRequestPrefixFiltersEnum
+	IPV4_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
+	IPV6_MPLS_UNICAST BgpPrefixStateRequestPrefixFiltersEnum
 }{
-	IPV4_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
-	IPV6_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
+	IPV4_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv4_unicast"),
+	IPV6_UNICAST:      BgpPrefixStateRequestPrefixFiltersEnum("ipv6_unicast"),
+	IPV4_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv4_mpls_unicast"),
+	IPV6_MPLS_UNICAST: BgpPrefixStateRequestPrefixFiltersEnum("ipv6_mpls_unicast"),
 }
 
 func (obj *bgpPrefixStateRequest) PrefixFilters() []BgpPrefixStateRequestPrefixFiltersEnum {

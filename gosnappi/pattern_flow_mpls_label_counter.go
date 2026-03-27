@@ -377,10 +377,10 @@ func (obj *patternFlowMplsLabelCounter) validateObj(vObj *validation, set_defaul
 
 	if obj.obj.Count != nil {
 
-		if *obj.obj.Count > 1048575 {
+		if *obj.obj.Count > 1048576 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= PatternFlowMplsLabelCounter.Count <= 1048575 but Got %d", *obj.obj.Count))
+				fmt.Sprintf("0 <= PatternFlowMplsLabelCounter.Count <= 1048576 but Got %d", *obj.obj.Count))
 		}
 
 	}
