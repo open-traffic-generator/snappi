@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.49.0
+  version: 1.51.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -3397,7 +3397,7 @@ components:
           type: integer
           format: uint32
           minimum: 64
-          maximum: 9000
+          maximum: 14000
           default: 1500
           x-field-uid: 5
         ieee_media_defaults:
@@ -14318,25 +14318,16 @@ components:
           x-field-uid: 14
           $ref: '#/components/schemas/Pattern.Flow.Ipv4.Dst'
         options:
+          description: |-
+            IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram.  It is encoded as a series of type, length and value attributes.  The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to a IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for a total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed. 3. timestamp option allows routers to record their local timestamp and IP address for latency measurement and path diagnostics as defined in RFC791.  4. end_of_options option allows routers to specify the end of options list. This may only be used if the end of the options does not coincide with the end of the IP header. It is a single octet value and padding is implicitly added to conform to a work boundary.
           type: array
           minItems: 0
           items:
             $ref: '#/components/schemas/Flow.Ipv4.Options'
           x-field-uid: 15
     Flow.Ipv4.Options:
-      description: "IPv4 options are optional extensions for the IPv4 header that\
-        \ can be utilised to provide additional information about the IPv4 datagram.\
-        \  It is encoded as a series of type, length and value attributes.  The IP\
-        \ header length MUST be increased to accommodate the extra bytes needed to\
-        \ encode the IP options. The length of the all options included to a IPv4\
-        \ header should not exceed 40 bytes since IPv4 Header length (4 bits) can\
-        \ at max specify 15 4-word octets for a total of 60 bytes which includes 20\
-        \ bytes needed for mandatory attributes of the IPv4 header. If the user adds\
-        \ multiples IPv4 options that exceeds 40 bytes and specify header length as\
-        \ \"auto\", implementation should throw error. Currently IP options supported\
-        \ are: 1. router_alert option allows devices to intercept packets not addressed\
-        \ to them directly as defined in RFC2113. 2. custom option is provided to\
-        \ configure user defined IP options as needed. "
+      description: |-
+        IPv4 options are optional extensions for the IPv4 header
       type: object
       properties:
         choice:
@@ -14348,12 +14339,21 @@ components:
               x-field-uid: 1
             custom:
               x-field-uid: 2
+            timestamp:
+              x-field-uid: 3
+            end_of_options:
+              x-field-uid: 4
           enum:
           - router_alert
           - custom
+          - timestamp
+          - end_of_options
         custom:
           $ref: '#/components/schemas/Flow.Ipv4Options.Custom'
           x-field-uid: 2
+        timestamp:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp'
+          x-field-uid: 3
     Flow.Ipv4Options.Custom:
       description: |-
         User defined IP options to be appended to the IPv4 header.
@@ -14419,6 +14419,107 @@ components:
           format: uint32
           default: 0
           x-field-uid: 3
+    Flow.Ipv4Options.Timestamp:
+      description: |-
+        IPv4 timestamp option to be appended to the IPv4 header.
+      type: object
+      properties:
+        pointer:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp.Pointer'
+          x-field-uid: 1
+        overflow:
+          description: |-
+            A counter that indicates the number of intermediate nodes that were unable to record a timestamp because the options data area was full.
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Overflow'
+        format:
+          $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp.Format'
+          x-field-uid: 3
+    Flow.Ipv4Options.Timestamp.Pointer:
+      description: |-
+        The attribute pointer indicates the octet offset where the next router should begin recording its data.
+        Choices of input are,
+        1. auto : The OTG implementation can provide a system generated value for this property. If the implementation is unable to generate a value, the default value must be used.
+        2. value: User can configure the pointer value.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        value:
+          type: integer
+          format: uint32
+          default: 5
+          minimum: 5
+          maximum: 40
+          x-field-uid: 2
+    Flow.Ipv4Options.Timestamp.Format:
+      description: |-
+        The format field defines the structural layout of the options data area and the specific recording logic routers must follow when appending timestamps and IP addresses.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            timestamps:
+              x-field-uid: 1
+            address_and_timestamps:
+              x-field-uid: 2
+            prespecified_address_and_timestamps:
+              x-field-uid: 3
+          x-field-uid: 1
+          enum:
+          - timestamps
+          - address_and_timestamps
+          - prespecified_address_and_timestamps
+        timestamps:
+          description: |-
+            A recording mode where routers append only their 32-bit universal timestamps sequentially into the options data area.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp.Format.Timestamps'
+          x-field-uid: 2
+        address_and_timestamps:
+          description: |-
+            A recording mode where each router appends its 32-bit IPv4 address followed immediately by its 32-bit universal timestamp into the options data area.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps'
+          x-field-uid: 3
+        prespecified_address_and_timestamps:
+          description: |-
+            A selective recording mode where only routers whose IPv4 addresses match the pre-listed entries in the header record their 32-bit universal timestamps into the options data area.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps'
+          x-field-uid: 4
+    Flow.Ipv4Options.Timestamp.Format.Timestamps:
+      type: object
+      properties:
+        timestamp:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.Timestamps.Timestamp'
+    Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps:
+      type: object
+      properties:
+        address:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Address'
+        timestamp:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Timestamp'
     Flow.Ipv4.Priority:
       description: |-
         A container for ipv4 raw, tos, dscp ip priorities.
@@ -32764,6 +32865,259 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Custom.Type.OptionNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv4Options.Timestamp.Overflow.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 15
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 15
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 16
+    Pattern.Flow.Ipv4Options.Timestamp.Overflow:
+      description: |-
+        A counter that indicates the number of intermediate nodes that were unable to record a timestamp because the options data area was full.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 15
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 15
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Overflow.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Overflow.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv4Options.Timestamp.Format.Timestamps.Timestamp.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv4Options.Timestamp.Format.Timestamps.Timestamp:
+      description: |-
+        A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.Timestamps.Timestamp.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.Timestamps.Timestamp.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Address.Counter:
+      description: |-
+        ipv4 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: 0.0.0.0
+          format: ipv4
+        step:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.1
+          format: ipv4
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Address:
+      description: |-
+        IPv4 address of the router interface that handled the packet, serving as a network identifier for the corresponding timestamp entry.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: 0.0.0.0
+          format: ipv4
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv4
+          x-field-uid: 3
+          default:
+          - 0.0.0.0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Address.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Address.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Timestamp.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Timestamp:
+      description: |-
+        A 32-bit value representing the time of packet processing, recorded as the number of milliseconds elapsed since midnight Universal Time (UT).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Timestamp.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv4Options.Timestamp.Format.AddressAndTimestamps.Timestamp.Counter'
           x-field-uid: 6
     Pattern.Flow.Ipv4.Priority.Raw.Counter:
       description: |-
