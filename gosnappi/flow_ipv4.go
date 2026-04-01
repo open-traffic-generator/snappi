@@ -809,7 +809,7 @@ func (obj *flowIpv4) SetDst(value PatternFlowIpv4Dst) FlowIpv4 {
 	return obj
 }
 
-// description is TBD
+// IPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram.  It is encoded as a series of type, length and value attributes.  The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to a IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for a total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed. 3. timestamp option allows routers to record their local timestamp and IP address for latency measurement and path diagnostics as defined in RFC791.  4. end_of_options option allows routers to specify the end of options list. This may only be used if the end of the options does not coincide with the end of the IP header. It is a single octet value and padding is implicitly added to conform to a work boundary.
 // Options returns a []FlowIpv4Options
 func (obj *flowIpv4) Options() FlowIpv4FlowIpv4OptionsIter {
 	if len(obj.obj.Options) == 0 {

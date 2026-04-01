@@ -13,10 +13,11 @@ import (
 // ***** FlowIpv4Options *****
 type flowIpv4Options struct {
 	validation
-	obj          *otg.FlowIpv4Options
-	marshaller   marshalFlowIpv4Options
-	unMarshaller unMarshalFlowIpv4Options
-	customHolder FlowIpv4OptionsCustom
+	obj             *otg.FlowIpv4Options
+	marshaller      marshalFlowIpv4Options
+	unMarshaller    unMarshalFlowIpv4Options
+	customHolder    FlowIpv4OptionsCustom
+	timestampHolder FlowIpv4OptionsTimestamp
 }
 
 func NewFlowIpv4Options() FlowIpv4Options {
@@ -245,12 +246,13 @@ func (obj *flowIpv4Options) Clone() (FlowIpv4Options, error) {
 
 func (obj *flowIpv4Options) setNil() {
 	obj.customHolder = nil
+	obj.timestampHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv4Options is iPv4 options are optional extensions for the IPv4 header that can be utilised to provide additional information about the IPv4 datagram.  It is encoded as a series of type, length and value attributes.  The IP header length MUST be increased to accommodate the extra bytes needed to encode the IP options. The length of the all options included to a IPv4 header should not exceed 40 bytes since IPv4 Header length (4 bits) can at max specify 15 4-word octets for a total of 60 bytes which includes 20 bytes needed for mandatory attributes of the IPv4 header. If the user adds multiples IPv4 options that exceeds 40 bytes and specify header length as "auto", implementation should throw error. Currently IP options supported are: 1. router_alert option allows devices to intercept packets not addressed to them directly as defined in RFC2113. 2. custom option is provided to configure user defined IP options as needed.
+// FlowIpv4Options is iPv4 options are optional extensions for the IPv4 header
 type FlowIpv4Options interface {
 	Validation
 	// msg marshals FlowIpv4Options to protobuf object *otg.FlowIpv4Options
@@ -280,6 +282,8 @@ type FlowIpv4Options interface {
 	HasChoice() bool
 	// getter for RouterAlert to set choice.
 	RouterAlert()
+	// getter for EndOfOptions to set choice.
+	EndOfOptions()
 	// Custom returns FlowIpv4OptionsCustom, set in FlowIpv4Options.
 	// FlowIpv4OptionsCustom is user defined IP options to be appended to the IPv4 header.
 	Custom() FlowIpv4OptionsCustom
@@ -288,6 +292,14 @@ type FlowIpv4Options interface {
 	SetCustom(value FlowIpv4OptionsCustom) FlowIpv4Options
 	// HasCustom checks if Custom has been set in FlowIpv4Options
 	HasCustom() bool
+	// Timestamp returns FlowIpv4OptionsTimestamp, set in FlowIpv4Options.
+	// FlowIpv4OptionsTimestamp is iPv4 timestamp option to be appended to the IPv4 header.
+	Timestamp() FlowIpv4OptionsTimestamp
+	// SetTimestamp assigns FlowIpv4OptionsTimestamp provided by user to FlowIpv4Options.
+	// FlowIpv4OptionsTimestamp is iPv4 timestamp option to be appended to the IPv4 header.
+	SetTimestamp(value FlowIpv4OptionsTimestamp) FlowIpv4Options
+	// HasTimestamp checks if Timestamp has been set in FlowIpv4Options
+	HasTimestamp() bool
 	setNil()
 }
 
@@ -295,11 +307,15 @@ type FlowIpv4OptionsChoiceEnum string
 
 // Enum of Choice on FlowIpv4Options
 var FlowIpv4OptionsChoice = struct {
-	ROUTER_ALERT FlowIpv4OptionsChoiceEnum
-	CUSTOM       FlowIpv4OptionsChoiceEnum
+	ROUTER_ALERT   FlowIpv4OptionsChoiceEnum
+	CUSTOM         FlowIpv4OptionsChoiceEnum
+	TIMESTAMP      FlowIpv4OptionsChoiceEnum
+	END_OF_OPTIONS FlowIpv4OptionsChoiceEnum
 }{
-	ROUTER_ALERT: FlowIpv4OptionsChoiceEnum("router_alert"),
-	CUSTOM:       FlowIpv4OptionsChoiceEnum("custom"),
+	ROUTER_ALERT:   FlowIpv4OptionsChoiceEnum("router_alert"),
+	CUSTOM:         FlowIpv4OptionsChoiceEnum("custom"),
+	TIMESTAMP:      FlowIpv4OptionsChoiceEnum("timestamp"),
+	END_OF_OPTIONS: FlowIpv4OptionsChoiceEnum("end_of_options"),
 }
 
 func (obj *flowIpv4Options) Choice() FlowIpv4OptionsChoiceEnum {
@@ -309,6 +325,11 @@ func (obj *flowIpv4Options) Choice() FlowIpv4OptionsChoiceEnum {
 // getter for RouterAlert to set choice
 func (obj *flowIpv4Options) RouterAlert() {
 	obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
+}
+
+// getter for EndOfOptions to set choice
+func (obj *flowIpv4Options) EndOfOptions() {
+	obj.setChoice(FlowIpv4OptionsChoice.END_OF_OPTIONS)
 }
 
 // description is TBD
@@ -326,11 +347,17 @@ func (obj *flowIpv4Options) setChoice(value FlowIpv4OptionsChoiceEnum) FlowIpv4O
 	}
 	enumValue := otg.FlowIpv4Options_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Timestamp = nil
+	obj.timestampHolder = nil
 	obj.obj.Custom = nil
 	obj.customHolder = nil
 
 	if value == FlowIpv4OptionsChoice.CUSTOM {
 		obj.obj.Custom = NewFlowIpv4OptionsCustom().msg()
+	}
+
+	if value == FlowIpv4OptionsChoice.TIMESTAMP {
+		obj.obj.Timestamp = NewFlowIpv4OptionsTimestamp().msg()
 	}
 
 	return obj
@@ -364,6 +391,34 @@ func (obj *flowIpv4Options) SetCustom(value FlowIpv4OptionsCustom) FlowIpv4Optio
 	return obj
 }
 
+// description is TBD
+// Timestamp returns a FlowIpv4OptionsTimestamp
+func (obj *flowIpv4Options) Timestamp() FlowIpv4OptionsTimestamp {
+	if obj.obj.Timestamp == nil {
+		obj.setChoice(FlowIpv4OptionsChoice.TIMESTAMP)
+	}
+	if obj.timestampHolder == nil {
+		obj.timestampHolder = &flowIpv4OptionsTimestamp{obj: obj.obj.Timestamp}
+	}
+	return obj.timestampHolder
+}
+
+// description is TBD
+// Timestamp returns a FlowIpv4OptionsTimestamp
+func (obj *flowIpv4Options) HasTimestamp() bool {
+	return obj.obj.Timestamp != nil
+}
+
+// description is TBD
+// SetTimestamp sets the FlowIpv4OptionsTimestamp value in the FlowIpv4Options object
+func (obj *flowIpv4Options) SetTimestamp(value FlowIpv4OptionsTimestamp) FlowIpv4Options {
+	obj.setChoice(FlowIpv4OptionsChoice.TIMESTAMP)
+	obj.timestampHolder = nil
+	obj.obj.Timestamp = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv4Options) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -372,6 +427,11 @@ func (obj *flowIpv4Options) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Custom != nil {
 
 		obj.Custom().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Timestamp != nil {
+
+		obj.Timestamp().validateObj(vObj, set_default)
 	}
 
 }
@@ -383,6 +443,11 @@ func (obj *flowIpv4Options) setDefault() {
 	if obj.obj.Custom != nil {
 		choices_set += 1
 		choice = FlowIpv4OptionsChoice.CUSTOM
+	}
+
+	if obj.obj.Timestamp != nil {
+		choices_set += 1
+		choice = FlowIpv4OptionsChoice.TIMESTAMP
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
