@@ -18311,6 +18311,9 @@ components:
         flows:
           $ref: '#/components/schemas/Flows.Update'
           x-field-uid: 2
+        protocols:
+          $ref: '#/components/schemas/Protocols.Update'
+          x-field-uid: 3
     Flows.Update:
       description: |-
         A container of flows with associated properties to be updated without affecting the flows current transmit state.
@@ -18340,6 +18343,50 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Flow'
+          x-field-uid: 2
+    Protocols.Update:
+      description: |-
+        A container of Protocols with associated properties to be updated that may or may not able to maintain the current Protocols session in Up state always.
+      type: object
+      properties:
+        isis:
+          $ref: '#/components/schemas/UpdateProtocol.Config.Isis'
+          x-field-uid: 1
+    UpdateProtocol.Config.Isis:
+      description: |-
+        A container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+      type: object
+      properties:
+        links:
+          description: |-
+            The flows that will be added to existing configuration on the traffic generator.
+            The flow name must not already be used in existing configuration.
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Link'
+          x-field-uid: 1
+    UpdateProtocol.Config.Isis.Link:
+      description: |-
+        A container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+      type: object
+      properties:
+        interface_name:
+          description: |
+            The name of an IS-IS emulated or simulated interface.
+
+            x-constraint:
+            - /components/schemas/Isis.Interface/properties/name
+          type: string
+          x-constraint:
+          - /components/schemas/Isis.Interface/properties/name
+          x-field-uid: 1
+        metric:
+          description: |-
+            The default metric cost for the interface.
+          type: integer
+          format: uint32
+          maximum: 16777215
+          default: 10
           x-field-uid: 2
     Config.Append:
       description: |-

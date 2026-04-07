@@ -1419,6 +1419,10 @@ from .snappi import Warning
 from .snappi import Error
 from .snappi import ConfigUpdate
 from .snappi import FlowsUpdate
+from .snappi import ProtocolsUpdate
+from .snappi import UpdateProtocolConfigIsis
+from .snappi import UpdateProtocolConfigIsisLink
+from .snappi import UpdateProtocolConfigIsisLinkIter
 from .snappi import ConfigAppend
 from .snappi import ConfigAppendResources
 from .snappi import ConfigAppendResourcesIter

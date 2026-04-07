@@ -13948,6 +13948,9 @@ message ConfigUpdate {
 
   // Description missing in models
   FlowsUpdate flows = 2;
+
+  // Description missing in models
+  ProtocolsUpdate protocols = 3;
 }
 
 // A container of flows with associated properties to be updated without affecting the
@@ -13966,6 +13969,39 @@ message FlowsUpdate {
 
   // The list of configured flows for which given property will be updated.
   repeated Flow flows = 2;
+}
+
+// A container of Protocols with associated properties to be updated that may or may
+// not able to maintain the current Protocols session in Up state always.
+message ProtocolsUpdate {
+
+  // Description missing in models
+  UpdateProtocolConfigIsis isis = 1;
+}
+
+// A container of IS-IS with associated properties to be updated that may or may not
+// able to maintain the current IS-IS Up session state always.
+message UpdateProtocolConfigIsis {
+
+  // The flows that will be added to existing configuration on the traffic generator.
+  // The flow name must not already be used in existing configuration.
+  repeated UpdateProtocolConfigIsisLink links = 1;
+}
+
+// A container of IS-IS with associated properties to be updated that may or may not
+// able to maintain the current IS-IS Up session state always.
+message UpdateProtocolConfigIsisLink {
+
+  // The name of an IS-IS emulated or simulated interface.
+  // 
+  // x-constraint:
+  // - /components/schemas/Isis.Interface/properties/name
+  // 
+  optional string interface_name = 1;
+
+  // The default metric cost for the interface.
+  // default = 10
+  optional uint32 metric = 2;
 }
 
 // A container for all configuration resources of various types to be appended.
