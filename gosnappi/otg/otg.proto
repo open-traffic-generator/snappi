@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.51.0
+/* Open Traffic Generator API 1.52.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -15674,6 +15674,7 @@ message PortMetricsRequest {
       bytes_tx_rate = 11;
       bytes_rx_rate = 12;
       last_change = 13;
+      speed = 14;
     }
   }
   // The list of column names that the returned result set will contain. If the list is
@@ -15763,6 +15764,12 @@ message PortMetric {
 
   // Description missing in models
   MetricDataIntegrity data_integrity = 15;
+
+  // The speed in KBps the frames are transmitted. The calculated speed for  a negotiated
+  // line speed of (i) 100 Gbps is 100 * 1024 * 1024 / 8 = 13107200 KBps,  (ii) 1.6 Tbps
+  // (high performance devices) is 1.6 * 1024 * 1024 * 1024 / 8 = 214748365 KBps,  (iii)
+  // 10 Mbps (legacy devices) is 10 * 1024 / 8 = 1280 KBps
+  optional uint64 speed = 16;
 }
 
 // The container for data integrity metrics. The container will be empty if
