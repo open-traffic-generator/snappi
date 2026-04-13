@@ -320,29 +320,28 @@ func (obj *stateProtocolIsisSimLinks) State() StateProtocolIsisSimLinksStateEnum
 	return StateProtocolIsisSimLinksStateEnum(obj.obj.State.Enum().String())
 }
 
-// description: |-
-// Set ControlState to UP or DOWN to interface state in UP or DOWN state respectively in both directions. Thats is the UP/DOWN state is applied for a simulated link,
-// connecting, say, a Node A to Node B and Node B to Node A in both directions.
-// Setting Control State to DOWN will result in the selected set of Simulated Links to be set in disconnected state. This should result in the link to be removed from the
-// Extended IS Reachability TLV in subsequent LSP transmitted ( with incremented Sequence Number ) from both the Simulated or Emulated Router on which this link is
-// located as well the Simulated or Emulated Router at the other end of the link i.e. this will bring down the Simulated Links on both ends.
-// Similarly, setting the Control State to UP should result in the neighbor information to be re-introduced in Extended IS Reachability sent in subsequent LSP Update by the
-// Router containing the Simulated Link and the neighboring Router at the other end of the link. Note that if the link is already in UP state and the Control State is set
-// to UP again or if the state is in DOWN state and the Control State is set to DOWN again, those links in the request should be ignored.
+// Sets the Control State of one or more Simulated Links to UP or DOWN.
+// The state change is applied bidirectionally — a link between IS-IS Routers A and B is affected
+// in both directions simultaneously.
+// Setting Control State to DOWN transitions the selected Simulated Links to a disconnected state.
+// Both the Simulated/Emulated Router hosting the link and the neighboring router at the far end
+// will remove the link from the Extended IS Reachability TLV in their next LSP transmission (with an incremented Sequence Number).
+// Setting Control State to UP reconnects the selected Simulated Links.
+// Both routers will re-advertise the neighbor relationship in their next LSP Update.
 //
 // Example:
-// Suppose Emulated Router ER (680000000003) is connected to Simulated Routers:  ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in a ring topology.
-// ER <--> ST1 <--> ST2
-// ^	            (A) ^
-// |		              |
-// v 	          (B) v
-// -------ST3-------
+// Suppose Emulated Router ER (680000000003) is connected to Simulated Routers:
+// ST1('770000000001'), ST2('770000000002') and ST3('770000000003') in a ring topology.
 //
-// Before the AB Link Down operation between ST2 & ST3  the neighbors of ST2 & ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State
+// ER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER
+//
+// Before the AB Link Down operation between ST2 & ST3  the neighbors of ST2 & ST3 will be seen
+// as in ISIS Link State PDU (LSP) information in Get State
 // LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors : ['770000000001', '770000000003']
 // LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors : ['770000000002', '770000000001']
 //
-// After the AB Link Down operation between ST2 & ST3  the neighbors of ST2 & ST3 will be seen as in ISIS Link State PDU (LSP) information in Get State
+// After the AB Link Down operation between ST2 & ST3  the neighbors of ST2 & ST3 will be seen
+// as in ISIS Link State PDU (LSP) information in Get State
 // LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors : ['770000000001']
 // LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors : ['770000000001']
 // State returns a string
