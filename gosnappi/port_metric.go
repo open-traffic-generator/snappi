@@ -780,7 +780,7 @@ func (obj *portMetric) SetDataIntegrity(value MetricDataIntegrity) PortMetric {
 	return obj
 }
 
-// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1024 * 1024 / 8 = 13107200 KBps,  (ii) 1.6 Tbps (high performance devices) is 1.6 * 1024 * 1024 * 1024 / 8 = 214748365 KBps,  (iii) 10 Mbps (legacy devices) is 10 * 1024 / 8 = 1280 KBps
+// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1000 * 1000 / 8 = 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 * 1000 * 1000 * 1000 / 8 = 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 * 1000 / 8 = 1250 KBps
 // Speed returns a uint64
 func (obj *portMetric) Speed() uint64 {
 
@@ -788,13 +788,13 @@ func (obj *portMetric) Speed() uint64 {
 
 }
 
-// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1024 * 1024 / 8 = 13107200 KBps,  (ii) 1.6 Tbps (high performance devices) is 1.6 * 1024 * 1024 * 1024 / 8 = 214748365 KBps,  (iii) 10 Mbps (legacy devices) is 10 * 1024 / 8 = 1280 KBps
+// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1000 * 1000 / 8 = 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 * 1000 * 1000 * 1000 / 8 = 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 * 1000 / 8 = 1250 KBps
 // Speed returns a uint64
 func (obj *portMetric) HasSpeed() bool {
 	return obj.obj.Speed != nil
 }
 
-// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1024 * 1024 / 8 = 13107200 KBps,  (ii) 1.6 Tbps (high performance devices) is 1.6 * 1024 * 1024 * 1024 / 8 = 214748365 KBps,  (iii) 10 Mbps (legacy devices) is 10 * 1024 / 8 = 1280 KBps
+// The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1000 * 1000 / 8 = 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 * 1000 * 1000 * 1000 / 8 = 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 * 1000 / 8 = 1250 KBps
 // SetSpeed sets the uint64 value in the PortMetric object
 func (obj *portMetric) SetSpeed(value uint64) PortMetric {
 
