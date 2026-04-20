@@ -272,6 +272,10 @@ type Dhcpv6ClientOptionsDuidUuidVariant interface {
 	HasChoice() bool
 	// getter for Dce to set choice.
 	Dce()
+	// getter for VarReserved to set choice.
+	VarReserved()
+	// getter for Guid to set choice.
+	Guid()
 	// getter for Ncs to set choice.
 	Ncs()
 	// getter for VarReserved to set choice.
@@ -302,6 +306,16 @@ func (obj *dhcpv6ClientOptionsDuidUuidVariant) Choice() Dhcpv6ClientOptionsDuidU
 // getter for Dce to set choice
 func (obj *dhcpv6ClientOptionsDuidUuidVariant) Dce() {
 	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.DCE)
+}
+
+// getter for VarReserved to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) VarReserved() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.VAR_RESERVED)
+}
+
+// getter for Guid to set choice
+func (obj *dhcpv6ClientOptionsDuidUuidVariant) Guid() {
+	obj.setChoice(Dhcpv6ClientOptionsDuidUuidVariantChoice.GUID)
 }
 
 // getter for Ncs to set choice

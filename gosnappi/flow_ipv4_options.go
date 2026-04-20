@@ -284,6 +284,8 @@ type FlowIpv4Options interface {
 	EndOfOptions()
 	// getter for RouterAlert to set choice.
 	RouterAlert()
+	// getter for EndOfOptions to set choice.
+	EndOfOptions()
 	// Custom returns FlowIpv4OptionsCustom, set in FlowIpv4Options.
 	// FlowIpv4OptionsCustom is user defined IP options to be appended to the IPv4 header.
 	Custom() FlowIpv4OptionsCustom
@@ -330,6 +332,11 @@ func (obj *flowIpv4Options) EndOfOptions() {
 // getter for RouterAlert to set choice
 func (obj *flowIpv4Options) RouterAlert() {
 	obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
+}
+
+// getter for EndOfOptions to set choice
+func (obj *flowIpv4Options) EndOfOptions() {
+	obj.setChoice(FlowIpv4OptionsChoice.END_OF_OPTIONS)
 }
 
 // description is TBD
