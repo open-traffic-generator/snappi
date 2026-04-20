@@ -320,6 +320,7 @@ var PortMetricsRequestColumnNames = struct {
 	BYTES_TX_RATE  PortMetricsRequestColumnNamesEnum
 	BYTES_RX_RATE  PortMetricsRequestColumnNamesEnum
 	LAST_CHANGE    PortMetricsRequestColumnNamesEnum
+	SPEED          PortMetricsRequestColumnNamesEnum
 }{
 	TRANSMIT:       PortMetricsRequestColumnNamesEnum("transmit"),
 	LOCATION:       PortMetricsRequestColumnNamesEnum("location"),
@@ -334,6 +335,7 @@ var PortMetricsRequestColumnNames = struct {
 	BYTES_TX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_tx_rate"),
 	BYTES_RX_RATE:  PortMetricsRequestColumnNamesEnum("bytes_rx_rate"),
 	LAST_CHANGE:    PortMetricsRequestColumnNamesEnum("last_change"),
+	SPEED:          PortMetricsRequestColumnNamesEnum("speed"),
 }
 
 func (obj *portMetricsRequest) ColumnNames() []PortMetricsRequestColumnNamesEnum {

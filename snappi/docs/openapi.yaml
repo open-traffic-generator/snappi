@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.51.0
+  version: 1.53.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -19139,36 +19139,29 @@ components:
           - /components/schemas/Isis.Interface/properties/name
           x-field-uid: 1
         state:
-          description: "description: |-\nSet ControlState to UP or DOWN to interface\
-            \ state in UP or DOWN state respectively in both directions. Thats is\
-            \ the UP/DOWN state is applied for a simulated link,\nconnecting, say,\
-            \ a Node A to Node B and Node B to Node A in both directions.\nSetting\
-            \ Control State to DOWN will result in the selected set of Simulated Links\
-            \ to be set in disconnected state. This should result in the link to be\
-            \ removed from the \nExtended IS Reachability TLV in subsequent LSP transmitted\
-            \ ( with incremented Sequence Number ) from both the Simulated or Emulated\
-            \ Router on which this link is \nlocated as well the Simulated or Emulated\
-            \ Router at the other end of the link i.e. this will bring down the Simulated\
-            \ Links on both ends.\nSimilarly, setting the Control State to UP should\
-            \ result in the neighbor information to be re-introduced in Extended IS\
-            \ Reachability sent in subsequent LSP Update by the \nRouter containing\
-            \ the Simulated Link and the neighboring Router at the other end of the\
-            \ link. Note that if the link is already in UP state and the Control State\
-            \ is set \nto UP again or if the state is in DOWN state and the Control\
-            \ State is set to DOWN again, those links in the request should be ignored.\n\
-            \nExample:\nSuppose Emulated Router ER (680000000003) is connected to\
-            \ Simulated Routers:  ST1('770000000001'), ST2('770000000002') and ST3('770000000003')\
-            \ in a ring topology.\nER <--> ST1 <--> ST2\n^\t            (A) ^\n|\t\
-            \t              |\nv \t          (B) v\n-------ST3-------\n\nBefore the\
-            \ AB Link Down operation between ST2 & ST3  the neighbors of ST2 & ST3\
-            \ will be seen as in ISIS Link State PDU (LSP) information in Get State\n\
-            LSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors : ['770000000001',\
-            \ '770000000003']\nLSP-ID of ST3: 770000000003-00-00: IS-Reachability\
-            \ Neighbors : ['770000000002', '770000000001']\n\nAfter the AB Link Down\
-            \ operation between ST2 & ST3  the neighbors of ST2 & ST3 will be seen\
-            \ as in ISIS Link State PDU (LSP) information in Get State\nLSP-ID of\
-            \ ST2: 770000000002-00-00: IS-Reachability Neighbors : ['770000000001']\n\
-            LSP-ID of ST3: 770000000003-00-00: IS-Reachability Neighbors : ['770000000001']"
+          description: "Sets the Control State of one or more Simulated Links to UP\
+            \ or DOWN. \nThe state change is applied bidirectionally — a link between\
+            \ IS-IS Routers A and B is affected \nin both directions simultaneously.\n\
+            Setting Control State to DOWN transitions the selected Simulated Links\
+            \ to a disconnected state. \nBoth the Simulated/Emulated Router hosting\
+            \ the link and the neighboring router at the far end \nwill remove the\
+            \ link from the Extended IS Reachability TLV in their next LSP transmission\
+            \ (with an incremented Sequence Number).\nSetting Control State to UP\
+            \ reconnects the selected Simulated Links. \nBoth routers will re-advertise\
+            \ the neighbor relationship in their next LSP Update.\n            \n\
+            Example:\nSuppose Emulated Router ER (680000000003) is connected to Simulated\
+            \ Routers:  \nST1('770000000001'), ST2('770000000002') and ST3('770000000003')\
+            \ in a ring topology.\n\nER <--> ST1 <--> ST2(A) <--> ST3(B) <--> ER\n\
+            \                 \nBefore the AB Link Down operation between ST2 & ST3\
+            \  the neighbors of ST2 & ST3 will be seen \nas in ISIS Link State PDU\
+            \ (LSP) information in Get State\nLSP-ID of ST2: 770000000002-00-00: IS-Reachability\
+            \ Neighbors : ['770000000001', '770000000003']\nLSP-ID of ST3: 770000000003-00-00:\
+            \ IS-Reachability Neighbors : ['770000000002', '770000000001']\n\nAfter\
+            \ the AB Link Down operation between ST2 & ST3  the neighbors of ST2 &\
+            \ ST3 will be seen \nas in ISIS Link State PDU (LSP) information in Get\
+            \ State\nLSP-ID of ST2: 770000000002-00-00: IS-Reachability Neighbors\
+            \ : ['770000000001']\nLSP-ID of ST3: 770000000003-00-00: IS-Reachability\
+            \ Neighbors : ['770000000001']"
           type: string
           x-field-uid: 2
           x-enum:
@@ -20267,6 +20260,8 @@ components:
                 x-field-uid: 12
               last_change:
                 x-field-uid: 13
+              speed:
+                x-field-uid: 14
             enum:
             - transmit
             - location
@@ -20281,6 +20276,7 @@ components:
             - bytes_tx_rate
             - bytes_rx_rate
             - last_change
+            - speed
           x-field-uid: 2
     Port.Metric:
       type: object
@@ -20394,6 +20390,12 @@ components:
         data_integrity:
           $ref: '#/components/schemas/Metric.DataIntegrity'
           x-field-uid: 15
+        speed:
+          description: |-
+            The speed in KBps the frames are transmitted. The calculated speed for  a negotiated line speed of (i) 100 Gbps is 100 * 1000 * 1000 / 8 = 12500000 KBps, (ii) 1.6 Tbps (high performance devices) is 1.6 * 1000 * 1000 * 1000 / 8 = 200000000 KBps, (iii) 10 Mbps (legacy devices) is 10 * 1000 / 8 = 1250 KBps
+          type: integer
+          format: uint64
+          x-field-uid: 16
     Metric.DataIntegrity:
       description: "The container for data integrity metrics. The container will be\
         \ empty if \noptions.port_options.data_integrity has not been enabled during\
