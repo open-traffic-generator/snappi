@@ -14976,10 +14976,6 @@ message StateProtocolIsisSimLinks {
   // x-constraint:
   // - /components/schemas/Isis.Interface/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Isis.Interface/properties/name
-  // 
   repeated string names = 1;
 
   message State {

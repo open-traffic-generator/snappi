@@ -281,10 +281,10 @@ type FlowPayload interface {
 	HasChoice() bool
 	// getter for IncrementByte to set choice.
 	IncrementByte()
-	// getter for DecrementWord to set choice.
-	DecrementWord()
 	// getter for DecrementByte to set choice.
 	DecrementByte()
+	// getter for DecrementWord to set choice.
+	DecrementWord()
 	// getter for IncrementWord to set choice.
 	IncrementWord()
 	// Fixed returns FlowPayloadFixed, set in FlowPayload.
@@ -324,14 +324,14 @@ func (obj *flowPayload) IncrementByte() {
 	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
 }
 
+// getter for DecrementByte to set choice
+func (obj *flowPayload) DecrementByte() {
+	obj.setChoice(FlowPayloadChoice.DECREMENT_BYTE)
+}
+
 // getter for DecrementWord to set choice
 func (obj *flowPayload) DecrementWord() {
 	obj.setChoice(FlowPayloadChoice.DECREMENT_WORD)
-}
-
-// getter for IncrementByte to set choice
-func (obj *flowPayload) IncrementByte() {
-	obj.setChoice(FlowPayloadChoice.INCREMENT_BYTE)
 }
 
 // getter for IncrementWord to set choice
