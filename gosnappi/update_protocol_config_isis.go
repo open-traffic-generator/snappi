@@ -277,8 +277,7 @@ type UpdateProtocolConfigIsis interface {
 	setNil()
 }
 
-// The flows that will be added to existing configuration on the traffic generator.
-// The flow name must not already be used in existing configuration.
+// The list of IS-IS emulated or simulated interfaces with associated properties to be updated.
 // Links returns a []UpdateProtocolConfigIsisLink
 func (obj *updateProtocolConfigIsis) Links() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
 	if len(obj.obj.Links) == 0 {

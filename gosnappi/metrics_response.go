@@ -326,10 +326,10 @@ type MetricsResponse interface {
 	Dhcpv6Client()
 	// getter for Dhcpv4Client to set choice.
 	Dhcpv4Client()
-	// getter for Dhcpv6Server to set choice.
-	Dhcpv6Server()
 	// getter for Dhcpv4Server to set choice.
 	Dhcpv4Server()
+	// getter for Dhcpv6Server to set choice.
+	Dhcpv6Server()
 	// PortMetrics returns MetricsResponsePortMetricIterIter, set in MetricsResponse
 	PortMetrics() MetricsResponsePortMetricIter
 	// FlowMetrics returns MetricsResponseFlowMetricIterIter, set in MetricsResponse
@@ -446,14 +446,14 @@ func (obj *metricsResponse) Dhcpv4Client() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_CLIENT)
 }
 
-// getter for Dhcpv6Server to set choice
-func (obj *metricsResponse) Dhcpv6Server() {
-	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
-}
-
 // getter for Dhcpv4Server to set choice
 func (obj *metricsResponse) Dhcpv4Server() {
 	obj.setChoice(MetricsResponseChoice.DHCPV4_SERVER)
+}
+
+// getter for Dhcpv6Server to set choice
+func (obj *metricsResponse) Dhcpv6Server() {
+	obj.setChoice(MetricsResponseChoice.DHCPV6_SERVER)
 }
 
 // description is TBD

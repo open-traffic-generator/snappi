@@ -18359,8 +18359,7 @@ components:
       properties:
         links:
           description: |-
-            The flows that will be added to existing configuration on the traffic generator.
-            The flow name must not already be used in existing configuration.
+            The list of IS-IS emulated or simulated interfaces with associated properties to be updated.
           type: array
           items:
             $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Link'
@@ -18382,7 +18381,7 @@ components:
           x-field-uid: 1
         metric:
           description: |-
-            The default metric cost for the interface.
+            If IS-IS session will be flapped if the link metric is updated on a emullated interface.  However, if the link metric is updated on a simulated interface then IS-IS session will be maintained in Up state. There will be LSP update with new metric value sent to the neighbors.
           type: integer
           format: uint32
           maximum: 16777215

@@ -312,7 +312,7 @@ func (obj *updateProtocolConfigIsisLink) SetInterfaceName(value string) UpdatePr
 	return obj
 }
 
-// The default metric cost for the interface.
+// If IS-IS session will be flapped if the link metric is updated on a emullated interface.  However, if the link metric is updated on a simulated interface then IS-IS session will be maintained in Up state. There will be LSP update with new metric value sent to the neighbors.
 // Metric returns a uint32
 func (obj *updateProtocolConfigIsisLink) Metric() uint32 {
 
@@ -320,13 +320,13 @@ func (obj *updateProtocolConfigIsisLink) Metric() uint32 {
 
 }
 
-// The default metric cost for the interface.
+// If IS-IS session will be flapped if the link metric is updated on a emullated interface.  However, if the link metric is updated on a simulated interface then IS-IS session will be maintained in Up state. There will be LSP update with new metric value sent to the neighbors.
 // Metric returns a uint32
 func (obj *updateProtocolConfigIsisLink) HasMetric() bool {
 	return obj.obj.Metric != nil
 }
 
-// The default metric cost for the interface.
+// If IS-IS session will be flapped if the link metric is updated on a emullated interface.  However, if the link metric is updated on a simulated interface then IS-IS session will be maintained in Up state. There will be LSP update with new metric value sent to the neighbors.
 // SetMetric sets the uint32 value in the UpdateProtocolConfigIsisLink object
 func (obj *updateProtocolConfigIsisLink) SetMetric(value uint32) UpdateProtocolConfigIsisLink {
 
