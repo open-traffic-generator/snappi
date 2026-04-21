@@ -18305,9 +18305,12 @@ components:
           x-enum:
             flows:
               x-field-uid: 1
+            protocols:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - flows
+          - protocols
         flows:
           $ref: '#/components/schemas/Flows.Update'
           x-field-uid: 2

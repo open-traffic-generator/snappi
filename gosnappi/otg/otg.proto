@@ -13941,6 +13941,7 @@ message ConfigUpdate {
     enum Enum {
       unspecified = 0;
       flows = 1;
+      protocols = 2;
     }
   }
   // Description missing in models
