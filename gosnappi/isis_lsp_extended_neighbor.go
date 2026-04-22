@@ -17,6 +17,7 @@ type isisLspExtendedNeighbor struct {
 	marshaller          marshalIsisLspExtendedNeighbor
 	unMarshaller        unMarshalIsisLspExtendedNeighbor
 	adjacencySidsHolder IsisLspExtendedNeighborIsisLspAdjacencySidIter
+	srv6AdjSidsHolder   IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
 }
 
 func NewIsisLspExtendedNeighbor() IsisLspExtendedNeighbor {
@@ -245,6 +246,7 @@ func (obj *isisLspExtendedNeighbor) Clone() (IsisLspExtendedNeighbor, error) {
 
 func (obj *isisLspExtendedNeighbor) setNil() {
 	obj.adjacencySidsHolder = nil
+	obj.srv6AdjSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -280,6 +282,8 @@ type IsisLspExtendedNeighbor interface {
 	HasSystemId() bool
 	// AdjacencySids returns IsisLspExtendedNeighborIsisLspAdjacencySidIterIter, set in IsisLspExtendedNeighbor
 	AdjacencySids() IsisLspExtendedNeighborIsisLspAdjacencySidIter
+	// Srv6AdjSids returns IsisLspExtendedNeighborIsisLspSRv6AdjSidIterIter, set in IsisLspExtendedNeighbor
+	Srv6AdjSids() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
 	setNil()
 }
 
@@ -305,7 +309,8 @@ func (obj *isisLspExtendedNeighbor) SetSystemId(value string) IsisLspExtendedNei
 	return obj
 }
 
-// List of segment routing adjacency SIDs.
+// List of SR-MPLS Adjacency SID sub-TLVs (sub-TLV types 31/32,
+// RFC 8667) learned from this neighbor.
 // AdjacencySids returns a []IsisLspAdjacencySid
 func (obj *isisLspExtendedNeighbor) AdjacencySids() IsisLspExtendedNeighborIsisLspAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {
@@ -392,6 +397,97 @@ func (obj *isisLspExtendedNeighborIsisLspAdjacencySidIter) appendHolderSlice(ite
 	return obj
 }
 
+// List of SRv6 Adjacency SID Sub-TLVs (End.X SID sub-TLV type 43
+// for P2P or LAN End.X SID sub-TLV type 44 for broadcast) learned
+// from this neighbor. Each entry carries a 128-bit SRv6 SID bound
+// to a specific outgoing adjacency.
+// Reference: RFC 9352 Sections 8.1-8.2.
+// Srv6AdjSids returns a []IsisLspSRv6AdjSid
+func (obj *isisLspExtendedNeighbor) Srv6AdjSids() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	if len(obj.obj.Srv6AdjSids) == 0 {
+		obj.obj.Srv6AdjSids = []*otg.IsisLspSRv6AdjSid{}
+	}
+	if obj.srv6AdjSidsHolder == nil {
+		obj.srv6AdjSidsHolder = newIsisLspExtendedNeighborIsisLspSRv6AdjSidIter(&obj.obj.Srv6AdjSids).setMsg(obj)
+	}
+	return obj.srv6AdjSidsHolder
+}
+
+type isisLspExtendedNeighborIsisLspSRv6AdjSidIter struct {
+	obj                    *isisLspExtendedNeighbor
+	isisLspSRv6AdjSidSlice []IsisLspSRv6AdjSid
+	fieldPtr               *[]*otg.IsisLspSRv6AdjSid
+}
+
+func newIsisLspExtendedNeighborIsisLspSRv6AdjSidIter(ptr *[]*otg.IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	return &isisLspExtendedNeighborIsisLspSRv6AdjSidIter{fieldPtr: ptr}
+}
+
+type IsisLspExtendedNeighborIsisLspSRv6AdjSidIter interface {
+	setMsg(*isisLspExtendedNeighbor) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+	Items() []IsisLspSRv6AdjSid
+	Add() IsisLspSRv6AdjSid
+	Append(items ...IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+	Set(index int, newObj IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+	Clear() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+	clearHolderSlice() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+	appendHolderSlice(item IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter
+}
+
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) setMsg(msg *isisLspExtendedNeighbor) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisLspSRv6AdjSid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) Items() []IsisLspSRv6AdjSid {
+	return obj.isisLspSRv6AdjSidSlice
+}
+
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) Add() IsisLspSRv6AdjSid {
+	newObj := &otg.IsisLspSRv6AdjSid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisLspSRv6AdjSid{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisLspSRv6AdjSidSlice = append(obj.isisLspSRv6AdjSidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) Append(items ...IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisLspSRv6AdjSidSlice = append(obj.isisLspSRv6AdjSidSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) Set(index int, newObj IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisLspSRv6AdjSidSlice[index] = newObj
+	return obj
+}
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) Clear() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisLspSRv6AdjSid{}
+		obj.isisLspSRv6AdjSidSlice = []IsisLspSRv6AdjSid{}
+	}
+	return obj
+}
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) clearHolderSlice() IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	if len(obj.isisLspSRv6AdjSidSlice) > 0 {
+		obj.isisLspSRv6AdjSidSlice = []IsisLspSRv6AdjSid{}
+	}
+	return obj
+}
+func (obj *isisLspExtendedNeighborIsisLspSRv6AdjSidIter) appendHolderSlice(item IsisLspSRv6AdjSid) IsisLspExtendedNeighborIsisLspSRv6AdjSidIter {
+	obj.isisLspSRv6AdjSidSlice = append(obj.isisLspSRv6AdjSidSlice, item)
+	return obj
+}
+
 func (obj *isisLspExtendedNeighbor) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -415,6 +511,20 @@ func (obj *isisLspExtendedNeighbor) validateObj(vObj *validation, set_default bo
 			}
 		}
 		for _, item := range obj.AdjacencySids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Srv6AdjSids) != 0 {
+
+		if set_default {
+			obj.Srv6AdjSids().clearHolderSlice()
+			for _, item := range obj.obj.Srv6AdjSids {
+				obj.Srv6AdjSids().appendHolderSlice(&isisLspSRv6AdjSid{obj: item})
+			}
+		}
+		for _, item := range obj.Srv6AdjSids().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

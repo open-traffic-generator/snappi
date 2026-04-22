@@ -17,6 +17,7 @@ type isisSegmentRouting struct {
 	marshaller             marshalIsisSegmentRouting
 	unMarshaller           unMarshalIsisSegmentRouting
 	routerCapabilityHolder IsisRouterCapability
+	srv6LocatorsHolder     IsisSegmentRoutingIsisSRv6LocatorIter
 }
 
 func NewIsisSegmentRouting() IsisSegmentRouting {
@@ -245,6 +246,7 @@ func (obj *isisSegmentRouting) Clone() (IsisSegmentRouting, error) {
 
 func (obj *isisSegmentRouting) setNil() {
 	obj.routerCapabilityHolder = nil
+	obj.srv6LocatorsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -256,7 +258,7 @@ func (obj *isisSegmentRouting) setNil() {
 // Adjacency segments represent a hop over a specific adjacency between two nodes in the IGP.
 // A prefix segment is typically a multi-hop path while an adjacency segment, in most of the cases, is a one-hop path.
 // These segments act as topological sub-paths that can be combined together to form the required path.
-// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667.
 // An implementation may advertise Router Capability with default values if a user does not even set the properties
 // of Router Capability and Segment Routing Capability.
 type IsisSegmentRouting interface {
@@ -292,6 +294,8 @@ type IsisSegmentRouting interface {
 	SetRouterCapability(value IsisRouterCapability) IsisSegmentRouting
 	// HasRouterCapability checks if RouterCapability has been set in IsisSegmentRouting
 	HasRouterCapability() bool
+	// Srv6Locators returns IsisSegmentRoutingIsisSRv6LocatorIterIter, set in IsisSegmentRouting
+	Srv6Locators() IsisSegmentRoutingIsisSRv6LocatorIter
 	setNil()
 }
 
@@ -326,6 +330,93 @@ func (obj *isisSegmentRouting) SetRouterCapability(value IsisRouterCapability) I
 	return obj
 }
 
+// List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Reference: RFC 9352 Section 7.1.
+// Srv6Locators returns a []IsisSRv6Locator
+func (obj *isisSegmentRouting) Srv6Locators() IsisSegmentRoutingIsisSRv6LocatorIter {
+	if len(obj.obj.Srv6Locators) == 0 {
+		obj.obj.Srv6Locators = []*otg.IsisSRv6Locator{}
+	}
+	if obj.srv6LocatorsHolder == nil {
+		obj.srv6LocatorsHolder = newIsisSegmentRoutingIsisSRv6LocatorIter(&obj.obj.Srv6Locators).setMsg(obj)
+	}
+	return obj.srv6LocatorsHolder
+}
+
+type isisSegmentRoutingIsisSRv6LocatorIter struct {
+	obj                  *isisSegmentRouting
+	isisSRv6LocatorSlice []IsisSRv6Locator
+	fieldPtr             *[]*otg.IsisSRv6Locator
+}
+
+func newIsisSegmentRoutingIsisSRv6LocatorIter(ptr *[]*otg.IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter {
+	return &isisSegmentRoutingIsisSRv6LocatorIter{fieldPtr: ptr}
+}
+
+type IsisSegmentRoutingIsisSRv6LocatorIter interface {
+	setMsg(*isisSegmentRouting) IsisSegmentRoutingIsisSRv6LocatorIter
+	Items() []IsisSRv6Locator
+	Add() IsisSRv6Locator
+	Append(items ...IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter
+	Set(index int, newObj IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter
+	Clear() IsisSegmentRoutingIsisSRv6LocatorIter
+	clearHolderSlice() IsisSegmentRoutingIsisSRv6LocatorIter
+	appendHolderSlice(item IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter
+}
+
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) setMsg(msg *isisSegmentRouting) IsisSegmentRoutingIsisSRv6LocatorIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisSRv6Locator{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) Items() []IsisSRv6Locator {
+	return obj.isisSRv6LocatorSlice
+}
+
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) Add() IsisSRv6Locator {
+	newObj := &otg.IsisSRv6Locator{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisSRv6Locator{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisSRv6LocatorSlice = append(obj.isisSRv6LocatorSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) Append(items ...IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisSRv6LocatorSlice = append(obj.isisSRv6LocatorSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) Set(index int, newObj IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisSRv6LocatorSlice[index] = newObj
+	return obj
+}
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) Clear() IsisSegmentRoutingIsisSRv6LocatorIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisSRv6Locator{}
+		obj.isisSRv6LocatorSlice = []IsisSRv6Locator{}
+	}
+	return obj
+}
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) clearHolderSlice() IsisSegmentRoutingIsisSRv6LocatorIter {
+	if len(obj.isisSRv6LocatorSlice) > 0 {
+		obj.isisSRv6LocatorSlice = []IsisSRv6Locator{}
+	}
+	return obj
+}
+func (obj *isisSegmentRoutingIsisSRv6LocatorIter) appendHolderSlice(item IsisSRv6Locator) IsisSegmentRoutingIsisSRv6LocatorIter {
+	obj.isisSRv6LocatorSlice = append(obj.isisSRv6LocatorSlice, item)
+	return obj
+}
+
 func (obj *isisSegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -334,6 +425,20 @@ func (obj *isisSegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.RouterCapability != nil {
 
 		obj.RouterCapability().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.Srv6Locators) != 0 {
+
+		if set_default {
+			obj.Srv6Locators().clearHolderSlice()
+			for _, item := range obj.obj.Srv6Locators {
+				obj.Srv6Locators().appendHolderSlice(&isisSRv6Locator{obj: item})
+			}
+		}
+		for _, item := range obj.Srv6Locators().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

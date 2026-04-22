@@ -13,11 +13,12 @@ import (
 // ***** IsisRouterCapability *****
 type isisRouterCapability struct {
 	validation
-	obj                *otg.IsisRouterCapability
-	marshaller         marshalIsisRouterCapability
-	unMarshaller       unMarshalIsisRouterCapability
-	srCapabilityHolder IsisSRCapability
-	srlbRangesHolder   IsisRouterCapabilityIsisSRSrlbIter
+	obj                  *otg.IsisRouterCapability
+	marshaller           marshalIsisRouterCapability
+	unMarshaller         unMarshalIsisRouterCapability
+	srCapabilityHolder   IsisSRCapability
+	srlbRangesHolder     IsisRouterCapabilityIsisSRSrlbIter
+	srv6CapabilityHolder IsisSRv6NodeCapability
 }
 
 func NewIsisRouterCapability() IsisRouterCapability {
@@ -247,6 +248,7 @@ func (obj *isisRouterCapability) Clone() (IsisRouterCapability, error) {
 func (obj *isisRouterCapability) setNil() {
 	obj.srCapabilityHolder = nil
 	obj.srlbRangesHolder = nil
+	obj.srv6CapabilityHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -282,10 +284,10 @@ type IsisRouterCapability interface {
 	setChoice(value IsisRouterCapabilityChoiceEnum) IsisRouterCapability
 	// HasChoice checks if Choice has been set in IsisRouterCapability
 	HasChoice() bool
-	// getter for InterfaceIp to set choice.
-	InterfaceIp()
 	// getter for Ipv4TeRouterId to set choice.
 	Ipv4TeRouterId()
+	// getter for InterfaceIp to set choice.
+	InterfaceIp()
 	// CustomRouterCapId returns string, set in IsisRouterCapability.
 	CustomRouterCapId() string
 	// SetCustomRouterCapId assigns string provided by user to IsisRouterCapability
@@ -326,6 +328,14 @@ type IsisRouterCapability interface {
 	SetAlgorithms(value []uint32) IsisRouterCapability
 	// SrlbRanges returns IsisRouterCapabilityIsisSRSrlbIterIter, set in IsisRouterCapability
 	SrlbRanges() IsisRouterCapabilityIsisSRSrlbIter
+	// Srv6Capability returns IsisSRv6NodeCapability, set in IsisRouterCapability.
+	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Node-level SRv6 Maximum SID Depth (MSD) values are also advertised here per RFC 8491. Reference: RFC 9352 Section 2.
+	Srv6Capability() IsisSRv6NodeCapability
+	// SetSrv6Capability assigns IsisSRv6NodeCapability provided by user to IsisRouterCapability.
+	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Node-level SRv6 Maximum SID Depth (MSD) values are also advertised here per RFC 8491. Reference: RFC 9352 Section 2.
+	SetSrv6Capability(value IsisSRv6NodeCapability) IsisRouterCapability
+	// HasSrv6Capability checks if Srv6Capability has been set in IsisRouterCapability
+	HasSrv6Capability() bool
 	setNil()
 }
 
@@ -346,14 +356,14 @@ func (obj *isisRouterCapability) Choice() IsisRouterCapabilityChoiceEnum {
 	return IsisRouterCapabilityChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for InterfaceIp to set choice
-func (obj *isisRouterCapability) InterfaceIp() {
-	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
-}
-
 // getter for Ipv4TeRouterId to set choice
 func (obj *isisRouterCapability) Ipv4TeRouterId() {
 	obj.setChoice(IsisRouterCapabilityChoice.IPV4_TE_ROUTER_ID)
+}
+
+// getter for InterfaceIp to set choice
+func (obj *isisRouterCapability) InterfaceIp() {
+	obj.setChoice(IsisRouterCapabilityChoice.INTERFACE_IP)
 }
 
 // The Router Capability ID SHOULD be identical to the value advertised in the Traffic Engineering Router ID TLV [RFC5305].
@@ -640,6 +650,34 @@ func (obj *isisRouterCapabilityIsisSRSrlbIter) appendHolderSlice(item IsisSRSrlb
 	return obj
 }
 
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within this Router CAPABILITY TLV. Announces that this router is an SRv6 Segment Endpoint Node and advertises optional OAM (O-flag) support and node-level SRv6 Maximum SID Depth (MSD) values. Reference: RFC 9352 Section 2, RFC 8491.
+// Srv6Capability returns a IsisSRv6NodeCapability
+func (obj *isisRouterCapability) Srv6Capability() IsisSRv6NodeCapability {
+	if obj.obj.Srv6Capability == nil {
+		obj.obj.Srv6Capability = NewIsisSRv6NodeCapability().msg()
+	}
+	if obj.srv6CapabilityHolder == nil {
+		obj.srv6CapabilityHolder = &isisSRv6NodeCapability{obj: obj.obj.Srv6Capability}
+	}
+	return obj.srv6CapabilityHolder
+}
+
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within this Router CAPABILITY TLV. Announces that this router is an SRv6 Segment Endpoint Node and advertises optional OAM (O-flag) support and node-level SRv6 Maximum SID Depth (MSD) values. Reference: RFC 9352 Section 2, RFC 8491.
+// Srv6Capability returns a IsisSRv6NodeCapability
+func (obj *isisRouterCapability) HasSrv6Capability() bool {
+	return obj.obj.Srv6Capability != nil
+}
+
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within this Router CAPABILITY TLV. Announces that this router is an SRv6 Segment Endpoint Node and advertises optional OAM (O-flag) support and node-level SRv6 Maximum SID Depth (MSD) values. Reference: RFC 9352 Section 2, RFC 8491.
+// SetSrv6Capability sets the IsisSRv6NodeCapability value in the IsisRouterCapability object
+func (obj *isisRouterCapability) SetSrv6Capability(value IsisSRv6NodeCapability) IsisRouterCapability {
+
+	obj.srv6CapabilityHolder = nil
+	obj.obj.Srv6Capability = value.msg()
+
+	return obj
+}
+
 func (obj *isisRouterCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -684,6 +722,11 @@ func (obj *isisRouterCapability) validateObj(vObj *validation, set_default bool)
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.Srv6Capability != nil {
+
+		obj.Srv6Capability().validateObj(vObj, set_default)
 	}
 
 }

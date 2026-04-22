@@ -13,11 +13,12 @@ import (
 // ***** IsisLspCapability *****
 type isisLspCapability struct {
 	validation
-	obj                *otg.IsisLspCapability
-	marshaller         marshalIsisLspCapability
-	unMarshaller       unMarshalIsisLspCapability
-	srCapabilityHolder IsisLspSRCapability
-	srlbRangesHolder   IsisLspCapabilityIsisLspSrlbIter
+	obj                  *otg.IsisLspCapability
+	marshaller           marshalIsisLspCapability
+	unMarshaller         unMarshalIsisLspCapability
+	srCapabilityHolder   IsisLspSRCapability
+	srlbRangesHolder     IsisLspCapabilityIsisLspSrlbIter
+	srv6CapabilityHolder IsisLspSRv6Capability
 }
 
 func NewIsisLspCapability() IsisLspCapability {
@@ -247,6 +248,7 @@ func (obj *isisLspCapability) Clone() (IsisLspCapability, error) {
 func (obj *isisLspCapability) setNil() {
 	obj.srCapabilityHolder = nil
 	obj.srlbRangesHolder = nil
+	obj.srv6CapabilityHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -306,6 +308,14 @@ type IsisLspCapability interface {
 	SetAlgorithms(value []uint32) IsisLspCapability
 	// SrlbRanges returns IsisLspCapabilityIsisLspSrlbIterIter, set in IsisLspCapability
 	SrlbRanges() IsisLspCapabilityIsisLspSrlbIter
+	// Srv6Capability returns IsisLspSRv6Capability, set in IsisLspCapability.
+	// IsisLspSRv6Capability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) learned from the IS-IS Router CAPABILITY TLV (TLV 242) in a received LSP. Indicates that the originating router is an SRv6 Segment Endpoint Node and carries optional OAM support (O-flag) and node-level SRv6 MSD values. Reference: RFC 9352 Section 2, RFC 8491.
+	Srv6Capability() IsisLspSRv6Capability
+	// SetSrv6Capability assigns IsisLspSRv6Capability provided by user to IsisLspCapability.
+	// IsisLspSRv6Capability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) learned from the IS-IS Router CAPABILITY TLV (TLV 242) in a received LSP. Indicates that the originating router is an SRv6 Segment Endpoint Node and carries optional OAM support (O-flag) and node-level SRv6 MSD values. Reference: RFC 9352 Section 2, RFC 8491.
+	SetSrv6Capability(value IsisLspSRv6Capability) IsisLspCapability
+	// HasSrv6Capability checks if Srv6Capability has been set in IsisLspCapability
+	HasSrv6Capability() bool
 	setNil()
 }
 
@@ -541,6 +551,46 @@ func (obj *isisLspCapabilityIsisLspSrlbIter) appendHolderSlice(item IsisLspSrlb)
 	return obj
 }
 
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) present within this
+// Router CAPABILITY TLV. Announces that the originating router is
+// an SRv6 Segment Endpoint Node, indicates OAM support (O-flag),
+// and carries node-level SRv6 Maximum SID Depth (MSD) values.
+// Reference: RFC 9352 Section 2, RFC 8491.
+// Srv6Capability returns a IsisLspSRv6Capability
+func (obj *isisLspCapability) Srv6Capability() IsisLspSRv6Capability {
+	if obj.obj.Srv6Capability == nil {
+		obj.obj.Srv6Capability = NewIsisLspSRv6Capability().msg()
+	}
+	if obj.srv6CapabilityHolder == nil {
+		obj.srv6CapabilityHolder = &isisLspSRv6Capability{obj: obj.obj.Srv6Capability}
+	}
+	return obj.srv6CapabilityHolder
+}
+
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) present within this
+// Router CAPABILITY TLV. Announces that the originating router is
+// an SRv6 Segment Endpoint Node, indicates OAM support (O-flag),
+// and carries node-level SRv6 Maximum SID Depth (MSD) values.
+// Reference: RFC 9352 Section 2, RFC 8491.
+// Srv6Capability returns a IsisLspSRv6Capability
+func (obj *isisLspCapability) HasSrv6Capability() bool {
+	return obj.obj.Srv6Capability != nil
+}
+
+// SRv6 Capabilities Sub-TLV (sub-TLV type 25) present within this
+// Router CAPABILITY TLV. Announces that the originating router is
+// an SRv6 Segment Endpoint Node, indicates OAM support (O-flag),
+// and carries node-level SRv6 Maximum SID Depth (MSD) values.
+// Reference: RFC 9352 Section 2, RFC 8491.
+// SetSrv6Capability sets the IsisLspSRv6Capability value in the IsisLspCapability object
+func (obj *isisLspCapability) SetSrv6Capability(value IsisLspSRv6Capability) IsisLspCapability {
+
+	obj.srv6CapabilityHolder = nil
+	obj.obj.Srv6Capability = value.msg()
+
+	return obj
+}
+
 func (obj *isisLspCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -572,6 +622,11 @@ func (obj *isisLspCapability) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.Srv6Capability != nil {
+
+		obj.Srv6Capability().validateObj(vObj, set_default)
 	}
 
 }
