@@ -281,9 +281,6 @@ type StateProtocolIsisSimLinks interface {
 // x-constraint:
 // - /components/schemas/Isis.Interface/properties/name
 //
-// x-constraint:
-// - /components/schemas/Isis.Interface/properties/name
-//
 // Names returns a []string
 func (obj *stateProtocolIsisSimLinks) Names() []string {
 	if obj.obj.Names == nil {
@@ -293,9 +290,6 @@ func (obj *stateProtocolIsisSimLinks) Names() []string {
 }
 
 // The names of ISIS Simulated Links to control. If no names are specified then all ISIS Simulated Links in the configuration will be affected..
-//
-// x-constraint:
-// - /components/schemas/Isis.Interface/properties/name
 //
 // x-constraint:
 // - /components/schemas/Isis.Interface/properties/name
