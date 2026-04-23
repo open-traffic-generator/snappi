@@ -40,6 +40,7 @@ type flowHeader struct {
 	macsecHolder              FlowMacsec
 	lacpHolder                FlowLacp
 	ipv6ExtensionHeaderHolder FlowIpv6ExtHeader
+	cfmHolder                 FlowCfm
 }
 
 func NewFlowHeader() FlowHeader {
@@ -291,6 +292,7 @@ func (obj *flowHeader) setNil() {
 	obj.macsecHolder = nil
 	obj.lacpHolder = nil
 	obj.ipv6ExtensionHeaderHolder = nil
+	obj.cfmHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -514,6 +516,14 @@ type FlowHeader interface {
 	SetIpv6ExtensionHeader(value FlowIpv6ExtHeader) FlowHeader
 	// HasIpv6ExtensionHeader checks if Ipv6ExtensionHeader has been set in FlowHeader
 	HasIpv6ExtensionHeader() bool
+	// Cfm returns FlowCfm, set in FlowHeader.
+	// FlowCfm is defines the fields of a Connectivity Fault Management (CFM) Packet Data Unit (PDU) as specified by IEEE 802.1.
+	Cfm() FlowCfm
+	// SetCfm assigns FlowCfm provided by user to FlowHeader.
+	// FlowCfm is defines the fields of a Connectivity Fault Management (CFM) Packet Data Unit (PDU) as specified by IEEE 802.1.
+	SetCfm(value FlowCfm) FlowHeader
+	// HasCfm checks if Cfm has been set in FlowHeader
+	HasCfm() bool
 	setNil()
 }
 
@@ -545,6 +555,7 @@ var FlowHeaderChoice = struct {
 	MACSEC                FlowHeaderChoiceEnum
 	LACP                  FlowHeaderChoiceEnum
 	IPV6_EXTENSION_HEADER FlowHeaderChoiceEnum
+	CFM                   FlowHeaderChoiceEnum
 }{
 	CUSTOM:                FlowHeaderChoiceEnum("custom"),
 	ETHERNET:              FlowHeaderChoiceEnum("ethernet"),
@@ -570,6 +581,7 @@ var FlowHeaderChoice = struct {
 	MACSEC:                FlowHeaderChoiceEnum("macsec"),
 	LACP:                  FlowHeaderChoiceEnum("lacp"),
 	IPV6_EXTENSION_HEADER: FlowHeaderChoiceEnum("ipv6_extension_header"),
+	CFM:                   FlowHeaderChoiceEnum("cfm"),
 }
 
 func (obj *flowHeader) Choice() FlowHeaderChoiceEnum {
@@ -592,6 +604,8 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 	}
 	enumValue := otg.FlowHeader_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Cfm = nil
+	obj.cfmHolder = nil
 	obj.obj.Ipv6ExtensionHeader = nil
 	obj.ipv6ExtensionHeaderHolder = nil
 	obj.obj.Lacp = nil
@@ -735,6 +749,10 @@ func (obj *flowHeader) setChoice(value FlowHeaderChoiceEnum) FlowHeader {
 
 	if value == FlowHeaderChoice.IPV6_EXTENSION_HEADER {
 		obj.obj.Ipv6ExtensionHeader = NewFlowIpv6ExtHeader().msg()
+	}
+
+	if value == FlowHeaderChoice.CFM {
+		obj.obj.Cfm = NewFlowCfm().msg()
 	}
 
 	return obj
@@ -1412,6 +1430,34 @@ func (obj *flowHeader) SetIpv6ExtensionHeader(value FlowIpv6ExtHeader) FlowHeade
 	return obj
 }
 
+// description is TBD
+// Cfm returns a FlowCfm
+func (obj *flowHeader) Cfm() FlowCfm {
+	if obj.obj.Cfm == nil {
+		obj.setChoice(FlowHeaderChoice.CFM)
+	}
+	if obj.cfmHolder == nil {
+		obj.cfmHolder = &flowCfm{obj: obj.obj.Cfm}
+	}
+	return obj.cfmHolder
+}
+
+// description is TBD
+// Cfm returns a FlowCfm
+func (obj *flowHeader) HasCfm() bool {
+	return obj.obj.Cfm != nil
+}
+
+// description is TBD
+// SetCfm sets the FlowCfm value in the FlowHeader object
+func (obj *flowHeader) SetCfm(value FlowCfm) FlowHeader {
+	obj.setChoice(FlowHeaderChoice.CFM)
+	obj.cfmHolder = nil
+	obj.obj.Cfm = value.msg()
+
+	return obj
+}
+
 func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1535,6 +1581,11 @@ func (obj *flowHeader) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Ipv6ExtensionHeader != nil {
 
 		obj.Ipv6ExtensionHeader().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Cfm != nil {
+
+		obj.Cfm().validateObj(vObj, set_default)
 	}
 
 }
@@ -1661,6 +1712,11 @@ func (obj *flowHeader) setDefault() {
 	if obj.obj.Ipv6ExtensionHeader != nil {
 		choices_set += 1
 		choice = FlowHeaderChoice.IPV6_EXTENSION_HEADER
+	}
+
+	if obj.obj.Cfm != nil {
+		choices_set += 1
+		choice = FlowHeaderChoice.CFM
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
