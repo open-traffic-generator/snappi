@@ -13,10 +13,11 @@ import (
 // ***** ConfigUpdate *****
 type configUpdate struct {
 	validation
-	obj          *otg.ConfigUpdate
-	marshaller   marshalConfigUpdate
-	unMarshaller unMarshalConfigUpdate
-	flowsHolder  FlowsUpdate
+	obj             *otg.ConfigUpdate
+	marshaller      marshalConfigUpdate
+	unMarshaller    unMarshalConfigUpdate
+	flowsHolder     FlowsUpdate
+	protocolsHolder ProtocolsUpdate
 }
 
 func NewConfigUpdate() ConfigUpdate {
@@ -245,6 +246,7 @@ func (obj *configUpdate) Clone() (ConfigUpdate, error) {
 
 func (obj *configUpdate) setNil() {
 	obj.flowsHolder = nil
+	obj.protocolsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -286,6 +288,14 @@ type ConfigUpdate interface {
 	SetFlows(value FlowsUpdate) ConfigUpdate
 	// HasFlows checks if Flows has been set in ConfigUpdate
 	HasFlows() bool
+	// Protocols returns ProtocolsUpdate, set in ConfigUpdate.
+	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not able to maintain the current Protocols session in Up state always.
+	Protocols() ProtocolsUpdate
+	// SetProtocols assigns ProtocolsUpdate provided by user to ConfigUpdate.
+	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not able to maintain the current Protocols session in Up state always.
+	SetProtocols(value ProtocolsUpdate) ConfigUpdate
+	// HasProtocols checks if Protocols has been set in ConfigUpdate
+	HasProtocols() bool
 	setNil()
 }
 
@@ -293,9 +303,11 @@ type ConfigUpdateChoiceEnum string
 
 // Enum of Choice on ConfigUpdate
 var ConfigUpdateChoice = struct {
-	FLOWS ConfigUpdateChoiceEnum
+	FLOWS     ConfigUpdateChoiceEnum
+	PROTOCOLS ConfigUpdateChoiceEnum
 }{
-	FLOWS: ConfigUpdateChoiceEnum("flows"),
+	FLOWS:     ConfigUpdateChoiceEnum("flows"),
+	PROTOCOLS: ConfigUpdateChoiceEnum("protocols"),
 }
 
 func (obj *configUpdate) Choice() ConfigUpdateChoiceEnum {
@@ -317,11 +329,17 @@ func (obj *configUpdate) setChoice(value ConfigUpdateChoiceEnum) ConfigUpdate {
 	}
 	enumValue := otg.ConfigUpdate_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Protocols = nil
+	obj.protocolsHolder = nil
 	obj.obj.Flows = nil
 	obj.flowsHolder = nil
 
 	if value == ConfigUpdateChoice.FLOWS {
 		obj.obj.Flows = NewFlowsUpdate().msg()
+	}
+
+	if value == ConfigUpdateChoice.PROTOCOLS {
+		obj.obj.Protocols = NewProtocolsUpdate().msg()
 	}
 
 	return obj
@@ -355,6 +373,34 @@ func (obj *configUpdate) SetFlows(value FlowsUpdate) ConfigUpdate {
 	return obj
 }
 
+// description is TBD
+// Protocols returns a ProtocolsUpdate
+func (obj *configUpdate) Protocols() ProtocolsUpdate {
+	if obj.obj.Protocols == nil {
+		obj.setChoice(ConfigUpdateChoice.PROTOCOLS)
+	}
+	if obj.protocolsHolder == nil {
+		obj.protocolsHolder = &protocolsUpdate{obj: obj.obj.Protocols}
+	}
+	return obj.protocolsHolder
+}
+
+// description is TBD
+// Protocols returns a ProtocolsUpdate
+func (obj *configUpdate) HasProtocols() bool {
+	return obj.obj.Protocols != nil
+}
+
+// description is TBD
+// SetProtocols sets the ProtocolsUpdate value in the ConfigUpdate object
+func (obj *configUpdate) SetProtocols(value ProtocolsUpdate) ConfigUpdate {
+	obj.setChoice(ConfigUpdateChoice.PROTOCOLS)
+	obj.protocolsHolder = nil
+	obj.obj.Protocols = value.msg()
+
+	return obj
+}
+
 func (obj *configUpdate) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,6 +409,11 @@ func (obj *configUpdate) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Flows != nil {
 
 		obj.Flows().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.Protocols != nil {
+
+		obj.Protocols().validateObj(vObj, set_default)
 	}
 
 }
@@ -374,6 +425,11 @@ func (obj *configUpdate) setDefault() {
 	if obj.obj.Flows != nil {
 		choices_set += 1
 		choice = ConfigUpdateChoice.FLOWS
+	}
+
+	if obj.obj.Protocols != nil {
+		choices_set += 1
+		choice = ConfigUpdateChoice.PROTOCOLS
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
