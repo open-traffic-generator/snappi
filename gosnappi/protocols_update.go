@@ -273,10 +273,12 @@ type ProtocolsUpdate interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Isis returns UpdateProtocolConfigIsis, set in ProtocolsUpdate.
-	// UpdateProtocolConfigIsis is a container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+	// UpdateProtocolConfigIsis is a container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.
+	// The choice field selects the category of attributes to be updated. Router-level and interface-level updates are controlled independently.
 	Isis() UpdateProtocolConfigIsis
 	// SetIsis assigns UpdateProtocolConfigIsis provided by user to ProtocolsUpdate.
-	// UpdateProtocolConfigIsis is a container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+	// UpdateProtocolConfigIsis is a container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.
+	// The choice field selects the category of attributes to be updated. Router-level and interface-level updates are controlled independently.
 	SetIsis(value UpdateProtocolConfigIsis) ProtocolsUpdate
 	// HasIsis checks if Isis has been set in ProtocolsUpdate
 	HasIsis() bool

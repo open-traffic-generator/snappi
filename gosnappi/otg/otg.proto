@@ -13980,32 +13980,82 @@ message ProtocolsUpdate {
   UpdateProtocolConfigIsis isis = 1;
 }
 
-// A container of IS-IS with associated properties to be updated that may or may not
-// able to maintain the current IS-IS Up session state always.
+// A container for IS-IS properties to be updated. Presence of this object indicates
+// that one or more IS-IS properties require updating.
+// The choice field selects the category of attributes to be updated. Router-level and
+// interface-level updates are controlled independently.
 message UpdateProtocolConfigIsis {
 
-  // The list of IS-IS emulated or simulated interfaces with associated properties to
-  // be updated.
-  repeated UpdateProtocolConfigIsisLink links = 1;
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      interfaces = 1;
+    }
+  }
+  // The category of IS-IS attributes to be updated.
+  optional Choice.Enum choice = 1;
+
+  // List of IS-IS interface update groups. IS-IS interface names are globally unique
+  // across all routers so no parent router name is required. Each update group applies
+  // a common set of property updates to one or more interfaces simultaneously. Use multiple
+  // update groups to handle asymmetric changes across different subsets of interfaces.
+  repeated UpdateProtocolConfigIsisInterfaceUpdateGroup interfaces = 3;
 }
 
-// A container of IS-IS with associated properties to be updated that may or may not
-// able to maintain the current IS-IS Up session state always.
-message UpdateProtocolConfigIsisLink {
+// An update group that applies a common set of property updates to one or more IS-IS
+// interfaces. All interfaces listed in names receive the same property updates defined
+// in properties. Use multiple update groups in a single request to apply different
+// property values to different subsets of interfaces (asymmetric updates).
+// A property must not appear more than once within the properties list of a single
+// update group.
+// The warnings field in the response is populated in the following cases:
+// a) Session started but not yet up: the updates are accepted and will be
+// applied when the session comes up.
+// 
+// b) Session is up but true on-the-fly update is not supported for the
+// attribute (e.g. metric change on an emulated interface): a warning is
+// returned indicating that the session will be disabled and re-enabled,
+// and the updated attribute will be reflected once the session comes back up.
+// 
+// An error is returned in the following cases:
+// a) The protocol or session is not in a started state.
+// b) A referenced interface name does not exist in the configuration.
+message UpdateProtocolConfigIsisInterfaceUpdateGroup {
 
-  // The name of an IS-IS emulated or simulated interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Isis.Interface/properties/name
-  // 
-  optional string interface_name = 1;
+  // The names of the IS-IS interfaces to which all property updates in this group will
+  // be applied.
+  repeated string names = 1;
 
-  // If IS-IS session will be flapped if the link metric is updated on a emullated interface.
-  // However, if the link metric is updated on a simulated interface then IS-IS session
-  // will be maintained in Up state. There will be LSP update with new metric value sent
-  // to the neighbors.
+  // The list of property updates to apply to all named interfaces. Each property may
+  // appear at most once within this list.
+  repeated UpdateProtocolConfigIsisInterfaceProperty properties = 2;
+}
+
+// A single IS-IS interface property update selected by choice.
+message UpdateProtocolConfigIsisInterfaceProperty {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      metric = 1;
+    }
+  }
+  // The attribute to be updated on the interface.
+  optional Choice.Enum choice = 1;
+
+  // The metric value to be updated on the IS-IS interface. Updating the metric on an
+  // emulated interface will flap the IS-IS session. Updating the metric on a simulated
+  // interface will maintain the IS-IS session in Up state and trigger an LSP update with
+  // the new metric value sent to neighbors.
+  UpdateProtocolConfigIsisInterfaceMetric metric = 2;
+}
+
+// The metric cost to be applied to the IS-IS interface.
+message UpdateProtocolConfigIsisInterfaceMetric {
+
+  // The metric cost for the interface.
   // default = 10
-  optional uint32 metric = 2;
+  optional uint32 value = 1;
 }
 
 // A container for all configuration resources of various types to be appended.

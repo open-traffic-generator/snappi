@@ -13,10 +13,10 @@ import (
 // ***** UpdateProtocolConfigIsis *****
 type updateProtocolConfigIsis struct {
 	validation
-	obj          *otg.UpdateProtocolConfigIsis
-	marshaller   marshalUpdateProtocolConfigIsis
-	unMarshaller unMarshalUpdateProtocolConfigIsis
-	linksHolder  UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
+	obj              *otg.UpdateProtocolConfigIsis
+	marshaller       marshalUpdateProtocolConfigIsis
+	unMarshaller     unMarshalUpdateProtocolConfigIsis
+	interfacesHolder UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
 }
 
 func NewUpdateProtocolConfigIsis() UpdateProtocolConfigIsis {
@@ -244,13 +244,14 @@ func (obj *updateProtocolConfigIsis) Clone() (UpdateProtocolConfigIsis, error) {
 }
 
 func (obj *updateProtocolConfigIsis) setNil() {
-	obj.linksHolder = nil
+	obj.interfacesHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// UpdateProtocolConfigIsis is a container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+// UpdateProtocolConfigIsis is a container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.
+// The choice field selects the category of attributes to be updated. Router-level and interface-level updates are controlled independently.
 type UpdateProtocolConfigIsis interface {
 	Validation
 	// msg marshals UpdateProtocolConfigIsis to protobuf object *otg.UpdateProtocolConfigIsis
@@ -272,95 +273,139 @@ type UpdateProtocolConfigIsis interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Links returns UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIterIter, set in UpdateProtocolConfigIsis
-	Links() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
+	// Choice returns UpdateProtocolConfigIsisChoiceEnum, set in UpdateProtocolConfigIsis
+	Choice() UpdateProtocolConfigIsisChoiceEnum
+	// setChoice assigns UpdateProtocolConfigIsisChoiceEnum provided by user to UpdateProtocolConfigIsis
+	setChoice(value UpdateProtocolConfigIsisChoiceEnum) UpdateProtocolConfigIsis
+	// HasChoice checks if Choice has been set in UpdateProtocolConfigIsis
+	HasChoice() bool
+	// Interfaces returns UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIterIter, set in UpdateProtocolConfigIsis
+	Interfaces() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
 	setNil()
 }
 
-// The list of IS-IS emulated or simulated interfaces with associated properties to be updated.
-// Links returns a []UpdateProtocolConfigIsisLink
-func (obj *updateProtocolConfigIsis) Links() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
-	if len(obj.obj.Links) == 0 {
-		obj.obj.Links = []*otg.UpdateProtocolConfigIsisLink{}
+type UpdateProtocolConfigIsisChoiceEnum string
+
+// Enum of Choice on UpdateProtocolConfigIsis
+var UpdateProtocolConfigIsisChoice = struct {
+	INTERFACES UpdateProtocolConfigIsisChoiceEnum
+}{
+	INTERFACES: UpdateProtocolConfigIsisChoiceEnum("interfaces"),
+}
+
+func (obj *updateProtocolConfigIsis) Choice() UpdateProtocolConfigIsisChoiceEnum {
+	return UpdateProtocolConfigIsisChoiceEnum(obj.obj.Choice.Enum().String())
+}
+
+// The category of IS-IS attributes to be updated.
+// Choice returns a string
+func (obj *updateProtocolConfigIsis) HasChoice() bool {
+	return obj.obj.Choice != nil
+}
+
+func (obj *updateProtocolConfigIsis) setChoice(value UpdateProtocolConfigIsisChoiceEnum) UpdateProtocolConfigIsis {
+	intValue, ok := otg.UpdateProtocolConfigIsis_Choice_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on UpdateProtocolConfigIsisChoiceEnum", string(value)))
+		return obj
 	}
-	if obj.linksHolder == nil {
-		obj.linksHolder = newUpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter(&obj.obj.Links).setMsg(obj)
+	enumValue := otg.UpdateProtocolConfigIsis_Choice_Enum(intValue)
+	obj.obj.Choice = &enumValue
+	obj.obj.Interfaces = nil
+	obj.interfacesHolder = nil
+
+	if value == UpdateProtocolConfigIsisChoice.INTERFACES {
+		obj.obj.Interfaces = []*otg.UpdateProtocolConfigIsisInterfaceUpdateGroup{}
 	}
-	return obj.linksHolder
+
+	return obj
 }
 
-type updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter struct {
-	obj                               *updateProtocolConfigIsis
-	updateProtocolConfigIsisLinkSlice []UpdateProtocolConfigIsisLink
-	fieldPtr                          *[]*otg.UpdateProtocolConfigIsisLink
+// List of IS-IS interface update groups. IS-IS interface names are globally unique across all routers so no parent router name is required. Each update group applies a common set of property updates to one or more interfaces simultaneously. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.
+// Interfaces returns a []UpdateProtocolConfigIsisInterfaceUpdateGroup
+func (obj *updateProtocolConfigIsis) Interfaces() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
+	if len(obj.obj.Interfaces) == 0 {
+		obj.setChoice(UpdateProtocolConfigIsisChoice.INTERFACES)
+	}
+	if obj.interfacesHolder == nil {
+		obj.interfacesHolder = newUpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter(&obj.obj.Interfaces).setMsg(obj)
+	}
+	return obj.interfacesHolder
 }
 
-func newUpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter(ptr *[]*otg.UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
-	return &updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter{fieldPtr: ptr}
+type updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter struct {
+	obj                                               *updateProtocolConfigIsis
+	updateProtocolConfigIsisInterfaceUpdateGroupSlice []UpdateProtocolConfigIsisInterfaceUpdateGroup
+	fieldPtr                                          *[]*otg.UpdateProtocolConfigIsisInterfaceUpdateGroup
 }
 
-type UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter interface {
-	setMsg(*updateProtocolConfigIsis) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
-	Items() []UpdateProtocolConfigIsisLink
-	Add() UpdateProtocolConfigIsisLink
-	Append(items ...UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
-	Set(index int, newObj UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
-	Clear() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
-	clearHolderSlice() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
-	appendHolderSlice(item UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter
+func newUpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter(ptr *[]*otg.UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
+	return &updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter{fieldPtr: ptr}
 }
 
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) setMsg(msg *updateProtocolConfigIsis) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
+type UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter interface {
+	setMsg(*updateProtocolConfigIsis) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+	Items() []UpdateProtocolConfigIsisInterfaceUpdateGroup
+	Add() UpdateProtocolConfigIsisInterfaceUpdateGroup
+	Append(items ...UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+	Set(index int, newObj UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+	Clear() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+	clearHolderSlice() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+	appendHolderSlice(item UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter
+}
+
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) setMsg(msg *updateProtocolConfigIsis) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
 	obj.clearHolderSlice()
 	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&updateProtocolConfigIsisLink{obj: val})
+		obj.appendHolderSlice(&updateProtocolConfigIsisInterfaceUpdateGroup{obj: val})
 	}
 	obj.obj = msg
 	return obj
 }
 
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) Items() []UpdateProtocolConfigIsisLink {
-	return obj.updateProtocolConfigIsisLinkSlice
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) Items() []UpdateProtocolConfigIsisInterfaceUpdateGroup {
+	return obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice
 }
 
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) Add() UpdateProtocolConfigIsisLink {
-	newObj := &otg.UpdateProtocolConfigIsisLink{}
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) Add() UpdateProtocolConfigIsisInterfaceUpdateGroup {
+	newObj := &otg.UpdateProtocolConfigIsisInterfaceUpdateGroup{}
 	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &updateProtocolConfigIsisLink{obj: newObj}
+	newLibObj := &updateProtocolConfigIsisInterfaceUpdateGroup{obj: newObj}
 	newLibObj.setDefault()
-	obj.updateProtocolConfigIsisLinkSlice = append(obj.updateProtocolConfigIsisLinkSlice, newLibObj)
+	obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice = append(obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice, newLibObj)
 	return newLibObj
 }
 
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) Append(items ...UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) Append(items ...UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
 	for _, item := range items {
 		newObj := item.msg()
 		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.updateProtocolConfigIsisLinkSlice = append(obj.updateProtocolConfigIsisLinkSlice, item)
+		obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice = append(obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice, item)
 	}
 	return obj
 }
 
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) Set(index int, newObj UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) Set(index int, newObj UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
 	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.updateProtocolConfigIsisLinkSlice[index] = newObj
+	obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice[index] = newObj
 	return obj
 }
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) Clear() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) Clear() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
 	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.UpdateProtocolConfigIsisLink{}
-		obj.updateProtocolConfigIsisLinkSlice = []UpdateProtocolConfigIsisLink{}
+		*obj.fieldPtr = []*otg.UpdateProtocolConfigIsisInterfaceUpdateGroup{}
+		obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice = []UpdateProtocolConfigIsisInterfaceUpdateGroup{}
 	}
 	return obj
 }
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) clearHolderSlice() UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
-	if len(obj.updateProtocolConfigIsisLinkSlice) > 0 {
-		obj.updateProtocolConfigIsisLinkSlice = []UpdateProtocolConfigIsisLink{}
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) clearHolderSlice() UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
+	if len(obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice) > 0 {
+		obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice = []UpdateProtocolConfigIsisInterfaceUpdateGroup{}
 	}
 	return obj
 }
-func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter) appendHolderSlice(item UpdateProtocolConfigIsisLink) UpdateProtocolConfigIsisUpdateProtocolConfigIsisLinkIter {
-	obj.updateProtocolConfigIsisLinkSlice = append(obj.updateProtocolConfigIsisLinkSlice, item)
+func (obj *updateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter) appendHolderSlice(item UpdateProtocolConfigIsisInterfaceUpdateGroup) UpdateProtocolConfigIsisUpdateProtocolConfigIsisInterfaceUpdateGroupIter {
+	obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice = append(obj.updateProtocolConfigIsisInterfaceUpdateGroupSlice, item)
 	return obj
 }
 
@@ -369,15 +414,15 @@ func (obj *updateProtocolConfigIsis) validateObj(vObj *validation, set_default b
 		obj.setDefault()
 	}
 
-	if len(obj.obj.Links) != 0 {
+	if len(obj.obj.Interfaces) != 0 {
 
 		if set_default {
-			obj.Links().clearHolderSlice()
-			for _, item := range obj.obj.Links {
-				obj.Links().appendHolderSlice(&updateProtocolConfigIsisLink{obj: item})
+			obj.Interfaces().clearHolderSlice()
+			for _, item := range obj.obj.Interfaces {
+				obj.Interfaces().appendHolderSlice(&updateProtocolConfigIsisInterfaceUpdateGroup{obj: item})
 			}
 		}
-		for _, item := range obj.Links().Items() {
+		for _, item := range obj.Interfaces().Items() {
 			item.validateObj(vObj, set_default)
 		}
 
@@ -386,5 +431,23 @@ func (obj *updateProtocolConfigIsis) validateObj(vObj *validation, set_default b
 }
 
 func (obj *updateProtocolConfigIsis) setDefault() {
+	var choices_set int = 0
+	var choice UpdateProtocolConfigIsisChoiceEnum
+
+	if len(obj.obj.Interfaces) > 0 {
+		choices_set += 1
+		choice = UpdateProtocolConfigIsisChoice.INTERFACES
+	}
+	if choices_set == 1 && choice != "" {
+		if obj.obj.Choice != nil {
+			if obj.Choice() != choice {
+				obj.validationErrors = append(obj.validationErrors, "choice not matching with property in UpdateProtocolConfigIsis")
+			}
+		} else {
+			intVal := otg.UpdateProtocolConfigIsis_Choice_Enum_value[string(choice)]
+			enumValue := otg.UpdateProtocolConfigIsis_Choice_Enum(intVal)
+			obj.obj.Choice = &enumValue
+		}
+	}
 
 }

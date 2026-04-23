@@ -18357,39 +18357,101 @@ components:
           x-field-uid: 1
     UpdateProtocol.Config.Isis:
       description: |-
-        A container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
+        A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.
+        The choice field selects the category of attributes to be updated. Router-level and interface-level updates are controlled independently.
       type: object
       properties:
-        links:
+        choice:
           description: |-
-            The list of IS-IS emulated or simulated interfaces with associated properties to be updated.
+            The category of IS-IS attributes to be updated.
+          type: string
+          x-enum:
+            interfaces:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - interfaces
+        interfaces:
+          description: |-
+            List of IS-IS interface update groups. IS-IS interface names are globally unique across all routers so no parent router name is required. Each update group applies a common set of property updates to one or more interfaces simultaneously. Use multiple update groups to handle asymmetric changes across different subsets of interfaces.
           type: array
           items:
-            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Link'
-          x-field-uid: 1
-    UpdateProtocol.Config.Isis.Link:
+            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Interface.UpdateGroup'
+          x-field-uid: 3
+    UpdateProtocol.Config.Isis.Interface.UpdateGroup:
       description: |-
-        A container of IS-IS with associated properties to be updated that may or may not able to maintain the current IS-IS Up session state always.
-      type: object
-      properties:
-        interface_name:
-          description: |
-            The name of an IS-IS emulated or simulated interface.
+        An update group that applies a common set of property updates to one or more IS-IS interfaces. All interfaces listed in names receive the same property updates defined in properties. Use multiple update groups in a single request to apply different property values to different subsets of interfaces (asymmetric updates).
+        A property must not appear more than once within the properties list of a single update group.
+        The warnings field in the response is populated in the following cases:
+        a) Session started but not yet up: the updates are accepted and will be
+           applied when the session comes up.
 
+        b) Session is up but true on-the-fly update is not supported for the
+           attribute (e.g. metric change on an emulated interface): a warning is
+           returned indicating that the session will be disabled and re-enabled,
+           and the updated attribute will be reflected once the session comes back up.
+
+        An error is returned in the following cases:
+        a) The protocol or session is not in a started state.
+        b) A referenced interface name does not exist in the configuration.
+      type: object
+      required:
+      - names
+      properties:
+        names:
+          description: |-
+            The names of the IS-IS interfaces to which all property updates in this group will be applied.
+          type: array
+          items:
+            type: string
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name
-          type: string
-          x-constraint:
-          - /components/schemas/Isis.Interface/properties/name
+            description: |
+              TBD
+
+              x-constraint:
+              - /components/schemas/Isis.Interface/properties/name
           x-field-uid: 1
+        properties:
+          description: |-
+            The list of property updates to apply to all named interfaces. Each property may appear at most once within this list.
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Interface.Property'
+          x-field-uid: 2
+    UpdateProtocol.Config.Isis.Interface.Property:
+      description: |-
+        A single IS-IS interface property update selected by choice.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The attribute to be updated on the interface.
+          type: string
+          x-enum:
+            metric:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - metric
         metric:
           description: |-
-            If IS-IS session will be flapped if the link metric is updated on a emullated interface.  However, if the link metric is updated on a simulated interface then IS-IS session will be maintained in Up state. There will be LSP update with new metric value sent to the neighbors.
+            The metric value to be updated on the IS-IS interface. Updating the metric on an emulated interface will flap the IS-IS session. Updating the metric on a simulated interface will maintain the IS-IS session in Up state and trigger an LSP update with the new metric value sent to neighbors.
+          $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Interface.Metric'
+          x-field-uid: 2
+    UpdateProtocol.Config.Isis.Interface.Metric:
+      description: |-
+        The metric cost to be applied to the IS-IS interface.
+      type: object
+      properties:
+        value:
+          description: |-
+            The metric cost for the interface.
           type: integer
           format: uint32
           maximum: 16777215
           default: 10
-          x-field-uid: 2
+          x-field-uid: 1
     Config.Append:
       description: |-
         A container for all configuration resources of various types to be appended.
