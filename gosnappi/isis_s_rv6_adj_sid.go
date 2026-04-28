@@ -250,7 +250,14 @@ func (obj *isisSRv6AdjSid) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// IsisSRv6AdjSid is sRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds a 128-bit SRv6 SID to a specific outgoing interface and next-hop, enabling traffic steering across a specific L3 adjacency. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3.
+// IsisSRv6AdjSid is sRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds a 128-bit SRv6 SID to a specific outgoing interface and next-hop, enabling traffic steering across a specific L3 adjacency. The full 128-bit SID is assembled as:
+// Locator (selected via locator/custom_locator_reference) | Function | Argument
+// Example  - given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:
+// locator auto (=> fc00:0:1::), function "00c8"
+// => final adjacency SID: fc00:0:1:c8::
+// locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9"
+// => final adjacency SID: fc00:0:2:c9::
+// Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3.
 type IsisSRv6AdjSid interface {
 	Validation
 	// msg marshals IsisSRv6AdjSid to protobuf object *otg.IsisSRv6AdjSid
@@ -272,12 +279,24 @@ type IsisSRv6AdjSid interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Sid returns string, set in IsisSRv6AdjSid.
-	Sid() string
-	// SetSid assigns string provided by user to IsisSRv6AdjSid
-	SetSid(value string) IsisSRv6AdjSid
-	// HasSid checks if Sid has been set in IsisSRv6AdjSid
-	HasSid() bool
+	// Locator returns IsisSRv6AdjSidLocatorEnum, set in IsisSRv6AdjSid
+	Locator() IsisSRv6AdjSidLocatorEnum
+	// SetLocator assigns IsisSRv6AdjSidLocatorEnum provided by user to IsisSRv6AdjSid
+	SetLocator(value IsisSRv6AdjSidLocatorEnum) IsisSRv6AdjSid
+	// HasLocator checks if Locator has been set in IsisSRv6AdjSid
+	HasLocator() bool
+	// CustomLocatorReference returns string, set in IsisSRv6AdjSid.
+	CustomLocatorReference() string
+	// SetCustomLocatorReference assigns string provided by user to IsisSRv6AdjSid
+	SetCustomLocatorReference(value string) IsisSRv6AdjSid
+	// HasCustomLocatorReference checks if CustomLocatorReference has been set in IsisSRv6AdjSid
+	HasCustomLocatorReference() bool
+	// Function returns string, set in IsisSRv6AdjSid.
+	Function() string
+	// SetFunction assigns string provided by user to IsisSRv6AdjSid
+	SetFunction(value string) IsisSRv6AdjSid
+	// HasFunction checks if Function has been set in IsisSRv6AdjSid
+	HasFunction() bool
 	// EndpointBehavior returns IsisSRv6AdjSidEndpointBehaviorEnum, set in IsisSRv6AdjSid
 	EndpointBehavior() IsisSRv6AdjSidEndpointBehaviorEnum
 	// SetEndpointBehavior assigns IsisSRv6AdjSidEndpointBehaviorEnum provided by user to IsisSRv6AdjSid
@@ -335,25 +354,93 @@ type IsisSRv6AdjSid interface {
 	setNil()
 }
 
-// The 128-bit SRv6 SID value in IPv6 address format for this adjacency. Must be allocated from the advertising node's locator prefix space.
-// Sid returns a string
-func (obj *isisSRv6AdjSid) Sid() string {
+type IsisSRv6AdjSidLocatorEnum string
 
-	return *obj.obj.Sid
+// Enum of Locator on IsisSRv6AdjSid
+var IsisSRv6AdjSidLocator = struct {
+	AUTO                     IsisSRv6AdjSidLocatorEnum
+	CUSTOM_LOCATOR_REFERENCE IsisSRv6AdjSidLocatorEnum
+}{
+	AUTO:                     IsisSRv6AdjSidLocatorEnum("auto"),
+	CUSTOM_LOCATOR_REFERENCE: IsisSRv6AdjSidLocatorEnum("custom_locator_reference"),
+}
+
+func (obj *isisSRv6AdjSid) Locator() IsisSRv6AdjSidLocatorEnum {
+	return IsisSRv6AdjSidLocatorEnum(obj.obj.Locator.Enum().String())
+}
+
+// Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators  - suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference  - use this when multiple locators are configured and a particular one must be selected, e.g. for a Flex-Algo binding.
+// Locator returns a string
+func (obj *isisSRv6AdjSid) HasLocator() bool {
+	return obj.obj.Locator != nil
+}
+
+func (obj *isisSRv6AdjSid) SetLocator(value IsisSRv6AdjSidLocatorEnum) IsisSRv6AdjSid {
+	intValue, ok := otg.IsisSRv6AdjSid_Locator_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on IsisSRv6AdjSidLocatorEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.IsisSRv6AdjSid_Locator_Enum(intValue)
+	obj.obj.Locator = &enumValue
+
+	return obj
+}
+
+// Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
+//
+// x-constraint:
+// - /components/schemas/IsisSRv6.Locator/properties/locator_name
+//
+// CustomLocatorReference returns a string
+func (obj *isisSRv6AdjSid) CustomLocatorReference() string {
+
+	return *obj.obj.CustomLocatorReference
 
 }
 
-// The 128-bit SRv6 SID value in IPv6 address format for this adjacency. Must be allocated from the advertising node's locator prefix space.
-// Sid returns a string
-func (obj *isisSRv6AdjSid) HasSid() bool {
-	return obj.obj.Sid != nil
+// Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
+//
+// x-constraint:
+// - /components/schemas/IsisSRv6.Locator/properties/locator_name
+//
+// CustomLocatorReference returns a string
+func (obj *isisSRv6AdjSid) HasCustomLocatorReference() bool {
+	return obj.obj.CustomLocatorReference != nil
 }
 
-// The 128-bit SRv6 SID value in IPv6 address format for this adjacency. Must be allocated from the advertising node's locator prefix space.
-// SetSid sets the string value in the IsisSRv6AdjSid object
-func (obj *isisSRv6AdjSid) SetSid(value string) IsisSRv6AdjSid {
+// Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
+//
+// x-constraint:
+// - /components/schemas/IsisSRv6.Locator/properties/locator_name
+//
+// SetCustomLocatorReference sets the string value in the IsisSRv6AdjSid object
+func (obj *isisSRv6AdjSid) SetCustomLocatorReference(value string) IsisSRv6AdjSid {
 
-	obj.obj.Sid = &value
+	obj.obj.CustomLocatorReference = &value
+	return obj
+}
+
+// The Function part of this adjacency SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+// Function returns a string
+func (obj *isisSRv6AdjSid) Function() string {
+
+	return *obj.obj.Function
+
+}
+
+// The Function part of this adjacency SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+// Function returns a string
+func (obj *isisSRv6AdjSid) HasFunction() bool {
+	return obj.obj.Function != nil
+}
+
+// The Function part of this adjacency SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+// SetFunction sets the string value in the IsisSRv6AdjSid object
+func (obj *isisSRv6AdjSid) SetFunction(value string) IsisSRv6AdjSid {
+
+	obj.obj.Function = &value
 	return obj
 }
 
@@ -517,7 +604,10 @@ func (obj *isisSRv6AdjSid) SetAlgorithm(value uint32) IsisSRv6AdjSid {
 	return obj
 }
 
-// Compression (uSID) flag. When set, indicates this adjacency SID supports Micro-SID (uSID) compressed encoding, allowing multiple adjacency micro-segments to be stacked within a single 128-bit SID carrier using the Argument field.
+// Compression (uSID) flag. When set, this adjacency SID is a Micro-SID (uSID) End.X per RFC 9800. A headend can pack it into a shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over a specific L3 adjacency within a compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:
+// c_flag=true, function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// c_flag=true, function "00c9" => uSID fc00:0:1:c9::  (End.X alternate link)
+// For a path routed via node 1's adjacency "00c8" then node 2 End "0001", the headend builds DA = fc00:0:1:c8:2:1:: encoding both hops in a single 128-bit address. Reference: RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6AdjSid) CFlag() bool {
 
@@ -525,13 +615,19 @@ func (obj *isisSRv6AdjSid) CFlag() bool {
 
 }
 
-// Compression (uSID) flag. When set, indicates this adjacency SID supports Micro-SID (uSID) compressed encoding, allowing multiple adjacency micro-segments to be stacked within a single 128-bit SID carrier using the Argument field.
+// Compression (uSID) flag. When set, this adjacency SID is a Micro-SID (uSID) End.X per RFC 9800. A headend can pack it into a shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over a specific L3 adjacency within a compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:
+// c_flag=true, function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// c_flag=true, function "00c9" => uSID fc00:0:1:c9::  (End.X alternate link)
+// For a path routed via node 1's adjacency "00c8" then node 2 End "0001", the headend builds DA = fc00:0:1:c8:2:1:: encoding both hops in a single 128-bit address. Reference: RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6AdjSid) HasCFlag() bool {
 	return obj.obj.CFlag != nil
 }
 
-// Compression (uSID) flag. When set, indicates this adjacency SID supports Micro-SID (uSID) compressed encoding, allowing multiple adjacency micro-segments to be stacked within a single 128-bit SID carrier using the Argument field.
+// Compression (uSID) flag. When set, this adjacency SID is a Micro-SID (uSID) End.X per RFC 9800. A headend can pack it into a shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over a specific L3 adjacency within a compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:
+// c_flag=true, function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// c_flag=true, function "00c9" => uSID fc00:0:1:c9::  (End.X alternate link)
+// For a path routed via node 1's adjacency "00c8" then node 2 End "0001", the headend builds DA = fc00:0:1:c8:2:1:: encoding both hops in a single 128-bit address. Reference: RFC 9800.
 // SetCFlag sets the bool value in the IsisSRv6AdjSid object
 func (obj *isisSRv6AdjSid) SetCFlag(value bool) IsisSRv6AdjSid {
 
@@ -572,11 +668,11 @@ func (obj *isisSRv6AdjSid) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	if obj.obj.Sid != nil {
+	if obj.obj.Function != nil {
 
-		err := obj.validateIpv6(obj.Sid())
+		err := obj.validateHex(obj.Function())
 		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on IsisSRv6AdjSid.Sid"))
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on IsisSRv6AdjSid.Function"))
 		}
 
 	}
@@ -609,6 +705,10 @@ func (obj *isisSRv6AdjSid) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *isisSRv6AdjSid) setDefault() {
+	if obj.obj.Locator == nil {
+		obj.SetLocator(IsisSRv6AdjSidLocator.AUTO)
+
+	}
 	if obj.obj.EndpointBehavior == nil {
 		obj.SetEndpointBehavior(IsisSRv6AdjSidEndpointBehavior.END_X)
 

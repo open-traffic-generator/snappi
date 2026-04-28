@@ -369,10 +369,10 @@ type IsisInterface interface {
 	// Srv6AdjacencySids returns IsisInterfaceIsisSRv6AdjSidIterIter, set in IsisInterface
 	Srv6AdjacencySids() IsisInterfaceIsisSRv6AdjSidIter
 	// Srv6LinkMsd returns IsisSRv6LinkMsd, set in IsisInterface.
-	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. Advertised as MSD sub-TLVs within the neighbor TLVs per RFC 8491. Reference: RFC 8491, RFC 9352 Section 6.
+	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. A non-zero value causes the corresponding MSD sub-TLV to be included in the neighbor TLV advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
 	Srv6LinkMsd() IsisSRv6LinkMsd
 	// SetSrv6LinkMsd assigns IsisSRv6LinkMsd provided by user to IsisInterface.
-	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. Advertised as MSD sub-TLVs within the neighbor TLVs per RFC 8491. Reference: RFC 8491, RFC 9352 Section 6.
+	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. A non-zero value causes the corresponding MSD sub-TLV to be included in the neighbor TLV advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
 	SetSrv6LinkMsd(value IsisSRv6LinkMsd) IsisInterface
 	// HasSrv6LinkMsd checks if Srv6LinkMsd has been set in IsisInterface
 	HasSrv6LinkMsd() bool

@@ -278,6 +278,12 @@ type IsisSRv6AdvertiseLocatorAsPrefix interface {
 	SetRouteMetric(value uint32) IsisSRv6AdvertiseLocatorAsPrefix
 	// HasRouteMetric checks if RouteMetric has been set in IsisSRv6AdvertiseLocatorAsPrefix
 	HasRouteMetric() bool
+	// RedistributionType returns IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum, set in IsisSRv6AdvertiseLocatorAsPrefix
+	RedistributionType() IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum
+	// SetRedistributionType assigns IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum provided by user to IsisSRv6AdvertiseLocatorAsPrefix
+	SetRedistributionType(value IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum) IsisSRv6AdvertiseLocatorAsPrefix
+	// HasRedistributionType checks if RedistributionType has been set in IsisSRv6AdvertiseLocatorAsPrefix
+	HasRedistributionType() bool
 	// RouteOrigin returns IsisSRv6AdvertiseLocatorAsPrefixRouteOriginEnum, set in IsisSRv6AdvertiseLocatorAsPrefix
 	RouteOrigin() IsisSRv6AdvertiseLocatorAsPrefixRouteOriginEnum
 	// SetRouteOrigin assigns IsisSRv6AdvertiseLocatorAsPrefixRouteOriginEnum provided by user to IsisSRv6AdvertiseLocatorAsPrefix
@@ -314,6 +320,40 @@ func (obj *isisSRv6AdvertiseLocatorAsPrefix) HasRouteMetric() bool {
 func (obj *isisSRv6AdvertiseLocatorAsPrefix) SetRouteMetric(value uint32) IsisSRv6AdvertiseLocatorAsPrefix {
 
 	obj.obj.RouteMetric = &value
+	return obj
+}
+
+type IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum string
+
+// Enum of RedistributionType on IsisSRv6AdvertiseLocatorAsPrefix
+var IsisSRv6AdvertiseLocatorAsPrefixRedistributionType = struct {
+	UP   IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum
+	DOWN IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum
+}{
+	UP:   IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum("up"),
+	DOWN: IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum("down"),
+}
+
+func (obj *isisSRv6AdvertiseLocatorAsPrefix) RedistributionType() IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum {
+	return IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum(obj.obj.RedistributionType.Enum().String())
+}
+
+// Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' = normal advertisement (default); 'down' = the locator has been leaked from Level 2 to Level 1 (RFC 5305).
+// RedistributionType returns a string
+func (obj *isisSRv6AdvertiseLocatorAsPrefix) HasRedistributionType() bool {
+	return obj.obj.RedistributionType != nil
+}
+
+func (obj *isisSRv6AdvertiseLocatorAsPrefix) SetRedistributionType(value IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum) IsisSRv6AdvertiseLocatorAsPrefix {
+	intValue, ok := otg.IsisSRv6AdvertiseLocatorAsPrefix_RedistributionType_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on IsisSRv6AdvertiseLocatorAsPrefixRedistributionTypeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.IsisSRv6AdvertiseLocatorAsPrefix_RedistributionType_Enum(intValue)
+	obj.obj.RedistributionType = &enumValue
+
 	return obj
 }
 
@@ -404,6 +444,10 @@ func (obj *isisSRv6AdvertiseLocatorAsPrefix) validateObj(vObj *validation, set_d
 func (obj *isisSRv6AdvertiseLocatorAsPrefix) setDefault() {
 	if obj.obj.RouteMetric == nil {
 		obj.SetRouteMetric(0)
+	}
+	if obj.obj.RedistributionType == nil {
+		obj.SetRedistributionType(IsisSRv6AdvertiseLocatorAsPrefixRedistributionType.UP)
+
 	}
 	if obj.obj.RouteOrigin == nil {
 		obj.SetRouteOrigin(IsisSRv6AdvertiseLocatorAsPrefixRouteOrigin.INTERNAL)

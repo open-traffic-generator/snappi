@@ -24,7 +24,6 @@ type isisLspTlvs struct {
 	extendedIpv4ReachabilityTlvsHolder IsisLspTlvsIsisLspExtendedIpv4ReachabilityTlvIter
 	ipv6ReachabilityTlvsHolder         IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
 	routerCapabilitiesHolder           IsisLspTlvsIsisLspCapabilityIter
-	srv6LocatorTlvsHolder              IsisLspTlvsIsisLspSRv6LocatorTlvIter
 }
 
 func NewIsisLspTlvs() IsisLspTlvs {
@@ -260,7 +259,6 @@ func (obj *isisLspTlvs) setNil() {
 	obj.extendedIpv4ReachabilityTlvsHolder = nil
 	obj.ipv6ReachabilityTlvsHolder = nil
 	obj.routerCapabilitiesHolder = nil
-	obj.srv6LocatorTlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -304,8 +302,6 @@ type IsisLspTlvs interface {
 	Ipv6ReachabilityTlvs() IsisLspTlvsIsisLspIpv6ReachabilityTlvIter
 	// RouterCapabilities returns IsisLspTlvsIsisLspCapabilityIterIter, set in IsisLspTlvs
 	RouterCapabilities() IsisLspTlvsIsisLspCapabilityIter
-	// Srv6LocatorTlvs returns IsisLspTlvsIsisLspSRv6LocatorTlvIterIter, set in IsisLspTlvs
-	Srv6LocatorTlvs() IsisLspTlvsIsisLspSRv6LocatorTlvIter
 	setNil()
 }
 
@@ -1006,97 +1002,6 @@ func (obj *isisLspTlvsIsisLspCapabilityIter) appendHolderSlice(item IsisLspCapab
 	return obj
 }
 
-// Array of SRv6 Locator TLVs (type 27) present in this LSP.
-// Each entry represents one SRv6 locator prefix advertisement,
-// binding a node-local IPv6 prefix to an IGP algorithm and carrying
-// node-local End SID Sub-TLVs for SRv6 endpoint behaviors.
-// Reference: RFC 9352 Section 7.1.
-// Srv6LocatorTlvs returns a []IsisLspSRv6LocatorTlv
-func (obj *isisLspTlvs) Srv6LocatorTlvs() IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	if len(obj.obj.Srv6LocatorTlvs) == 0 {
-		obj.obj.Srv6LocatorTlvs = []*otg.IsisLspSRv6LocatorTlv{}
-	}
-	if obj.srv6LocatorTlvsHolder == nil {
-		obj.srv6LocatorTlvsHolder = newIsisLspTlvsIsisLspSRv6LocatorTlvIter(&obj.obj.Srv6LocatorTlvs).setMsg(obj)
-	}
-	return obj.srv6LocatorTlvsHolder
-}
-
-type isisLspTlvsIsisLspSRv6LocatorTlvIter struct {
-	obj                        *isisLspTlvs
-	isisLspSRv6LocatorTlvSlice []IsisLspSRv6LocatorTlv
-	fieldPtr                   *[]*otg.IsisLspSRv6LocatorTlv
-}
-
-func newIsisLspTlvsIsisLspSRv6LocatorTlvIter(ptr *[]*otg.IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	return &isisLspTlvsIsisLspSRv6LocatorTlvIter{fieldPtr: ptr}
-}
-
-type IsisLspTlvsIsisLspSRv6LocatorTlvIter interface {
-	setMsg(*isisLspTlvs) IsisLspTlvsIsisLspSRv6LocatorTlvIter
-	Items() []IsisLspSRv6LocatorTlv
-	Add() IsisLspSRv6LocatorTlv
-	Append(items ...IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter
-	Set(index int, newObj IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter
-	Clear() IsisLspTlvsIsisLspSRv6LocatorTlvIter
-	clearHolderSlice() IsisLspTlvsIsisLspSRv6LocatorTlvIter
-	appendHolderSlice(item IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter
-}
-
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) setMsg(msg *isisLspTlvs) IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&isisLspSRv6LocatorTlv{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) Items() []IsisLspSRv6LocatorTlv {
-	return obj.isisLspSRv6LocatorTlvSlice
-}
-
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) Add() IsisLspSRv6LocatorTlv {
-	newObj := &otg.IsisLspSRv6LocatorTlv{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &isisLspSRv6LocatorTlv{obj: newObj}
-	newLibObj.setDefault()
-	obj.isisLspSRv6LocatorTlvSlice = append(obj.isisLspSRv6LocatorTlvSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) Append(items ...IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.isisLspSRv6LocatorTlvSlice = append(obj.isisLspSRv6LocatorTlvSlice, item)
-	}
-	return obj
-}
-
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) Set(index int, newObj IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.isisLspSRv6LocatorTlvSlice[index] = newObj
-	return obj
-}
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) Clear() IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.IsisLspSRv6LocatorTlv{}
-		obj.isisLspSRv6LocatorTlvSlice = []IsisLspSRv6LocatorTlv{}
-	}
-	return obj
-}
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) clearHolderSlice() IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	if len(obj.isisLspSRv6LocatorTlvSlice) > 0 {
-		obj.isisLspSRv6LocatorTlvSlice = []IsisLspSRv6LocatorTlv{}
-	}
-	return obj
-}
-func (obj *isisLspTlvsIsisLspSRv6LocatorTlvIter) appendHolderSlice(item IsisLspSRv6LocatorTlv) IsisLspTlvsIsisLspSRv6LocatorTlvIter {
-	obj.isisLspSRv6LocatorTlvSlice = append(obj.isisLspSRv6LocatorTlvSlice, item)
-	return obj
-}
-
 func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1209,20 +1114,6 @@ func (obj *isisLspTlvs) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.RouterCapabilities().Items() {
-			item.validateObj(vObj, set_default)
-		}
-
-	}
-
-	if len(obj.obj.Srv6LocatorTlvs) != 0 {
-
-		if set_default {
-			obj.Srv6LocatorTlvs().clearHolderSlice()
-			for _, item := range obj.obj.Srv6LocatorTlvs {
-				obj.Srv6LocatorTlvs().appendHolderSlice(&isisLspSRv6LocatorTlv{obj: item})
-			}
-		}
-		for _, item := range obj.Srv6LocatorTlvs().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

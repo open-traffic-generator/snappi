@@ -292,7 +292,7 @@ type IsisSRv6SidStructure interface {
 	HasArgumentLength() bool
 }
 
-// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1.
+// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1 (a zero-bit locator block is not meaningful).
 // LocatorBlockLength returns a uint32
 func (obj *isisSRv6SidStructure) LocatorBlockLength() uint32 {
 
@@ -300,13 +300,13 @@ func (obj *isisSRv6SidStructure) LocatorBlockLength() uint32 {
 
 }
 
-// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1.
+// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1 (a zero-bit locator block is not meaningful).
 // LocatorBlockLength returns a uint32
 func (obj *isisSRv6SidStructure) HasLocatorBlockLength() bool {
 	return obj.obj.LocatorBlockLength != nil
 }
 
-// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1.
+// Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1 (a zero-bit locator block is not meaningful).
 // SetLocatorBlockLength sets the uint32 value in the IsisSRv6SidStructure object
 func (obj *isisSRv6SidStructure) SetLocatorBlockLength(value uint32) IsisSRv6SidStructure {
 
@@ -387,10 +387,10 @@ func (obj *isisSRv6SidStructure) validateObj(vObj *validation, set_default bool)
 
 	if obj.obj.LocatorBlockLength != nil {
 
-		if *obj.obj.LocatorBlockLength > 128 {
+		if *obj.obj.LocatorBlockLength < 1 || *obj.obj.LocatorBlockLength > 128 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("0 <= IsisSRv6SidStructure.LocatorBlockLength <= 128 but Got %d", *obj.obj.LocatorBlockLength))
+				fmt.Sprintf("1 <= IsisSRv6SidStructure.LocatorBlockLength <= 128 but Got %d", *obj.obj.LocatorBlockLength))
 		}
 
 	}

@@ -1664,9 +1664,6 @@ from .snappi import IsisLspExtendedNeighbor
 from .snappi import IsisLspAdjacencySid
 from .snappi import IsisLspAdjSidFlags
 from .snappi import IsisLspAdjacencySidIter
-from .snappi import IsisLspSRv6AdjSid
-from .snappi import IsisLspSRv6SidStructure
-from .snappi import IsisLspSRv6AdjSidIter
 from .snappi import IsisLspExtendedNeighborIter
 from .snappi import IsisLspExtendedIsReachabilityTlvIter
 from .snappi import IsisLspIpv4InternalReachabilityTlv
@@ -1694,15 +1691,7 @@ from .snappi import IsisLspSrgb
 from .snappi import IsisLspSrgbIter
 from .snappi import IsisLspSrlb
 from .snappi import IsisLspSrlbIter
-from .snappi import IsisLspSRv6Capability
-from .snappi import IsisLspSRv6NodeMsd
 from .snappi import IsisLspCapabilityIter
-from .snappi import IsisLspSRv6LocatorTlv
-from .snappi import IsisLspSRv6EndSid
-from .snappi import IsisLspSRv6EndSidIter
-from .snappi import IsisLspSRv6AdvertisedLocatorAsPrefix
-from .snappi import IsisLspSRv6PrefixAttributes
-from .snappi import IsisLspSRv6LocatorTlvIter
 from .snappi import IsisLspStateIter
 from .snappi import IsisLspsStateIter
 from .snappi import LldpNeighborsState

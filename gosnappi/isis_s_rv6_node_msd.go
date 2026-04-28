@@ -242,7 +242,7 @@ func (obj *isisSRv6NodeMsd) Clone() (IsisSRv6NodeMsd, error) {
 	return newObj, nil
 }
 
-// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. Each include_* flag controls whether the corresponding MSD type is advertised; the paired value field sets the advertised depth. MSD Type 41 = Max SL, Type 42 = Max End Pop, Type 44 = Max H.Encaps, Type 45 = Max End D. Reference: RFC 8491, RFC 9352 Section 6.
+// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
 type IsisSRv6NodeMsd interface {
 	Validation
 	// msg marshals IsisSRv6NodeMsd to protobuf object *otg.IsisSRv6NodeMsd
@@ -264,91 +264,39 @@ type IsisSRv6NodeMsd interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// IncludeMaxSl returns bool, set in IsisSRv6NodeMsd.
-	IncludeMaxSl() bool
-	// SetIncludeMaxSl assigns bool provided by user to IsisSRv6NodeMsd
-	SetIncludeMaxSl(value bool) IsisSRv6NodeMsd
-	// HasIncludeMaxSl checks if IncludeMaxSl has been set in IsisSRv6NodeMsd
-	HasIncludeMaxSl() bool
 	// MaxSl returns uint32, set in IsisSRv6NodeMsd.
 	MaxSl() uint32
 	// SetMaxSl assigns uint32 provided by user to IsisSRv6NodeMsd
 	SetMaxSl(value uint32) IsisSRv6NodeMsd
 	// HasMaxSl checks if MaxSl has been set in IsisSRv6NodeMsd
 	HasMaxSl() bool
-	// IncludeMaxEndPopSrh returns bool, set in IsisSRv6NodeMsd.
-	IncludeMaxEndPopSrh() bool
-	// SetIncludeMaxEndPopSrh assigns bool provided by user to IsisSRv6NodeMsd
-	SetIncludeMaxEndPopSrh(value bool) IsisSRv6NodeMsd
-	// HasIncludeMaxEndPopSrh checks if IncludeMaxEndPopSrh has been set in IsisSRv6NodeMsd
-	HasIncludeMaxEndPopSrh() bool
 	// MaxEndPopSrh returns uint32, set in IsisSRv6NodeMsd.
 	MaxEndPopSrh() uint32
 	// SetMaxEndPopSrh assigns uint32 provided by user to IsisSRv6NodeMsd
 	SetMaxEndPopSrh(value uint32) IsisSRv6NodeMsd
 	// HasMaxEndPopSrh checks if MaxEndPopSrh has been set in IsisSRv6NodeMsd
 	HasMaxEndPopSrh() bool
-	// IncludeMaxHEncaps returns bool, set in IsisSRv6NodeMsd.
-	IncludeMaxHEncaps() bool
-	// SetIncludeMaxHEncaps assigns bool provided by user to IsisSRv6NodeMsd
-	SetIncludeMaxHEncaps(value bool) IsisSRv6NodeMsd
-	// HasIncludeMaxHEncaps checks if IncludeMaxHEncaps has been set in IsisSRv6NodeMsd
-	HasIncludeMaxHEncaps() bool
-	// MaxHEncaps returns uint32, set in IsisSRv6NodeMsd.
-	MaxHEncaps() uint32
-	// SetMaxHEncaps assigns uint32 provided by user to IsisSRv6NodeMsd
-	SetMaxHEncaps(value uint32) IsisSRv6NodeMsd
-	// HasMaxHEncaps checks if MaxHEncaps has been set in IsisSRv6NodeMsd
-	HasMaxHEncaps() bool
-	// IncludeMaxEndDSrh returns bool, set in IsisSRv6NodeMsd.
-	IncludeMaxEndDSrh() bool
-	// SetIncludeMaxEndDSrh assigns bool provided by user to IsisSRv6NodeMsd
-	SetIncludeMaxEndDSrh(value bool) IsisSRv6NodeMsd
-	// HasIncludeMaxEndDSrh checks if IncludeMaxEndDSrh has been set in IsisSRv6NodeMsd
-	HasIncludeMaxEndDSrh() bool
-	// MaxEndDSrh returns uint32, set in IsisSRv6NodeMsd.
-	MaxEndDSrh() uint32
-	// SetMaxEndDSrh assigns uint32 provided by user to IsisSRv6NodeMsd
-	SetMaxEndDSrh(value uint32) IsisSRv6NodeMsd
-	// HasMaxEndDSrh checks if MaxEndDSrh has been set in IsisSRv6NodeMsd
-	HasMaxEndDSrh() bool
-	// IncludeMaxTInsert returns bool, set in IsisSRv6NodeMsd.
-	IncludeMaxTInsert() bool
-	// SetIncludeMaxTInsert assigns bool provided by user to IsisSRv6NodeMsd
-	SetIncludeMaxTInsert(value bool) IsisSRv6NodeMsd
-	// HasIncludeMaxTInsert checks if IncludeMaxTInsert has been set in IsisSRv6NodeMsd
-	HasIncludeMaxTInsert() bool
 	// MaxTInsert returns uint32, set in IsisSRv6NodeMsd.
 	MaxTInsert() uint32
 	// SetMaxTInsert assigns uint32 provided by user to IsisSRv6NodeMsd
 	SetMaxTInsert(value uint32) IsisSRv6NodeMsd
 	// HasMaxTInsert checks if MaxTInsert has been set in IsisSRv6NodeMsd
 	HasMaxTInsert() bool
+	// MaxHEncaps returns uint32, set in IsisSRv6NodeMsd.
+	MaxHEncaps() uint32
+	// SetMaxHEncaps assigns uint32 provided by user to IsisSRv6NodeMsd
+	SetMaxHEncaps(value uint32) IsisSRv6NodeMsd
+	// HasMaxHEncaps checks if MaxHEncaps has been set in IsisSRv6NodeMsd
+	HasMaxHEncaps() bool
+	// MaxEndDSrh returns uint32, set in IsisSRv6NodeMsd.
+	MaxEndDSrh() uint32
+	// SetMaxEndDSrh assigns uint32 provided by user to IsisSRv6NodeMsd
+	SetMaxEndDSrh(value uint32) IsisSRv6NodeMsd
+	// HasMaxEndDSrh checks if MaxEndDSrh has been set in IsisSRv6NodeMsd
+	HasMaxEndDSrh() bool
 }
 
-// When true, advertises the Maximum Segments Left (Max SL) MSD sub-TLV (MSD-Type 41). Signals the maximum value of the Segments Left (SL) field in an SRH that this router can process.
-// IncludeMaxSl returns a bool
-func (obj *isisSRv6NodeMsd) IncludeMaxSl() bool {
-
-	return *obj.obj.IncludeMaxSl
-
-}
-
-// When true, advertises the Maximum Segments Left (Max SL) MSD sub-TLV (MSD-Type 41). Signals the maximum value of the Segments Left (SL) field in an SRH that this router can process.
-// IncludeMaxSl returns a bool
-func (obj *isisSRv6NodeMsd) HasIncludeMaxSl() bool {
-	return obj.obj.IncludeMaxSl != nil
-}
-
-// When true, advertises the Maximum Segments Left (Max SL) MSD sub-TLV (MSD-Type 41). Signals the maximum value of the Segments Left (SL) field in an SRH that this router can process.
-// SetIncludeMaxSl sets the bool value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetIncludeMaxSl(value bool) IsisSRv6NodeMsd {
-
-	obj.obj.IncludeMaxSl = &value
-	return obj
-}
-
-// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A value of 0 indicates no SRH processing capability.
+// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A non-zero value is advertised as the Max SL MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxSl returns a uint32
 func (obj *isisSRv6NodeMsd) MaxSl() uint32 {
 
@@ -356,13 +304,13 @@ func (obj *isisSRv6NodeMsd) MaxSl() uint32 {
 
 }
 
-// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A value of 0 indicates no SRH processing capability.
+// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A non-zero value is advertised as the Max SL MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxSl returns a uint32
 func (obj *isisSRv6NodeMsd) HasMaxSl() bool {
 	return obj.obj.MaxSl != nil
 }
 
-// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A value of 0 indicates no SRH processing capability.
+// Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A non-zero value is advertised as the Max SL MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // SetMaxSl sets the uint32 value in the IsisSRv6NodeMsd object
 func (obj *isisSRv6NodeMsd) SetMaxSl(value uint32) IsisSRv6NodeMsd {
 
@@ -370,29 +318,7 @@ func (obj *isisSRv6NodeMsd) SetMaxSl(value uint32) IsisSRv6NodeMsd {
 	return obj
 }
 
-// When true, advertises the Max-End-Pop-SRH MSD sub-TLV (MSD-Type 42). Signals the maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors.
-// IncludeMaxEndPopSrh returns a bool
-func (obj *isisSRv6NodeMsd) IncludeMaxEndPopSrh() bool {
-
-	return *obj.obj.IncludeMaxEndPopSrh
-
-}
-
-// When true, advertises the Max-End-Pop-SRH MSD sub-TLV (MSD-Type 42). Signals the maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors.
-// IncludeMaxEndPopSrh returns a bool
-func (obj *isisSRv6NodeMsd) HasIncludeMaxEndPopSrh() bool {
-	return obj.obj.IncludeMaxEndPopSrh != nil
-}
-
-// When true, advertises the Max-End-Pop-SRH MSD sub-TLV (MSD-Type 42). Signals the maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors.
-// SetIncludeMaxEndPopSrh sets the bool value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetIncludeMaxEndPopSrh(value bool) IsisSRv6NodeMsd {
-
-	obj.obj.IncludeMaxEndPopSrh = &value
-	return obj
-}
-
-// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A value of 0 means the router cannot apply these behaviors.
+// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-Pop-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxEndPopSrh returns a uint32
 func (obj *isisSRv6NodeMsd) MaxEndPopSrh() uint32 {
 
@@ -400,13 +326,13 @@ func (obj *isisSRv6NodeMsd) MaxEndPopSrh() uint32 {
 
 }
 
-// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A value of 0 means the router cannot apply these behaviors.
+// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-Pop-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxEndPopSrh returns a uint32
 func (obj *isisSRv6NodeMsd) HasMaxEndPopSrh() bool {
 	return obj.obj.MaxEndPopSrh != nil
 }
 
-// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A value of 0 means the router cannot apply these behaviors.
+// Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-Pop-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // SetMaxEndPopSrh sets the uint32 value in the IsisSRv6NodeMsd object
 func (obj *isisSRv6NodeMsd) SetMaxEndPopSrh(value uint32) IsisSRv6NodeMsd {
 
@@ -414,117 +340,7 @@ func (obj *isisSRv6NodeMsd) SetMaxEndPopSrh(value uint32) IsisSRv6NodeMsd {
 	return obj
 }
 
-// When true, advertises the Max-H-Encaps MSD sub-TLV (MSD-Type 44). Signals the maximum number of SIDs that can be pushed via the H.Encaps headend encapsulation behavior.
-// IncludeMaxHEncaps returns a bool
-func (obj *isisSRv6NodeMsd) IncludeMaxHEncaps() bool {
-
-	return *obj.obj.IncludeMaxHEncaps
-
-}
-
-// When true, advertises the Max-H-Encaps MSD sub-TLV (MSD-Type 44). Signals the maximum number of SIDs that can be pushed via the H.Encaps headend encapsulation behavior.
-// IncludeMaxHEncaps returns a bool
-func (obj *isisSRv6NodeMsd) HasIncludeMaxHEncaps() bool {
-	return obj.obj.IncludeMaxHEncaps != nil
-}
-
-// When true, advertises the Max-H-Encaps MSD sub-TLV (MSD-Type 44). Signals the maximum number of SIDs that can be pushed via the H.Encaps headend encapsulation behavior.
-// SetIncludeMaxHEncaps sets the bool value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetIncludeMaxHEncaps(value bool) IsisSRv6NodeMsd {
-
-	obj.obj.IncludeMaxHEncaps = &value
-	return obj
-}
-
-// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
-// MaxHEncaps returns a uint32
-func (obj *isisSRv6NodeMsd) MaxHEncaps() uint32 {
-
-	return *obj.obj.MaxHEncaps
-
-}
-
-// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
-// MaxHEncaps returns a uint32
-func (obj *isisSRv6NodeMsd) HasMaxHEncaps() bool {
-	return obj.obj.MaxHEncaps != nil
-}
-
-// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
-// SetMaxHEncaps sets the uint32 value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetMaxHEncaps(value uint32) IsisSRv6NodeMsd {
-
-	obj.obj.MaxHEncaps = &value
-	return obj
-}
-
-// When true, advertises the Max-End-D-SRH MSD sub-TLV (MSD-Type 45). Signals the maximum number of SIDs in the SRH when applying decapsulation behaviors (End.DT4, End.DT6, End.DT46, End.DX4, End.DX6).
-// IncludeMaxEndDSrh returns a bool
-func (obj *isisSRv6NodeMsd) IncludeMaxEndDSrh() bool {
-
-	return *obj.obj.IncludeMaxEndDSrh
-
-}
-
-// When true, advertises the Max-End-D-SRH MSD sub-TLV (MSD-Type 45). Signals the maximum number of SIDs in the SRH when applying decapsulation behaviors (End.DT4, End.DT6, End.DT46, End.DX4, End.DX6).
-// IncludeMaxEndDSrh returns a bool
-func (obj *isisSRv6NodeMsd) HasIncludeMaxEndDSrh() bool {
-	return obj.obj.IncludeMaxEndDSrh != nil
-}
-
-// When true, advertises the Max-End-D-SRH MSD sub-TLV (MSD-Type 45). Signals the maximum number of SIDs in the SRH when applying decapsulation behaviors (End.DT4, End.DT6, End.DT46, End.DX4, End.DX6).
-// SetIncludeMaxEndDSrh sets the bool value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetIncludeMaxEndDSrh(value bool) IsisSRv6NodeMsd {
-
-	obj.obj.IncludeMaxEndDSrh = &value
-	return obj
-}
-
-// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A value of 0 indicates no decapsulation support.
-// MaxEndDSrh returns a uint32
-func (obj *isisSRv6NodeMsd) MaxEndDSrh() uint32 {
-
-	return *obj.obj.MaxEndDSrh
-
-}
-
-// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A value of 0 indicates no decapsulation support.
-// MaxEndDSrh returns a uint32
-func (obj *isisSRv6NodeMsd) HasMaxEndDSrh() bool {
-	return obj.obj.MaxEndDSrh != nil
-}
-
-// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A value of 0 indicates no decapsulation support.
-// SetMaxEndDSrh sets the uint32 value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetMaxEndDSrh(value uint32) IsisSRv6NodeMsd {
-
-	obj.obj.MaxEndDSrh = &value
-	return obj
-}
-
-// When true, advertises the Maximum T.Insert MSD sub-TLV (MSD-Type 43). Signals the maximum number of SIDs that can be inserted as a new SRH using the T.Insert headend behavior (RFC 8986 Section 5.3). Used for transit insertion of SRv6 policy. Reference: RFC 8491.
-// IncludeMaxTInsert returns a bool
-func (obj *isisSRv6NodeMsd) IncludeMaxTInsert() bool {
-
-	return *obj.obj.IncludeMaxTInsert
-
-}
-
-// When true, advertises the Maximum T.Insert MSD sub-TLV (MSD-Type 43). Signals the maximum number of SIDs that can be inserted as a new SRH using the T.Insert headend behavior (RFC 8986 Section 5.3). Used for transit insertion of SRv6 policy. Reference: RFC 8491.
-// IncludeMaxTInsert returns a bool
-func (obj *isisSRv6NodeMsd) HasIncludeMaxTInsert() bool {
-	return obj.obj.IncludeMaxTInsert != nil
-}
-
-// When true, advertises the Maximum T.Insert MSD sub-TLV (MSD-Type 43). Signals the maximum number of SIDs that can be inserted as a new SRH using the T.Insert headend behavior (RFC 8986 Section 5.3). Used for transit insertion of SRv6 policy. Reference: RFC 8491.
-// SetIncludeMaxTInsert sets the bool value in the IsisSRv6NodeMsd object
-func (obj *isisSRv6NodeMsd) SetIncludeMaxTInsert(value bool) IsisSRv6NodeMsd {
-
-	obj.obj.IncludeMaxTInsert = &value
-	return obj
-}
-
-// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A value of 0 indicates T.Insert is not supported.
+// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A non-zero value is advertised as the Maximum T.Insert MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxTInsert returns a uint32
 func (obj *isisSRv6NodeMsd) MaxTInsert() uint32 {
 
@@ -532,17 +348,61 @@ func (obj *isisSRv6NodeMsd) MaxTInsert() uint32 {
 
 }
 
-// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A value of 0 indicates T.Insert is not supported.
+// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A non-zero value is advertised as the Maximum T.Insert MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // MaxTInsert returns a uint32
 func (obj *isisSRv6NodeMsd) HasMaxTInsert() bool {
 	return obj.obj.MaxTInsert != nil
 }
 
-// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A value of 0 indicates T.Insert is not supported.
+// Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A non-zero value is advertised as the Maximum T.Insert MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
 // SetMaxTInsert sets the uint32 value in the IsisSRv6NodeMsd object
 func (obj *isisSRv6NodeMsd) SetMaxTInsert(value uint32) IsisSRv6NodeMsd {
 
 	obj.obj.MaxTInsert = &value
+	return obj
+}
+
+// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A non-zero value is advertised as the Max-H-Encaps MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV. A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
+// MaxHEncaps returns a uint32
+func (obj *isisSRv6NodeMsd) MaxHEncaps() uint32 {
+
+	return *obj.obj.MaxHEncaps
+
+}
+
+// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A non-zero value is advertised as the Max-H-Encaps MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV. A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
+// MaxHEncaps returns a uint32
+func (obj *isisSRv6NodeMsd) HasMaxHEncaps() bool {
+	return obj.obj.MaxHEncaps != nil
+}
+
+// Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A non-zero value is advertised as the Max-H-Encaps MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV. A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
+// SetMaxHEncaps sets the uint32 value in the IsisSRv6NodeMsd object
+func (obj *isisSRv6NodeMsd) SetMaxHEncaps(value uint32) IsisSRv6NodeMsd {
+
+	obj.obj.MaxHEncaps = &value
+	return obj
+}
+
+// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-D-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
+// MaxEndDSrh returns a uint32
+func (obj *isisSRv6NodeMsd) MaxEndDSrh() uint32 {
+
+	return *obj.obj.MaxEndDSrh
+
+}
+
+// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-D-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
+// MaxEndDSrh returns a uint32
+func (obj *isisSRv6NodeMsd) HasMaxEndDSrh() bool {
+	return obj.obj.MaxEndDSrh != nil
+}
+
+// Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-D-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
+// SetMaxEndDSrh sets the uint32 value in the IsisSRv6NodeMsd object
+func (obj *isisSRv6NodeMsd) SetMaxEndDSrh(value uint32) IsisSRv6NodeMsd {
+
+	obj.obj.MaxEndDSrh = &value
 	return obj
 }
 
@@ -571,6 +431,16 @@ func (obj *isisSRv6NodeMsd) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.MaxTInsert != nil {
+
+		if *obj.obj.MaxTInsert > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("0 <= IsisSRv6NodeMsd.MaxTInsert <= 255 but Got %d", *obj.obj.MaxTInsert))
+		}
+
+	}
+
 	if obj.obj.MaxHEncaps != nil {
 
 		if *obj.obj.MaxHEncaps > 255 {
@@ -591,48 +461,23 @@ func (obj *isisSRv6NodeMsd) validateObj(vObj *validation, set_default bool) {
 
 	}
 
-	if obj.obj.MaxTInsert != nil {
-
-		if *obj.obj.MaxTInsert > 255 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= IsisSRv6NodeMsd.MaxTInsert <= 255 but Got %d", *obj.obj.MaxTInsert))
-		}
-
-	}
-
 }
 
 func (obj *isisSRv6NodeMsd) setDefault() {
-	if obj.obj.IncludeMaxSl == nil {
-		obj.SetIncludeMaxSl(false)
-	}
 	if obj.obj.MaxSl == nil {
 		obj.SetMaxSl(0)
-	}
-	if obj.obj.IncludeMaxEndPopSrh == nil {
-		obj.SetIncludeMaxEndPopSrh(false)
 	}
 	if obj.obj.MaxEndPopSrh == nil {
 		obj.SetMaxEndPopSrh(0)
 	}
-	if obj.obj.IncludeMaxHEncaps == nil {
-		obj.SetIncludeMaxHEncaps(false)
+	if obj.obj.MaxTInsert == nil {
+		obj.SetMaxTInsert(0)
 	}
 	if obj.obj.MaxHEncaps == nil {
 		obj.SetMaxHEncaps(0)
 	}
-	if obj.obj.IncludeMaxEndDSrh == nil {
-		obj.SetIncludeMaxEndDSrh(false)
-	}
 	if obj.obj.MaxEndDSrh == nil {
 		obj.SetMaxEndDSrh(0)
-	}
-	if obj.obj.IncludeMaxTInsert == nil {
-		obj.SetIncludeMaxTInsert(false)
-	}
-	if obj.obj.MaxTInsert == nil {
-		obj.SetMaxTInsert(0)
 	}
 
 }

@@ -3158,7 +3158,7 @@ components:
       properties:
         o_flag:
           description: |-
-            OAM flag (bit 1 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+            OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
           type: boolean
           default: false
           x-field-uid: 1
@@ -3169,94 +3169,74 @@ components:
           x-field-uid: 2
         c_flag:
           description: |-
-            Compression (uSID) flag at the node level. When set, announces that this node supports Micro-SID (uSID) compressed encoding for SRv6 SIDs as described in RFC 9800. This flag is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+            Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
+              Step 1 - Set this c_flag = true.
+              Step 2 - Configure IsisSRv6.Locator with:
+                locator "fc00:0:1::", prefix_length 48,
+                sid_structure: lb=32, ln=16, fn=16, arg=0.
+              Step 3 - Add End SIDs under the locator (c_flag=true per SID):
+                function "0001" => uSID fc00:0:1:1::  (End)
+                function "0002" => uSID fc00:0:1:2::  (End.DT46)
+              Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
+                function "00c8" => uSID fc00:0:1:c8::  (End.X)
+            A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
           type: boolean
           default: false
           x-field-uid: 3
     IsisSRv6.NodeMsd:
       description: |-
-        Node-level SRv6 Maximum SID Depth (MSD) capabilities. Each include_* flag controls whether the corresponding MSD type is advertised; the paired value field sets the advertised depth. MSD Type 41 = Max SL, Type 42 = Max End Pop, Type 44 = Max H.Encaps, Type 45 = Max End D. Reference: RFC 8491, RFC 9352 Section 6.
+        Node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
       type: object
       properties:
-        include_max_sl:
-          description: |-
-            When true, advertises the Maximum Segments Left (Max SL) MSD sub-TLV (MSD-Type 41). Signals the maximum value of the Segments Left (SL) field in an SRH that this router can process.
-          type: boolean
-          default: false
-          x-field-uid: 1
         max_sl:
           description: |-
-            Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A value of 0 indicates no SRH processing capability.
+            Maximum value of the Segments Left (SL) field in an SRH that this router can process (MSD-Type 41, RFC 9352 Section 6). A non-zero value is advertised as the Max SL MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 1
+        max_end_pop_srh:
+          description: |-
+            Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-Pop-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
           type: integer
           format: uint32
           maximum: 255
           default: 0
           x-field-uid: 2
-        include_max_end_pop_srh:
+        max_t_insert:
           description: |-
-            When true, advertises the Max-End-Pop-SRH MSD sub-TLV (MSD-Type 42). Signals the maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors.
-          type: boolean
-          default: false
+            Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A non-zero value is advertised as the Maximum T.Insert MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
           x-field-uid: 3
-        max_end_pop_srh:
+        max_h_encaps:
           description: |-
-            Maximum number of SIDs in the top SRH that this router can pop using PSP or USP End behaviors (MSD-Type 42, RFC 9352 Section 6). A value of 0 means the router cannot apply these behaviors.
+            Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A non-zero value is advertised as the Max-H-Encaps MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV. A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
           type: integer
           format: uint32
           maximum: 255
           default: 0
           x-field-uid: 4
-        include_max_h_encaps:
-          description: |-
-            When true, advertises the Max-H-Encaps MSD sub-TLV (MSD-Type 44). Signals the maximum number of SIDs that can be pushed via the H.Encaps headend encapsulation behavior.
-          type: boolean
-          default: false
-          x-field-uid: 5
-        max_h_encaps:
-          description: |-
-            Maximum number of SIDs this router can insert in the SRH using the H.Encaps behavior (MSD-Type 44, RFC 9352 Section 6). A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
-          type: integer
-          format: uint32
-          maximum: 255
-          default: 0
-          x-field-uid: 6
-        include_max_end_d_srh:
-          description: |-
-            When true, advertises the Max-End-D-SRH MSD sub-TLV (MSD-Type 45). Signals the maximum number of SIDs in the SRH when applying decapsulation behaviors (End.DT4, End.DT6, End.DT46, End.DX4, End.DX6).
-          type: boolean
-          default: false
-          x-field-uid: 7
         max_end_d_srh:
           description: |-
-            Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A value of 0 indicates no decapsulation support.
+            Maximum number of SIDs in the SRH that this router can handle while applying decapsulation behaviors such as End.DT6, End.DT4 or End.DT46 (MSD-Type 45, RFC 9352 Section 6). A non-zero value is advertised as the Max-End-D-SRH MSD sub-TLV; a value of 0 (default) suppresses the sub-TLV.
           type: integer
           format: uint32
           maximum: 255
           default: 0
-          x-field-uid: 8
-        include_max_t_insert:
-          description: |-
-            When true, advertises the Maximum T.Insert MSD sub-TLV (MSD-Type 43). Signals the maximum number of SIDs that can be inserted as a new SRH using the T.Insert headend behavior (RFC 8986 Section 5.3). Used for transit insertion of SRv6 policy. Reference: RFC 8491.
-          type: boolean
-          default: false
-          x-field-uid: 9
-        max_t_insert:
-          description: |-
-            Maximum number of SIDs this router can insert using the T.Insert behavior (MSD-Type 43, RFC 8491). A value of 0 indicates T.Insert is not supported.
-          type: integer
-          format: uint32
-          maximum: 255
-          default: 0
-          x-field-uid: 10
+          x-field-uid: 5
     IsisSRv6.Locator:
       description: |-
         IS-IS SRv6 Locator TLV (TLV type 27), as defined in RFC 9352 Section 7.1. Advertises an SRv6 locator prefix that identifies this SRv6-capable router and binds it to a specific IGP algorithm (standard SPF or Flex-Algo per RFC 9350). One Locator TLV is required per topology/algorithm combination. The SRv6 SID space is structured as: Locator prefix | Function | Argument, where the locator prefix is routable and the function identifies the specific endpoint behavior (RFC 8986 Section 3.1).
       type: object
       required:
       - locator
-      - name
+      - locator_name
       properties:
-        name:
+        locator_name:
           x-field-uid: 1
           description: |-
             Globally unique name of an object. It also serves as the primary key for arrays of objects.
@@ -3294,40 +3274,32 @@ components:
           maximum: 16777215
           default: 0
           x-field-uid: 5
-        redistribution_type:
-          description: |-
-            Controls the Up/Down redistribution bit for this locator. 'up' = normal advertisement (default); 'down' = the locator has been leaked from Level 2 to Level 1 (RFC 5305). Must be consistent with the d_flag setting.
-          type: string
-          default: up
-          x-enum:
-            up:
-              x-field-uid: 1
-            down:
-              x-field-uid: 2
-          x-field-uid: 6
-          enum:
-          - up
-          - down
         d_flag:
           description: |-
             Down bit (D-flag, bit 0 of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level 2 to Level 1 to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
           type: boolean
           default: false
-          x-field-uid: 7
+          x-field-uid: 6
         mt_id:
           description: |-
-            Multi-Topology Identifier (MT-ID) for this locator advertisement. Specifies which IS-IS topology this locator belongs to. 0 = default topology. Valid range 0-4095 (RFC 5120).
-          type: integer
-          format: uint32
-          maximum: 4095
-          default: 0
-          x-field-uid: 8
+            List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-255 (RFC 5120).
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 7
         end_sids:
           description: |-
-            List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises a locally instantiated node-local SRv6 SID, its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants), and optional SID structure information (RFC 9352 Section 7.2).
+            List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises a locally instantiated node-local SRv6 SID and its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants). Reference: RFC 9352 Section 7.2.
           type: array
           items:
             $ref: '#/components/schemas/IsisSRv6.EndSid'
+          x-field-uid: 8
+        sid_structure:
+          description: |-
+            SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+          $ref: '#/components/schemas/IsisSRv6.SidStructure'
           x-field-uid: 9
         advertise_locator_as_prefix:
           description: |-
@@ -3347,6 +3319,20 @@ components:
           maximum: 16777215
           default: 0
           x-field-uid: 1
+        redistribution_type:
+          description: |-
+            Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' = normal advertisement (default); 'down' = the locator has been leaked from Level 2 to Level 1 (RFC 5305).
+          type: string
+          default: up
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+          x-field-uid: 2
+          enum:
+          - up
+          - down
         route_origin:
           description: |-
             Origin type for the locator prefix in the IPv6 Reachability TLV (TLV 236/237). 'internal' = intra-area prefix (default); 'external' = redistributed from another protocol.
@@ -3357,7 +3343,7 @@ components:
               x-field-uid: 1
             external:
               x-field-uid: 2
-          x-field-uid: 2
+          x-field-uid: 3
           enum:
           - internal
           - external
@@ -3365,7 +3351,7 @@ components:
           description: |-
             When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, N, and A flags. Absence suppresses the sub-TLV.
           $ref: '#/components/schemas/IsisSRv6.PrefixAttributes'
-          x-field-uid: 3
+          x-field-uid: 4
     IsisSRv6.PrefixAttributes:
       description: |-
         Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as a prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.
@@ -3397,15 +3383,60 @@ components:
           x-field-uid: 4
     IsisSRv6.EndSid:
       description: |-
-        SRv6 End SID Sub-TLV (sub-TLV type 5) carried within the SRv6 Locator TLV (TLV type 27). Advertises a locally instantiated node-local SRv6 SID and its associated endpoint behavior. The SID value must be allocated from within the parent locator's prefix. Valid behaviors for node-local End SIDs are End (with PSP/USP/USD flavor variants) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
+        SRv6 End SID Sub-TLV (sub-TLV type 5) carried within the SRv6 Locator
+        TLV (TLV type 27). Advertises a locally instantiated node-local SRv6
+        SID and its associated endpoint behavior.
+        The full 128-bit SID is assembled as:
+          Locator (selected via locator/custom_locator_reference) | Function | Argument
+        Example  - given locator fc00:0:1:: /48 with sid_structure
+        lb=32, ln=16, fn=16, arg=0:
+          locator auto (=> fc00:0:1::), function "0001", argument "0000"
+          => final SID: fc00:0:1:1::
+          locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "0064", argument "0000"
+          => final SID: fc00:0:2:64::
+        Valid behaviors for node-local End SIDs are End (with PSP/USP/USD
+        flavor variants) and decapsulation behaviors (End.DT4, End.DT6,
+        End.DT46).
+        Reference: RFC 9352 Section 7.2, RFC 8986.
       type: object
       properties:
-        sid:
+        locator:
           description: |-
-            The 128-bit SRv6 SID value in IPv6 address format. Must be allocated from within the parent locator's prefix space, following the structure: Locator | Function | Argument (RFC 8986 Section 3.1).
+            Selects which locator from the IsisSRv6.Locator list to use as the locator part of this End SID. 'auto' (default) uses the enclosing IsisSRv6.Locator  - the parent Locator TLV that contains this End SID. Suitable for the typical case where each End SID belongs to its containing locator. 'custom_locator_reference' uses a specific locator identified by custom_locator_reference  - for cases where multiple locators are configured and a particular one must be selected, e.g. for a Flex-Algo binding.
           type: string
-          format: ipv6
-          x-field-uid: 1
+          default: auto
+          x-enum:
+            auto:
+              x-field-uid: 1
+            custom_locator_reference:
+              x-field-uid: 2
+          x-field-uid: 7
+          enum:
+          - auto
+          - custom_locator_reference
+        custom_locator_reference:
+          description: |
+            Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
+
+            x-constraint:
+            - /components/schemas/IsisSRv6.Locator/properties/locator_name
+          type: string
+          x-constraint:
+          - /components/schemas/IsisSRv6.Locator/properties/locator_name
+          x-field-uid: 8
+        function:
+          description: |-
+            The Function part of this End SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "0001" places value 1 in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:1::.
+          type: string
+          format: hex
+          x-field-uid: 5
+        argument:
+          description: |-
+            The Argument part of this End SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match argument_length in the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is needed (argument_length 0 or 16 with no value).
+          type: string
+          format: hex
+          default: '0000'
+          x-field-uid: 6
         endpoint_behavior:
           description: |-
             The endpoint behavior for this SRv6 End SID, encoded as a 2-octet behavior codepoint (RFC 8986 Section 7.4). Defines how the router processes packets arriving with this SID as the Active Segment. Valid node-level behaviors for End SID Sub-TLV type 5 are End variants (with PSP/USP/USD flavors) and decapsulation behaviors.
@@ -3471,26 +3502,55 @@ components:
           - end_dt46
         c_flag:
           description: |-
-            Compression (uSID) flag. When set, indicates that this SID supports Micro-SID (uSID) compressed encoding, enabling multiple node segments to be packed within a single 128-bit SID carrier using the Argument field. Requires the SRv6 SID Structure Sub-Sub-TLV to be included to describe the bit allocation. Reference: draft-filsfils-spring-net-pgm-extension-srv6-usid, RFC 9800.
+            Compression (uSID) flag. When set, this End SID is a Micro-SID (uSID) per RFC 9800. A headend router can pack it into a shared 128-bit uSID container alongside uSIDs from other nodes in the same /32 uSID block, steering a multi-hop path without a Segment Routing Header. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the parent IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:
+              c_flag=true, function "0001" => uSID fc00:0:1:1::  (End)
+              c_flag=true, function "0002" => uSID fc00:0:1:2::  (End.DT46)
+            For a 2-hop path via node 1 (End "0001") then node 2 (End "0001"), the headend builds container DA = fc00:0:1:1:2:1:: - two 32-bit uSID slots [LN=1,FN=1] and [LN=2,FN=1] packed after the /32 block prefix. Reference: RFC 9800.
           type: boolean
           default: false
           x-field-uid: 3
-        sid_structure:
-          description: |-
-            SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition of this SID value. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. When present, the sub-sub-TLV is included in the advertisement. Typically set when c_flag is true (RFC 9352 Section 9).
-          $ref: '#/components/schemas/IsisSRv6.SidStructure'
-          x-field-uid: 4
     IsisSRv6.AdjSid:
       description: |-
-        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds a 128-bit SRv6 SID to a specific outgoing interface and next-hop, enabling traffic steering across a specific L3 adjacency. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3.
+        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds a 128-bit SRv6 SID to a specific outgoing interface and next-hop, enabling traffic steering across a specific L3 adjacency. The full 128-bit SID is assembled as:
+          Locator (selected via locator/custom_locator_reference) | Function | Argument
+        Example  - given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:
+          locator auto (=> fc00:0:1::), function "00c8"
+          => final adjacency SID: fc00:0:1:c8::
+          locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9"
+          => final adjacency SID: fc00:0:2:c9::
+        Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3.
       type: object
       properties:
-        sid:
+        locator:
           description: |-
-            The 128-bit SRv6 SID value in IPv6 address format for this adjacency. Must be allocated from the advertising node's locator prefix space.
+            Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators  - suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference  - use this when multiple locators are configured and a particular one must be selected, e.g. for a Flex-Algo binding.
           type: string
-          format: ipv6
-          x-field-uid: 1
+          default: auto
+          x-enum:
+            auto:
+              x-field-uid: 1
+            custom_locator_reference:
+              x-field-uid: 2
+          x-field-uid: 10
+          enum:
+          - auto
+          - custom_locator_reference
+        custom_locator_reference:
+          description: |
+            Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
+
+            x-constraint:
+            - /components/schemas/IsisSRv6.Locator/properties/locator_name
+          type: string
+          x-constraint:
+          - /components/schemas/IsisSRv6.Locator/properties/locator_name
+          x-field-uid: 11
+        function:
+          description: |-
+            The Function part of this adjacency SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+          type: string
+          format: hex
+          x-field-uid: 12
         endpoint_behavior:
           description: |-
             The endpoint behavior for this adjacency SID, encoded as a 2-octet behavior codepoint (RFC 8986 Section 7.4). Valid adjacency-level behaviors for End.X SID Sub-TLV types 43/44 are End.X variants (with PSP/USP/USD flavors) and per-CE cross-connect decapsulation behaviors (End.DX4, End.DX6).
@@ -3587,7 +3647,10 @@ components:
           x-field-uid: 7
         c_flag:
           description: |-
-            Compression (uSID) flag. When set, indicates this adjacency SID supports Micro-SID (uSID) compressed encoding, allowing multiple adjacency micro-segments to be stacked within a single 128-bit SID carrier using the Argument field.
+            Compression (uSID) flag. When set, this adjacency SID is a Micro-SID (uSID) End.X per RFC 9800. A headend can pack it into a shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over a specific L3 adjacency within a compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:
+              c_flag=true, function "00c8" => uSID fc00:0:1:c8::  (End.X)
+              c_flag=true, function "00c9" => uSID fc00:0:1:c9::  (End.X alternate link)
+            For a path routed via node 1's adjacency "00c8" then node 2 End "0001", the headend builds DA = fc00:0:1:c8:2:1:: encoding both hops in a single 128-bit address. Reference: RFC 9800.
           type: boolean
           default: false
           x-field-uid: 8
@@ -3605,10 +3668,10 @@ components:
       properties:
         locator_block_length:
           description: |-
-            Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1.
+            Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value 1 (a zero-bit locator block is not meaningful).
           type: integer
           format: uint32
-          minimum: 0
+          minimum: 1
           maximum: 128
           default: 32
           x-field-uid: 1
@@ -3641,79 +3704,49 @@ components:
           x-field-uid: 4
     IsisSRv6.LinkMsd:
       description: |-
-        Link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. Advertised as MSD sub-TLVs within the neighbor TLVs per RFC 8491. Reference: RFC 8491, RFC 9352 Section 6.
+        Link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. A non-zero value causes the corresponding MSD sub-TLV to be included in the neighbor TLV advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
       type: object
       properties:
-        include_max_sl:
-          description: |-
-            When true, advertises the Maximum Segments Left (Max SL) MSD (MSD-Type 41) at the link level. Signals the maximum SL value in an SRH that can be processed on this interface.
-          type: boolean
-          default: false
-          x-field-uid: 1
         max_sl:
           description: |-
-            Maximum value of the Segments Left (SL) field in an SRH that this interface can process (MSD-Type 41). A value of 0 indicates no SRH processing support on this link.
+            Maximum value of the Segments Left (SL) field in an SRH that this interface can process (MSD-Type 41). A non-zero value is advertised as the Max SL MSD sub-TLV at the link level; a value of 0 (default) suppresses the sub-TLV.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 1
+        max_end_pop_srh:
+          description: |-
+            Maximum number of SIDs in the top SRH for PSP or USP End behaviors on this interface (MSD-Type 42). A non-zero value is advertised as the Max-End-Pop-SRH MSD sub-TLV at the link level; a value of 0 (default) suppresses the sub-TLV.
           type: integer
           format: uint32
           maximum: 255
           default: 0
           x-field-uid: 2
-        include_max_end_pop_srh:
+        max_t_insert:
           description: |-
-            When true, advertises the Max-End-Pop-SRH MSD (MSD-Type 42) at the link level.
-          type: boolean
-          default: false
+            Maximum number of SIDs insertable via T.Insert behavior on this interface (MSD-Type 43, RFC 8491). A non-zero value is advertised as the Maximum T.Insert MSD sub-TLV at the link level; a value of 0 (default) suppresses the sub-TLV.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
           x-field-uid: 3
-        max_end_pop_srh:
+        max_h_encaps:
           description: |-
-            Maximum number of SIDs in the top SRH for PSP or USP End behaviors on this interface (MSD-Type 42). A value of 0 indicates these behaviors are not supported on this link.
+            Maximum number of SIDs for H.Encaps behavior on this interface (MSD-Type 44). A non-zero value is advertised as the Max-H-Encaps MSD sub-TLV at the link level; a value of 0 (default) suppresses the sub-TLV. A value of 0 with E-flag set indicates IPinIP encapsulation without SRH.
           type: integer
           format: uint32
           maximum: 255
           default: 0
           x-field-uid: 4
-        include_max_h_encaps:
-          description: |-
-            When true, advertises the Max-H-Encaps MSD (MSD-Type 44) at the link level.
-          type: boolean
-          default: false
-          x-field-uid: 5
-        max_h_encaps:
-          description: |-
-            Maximum number of SIDs for H.Encaps behavior on this interface (MSD-Type 44). A value of 0 indicates H.Encaps is not supported on this link.
-          type: integer
-          format: uint32
-          maximum: 255
-          default: 0
-          x-field-uid: 6
-        include_max_end_d_srh:
-          description: |-
-            When true, advertises the Max-End-D-SRH MSD (MSD-Type 45) at the link level.
-          type: boolean
-          default: false
-          x-field-uid: 7
         max_end_d_srh:
           description: |-
-            Maximum number of SIDs in the SRH for decapsulation behaviors (End.DT4/DT6/DT46/DX4/DX6) on this interface (MSD-Type 45). A value of 0 indicates decapsulation behaviors are not supported on this link.
+            Maximum number of SIDs in the SRH for decapsulation behaviors (End.DT4/DT6/DT46/DX4/DX6) on this interface (MSD-Type 45). A non-zero value is advertised as the Max-End-D-SRH MSD sub-TLV at the link level; a value of 0 (default) suppresses the sub-TLV.
           type: integer
           format: uint32
           maximum: 255
           default: 0
-          x-field-uid: 8
-        include_max_t_insert:
-          description: |-
-            When true, advertises the Maximum T.Insert MSD (MSD-Type 43) at the link level. Signals the maximum number of SIDs that can be inserted via the T.Insert headend behavior on this specific interface. Reference: RFC 8491.
-          type: boolean
-          default: false
-          x-field-uid: 9
-        max_t_insert:
-          description: |-
-            Maximum number of SIDs insertable via T.Insert behavior on this interface (MSD-Type 43, RFC 8491). A value of 0 indicates T.Insert is not supported on this link.
-          type: integer
-          format: uint32
-          maximum: 255
-          default: 0
-          x-field-uid: 10
+          x-field-uid: 5
     Isis.Basic:
       description: |-
         This contains ISIS router basic properties.
@@ -4333,7 +4366,7 @@ components:
           x-field-uid: 1
         srv6_locators:
           description: |-
-            List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Reference: RFC 9352 Section 7.1.
+            List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Locators are scoped to this IS-IS instance and cannot be shared across other protocol instances. Reference: RFC 9352 Section 7.1.
           type: array
           items:
             $ref: '#/components/schemas/IsisSRv6.Locator'
@@ -27057,17 +27090,6 @@ components:
           items:
             $ref: '#/components/schemas/IsisLsp.Capability'
           x-field-uid: 8
-        srv6_locator_tlvs:
-          description: |-
-            Array of SRv6 Locator TLVs (type 27) present in this LSP.
-            Each entry represents one SRv6 locator prefix advertisement,
-            binding a node-local IPv6 prefix to an IGP algorithm and carrying
-            node-local End SID Sub-TLVs for SRv6 endpoint behaviors.
-            Reference: RFC 9352 Section 7.1.
-          type: array
-          items:
-            $ref: '#/components/schemas/IsisLsp.SRv6LocatorTlv'
-          x-field-uid: 9
     IsisLsp.Hostname:
       description: |-
         It contains Hostname for the TLV 137.
@@ -27171,17 +27193,6 @@ components:
           items:
             $ref: '#/components/schemas/IsisLsp.AdjacencySid'
           x-field-uid: 2
-        srv6_adj_sids:
-          description: |-
-            List of SRv6 Adjacency SID Sub-TLVs (End.X SID sub-TLV type 43
-            for P2P or LAN End.X SID sub-TLV type 44 for broadcast) learned
-            from this neighbor. Each entry carries a 128-bit SRv6 SID bound
-            to a specific outgoing adjacency.
-            Reference: RFC 9352 Sections 8.1-8.2.
-          type: array
-          items:
-            $ref: '#/components/schemas/IsisLsp.SRv6AdjSid'
-          x-field-uid: 3
     IsisLsp.Ipv4InternalReachabilityTlv:
       description: |-
         This container defines list of IPv4 internal reachability information in one IPv4 internal reachability TLV.
@@ -27526,15 +27537,6 @@ components:
           items:
             $ref: '#/components/schemas/IsisLsp.Srlb'
           x-field-uid: 6
-        srv6_capability:
-          description: |-
-            SRv6 Capabilities Sub-TLV (sub-TLV type 25) present within this
-            Router CAPABILITY TLV. Announces that the originating router is
-            an SRv6 Segment Endpoint Node, indicates OAM support (O-flag),
-            and carries node-level SRv6 Maximum SID Depth (MSD) values.
-            Reference: RFC 9352 Section 2, RFC 8491.
-          $ref: '#/components/schemas/IsisLsp.SRv6Capability'
-          x-field-uid: 7
     IsisLsp.SRCapability:
       description: |-
         Container of IS-IS SR-CAPABILITY Sub-Tlv.
@@ -27719,404 +27721,6 @@ components:
             remains consistent across router restart and/or interface flap.
           type: boolean
           x-field-uid: 6
-    IsisLsp.SRv6Capability:
-      description: |-
-        SRv6 Capabilities Sub-TLV (sub-TLV type 25) learned from the IS-IS Router CAPABILITY TLV (TLV 242) in a received LSP. Indicates that the originating router is an SRv6 Segment Endpoint Node and carries optional OAM support (O-flag) and node-level SRv6 MSD values. Reference: RFC 9352 Section 2, RFC 8491.
-      type: object
-      properties:
-        o_flag:
-          description: |-
-            OAM flag (bit 1). When set, the originating router supports the use of the O-bit in the Segment Routing Header (SRH) for OAM operations as defined in RFC 9259.
-          type: boolean
-          x-field-uid: 1
-        node_msds:
-          description: |-
-            Node-level SRv6 Maximum SID Depth (MSD) values learned from MSD sub-TLVs within the Router Capability TLV.
-          $ref: '#/components/schemas/IsisLsp.SRv6NodeMsd'
-          x-field-uid: 2
-        c_flag:
-          description: |-
-            Compression (uSID) flag. When set, the originating router supports Micro-SID (uSID) compressed encoding for SRv6 SIDs. Learned from the Flags field of the SRv6 Capabilities Sub-TLV (sub-TLV type 25). Reference: RFC 9352 Section 2, RFC 9800.
-          type: boolean
-          x-field-uid: 3
-    IsisLsp.SRv6NodeMsd:
-      description: |-
-        Node-level SRv6 Maximum SID Depth (MSD) values learned from a received LSP. Each field represents the advertised depth limit for a specific SRv6 forwarding behavior. MSD Type 41 = Max SL, Type 42 = Max End Pop, Type 44 = Max H.Encaps, Type 45 = Max End D. Reference: RFC 8491, RFC 9352 Section 6.
-      type: object
-      properties:
-        max_sl:
-          description: |-
-            Maximum value of the Segments Left (SL) field in an SRH that the originating router can process (MSD-Type 41). Absent if not advertised; value of 0 means no SRH processing support.
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 1
-        max_end_pop_srh:
-          description: |-
-            Maximum number of SIDs in the top SRH that the originating router can pop using PSP or USP End behaviors (MSD-Type 42). Absent if not advertised.
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 2
-        max_h_encaps:
-          description: |-
-            Maximum number of SIDs the originating router can push via H.Encaps behavior (MSD-Type 44). Absent if not advertised.
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 3
-        max_end_d_srh:
-          description: |-
-            Maximum number of SIDs in the SRH the originating router can handle for decapsulation behaviors End.DT4/DT6/DT46/DX4/DX6 (MSD-Type 45). Absent if not advertised.
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 4
-        max_t_insert:
-          description: |-
-            Maximum number of SIDs the originating router can insert using the T.Insert headend behavior (MSD-Type 43, RFC 8491). Absent if not advertised by the originating router.
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 5
-    IsisLsp.SRv6LocatorTlv:
-      description: |-
-        SRv6 Locator TLV (TLV type 27) learned from a received IS-IS LSP. Carries an SRv6 locator prefix that identifies the originating node, the associated IGP algorithm, metric, and a list of locally instantiated End SID Sub-TLVs. Reference: RFC 9352 Section 7.1.
-      type: object
-      properties:
-        locator:
-          description: |-
-            The SRv6 locator IPv6 prefix advertised in this TLV.
-          type: string
-          format: ipv6
-          x-field-uid: 1
-        prefix_length:
-          description: |-
-            Number of significant bits in the locator field (1-128).
-          type: integer
-          format: uint32
-          minimum: 1
-          maximum: 128
-          x-field-uid: 2
-        algorithm:
-          description: |-
-            IGP algorithm identifier for this locator. 0 = SPF, 1 = Strict SPF, 128-255 = Flex-Algo (RFC 9350, RFC 8665).
-          type: integer
-          format: uint32
-          minimum: 0
-          maximum: 255
-          x-field-uid: 3
-        metric:
-          description: |-
-            The metric (cost) associated with this SRv6 locator prefix.
-          type: integer
-          format: uint32
-          x-field-uid: 4
-        redistribution_type:
-          description: |-
-            Up/Down redistribution bit for this locator advertisement. 'up' = normal advertisement; 'down' = leaked from L2 to L1.
-          type: string
-          x-enum:
-            up:
-              x-field-uid: 1
-            down:
-              x-field-uid: 2
-          x-field-uid: 5
-          enum:
-          - up
-          - down
-        d_flag:
-          description: |-
-            Down bit (D-flag). Set when this locator was leaked from Level 2 to Level 1 (RFC 9352 Section 7.1).
-          type: boolean
-          x-field-uid: 6
-        mt_id:
-          description: |-
-            Multi-Topology ID for this locator. 0 = default topology.
-          type: integer
-          format: uint32
-          maximum: 4095
-          x-field-uid: 7
-        end_sids:
-          description: |-
-            List of SRv6 End SID Sub-TLVs (sub-TLV type 5) carried within this Locator TLV. Each entry describes a node-local SRv6 SID and its endpoint behavior. Reference: RFC 9352 Section 7.2.
-          type: array
-          items:
-            $ref: '#/components/schemas/IsisLsp.SRv6EndSid'
-          x-field-uid: 8
-        advertise_locator_as_prefix:
-          description: |-
-            Present when the originating router also advertised this locator as an IS-IS IPv6 Reachability prefix (TLV 236/237). Carries the prefix attribute flags received in that advertisement.
-          $ref: '#/components/schemas/IsisLsp.SRv6AdvertisedLocatorAsPrefix'
-          x-field-uid: 9
-    IsisLsp.SRv6AdvertisedLocatorAsPrefix:
-      description: |-
-        Learned state for the secondary IPv6 Reachability prefix advertisement (TLV 236/237) of an SRv6 locator. Present only when the originating router advertised the locator prefix alongside the SRv6 Locator TLV. Reference: RFC 9352 Section 7.1.
-      type: object
-      properties:
-        prefix_attributes:
-          description: |-
-            Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) received in the locator's IPv6 Reachability advertisement. Present only if the originating router included this sub-TLV.
-          $ref: '#/components/schemas/IsisLsp.SRv6PrefixAttributes'
-          x-field-uid: 1
-    IsisLsp.SRv6PrefixAttributes:
-      description: |-
-        Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) learned from the IPv6 Reachability advertisement of an SRv6 locator prefix. Reference: RFC 7794.
-      type: object
-      properties:
-        x_flag:
-          description: |-
-            External prefix flag (bit 0, RFC 7794). Set if the locator prefix was redistributed from another protocol.
-          type: boolean
-          x-field-uid: 1
-        r_flag:
-          description: |-
-            Re-advertisement flag (bit 1, RFC 7794). Set if the locator prefix was leaked between IS-IS levels.
-          type: boolean
-          x-field-uid: 2
-        n_flag:
-          description: |-
-            Node flag (bit 2, RFC 7794). Set if this prefix identifies the advertising router.
-          type: boolean
-          x-field-uid: 3
-        a_flag:
-          description: |-
-            Anycast flag (bit 5, RFC 7794). Set if this locator is an anycast prefix shared across multiple routers.
-          type: boolean
-          x-field-uid: 4
-    IsisLsp.SRv6EndSid:
-      description: |-
-        SRv6 End SID Sub-TLV (sub-TLV type 5) learned from an SRv6 Locator TLV (type 27) in a received LSP. Describes a node-local SRv6 SID, its endpoint behavior, and optional SID structure information. Reference: RFC 9352 Section 7.2, RFC 8986.
-      type: object
-      properties:
-        sid:
-          description: |-
-            The 128-bit SRv6 SID value in IPv6 address format.
-          type: string
-          format: ipv6
-          x-field-uid: 1
-        endpoint_behavior:
-          description: |-
-            Endpoint behavior codepoint for this End SID (RFC 8986 Section 7.4). Indicates how the originating router processes packets arriving with this SID as the Active Segment.
-          type: string
-          x-enum:
-            end:
-              description: |-
-                End (RFC 8986 codepoint 1).
-              x-field-uid: 1
-            end_with_psp:
-              description: |-
-                End with PSP flavor (RFC 8986 codepoint 2).
-              x-field-uid: 2
-            end_with_usp:
-              description: |-
-                End with USP flavor (RFC 8986 codepoint 3).
-              x-field-uid: 3
-            end_with_psp_usp:
-              description: |-
-                End with PSP+USP flavors (RFC 8986 codepoint 4).
-              x-field-uid: 4
-            end_with_usd:
-              description: |-
-                End with USD flavor (RFC 8986 codepoint 28).
-              x-field-uid: 5
-            end_with_psp_usd:
-              description: |-
-                End with PSP+USD flavors (RFC 8986 codepoint 29).
-              x-field-uid: 6
-            end_with_usp_usd:
-              description: |-
-                End with USP+USD flavors (RFC 8986 codepoint 30).
-              x-field-uid: 7
-            end_with_psp_usp_usd:
-              description: |-
-                End with PSP+USP+USD flavors (RFC 8986 codepoint 31).
-              x-field-uid: 8
-            end_dt4:
-              description: |-
-                End.DT4 IPv4 table lookup (RFC 8986 codepoint 19).
-              x-field-uid: 9
-            end_dt6:
-              description: |-
-                End.DT6 IPv6 table lookup (RFC 8986 codepoint 18).
-              x-field-uid: 10
-            end_dt46:
-              description: |-
-                End.DT46 dual-stack table lookup (RFC 8986 codepoint 20).
-              x-field-uid: 11
-          x-field-uid: 2
-          enum:
-          - end
-          - end_with_psp
-          - end_with_usp
-          - end_with_psp_usp
-          - end_with_usd
-          - end_with_psp_usd
-          - end_with_usp_usd
-          - end_with_psp_usp_usd
-          - end_dt4
-          - end_dt6
-          - end_dt46
-        sid_structure:
-          description: |-
-            SRv6 SID Structure Sub-Sub-TLV (type 1) if present, describing the bit-field decomposition of this SID value. Specifies Locator Block, Locator Node, Function, and Argument lengths in bits. Reference: RFC 9352 Section 9.
-          $ref: '#/components/schemas/IsisLsp.SRv6SidStructure'
-          x-field-uid: 3
-    IsisLsp.SRv6AdjSid:
-      description: |-
-        SRv6 Adjacency SID Sub-TLV learned from the Extended IS Reachability TLV (type 22) or MT-ISN TLV (type 222) in a received LSP. Point-to-point End.X SID Sub-TLV has sub-TLV type 43; LAN End.X SID Sub-TLV has sub-TLV type 44 and includes the neighbor System ID. Reference: RFC 9352 Sections 8.1-8.2, RFC 8986.
-      type: object
-      properties:
-        type:
-          description: |-
-            The sub-TLV type that carried this adjacency SID. 'end_x_sid' = point-to-point (sub-TLV type 43); 'lan_end_x_sid' = LAN adjacency (sub-TLV type 44, includes neighbor System ID in neighbor_id field).
-          type: string
-          x-enum:
-            end_x_sid:
-              x-field-uid: 1
-            lan_end_x_sid:
-              x-field-uid: 2
-          x-field-uid: 1
-          enum:
-          - end_x_sid
-          - lan_end_x_sid
-        neighbor_id:
-          description: |-
-            IS-IS System ID of the LAN neighbor from which this End.X SID was received. Present only when type is 'lan_end_x_sid' (sub-TLV type 44, RFC 9352 Section 8.2).
-          type: string
-          format: hex
-          x-field-uid: 2
-        sid:
-          description: |-
-            The 128-bit SRv6 End.X SID value in IPv6 address format.
-          type: string
-          format: ipv6
-          x-field-uid: 3
-        endpoint_behavior:
-          description: |-
-            Endpoint behavior codepoint for this adjacency SID (RFC 8986 Section 7.4).
-          type: string
-          x-enum:
-            end_x:
-              description: |-
-                End.X adjacency cross-connect (RFC 8986 codepoint 5).
-              x-field-uid: 1
-            end_x_with_psp:
-              description: |-
-                End.X with PSP flavor (RFC 8986 codepoint 6).
-              x-field-uid: 2
-            end_x_with_usp:
-              description: |-
-                End.X with USP flavor (RFC 8986 codepoint 7).
-              x-field-uid: 3
-            end_x_with_psp_usp:
-              description: |-
-                End.X with PSP+USP flavors (RFC 8986 codepoint 8).
-              x-field-uid: 4
-            end_x_with_usd:
-              description: |-
-                End.X with USD flavor (RFC 8986 codepoint 32).
-              x-field-uid: 5
-            end_x_with_psp_usd:
-              description: |-
-                End.X with PSP+USD flavors (RFC 8986 codepoint 33).
-              x-field-uid: 6
-            end_x_with_usp_usd:
-              description: |-
-                End.X with USP+USD flavors (RFC 8986 codepoint 34).
-              x-field-uid: 7
-            end_x_with_psp_usp_usd:
-              description: |-
-                End.X with PSP+USP+USD flavors (RFC 8986 codepoint 35).
-              x-field-uid: 8
-            end_dx4:
-              description: |-
-                End.DX4 IPv4 cross-connect (RFC 8986 codepoint 17).
-              x-field-uid: 9
-            end_dx6:
-              description: |-
-                End.DX6 IPv6 cross-connect (RFC 8986 codepoint 16).
-              x-field-uid: 10
-          x-field-uid: 4
-          enum:
-          - end_x
-          - end_x_with_psp
-          - end_x_with_usp
-          - end_x_with_psp_usp
-          - end_x_with_usd
-          - end_x_with_psp_usd
-          - end_x_with_usp_usd
-          - end_x_with_psp_usp_usd
-          - end_dx4
-          - end_dx6
-        b_flag:
-          description: |-
-            Backup flag. When set, this End.X SID is eligible for IP-FRR protection (RFC 9352 Section 8.1).
-          type: boolean
-          x-field-uid: 5
-        s_flag:
-          description: |-
-            Set flag. When set, this End.X SID refers to a set of adjacencies (RFC 9352 Section 8.1).
-          type: boolean
-          x-field-uid: 6
-        p_flag:
-          description: |-
-            Persistent flag. When set, the SID value is stable across router restarts and interface flaps (RFC 9352 Section 8.1).
-          type: boolean
-          x-field-uid: 7
-        weight:
-          description: |-
-            Weight for load balancing across the adjacency set when S-flag is set (RFC 9352 Section 8.1).
-          type: integer
-          format: uint32
-          maximum: 255
-          x-field-uid: 8
-        algorithm:
-          description: |-
-            IGP algorithm bound to this adjacency SID. 0 = SPF, 1 = Strict SPF, 128-255 = Flex-Algo (RFC 9350, RFC 8665).
-          type: integer
-          format: uint32
-          minimum: 0
-          maximum: 255
-          x-field-uid: 9
-        sid_structure:
-          description: |-
-            SRv6 SID Structure Sub-Sub-TLV (type 1) if present, describing the internal bit-field decomposition of this adjacency SID. Reference: RFC 9352 Section 9.
-          $ref: '#/components/schemas/IsisLsp.SRv6SidStructure'
-          x-field-uid: 10
-    IsisLsp.SRv6SidStructure:
-      description: |-
-        SRv6 SID Structure Sub-Sub-TLV (type 1) learned from a received LSP. Describes the internal bit-field decomposition of an SRv6 SID, enabling routers to independently interpret each component of the 128-bit SID value. The sum of all four length fields must not exceed 128 bits. Reference: RFC 9352 Section 9.
-      type: object
-      properties:
-        locator_block_length:
-          description: |-
-            Number of bits in the Locator Block (LB) field of the SID. The common IPv6 prefix shared by all SIDs in the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format).
-          type: integer
-          format: uint32
-          maximum: 128
-          x-field-uid: 1
-        locator_node_length:
-          description: |-
-            Number of bits in the Locator Node (LN) field of the SID. Identifies the specific node within the Locator Block (e.g., 16 bits in the uSID F3216 format).
-          type: integer
-          format: uint32
-          maximum: 128
-          x-field-uid: 2
-        function_length:
-          description: |-
-            Number of bits in the Function field of the SID. Identifies the specific endpoint behavior on this node (e.g., 16 bits in the uSID F3216 format).
-          type: integer
-          format: uint32
-          maximum: 128
-          x-field-uid: 3
-        argument_length:
-          description: |-
-            Number of bits in the Argument field of the SID. Used for VPN table IDs or compressed next-SID encodings in Micro-SID stacking. 0 for standard SIDs without argument (RFC 9800).
-          type: integer
-          format: uint32
-          maximum: 128
-          x-field-uid: 4
     LldpNeighbors.State.Request:
       description: |-
         The request to retrieve LLDP neighbor information for a given instance.

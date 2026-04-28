@@ -279,10 +279,10 @@ type IsisSRv6NodeCapability interface {
 	// HasOFlag checks if OFlag has been set in IsisSRv6NodeCapability
 	HasOFlag() bool
 	// NodeMsds returns IsisSRv6NodeMsd, set in IsisSRv6NodeCapability.
-	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. Each include_* flag controls whether the corresponding MSD type is advertised; the paired value field sets the advertised depth. MSD Type 41 = Max SL, Type 42 = Max End Pop, Type 44 = Max H.Encaps, Type 45 = Max End D. Reference: RFC 8491, RFC 9352 Section 6.
+	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
 	NodeMsds() IsisSRv6NodeMsd
 	// SetNodeMsds assigns IsisSRv6NodeMsd provided by user to IsisSRv6NodeCapability.
-	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. Each include_* flag controls whether the corresponding MSD type is advertised; the paired value field sets the advertised depth. MSD Type 41 = Max SL, Type 42 = Max End Pop, Type 44 = Max H.Encaps, Type 45 = Max End D. Reference: RFC 8491, RFC 9352 Section 6.
+	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
 	SetNodeMsds(value IsisSRv6NodeMsd) IsisSRv6NodeCapability
 	// HasNodeMsds checks if NodeMsds has been set in IsisSRv6NodeCapability
 	HasNodeMsds() bool
@@ -295,7 +295,7 @@ type IsisSRv6NodeCapability interface {
 	setNil()
 }
 
-// OAM flag (bit 1 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+// OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
 // OFlag returns a bool
 func (obj *isisSRv6NodeCapability) OFlag() bool {
 
@@ -303,13 +303,13 @@ func (obj *isisSRv6NodeCapability) OFlag() bool {
 
 }
 
-// OAM flag (bit 1 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+// OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
 // OFlag returns a bool
 func (obj *isisSRv6NodeCapability) HasOFlag() bool {
 	return obj.obj.OFlag != nil
 }
 
-// OAM flag (bit 1 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+// OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
 // SetOFlag sets the bool value in the IsisSRv6NodeCapability object
 func (obj *isisSRv6NodeCapability) SetOFlag(value bool) IsisSRv6NodeCapability {
 
@@ -345,7 +345,17 @@ func (obj *isisSRv6NodeCapability) SetNodeMsds(value IsisSRv6NodeMsd) IsisSRv6No
 	return obj
 }
 
-// Compression (uSID) flag at the node level. When set, announces that this node supports Micro-SID (uSID) compressed encoding for SRv6 SIDs as described in RFC 9800. This flag is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
+// Step 1 - Set this c_flag = true.
+// Step 2 - Configure IsisSRv6.Locator with:
+// locator "fc00:0:1::", prefix_length 48,
+// sid_structure: lb=32, ln=16, fn=16, arg=0.
+// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
+// function "0001" => uSID fc00:0:1:1::  (End)
+// function "0002" => uSID fc00:0:1:2::  (End.DT46)
+// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
+// function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6NodeCapability) CFlag() bool {
 
@@ -353,13 +363,33 @@ func (obj *isisSRv6NodeCapability) CFlag() bool {
 
 }
 
-// Compression (uSID) flag at the node level. When set, announces that this node supports Micro-SID (uSID) compressed encoding for SRv6 SIDs as described in RFC 9800. This flag is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
+// Step 1 - Set this c_flag = true.
+// Step 2 - Configure IsisSRv6.Locator with:
+// locator "fc00:0:1::", prefix_length 48,
+// sid_structure: lb=32, ln=16, fn=16, arg=0.
+// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
+// function "0001" => uSID fc00:0:1:1::  (End)
+// function "0002" => uSID fc00:0:1:2::  (End.DT46)
+// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
+// function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6NodeCapability) HasCFlag() bool {
 	return obj.obj.CFlag != nil
 }
 
-// Compression (uSID) flag at the node level. When set, announces that this node supports Micro-SID (uSID) compressed encoding for SRv6 SIDs as described in RFC 9800. This flag is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
+// Step 1 - Set this c_flag = true.
+// Step 2 - Configure IsisSRv6.Locator with:
+// locator "fc00:0:1::", prefix_length 48,
+// sid_structure: lb=32, ln=16, fn=16, arg=0.
+// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
+// function "0001" => uSID fc00:0:1:1::  (End)
+// function "0002" => uSID fc00:0:1:2::  (End.DT46)
+// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
+// function "00c8" => uSID fc00:0:1:c8::  (End.X)
+// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
 // SetCFlag sets the bool value in the IsisSRv6NodeCapability object
 func (obj *isisSRv6NodeCapability) SetCFlag(value bool) IsisSRv6NodeCapability {
 

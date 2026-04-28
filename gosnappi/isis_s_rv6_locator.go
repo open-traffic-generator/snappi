@@ -17,6 +17,7 @@ type isisSRv6Locator struct {
 	marshaller                     marshalIsisSRv6Locator
 	unMarshaller                   unMarshalIsisSRv6Locator
 	endSidsHolder                  IsisSRv6LocatorIsisSRv6EndSidIter
+	sidStructureHolder             IsisSRv6SidStructure
 	advertiseLocatorAsPrefixHolder IsisSRv6AdvertiseLocatorAsPrefix
 }
 
@@ -246,6 +247,7 @@ func (obj *isisSRv6Locator) Clone() (IsisSRv6Locator, error) {
 
 func (obj *isisSRv6Locator) setNil() {
 	obj.endSidsHolder = nil
+	obj.sidStructureHolder = nil
 	obj.advertiseLocatorAsPrefixHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
@@ -274,10 +276,10 @@ type IsisSRv6Locator interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Name returns string, set in IsisSRv6Locator.
-	Name() string
-	// SetName assigns string provided by user to IsisSRv6Locator
-	SetName(value string) IsisSRv6Locator
+	// LocatorName returns string, set in IsisSRv6Locator.
+	LocatorName() string
+	// SetLocatorName assigns string provided by user to IsisSRv6Locator
+	SetLocatorName(value string) IsisSRv6Locator
 	// Locator returns string, set in IsisSRv6Locator.
 	Locator() string
 	// SetLocator assigns string provided by user to IsisSRv6Locator
@@ -300,26 +302,30 @@ type IsisSRv6Locator interface {
 	SetMetric(value uint32) IsisSRv6Locator
 	// HasMetric checks if Metric has been set in IsisSRv6Locator
 	HasMetric() bool
-	// RedistributionType returns IsisSRv6LocatorRedistributionTypeEnum, set in IsisSRv6Locator
-	RedistributionType() IsisSRv6LocatorRedistributionTypeEnum
-	// SetRedistributionType assigns IsisSRv6LocatorRedistributionTypeEnum provided by user to IsisSRv6Locator
-	SetRedistributionType(value IsisSRv6LocatorRedistributionTypeEnum) IsisSRv6Locator
-	// HasRedistributionType checks if RedistributionType has been set in IsisSRv6Locator
-	HasRedistributionType() bool
 	// DFlag returns bool, set in IsisSRv6Locator.
 	DFlag() bool
 	// SetDFlag assigns bool provided by user to IsisSRv6Locator
 	SetDFlag(value bool) IsisSRv6Locator
 	// HasDFlag checks if DFlag has been set in IsisSRv6Locator
 	HasDFlag() bool
-	// MtId returns uint32, set in IsisSRv6Locator.
-	MtId() uint32
-	// SetMtId assigns uint32 provided by user to IsisSRv6Locator
-	SetMtId(value uint32) IsisSRv6Locator
-	// HasMtId checks if MtId has been set in IsisSRv6Locator
-	HasMtId() bool
+	// MtId returns []uint32, set in IsisSRv6Locator.
+	MtId() []uint32
+	// SetMtId assigns []uint32 provided by user to IsisSRv6Locator
+	SetMtId(value []uint32) IsisSRv6Locator
 	// EndSids returns IsisSRv6LocatorIsisSRv6EndSidIterIter, set in IsisSRv6Locator
 	EndSids() IsisSRv6LocatorIsisSRv6EndSidIter
+	// SidStructure returns IsisSRv6SidStructure, set in IsisSRv6Locator.
+	// IsisSRv6SidStructure is sRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length + ln_length + function_length + argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:
+	// lb_length=32, ln_length=16, function_length=16, argument_length=0
+	// Reference: RFC 9352 Section 9, RFC 9800.
+	SidStructure() IsisSRv6SidStructure
+	// SetSidStructure assigns IsisSRv6SidStructure provided by user to IsisSRv6Locator.
+	// IsisSRv6SidStructure is sRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length + ln_length + function_length + argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:
+	// lb_length=32, ln_length=16, function_length=16, argument_length=0
+	// Reference: RFC 9352 Section 9, RFC 9800.
+	SetSidStructure(value IsisSRv6SidStructure) IsisSRv6Locator
+	// HasSidStructure checks if SidStructure has been set in IsisSRv6Locator
+	HasSidStructure() bool
 	// AdvertiseLocatorAsPrefix returns IsisSRv6AdvertiseLocatorAsPrefix, set in IsisSRv6Locator.
 	// IsisSRv6AdvertiseLocatorAsPrefix is controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.
 	AdvertiseLocatorAsPrefix() IsisSRv6AdvertiseLocatorAsPrefix
@@ -332,18 +338,18 @@ type IsisSRv6Locator interface {
 }
 
 // Globally unique name of an object. It also serves as the primary key for arrays of objects.
-// Name returns a string
-func (obj *isisSRv6Locator) Name() string {
+// LocatorName returns a string
+func (obj *isisSRv6Locator) LocatorName() string {
 
-	return *obj.obj.Name
+	return *obj.obj.LocatorName
 
 }
 
 // Globally unique name of an object. It also serves as the primary key for arrays of objects.
-// SetName sets the string value in the IsisSRv6Locator object
-func (obj *isisSRv6Locator) SetName(value string) IsisSRv6Locator {
+// SetLocatorName sets the string value in the IsisSRv6Locator object
+func (obj *isisSRv6Locator) SetLocatorName(value string) IsisSRv6Locator {
 
-	obj.obj.Name = &value
+	obj.obj.LocatorName = &value
 	return obj
 }
 
@@ -429,40 +435,6 @@ func (obj *isisSRv6Locator) SetMetric(value uint32) IsisSRv6Locator {
 	return obj
 }
 
-type IsisSRv6LocatorRedistributionTypeEnum string
-
-// Enum of RedistributionType on IsisSRv6Locator
-var IsisSRv6LocatorRedistributionType = struct {
-	UP   IsisSRv6LocatorRedistributionTypeEnum
-	DOWN IsisSRv6LocatorRedistributionTypeEnum
-}{
-	UP:   IsisSRv6LocatorRedistributionTypeEnum("up"),
-	DOWN: IsisSRv6LocatorRedistributionTypeEnum("down"),
-}
-
-func (obj *isisSRv6Locator) RedistributionType() IsisSRv6LocatorRedistributionTypeEnum {
-	return IsisSRv6LocatorRedistributionTypeEnum(obj.obj.RedistributionType.Enum().String())
-}
-
-// Controls the Up/Down redistribution bit for this locator. 'up' = normal advertisement (default); 'down' = the locator has been leaked from Level 2 to Level 1 (RFC 5305). Must be consistent with the d_flag setting.
-// RedistributionType returns a string
-func (obj *isisSRv6Locator) HasRedistributionType() bool {
-	return obj.obj.RedistributionType != nil
-}
-
-func (obj *isisSRv6Locator) SetRedistributionType(value IsisSRv6LocatorRedistributionTypeEnum) IsisSRv6Locator {
-	intValue, ok := otg.IsisSRv6Locator_RedistributionType_Enum_value[string(value)]
-	if !ok {
-		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
-			"%s is not a valid choice on IsisSRv6LocatorRedistributionTypeEnum", string(value)))
-		return obj
-	}
-	enumValue := otg.IsisSRv6Locator_RedistributionType_Enum(intValue)
-	obj.obj.RedistributionType = &enumValue
-
-	return obj
-}
-
 // Down bit (D-flag, bit 0 of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level 2 to Level 1 to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
 // DFlag returns a bool
 func (obj *isisSRv6Locator) DFlag() bool {
@@ -485,29 +457,28 @@ func (obj *isisSRv6Locator) SetDFlag(value bool) IsisSRv6Locator {
 	return obj
 }
 
-// Multi-Topology Identifier (MT-ID) for this locator advertisement. Specifies which IS-IS topology this locator belongs to. 0 = default topology. Valid range 0-4095 (RFC 5120).
-// MtId returns a uint32
-func (obj *isisSRv6Locator) MtId() uint32 {
-
-	return *obj.obj.MtId
-
+// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-255 (RFC 5120).
+// MtId returns a []uint32
+func (obj *isisSRv6Locator) MtId() []uint32 {
+	if obj.obj.MtId == nil {
+		obj.obj.MtId = make([]uint32, 0)
+	}
+	return obj.obj.MtId
 }
 
-// Multi-Topology Identifier (MT-ID) for this locator advertisement. Specifies which IS-IS topology this locator belongs to. 0 = default topology. Valid range 0-4095 (RFC 5120).
-// MtId returns a uint32
-func (obj *isisSRv6Locator) HasMtId() bool {
-	return obj.obj.MtId != nil
-}
+// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-255 (RFC 5120).
+// SetMtId sets the []uint32 value in the IsisSRv6Locator object
+func (obj *isisSRv6Locator) SetMtId(value []uint32) IsisSRv6Locator {
 
-// Multi-Topology Identifier (MT-ID) for this locator advertisement. Specifies which IS-IS topology this locator belongs to. 0 = default topology. Valid range 0-4095 (RFC 5120).
-// SetMtId sets the uint32 value in the IsisSRv6Locator object
-func (obj *isisSRv6Locator) SetMtId(value uint32) IsisSRv6Locator {
+	if obj.obj.MtId == nil {
+		obj.obj.MtId = make([]uint32, 0)
+	}
+	obj.obj.MtId = value
 
-	obj.obj.MtId = &value
 	return obj
 }
 
-// List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises a locally instantiated node-local SRv6 SID, its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants), and optional SID structure information (RFC 9352 Section 7.2).
+// List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises a locally instantiated node-local SRv6 SID and its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants). Reference: RFC 9352 Section 7.2.
 // EndSids returns a []IsisSRv6EndSid
 func (obj *isisSRv6Locator) EndSids() IsisSRv6LocatorIsisSRv6EndSidIter {
 	if len(obj.obj.EndSids) == 0 {
@@ -594,6 +565,34 @@ func (obj *isisSRv6LocatorIsisSRv6EndSidIter) appendHolderSlice(item IsisSRv6End
 	return obj
 }
 
+// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+// SidStructure returns a IsisSRv6SidStructure
+func (obj *isisSRv6Locator) SidStructure() IsisSRv6SidStructure {
+	if obj.obj.SidStructure == nil {
+		obj.obj.SidStructure = NewIsisSRv6SidStructure().msg()
+	}
+	if obj.sidStructureHolder == nil {
+		obj.sidStructureHolder = &isisSRv6SidStructure{obj: obj.obj.SidStructure}
+	}
+	return obj.sidStructureHolder
+}
+
+// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+// SidStructure returns a IsisSRv6SidStructure
+func (obj *isisSRv6Locator) HasSidStructure() bool {
+	return obj.obj.SidStructure != nil
+}
+
+// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+// SetSidStructure sets the IsisSRv6SidStructure value in the IsisSRv6Locator object
+func (obj *isisSRv6Locator) SetSidStructure(value IsisSRv6SidStructure) IsisSRv6Locator {
+
+	obj.sidStructureHolder = nil
+	obj.obj.SidStructure = value.msg()
+
+	return obj
+}
+
 // When present, the locator prefix is also advertised as an IS-IS IPv6 Reachability prefix (TLV 236/237) in addition to the SRv6 Locator TLV (type 27). This enables non-SRv6-capable routers to route toward the locator as an ordinary IPv6 prefix. Absence of this object suppresses the secondary prefix advertisement.
 // AdvertiseLocatorAsPrefix returns a IsisSRv6AdvertiseLocatorAsPrefix
 func (obj *isisSRv6Locator) AdvertiseLocatorAsPrefix() IsisSRv6AdvertiseLocatorAsPrefix {
@@ -627,9 +626,9 @@ func (obj *isisSRv6Locator) validateObj(vObj *validation, set_default bool) {
 		obj.setDefault()
 	}
 
-	// Name is required
-	if obj.obj.Name == nil {
-		vObj.validationErrors = append(vObj.validationErrors, "Name is required field on interface IsisSRv6Locator")
+	// LocatorName is required
+	if obj.obj.LocatorName == nil {
+		vObj.validationErrors = append(vObj.validationErrors, "LocatorName is required field on interface IsisSRv6Locator")
 	}
 
 	// Locator is required
@@ -677,10 +676,13 @@ func (obj *isisSRv6Locator) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.MtId != nil {
 
-		if *obj.obj.MtId > 4095 {
-			vObj.validationErrors = append(
-				vObj.validationErrors,
-				fmt.Sprintf("0 <= IsisSRv6Locator.MtId <= 4095 but Got %d", *obj.obj.MtId))
+		for _, item := range obj.obj.MtId {
+			if item > 255 {
+				vObj.validationErrors = append(
+					vObj.validationErrors,
+					fmt.Sprintf("min(uint32) <= IsisSRv6Locator.MtId <= 255 but Got %d", item))
+			}
+
 		}
 
 	}
@@ -697,6 +699,11 @@ func (obj *isisSRv6Locator) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.SidStructure != nil {
+
+		obj.SidStructure().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.AdvertiseLocatorAsPrefix != nil {
@@ -716,15 +723,8 @@ func (obj *isisSRv6Locator) setDefault() {
 	if obj.obj.Metric == nil {
 		obj.SetMetric(0)
 	}
-	if obj.obj.RedistributionType == nil {
-		obj.SetRedistributionType(IsisSRv6LocatorRedistributionType.UP)
-
-	}
 	if obj.obj.DFlag == nil {
 		obj.SetDFlag(false)
-	}
-	if obj.obj.MtId == nil {
-		obj.SetMtId(0)
 	}
 
 }

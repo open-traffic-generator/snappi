@@ -330,7 +330,7 @@ func (obj *isisSegmentRouting) SetRouterCapability(value IsisRouterCapability) I
 	return obj
 }
 
-// List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Reference: RFC 9352 Section 7.1.
+// List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Locators are scoped to this IS-IS instance and cannot be shared across other protocol instances. Reference: RFC 9352 Section 7.1.
 // Srv6Locators returns a []IsisSRv6Locator
 func (obj *isisSegmentRouting) Srv6Locators() IsisSegmentRoutingIsisSRv6LocatorIter {
 	if len(obj.obj.Srv6Locators) == 0 {
