@@ -88,6 +88,10 @@ from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
 from .snappi import IsisInterfaceAdjacencySid
 from .snappi import IsisInterfaceAdjacencySidIter
+from .snappi import IsisSRv6AdjSid
+from .snappi import IsisSRv6SidStructure
+from .snappi import IsisSRv6AdjSidIter
+from .snappi import IsisSRv6LinkMsd
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -111,6 +115,14 @@ from .snappi import IsisSRSrgb
 from .snappi import IsisSRSrgbIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
+from .snappi import IsisSRv6NodeCapability
+from .snappi import IsisSRv6NodeMsd
+from .snappi import IsisSRv6Locator
+from .snappi import IsisSRv6EndSid
+from .snappi import IsisSRv6EndSidIter
+from .snappi import IsisSRv6AdvertiseLocatorAsPrefix
+from .snappi import IsisSRv6PrefixAttributes
+from .snappi import IsisSRv6LocatorIter
 from .snappi import IsisGracefulRestart
 from .snappi import DeviceBgpRouter
 from .snappi import BgpV4Interface

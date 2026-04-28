@@ -305,7 +305,8 @@ func (obj *isisLspExtendedNeighbor) SetSystemId(value string) IsisLspExtendedNei
 	return obj
 }
 
-// List of segment routing adjacency SIDs.
+// List of SR-MPLS Adjacency SID sub-TLVs (sub-TLV types 31/32,
+// RFC 8667) learned from this neighbor.
 // AdjacencySids returns a []IsisLspAdjacencySid
 func (obj *isisLspExtendedNeighbor) AdjacencySids() IsisLspExtendedNeighborIsisLspAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {
