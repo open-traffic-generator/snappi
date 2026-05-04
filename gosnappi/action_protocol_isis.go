@@ -17,6 +17,7 @@ type actionProtocolIsis struct {
 	marshaller                    marshalActionProtocolIsis
 	unMarshaller                  unMarshalActionProtocolIsis
 	initiateGracefulRestartHolder ActionProtocolIsisInitiateRestart
+	srv6Holder                    ActionProtocolIsisSrv6
 }
 
 func NewActionProtocolIsis() ActionProtocolIsis {
@@ -245,6 +246,7 @@ func (obj *actionProtocolIsis) Clone() (ActionProtocolIsis, error) {
 
 func (obj *actionProtocolIsis) setNil() {
 	obj.initiateGracefulRestartHolder = nil
+	obj.srv6Holder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,14 @@ type ActionProtocolIsis interface {
 	SetInitiateGracefulRestart(value ActionProtocolIsisInitiateRestart) ActionProtocolIsis
 	// HasInitiateGracefulRestart checks if InitiateGracefulRestart has been set in ActionProtocolIsis
 	HasInitiateGracefulRestart() bool
+	// Srv6 returns ActionProtocolIsisSrv6, set in ActionProtocolIsis.
+	// ActionProtocolIsisSrv6 is sRv6 control actions for IS-IS emulated routers.
+	Srv6() ActionProtocolIsisSrv6
+	// SetSrv6 assigns ActionProtocolIsisSrv6 provided by user to ActionProtocolIsis.
+	// ActionProtocolIsisSrv6 is sRv6 control actions for IS-IS emulated routers.
+	SetSrv6(value ActionProtocolIsisSrv6) ActionProtocolIsis
+	// HasSrv6 checks if Srv6 has been set in ActionProtocolIsis
+	HasSrv6() bool
 	setNil()
 }
 
@@ -304,8 +314,10 @@ type ActionProtocolIsisChoiceEnum string
 // Enum of Choice on ActionProtocolIsis
 var ActionProtocolIsisChoice = struct {
 	INITIATE_GRACEFUL_RESTART ActionProtocolIsisChoiceEnum
+	SRV6                      ActionProtocolIsisChoiceEnum
 }{
 	INITIATE_GRACEFUL_RESTART: ActionProtocolIsisChoiceEnum("initiate_graceful_restart"),
+	SRV6:                      ActionProtocolIsisChoiceEnum("srv6"),
 }
 
 func (obj *actionProtocolIsis) Choice() ActionProtocolIsisChoiceEnum {
@@ -321,11 +333,17 @@ func (obj *actionProtocolIsis) setChoice(value ActionProtocolIsisChoiceEnum) Act
 	}
 	enumValue := otg.ActionProtocolIsis_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.Srv6 = nil
+	obj.srv6Holder = nil
 	obj.obj.InitiateGracefulRestart = nil
 	obj.initiateGracefulRestartHolder = nil
 
 	if value == ActionProtocolIsisChoice.INITIATE_GRACEFUL_RESTART {
 		obj.obj.InitiateGracefulRestart = NewActionProtocolIsisInitiateRestart().msg()
+	}
+
+	if value == ActionProtocolIsisChoice.SRV6 {
+		obj.obj.Srv6 = NewActionProtocolIsisSrv6().msg()
 	}
 
 	return obj
@@ -359,6 +377,34 @@ func (obj *actionProtocolIsis) SetInitiateGracefulRestart(value ActionProtocolIs
 	return obj
 }
 
+// SRv6 control actions for IS-IS emulated routers.
+// Srv6 returns a ActionProtocolIsisSrv6
+func (obj *actionProtocolIsis) Srv6() ActionProtocolIsisSrv6 {
+	if obj.obj.Srv6 == nil {
+		obj.setChoice(ActionProtocolIsisChoice.SRV6)
+	}
+	if obj.srv6Holder == nil {
+		obj.srv6Holder = &actionProtocolIsisSrv6{obj: obj.obj.Srv6}
+	}
+	return obj.srv6Holder
+}
+
+// SRv6 control actions for IS-IS emulated routers.
+// Srv6 returns a ActionProtocolIsisSrv6
+func (obj *actionProtocolIsis) HasSrv6() bool {
+	return obj.obj.Srv6 != nil
+}
+
+// SRv6 control actions for IS-IS emulated routers.
+// SetSrv6 sets the ActionProtocolIsisSrv6 value in the ActionProtocolIsis object
+func (obj *actionProtocolIsis) SetSrv6(value ActionProtocolIsisSrv6) ActionProtocolIsis {
+	obj.setChoice(ActionProtocolIsisChoice.SRV6)
+	obj.srv6Holder = nil
+	obj.obj.Srv6 = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocolIsis) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -374,6 +420,11 @@ func (obj *actionProtocolIsis) validateObj(vObj *validation, set_default bool) {
 		obj.InitiateGracefulRestart().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.Srv6 != nil {
+
+		obj.Srv6().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *actionProtocolIsis) setDefault() {
@@ -383,6 +434,11 @@ func (obj *actionProtocolIsis) setDefault() {
 	if obj.obj.InitiateGracefulRestart != nil {
 		choices_set += 1
 		choice = ActionProtocolIsisChoice.INITIATE_GRACEFUL_RESTART
+	}
+
+	if obj.obj.Srv6 != nil {
+		choices_set += 1
+		choice = ActionProtocolIsisChoice.SRV6
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {

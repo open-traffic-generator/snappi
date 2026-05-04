@@ -2356,62 +2356,32 @@ message IsisSRv6PrefixAttributes {
   optional bool a_flag = 4;
 }
 
-// SRv6 End SID Sub-TLV (sub-TLV type 5) carried within the SRv6 Locator
-// TLV (TLV type 27). Advertises a locally instantiated node-local SRv6
-// SID and its associated endpoint behavior.
-// The full 128-bit SID is assembled as:
-// Locator (selected via locator/custom_locator_reference) | Function | Argument
-// Example  - given locator fc00:0:1:: /48 with sid_structure
-// lb=32, ln=16, fn=16, arg=0:
-// locator auto (=> fc00:0:1::), function 0001, argument 0000
-// => final SID: fc00:0:1:1::
-// locator custom_locator_reference loc2 (fc00:0:2:: /48), function 0064, argument
-// 0000
-// => final SID: fc00:0:2:64::
-// Valid behaviors for node-local End SIDs are End (with PSP/USP/USD
-// flavor variants) and decapsulation behaviors (End.DT4, End.DT6,
-// End.DT46).
-// Reference: RFC 9352 Section 7.2, RFC 8986.
+// SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV
+// (TLV type 27, RFC 9352 Section 7.2). Advertises a locally instantiated, node-level
+// SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the
+// parent IsisSRv6.Locator; only the Function and Argument fields need to be specified
+// here. The full 128-bit SID is assembled as:
+// <parent locator prefix> | Function | Argument
+// Example - given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16,
+// arg=0:
+// function 0001, argument 0000 => SID fc00:0:1:1::
+// function 0064, argument 0000 => SID fc00:0:1:64::
+// Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors
+// (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
 message IsisSRv6EndSid {
-
-  message Locator {
-    enum Enum {
-      unspecified = 0;
-      auto = 1;
-      custom_locator_reference = 2;
-    }
-  }
-  // Selects which locator from the IsisSRv6.Locator list to use as the locator part of
-  // this End SID. 'auto' (default) uses the enclosing IsisSRv6.Locator  - the parent
-  // Locator TLV that contains this End SID. Suitable for the typical case where each
-  // End SID belongs to its containing locator. 'custom_locator_reference' uses a specific
-  // locator identified by custom_locator_reference  - for cases where multiple locators
-  // are configured and a particular one must be selected, e.g. for a Flex-Algo binding.
-  // default = Locator.Enum.auto
-  optional Locator.Enum locator = 7;
-
-  // Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'.
-  // Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators.
-  // Example: loc2 selects the locator whose locator_name is loc2.
-  // 
-  // x-constraint:
-  // - /components/schemas/IsisSRv6.Locator/properties/locator_name
-  // 
-  optional string custom_locator_reference = 8;
 
   // The Function part of this End SID expressed as a hex string, occupying the function
   // bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1).
-  // The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure
-  // divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: 0001
-  // places value 1 in the function field; with locator fc00:0:1:: /48 (selected via auto
-  // or custom_locator_reference) the resulting SID is fc00:0:1:1::.
+  // The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure
+  // divided by 4 - for example, a function_length of 16 requires a 4-nibble string. Example:
+  // 0001 with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
   optional string function = 5;
 
   // The Argument part of this End SID expressed as a hex string, occupying the argument
   // bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The
-  // number of hex digits must match argument_length in the parent IsisSRv6.Locator.sid_structure
-  // divided by 4. Use the default 0000 when no argument is needed (argument_length 0
-  // or 16 with no value).
+  // number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure
+  // divided by 4. Use the default 0000 when no argument is carried (argument_length is
+  // 0).
   // default = 0000
   optional string argument = 6;
 
@@ -13097,13 +13067,51 @@ message FlowIpv6SegmentRouting {
   // Policy, the second element contains the penultimate segment of the SR Policy, and
   // so on.
   repeated FlowIpv6SegmentRoutingSegment segment_list = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingRoutingType routing_type = 6;
+
+  message Srv6EncapMode {
+    enum Enum {
+      unspecified = 0;
+      srh = 1;
+      usid_no_srh = 2;
+      usid_srh_1 = 3;
+      usid_srh_2 = 4;
+    }
+  }
+  // Declares the SRv6 encapsulation variant for this flow (RFC 9800 Section 4, RFC 8986
+  // Section 4.16). The implementation uses this to validate the surrounding packet stack.
+  // 'srh' (default) - standard SRH with full segment list.
+  // Stack: Ethernet + IPv6 + IPv6ExtHeader(routing) + payload.
+  // 'usid_no_srh' - active uSID is placed directly in the outer IPv6 DA;
+  // no Segment Routing Header is generated. This exercises the uN
+  // reduced-SRH forwarding path.
+  // Stack: Ethernet + IPv6 (DA=active_usid) + payload.
+  // 'usid_srh_1' - outer IPv6 + one uSID container in SRH (segments_left=0).
+  // Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 1 segment) + payload.
+  // 'usid_srh_2' - outer IPv6 + two uSID containers in SRH (segments_left=1).
+  // Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 2 segments) + payload.
+  // For USD decapsulation tests, the payload layer is IPv4 (IPinIPv6) or IPv6 (IPv6inIPv6)
+  // rather than the application payload.
+  // default = Srv6EncapMode.Enum.srh
+  optional Srv6EncapMode.Enum srv6_encap_mode = 7;
 }
 
-// Description missing in models
+// One entry in the SRH Segment List (RFC 8754 Section 2.1). Two encodings are supported:
+// 'segment' - a single 128-bit SRv6 SID address (full-SID encoding, default). 'usid_container'
+// - a packed 128-bit uSID container holding multiple micro-SIDs per RFC 9800. Set 'usid_container'
+// to provide structured input; leave it unset and use 'segment' for standard full-SID
+// entries.
 message FlowIpv6SegmentRoutingSegment {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingSegmentSegment segment = 1;
+
+  // Structured uSID container encoding (RFC 9800). When set, the implementation assembles
+  // the 128-bit container value from the constituent uSIDs and places it in the SRH segment
+  // list entry. Takes precedence over 'segment' if both are provided.
+  FlowIpv6SegmentRoutingUSidContainer usid_container = 2;
 }
 
 // An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
@@ -13118,6 +13126,63 @@ message FlowIpv6SegmentRoutingFlags {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+}
+
+// A uSID container segment (RFC 9800) - a 128-bit IPv6 address packed with multiple
+// Micro-SIDs (uSIDs). The implementation assembles the 128-bit value by placing the
+// locator block prefix in the high bits, then packing each uSID (locator_node + function)
+// consecutively in units of (locator_node_length + function_length) bits, padding the
+// remainder with zeros. Example using F3216 (lb=32, ln=16, fn=16, arg=0) and locator
+// block fc00::/32:
+// usids = [{node: 0001, function: 0001}, {node: 0002, function: 0001}]
+// => container = fc00:0:1:1:2:1:: (2-hop path, nodes 1 and 2, function 1)
+// Reference: RFC 9800 Section 4.
+message FlowIpv6SegmentRoutingUSidContainer {
+
+  // The common locator block IPv6 prefix shared across all uSIDs in this container (e.g.,
+  // fc00:: for the fcbb:bbbb::/32 SONiC convention). This prefix occupies the most-significant
+  // locator_block_length bits of the 128-bit container.
+  // required = true
+  optional string locator_block = 1;
+
+  // Length of the locator block in bits (default 32 for F3216 uSID format). Must match
+  // the lb_length in the IsisSRv6.SidStructure used by the emulated devices.
+  // default = 32
+  optional uint32 locator_block_length = 2;
+
+  // Length of the locator node field within each uSID slot, in bits (default 16 for F3216).
+  // Each uSID slot is (locator_node_length + function_length) bits wide.
+  // default = 16
+  optional uint32 locator_node_length = 3;
+
+  // Length of the function field within each uSID slot, in bits (default 16 for F3216).
+  // default = 16
+  optional uint32 function_length = 4;
+
+  // Ordered list of uSIDs to pack into this container, from left (most significant) to
+  // right. Each uSID entry provides the locator_node and function hex values; the implementation
+  // packs them consecutively after the locator block. The number of uSIDs that fit in
+  // one container is:
+  // floor((128 - locator_block_length) /
+  // (locator_node_length + function_length))
+  // For F3216: floor((128-32)/(16+16)) = 3 uSIDs per container.
+  repeated FlowIpv6SegmentRoutingUSid usids = 5;
+}
+
+// One Micro-SID (uSID) entry within a uSID container (RFC 9800). Specifies the locator
+// node and function hex values that are packed into consecutive bits of the 128-bit
+// container value.
+message FlowIpv6SegmentRoutingUSid {
+
+  // Locator node identifier as a hex string, occupying locator_node_length bits in the
+  // container. For F3216 (locator_node_length=16), this is a 4-nibble string. Example:
+  // 0001 identifies node 1.
+  optional string locator_node = 1;
+
+  // Function identifier as a hex string, occupying function_length bits in the container.
+  // For F3216 (function_length=16), this is a 4-nibble string. Example: 0001 for End,
+  // 00c8 for End.X.
+  optional string function = 2;
 }
 
 // The frame size which overrides the total length of the packet
@@ -15636,6 +15701,7 @@ message ActionProtocolIsis {
     enum Enum {
       unspecified = 0;
       initiate_graceful_restart = 1;
+      srv6 = 2;
     }
   }
   // Description missing in models
@@ -15644,6 +15710,9 @@ message ActionProtocolIsis {
 
   // Configuration for the initiation of the IS-IS Graceful Restart.
   ActionProtocolIsisInitiateRestart initiate_graceful_restart = 2;
+
+  // SRv6 control actions for IS-IS emulated routers.
+  ActionProtocolIsisSrv6 srv6 = 3;
 }
 
 // Timers T1 and T2 are used both by a restarting router and a starting router. Timer
@@ -15738,6 +15807,153 @@ message ActionProtocolIsisPlannedRestart {
   // and hold_timer is reset to normal.
   // default = 10
   optional uint32 restart_after = 3;
+}
+
+// SRv6 control actions for IS-IS emulated routers.
+message ActionProtocolIsisSrv6 {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      my_local_sid = 1;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  ActionProtocolIsisSrv6MyLocalSid my_local_sid = 2;
+}
+
+// Trigger a My Local SID lifecycle operation (add, modify, or delete) on the specified
+// IS-IS routers (RFC 8986 Section 4 Instantiation, Re-instantiation, and Un-instantiation).
+// In IxNetwork, this operation manipulates isisSRv6EndSIDList entries under the IS-IS
+// router and triggers IS-IS LSP re-advertisement.
+message ActionProtocolIsisSrv6MyLocalSid {
+
+  // Names of the IS-IS routers on which to perform the My Local SID operation. An empty
+  // or null list applies the operation to all configured IS-IS routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      add = 1;
+      modify = 2;
+      delete = 3;
+    }
+  }
+  // Description missing in models
+  // required = true
+  optional Choice.Enum choice = 2;
+
+  // Description missing in models
+  ActionProtocolIsisSrv6MyLocalSidAdd add = 3;
+
+  // Description missing in models
+  ActionProtocolIsisSrv6MyLocalSidModify modify = 4;
+
+  // Description missing in models
+  ActionProtocolIsisSrv6MyLocalSidDelete delete = 5;
+}
+
+// Program new SRv6 My Local SID entries on the routers specified by router_names. After
+// this operation the router matches packets whose DA falls within each SID prefix and
+// applies the configured behavior. Session impact: implementation-specific. In IxNetwork
+// the IS-IS router re-advertises its Locator TLV after the add.
+message ActionProtocolIsisSrv6MyLocalSidAdd {
+
+  // List of My Local SID entries to add.
+  repeated ActionProtocolIsisSrv6MyLocalSidEntry entries = 1;
+}
+
+// Modify existing SRv6 My Local SID entries on the routers specified by router_names.
+// Each entry is matched by sid_prefix + prefix_length; the remaining fields replace
+// the existing values without a delete-and-re-add cycle. Session impact: implementation-specific.
+// In IxNetwork IS-IS re-sends its LSP with the updated SID set.
+message ActionProtocolIsisSrv6MyLocalSidModify {
+
+  // List of My Local SID entries to modify. Each entry is matched by sid_prefix + prefix_length;
+  // other fields are updated.
+  repeated ActionProtocolIsisSrv6MyLocalSidEntry entries = 1;
+}
+
+// Remove SRv6 My Local SID entries from the routers specified by router_names. After
+// deletion, packets whose DA matches these SID prefixes are no longer forwarded (RFC
+// 8986 Section 4 Un-instantiation). Session impact: implementation-specific. In IxNetwork
+// IS-IS withdraws the affected SIDs from its Locator TLV.
+message ActionProtocolIsisSrv6MyLocalSidDelete {
+
+  // List of My Local SID entries to delete, identified by prefix and prefix length.
+  repeated ActionProtocolIsisSrv6MyLocalSidSidRef sid_refs = 1;
+}
+
+// One SRv6 My Local SID entry. Corresponds to a single row in the MY_LOCAL_SID table
+// (RFC 8986 Section 3.3), indexed by (SID prefix, behavior).
+message ActionProtocolIsisSrv6MyLocalSidEntry {
+
+  // IPv6 address of this My Local SID (e.g., fcbb:bbbb:1:: for a SONiC uN node using
+  // the fcbb:bbbb::/32 locator block).
+  // required = true
+  optional string sid_prefix = 1;
+
+  // Prefix length of the My Local SID in bits. Common values: 48 for u_n with F3216 locator;
+  // 64 for end and DT behaviors.
+  // default = 48
+  optional uint32 prefix_length = 2;
+
+  message Behavior {
+    enum Enum {
+      unspecified = 0;
+      u_n = 1;
+      u_dt4 = 2;
+      u_dt6 = 3;
+      u_dt46 = 4;
+      u_dx4 = 5;
+      u_dx6 = 6;
+      end = 7;
+      end_dt4 = 8;
+      end_dt6 = 9;
+      end_dt46 = 10;
+    }
+  }
+  // SRv6 endpoint behavior applied when a packet's DA matches this My Local SID (RFC
+  // 8986 Section 7.4 codepoints, RFC 9800). 'u_n' - Micro-SID node: shift active uSID
+  // out of DA and forward
+  // (RFC 9800 Section 4).
+  // 'u_dt4' / 'u_dt6' / 'u_dt46' - Micro-SID decap + IPv4 / IPv6 /
+  // dual-stack table lookup in the VRF given by vrf_name (RFC 9800).
+  // 'u_dx4' / 'u_dx6' - Micro-SID decap + L3 cross-connect to the
+  // IPv4 / IPv6 next-hop given by next_hop (RFC 9800).
+  // 'end' / 'end_dt4' / 'end_dt6' / 'end_dt46' - Full-SID
+  // equivalents (RFC 8986 Sections 4.1, 4.6, 4.7, 4.8).
+  // default = Behavior.Enum.u_n
+  optional Behavior.Enum behavior = 3;
+
+  // VRF name for decapsulation behaviors (u_dt4, u_dt6, u_dt46, u_dx4, u_dx6, end_dt4,
+  // end_dt6, end_dt46). Omit or leave empty for the default VRF.
+  optional string vrf_name = 4;
+
+  // Next-hop address for cross-connect behaviors: an IPv4 address for u_dx4, an IPv6
+  // address for u_dx6. Not applicable for DT or u_n behaviors.
+  optional string next_hop = 5;
+}
+
+// Identifies a My Local SID entry by its prefix and length, used in delete operations.
+message ActionProtocolIsisSrv6MyLocalSidSidRef {
+
+  // IPv6 address of the My Local SID entry to delete.
+  // required = true
+  optional string sid_prefix = 1;
+
+  // Prefix length of the My Local SID to delete, in bits.
+  // required = true
+  optional uint32 prefix_length = 2;
 }
 
 // Request to traffic generator for metrics of choice.
@@ -36794,6 +37010,62 @@ message PatternFlowIpv6SegmentRoutingTag {
   PatternFlowIpv6SegmentRoutingTagCounter decrement = 6;
 }
 
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingRoutingTypeCounter {
+
+  // Description missing in models
+  // default = 4
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 8-bit Routing Type field in the SRH (RFC 8754 Section 2.1). The only defined value
+// for Segment Routing is 4. When auto is assigned the implementation sets this to 4
+// automatically.
+message PatternFlowIpv6SegmentRoutingRoutingType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 4
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [4]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 4
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingRoutingTypeCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingRoutingTypeCounter decrement = 7;
+}
+
 // ipv6 counter pattern
 message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
 
@@ -36810,7 +37082,9 @@ message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
   optional uint32 count = 3;
 }
 
-// A 128-bit IPv6 address segment.
+// A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Use for standard full-SID encoding
+// where each segment carries a complete locator + function + argument value. Example:
+// 2001:db8::1.
 message PatternFlowIpv6SegmentRoutingSegmentSegment {
 
   message Choice {

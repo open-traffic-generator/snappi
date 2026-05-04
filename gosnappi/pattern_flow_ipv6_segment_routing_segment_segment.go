@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingSegmentSegment) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 address segment.
+// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Use for standard full-SID encoding where each segment carries a complete locator + function + argument value. Example: "2001:db8::1".
 type PatternFlowIpv6SegmentRoutingSegmentSegment interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingSegmentSegment to protobuf object *otg.PatternFlowIpv6SegmentRoutingSegmentSegment

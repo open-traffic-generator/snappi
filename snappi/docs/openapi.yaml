@@ -3383,56 +3383,26 @@ components:
           x-field-uid: 4
     IsisSRv6.EndSid:
       description: |-
-        SRv6 End SID Sub-TLV (sub-TLV type 5) carried within the SRv6 Locator
-        TLV (TLV type 27). Advertises a locally instantiated node-local SRv6
-        SID and its associated endpoint behavior.
-        The full 128-bit SID is assembled as:
-          Locator (selected via locator/custom_locator_reference) | Function | Argument
-        Example  - given locator fc00:0:1:: /48 with sid_structure
-        lb=32, ln=16, fn=16, arg=0:
-          locator auto (=> fc00:0:1::), function "0001", argument "0000"
-          => final SID: fc00:0:1:1::
-          locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "0064", argument "0000"
-          => final SID: fc00:0:2:64::
-        Valid behaviors for node-local End SIDs are End (with PSP/USP/USD
-        flavor variants) and decapsulation behaviors (End.DT4, End.DT6,
-        End.DT46).
-        Reference: RFC 9352 Section 7.2, RFC 8986.
+        SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV (TLV type 27, RFC 9352 Section 7.2). Advertises a locally instantiated, node-level SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the parent IsisSRv6.Locator; only the Function and Argument fields need to be specified here. The full 128-bit SID is assembled as:
+          <parent locator prefix> | Function | Argument
+        Example - given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:
+          function "0001", argument "0000" => SID fc00:0:1:1::
+          function "0064", argument "0000" => SID fc00:0:1:64::
+        Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
       type: object
+      x-reserved-field-uids:
+      - 7
+      - 8
       properties:
-        locator:
-          description: |-
-            Selects which locator from the IsisSRv6.Locator list to use as the locator part of this End SID. 'auto' (default) uses the enclosing IsisSRv6.Locator  - the parent Locator TLV that contains this End SID. Suitable for the typical case where each End SID belongs to its containing locator. 'custom_locator_reference' uses a specific locator identified by custom_locator_reference  - for cases where multiple locators are configured and a particular one must be selected, e.g. for a Flex-Algo binding.
-          type: string
-          default: auto
-          x-enum:
-            auto:
-              x-field-uid: 1
-            custom_locator_reference:
-              x-field-uid: 2
-          x-field-uid: 7
-          enum:
-          - auto
-          - custom_locator_reference
-        custom_locator_reference:
-          description: |
-            Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of a locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".
-
-            x-constraint:
-            - /components/schemas/IsisSRv6.Locator/properties/locator_name
-          type: string
-          x-constraint:
-          - /components/schemas/IsisSRv6.Locator/properties/locator_name
-          x-field-uid: 8
         function:
           description: |-
-            The Function part of this End SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by 4  - e.g. function_length 16 requires a 4-nibble string. Example: "0001" places value 1 in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:1::.
+            The Function part of this End SID expressed as a hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure divided by 4 - for example, a function_length of 16 requires a 4-nibble string. Example: "0001" with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
           type: string
           format: hex
           x-field-uid: 5
         argument:
           description: |-
-            The Argument part of this End SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match argument_length in the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is needed (argument_length 0 or 16 with no value).
+            The Argument part of this End SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
           type: string
           format: hex
           default: '0000'
@@ -17104,12 +17074,52 @@ components:
           items:
             $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.Segment'
           x-field-uid: 5
+        routing_type:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.RoutingType'
+        srv6_encap_mode:
+          description: |-
+            Declares the SRv6 encapsulation variant for this flow (RFC 9800 Section 4, RFC 8986 Section 4.16). The implementation uses this to validate the surrounding packet stack. 'srh' (default) - standard SRH with full segment list.
+              Stack: Ethernet + IPv6 + IPv6ExtHeader(routing) + payload.
+            'usid_no_srh' - active uSID is placed directly in the outer IPv6 DA;
+              no Segment Routing Header is generated. This exercises the uN
+              reduced-SRH forwarding path.
+              Stack: Ethernet + IPv6 (DA=active_usid) + payload.
+            'usid_srh_1' - outer IPv6 + one uSID container in SRH (segments_left=0).
+              Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 1 segment) + payload.
+            'usid_srh_2' - outer IPv6 + two uSID containers in SRH (segments_left=1).
+              Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 2 segments) + payload.
+            For USD decapsulation tests, the payload layer is IPv4 (IPinIPv6) or IPv6 (IPv6inIPv6) rather than the application payload.
+          type: string
+          default: srh
+          x-enum:
+            srh:
+              x-field-uid: 1
+            usid_no_srh:
+              x-field-uid: 2
+            usid_srh_1:
+              x-field-uid: 3
+            usid_srh_2:
+              x-field-uid: 4
+          x-field-uid: 7
+          enum:
+          - srh
+          - usid_no_srh
+          - usid_srh_1
+          - usid_srh_2
     Flow.Ipv6SegmentRouting.Segment:
+      description: |-
+        One entry in the SRH Segment List (RFC 8754 Section 2.1). Two encodings are supported: 'segment' - a single 128-bit SRv6 SID address (full-SID encoding, default). 'usid_container' - a packed 128-bit uSID container holding multiple micro-SIDs per RFC 9800. Set 'usid_container' to provide structured input; leave it unset and use 'segment' for standard full-SID entries.
       type: object
       properties:
         segment:
           x-field-uid: 1
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Segment.Segment'
+        usid_container:
+          description: |-
+            Structured uSID container encoding (RFC 9800). When set, the implementation assembles the 128-bit container value from the constituent uSIDs and places it in the SRH segment list entry. Takes precedence over 'segment' if both are provided.
+          $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.USidContainer'
+          x-field-uid: 2
     Flow.Ipv6SegmentRouting.Flags:
       description: |-
         An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
@@ -17124,6 +17134,76 @@ components:
         alert:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert'
+    Flow.Ipv6SegmentRouting.USidContainer:
+      description: |-
+        A uSID container segment (RFC 9800) - a 128-bit IPv6 address packed with multiple Micro-SIDs (uSIDs). The implementation assembles the 128-bit value by placing the locator block prefix in the high bits, then packing each uSID (locator_node + function) consecutively in units of (locator_node_length + function_length) bits, padding the remainder with zeros. Example using F3216 (lb=32, ln=16, fn=16, arg=0) and locator block fc00::/32:
+          usids = [{node: "0001", function: "0001"}, {node: "0002", function: "0001"}]
+          => container = fc00:0:1:1:2:1:: (2-hop path, nodes 1 and 2, function 1)
+        Reference: RFC 9800 Section 4.
+      type: object
+      required:
+      - locator_block
+      properties:
+        locator_block:
+          description: |-
+            The common locator block IPv6 prefix shared across all uSIDs in this container (e.g., "fc00::" for the fcbb:bbbb::/32 SONiC convention). This prefix occupies the most-significant locator_block_length bits of the 128-bit container.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        locator_block_length:
+          description: |-
+            Length of the locator block in bits (default 32 for F3216 uSID format). Must match the lb_length in the IsisSRv6.SidStructure used by the emulated devices.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 120
+          default: 32
+          x-field-uid: 2
+        locator_node_length:
+          description: |-
+            Length of the locator node field within each uSID slot, in bits (default 16 for F3216). Each uSID slot is (locator_node_length + function_length) bits wide.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 64
+          default: 16
+          x-field-uid: 3
+        function_length:
+          description: |-
+            Length of the function field within each uSID slot, in bits (default 16 for F3216).
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 64
+          default: 16
+          x-field-uid: 4
+        usids:
+          description: |-
+            Ordered list of uSIDs to pack into this container, from left (most significant) to right. Each uSID entry provides the locator_node and function hex values; the implementation packs them consecutively after the locator block. The number of uSIDs that fit in one container is:
+              floor((128 - locator_block_length) /
+                    (locator_node_length + function_length))
+            For F3216: floor((128-32)/(16+16)) = 3 uSIDs per container.
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.USid'
+          x-field-uid: 5
+    Flow.Ipv6SegmentRouting.USid:
+      description: |-
+        One Micro-SID (uSID) entry within a uSID container (RFC 9800). Specifies the locator node and function hex values that are packed into consecutive bits of the 128-bit container value.
+      type: object
+      properties:
+        locator_node:
+          description: |-
+            Locator node identifier as a hex string, occupying locator_node_length bits in the container. For F3216 (locator_node_length=16), this is a 4-nibble string. Example: "0001" identifies node 1.
+          type: string
+          format: hex
+          x-field-uid: 1
+        function:
+          description: |-
+            Function identifier as a hex string, occupying function_length bits in the container. For F3216 (function_length=16), this is a 4-nibble string. Example: "0001" for End, "00c8" for End.X.
+          type: string
+          format: hex
+          x-field-uid: 2
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -20337,14 +20417,22 @@ components:
           x-enum:
             initiate_graceful_restart:
               x-field-uid: 1
+            srv6:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - initiate_graceful_restart
+          - srv6
         initiate_graceful_restart:
           description: |-
             Configuration for the initiation of the IS-IS Graceful Restart.
           $ref: '#/components/schemas/Action.Protocol.Isis.InitiateRestart'
           x-field-uid: 2
+        srv6:
+          description: |-
+            SRv6 control actions for IS-IS emulated routers.
+          $ref: '#/components/schemas/Action.Protocol.Isis.Srv6'
+          x-field-uid: 3
     Action.Protocol.Isis.InitiateRestart:
       description: "Timers T1 and T2 are used both by a restarting router and a starting\
         \ router. Timer T3 is used only by a restarting router.\n- Timer T1 is maintained\
@@ -20436,6 +20524,207 @@ components:
           default: 10
           minimum: 0
           x-field-uid: 3
+    Action.Protocol.Isis.Srv6:
+      description: |-
+        SRv6 control actions for IS-IS emulated routers.
+      type: object
+      required:
+      - choice
+      properties:
+        choice:
+          type: string
+          x-enum:
+            my_local_sid:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - my_local_sid
+        my_local_sid:
+          $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid'
+          x-field-uid: 2
+    Action.Protocol.Isis.Srv6.MyLocalSid:
+      description: |-
+        Trigger a My Local SID lifecycle operation (add, modify, or delete) on the specified IS-IS routers (RFC 8986 Section 4 Instantiation, Re-instantiation, and Un-instantiation). In IxNetwork, this operation manipulates isisSRv6EndSIDList entries under the IS-IS router and triggers IS-IS LSP re-advertisement.
+      type: object
+      required:
+      - choice
+      properties:
+        router_names:
+          description: |
+            Names of the IS-IS routers on which to perform the My Local SID operation. An empty or null list applies the operation to all configured IS-IS routers.
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.IsisRouter/properties/name
+          x-field-uid: 1
+        choice:
+          type: string
+          x-enum:
+            add:
+              x-field-uid: 1
+            modify:
+              x-field-uid: 2
+            delete:
+              x-field-uid: 3
+          x-field-uid: 2
+          enum:
+          - add
+          - modify
+          - delete
+        add:
+          $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.Add'
+          x-field-uid: 3
+        modify:
+          $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.Modify'
+          x-field-uid: 4
+        delete:
+          $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.Delete'
+          x-field-uid: 5
+    Action.Protocol.Isis.Srv6.MyLocalSid.Add:
+      description: |-
+        Program new SRv6 My Local SID entries on the routers specified by router_names. After this operation the router matches packets whose DA falls within each SID prefix and applies the configured behavior. Session impact: implementation-specific. In IxNetwork the IS-IS router re-advertises its Locator TLV after the add.
+      type: object
+      required:
+      - entries
+      properties:
+        entries:
+          description: |-
+            List of My Local SID entries to add.
+          type: array
+          items:
+            $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.Entry'
+          x-field-uid: 1
+    Action.Protocol.Isis.Srv6.MyLocalSid.Modify:
+      description: |-
+        Modify existing SRv6 My Local SID entries on the routers specified by router_names. Each entry is matched by sid_prefix + prefix_length; the remaining fields replace the existing values without a delete-and-re-add cycle. Session impact: implementation-specific. In IxNetwork IS-IS re-sends its LSP with the updated SID set.
+      type: object
+      required:
+      - entries
+      properties:
+        entries:
+          description: |-
+            List of My Local SID entries to modify. Each entry is matched by sid_prefix + prefix_length; other fields are updated.
+          type: array
+          items:
+            $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.Entry'
+          x-field-uid: 1
+    Action.Protocol.Isis.Srv6.MyLocalSid.Delete:
+      description: |-
+        Remove SRv6 My Local SID entries from the routers specified by router_names. After deletion, packets whose DA matches these SID prefixes are no longer forwarded (RFC 8986 Section 4 Un-instantiation). Session impact: implementation-specific. In IxNetwork IS-IS withdraws the affected SIDs from its Locator TLV.
+      type: object
+      required:
+      - sid_refs
+      properties:
+        sid_refs:
+          description: |-
+            List of My Local SID entries to delete, identified by prefix and prefix length.
+          type: array
+          items:
+            $ref: '#/components/schemas/Action.Protocol.Isis.Srv6.MyLocalSid.SidRef'
+          x-field-uid: 1
+    Action.Protocol.Isis.Srv6.MyLocalSid.Entry:
+      description: |-
+        One SRv6 My Local SID entry. Corresponds to a single row in the MY_LOCAL_SID table (RFC 8986 Section 3.3), indexed by (SID prefix, behavior).
+      type: object
+      required:
+      - sid_prefix
+      properties:
+        sid_prefix:
+          description: |-
+            IPv6 address of this My Local SID (e.g., "fcbb:bbbb:1::" for a SONiC uN node using the fcbb:bbbb::/32 locator block).
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            Prefix length of the My Local SID in bits. Common values: 48 for u_n with F3216 locator; 64 for end and DT behaviors.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 128
+          default: 48
+          x-field-uid: 2
+        behavior:
+          description: |-
+            SRv6 endpoint behavior applied when a packet's DA matches this My Local SID (RFC 8986 Section 7.4 codepoints, RFC 9800). 'u_n' - Micro-SID node: shift active uSID out of DA and forward
+              (RFC 9800 Section 4).
+            'u_dt4' / 'u_dt6' / 'u_dt46' - Micro-SID decap + IPv4 / IPv6 /
+              dual-stack table lookup in the VRF given by vrf_name (RFC 9800).
+            'u_dx4' / 'u_dx6' - Micro-SID decap + L3 cross-connect to the
+              IPv4 / IPv6 next-hop given by next_hop (RFC 9800).
+            'end' / 'end_dt4' / 'end_dt6' / 'end_dt46' - Full-SID
+              equivalents (RFC 8986 Sections 4.1, 4.6, 4.7, 4.8).
+          type: string
+          default: u_n
+          x-enum:
+            u_n:
+              x-field-uid: 1
+            u_dt4:
+              x-field-uid: 2
+            u_dt6:
+              x-field-uid: 3
+            u_dt46:
+              x-field-uid: 4
+            u_dx4:
+              x-field-uid: 5
+            u_dx6:
+              x-field-uid: 6
+            end:
+              x-field-uid: 7
+            end_dt4:
+              x-field-uid: 8
+            end_dt6:
+              x-field-uid: 9
+            end_dt46:
+              x-field-uid: 10
+          x-field-uid: 3
+          enum:
+          - u_n
+          - u_dt4
+          - u_dt6
+          - u_dt46
+          - u_dx4
+          - u_dx6
+          - end
+          - end_dt4
+          - end_dt6
+          - end_dt46
+        vrf_name:
+          description: |-
+            VRF name for decapsulation behaviors (u_dt4, u_dt6, u_dt46, u_dx4, u_dx6, end_dt4, end_dt6, end_dt46). Omit or leave empty for the default VRF.
+          type: string
+          x-field-uid: 4
+        next_hop:
+          description: |-
+            Next-hop address for cross-connect behaviors: an IPv4 address for u_dx4, an IPv6 address for u_dx6. Not applicable for DT or u_n behaviors.
+          type: string
+          x-field-uid: 5
+    Action.Protocol.Isis.Srv6.MyLocalSid.SidRef:
+      description: |-
+        Identifies a My Local SID entry by its prefix and length, used in delete operations.
+      type: object
+      required:
+      - sid_prefix
+      - prefix_length
+      properties:
+        sid_prefix:
+          description: |-
+            IPv6 address of the My Local SID entry to delete.
+          type: string
+          format: ipv6
+          x-field-uid: 1
+        prefix_length:
+          description: |-
+            Prefix length of the My Local SID to delete, in bits.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 128
+          x-field-uid: 2
     Metrics.Request:
       description: |-
         Request to traffic generator for metrics of choice.
@@ -34811,6 +35100,7 @@ components:
         igmp: 2
         ggp: 3
         ip_in_ip: 4
+        ipv4: 4
         st: 5
         tcp: 6
         cpt: 7
@@ -34916,6 +35206,7 @@ components:
         igmp: 2
         ggp: 3
         ip_in_ip: 4
+        ipv4: 4
         st: 5
         tcp: 6
         cpt: 7
@@ -51535,6 +51826,86 @@ components:
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Tag.Counter'
           x-field-uid: 6
+    Pattern.Flow.Ipv6SegmentRouting.RoutingType.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SegmentRouting.RoutingType:
+      description: |-
+        8-bit Routing Type field in the SRH (RFC 8754 Section 2.1). The only defined value for Segment Routing is 4. When auto is assigned the implementation sets this to 4 automatically.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 4
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 4
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.RoutingType.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.RoutingType.Counter'
+          x-field-uid: 7
     Pattern.Flow.Ipv6SegmentRouting.Segment.Segment.Counter:
       description: |-
         ipv6 counter pattern
@@ -51557,7 +51928,7 @@ components:
           format: uint32
     Pattern.Flow.Ipv6SegmentRouting.Segment.Segment:
       description: |-
-        A 128-bit IPv6 address segment.
+        A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Use for standard full-SID encoding where each segment carries a complete locator + function + argument value. Example: "2001:db8::1".
       type: object
       properties:
         choice:
