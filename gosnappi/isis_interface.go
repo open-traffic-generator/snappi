@@ -24,6 +24,7 @@ type isisInterface struct {
 	advancedHolder           IsisInterfaceAdvanced
 	linkProtectionHolder     IsisInterfaceLinkProtection
 	adjacencySidsHolder      IsisInterfaceIsisInterfaceAdjacencySidIter
+	srv6AdjacencySidsHolder  IsisInterfaceIsisSRv6AdjSidIter
 }
 
 func NewIsisInterface() IsisInterface {
@@ -259,6 +260,7 @@ func (obj *isisInterface) setNil() {
 	obj.advancedHolder = nil
 	obj.linkProtectionHolder = nil
 	obj.adjacencySidsHolder = nil
+	obj.srv6AdjacencySidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -362,13 +364,12 @@ type IsisInterface interface {
 	SetName(value string) IsisInterface
 	// AdjacencySids returns IsisInterfaceIsisInterfaceAdjacencySidIterIter, set in IsisInterface
 	AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter
+	// Srv6AdjacencySids returns IsisInterfaceIsisSRv6AdjSidIterIter, set in IsisInterface
+	Srv6AdjacencySids() IsisInterfaceIsisSRv6AdjSidIter
 	setNil()
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -381,9 +382,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -839,7 +837,7 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+// List of SR-MPLS Adjacency Segment Identifier (Adj-SID) sub-TLVs for this interface (RFC 8667).
 // AdjacencySids returns a []IsisInterfaceAdjacencySid
 func (obj *isisInterface) AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {
@@ -923,6 +921,93 @@ func (obj *isisInterfaceIsisInterfaceAdjacencySidIter) clearHolderSlice() IsisIn
 }
 func (obj *isisInterfaceIsisInterfaceAdjacencySidIter) appendHolderSlice(item IsisInterfaceAdjacencySid) IsisInterfaceIsisInterfaceAdjacencySidIter {
 	obj.isisInterfaceAdjacencySidSlice = append(obj.isisInterfaceAdjacencySidSlice, item)
+	return obj
+}
+
+// List of SRv6 Adjacency SID Sub-TLVs (End.X SID) for this interface. Point-to-point interfaces advertise End.X SID Sub-TLV (sub-TLV type 43); broadcast interfaces advertise LAN End.X SID Sub-TLV (sub-TLV type 44). Each entry binds a 128-bit SRv6 SID to this specific outgoing adjacency and advertises the associated endpoint behavior. Reference: RFC 9352 Sections 8.1-8.2.
+// Srv6AdjacencySids returns a []IsisSRv6AdjSid
+func (obj *isisInterface) Srv6AdjacencySids() IsisInterfaceIsisSRv6AdjSidIter {
+	if len(obj.obj.Srv6AdjacencySids) == 0 {
+		obj.obj.Srv6AdjacencySids = []*otg.IsisSRv6AdjSid{}
+	}
+	if obj.srv6AdjacencySidsHolder == nil {
+		obj.srv6AdjacencySidsHolder = newIsisInterfaceIsisSRv6AdjSidIter(&obj.obj.Srv6AdjacencySids).setMsg(obj)
+	}
+	return obj.srv6AdjacencySidsHolder
+}
+
+type isisInterfaceIsisSRv6AdjSidIter struct {
+	obj                 *isisInterface
+	isisSRv6AdjSidSlice []IsisSRv6AdjSid
+	fieldPtr            *[]*otg.IsisSRv6AdjSid
+}
+
+func newIsisInterfaceIsisSRv6AdjSidIter(ptr *[]*otg.IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter {
+	return &isisInterfaceIsisSRv6AdjSidIter{fieldPtr: ptr}
+}
+
+type IsisInterfaceIsisSRv6AdjSidIter interface {
+	setMsg(*isisInterface) IsisInterfaceIsisSRv6AdjSidIter
+	Items() []IsisSRv6AdjSid
+	Add() IsisSRv6AdjSid
+	Append(items ...IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter
+	Set(index int, newObj IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter
+	Clear() IsisInterfaceIsisSRv6AdjSidIter
+	clearHolderSlice() IsisInterfaceIsisSRv6AdjSidIter
+	appendHolderSlice(item IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter
+}
+
+func (obj *isisInterfaceIsisSRv6AdjSidIter) setMsg(msg *isisInterface) IsisInterfaceIsisSRv6AdjSidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&isisSRv6AdjSid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *isisInterfaceIsisSRv6AdjSidIter) Items() []IsisSRv6AdjSid {
+	return obj.isisSRv6AdjSidSlice
+}
+
+func (obj *isisInterfaceIsisSRv6AdjSidIter) Add() IsisSRv6AdjSid {
+	newObj := &otg.IsisSRv6AdjSid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &isisSRv6AdjSid{obj: newObj}
+	newLibObj.setDefault()
+	obj.isisSRv6AdjSidSlice = append(obj.isisSRv6AdjSidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *isisInterfaceIsisSRv6AdjSidIter) Append(items ...IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.isisSRv6AdjSidSlice = append(obj.isisSRv6AdjSidSlice, item)
+	}
+	return obj
+}
+
+func (obj *isisInterfaceIsisSRv6AdjSidIter) Set(index int, newObj IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.isisSRv6AdjSidSlice[index] = newObj
+	return obj
+}
+func (obj *isisInterfaceIsisSRv6AdjSidIter) Clear() IsisInterfaceIsisSRv6AdjSidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.IsisSRv6AdjSid{}
+		obj.isisSRv6AdjSidSlice = []IsisSRv6AdjSid{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisSRv6AdjSidIter) clearHolderSlice() IsisInterfaceIsisSRv6AdjSidIter {
+	if len(obj.isisSRv6AdjSidSlice) > 0 {
+		obj.isisSRv6AdjSidSlice = []IsisSRv6AdjSid{}
+	}
+	return obj
+}
+func (obj *isisInterfaceIsisSRv6AdjSidIter) appendHolderSlice(item IsisSRv6AdjSid) IsisInterfaceIsisSRv6AdjSidIter {
+	obj.isisSRv6AdjSidSlice = append(obj.isisSRv6AdjSidSlice, item)
 	return obj
 }
 
@@ -1026,6 +1111,20 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 			}
 		}
 		for _, item := range obj.AdjacencySids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
+	}
+
+	if len(obj.obj.Srv6AdjacencySids) != 0 {
+
+		if set_default {
+			obj.Srv6AdjacencySids().clearHolderSlice()
+			for _, item := range obj.obj.Srv6AdjacencySids {
+				obj.Srv6AdjacencySids().appendHolderSlice(&isisSRv6AdjSid{obj: item})
+			}
+		}
+		for _, item := range obj.Srv6AdjacencySids().Items() {
 			item.validateObj(vObj, set_default)
 		}
 

@@ -88,6 +88,8 @@ from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
 from .snappi import IsisInterfaceAdjacencySid
 from .snappi import IsisInterfaceAdjacencySidIter
+from .snappi import IsisSRv6AdjSid
+from .snappi import IsisSRv6AdjSidIter
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -111,6 +113,14 @@ from .snappi import IsisSRSrgb
 from .snappi import IsisSRSrgbIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
+from .snappi import IsisSRv6NodeCapability
+from .snappi import IsisSRv6Locator
+from .snappi import IsisSRv6EndSid
+from .snappi import IsisSRv6EndSidIter
+from .snappi import IsisSRv6SidStructure
+from .snappi import IsisSRv6AdvertiseLocatorAsPrefix
+from .snappi import IsisSRv6PrefixAttributes
+from .snappi import IsisSRv6LocatorIter
 from .snappi import IsisGracefulRestart
 from .snappi import DeviceBgpRouter
 from .snappi import BgpV4Interface
@@ -1343,7 +1353,12 @@ from .snappi import PatternFlowIpv6SegmentRoutingTagCounter
 from .snappi import FlowIpv6SegmentRoutingSegment
 from .snappi import PatternFlowIpv6SegmentRoutingSegmentSegment
 from .snappi import PatternFlowIpv6SegmentRoutingSegmentSegmentCounter
+from .snappi import FlowIpv6SegmentRoutingUSidContainer
+from .snappi import FlowIpv6SegmentRoutingUSid
+from .snappi import FlowIpv6SegmentRoutingUSidIter
 from .snappi import FlowIpv6SegmentRoutingSegmentIter
+from .snappi import PatternFlowIpv6SegmentRoutingRoutingType
+from .snappi import PatternFlowIpv6SegmentRoutingRoutingTypeCounter
 from .snappi import FlowHeaderIter
 from .snappi import FlowSize
 from .snappi import FlowSizeIncrement

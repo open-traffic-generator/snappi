@@ -21,6 +21,7 @@ type flowIpv6SegmentRouting struct {
 	flagsHolder        FlowIpv6SegmentRoutingFlags
 	tagHolder          PatternFlowIpv6SegmentRoutingTag
 	segmentListHolder  FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter
+	routingTypeHolder  PatternFlowIpv6SegmentRoutingRoutingType
 }
 
 func NewFlowIpv6SegmentRouting() FlowIpv6SegmentRouting {
@@ -253,6 +254,7 @@ func (obj *flowIpv6SegmentRouting) setNil() {
 	obj.flagsHolder = nil
 	obj.tagHolder = nil
 	obj.segmentListHolder = nil
+	obj.routingTypeHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -314,6 +316,20 @@ type FlowIpv6SegmentRouting interface {
 	HasTag() bool
 	// SegmentList returns FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIterIter, set in FlowIpv6SegmentRouting
 	SegmentList() FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter
+	// RoutingType returns PatternFlowIpv6SegmentRoutingRoutingType, set in FlowIpv6SegmentRouting.
+	// PatternFlowIpv6SegmentRoutingRoutingType is 8-bit Routing Type field in the SRH (RFC 8754 Section 2.1). The only defined value for Segment Routing is 4. When auto is assigned the implementation sets this to 4 automatically.
+	RoutingType() PatternFlowIpv6SegmentRoutingRoutingType
+	// SetRoutingType assigns PatternFlowIpv6SegmentRoutingRoutingType provided by user to FlowIpv6SegmentRouting.
+	// PatternFlowIpv6SegmentRoutingRoutingType is 8-bit Routing Type field in the SRH (RFC 8754 Section 2.1). The only defined value for Segment Routing is 4. When auto is assigned the implementation sets this to 4 automatically.
+	SetRoutingType(value PatternFlowIpv6SegmentRoutingRoutingType) FlowIpv6SegmentRouting
+	// HasRoutingType checks if RoutingType has been set in FlowIpv6SegmentRouting
+	HasRoutingType() bool
+	// Srv6EncapMode returns FlowIpv6SegmentRoutingSrv6EncapModeEnum, set in FlowIpv6SegmentRouting
+	Srv6EncapMode() FlowIpv6SegmentRoutingSrv6EncapModeEnum
+	// SetSrv6EncapMode assigns FlowIpv6SegmentRoutingSrv6EncapModeEnum provided by user to FlowIpv6SegmentRouting
+	SetSrv6EncapMode(value FlowIpv6SegmentRoutingSrv6EncapModeEnum) FlowIpv6SegmentRouting
+	// HasSrv6EncapMode checks if Srv6EncapMode has been set in FlowIpv6SegmentRouting
+	HasSrv6EncapMode() bool
 	setNil()
 }
 
@@ -516,6 +532,82 @@ func (obj *flowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter) appendHolder
 	return obj
 }
 
+// description is TBD
+// RoutingType returns a PatternFlowIpv6SegmentRoutingRoutingType
+func (obj *flowIpv6SegmentRouting) RoutingType() PatternFlowIpv6SegmentRoutingRoutingType {
+	if obj.obj.RoutingType == nil {
+		obj.obj.RoutingType = NewPatternFlowIpv6SegmentRoutingRoutingType().msg()
+	}
+	if obj.routingTypeHolder == nil {
+		obj.routingTypeHolder = &patternFlowIpv6SegmentRoutingRoutingType{obj: obj.obj.RoutingType}
+	}
+	return obj.routingTypeHolder
+}
+
+// description is TBD
+// RoutingType returns a PatternFlowIpv6SegmentRoutingRoutingType
+func (obj *flowIpv6SegmentRouting) HasRoutingType() bool {
+	return obj.obj.RoutingType != nil
+}
+
+// description is TBD
+// SetRoutingType sets the PatternFlowIpv6SegmentRoutingRoutingType value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetRoutingType(value PatternFlowIpv6SegmentRoutingRoutingType) FlowIpv6SegmentRouting {
+
+	obj.routingTypeHolder = nil
+	obj.obj.RoutingType = value.msg()
+
+	return obj
+}
+
+type FlowIpv6SegmentRoutingSrv6EncapModeEnum string
+
+// Enum of Srv6EncapMode on FlowIpv6SegmentRouting
+var FlowIpv6SegmentRoutingSrv6EncapMode = struct {
+	SRH         FlowIpv6SegmentRoutingSrv6EncapModeEnum
+	USID_NO_SRH FlowIpv6SegmentRoutingSrv6EncapModeEnum
+	USID_SRH_1  FlowIpv6SegmentRoutingSrv6EncapModeEnum
+	USID_SRH_2  FlowIpv6SegmentRoutingSrv6EncapModeEnum
+}{
+	SRH:         FlowIpv6SegmentRoutingSrv6EncapModeEnum("srh"),
+	USID_NO_SRH: FlowIpv6SegmentRoutingSrv6EncapModeEnum("usid_no_srh"),
+	USID_SRH_1:  FlowIpv6SegmentRoutingSrv6EncapModeEnum("usid_srh_1"),
+	USID_SRH_2:  FlowIpv6SegmentRoutingSrv6EncapModeEnum("usid_srh_2"),
+}
+
+func (obj *flowIpv6SegmentRouting) Srv6EncapMode() FlowIpv6SegmentRoutingSrv6EncapModeEnum {
+	return FlowIpv6SegmentRoutingSrv6EncapModeEnum(obj.obj.Srv6EncapMode.Enum().String())
+}
+
+// Declares the SRv6 encapsulation variant for this flow (RFC 9800 Section 4, RFC 8986 Section 4.16). The implementation uses this to validate the surrounding packet stack. 'srh' (default) - standard SRH with full segment list.
+// Stack: Ethernet + IPv6 + IPv6ExtHeader(routing) + payload.
+// 'usid_no_srh' - active uSID is placed directly in the outer IPv6 DA;
+// no Segment Routing Header is generated. This exercises the uN
+// reduced-SRH forwarding path.
+// Stack: Ethernet + IPv6 (DA=active_usid) + payload.
+// 'usid_srh_1' - outer IPv6 + one uSID container in SRH (segments_left=0).
+// Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 1 segment) + payload.
+// 'usid_srh_2' - outer IPv6 + two uSID containers in SRH (segments_left=1).
+// Stack: Ethernet + IPv6 + IPv6ExtHeader(routing, 2 segments) + payload.
+// For USD decapsulation tests, the payload layer is IPv4 (IPinIPv6) or IPv6 (IPv6inIPv6) rather than the application payload.
+// Srv6EncapMode returns a string
+func (obj *flowIpv6SegmentRouting) HasSrv6EncapMode() bool {
+	return obj.obj.Srv6EncapMode != nil
+}
+
+func (obj *flowIpv6SegmentRouting) SetSrv6EncapMode(value FlowIpv6SegmentRoutingSrv6EncapModeEnum) FlowIpv6SegmentRouting {
+	intValue, ok := otg.FlowIpv6SegmentRouting_Srv6EncapMode_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on FlowIpv6SegmentRoutingSrv6EncapModeEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.FlowIpv6SegmentRouting_Srv6EncapMode_Enum(intValue)
+	obj.obj.Srv6EncapMode = &enumValue
+
+	return obj
+}
+
 func (obj *flowIpv6SegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -555,8 +647,17 @@ func (obj *flowIpv6SegmentRouting) validateObj(vObj *validation, set_default boo
 
 	}
 
+	if obj.obj.RoutingType != nil {
+
+		obj.RoutingType().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *flowIpv6SegmentRouting) setDefault() {
+	if obj.obj.Srv6EncapMode == nil {
+		obj.SetSrv6EncapMode(FlowIpv6SegmentRoutingSrv6EncapMode.SRH)
+
+	}
 
 }
