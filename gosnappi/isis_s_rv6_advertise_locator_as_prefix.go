@@ -391,7 +391,7 @@ func (obj *isisSRv6AdvertiseLocatorAsPrefix) SetRouteOrigin(value IsisSRv6Advert
 	return obj
 }
 
-// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, N, and A flags. Absence suppresses the sub-TLV.
+// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, and N flags. Absence suppresses the sub-TLV.
 // PrefixAttributes returns a IsisSRv6PrefixAttributes
 func (obj *isisSRv6AdvertiseLocatorAsPrefix) PrefixAttributes() IsisSRv6PrefixAttributes {
 	if obj.obj.PrefixAttributes == nil {
@@ -403,13 +403,13 @@ func (obj *isisSRv6AdvertiseLocatorAsPrefix) PrefixAttributes() IsisSRv6PrefixAt
 	return obj.prefixAttributesHolder
 }
 
-// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, N, and A flags. Absence suppresses the sub-TLV.
+// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, and N flags. Absence suppresses the sub-TLV.
 // PrefixAttributes returns a IsisSRv6PrefixAttributes
 func (obj *isisSRv6AdvertiseLocatorAsPrefix) HasPrefixAttributes() bool {
 	return obj.obj.PrefixAttributes != nil
 }
 
-// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, N, and A flags. Absence suppresses the sub-TLV.
+// When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, and N flags. Absence suppresses the sub-TLV.
 // SetPrefixAttributes sets the IsisSRv6PrefixAttributes value in the IsisSRv6AdvertiseLocatorAsPrefix object
 func (obj *isisSRv6AdvertiseLocatorAsPrefix) SetPrefixAttributes(value IsisSRv6PrefixAttributes) IsisSRv6AdvertiseLocatorAsPrefix {
 

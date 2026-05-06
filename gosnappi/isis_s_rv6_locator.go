@@ -457,7 +457,7 @@ func (obj *isisSRv6Locator) SetDFlag(value bool) IsisSRv6Locator {
 	return obj
 }
 
-// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-255 (RFC 5120).
+// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-4095 per RFC 5120 Section 2 (12-bit field).
 // MtId returns a []uint32
 func (obj *isisSRv6Locator) MtId() []uint32 {
 	if obj.obj.MtId == nil {
@@ -466,7 +466,7 @@ func (obj *isisSRv6Locator) MtId() []uint32 {
 	return obj.obj.MtId
 }
 
-// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-255 (RFC 5120).
+// List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. 0 = default topology. Valid range 0-4095 per RFC 5120 Section 2 (12-bit field).
 // SetMtId sets the []uint32 value in the IsisSRv6Locator object
 func (obj *isisSRv6Locator) SetMtId(value []uint32) IsisSRv6Locator {
 
@@ -677,10 +677,10 @@ func (obj *isisSRv6Locator) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.MtId != nil {
 
 		for _, item := range obj.obj.MtId {
-			if item > 255 {
+			if item > 4095 {
 				vObj.validationErrors = append(
 					vObj.validationErrors,
-					fmt.Sprintf("min(uint32) <= IsisSRv6Locator.MtId <= 255 but Got %d", item))
+					fmt.Sprintf("min(uint32) <= IsisSRv6Locator.MtId <= 4095 but Got %d", item))
 			}
 
 		}

@@ -282,12 +282,6 @@ type IsisSRv6PrefixAttributes interface {
 	SetNFlag(value bool) IsisSRv6PrefixAttributes
 	// HasNFlag checks if NFlag has been set in IsisSRv6PrefixAttributes
 	HasNFlag() bool
-	// AFlag returns bool, set in IsisSRv6PrefixAttributes.
-	AFlag() bool
-	// SetAFlag assigns bool provided by user to IsisSRv6PrefixAttributes
-	SetAFlag(value bool) IsisSRv6PrefixAttributes
-	// HasAFlag checks if AFlag has been set in IsisSRv6PrefixAttributes
-	HasAFlag() bool
 }
 
 // External prefix flag (bit 0, RFC 7794). When set, indicates this locator prefix was redistributed from another protocol.
@@ -356,28 +350,6 @@ func (obj *isisSRv6PrefixAttributes) SetNFlag(value bool) IsisSRv6PrefixAttribut
 	return obj
 }
 
-// Anycast flag (bit 5, RFC 7794). When set, indicates this prefix is an anycast prefix shared across multiple routers.
-// AFlag returns a bool
-func (obj *isisSRv6PrefixAttributes) AFlag() bool {
-
-	return *obj.obj.AFlag
-
-}
-
-// Anycast flag (bit 5, RFC 7794). When set, indicates this prefix is an anycast prefix shared across multiple routers.
-// AFlag returns a bool
-func (obj *isisSRv6PrefixAttributes) HasAFlag() bool {
-	return obj.obj.AFlag != nil
-}
-
-// Anycast flag (bit 5, RFC 7794). When set, indicates this prefix is an anycast prefix shared across multiple routers.
-// SetAFlag sets the bool value in the IsisSRv6PrefixAttributes object
-func (obj *isisSRv6PrefixAttributes) SetAFlag(value bool) IsisSRv6PrefixAttributes {
-
-	obj.obj.AFlag = &value
-	return obj
-}
-
 func (obj *isisSRv6PrefixAttributes) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -394,9 +366,6 @@ func (obj *isisSRv6PrefixAttributes) setDefault() {
 	}
 	if obj.obj.NFlag == nil {
 		obj.SetNFlag(false)
-	}
-	if obj.obj.AFlag == nil {
-		obj.SetAFlag(false)
 	}
 
 }

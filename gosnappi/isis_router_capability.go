@@ -329,10 +329,10 @@ type IsisRouterCapability interface {
 	// SrlbRanges returns IsisRouterCapabilityIsisSRSrlbIterIter, set in IsisRouterCapability
 	SrlbRanges() IsisRouterCapabilityIsisSRSrlbIter
 	// Srv6Capability returns IsisSRv6NodeCapability, set in IsisRouterCapability.
-	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Node-level SRv6 Maximum SID Depth (MSD) values are also advertised here per RFC 8491. Reference: RFC 9352 Section 2.
+	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.
 	Srv6Capability() IsisSRv6NodeCapability
 	// SetSrv6Capability assigns IsisSRv6NodeCapability provided by user to IsisRouterCapability.
-	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Node-level SRv6 Maximum SID Depth (MSD) values are also advertised here per RFC 8491. Reference: RFC 9352 Section 2.
+	// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.
 	SetSrv6Capability(value IsisSRv6NodeCapability) IsisRouterCapability
 	// HasSrv6Capability checks if Srv6Capability has been set in IsisRouterCapability
 	HasSrv6Capability() bool

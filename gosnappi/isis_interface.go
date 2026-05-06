@@ -25,7 +25,6 @@ type isisInterface struct {
 	linkProtectionHolder     IsisInterfaceLinkProtection
 	adjacencySidsHolder      IsisInterfaceIsisInterfaceAdjacencySidIter
 	srv6AdjacencySidsHolder  IsisInterfaceIsisSRv6AdjSidIter
-	srv6LinkMsdHolder        IsisSRv6LinkMsd
 }
 
 func NewIsisInterface() IsisInterface {
@@ -262,7 +261,6 @@ func (obj *isisInterface) setNil() {
 	obj.linkProtectionHolder = nil
 	obj.adjacencySidsHolder = nil
 	obj.srv6AdjacencySidsHolder = nil
-	obj.srv6LinkMsdHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -368,14 +366,6 @@ type IsisInterface interface {
 	AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter
 	// Srv6AdjacencySids returns IsisInterfaceIsisSRv6AdjSidIterIter, set in IsisInterface
 	Srv6AdjacencySids() IsisInterfaceIsisSRv6AdjSidIter
-	// Srv6LinkMsd returns IsisSRv6LinkMsd, set in IsisInterface.
-	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. A non-zero value causes the corresponding MSD sub-TLV to be included in the neighbor TLV advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
-	Srv6LinkMsd() IsisSRv6LinkMsd
-	// SetSrv6LinkMsd assigns IsisSRv6LinkMsd provided by user to IsisInterface.
-	// IsisSRv6LinkMsd is link-level SRv6 Maximum SID Depth (MSD) capabilities advertised per IS-IS interface. Signals the SRv6 SRH processing capacity specific to this link, which may differ from the node-level MSD values. A non-zero value causes the corresponding MSD sub-TLV to be included in the neighbor TLV advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
-	SetSrv6LinkMsd(value IsisSRv6LinkMsd) IsisInterface
-	// HasSrv6LinkMsd checks if Srv6LinkMsd has been set in IsisInterface
-	HasSrv6LinkMsd() bool
 	setNil()
 }
 
@@ -1021,34 +1011,6 @@ func (obj *isisInterfaceIsisSRv6AdjSidIter) appendHolderSlice(item IsisSRv6AdjSi
 	return obj
 }
 
-// Link-level SRv6 Maximum SID Depth (MSD) capabilities for this interface. Advertised as MSD sub-TLVs within the neighbor TLVs (Extended IS Reachability TLV 22 / MT-ISN TLV 222) to signal the SRv6 SRH processing capacity of this specific link. Reference: RFC 8491, RFC 9352 Section 6.
-// Srv6LinkMsd returns a IsisSRv6LinkMsd
-func (obj *isisInterface) Srv6LinkMsd() IsisSRv6LinkMsd {
-	if obj.obj.Srv6LinkMsd == nil {
-		obj.obj.Srv6LinkMsd = NewIsisSRv6LinkMsd().msg()
-	}
-	if obj.srv6LinkMsdHolder == nil {
-		obj.srv6LinkMsdHolder = &isisSRv6LinkMsd{obj: obj.obj.Srv6LinkMsd}
-	}
-	return obj.srv6LinkMsdHolder
-}
-
-// Link-level SRv6 Maximum SID Depth (MSD) capabilities for this interface. Advertised as MSD sub-TLVs within the neighbor TLVs (Extended IS Reachability TLV 22 / MT-ISN TLV 222) to signal the SRv6 SRH processing capacity of this specific link. Reference: RFC 8491, RFC 9352 Section 6.
-// Srv6LinkMsd returns a IsisSRv6LinkMsd
-func (obj *isisInterface) HasSrv6LinkMsd() bool {
-	return obj.obj.Srv6LinkMsd != nil
-}
-
-// Link-level SRv6 Maximum SID Depth (MSD) capabilities for this interface. Advertised as MSD sub-TLVs within the neighbor TLVs (Extended IS Reachability TLV 22 / MT-ISN TLV 222) to signal the SRv6 SRH processing capacity of this specific link. Reference: RFC 8491, RFC 9352 Section 6.
-// SetSrv6LinkMsd sets the IsisSRv6LinkMsd value in the IsisInterface object
-func (obj *isisInterface) SetSrv6LinkMsd(value IsisSRv6LinkMsd) IsisInterface {
-
-	obj.srv6LinkMsdHolder = nil
-	obj.obj.Srv6LinkMsd = value.msg()
-
-	return obj
-}
-
 func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1166,11 +1128,6 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
-	}
-
-	if obj.obj.Srv6LinkMsd != nil {
-
-		obj.Srv6LinkMsd().validateObj(vObj, set_default)
 	}
 
 }
