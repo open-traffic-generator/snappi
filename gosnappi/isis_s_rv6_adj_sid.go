@@ -13,10 +13,9 @@ import (
 // ***** IsisSRv6AdjSid *****
 type isisSRv6AdjSid struct {
 	validation
-	obj                *otg.IsisSRv6AdjSid
-	marshaller         marshalIsisSRv6AdjSid
-	unMarshaller       unMarshalIsisSRv6AdjSid
-	sidStructureHolder IsisSRv6SidStructure
+	obj          *otg.IsisSRv6AdjSid
+	marshaller   marshalIsisSRv6AdjSid
+	unMarshaller unMarshalIsisSRv6AdjSid
 }
 
 func NewIsisSRv6AdjSid() IsisSRv6AdjSid {
@@ -30,7 +29,7 @@ func (obj *isisSRv6AdjSid) msg() *otg.IsisSRv6AdjSid {
 }
 
 func (obj *isisSRv6AdjSid) setMsg(msg *otg.IsisSRv6AdjSid) IsisSRv6AdjSid {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalisisSRv6AdjSid) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalisisSRv6AdjSid) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalisisSRv6AdjSid) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -243,13 +242,6 @@ func (obj *isisSRv6AdjSid) Clone() (IsisSRv6AdjSid, error) {
 	return newObj, nil
 }
 
-func (obj *isisSRv6AdjSid) setNil() {
-	obj.sidStructureHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // IsisSRv6AdjSid is sRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds a 128-bit SRv6 SID to a specific outgoing interface and next-hop, enabling traffic steering across a specific L3 adjacency. The full 128-bit SID is assembled as:
 // Locator (selected via locator/custom_locator_reference) | Function | Argument
 // Example  - given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:
@@ -257,7 +249,7 @@ func (obj *isisSRv6AdjSid) setNil() {
 // => final adjacency SID: fc00:0:1:c8::
 // locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9"
 // => final adjacency SID: fc00:0:2:c9::
-// Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3.
+// Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3. The SID bit-field structure (locator block, locator node, function, and argument lengths) is inherited from IsisSRv6.Locator.sid_structure of the selected locator per RFC 9352 Section 9. No per-adjacency structure override is defined in the RFC.
 type IsisSRv6AdjSid interface {
 	Validation
 	// msg marshals IsisSRv6AdjSid to protobuf object *otg.IsisSRv6AdjSid
@@ -339,19 +331,6 @@ type IsisSRv6AdjSid interface {
 	SetCFlag(value bool) IsisSRv6AdjSid
 	// HasCFlag checks if CFlag has been set in IsisSRv6AdjSid
 	HasCFlag() bool
-	// SidStructure returns IsisSRv6SidStructure, set in IsisSRv6AdjSid.
-	// IsisSRv6SidStructure is sRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length + ln_length + function_length + argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:
-	// lb_length=32, ln_length=16, function_length=16, argument_length=0
-	// Reference: RFC 9352 Section 9, RFC 9800.
-	SidStructure() IsisSRv6SidStructure
-	// SetSidStructure assigns IsisSRv6SidStructure provided by user to IsisSRv6AdjSid.
-	// IsisSRv6SidStructure is sRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length + ln_length + function_length + argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:
-	// lb_length=32, ln_length=16, function_length=16, argument_length=0
-	// Reference: RFC 9352 Section 9, RFC 9800.
-	SetSidStructure(value IsisSRv6SidStructure) IsisSRv6AdjSid
-	// HasSidStructure checks if SidStructure has been set in IsisSRv6AdjSid
-	HasSidStructure() bool
-	setNil()
 }
 
 type IsisSRv6AdjSidLocatorEnum string
@@ -635,34 +614,6 @@ func (obj *isisSRv6AdjSid) SetCFlag(value bool) IsisSRv6AdjSid {
 	return obj
 }
 
-// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition of this adjacency SID. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. When present, the sub-sub-TLV is included in the advertisement. Typically set when c_flag is true (RFC 9352 Section 9).
-// SidStructure returns a IsisSRv6SidStructure
-func (obj *isisSRv6AdjSid) SidStructure() IsisSRv6SidStructure {
-	if obj.obj.SidStructure == nil {
-		obj.obj.SidStructure = NewIsisSRv6SidStructure().msg()
-	}
-	if obj.sidStructureHolder == nil {
-		obj.sidStructureHolder = &isisSRv6SidStructure{obj: obj.obj.SidStructure}
-	}
-	return obj.sidStructureHolder
-}
-
-// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition of this adjacency SID. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. When present, the sub-sub-TLV is included in the advertisement. Typically set when c_flag is true (RFC 9352 Section 9).
-// SidStructure returns a IsisSRv6SidStructure
-func (obj *isisSRv6AdjSid) HasSidStructure() bool {
-	return obj.obj.SidStructure != nil
-}
-
-// SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition of this adjacency SID. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. When present, the sub-sub-TLV is included in the advertisement. Typically set when c_flag is true (RFC 9352 Section 9).
-// SetSidStructure sets the IsisSRv6SidStructure value in the IsisSRv6AdjSid object
-func (obj *isisSRv6AdjSid) SetSidStructure(value IsisSRv6SidStructure) IsisSRv6AdjSid {
-
-	obj.sidStructureHolder = nil
-	obj.obj.SidStructure = value.msg()
-
-	return obj
-}
-
 func (obj *isisSRv6AdjSid) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -695,11 +646,6 @@ func (obj *isisSRv6AdjSid) validateObj(vObj *validation, set_default bool) {
 				fmt.Sprintf("0 <= IsisSRv6AdjSid.Algorithm <= 255 but Got %d", *obj.obj.Algorithm))
 		}
 
-	}
-
-	if obj.obj.SidStructure != nil {
-
-		obj.SidStructure().validateObj(vObj, set_default)
 	}
 
 }

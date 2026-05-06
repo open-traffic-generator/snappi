@@ -13,10 +13,9 @@ import (
 // ***** IsisSRv6NodeCapability *****
 type isisSRv6NodeCapability struct {
 	validation
-	obj            *otg.IsisSRv6NodeCapability
-	marshaller     marshalIsisSRv6NodeCapability
-	unMarshaller   unMarshalIsisSRv6NodeCapability
-	nodeMsdsHolder IsisSRv6NodeMsd
+	obj          *otg.IsisSRv6NodeCapability
+	marshaller   marshalIsisSRv6NodeCapability
+	unMarshaller unMarshalIsisSRv6NodeCapability
 }
 
 func NewIsisSRv6NodeCapability() IsisSRv6NodeCapability {
@@ -30,7 +29,7 @@ func (obj *isisSRv6NodeCapability) msg() *otg.IsisSRv6NodeCapability {
 }
 
 func (obj *isisSRv6NodeCapability) setMsg(msg *otg.IsisSRv6NodeCapability) IsisSRv6NodeCapability {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -243,14 +242,7 @@ func (obj *isisSRv6NodeCapability) Clone() (IsisSRv6NodeCapability, error) {
 	return newObj, nil
 }
 
-func (obj *isisSRv6NodeCapability) setNil() {
-	obj.nodeMsdsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
-// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Node-level SRv6 Maximum SID Depth (MSD) values are also advertised here per RFC 8491. Reference: RFC 9352 Section 2.
+// IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.
 type IsisSRv6NodeCapability interface {
 	Validation
 	// msg marshals IsisSRv6NodeCapability to protobuf object *otg.IsisSRv6NodeCapability
@@ -278,21 +270,12 @@ type IsisSRv6NodeCapability interface {
 	SetOFlag(value bool) IsisSRv6NodeCapability
 	// HasOFlag checks if OFlag has been set in IsisSRv6NodeCapability
 	HasOFlag() bool
-	// NodeMsds returns IsisSRv6NodeMsd, set in IsisSRv6NodeCapability.
-	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
-	NodeMsds() IsisSRv6NodeMsd
-	// SetNodeMsds assigns IsisSRv6NodeMsd provided by user to IsisSRv6NodeCapability.
-	// IsisSRv6NodeMsd is node-level SRv6 Maximum SID Depth (MSD) capabilities. A non-zero value causes the corresponding MSD sub-TLV to be included in the advertisement; a value of 0 (default) suppresses it. This follows RFC 8491 where MSD is a list of (MSD-Type, MSD-Value) tuples. Reference: RFC 8491, RFC 9352 Section 6.
-	SetNodeMsds(value IsisSRv6NodeMsd) IsisSRv6NodeCapability
-	// HasNodeMsds checks if NodeMsds has been set in IsisSRv6NodeCapability
-	HasNodeMsds() bool
 	// CFlag returns bool, set in IsisSRv6NodeCapability.
 	CFlag() bool
 	// SetCFlag assigns bool provided by user to IsisSRv6NodeCapability
 	SetCFlag(value bool) IsisSRv6NodeCapability
 	// HasCFlag checks if CFlag has been set in IsisSRv6NodeCapability
 	HasCFlag() bool
-	setNil()
 }
 
 // OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
@@ -314,34 +297,6 @@ func (obj *isisSRv6NodeCapability) HasOFlag() bool {
 func (obj *isisSRv6NodeCapability) SetOFlag(value bool) IsisSRv6NodeCapability {
 
 	obj.obj.OFlag = &value
-	return obj
-}
-
-// Node-level SRv6 Maximum SID Depth (MSD) capabilities advertised as MSD sub-TLVs within the Router Capability TLV per RFC 8491. These signal the maximum SRH stack depth this router supports for specific SRv6 forwarding behaviors (RFC 9352 Section 6).
-// NodeMsds returns a IsisSRv6NodeMsd
-func (obj *isisSRv6NodeCapability) NodeMsds() IsisSRv6NodeMsd {
-	if obj.obj.NodeMsds == nil {
-		obj.obj.NodeMsds = NewIsisSRv6NodeMsd().msg()
-	}
-	if obj.nodeMsdsHolder == nil {
-		obj.nodeMsdsHolder = &isisSRv6NodeMsd{obj: obj.obj.NodeMsds}
-	}
-	return obj.nodeMsdsHolder
-}
-
-// Node-level SRv6 Maximum SID Depth (MSD) capabilities advertised as MSD sub-TLVs within the Router Capability TLV per RFC 8491. These signal the maximum SRH stack depth this router supports for specific SRv6 forwarding behaviors (RFC 9352 Section 6).
-// NodeMsds returns a IsisSRv6NodeMsd
-func (obj *isisSRv6NodeCapability) HasNodeMsds() bool {
-	return obj.obj.NodeMsds != nil
-}
-
-// Node-level SRv6 Maximum SID Depth (MSD) capabilities advertised as MSD sub-TLVs within the Router Capability TLV per RFC 8491. These signal the maximum SRH stack depth this router supports for specific SRv6 forwarding behaviors (RFC 9352 Section 6).
-// SetNodeMsds sets the IsisSRv6NodeMsd value in the IsisSRv6NodeCapability object
-func (obj *isisSRv6NodeCapability) SetNodeMsds(value IsisSRv6NodeMsd) IsisSRv6NodeCapability {
-
-	obj.nodeMsdsHolder = nil
-	obj.obj.NodeMsds = value.msg()
-
 	return obj
 }
 
@@ -400,11 +355,6 @@ func (obj *isisSRv6NodeCapability) SetCFlag(value bool) IsisSRv6NodeCapability {
 func (obj *isisSRv6NodeCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
-	}
-
-	if obj.obj.NodeMsds != nil {
-
-		obj.NodeMsds().validateObj(vObj, set_default)
 	}
 
 }

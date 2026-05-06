@@ -89,9 +89,7 @@ from .snappi import IsisInterfaceLinkProtection
 from .snappi import IsisInterfaceAdjacencySid
 from .snappi import IsisInterfaceAdjacencySidIter
 from .snappi import IsisSRv6AdjSid
-from .snappi import IsisSRv6SidStructure
 from .snappi import IsisSRv6AdjSidIter
-from .snappi import IsisSRv6LinkMsd
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -116,10 +114,10 @@ from .snappi import IsisSRSrgbIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
 from .snappi import IsisSRv6NodeCapability
-from .snappi import IsisSRv6NodeMsd
 from .snappi import IsisSRv6Locator
 from .snappi import IsisSRv6EndSid
 from .snappi import IsisSRv6EndSidIter
+from .snappi import IsisSRv6SidStructure
 from .snappi import IsisSRv6AdvertiseLocatorAsPrefix
 from .snappi import IsisSRv6PrefixAttributes
 from .snappi import IsisSRv6LocatorIter
@@ -1490,15 +1488,6 @@ from .snappi import ActionProtocolIsis
 from .snappi import ActionProtocolIsisInitiateRestart
 from .snappi import ActionProtocolIsisUnplannedRestart
 from .snappi import ActionProtocolIsisPlannedRestart
-from .snappi import ActionProtocolIsisSrv6
-from .snappi import ActionProtocolIsisSrv6MyLocalSid
-from .snappi import ActionProtocolIsisSrv6MyLocalSidAdd
-from .snappi import ActionProtocolIsisSrv6MyLocalSidEntry
-from .snappi import ActionProtocolIsisSrv6MyLocalSidEntryIter
-from .snappi import ActionProtocolIsisSrv6MyLocalSidModify
-from .snappi import ActionProtocolIsisSrv6MyLocalSidDelete
-from .snappi import ActionProtocolIsisSrv6MyLocalSidSidRef
-from .snappi import ActionProtocolIsisSrv6MyLocalSidSidRefIter
 from .snappi import ActionPort
 from .snappi import ActionPortReboot
 from .snappi import ControlActionResponse
