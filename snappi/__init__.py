@@ -1344,8 +1344,6 @@ from .snappi import PatternFlowIpv6SegmentRoutingLastEntryCounter
 from .snappi import FlowIpv6SegmentRoutingFlags
 from .snappi import PatternFlowIpv6SegmentRoutingFlagsProtected
 from .snappi import PatternFlowIpv6SegmentRoutingFlagsProtectedCounter
-from .snappi import PatternFlowIpv6SegmentRoutingFlagsOam
-from .snappi import PatternFlowIpv6SegmentRoutingFlagsOamCounter
 from .snappi import PatternFlowIpv6SegmentRoutingFlagsAlert
 from .snappi import PatternFlowIpv6SegmentRoutingFlagsAlertCounter
 from .snappi import PatternFlowIpv6SegmentRoutingTag

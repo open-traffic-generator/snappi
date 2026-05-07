@@ -357,10 +357,10 @@ type FlowIpv6SegmentRoutingUsid interface {
 	// HasLastEntry checks if LastEntry has been set in FlowIpv6SegmentRoutingUsid
 	HasLastEntry() bool
 	// Flags returns FlowIpv6SegmentRoutingFlags, set in FlowIpv6SegmentRoutingUsid.
-	// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
+	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
 	Flags() FlowIpv6SegmentRoutingFlags
 	// SetFlags assigns FlowIpv6SegmentRoutingFlags provided by user to FlowIpv6SegmentRoutingUsid.
-	// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
+	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
 	SetFlags(value FlowIpv6SegmentRoutingFlags) FlowIpv6SegmentRoutingUsid
 	// HasFlags checks if Flags has been set in FlowIpv6SegmentRoutingUsid
 	HasFlags() bool

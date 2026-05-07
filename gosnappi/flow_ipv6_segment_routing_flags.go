@@ -17,7 +17,6 @@ type flowIpv6SegmentRoutingFlags struct {
 	marshaller      marshalFlowIpv6SegmentRoutingFlags
 	unMarshaller    unMarshalFlowIpv6SegmentRoutingFlags
 	protectedHolder PatternFlowIpv6SegmentRoutingFlagsProtected
-	oamHolder       PatternFlowIpv6SegmentRoutingFlagsOam
 	alertHolder     PatternFlowIpv6SegmentRoutingFlagsAlert
 }
 
@@ -247,14 +246,13 @@ func (obj *flowIpv6SegmentRoutingFlags) Clone() (FlowIpv6SegmentRoutingFlags, er
 
 func (obj *flowIpv6SegmentRoutingFlags) setNil() {
 	obj.protectedHolder = nil
-	obj.oamHolder = nil
 	obj.alertHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
+// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
 type FlowIpv6SegmentRoutingFlags interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingFlags to protobuf object *otg.FlowIpv6SegmentRoutingFlags
@@ -284,14 +282,6 @@ type FlowIpv6SegmentRoutingFlags interface {
 	SetProtected(value PatternFlowIpv6SegmentRoutingFlagsProtected) FlowIpv6SegmentRoutingFlags
 	// HasProtected checks if Protected has been set in FlowIpv6SegmentRoutingFlags
 	HasProtected() bool
-	// Oam returns PatternFlowIpv6SegmentRoutingFlagsOam, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOam is oAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
-	Oam() PatternFlowIpv6SegmentRoutingFlagsOam
-	// SetOam assigns PatternFlowIpv6SegmentRoutingFlagsOam provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOam is oAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
-	SetOam(value PatternFlowIpv6SegmentRoutingFlagsOam) FlowIpv6SegmentRoutingFlags
-	// HasOam checks if Oam has been set in FlowIpv6SegmentRoutingFlags
-	HasOam() bool
 	// Alert returns PatternFlowIpv6SegmentRoutingFlagsAlert, set in FlowIpv6SegmentRoutingFlags.
 	// PatternFlowIpv6SegmentRoutingFlagsAlert is alert Flag. Indicates the presence of important TLVs that must be inspected.
 	Alert() PatternFlowIpv6SegmentRoutingFlagsAlert
@@ -332,34 +322,6 @@ func (obj *flowIpv6SegmentRoutingFlags) SetProtected(value PatternFlowIpv6Segmen
 }
 
 // description is TBD
-// Oam returns a PatternFlowIpv6SegmentRoutingFlagsOam
-func (obj *flowIpv6SegmentRoutingFlags) Oam() PatternFlowIpv6SegmentRoutingFlagsOam {
-	if obj.obj.Oam == nil {
-		obj.obj.Oam = NewPatternFlowIpv6SegmentRoutingFlagsOam().msg()
-	}
-	if obj.oamHolder == nil {
-		obj.oamHolder = &patternFlowIpv6SegmentRoutingFlagsOam{obj: obj.obj.Oam}
-	}
-	return obj.oamHolder
-}
-
-// description is TBD
-// Oam returns a PatternFlowIpv6SegmentRoutingFlagsOam
-func (obj *flowIpv6SegmentRoutingFlags) HasOam() bool {
-	return obj.obj.Oam != nil
-}
-
-// description is TBD
-// SetOam sets the PatternFlowIpv6SegmentRoutingFlagsOam value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetOam(value PatternFlowIpv6SegmentRoutingFlagsOam) FlowIpv6SegmentRoutingFlags {
-
-	obj.oamHolder = nil
-	obj.obj.Oam = value.msg()
-
-	return obj
-}
-
-// description is TBD
 // Alert returns a PatternFlowIpv6SegmentRoutingFlagsAlert
 func (obj *flowIpv6SegmentRoutingFlags) Alert() PatternFlowIpv6SegmentRoutingFlagsAlert {
 	if obj.obj.Alert == nil {
@@ -395,11 +357,6 @@ func (obj *flowIpv6SegmentRoutingFlags) validateObj(vObj *validation, set_defaul
 	if obj.obj.Protected != nil {
 
 		obj.Protected().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Oam != nil {
-
-		obj.Oam().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.Alert != nil {

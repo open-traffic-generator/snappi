@@ -17109,17 +17109,14 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRoutingUsid.Segment.Segment'
     Flow.Ipv6SegmentRouting.Flags:
       description: |-
-        8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
+        An 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
       type: object
       properties:
         protected:
           x-field-uid: 1
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Protected'
-        oam:
-          x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Oam'
         alert:
-          x-field-uid: 3
+          x-field-uid: 2
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert'
     Flow.Size:
       description: |-
@@ -51956,79 +51953,6 @@ components:
       x-constants:
         not_protected: 0
         protected: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Oam.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-      x-constants:
-        not_oam: 0
-        oam: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Oam:
-      description: |-
-        OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Oam.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Oam.Counter'
-          x-field-uid: 6
-      x-constants:
-        not_oam: 0
-        oam: 1
     Pattern.Flow.Ipv6SegmentRouting.Flags.Alert.Counter:
       description: |-
         integer counter pattern

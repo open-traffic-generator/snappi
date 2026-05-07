@@ -13116,18 +13116,15 @@ message FlowIpv6SegmentRoutingUsidSegment {
   PatternFlowIpv6SegmentRoutingUsidSegmentSegment segment = 1;
 }
 
-// 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as
-// unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
+// An 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier
+// drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
 message FlowIpv6SegmentRoutingFlags {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingFlagsProtected protected = 1;
 
   // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOam oam = 2;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 2;
 }
 
 // The frame size which overrides the total length of the packet
@@ -37101,54 +37098,6 @@ message PatternFlowIpv6SegmentRoutingFlagsProtected {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingFlagsProtectedCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
-// (OAM) packet.
-message PatternFlowIpv6SegmentRoutingFlagsOam {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOamCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOamCounter decrement = 6;
 }
 
 // integer counter pattern
