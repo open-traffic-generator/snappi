@@ -258,7 +258,36 @@ func (obj *flowIpv6SegmentRouting) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRouting is defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify a source-routed path for a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH) with full 128-bit Segment IDs
+// (RFC 8754 Section 2). Each segment list entry carries a complete SRv6 SID
+// (locator + function + argument) as a 128-bit IPv6 address.
+// The Routing Type field is always 4 (RFC 8754 Section 2.1).
+//
+// Packet stack example - 2-SID path (H.Encaps, Node1 then Node2 then receiver):
+//
+// ```
+// +--------------------------------------------------+
+// | Ethernet                                         |
+// +--------------------------------------------------+
+// | Outer IPv6                                       |
+// |   next_header : 43 (Routing Extension Header)   |
+// |   dst         : fc00:0:1::  (Segment[1], active)|
+// +--------------------------------------------------+
+// | SRH (Routing Type 4)                            |
+// |   segments_left : 1  (auto = num segments - 1)  |
+// |   last_entry    : 1  (auto = num segments - 1)  |
+// |   flags, tag    : 0                             |
+// |   Segment[0]    : fc00:0:2::  (last hop)        |
+// |   Segment[1]    : fc00:0:1::  (first hop)       |
+// +--------------------------------------------------+
+// | Inner payload (IPv4, IPv6, etc.)                 |
+// +--------------------------------------------------+
+// ```
+//
+// The outer IPv6 dst is set to Segment[segments_left], which is the first
+// SID to visit. At each hop, segments_left is decremented and dst is
+// updated to the next SID. The segment list is encoded in reverse path
+// order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 type FlowIpv6SegmentRouting interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRouting to protobuf object *otg.FlowIpv6SegmentRouting
@@ -281,34 +310,34 @@ type FlowIpv6SegmentRouting interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// SegmentsLeft returns PatternFlowIpv6SegmentRoutingSegmentsLeft, set in FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.
+	// PatternFlowIpv6SegmentRoutingSegmentsLeft is number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.
 	SegmentsLeft() PatternFlowIpv6SegmentRoutingSegmentsLeft
 	// SetSegmentsLeft assigns PatternFlowIpv6SegmentRoutingSegmentsLeft provided by user to FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingSegmentsLeft is 8-bit unsigned integer containing the number of remaining segments to be visited before the packet reaches its final destination. It is decremented at each segment endpoint. It points to the current active segment in the Segment List. This should not be more than the number of segments specified in the segment list. When auto is assigned the value is set to the number of segments specified.
+	// PatternFlowIpv6SegmentRoutingSegmentsLeft is number of route segments remaining before the packet reaches its final destination (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned the value is set to the number of segments specified.
 	SetSegmentsLeft(value PatternFlowIpv6SegmentRoutingSegmentsLeft) FlowIpv6SegmentRouting
 	// HasSegmentsLeft checks if SegmentsLeft has been set in FlowIpv6SegmentRouting
 	HasSegmentsLeft() bool
 	// LastEntry returns PatternFlowIpv6SegmentRoutingLastEntry, set in FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.
+	// PatternFlowIpv6SegmentRoutingLastEntry is zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, a list of 3 SIDs has Last Entry = 2. When auto is assigned the value is set to one less than the number of segments specified.
 	LastEntry() PatternFlowIpv6SegmentRoutingLastEntry
 	// SetLastEntry assigns PatternFlowIpv6SegmentRoutingLastEntry provided by user to FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.
+	// PatternFlowIpv6SegmentRoutingLastEntry is zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, a list of 3 SIDs has Last Entry = 2. When auto is assigned the value is set to one less than the number of segments specified.
 	SetLastEntry(value PatternFlowIpv6SegmentRoutingLastEntry) FlowIpv6SegmentRouting
 	// HasLastEntry checks if LastEntry has been set in FlowIpv6SegmentRouting
 	HasLastEntry() bool
 	// Flags returns FlowIpv6SegmentRoutingFlags, set in FlowIpv6SegmentRouting.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
 	Flags() FlowIpv6SegmentRoutingFlags
 	// SetFlags assigns FlowIpv6SegmentRoutingFlags provided by user to FlowIpv6SegmentRouting.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
 	SetFlags(value FlowIpv6SegmentRoutingFlags) FlowIpv6SegmentRouting
 	// HasFlags checks if Flags has been set in FlowIpv6SegmentRouting
 	HasFlags() bool
 	// Tag returns PatternFlowIpv6SegmentRoutingTag, set in FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.
+	// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.
 	Tag() PatternFlowIpv6SegmentRoutingTag
 	// SetTag assigns PatternFlowIpv6SegmentRoutingTag provided by user to FlowIpv6SegmentRouting.
-	// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.
+	// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.
 	SetTag(value PatternFlowIpv6SegmentRoutingTag) FlowIpv6SegmentRouting
 	// HasTag checks if Tag has been set in FlowIpv6SegmentRouting
 	HasTag() bool
@@ -429,7 +458,7 @@ func (obj *flowIpv6SegmentRouting) SetTag(value PatternFlowIpv6SegmentRoutingTag
 	return obj
 }
 
-// 128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment List is encoded starting from the last segment of the SR Policy. That is, the first element of the Segment List (Segment List[0]) contains the last segment of the SR Policy, the second element contains the penultimate segment of the SR Policy, and so on.
+// List of 128-bit SRv6 SID addresses (RFC 8754 Section 2.1), encoded in reverse path order: Segment[0] is the last segment of the SR Policy, Segment[n-1] is the first segment to visit.
 // SegmentList returns a []FlowIpv6SegmentRoutingSegment
 func (obj *flowIpv6SegmentRouting) SegmentList() FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter {
 	if len(obj.obj.SegmentList) == 0 {

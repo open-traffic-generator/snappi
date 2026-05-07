@@ -254,7 +254,7 @@ func (obj *flowIpv6SegmentRoutingFlags) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+// FlowIpv6SegmentRoutingFlags is 8-bit flags field in the SRH (RFC 8754 Section 2.1). RFC 8754 reserves all bits as unused; earlier drafts defined OAM, HMAC, and FRR protection flags.
 type FlowIpv6SegmentRoutingFlags interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingFlags to protobuf object *otg.FlowIpv6SegmentRoutingFlags

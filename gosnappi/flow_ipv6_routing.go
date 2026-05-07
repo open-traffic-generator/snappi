@@ -13,10 +13,11 @@ import (
 // ***** FlowIpv6Routing *****
 type flowIpv6Routing struct {
 	validation
-	obj                  *otg.FlowIpv6Routing
-	marshaller           marshalFlowIpv6Routing
-	unMarshaller         unMarshalFlowIpv6Routing
-	segmentRoutingHolder FlowIpv6SegmentRouting
+	obj                      *otg.FlowIpv6Routing
+	marshaller               marshalFlowIpv6Routing
+	unMarshaller             unMarshalFlowIpv6Routing
+	segmentRoutingHolder     FlowIpv6SegmentRouting
+	segmentRoutingUsidHolder FlowIpv6SegmentRoutingUsid
 }
 
 func NewFlowIpv6Routing() FlowIpv6Routing {
@@ -245,6 +246,7 @@ func (obj *flowIpv6Routing) Clone() (FlowIpv6Routing, error) {
 
 func (obj *flowIpv6Routing) setNil() {
 	obj.segmentRoutingHolder = nil
+	obj.segmentRoutingUsidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -279,13 +281,199 @@ type FlowIpv6Routing interface {
 	// HasChoice checks if Choice has been set in FlowIpv6Routing
 	HasChoice() bool
 	// SegmentRouting returns FlowIpv6SegmentRouting, set in FlowIpv6Routing.
-	// FlowIpv6SegmentRouting is defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify a source-routed path for a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+	// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH) with full 128-bit Segment IDs
+	// (RFC 8754 Section 2). Each segment list entry carries a complete SRv6 SID
+	// (locator + function + argument) as a 128-bit IPv6 address.
+	// The Routing Type field is always 4 (RFC 8754 Section 2.1).
+	//
+	// Packet stack example - 2-SID path (H.Encaps, Node1 then Node2 then receiver):
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   next_header : 43 (Routing Extension Header)   |
+	// |   dst         : fc00:0:1::  (Segment[1], active)|
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 1  (auto = num segments - 1)  |
+	// |   last_entry    : 1  (auto = num segments - 1)  |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:2::  (last hop)        |
+	// |   Segment[1]    : fc00:0:1::  (first hop)       |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// The outer IPv6 dst is set to Segment[segments_left], which is the first
+	// SID to visit. At each hop, segments_left is decremented and dst is
+	// updated to the next SID. The segment list is encoded in reverse path
+	// order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 	SegmentRouting() FlowIpv6SegmentRouting
 	// SetSegmentRouting assigns FlowIpv6SegmentRouting provided by user to FlowIpv6Routing.
-	// FlowIpv6SegmentRouting is defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type 4. This header is an IPv6 Routing header used to specify a source-routed path for a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically IPv6 addresses.
+	// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH) with full 128-bit Segment IDs
+	// (RFC 8754 Section 2). Each segment list entry carries a complete SRv6 SID
+	// (locator + function + argument) as a 128-bit IPv6 address.
+	// The Routing Type field is always 4 (RFC 8754 Section 2.1).
+	//
+	// Packet stack example - 2-SID path (H.Encaps, Node1 then Node2 then receiver):
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   next_header : 43 (Routing Extension Header)   |
+	// |   dst         : fc00:0:1::  (Segment[1], active)|
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 1  (auto = num segments - 1)  |
+	// |   last_entry    : 1  (auto = num segments - 1)  |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:2::  (last hop)        |
+	// |   Segment[1]    : fc00:0:1::  (first hop)       |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// The outer IPv6 dst is set to Segment[segments_left], which is the first
+	// SID to visit. At each hop, segments_left is decremented and dst is
+	// updated to the next SID. The segment list is encoded in reverse path
+	// order: Segment[0] is the last hop, Segment[n-1] is the first hop.
 	SetSegmentRouting(value FlowIpv6SegmentRouting) FlowIpv6Routing
 	// HasSegmentRouting checks if SegmentRouting has been set in FlowIpv6Routing
 	HasSegmentRouting() bool
+	// SegmentRoutingUsid returns FlowIpv6SegmentRoutingUsid, set in FlowIpv6Routing.
+	// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH) with uSID containers (RFC 9800 Section 4).
+	// Each segment list entry is a pre-computed 128-bit uSID container value
+	// supplied as a plain IPv6 address. The container packs multiple Micro-SIDs
+	// but appears on the wire as a single 128-bit address - no decomposition
+	// fields (locator block length, node length, function length) are present
+	// in the packet. The user pre-computes the container value and supplies it
+	// directly, allowing raw traffic generation independent of any control
+	// plane configuration on the emulated device.
+	// The Routing Type field is always 4 (RFC 8754 Section 2.1).
+	//
+	// Packet stack example - 1 container (F3216, Node2 + Node3 packed into one container):
+	//
+	// Container value assembly (done by user, outside the schema):
+	// lb=fc00::/32 | node2-fn1 (0002:0001) | node3-fn1 (0003:0001) | zeros
+	// => fc00:0:2:1:3:1::
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   next_header : 43 (Routing Extension Header)   |
+	// |   dst         : fc00:0:2:1:3:1:: (container)    |
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 0  (auto)                     |
+	// |   last_entry    : 0  (auto)                     |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:2:1:3:1::              |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// At Node2: reads first uSID (node2-fn1), shifts container left,
+	// outer dst becomes fc00:0:3:1::, forwards.
+	// At Node3: reads next uSID (node3-fn1), container exhausted,
+	// strips SRH, delivers payload.
+	//
+	// Packet stack example - 2 containers (3-hop path: Node2 + Node3, then Node4):
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   dst : fc00:0:2:1:3:1:: (Segment[1], active)   |
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 1  (auto)                     |
+	// |   last_entry    : 1  (auto)                     |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:4:1::      (last hop)  |
+	// |   Segment[1]    : fc00:0:2:1:3:1::  (first)     |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// The segment list is encoded in reverse path order: Segment[0] is the
+	// last container (last hop), Segment[n-1] is the first container to visit.
+	SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid
+	// SetSegmentRoutingUsid assigns FlowIpv6SegmentRoutingUsid provided by user to FlowIpv6Routing.
+	// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH) with uSID containers (RFC 9800 Section 4).
+	// Each segment list entry is a pre-computed 128-bit uSID container value
+	// supplied as a plain IPv6 address. The container packs multiple Micro-SIDs
+	// but appears on the wire as a single 128-bit address - no decomposition
+	// fields (locator block length, node length, function length) are present
+	// in the packet. The user pre-computes the container value and supplies it
+	// directly, allowing raw traffic generation independent of any control
+	// plane configuration on the emulated device.
+	// The Routing Type field is always 4 (RFC 8754 Section 2.1).
+	//
+	// Packet stack example - 1 container (F3216, Node2 + Node3 packed into one container):
+	//
+	// Container value assembly (done by user, outside the schema):
+	// lb=fc00::/32 | node2-fn1 (0002:0001) | node3-fn1 (0003:0001) | zeros
+	// => fc00:0:2:1:3:1::
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   next_header : 43 (Routing Extension Header)   |
+	// |   dst         : fc00:0:2:1:3:1:: (container)    |
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 0  (auto)                     |
+	// |   last_entry    : 0  (auto)                     |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:2:1:3:1::              |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// At Node2: reads first uSID (node2-fn1), shifts container left,
+	// outer dst becomes fc00:0:3:1::, forwards.
+	// At Node3: reads next uSID (node3-fn1), container exhausted,
+	// strips SRH, delivers payload.
+	//
+	// Packet stack example - 2 containers (3-hop path: Node2 + Node3, then Node4):
+	//
+	// ```
+	// +--------------------------------------------------+
+	// | Ethernet                                         |
+	// +--------------------------------------------------+
+	// | Outer IPv6                                       |
+	// |   dst : fc00:0:2:1:3:1:: (Segment[1], active)   |
+	// +--------------------------------------------------+
+	// | SRH (Routing Type 4)                            |
+	// |   segments_left : 1  (auto)                     |
+	// |   last_entry    : 1  (auto)                     |
+	// |   flags, tag    : 0                             |
+	// |   Segment[0]    : fc00:0:4:1::      (last hop)  |
+	// |   Segment[1]    : fc00:0:2:1:3:1::  (first)     |
+	// +--------------------------------------------------+
+	// | Inner payload (IPv4, IPv6, etc.)                 |
+	// +--------------------------------------------------+
+	// ```
+	//
+	// The segment list is encoded in reverse path order: Segment[0] is the
+	// last container (last hop), Segment[n-1] is the first container to visit.
+	SetSegmentRoutingUsid(value FlowIpv6SegmentRoutingUsid) FlowIpv6Routing
+	// HasSegmentRoutingUsid checks if SegmentRoutingUsid has been set in FlowIpv6Routing
+	HasSegmentRoutingUsid() bool
 	setNil()
 }
 
@@ -293,9 +481,11 @@ type FlowIpv6RoutingChoiceEnum string
 
 // Enum of Choice on FlowIpv6Routing
 var FlowIpv6RoutingChoice = struct {
-	SEGMENT_ROUTING FlowIpv6RoutingChoiceEnum
+	SEGMENT_ROUTING      FlowIpv6RoutingChoiceEnum
+	SEGMENT_ROUTING_USID FlowIpv6RoutingChoiceEnum
 }{
-	SEGMENT_ROUTING: FlowIpv6RoutingChoiceEnum("segment_routing"),
+	SEGMENT_ROUTING:      FlowIpv6RoutingChoiceEnum("segment_routing"),
+	SEGMENT_ROUTING_USID: FlowIpv6RoutingChoiceEnum("segment_routing_usid"),
 }
 
 func (obj *flowIpv6Routing) Choice() FlowIpv6RoutingChoiceEnum {
@@ -317,11 +507,17 @@ func (obj *flowIpv6Routing) setChoice(value FlowIpv6RoutingChoiceEnum) FlowIpv6R
 	}
 	enumValue := otg.FlowIpv6Routing_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.SegmentRoutingUsid = nil
+	obj.segmentRoutingUsidHolder = nil
 	obj.obj.SegmentRouting = nil
 	obj.segmentRoutingHolder = nil
 
 	if value == FlowIpv6RoutingChoice.SEGMENT_ROUTING {
 		obj.obj.SegmentRouting = NewFlowIpv6SegmentRouting().msg()
+	}
+
+	if value == FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID {
+		obj.obj.SegmentRoutingUsid = NewFlowIpv6SegmentRoutingUsid().msg()
 	}
 
 	return obj
@@ -355,6 +551,34 @@ func (obj *flowIpv6Routing) SetSegmentRouting(value FlowIpv6SegmentRouting) Flow
 	return obj
 }
 
+// description is TBD
+// SegmentRoutingUsid returns a FlowIpv6SegmentRoutingUsid
+func (obj *flowIpv6Routing) SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid {
+	if obj.obj.SegmentRoutingUsid == nil {
+		obj.setChoice(FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID)
+	}
+	if obj.segmentRoutingUsidHolder == nil {
+		obj.segmentRoutingUsidHolder = &flowIpv6SegmentRoutingUsid{obj: obj.obj.SegmentRoutingUsid}
+	}
+	return obj.segmentRoutingUsidHolder
+}
+
+// description is TBD
+// SegmentRoutingUsid returns a FlowIpv6SegmentRoutingUsid
+func (obj *flowIpv6Routing) HasSegmentRoutingUsid() bool {
+	return obj.obj.SegmentRoutingUsid != nil
+}
+
+// description is TBD
+// SetSegmentRoutingUsid sets the FlowIpv6SegmentRoutingUsid value in the FlowIpv6Routing object
+func (obj *flowIpv6Routing) SetSegmentRoutingUsid(value FlowIpv6SegmentRoutingUsid) FlowIpv6Routing {
+	obj.setChoice(FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID)
+	obj.segmentRoutingUsidHolder = nil
+	obj.obj.SegmentRoutingUsid = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv6Routing) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,6 +587,11 @@ func (obj *flowIpv6Routing) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.SegmentRouting != nil {
 
 		obj.SegmentRouting().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.SegmentRoutingUsid != nil {
+
+		obj.SegmentRoutingUsid().validateObj(vObj, set_default)
 	}
 
 }
@@ -374,6 +603,11 @@ func (obj *flowIpv6Routing) setDefault() {
 	if obj.obj.SegmentRouting != nil {
 		choices_set += 1
 		choice = FlowIpv6RoutingChoice.SEGMENT_ROUTING
+	}
+
+	if obj.obj.SegmentRoutingUsid != nil {
+		choices_set += 1
+		choice = FlowIpv6RoutingChoice.SEGMENT_ROUTING_USID
 	}
 	if choices_set == 0 {
 		if obj.obj.Choice == nil {
