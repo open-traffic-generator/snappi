@@ -13,14 +13,19 @@ import (
 // ***** FlowIpv6SegmentRoutingUsid *****
 type flowIpv6SegmentRoutingUsid struct {
 	validation
-	obj                *otg.FlowIpv6SegmentRoutingUsid
-	marshaller         marshalFlowIpv6SegmentRoutingUsid
-	unMarshaller       unMarshalFlowIpv6SegmentRoutingUsid
-	segmentsLeftHolder PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
-	lastEntryHolder    PatternFlowIpv6SegmentRoutingUsidLastEntry
-	flagsHolder        FlowIpv6SegmentRoutingFlags
-	tagHolder          PatternFlowIpv6SegmentRoutingUsidTag
-	segmentListHolder  FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter
+	obj                  *otg.FlowIpv6SegmentRoutingUsid
+	marshaller           marshalFlowIpv6SegmentRoutingUsid
+	unMarshaller         unMarshalFlowIpv6SegmentRoutingUsid
+	segmentsLeftHolder   PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
+	lastEntryHolder      PatternFlowIpv6SegmentRoutingUsidLastEntry
+	flagsHolder          FlowIpv6SegmentRoutingFlags
+	tagHolder            PatternFlowIpv6SegmentRoutingUsidTag
+	segmentListHolder    FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter
+	ingressNodeTlvHolder FlowIpv6SRHIngressNodeTlv
+	egressNodeTlvHolder  FlowIpv6SRHEgressNodeTlv
+	opaqueTlvHolder      FlowIpv6SRHOpaqueContainerTlv
+	padTlvHolder         FlowIpv6SRHPadTlv
+	pathTraceTlvHolder   FlowIpv6SRHPathTraceTlv
 }
 
 func NewFlowIpv6SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid {
@@ -253,72 +258,17 @@ func (obj *flowIpv6SegmentRoutingUsid) setNil() {
 	obj.flagsHolder = nil
 	obj.tagHolder = nil
 	obj.segmentListHolder = nil
+	obj.ingressNodeTlvHolder = nil
+	obj.egressNodeTlvHolder = nil
+	obj.opaqueTlvHolder = nil
+	obj.padTlvHolder = nil
+	obj.pathTraceTlvHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH) with uSID containers (RFC 9800 Section 4).
-// Each segment list entry is a pre-computed 128-bit uSID container value
-// supplied as a plain IPv6 address. The container packs multiple Micro-SIDs
-// but appears on the wire as a single 128-bit address - no decomposition
-// fields (locator block length, node length, function length) are present
-// in the packet. The user pre-computes the container value and supplies it
-// directly, allowing raw traffic generation independent of any control
-// plane configuration on the emulated device.
-// The Routing Type field is always 4 (RFC 8754 Section 2.1).
-//
-// Packet stack example - 1 container (F3216, Node2 + Node3 packed into one container):
-//
-// Container value assembly (done by user, outside the schema):
-// lb=fc00::/32 | node2-fn1 (0002:0001) | node3-fn1 (0003:0001) | zeros
-// => fc00:0:2:1:3:1::
-//
-// ```
-// +--------------------------------------------------+
-// | Ethernet                                         |
-// +--------------------------------------------------+
-// | Outer IPv6                                       |
-// |   next_header : 43 (Routing Extension Header)   |
-// |   dst         : fc00:0:2:1:3:1:: (container)    |
-// +--------------------------------------------------+
-// | SRH (Routing Type 4)                            |
-// |   segments_left : 0  (auto)                     |
-// |   last_entry    : 0  (auto)                     |
-// |   flags, tag    : 0                             |
-// |   Segment[0]    : fc00:0:2:1:3:1::              |
-// +--------------------------------------------------+
-// | Inner payload (IPv4, IPv6, etc.)                 |
-// +--------------------------------------------------+
-// ```
-//
-// At Node2: reads first uSID (node2-fn1), shifts container left,
-// outer dst becomes fc00:0:3:1::, forwards.
-// At Node3: reads next uSID (node3-fn1), container exhausted,
-// strips SRH, delivers payload.
-//
-// Packet stack example - 2 containers (3-hop path: Node2 + Node3, then Node4):
-//
-// ```
-// +--------------------------------------------------+
-// | Ethernet                                         |
-// +--------------------------------------------------+
-// | Outer IPv6                                       |
-// |   dst : fc00:0:2:1:3:1:: (Segment[1], active)   |
-// +--------------------------------------------------+
-// | SRH (Routing Type 4)                            |
-// |   segments_left : 1  (auto)                     |
-// |   last_entry    : 1  (auto)                     |
-// |   flags, tag    : 0                             |
-// |   Segment[0]    : fc00:0:4:1::      (last hop)  |
-// |   Segment[1]    : fc00:0:2:1:3:1::  (first)     |
-// +--------------------------------------------------+
-// | Inner payload (IPv4, IPv6, etc.)                 |
-// +--------------------------------------------------+
-// ```
-//
-// The segment list is encoded in reverse path order: Segment[0] is the
-// last container (last hop), Segment[n-1] is the first container to visit.
+// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying pre-computed uSID containers (RFC 9800 Section 4). Each segment list entry is a 128-bit uSID container value supplied as a plain IPv6 address. The user pre-computes the container outside the schema; no decomposition fields appear on the wire. Segment list encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first (active, placed in outer IPv6 dst).
 type FlowIpv6SegmentRoutingUsid interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsid to protobuf object *otg.FlowIpv6SegmentRoutingUsid
@@ -357,10 +307,10 @@ type FlowIpv6SegmentRoutingUsid interface {
 	// HasLastEntry checks if LastEntry has been set in FlowIpv6SegmentRoutingUsid
 	HasLastEntry() bool
 	// Flags returns FlowIpv6SegmentRoutingFlags, set in FlowIpv6SegmentRoutingUsid.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
 	Flags() FlowIpv6SegmentRoutingFlags
 	// SetFlags assigns FlowIpv6SegmentRoutingFlags provided by user to FlowIpv6SegmentRoutingUsid.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
 	SetFlags(value FlowIpv6SegmentRoutingFlags) FlowIpv6SegmentRoutingUsid
 	// HasFlags checks if Flags has been set in FlowIpv6SegmentRoutingUsid
 	HasFlags() bool
@@ -374,6 +324,46 @@ type FlowIpv6SegmentRoutingUsid interface {
 	HasTag() bool
 	// SegmentList returns FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIterIter, set in FlowIpv6SegmentRoutingUsid
 	SegmentList() FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter
+	// IngressNodeTlv returns FlowIpv6SRHIngressNodeTlv, set in FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHIngressNodeTlv is sRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
+	IngressNodeTlv() FlowIpv6SRHIngressNodeTlv
+	// SetIngressNodeTlv assigns FlowIpv6SRHIngressNodeTlv provided by user to FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHIngressNodeTlv is sRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
+	SetIngressNodeTlv(value FlowIpv6SRHIngressNodeTlv) FlowIpv6SegmentRoutingUsid
+	// HasIngressNodeTlv checks if IngressNodeTlv has been set in FlowIpv6SegmentRoutingUsid
+	HasIngressNodeTlv() bool
+	// EgressNodeTlv returns FlowIpv6SRHEgressNodeTlv, set in FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHEgressNodeTlv is sRH Egress Node TLV (type 2, RFC 9259 Section 3.2). Identifies the global IPv6 address of the intended SRv6 egress node - the last segment endpoint of the SR policy. OAM-capable endpoint nodes inspect this TLV to verify that the packet will exit the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.2.
+	EgressNodeTlv() FlowIpv6SRHEgressNodeTlv
+	// SetEgressNodeTlv assigns FlowIpv6SRHEgressNodeTlv provided by user to FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHEgressNodeTlv is sRH Egress Node TLV (type 2, RFC 9259 Section 3.2). Identifies the global IPv6 address of the intended SRv6 egress node - the last segment endpoint of the SR policy. OAM-capable endpoint nodes inspect this TLV to verify that the packet will exit the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.2.
+	SetEgressNodeTlv(value FlowIpv6SRHEgressNodeTlv) FlowIpv6SegmentRoutingUsid
+	// HasEgressNodeTlv checks if EgressNodeTlv has been set in FlowIpv6SegmentRoutingUsid
+	HasEgressNodeTlv() bool
+	// OpaqueTlv returns FlowIpv6SRHOpaqueContainerTlv, set in FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHOpaqueContainerTlv is sRH Opaque Container TLV (type 3, RFC 8754 Section 2.1). Carries implementation-specific or application-defined opaque data in the SRH TLV section. Transit nodes do not interpret the contents. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	OpaqueTlv() FlowIpv6SRHOpaqueContainerTlv
+	// SetOpaqueTlv assigns FlowIpv6SRHOpaqueContainerTlv provided by user to FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHOpaqueContainerTlv is sRH Opaque Container TLV (type 3, RFC 8754 Section 2.1). Carries implementation-specific or application-defined opaque data in the SRH TLV section. Transit nodes do not interpret the contents. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	SetOpaqueTlv(value FlowIpv6SRHOpaqueContainerTlv) FlowIpv6SegmentRoutingUsid
+	// HasOpaqueTlv checks if OpaqueTlv has been set in FlowIpv6SegmentRoutingUsid
+	HasOpaqueTlv() bool
+	// PadTlv returns FlowIpv6SRHPadTlv, set in FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHPadTlv is sRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	PadTlv() FlowIpv6SRHPadTlv
+	// SetPadTlv assigns FlowIpv6SRHPadTlv provided by user to FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHPadTlv is sRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	SetPadTlv(value FlowIpv6SRHPadTlv) FlowIpv6SegmentRoutingUsid
+	// HasPadTlv checks if PadTlv has been set in FlowIpv6SegmentRoutingUsid
+	HasPadTlv() bool
+	// PathTraceTlv returns FlowIpv6SRHPathTraceTlv, set in FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHPathTraceTlv is sRH Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing). Records path information as the packet traverses SRv6 segment endpoints. The ingress node initializes the TLV; each subsequent SRv6 endpoint appends an 8-byte block containing its node identity, timestamp, and performance monitoring data. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: draft-ietf-spring-srv6-path-tracing.
+	PathTraceTlv() FlowIpv6SRHPathTraceTlv
+	// SetPathTraceTlv assigns FlowIpv6SRHPathTraceTlv provided by user to FlowIpv6SegmentRoutingUsid.
+	// FlowIpv6SRHPathTraceTlv is sRH Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing). Records path information as the packet traverses SRv6 segment endpoints. The ingress node initializes the TLV; each subsequent SRv6 endpoint appends an 8-byte block containing its node identity, timestamp, and performance monitoring data. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: draft-ietf-spring-srv6-path-tracing.
+	SetPathTraceTlv(value FlowIpv6SRHPathTraceTlv) FlowIpv6SegmentRoutingUsid
+	// HasPathTraceTlv checks if PathTraceTlv has been set in FlowIpv6SegmentRoutingUsid
+	HasPathTraceTlv() bool
 	setNil()
 }
 
@@ -489,8 +479,7 @@ func (obj *flowIpv6SegmentRoutingUsid) SetTag(value PatternFlowIpv6SegmentRoutin
 	return obj
 }
 
-// List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container (last hop), Segment[n-1] is the first container to visit. Each value is a plain IPv6 address supplied by the user.
-// Maximum capacity per SRH (RFC 8754 Section 2.1): The hdr_ext_len field is 8 bits; the SRH total size is (hdr_ext_len + 1) x 8 bytes. With hdr_ext_len max = 255 the SRH can hold at most (255+1)*8 - 8 = 2040 bytes of segment list, giving a theoretical maximum of 127 containers (each 16 bytes). For F3216 (3 uSIDs per container) this is 127 x 3 = 381 micro-SIDs. In practice a standard Ethernet MTU of 1500 bytes limits the SRH to approximately 88 containers (~264 micro-SIDs for F3216) after accounting for the outer IPv6 header (40 bytes) and inner payload.
+// List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit.
 // SegmentList returns a []FlowIpv6SegmentRoutingUsidSegment
 func (obj *flowIpv6SegmentRoutingUsid) SegmentList() FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter {
 	if len(obj.obj.SegmentList) == 0 {
@@ -577,6 +566,146 @@ func (obj *flowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter) appe
 	return obj
 }
 
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// IngressNodeTlv returns a FlowIpv6SRHIngressNodeTlv
+func (obj *flowIpv6SegmentRoutingUsid) IngressNodeTlv() FlowIpv6SRHIngressNodeTlv {
+	if obj.obj.IngressNodeTlv == nil {
+		obj.obj.IngressNodeTlv = NewFlowIpv6SRHIngressNodeTlv().msg()
+	}
+	if obj.ingressNodeTlvHolder == nil {
+		obj.ingressNodeTlvHolder = &flowIpv6SRHIngressNodeTlv{obj: obj.obj.IngressNodeTlv}
+	}
+	return obj.ingressNodeTlvHolder
+}
+
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// IngressNodeTlv returns a FlowIpv6SRHIngressNodeTlv
+func (obj *flowIpv6SegmentRoutingUsid) HasIngressNodeTlv() bool {
+	return obj.obj.IngressNodeTlv != nil
+}
+
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// SetIngressNodeTlv sets the FlowIpv6SRHIngressNodeTlv value in the FlowIpv6SegmentRoutingUsid object
+func (obj *flowIpv6SegmentRoutingUsid) SetIngressNodeTlv(value FlowIpv6SRHIngressNodeTlv) FlowIpv6SegmentRoutingUsid {
+
+	obj.ingressNodeTlvHolder = nil
+	obj.obj.IngressNodeTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// EgressNodeTlv returns a FlowIpv6SRHEgressNodeTlv
+func (obj *flowIpv6SegmentRoutingUsid) EgressNodeTlv() FlowIpv6SRHEgressNodeTlv {
+	if obj.obj.EgressNodeTlv == nil {
+		obj.obj.EgressNodeTlv = NewFlowIpv6SRHEgressNodeTlv().msg()
+	}
+	if obj.egressNodeTlvHolder == nil {
+		obj.egressNodeTlvHolder = &flowIpv6SRHEgressNodeTlv{obj: obj.obj.EgressNodeTlv}
+	}
+	return obj.egressNodeTlvHolder
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// EgressNodeTlv returns a FlowIpv6SRHEgressNodeTlv
+func (obj *flowIpv6SegmentRoutingUsid) HasEgressNodeTlv() bool {
+	return obj.obj.EgressNodeTlv != nil
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// SetEgressNodeTlv sets the FlowIpv6SRHEgressNodeTlv value in the FlowIpv6SegmentRoutingUsid object
+func (obj *flowIpv6SegmentRoutingUsid) SetEgressNodeTlv(value FlowIpv6SRHEgressNodeTlv) FlowIpv6SegmentRoutingUsid {
+
+	obj.egressNodeTlvHolder = nil
+	obj.obj.EgressNodeTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// OpaqueTlv returns a FlowIpv6SRHOpaqueContainerTlv
+func (obj *flowIpv6SegmentRoutingUsid) OpaqueTlv() FlowIpv6SRHOpaqueContainerTlv {
+	if obj.obj.OpaqueTlv == nil {
+		obj.obj.OpaqueTlv = NewFlowIpv6SRHOpaqueContainerTlv().msg()
+	}
+	if obj.opaqueTlvHolder == nil {
+		obj.opaqueTlvHolder = &flowIpv6SRHOpaqueContainerTlv{obj: obj.obj.OpaqueTlv}
+	}
+	return obj.opaqueTlvHolder
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// OpaqueTlv returns a FlowIpv6SRHOpaqueContainerTlv
+func (obj *flowIpv6SegmentRoutingUsid) HasOpaqueTlv() bool {
+	return obj.obj.OpaqueTlv != nil
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// SetOpaqueTlv sets the FlowIpv6SRHOpaqueContainerTlv value in the FlowIpv6SegmentRoutingUsid object
+func (obj *flowIpv6SegmentRoutingUsid) SetOpaqueTlv(value FlowIpv6SRHOpaqueContainerTlv) FlowIpv6SegmentRoutingUsid {
+
+	obj.opaqueTlvHolder = nil
+	obj.obj.OpaqueTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// PadTlv returns a FlowIpv6SRHPadTlv
+func (obj *flowIpv6SegmentRoutingUsid) PadTlv() FlowIpv6SRHPadTlv {
+	if obj.obj.PadTlv == nil {
+		obj.obj.PadTlv = NewFlowIpv6SRHPadTlv().msg()
+	}
+	if obj.padTlvHolder == nil {
+		obj.padTlvHolder = &flowIpv6SRHPadTlv{obj: obj.obj.PadTlv}
+	}
+	return obj.padTlvHolder
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// PadTlv returns a FlowIpv6SRHPadTlv
+func (obj *flowIpv6SegmentRoutingUsid) HasPadTlv() bool {
+	return obj.obj.PadTlv != nil
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// SetPadTlv sets the FlowIpv6SRHPadTlv value in the FlowIpv6SegmentRoutingUsid object
+func (obj *flowIpv6SegmentRoutingUsid) SetPadTlv(value FlowIpv6SRHPadTlv) FlowIpv6SegmentRoutingUsid {
+
+	obj.padTlvHolder = nil
+	obj.obj.PadTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// PathTraceTlv returns a FlowIpv6SRHPathTraceTlv
+func (obj *flowIpv6SegmentRoutingUsid) PathTraceTlv() FlowIpv6SRHPathTraceTlv {
+	if obj.obj.PathTraceTlv == nil {
+		obj.obj.PathTraceTlv = NewFlowIpv6SRHPathTraceTlv().msg()
+	}
+	if obj.pathTraceTlvHolder == nil {
+		obj.pathTraceTlvHolder = &flowIpv6SRHPathTraceTlv{obj: obj.obj.PathTraceTlv}
+	}
+	return obj.pathTraceTlvHolder
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// PathTraceTlv returns a FlowIpv6SRHPathTraceTlv
+func (obj *flowIpv6SegmentRoutingUsid) HasPathTraceTlv() bool {
+	return obj.obj.PathTraceTlv != nil
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// SetPathTraceTlv sets the FlowIpv6SRHPathTraceTlv value in the FlowIpv6SegmentRoutingUsid object
+func (obj *flowIpv6SegmentRoutingUsid) SetPathTraceTlv(value FlowIpv6SRHPathTraceTlv) FlowIpv6SegmentRoutingUsid {
+
+	obj.pathTraceTlvHolder = nil
+	obj.obj.PathTraceTlv = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv6SegmentRoutingUsid) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -614,6 +743,31 @@ func (obj *flowIpv6SegmentRoutingUsid) validateObj(vObj *validation, set_default
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.IngressNodeTlv != nil {
+
+		obj.IngressNodeTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.EgressNodeTlv != nil {
+
+		obj.EgressNodeTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.OpaqueTlv != nil {
+
+		obj.OpaqueTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PadTlv != nil {
+
+		obj.PadTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PathTraceTlv != nil {
+
+		obj.PathTraceTlv().validateObj(vObj, set_default)
 	}
 
 }

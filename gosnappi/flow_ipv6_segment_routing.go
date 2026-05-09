@@ -13,14 +13,19 @@ import (
 // ***** FlowIpv6SegmentRouting *****
 type flowIpv6SegmentRouting struct {
 	validation
-	obj                *otg.FlowIpv6SegmentRouting
-	marshaller         marshalFlowIpv6SegmentRouting
-	unMarshaller       unMarshalFlowIpv6SegmentRouting
-	segmentsLeftHolder PatternFlowIpv6SegmentRoutingSegmentsLeft
-	lastEntryHolder    PatternFlowIpv6SegmentRoutingLastEntry
-	flagsHolder        FlowIpv6SegmentRoutingFlags
-	tagHolder          PatternFlowIpv6SegmentRoutingTag
-	segmentListHolder  FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter
+	obj                  *otg.FlowIpv6SegmentRouting
+	marshaller           marshalFlowIpv6SegmentRouting
+	unMarshaller         unMarshalFlowIpv6SegmentRouting
+	segmentsLeftHolder   PatternFlowIpv6SegmentRoutingSegmentsLeft
+	lastEntryHolder      PatternFlowIpv6SegmentRoutingLastEntry
+	flagsHolder          FlowIpv6SegmentRoutingFlags
+	tagHolder            PatternFlowIpv6SegmentRoutingTag
+	segmentListHolder    FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter
+	ingressNodeTlvHolder FlowIpv6SRHIngressNodeTlv
+	egressNodeTlvHolder  FlowIpv6SRHEgressNodeTlv
+	opaqueTlvHolder      FlowIpv6SRHOpaqueContainerTlv
+	padTlvHolder         FlowIpv6SRHPadTlv
+	pathTraceTlvHolder   FlowIpv6SRHPathTraceTlv
 }
 
 func NewFlowIpv6SegmentRouting() FlowIpv6SegmentRouting {
@@ -253,41 +258,17 @@ func (obj *flowIpv6SegmentRouting) setNil() {
 	obj.flagsHolder = nil
 	obj.tagHolder = nil
 	obj.segmentListHolder = nil
+	obj.ingressNodeTlvHolder = nil
+	obj.egressNodeTlvHolder = nil
+	obj.opaqueTlvHolder = nil
+	obj.padTlvHolder = nil
+	obj.pathTraceTlvHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH) with full 128-bit Segment IDs
-// (RFC 8754 Section 2). Each segment list entry carries a complete SRv6 SID
-// (locator + function + argument) as a 128-bit IPv6 address.
-// The Routing Type field is always 4 (RFC 8754 Section 2.1).
-//
-// Packet stack example - 2-SID path (H.Encaps, Node1 then Node2 then receiver):
-//
-// ```
-// +--------------------------------------------------+
-// | Ethernet                                         |
-// +--------------------------------------------------+
-// | Outer IPv6                                       |
-// |   next_header : 43 (Routing Extension Header)   |
-// |   dst         : fc00:0:1::  (Segment[1], active)|
-// +--------------------------------------------------+
-// | SRH (Routing Type 4)                            |
-// |   segments_left : 1  (auto = num segments - 1)  |
-// |   last_entry    : 1  (auto = num segments - 1)  |
-// |   flags, tag    : 0                             |
-// |   Segment[0]    : fc00:0:2::  (last hop)        |
-// |   Segment[1]    : fc00:0:1::  (first hop)       |
-// +--------------------------------------------------+
-// | Inner payload (IPv4, IPv6, etc.)                 |
-// +--------------------------------------------------+
-// ```
-//
-// The outer IPv6 dst is set to Segment[segments_left], which is the first
-// SID to visit. At each hop, segments_left is decremented and dst is
-// updated to the next SID. The segment list is encoded in reverse path
-// order: Segment[0] is the last hop, Segment[n-1] is the first hop.
+// FlowIpv6SegmentRouting is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full 128-bit SRv6 SIDs. Each segment list entry is a complete SID (locator + function + argument) as a 128-bit IPv6 address. Segment list encoded in reverse path order: Segment[0] is the last hop, Segment[n-1] is the first hop (active, placed in outer IPv6 dst).
 type FlowIpv6SegmentRouting interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRouting to protobuf object *otg.FlowIpv6SegmentRouting
@@ -326,10 +307,10 @@ type FlowIpv6SegmentRouting interface {
 	// HasLastEntry checks if LastEntry has been set in FlowIpv6SegmentRouting
 	HasLastEntry() bool
 	// Flags returns FlowIpv6SegmentRoutingFlags, set in FlowIpv6SegmentRouting.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
 	Flags() FlowIpv6SegmentRoutingFlags
 	// SetFlags assigns FlowIpv6SegmentRoutingFlags provided by user to FlowIpv6SegmentRouting.
-	// FlowIpv6SegmentRoutingFlags is an 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+	// FlowIpv6SegmentRoutingFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
 	SetFlags(value FlowIpv6SegmentRoutingFlags) FlowIpv6SegmentRouting
 	// HasFlags checks if Flags has been set in FlowIpv6SegmentRouting
 	HasFlags() bool
@@ -343,6 +324,46 @@ type FlowIpv6SegmentRouting interface {
 	HasTag() bool
 	// SegmentList returns FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIterIter, set in FlowIpv6SegmentRouting
 	SegmentList() FlowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter
+	// IngressNodeTlv returns FlowIpv6SRHIngressNodeTlv, set in FlowIpv6SegmentRouting.
+	// FlowIpv6SRHIngressNodeTlv is sRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
+	IngressNodeTlv() FlowIpv6SRHIngressNodeTlv
+	// SetIngressNodeTlv assigns FlowIpv6SRHIngressNodeTlv provided by user to FlowIpv6SegmentRouting.
+	// FlowIpv6SRHIngressNodeTlv is sRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
+	SetIngressNodeTlv(value FlowIpv6SRHIngressNodeTlv) FlowIpv6SegmentRouting
+	// HasIngressNodeTlv checks if IngressNodeTlv has been set in FlowIpv6SegmentRouting
+	HasIngressNodeTlv() bool
+	// EgressNodeTlv returns FlowIpv6SRHEgressNodeTlv, set in FlowIpv6SegmentRouting.
+	// FlowIpv6SRHEgressNodeTlv is sRH Egress Node TLV (type 2, RFC 9259 Section 3.2). Identifies the global IPv6 address of the intended SRv6 egress node - the last segment endpoint of the SR policy. OAM-capable endpoint nodes inspect this TLV to verify that the packet will exit the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.2.
+	EgressNodeTlv() FlowIpv6SRHEgressNodeTlv
+	// SetEgressNodeTlv assigns FlowIpv6SRHEgressNodeTlv provided by user to FlowIpv6SegmentRouting.
+	// FlowIpv6SRHEgressNodeTlv is sRH Egress Node TLV (type 2, RFC 9259 Section 3.2). Identifies the global IPv6 address of the intended SRv6 egress node - the last segment endpoint of the SR policy. OAM-capable endpoint nodes inspect this TLV to verify that the packet will exit the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.2.
+	SetEgressNodeTlv(value FlowIpv6SRHEgressNodeTlv) FlowIpv6SegmentRouting
+	// HasEgressNodeTlv checks if EgressNodeTlv has been set in FlowIpv6SegmentRouting
+	HasEgressNodeTlv() bool
+	// OpaqueTlv returns FlowIpv6SRHOpaqueContainerTlv, set in FlowIpv6SegmentRouting.
+	// FlowIpv6SRHOpaqueContainerTlv is sRH Opaque Container TLV (type 3, RFC 8754 Section 2.1). Carries implementation-specific or application-defined opaque data in the SRH TLV section. Transit nodes do not interpret the contents. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	OpaqueTlv() FlowIpv6SRHOpaqueContainerTlv
+	// SetOpaqueTlv assigns FlowIpv6SRHOpaqueContainerTlv provided by user to FlowIpv6SegmentRouting.
+	// FlowIpv6SRHOpaqueContainerTlv is sRH Opaque Container TLV (type 3, RFC 8754 Section 2.1). Carries implementation-specific or application-defined opaque data in the SRH TLV section. Transit nodes do not interpret the contents. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	SetOpaqueTlv(value FlowIpv6SRHOpaqueContainerTlv) FlowIpv6SegmentRouting
+	// HasOpaqueTlv checks if OpaqueTlv has been set in FlowIpv6SegmentRouting
+	HasOpaqueTlv() bool
+	// PadTlv returns FlowIpv6SRHPadTlv, set in FlowIpv6SegmentRouting.
+	// FlowIpv6SRHPadTlv is sRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	PadTlv() FlowIpv6SRHPadTlv
+	// SetPadTlv assigns FlowIpv6SRHPadTlv provided by user to FlowIpv6SegmentRouting.
+	// FlowIpv6SRHPadTlv is sRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+	SetPadTlv(value FlowIpv6SRHPadTlv) FlowIpv6SegmentRouting
+	// HasPadTlv checks if PadTlv has been set in FlowIpv6SegmentRouting
+	HasPadTlv() bool
+	// PathTraceTlv returns FlowIpv6SRHPathTraceTlv, set in FlowIpv6SegmentRouting.
+	// FlowIpv6SRHPathTraceTlv is sRH Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing). Records path information as the packet traverses SRv6 segment endpoints. The ingress node initializes the TLV; each subsequent SRv6 endpoint appends an 8-byte block containing its node identity, timestamp, and performance monitoring data. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: draft-ietf-spring-srv6-path-tracing.
+	PathTraceTlv() FlowIpv6SRHPathTraceTlv
+	// SetPathTraceTlv assigns FlowIpv6SRHPathTraceTlv provided by user to FlowIpv6SegmentRouting.
+	// FlowIpv6SRHPathTraceTlv is sRH Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing). Records path information as the packet traverses SRv6 segment endpoints. The ingress node initializes the TLV; each subsequent SRv6 endpoint appends an 8-byte block containing its node identity, timestamp, and performance monitoring data. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: draft-ietf-spring-srv6-path-tracing.
+	SetPathTraceTlv(value FlowIpv6SRHPathTraceTlv) FlowIpv6SegmentRouting
+	// HasPathTraceTlv checks if PathTraceTlv has been set in FlowIpv6SegmentRouting
+	HasPathTraceTlv() bool
 	setNil()
 }
 
@@ -545,6 +566,146 @@ func (obj *flowIpv6SegmentRoutingFlowIpv6SegmentRoutingSegmentIter) appendHolder
 	return obj
 }
 
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// IngressNodeTlv returns a FlowIpv6SRHIngressNodeTlv
+func (obj *flowIpv6SegmentRouting) IngressNodeTlv() FlowIpv6SRHIngressNodeTlv {
+	if obj.obj.IngressNodeTlv == nil {
+		obj.obj.IngressNodeTlv = NewFlowIpv6SRHIngressNodeTlv().msg()
+	}
+	if obj.ingressNodeTlvHolder == nil {
+		obj.ingressNodeTlvHolder = &flowIpv6SRHIngressNodeTlv{obj: obj.obj.IngressNodeTlv}
+	}
+	return obj.ingressNodeTlvHolder
+}
+
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// IngressNodeTlv returns a FlowIpv6SRHIngressNodeTlv
+func (obj *flowIpv6SegmentRouting) HasIngressNodeTlv() bool {
+	return obj.obj.IngressNodeTlv != nil
+}
+
+// When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+// SetIngressNodeTlv sets the FlowIpv6SRHIngressNodeTlv value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetIngressNodeTlv(value FlowIpv6SRHIngressNodeTlv) FlowIpv6SegmentRouting {
+
+	obj.ingressNodeTlvHolder = nil
+	obj.obj.IngressNodeTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// EgressNodeTlv returns a FlowIpv6SRHEgressNodeTlv
+func (obj *flowIpv6SegmentRouting) EgressNodeTlv() FlowIpv6SRHEgressNodeTlv {
+	if obj.obj.EgressNodeTlv == nil {
+		obj.obj.EgressNodeTlv = NewFlowIpv6SRHEgressNodeTlv().msg()
+	}
+	if obj.egressNodeTlvHolder == nil {
+		obj.egressNodeTlvHolder = &flowIpv6SRHEgressNodeTlv{obj: obj.obj.EgressNodeTlv}
+	}
+	return obj.egressNodeTlvHolder
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// EgressNodeTlv returns a FlowIpv6SRHEgressNodeTlv
+func (obj *flowIpv6SegmentRouting) HasEgressNodeTlv() bool {
+	return obj.obj.EgressNodeTlv != nil
+}
+
+// When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+// SetEgressNodeTlv sets the FlowIpv6SRHEgressNodeTlv value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetEgressNodeTlv(value FlowIpv6SRHEgressNodeTlv) FlowIpv6SegmentRouting {
+
+	obj.egressNodeTlvHolder = nil
+	obj.obj.EgressNodeTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// OpaqueTlv returns a FlowIpv6SRHOpaqueContainerTlv
+func (obj *flowIpv6SegmentRouting) OpaqueTlv() FlowIpv6SRHOpaqueContainerTlv {
+	if obj.obj.OpaqueTlv == nil {
+		obj.obj.OpaqueTlv = NewFlowIpv6SRHOpaqueContainerTlv().msg()
+	}
+	if obj.opaqueTlvHolder == nil {
+		obj.opaqueTlvHolder = &flowIpv6SRHOpaqueContainerTlv{obj: obj.obj.OpaqueTlv}
+	}
+	return obj.opaqueTlvHolder
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// OpaqueTlv returns a FlowIpv6SRHOpaqueContainerTlv
+func (obj *flowIpv6SegmentRouting) HasOpaqueTlv() bool {
+	return obj.obj.OpaqueTlv != nil
+}
+
+// When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+// SetOpaqueTlv sets the FlowIpv6SRHOpaqueContainerTlv value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetOpaqueTlv(value FlowIpv6SRHOpaqueContainerTlv) FlowIpv6SegmentRouting {
+
+	obj.opaqueTlvHolder = nil
+	obj.obj.OpaqueTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// PadTlv returns a FlowIpv6SRHPadTlv
+func (obj *flowIpv6SegmentRouting) PadTlv() FlowIpv6SRHPadTlv {
+	if obj.obj.PadTlv == nil {
+		obj.obj.PadTlv = NewFlowIpv6SRHPadTlv().msg()
+	}
+	if obj.padTlvHolder == nil {
+		obj.padTlvHolder = &flowIpv6SRHPadTlv{obj: obj.obj.PadTlv}
+	}
+	return obj.padTlvHolder
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// PadTlv returns a FlowIpv6SRHPadTlv
+func (obj *flowIpv6SegmentRouting) HasPadTlv() bool {
+	return obj.obj.PadTlv != nil
+}
+
+// When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+// SetPadTlv sets the FlowIpv6SRHPadTlv value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetPadTlv(value FlowIpv6SRHPadTlv) FlowIpv6SegmentRouting {
+
+	obj.padTlvHolder = nil
+	obj.obj.PadTlv = value.msg()
+
+	return obj
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// PathTraceTlv returns a FlowIpv6SRHPathTraceTlv
+func (obj *flowIpv6SegmentRouting) PathTraceTlv() FlowIpv6SRHPathTraceTlv {
+	if obj.obj.PathTraceTlv == nil {
+		obj.obj.PathTraceTlv = NewFlowIpv6SRHPathTraceTlv().msg()
+	}
+	if obj.pathTraceTlvHolder == nil {
+		obj.pathTraceTlvHolder = &flowIpv6SRHPathTraceTlv{obj: obj.obj.PathTraceTlv}
+	}
+	return obj.pathTraceTlvHolder
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// PathTraceTlv returns a FlowIpv6SRHPathTraceTlv
+func (obj *flowIpv6SegmentRouting) HasPathTraceTlv() bool {
+	return obj.obj.PathTraceTlv != nil
+}
+
+// When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+// SetPathTraceTlv sets the FlowIpv6SRHPathTraceTlv value in the FlowIpv6SegmentRouting object
+func (obj *flowIpv6SegmentRouting) SetPathTraceTlv(value FlowIpv6SRHPathTraceTlv) FlowIpv6SegmentRouting {
+
+	obj.pathTraceTlvHolder = nil
+	obj.obj.PathTraceTlv = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv6SegmentRouting) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -582,6 +743,31 @@ func (obj *flowIpv6SegmentRouting) validateObj(vObj *validation, set_default boo
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.IngressNodeTlv != nil {
+
+		obj.IngressNodeTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.EgressNodeTlv != nil {
+
+		obj.EgressNodeTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.OpaqueTlv != nil {
+
+		obj.OpaqueTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PadTlv != nil {
+
+		obj.PadTlv().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PathTraceTlv != nil {
+
+		obj.PathTraceTlv().validateObj(vObj, set_default)
 	}
 
 }

@@ -250,17 +250,7 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingUsidSegment is one pre-computed uSID container entry in the SRH Segment List (RFC 9800 Section 4, RFC 8754 Section 2.1). The 128-bit value encodes the locator block and packed micro-SIDs and is supplied as a plain IPv6 address. No decomposition metadata is carried on the wire.
-// Maximum micro-SIDs per container (RFC 9800 Section 4):
-// floor((128 - locator_block_length) /
-// (locator_node_length + function_length))
-// Common formats:
-// F3216 (lb=32, ln=16, fn=16): floor(96/32) = 3 uSIDs per container.
-// F4816 (lb=48, ln=16, fn=16): floor(80/32) = 2 uSIDs per container.
-// F3208 (lb=32, ln=8,  fn=8 ): floor(96/16) = 6 uSIDs per container.
-//
-// Example (F3216, lb=fc00::/32, node2-fn1 packed with node3-fn1):
-// fc00:0:2:1:3:1::
+// FlowIpv6SegmentRoutingUsidSegment is one pre-computed uSID container entry in the SRH Segment List (RFC 9800 Section 4, RFC 8754 Section 2.1). Supplied as a plain 128-bit IPv6 address; no decomposition metadata is carried on the wire.
 type FlowIpv6SegmentRoutingUsidSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsidSegment to protobuf object *otg.FlowIpv6SegmentRoutingUsidSegment

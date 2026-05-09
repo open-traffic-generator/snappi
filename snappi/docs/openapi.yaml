@@ -2767,6 +2767,11 @@ components:
           items:
             $ref: '#/components/schemas/IsisSRv6.AdjSid'
           x-field-uid: 15
+        srv6_link_msd:
+          description: |-
+            When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each non-zero field causes the corresponding link MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+          $ref: '#/components/schemas/IsisSRv6.Msd'
+          x-field-uid: 16
     IsisInterface.Level:
       description: |-
         Configuration for the properties of Level 1 Hello.
@@ -3157,19 +3162,14 @@ components:
           type: boolean
           default: false
           x-field-uid: 1
+        node_msds:
+          description: |-
+            When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each non-zero field causes the corresponding MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+          $ref: '#/components/schemas/IsisSRv6.Msd'
+          x-field-uid: 2
         c_flag:
           description: |-
-            Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
-              Step 1 - Set this c_flag = true.
-              Step 2 - Configure IsisSRv6.Locator with:
-                locator "fc00:0:1::", prefix_length 48,
-                sid_structure: lb=32, ln=16, fn=16, arg=0.
-              Step 3 - Add End SIDs under the locator (c_flag=true per SID):
-                function "0001" => uSID fc00:0:1:1::  (End)
-                function "0002" => uSID fc00:0:1:2::  (End.DT46)
-              Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
-                function "00c8" => uSID fc00:0:1:c8::  (End.X)
-            A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
+            Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as a node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
           type: boolean
           default: false
           x-field-uid: 3
@@ -3560,6 +3560,59 @@ components:
           type: boolean
           default: false
           x-field-uid: 8
+    IsisSRv6.Msd:
+      description: |-
+        SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15). A field value of 0 suppresses advertisement of that sub-TLV. Reference: RFC 9352 Section 6.
+      type: object
+      properties:
+        max_sl:
+          description: |-
+            Maximum Segments Left (Max-SL). Maximum value of the Segments Left field in an SRH that this node can correctly process. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 1
+        max_end_pop_srh:
+          description: |-
+            Maximum End Pop SRH (Max-End-Pop). Maximum size of the SRH this node can remove when processing an End.Pop operation. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 2
+        max_h_encaps:
+          description: |-
+            Maximum H.Encaps (Max-H.Encaps). Maximum number of SRv6 SID encapsulations this node can perform as a headend. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 3
+        max_end_d_srh:
+          description: |-
+            Maximum End.D SRH (Max-End-D). Maximum size of the SRH this node can process when performing an End.D (decapsulation) function. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 4
+        max_t_insert:
+          description: |-
+            Maximum T.Insert (Max-T.Insert). Maximum size of the SRH this node can insert using a T.Insert operation. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 5
+        max_t_encaps:
+          description: |-
+            Maximum T.Encaps (Max-T.Encaps). Maximum size of the SRH this node can insert using a T.Encaps operation. A value of 0 suppresses advertisement of this sub-TLV. Reference: RFC 9352 Section 6.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 0
+          x-field-uid: 6
     IsisSRv6.SidStructure:
       description: |-
         SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length + ln_length + function_length + argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:
@@ -16943,36 +16996,7 @@ components:
           x-field-uid: 3
     Flow.Ipv6SegmentRouting:
       description: |-
-        IPv6 Segment Routing Header (SRH) with full 128-bit Segment IDs
-        (RFC 8754 Section 2). Each segment list entry carries a complete SRv6 SID
-        (locator + function + argument) as a 128-bit IPv6 address.
-        The Routing Type field is always 4 (RFC 8754 Section 2.1).
-
-        Packet stack example - 2-SID path (H.Encaps, Node1 then Node2 then receiver):
-
-        ```
-        +--------------------------------------------------+
-        | Ethernet                                         |
-        +--------------------------------------------------+
-        | Outer IPv6                                       |
-        |   next_header : 43 (Routing Extension Header)   |
-        |   dst         : fc00:0:1::  (Segment[1], active)|
-        +--------------------------------------------------+
-        | SRH (Routing Type 4)                            |
-        |   segments_left : 1  (auto = num segments - 1)  |
-        |   last_entry    : 1  (auto = num segments - 1)  |
-        |   flags, tag    : 0                             |
-        |   Segment[0]    : fc00:0:2::  (last hop)        |
-        |   Segment[1]    : fc00:0:1::  (first hop)       |
-        +--------------------------------------------------+
-        | Inner payload (IPv4, IPv6, etc.)                 |
-        +--------------------------------------------------+
-        ```
-
-        The outer IPv6 dst is set to Segment[segments_left], which is the first
-        SID to visit. At each hop, segments_left is decremented and dst is
-        updated to the next SID. The segment list is encoded in reverse path
-        order: Segment[0] is the last hop, Segment[n-1] is the first hop.
+        IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full 128-bit SRv6 SIDs. Each segment list entry is a complete SID (locator + function + argument) as a 128-bit IPv6 address. Segment list encoded in reverse path order: Segment[0] is the last hop, Segment[n-1] is the first hop (active, placed in outer IPv6 dst).
       type: object
       properties:
         segments_left:
@@ -16995,69 +17019,34 @@ components:
           items:
             $ref: '#/components/schemas/Flow.Ipv6SegmentRouting.Segment'
           x-field-uid: 5
+        ingress_node_tlv:
+          description: |-
+            When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.IngressNodeTlv'
+          x-field-uid: 6
+        egress_node_tlv:
+          description: |-
+            When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.EgressNodeTlv'
+          x-field-uid: 7
+        opaque_tlv:
+          description: |-
+            When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.OpaqueContainerTlv'
+          x-field-uid: 8
+        pad_tlv:
+          description: |-
+            When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.PadTlv'
+          x-field-uid: 9
+        path_trace_tlv:
+          description: |-
+            When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.PathTraceTlv'
+          x-field-uid: 10
     Flow.Ipv6SegmentRoutingUsid:
       description: |-
-        IPv6 Segment Routing Header (SRH) with uSID containers (RFC 9800 Section 4).
-        Each segment list entry is a pre-computed 128-bit uSID container value
-        supplied as a plain IPv6 address. The container packs multiple Micro-SIDs
-        but appears on the wire as a single 128-bit address - no decomposition
-        fields (locator block length, node length, function length) are present
-        in the packet. The user pre-computes the container value and supplies it
-        directly, allowing raw traffic generation independent of any control
-        plane configuration on the emulated device.
-        The Routing Type field is always 4 (RFC 8754 Section 2.1).
-
-        Packet stack example - 1 container (F3216, Node2 + Node3 packed into one container):
-
-        Container value assembly (done by user, outside the schema):
-          lb=fc00::/32 | node2-fn1 (0002:0001) | node3-fn1 (0003:0001) | zeros
-          => fc00:0:2:1:3:1::
-
-        ```
-        +--------------------------------------------------+
-        | Ethernet                                         |
-        +--------------------------------------------------+
-        | Outer IPv6                                       |
-        |   next_header : 43 (Routing Extension Header)   |
-        |   dst         : fc00:0:2:1:3:1:: (container)    |
-        +--------------------------------------------------+
-        | SRH (Routing Type 4)                            |
-        |   segments_left : 0  (auto)                     |
-        |   last_entry    : 0  (auto)                     |
-        |   flags, tag    : 0                             |
-        |   Segment[0]    : fc00:0:2:1:3:1::              |
-        +--------------------------------------------------+
-        | Inner payload (IPv4, IPv6, etc.)                 |
-        +--------------------------------------------------+
-        ```
-
-        At Node2: reads first uSID (node2-fn1), shifts container left,
-        outer dst becomes fc00:0:3:1::, forwards.
-        At Node3: reads next uSID (node3-fn1), container exhausted,
-        strips SRH, delivers payload.
-
-        Packet stack example - 2 containers (3-hop path: Node2 + Node3, then Node4):
-
-        ```
-        +--------------------------------------------------+
-        | Ethernet                                         |
-        +--------------------------------------------------+
-        | Outer IPv6                                       |
-        |   dst : fc00:0:2:1:3:1:: (Segment[1], active)   |
-        +--------------------------------------------------+
-        | SRH (Routing Type 4)                            |
-        |   segments_left : 1  (auto)                     |
-        |   last_entry    : 1  (auto)                     |
-        |   flags, tag    : 0                             |
-        |   Segment[0]    : fc00:0:4:1::      (last hop)  |
-        |   Segment[1]    : fc00:0:2:1:3:1::  (first)     |
-        +--------------------------------------------------+
-        | Inner payload (IPv4, IPv6, etc.)                 |
-        +--------------------------------------------------+
-        ```
-
-        The segment list is encoded in reverse path order: Segment[0] is the
-        last container (last hop), Segment[n-1] is the first container to visit.
+        IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying pre-computed uSID containers (RFC 9800 Section 4). Each segment list entry is a 128-bit uSID container value supplied as a plain IPv6 address. The user pre-computes the container outside the schema; no decomposition fields appear on the wire. Segment list encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first (active, placed in outer IPv6 dst).
       type: object
       properties:
         segments_left:
@@ -17074,13 +17063,37 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRoutingUsid.Tag'
         segment_list:
           description: |-
-            List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container (last hop), Segment[n-1] is the first container to visit. Each value is a plain IPv6 address supplied by the user.
-            Maximum capacity per SRH (RFC 8754 Section 2.1): The hdr_ext_len field is 8 bits; the SRH total size is (hdr_ext_len + 1) x 8 bytes. With hdr_ext_len max = 255 the SRH can hold at most (255+1)*8 - 8 = 2040 bytes of segment list, giving a theoretical maximum of 127 containers (each 16 bytes). For F3216 (3 uSIDs per container) this is 127 x 3 = 381 micro-SIDs. In practice a standard Ethernet MTU of 1500 bytes limits the SRH to approximately 88 containers (~264 micro-SIDs for F3216) after accounting for the outer IPv6 header (40 bytes) and inner payload.
+            List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit.
           type: array
           minItems: 1
           items:
             $ref: '#/components/schemas/Flow.Ipv6SegmentRoutingUsid.Segment'
           x-field-uid: 5
+        ingress_node_tlv:
+          description: |-
+            When present, includes an Ingress Node TLV (type 1, RFC 9259 Section 3.1) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.IngressNodeTlv'
+          x-field-uid: 6
+        egress_node_tlv:
+          description: |-
+            When present, includes an Egress Node TLV (type 2, RFC 9259 Section 3.2) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.EgressNodeTlv'
+          x-field-uid: 7
+        opaque_tlv:
+          description: |-
+            When present, includes an Opaque Container TLV (type 3, RFC 8754 Section 2.1) in the SRH TLV section. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.OpaqueContainerTlv'
+          x-field-uid: 8
+        pad_tlv:
+          description: |-
+            When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV section to align the TLV block to an 8-byte boundary. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.PadTlv'
+          x-field-uid: 9
+        path_trace_tlv:
+          description: |-
+            When present, includes a Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing) in the SRH TLV section. Each SRv6 endpoint on the path appends an 8-byte block containing node identity, timestamp, and performance monitoring data. Omit to suppress.
+          $ref: '#/components/schemas/Flow.Ipv6SRH.PathTraceTlv'
+          x-field-uid: 10
     Flow.Ipv6SegmentRouting.Segment:
       description: |-
         One entry in the SRH Segment List (RFC 8754 Section 2.1). A single 128-bit SRv6 SID address for full-SID encoding (locator + function + argument packed into one IPv6 address).
@@ -17091,17 +17104,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Segment.Segment'
     Flow.Ipv6SegmentRoutingUsid.Segment:
       description: |-
-        One pre-computed uSID container entry in the SRH Segment List (RFC 9800 Section 4, RFC 8754 Section 2.1). The 128-bit value encodes the locator block and packed micro-SIDs and is supplied as a plain IPv6 address. No decomposition metadata is carried on the wire.
-        Maximum micro-SIDs per container (RFC 9800 Section 4):
-          floor((128 - locator_block_length) /
-                (locator_node_length + function_length))
-        Common formats:
-          F3216 (lb=32, ln=16, fn=16): floor(96/32) = 3 uSIDs per container.
-          F4816 (lb=48, ln=16, fn=16): floor(80/32) = 2 uSIDs per container.
-          F3208 (lb=32, ln=8,  fn=8 ): floor(96/16) = 6 uSIDs per container.
-
-        Example (F3216, lb=fc00::/32, node2-fn1 packed with node3-fn1):
-          fc00:0:2:1:3:1::
+        One pre-computed uSID container entry in the SRH Segment List (RFC 9800 Section 4, RFC 8754 Section 2.1). Supplied as a plain 128-bit IPv6 address; no decomposition metadata is carried on the wire.
       type: object
       properties:
         segment:
@@ -17109,7 +17112,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRoutingUsid.Segment.Segment'
     Flow.Ipv6SegmentRouting.Flags:
       description: |-
-        An 8-bit field containing flags. While RFC 8754 reserves all bits as unused,  earlier drafts defined specific flags for behavior such as OAM, HMAC, and FRR protection.
+        SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
       type: object
       properties:
         protected:
@@ -17118,6 +17121,103 @@ components:
         alert:
           x-field-uid: 2
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert'
+        o_flag:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag'
+        h_flag:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag'
+        u1_flag:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag'
+        u2_flag:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag'
+    Flow.Ipv6SRH.IngressNodeTlv:
+      description: |-
+        SRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Length'
+        reserved:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Reserved'
+        value:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Value'
+    Flow.Ipv6SRH.EgressNodeTlv:
+      description: |-
+        SRH Egress Node TLV (type 2, RFC 9259 Section 3.2). Identifies the global IPv6 address of the intended SRv6 egress node - the last segment endpoint of the SR policy. OAM-capable endpoint nodes inspect this TLV to verify that the packet will exit the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.2.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Length'
+        reserved:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Reserved'
+        value:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Value'
+    Flow.Ipv6SRH.OpaqueContainerTlv:
+      description: |-
+        SRH Opaque Container TLV (type 3, RFC 8754 Section 2.1). Carries implementation-specific or application-defined opaque data in the SRH TLV section. Transit nodes do not interpret the contents. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Length'
+        value:
+          description: |-
+            Opaque data as a hex string (RFC 8754 Section 2.1). The content is implementation-defined and not interpreted by transit nodes. Example: "deadbeef01020304".
+          type: string
+          format: hex
+          x-field-uid: 3
+    Flow.Ipv6SRH.PadTlv:
+      description: |-
+        SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to an 8-byte boundary. The padding bytes are set to zero and are skipped by transit nodes. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 8754 Section 2.1.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Length'
+    Flow.Ipv6SRH.PathTraceTlv:
+      description: |-
+        SRH Path Trace TLV (type 128, draft-ietf-spring-srv6-path-tracing). Records path information as the packet traverses SRv6 segment endpoints. The ingress node initializes the TLV; each subsequent SRv6 endpoint appends an 8-byte block containing its node identity, timestamp, and performance monitoring data. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: draft-ietf-spring-srv6-path-tracing.
+      type: object
+      properties:
+        type:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Type'
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Length'
+        reserved:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Reserved'
+        timestamp:
+          x-field-uid: 4
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Timestamp'
+        pm_data:
+          x-field-uid: 5
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.PmData'
+        value:
+          x-field-uid: 6
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Value'
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -51908,7 +52008,7 @@ components:
         protected: 1
     Pattern.Flow.Ipv6SegmentRouting.Flags.Protected:
       description: |-
-        Protected Flag. Indicates if the segment is protected by a Fast Re-Route (FRR) mechanism.
+        Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
       type: object
       properties:
         choice:
@@ -51981,7 +52081,7 @@ components:
         alert: 1
     Pattern.Flow.Ipv6SegmentRouting.Flags.Alert:
       description: |-
-        Alert Flag. Indicates the presence of important TLVs that must be inspected.
+        Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
       type: object
       properties:
         choice:
@@ -52026,6 +52126,1597 @@ components:
       x-constants:
         no_alert: 0
         alert: 1
+    Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+      x-constants:
+        not_oam: 0
+        oam: 1
+    Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag:
+      description: |-
+        OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter'
+          x-field-uid: 6
+      x-constants:
+        not_oam: 0
+        oam: 1
+    Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+      x-constants:
+        no_hmac: 0
+        hmac: 1
+    Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag:
+      description: |-
+        HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter'
+          x-field-uid: 6
+      x-constants:
+        no_hmac: 0
+        hmac: 1
+    Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag:
+      description: |-
+        Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 1
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 1
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 2
+    Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag:
+      description: |-
+        Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 1
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 1
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type:
+      description: |-
+        TLV type code (RFC 9259 Section 3.1). The canonical value is 1. Set to a different value only for negative or conformance testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 1
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 1
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 18
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Length:
+      description: |-
+        Length of the TLV Value field in bytes (RFC 9259 Section 3.1). When auto is assigned the implementation sets this to 18: 1-byte Reserved + 1-byte Node ID Len (fixed at 16) + 16-byte IPv6 address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 18
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 18
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 18
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Reserved:
+      description: |-
+        Reserved byte following the Length field (RFC 9259 Section 3.1). Must be zero on transmission. The adjacent Node ID Length byte is fixed at 16 for IPv6 addresses and is not separately configurable.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Value.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: ::0
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6SRH.IngressNodeTlv.Value:
+      description: |-
+        Global IPv6 address of the SRv6 ingress node (RFC 9259 Section 3.1). This is the address of the node that imposed the SRH on the packet.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: ::0
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - ::0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Value.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.IngressNodeTlv.Value.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 2
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Type:
+      description: |-
+        TLV type code (RFC 9259 Section 3.2). The canonical value is 2. Set to a different value only for negative or conformance testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 2
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 2
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 2
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Type.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Type.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 18
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Length:
+      description: |-
+        Length of the TLV Value field in bytes (RFC 9259 Section 3.2). When auto is assigned the implementation sets this to 18: 1-byte Reserved + 1-byte Node ID Len (fixed at 16) + 16-byte IPv6 address.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 18
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 18
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 18
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Reserved:
+      description: |-
+        Reserved byte following the Length field (RFC 9259 Section 3.2). Must be zero on transmission. The adjacent Node ID Length byte is fixed at 16 for IPv6 addresses and is not separately configurable.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Value.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: ::0
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6SRH.EgressNodeTlv.Value:
+      description: |-
+        Global IPv6 address of the intended SRv6 egress node (RFC 9259 Section 3.2). This is the address of the final segment endpoint of the SR policy.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: ::0
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - ::0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Value.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.EgressNodeTlv.Value.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 3
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Type:
+      description: |-
+        TLV type code (RFC 8754 Section 2.1). The canonical value is 3. Set to a different value only for negative or conformance testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 3
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 3
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 3
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Type.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Type.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Length:
+      description: |-
+        Length of the TLV Value field in bytes (RFC 8754 Section 2.1). When auto is assigned the implementation derives this from the length of the value string.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.OpaqueContainerTlv.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.PadTlv.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 4
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.PadTlv.Type:
+      description: |-
+        TLV type code (RFC 8754 Section 2.1). The canonical value is 4. Set to a different value only for negative or conformance testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 4
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 4
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 4
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Type.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Type.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.PadTlv.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.PadTlv.Length:
+      description: |-
+        Number of padding bytes following the Type and Length fields (RFC 8754 Section 2.1). When auto is assigned the implementation computes the value needed to align the TLV section to an 8-byte boundary.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PadTlv.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Type.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 128
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Type:
+      description: |-
+        TLV type code (draft-ietf-spring-srv6-path-tracing). The canonical value is 128. Set to a different value only for negative or conformance testing.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 128
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 128
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 128
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Type.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Type.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Length:
+      description: |-
+        Length of the TLV Value field in bytes (draft-ietf-spring-srv6-path-tracing). When auto is assigned the implementation derives this from the configured value fields.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 255
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Length.Counter'
+          x-field-uid: 7
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Reserved.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Reserved:
+      description: |-
+        Reserved field (draft-ietf-spring-srv6-path-tracing). Must be zero on transmission.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Reserved.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Reserved.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Timestamp.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Timestamp:
+      description: |-
+        Timestamp inserted by the ingress node (draft-ietf-spring-srv6-path-tracing). Encoded as a 32-bit truncated PTP timestamp value.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Timestamp.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Timestamp.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.PmData.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.PmData:
+      description: |-
+        Performance Monitoring (PM) data inserted by the ingress node (draft-ietf-spring-srv6-path-tracing). Carries interface and load information encoded as a 32-bit value.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.PmData.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.PmData.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Value.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6SRH.PathTraceTlv.Value:
+      description: |-
+        Initial node identification value inserted by the ingress node (draft-ietf-spring-srv6-path-tracing). Identifies the ingress node within the path trace record.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Value.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6SRH.PathTraceTlv.Value.Counter'
+          x-field-uid: 6
     Version:
       description: |-
         Version details

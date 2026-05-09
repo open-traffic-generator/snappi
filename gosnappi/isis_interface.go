@@ -25,6 +25,7 @@ type isisInterface struct {
 	linkProtectionHolder     IsisInterfaceLinkProtection
 	adjacencySidsHolder      IsisInterfaceIsisInterfaceAdjacencySidIter
 	srv6AdjacencySidsHolder  IsisInterfaceIsisSRv6AdjSidIter
+	srv6LinkMsdHolder        IsisSRv6Msd
 }
 
 func NewIsisInterface() IsisInterface {
@@ -261,6 +262,7 @@ func (obj *isisInterface) setNil() {
 	obj.linkProtectionHolder = nil
 	obj.adjacencySidsHolder = nil
 	obj.srv6AdjacencySidsHolder = nil
+	obj.srv6LinkMsdHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -366,6 +368,14 @@ type IsisInterface interface {
 	AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter
 	// Srv6AdjacencySids returns IsisInterfaceIsisSRv6AdjSidIterIter, set in IsisInterface
 	Srv6AdjacencySids() IsisInterfaceIsisSRv6AdjSidIter
+	// Srv6LinkMsd returns IsisSRv6Msd, set in IsisInterface.
+	// IsisSRv6Msd is sRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15). A field value of 0 suppresses advertisement of that sub-TLV. Reference: RFC 9352 Section 6.
+	Srv6LinkMsd() IsisSRv6Msd
+	// SetSrv6LinkMsd assigns IsisSRv6Msd provided by user to IsisInterface.
+	// IsisSRv6Msd is sRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15). A field value of 0 suppresses advertisement of that sub-TLV. Reference: RFC 9352 Section 6.
+	SetSrv6LinkMsd(value IsisSRv6Msd) IsisInterface
+	// HasSrv6LinkMsd checks if Srv6LinkMsd has been set in IsisInterface
+	HasSrv6LinkMsd() bool
 	setNil()
 }
 
@@ -1011,6 +1021,34 @@ func (obj *isisInterfaceIsisSRv6AdjSidIter) appendHolderSlice(item IsisSRv6AdjSi
 	return obj
 }
 
+// When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each non-zero field causes the corresponding link MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// Srv6LinkMsd returns a IsisSRv6Msd
+func (obj *isisInterface) Srv6LinkMsd() IsisSRv6Msd {
+	if obj.obj.Srv6LinkMsd == nil {
+		obj.obj.Srv6LinkMsd = NewIsisSRv6Msd().msg()
+	}
+	if obj.srv6LinkMsdHolder == nil {
+		obj.srv6LinkMsdHolder = &isisSRv6Msd{obj: obj.obj.Srv6LinkMsd}
+	}
+	return obj.srv6LinkMsdHolder
+}
+
+// When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each non-zero field causes the corresponding link MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// Srv6LinkMsd returns a IsisSRv6Msd
+func (obj *isisInterface) HasSrv6LinkMsd() bool {
+	return obj.obj.Srv6LinkMsd != nil
+}
+
+// When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each non-zero field causes the corresponding link MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// SetSrv6LinkMsd sets the IsisSRv6Msd value in the IsisInterface object
+func (obj *isisInterface) SetSrv6LinkMsd(value IsisSRv6Msd) IsisInterface {
+
+	obj.srv6LinkMsdHolder = nil
+	obj.obj.Srv6LinkMsd = value.msg()
+
+	return obj
+}
+
 func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1128,6 +1166,11 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.Srv6LinkMsd != nil {
+
+		obj.Srv6LinkMsd().validateObj(vObj, set_default)
 	}
 
 }

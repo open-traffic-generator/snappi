@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingFlagsProtected) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingFlagsProtected is protected Flag. Indicates if the segment is protected by a Fast Re-Route (FRR) mechanism.
+// PatternFlowIpv6SegmentRoutingFlagsProtected is protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
 type PatternFlowIpv6SegmentRoutingFlagsProtected interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingFlagsProtected to protobuf object *otg.PatternFlowIpv6SegmentRoutingFlagsProtected

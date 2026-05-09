@@ -13,9 +13,10 @@ import (
 // ***** IsisSRv6NodeCapability *****
 type isisSRv6NodeCapability struct {
 	validation
-	obj          *otg.IsisSRv6NodeCapability
-	marshaller   marshalIsisSRv6NodeCapability
-	unMarshaller unMarshalIsisSRv6NodeCapability
+	obj            *otg.IsisSRv6NodeCapability
+	marshaller     marshalIsisSRv6NodeCapability
+	unMarshaller   unMarshalIsisSRv6NodeCapability
+	nodeMsdsHolder IsisSRv6Msd
 }
 
 func NewIsisSRv6NodeCapability() IsisSRv6NodeCapability {
@@ -29,7 +30,7 @@ func (obj *isisSRv6NodeCapability) msg() *otg.IsisSRv6NodeCapability {
 }
 
 func (obj *isisSRv6NodeCapability) setMsg(msg *otg.IsisSRv6NodeCapability) IsisSRv6NodeCapability {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalisisSRv6NodeCapability) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *isisSRv6NodeCapability) Clone() (IsisSRv6NodeCapability, error) {
 	return newObj, nil
 }
 
+func (obj *isisSRv6NodeCapability) setNil() {
+	obj.nodeMsdsHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // IsisSRv6NodeCapability is sRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.
 type IsisSRv6NodeCapability interface {
 	Validation
@@ -270,12 +278,21 @@ type IsisSRv6NodeCapability interface {
 	SetOFlag(value bool) IsisSRv6NodeCapability
 	// HasOFlag checks if OFlag has been set in IsisSRv6NodeCapability
 	HasOFlag() bool
+	// NodeMsds returns IsisSRv6Msd, set in IsisSRv6NodeCapability.
+	// IsisSRv6Msd is sRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15). A field value of 0 suppresses advertisement of that sub-TLV. Reference: RFC 9352 Section 6.
+	NodeMsds() IsisSRv6Msd
+	// SetNodeMsds assigns IsisSRv6Msd provided by user to IsisSRv6NodeCapability.
+	// IsisSRv6Msd is sRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15). A field value of 0 suppresses advertisement of that sub-TLV. Reference: RFC 9352 Section 6.
+	SetNodeMsds(value IsisSRv6Msd) IsisSRv6NodeCapability
+	// HasNodeMsds checks if NodeMsds has been set in IsisSRv6NodeCapability
+	HasNodeMsds() bool
 	// CFlag returns bool, set in IsisSRv6NodeCapability.
 	CFlag() bool
 	// SetCFlag assigns bool provided by user to IsisSRv6NodeCapability
 	SetCFlag(value bool) IsisSRv6NodeCapability
 	// HasCFlag checks if CFlag has been set in IsisSRv6NodeCapability
 	HasCFlag() bool
+	setNil()
 }
 
 // OAM flag (bit 0 of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
@@ -300,17 +317,35 @@ func (obj *isisSRv6NodeCapability) SetOFlag(value bool) IsisSRv6NodeCapability {
 	return obj
 }
 
-// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
-// Step 1 - Set this c_flag = true.
-// Step 2 - Configure IsisSRv6.Locator with:
-// locator "fc00:0:1::", prefix_length 48,
-// sid_structure: lb=32, ln=16, fn=16, arg=0.
-// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
-// function "0001" => uSID fc00:0:1:1::  (End)
-// function "0002" => uSID fc00:0:1:2::  (End.DT46)
-// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
-// function "00c8" => uSID fc00:0:1:c8::  (End.X)
-// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
+// When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each non-zero field causes the corresponding MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// NodeMsds returns a IsisSRv6Msd
+func (obj *isisSRv6NodeCapability) NodeMsds() IsisSRv6Msd {
+	if obj.obj.NodeMsds == nil {
+		obj.obj.NodeMsds = NewIsisSRv6Msd().msg()
+	}
+	if obj.nodeMsdsHolder == nil {
+		obj.nodeMsdsHolder = &isisSRv6Msd{obj: obj.obj.NodeMsds}
+	}
+	return obj.nodeMsdsHolder
+}
+
+// When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each non-zero field causes the corresponding MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// NodeMsds returns a IsisSRv6Msd
+func (obj *isisSRv6NodeCapability) HasNodeMsds() bool {
+	return obj.obj.NodeMsds != nil
+}
+
+// When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each non-zero field causes the corresponding MSD sub-TLV to be included; a value of 0 suppresses that sub-TLV. Reference: RFC 9352 Section 6.
+// SetNodeMsds sets the IsisSRv6Msd value in the IsisSRv6NodeCapability object
+func (obj *isisSRv6NodeCapability) SetNodeMsds(value IsisSRv6Msd) IsisSRv6NodeCapability {
+
+	obj.nodeMsdsHolder = nil
+	obj.obj.NodeMsds = value.msg()
+
+	return obj
+}
+
+// Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as a node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6NodeCapability) CFlag() bool {
 
@@ -318,33 +353,13 @@ func (obj *isisSRv6NodeCapability) CFlag() bool {
 
 }
 
-// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
-// Step 1 - Set this c_flag = true.
-// Step 2 - Configure IsisSRv6.Locator with:
-// locator "fc00:0:1::", prefix_length 48,
-// sid_structure: lb=32, ln=16, fn=16, arg=0.
-// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
-// function "0001" => uSID fc00:0:1:1::  (End)
-// function "0002" => uSID fc00:0:1:2::  (End.DT46)
-// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
-// function "00c8" => uSID fc00:0:1:c8::  (End.X)
-// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
+// Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as a node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
 // CFlag returns a bool
 func (obj *isisSRv6NodeCapability) HasCFlag() bool {
 	return obj.obj.CFlag != nil
 }
 
-// Compression (uSID) flag at the node level (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. This flag is the prerequisite: it must be set before individual End SIDs or Adj SIDs are marked as uSIDs via their own c_flag fields. It is carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. To advertise a uSID-capable node using the F3216 format (uSID block fc00::/32, node locator fc00:0:1:: /48):
-// Step 1 - Set this c_flag = true.
-// Step 2 - Configure IsisSRv6.Locator with:
-// locator "fc00:0:1::", prefix_length 48,
-// sid_structure: lb=32, ln=16, fn=16, arg=0.
-// Step 3 - Add End SIDs under the locator (c_flag=true per SID):
-// function "0001" => uSID fc00:0:1:1::  (End)
-// function "0002" => uSID fc00:0:1:2::  (End.DT46)
-// Step 4 - Add Adj SIDs on the interface (c_flag=true per SID):
-// function "00c8" => uSID fc00:0:1:c8::  (End.X)
-// A headend can then pack uSIDs from the same /32 block into a single 128-bit container - no SRH required. With three nodes (fc00:0:1::, fc00:0:2::, fc00:0:3::) each advertising End function "0001", the headend constructs destination address fc00:0:1:1:2:1:3:1 to steer traffic over the 3-hop path in one 128-bit address. Reference: RFC 9352 Section 2, RFC 9800.
+// Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as a node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
 // SetCFlag sets the bool value in the IsisSRv6NodeCapability object
 func (obj *isisSRv6NodeCapability) SetCFlag(value bool) IsisSRv6NodeCapability {
 
@@ -355,6 +370,11 @@ func (obj *isisSRv6NodeCapability) SetCFlag(value bool) IsisSRv6NodeCapability {
 func (obj *isisSRv6NodeCapability) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.NodeMsds != nil {
+
+		obj.NodeMsds().validateObj(vObj, set_default)
 	}
 
 }

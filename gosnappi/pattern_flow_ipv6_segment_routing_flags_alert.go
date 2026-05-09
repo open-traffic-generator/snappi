@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingFlagsAlert) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingFlagsAlert is alert Flag. Indicates the presence of important TLVs that must be inspected.
+// PatternFlowIpv6SegmentRoutingFlagsAlert is alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
 type PatternFlowIpv6SegmentRoutingFlagsAlert interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingFlagsAlert to protobuf object *otg.PatternFlowIpv6SegmentRoutingFlagsAlert
