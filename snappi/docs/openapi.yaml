@@ -17116,23 +17116,41 @@ components:
       type: object
       properties:
         protected:
+          description: |-
+            Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
+          type: boolean
+          default: false
           x-field-uid: 1
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Protected'
         alert:
+          description: |-
+            Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
+          type: boolean
+          default: false
           x-field-uid: 2
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert'
         o_flag:
+          description: |-
+            OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
+          type: boolean
+          default: false
           x-field-uid: 3
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag'
         h_flag:
+          description: |-
+            HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
+          type: boolean
+          default: false
           x-field-uid: 4
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag'
         u1_flag:
+          description: |-
+            Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+          type: boolean
+          default: false
           x-field-uid: 5
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag'
         u2_flag:
+          description: |-
+            Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+          type: boolean
+          default: false
           x-field-uid: 6
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag'
     Flow.Ipv6SRH.IngressNodeTlv:
       description: |-
         SRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address of the SRv6 ingress node that imposed the SRH on the packet. OAM-capable endpoint nodes (those that process packets with the O-flag set) inspect this TLV to verify that the packet entered the SR domain at the expected node. When present this TLV is included in the SRH TLV section; omit the object to suppress it. Reference: RFC 9259 Section 3.1.
@@ -51979,432 +51997,6 @@ components:
           x-field-uid: 5
         decrement:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRoutingUsid.Segment.Segment.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Protected.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-      x-constants:
-        not_protected: 0
-        protected: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Protected:
-      description: |-
-        Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Protected.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Protected.Counter'
-          x-field-uid: 6
-      x-constants:
-        not_protected: 0
-        protected: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Alert.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-      x-constants:
-        no_alert: 0
-        alert: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.Alert:
-      description: |-
-        Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert.Counter'
-          x-field-uid: 6
-      x-constants:
-        no_alert: 0
-        alert: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-      x-constants:
-        not_oam: 0
-        oam: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag:
-      description: |-
-        OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.OFlag.Counter'
-          x-field-uid: 6
-      x-constants:
-        not_oam: 0
-        oam: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-      x-constants:
-        no_hmac: 0
-        hmac: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag:
-      description: |-
-        HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.HFlag.Counter'
-          x-field-uid: 6
-      x-constants:
-        no_hmac: 0
-        hmac: 1
-    Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-    Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag:
-      description: |-
-        Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U1Flag.Counter'
-          x-field-uid: 6
-    Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter:
-      description: |-
-        integer counter pattern
-      type: object
-      properties:
-        start:
-          type: integer
-          x-field-uid: 1
-          default: 0
-          format: uint32
-          maximum: 1
-        step:
-          type: integer
-          x-field-uid: 2
-          default: 1
-          format: uint32
-          maximum: 1
-        count:
-          type: integer
-          x-field-uid: 3
-          default: 1
-          format: uint32
-          maximum: 2
-    Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag:
-      description: |-
-        Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-      type: object
-      properties:
-        choice:
-          type: string
-          x-enum:
-            value:
-              x-field-uid: 2
-            values:
-              x-field-uid: 3
-            increment:
-              x-field-uid: 4
-            decrement:
-              x-field-uid: 5
-          default: value
-          x-field-uid: 1
-          enum:
-          - value
-          - values
-          - increment
-          - decrement
-        value:
-          type: integer
-          x-field-uid: 2
-          default: 0
-          format: uint32
-          maximum: 1
-        values:
-          type: array
-          items:
-            type: integer
-            format: uint32
-            maximum: 1
-          x-field-uid: 3
-          default:
-          - 0
-        increment:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter'
-          x-field-uid: 5
-        decrement:
-          $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.U2Flag.Counter'
           x-field-uid: 6
     Pattern.Flow.Ipv6SRH.IngressNodeTlv.Type.Counter:
       description: |-

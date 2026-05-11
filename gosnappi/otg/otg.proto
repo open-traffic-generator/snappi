@@ -13106,23 +13106,38 @@ message FlowIpv6SegmentRoutingUsidSegment {
 // U2.
 message FlowIpv6SegmentRoutingFlags {
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsProtected protected = 1;
+  // Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR)
+  // mechanism (RFC 8754 Section 2.1).
+  // default = False
+  optional bool protected = 1;
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsAlert alert = 2;
+  // Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be
+  // examined by the receiving endpoint (RFC 8754 Section 2.1).
+  // default = False
+  optional bool alert = 2;
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOFlag o_flag = 3;
+  // OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe.
+  // SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress
+  // Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference:
+  // RFC 8754 Section 2.1, RFC 9259 Section 2.
+  // default = False
+  optional bool o_flag = 3;
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsHFlag h_flag = 4;
+  // HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes
+  // an HMAC TLV (type 5) providing data integrity and source authentication for the segment
+  // routing path. Reference: RFC 8754 Section 2.1.
+  // default = False
+  optional bool h_flag = 4;
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU1Flag u1_flag = 5;
+  // Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed
+  // for negative or conformance testing only.
+  // default = False
+  optional bool u1_flag = 5;
 
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU2Flag u2_flag = 6;
+  // Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed
+  // for negative or conformance testing only.
+  // default = False
+  optional bool u2_flag = 6;
 }
 
 // SRH Ingress Node TLV (type 1, RFC 9259 Section 3.1). Identifies the global IPv6 address
@@ -37146,297 +37161,6 @@ message PatternFlowIpv6SegmentRoutingUsidSegmentSegment {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingUsidSegmentSegmentCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsProtectedCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR)
-// mechanism (RFC 8754 Section 2.1).
-message PatternFlowIpv6SegmentRoutingFlagsProtected {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsProtectedCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsAlertCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be
-// examined by the receiving endpoint (RFC 8754 Section 2.1).
-message PatternFlowIpv6SegmentRoutingFlagsAlert {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsAlertCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsAlertCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsOFlagCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe.
-// SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress
-// Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference:
-// RFC 8754 Section 2.1, RFC 9259 Section 2.
-message PatternFlowIpv6SegmentRoutingFlagsOFlag {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOFlagCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsOFlagCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsHFlagCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes
-// an HMAC TLV (type 5) providing data integrity and source authentication for the segment
-// routing path. Reference: RFC 8754 Section 2.1.
-message PatternFlowIpv6SegmentRoutingFlagsHFlag {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsHFlagCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsHFlagCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsU1FlagCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed
-// for negative or conformance testing only.
-message PatternFlowIpv6SegmentRoutingFlagsU1Flag {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU1FlagCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU1FlagCounter decrement = 6;
-}
-
-// integer counter pattern
-message PatternFlowIpv6SegmentRoutingFlagsU2FlagCounter {
-
-  // Description missing in models
-  // default = 0
-  optional uint32 start = 1;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 step = 2;
-
-  // Description missing in models
-  // default = 1
-  optional uint32 count = 3;
-}
-
-// Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed
-// for negative or conformance testing only.
-message PatternFlowIpv6SegmentRoutingFlagsU2Flag {
-
-  message Choice {
-    enum Enum {
-      unspecified = 0;
-      value = 2;
-      values = 3;
-      increment = 4;
-      decrement = 5;
-    }
-  }
-  // Description missing in models
-  // default = Choice.Enum.value
-  optional Choice.Enum choice = 1;
-
-  // Description missing in models
-  // default = 0
-  optional uint32 value = 2;
-
-  // Description missing in models
-  // default = [0]
-  repeated uint32 values = 3;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU2FlagCounter increment = 5;
-
-  // Description missing in models
-  PatternFlowIpv6SegmentRoutingFlagsU2FlagCounter decrement = 6;
 }
 
 // integer counter pattern

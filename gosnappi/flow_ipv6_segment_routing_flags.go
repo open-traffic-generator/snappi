@@ -13,15 +13,9 @@ import (
 // ***** FlowIpv6SegmentRoutingFlags *****
 type flowIpv6SegmentRoutingFlags struct {
 	validation
-	obj             *otg.FlowIpv6SegmentRoutingFlags
-	marshaller      marshalFlowIpv6SegmentRoutingFlags
-	unMarshaller    unMarshalFlowIpv6SegmentRoutingFlags
-	protectedHolder PatternFlowIpv6SegmentRoutingFlagsProtected
-	alertHolder     PatternFlowIpv6SegmentRoutingFlagsAlert
-	oFlagHolder     PatternFlowIpv6SegmentRoutingFlagsOFlag
-	hFlagHolder     PatternFlowIpv6SegmentRoutingFlagsHFlag
-	u1FlagHolder    PatternFlowIpv6SegmentRoutingFlagsU1Flag
-	u2FlagHolder    PatternFlowIpv6SegmentRoutingFlagsU2Flag
+	obj          *otg.FlowIpv6SegmentRoutingFlags
+	marshaller   marshalFlowIpv6SegmentRoutingFlags
+	unMarshaller unMarshalFlowIpv6SegmentRoutingFlags
 }
 
 func NewFlowIpv6SegmentRoutingFlags() FlowIpv6SegmentRoutingFlags {
@@ -35,7 +29,7 @@ func (obj *flowIpv6SegmentRoutingFlags) msg() *otg.FlowIpv6SegmentRoutingFlags {
 }
 
 func (obj *flowIpv6SegmentRoutingFlags) setMsg(msg *otg.FlowIpv6SegmentRoutingFlags) FlowIpv6SegmentRoutingFlags {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -118,7 +112,7 @@ func (m *unMarshalflowIpv6SegmentRoutingFlags) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -164,7 +158,7 @@ func (m *unMarshalflowIpv6SegmentRoutingFlags) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -203,7 +197,7 @@ func (m *unMarshalflowIpv6SegmentRoutingFlags) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -248,18 +242,6 @@ func (obj *flowIpv6SegmentRoutingFlags) Clone() (FlowIpv6SegmentRoutingFlags, er
 	return newObj, nil
 }
 
-func (obj *flowIpv6SegmentRoutingFlags) setNil() {
-	obj.protectedHolder = nil
-	obj.alertHolder = nil
-	obj.oFlagHolder = nil
-	obj.hFlagHolder = nil
-	obj.u1FlagHolder = nil
-	obj.u2FlagHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
-}
-
 // FlowIpv6SegmentRoutingFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved. IxNetwork exposes the following bits for OAM, HMAC, FRR, and protocol testing: Protected (FRR), Alert, O (OAM, RFC 9259), H (HMAC), and two reserved bits U1 and U2.
 type FlowIpv6SegmentRoutingFlags interface {
 	Validation
@@ -282,222 +264,173 @@ type FlowIpv6SegmentRoutingFlags interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// Protected returns PatternFlowIpv6SegmentRoutingFlagsProtected, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsProtected is protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
-	Protected() PatternFlowIpv6SegmentRoutingFlagsProtected
-	// SetProtected assigns PatternFlowIpv6SegmentRoutingFlagsProtected provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsProtected is protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
-	SetProtected(value PatternFlowIpv6SegmentRoutingFlagsProtected) FlowIpv6SegmentRoutingFlags
+	// Protected returns bool, set in FlowIpv6SegmentRoutingFlags.
+	Protected() bool
+	// SetProtected assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetProtected(value bool) FlowIpv6SegmentRoutingFlags
 	// HasProtected checks if Protected has been set in FlowIpv6SegmentRoutingFlags
 	HasProtected() bool
-	// Alert returns PatternFlowIpv6SegmentRoutingFlagsAlert, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsAlert is alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
-	Alert() PatternFlowIpv6SegmentRoutingFlagsAlert
-	// SetAlert assigns PatternFlowIpv6SegmentRoutingFlagsAlert provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsAlert is alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
-	SetAlert(value PatternFlowIpv6SegmentRoutingFlagsAlert) FlowIpv6SegmentRoutingFlags
+	// Alert returns bool, set in FlowIpv6SegmentRoutingFlags.
+	Alert() bool
+	// SetAlert assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetAlert(value bool) FlowIpv6SegmentRoutingFlags
 	// HasAlert checks if Alert has been set in FlowIpv6SegmentRoutingFlags
 	HasAlert() bool
-	// OFlag returns PatternFlowIpv6SegmentRoutingFlagsOFlag, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOFlag is oAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
-	OFlag() PatternFlowIpv6SegmentRoutingFlagsOFlag
-	// SetOFlag assigns PatternFlowIpv6SegmentRoutingFlagsOFlag provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOFlag is oAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
-	SetOFlag(value PatternFlowIpv6SegmentRoutingFlagsOFlag) FlowIpv6SegmentRoutingFlags
+	// OFlag returns bool, set in FlowIpv6SegmentRoutingFlags.
+	OFlag() bool
+	// SetOFlag assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetOFlag(value bool) FlowIpv6SegmentRoutingFlags
 	// HasOFlag checks if OFlag has been set in FlowIpv6SegmentRoutingFlags
 	HasOFlag() bool
-	// HFlag returns PatternFlowIpv6SegmentRoutingFlagsHFlag, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsHFlag is hMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
-	HFlag() PatternFlowIpv6SegmentRoutingFlagsHFlag
-	// SetHFlag assigns PatternFlowIpv6SegmentRoutingFlagsHFlag provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsHFlag is hMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
-	SetHFlag(value PatternFlowIpv6SegmentRoutingFlagsHFlag) FlowIpv6SegmentRoutingFlags
+	// HFlag returns bool, set in FlowIpv6SegmentRoutingFlags.
+	HFlag() bool
+	// SetHFlag assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetHFlag(value bool) FlowIpv6SegmentRoutingFlags
 	// HasHFlag checks if HFlag has been set in FlowIpv6SegmentRoutingFlags
 	HasHFlag() bool
-	// U1Flag returns PatternFlowIpv6SegmentRoutingFlagsU1Flag, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsU1Flag is reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-	U1Flag() PatternFlowIpv6SegmentRoutingFlagsU1Flag
-	// SetU1Flag assigns PatternFlowIpv6SegmentRoutingFlagsU1Flag provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsU1Flag is reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-	SetU1Flag(value PatternFlowIpv6SegmentRoutingFlagsU1Flag) FlowIpv6SegmentRoutingFlags
+	// U1Flag returns bool, set in FlowIpv6SegmentRoutingFlags.
+	U1Flag() bool
+	// SetU1Flag assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetU1Flag(value bool) FlowIpv6SegmentRoutingFlags
 	// HasU1Flag checks if U1Flag has been set in FlowIpv6SegmentRoutingFlags
 	HasU1Flag() bool
-	// U2Flag returns PatternFlowIpv6SegmentRoutingFlagsU2Flag, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsU2Flag is reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-	U2Flag() PatternFlowIpv6SegmentRoutingFlagsU2Flag
-	// SetU2Flag assigns PatternFlowIpv6SegmentRoutingFlagsU2Flag provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsU2Flag is reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
-	SetU2Flag(value PatternFlowIpv6SegmentRoutingFlagsU2Flag) FlowIpv6SegmentRoutingFlags
+	// U2Flag returns bool, set in FlowIpv6SegmentRoutingFlags.
+	U2Flag() bool
+	// SetU2Flag assigns bool provided by user to FlowIpv6SegmentRoutingFlags
+	SetU2Flag(value bool) FlowIpv6SegmentRoutingFlags
 	// HasU2Flag checks if U2Flag has been set in FlowIpv6SegmentRoutingFlags
 	HasU2Flag() bool
-	setNil()
 }
 
-// description is TBD
-// Protected returns a PatternFlowIpv6SegmentRoutingFlagsProtected
-func (obj *flowIpv6SegmentRoutingFlags) Protected() PatternFlowIpv6SegmentRoutingFlagsProtected {
-	if obj.obj.Protected == nil {
-		obj.obj.Protected = NewPatternFlowIpv6SegmentRoutingFlagsProtected().msg()
-	}
-	if obj.protectedHolder == nil {
-		obj.protectedHolder = &patternFlowIpv6SegmentRoutingFlagsProtected{obj: obj.obj.Protected}
-	}
-	return obj.protectedHolder
+// Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
+// Protected returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) Protected() bool {
+
+	return *obj.obj.Protected
+
 }
 
-// description is TBD
-// Protected returns a PatternFlowIpv6SegmentRoutingFlagsProtected
+// Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
+// Protected returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasProtected() bool {
 	return obj.obj.Protected != nil
 }
 
-// description is TBD
-// SetProtected sets the PatternFlowIpv6SegmentRoutingFlagsProtected value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetProtected(value PatternFlowIpv6SegmentRoutingFlagsProtected) FlowIpv6SegmentRoutingFlags {
+// Protected (P) flag. Indicates that the segment is protected by a Fast Re-Route (FRR) mechanism (RFC 8754 Section 2.1).
+// SetProtected sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetProtected(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.protectedHolder = nil
-	obj.obj.Protected = value.msg()
-
+	obj.obj.Protected = &value
 	return obj
 }
 
-// description is TBD
-// Alert returns a PatternFlowIpv6SegmentRoutingFlagsAlert
-func (obj *flowIpv6SegmentRoutingFlags) Alert() PatternFlowIpv6SegmentRoutingFlagsAlert {
-	if obj.obj.Alert == nil {
-		obj.obj.Alert = NewPatternFlowIpv6SegmentRoutingFlagsAlert().msg()
-	}
-	if obj.alertHolder == nil {
-		obj.alertHolder = &patternFlowIpv6SegmentRoutingFlagsAlert{obj: obj.obj.Alert}
-	}
-	return obj.alertHolder
+// Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
+// Alert returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) Alert() bool {
+
+	return *obj.obj.Alert
+
 }
 
-// description is TBD
-// Alert returns a PatternFlowIpv6SegmentRoutingFlagsAlert
+// Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
+// Alert returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasAlert() bool {
 	return obj.obj.Alert != nil
 }
 
-// description is TBD
-// SetAlert sets the PatternFlowIpv6SegmentRoutingFlagsAlert value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetAlert(value PatternFlowIpv6SegmentRoutingFlagsAlert) FlowIpv6SegmentRoutingFlags {
+// Alert (A) flag. Indicates the presence of important TLVs in the SRH that must be examined by the receiving endpoint (RFC 8754 Section 2.1).
+// SetAlert sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetAlert(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.alertHolder = nil
-	obj.obj.Alert = value.msg()
-
+	obj.obj.Alert = &value
 	return obj
 }
 
-// description is TBD
-// OFlag returns a PatternFlowIpv6SegmentRoutingFlagsOFlag
-func (obj *flowIpv6SegmentRoutingFlags) OFlag() PatternFlowIpv6SegmentRoutingFlagsOFlag {
-	if obj.obj.OFlag == nil {
-		obj.obj.OFlag = NewPatternFlowIpv6SegmentRoutingFlagsOFlag().msg()
-	}
-	if obj.oFlagHolder == nil {
-		obj.oFlagHolder = &patternFlowIpv6SegmentRoutingFlagsOFlag{obj: obj.obj.OFlag}
-	}
-	return obj.oFlagHolder
+// OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
+// OFlag returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) OFlag() bool {
+
+	return *obj.obj.OFlag
+
 }
 
-// description is TBD
-// OFlag returns a PatternFlowIpv6SegmentRoutingFlagsOFlag
+// OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
+// OFlag returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasOFlag() bool {
 	return obj.obj.OFlag != nil
 }
 
-// description is TBD
-// SetOFlag sets the PatternFlowIpv6SegmentRoutingFlagsOFlag value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetOFlag(value PatternFlowIpv6SegmentRoutingFlagsOFlag) FlowIpv6SegmentRoutingFlags {
+// OAM (O) flag (RFC 9259 Section 2). When set, marks this packet as an active OAM probe. SRv6 endpoint nodes that process OAM packets inspect SRH TLVs such as the Ingress Node TLV (type 1) and Egress Node TLV (type 2) to perform path verification. Reference: RFC 8754 Section 2.1, RFC 9259 Section 2.
+// SetOFlag sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetOFlag(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.oFlagHolder = nil
-	obj.obj.OFlag = value.msg()
-
+	obj.obj.OFlag = &value
 	return obj
 }
 
-// description is TBD
-// HFlag returns a PatternFlowIpv6SegmentRoutingFlagsHFlag
-func (obj *flowIpv6SegmentRoutingFlags) HFlag() PatternFlowIpv6SegmentRoutingFlagsHFlag {
-	if obj.obj.HFlag == nil {
-		obj.obj.HFlag = NewPatternFlowIpv6SegmentRoutingFlagsHFlag().msg()
-	}
-	if obj.hFlagHolder == nil {
-		obj.hFlagHolder = &patternFlowIpv6SegmentRoutingFlagsHFlag{obj: obj.obj.HFlag}
-	}
-	return obj.hFlagHolder
+// HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
+// HFlag returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) HFlag() bool {
+
+	return *obj.obj.HFlag
+
 }
 
-// description is TBD
-// HFlag returns a PatternFlowIpv6SegmentRoutingFlagsHFlag
+// HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
+// HFlag returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasHFlag() bool {
 	return obj.obj.HFlag != nil
 }
 
-// description is TBD
-// SetHFlag sets the PatternFlowIpv6SegmentRoutingFlagsHFlag value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetHFlag(value PatternFlowIpv6SegmentRoutingFlagsHFlag) FlowIpv6SegmentRoutingFlags {
+// HMAC (H) flag (RFC 8754 Section 2.1). When set, indicates that this SRH includes an HMAC TLV (type 5) providing data integrity and source authentication for the segment routing path. Reference: RFC 8754 Section 2.1.
+// SetHFlag sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetHFlag(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.hFlagHolder = nil
-	obj.obj.HFlag = value.msg()
-
+	obj.obj.HFlag = &value
 	return obj
 }
 
-// description is TBD
-// U1Flag returns a PatternFlowIpv6SegmentRoutingFlagsU1Flag
-func (obj *flowIpv6SegmentRoutingFlags) U1Flag() PatternFlowIpv6SegmentRoutingFlagsU1Flag {
-	if obj.obj.U1Flag == nil {
-		obj.obj.U1Flag = NewPatternFlowIpv6SegmentRoutingFlagsU1Flag().msg()
-	}
-	if obj.u1FlagHolder == nil {
-		obj.u1FlagHolder = &patternFlowIpv6SegmentRoutingFlagsU1Flag{obj: obj.obj.U1Flag}
-	}
-	return obj.u1FlagHolder
+// Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// U1Flag returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) U1Flag() bool {
+
+	return *obj.obj.U1Flag
+
 }
 
-// description is TBD
-// U1Flag returns a PatternFlowIpv6SegmentRoutingFlagsU1Flag
+// Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// U1Flag returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasU1Flag() bool {
 	return obj.obj.U1Flag != nil
 }
 
-// description is TBD
-// SetU1Flag sets the PatternFlowIpv6SegmentRoutingFlagsU1Flag value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetU1Flag(value PatternFlowIpv6SegmentRoutingFlagsU1Flag) FlowIpv6SegmentRoutingFlags {
+// Reserved bit U1 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// SetU1Flag sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetU1Flag(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.u1FlagHolder = nil
-	obj.obj.U1Flag = value.msg()
-
+	obj.obj.U1Flag = &value
 	return obj
 }
 
-// description is TBD
-// U2Flag returns a PatternFlowIpv6SegmentRoutingFlagsU2Flag
-func (obj *flowIpv6SegmentRoutingFlags) U2Flag() PatternFlowIpv6SegmentRoutingFlagsU2Flag {
-	if obj.obj.U2Flag == nil {
-		obj.obj.U2Flag = NewPatternFlowIpv6SegmentRoutingFlagsU2Flag().msg()
-	}
-	if obj.u2FlagHolder == nil {
-		obj.u2FlagHolder = &patternFlowIpv6SegmentRoutingFlagsU2Flag{obj: obj.obj.U2Flag}
-	}
-	return obj.u2FlagHolder
+// Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// U2Flag returns a bool
+func (obj *flowIpv6SegmentRoutingFlags) U2Flag() bool {
+
+	return *obj.obj.U2Flag
+
 }
 
-// description is TBD
-// U2Flag returns a PatternFlowIpv6SegmentRoutingFlagsU2Flag
+// Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// U2Flag returns a bool
 func (obj *flowIpv6SegmentRoutingFlags) HasU2Flag() bool {
 	return obj.obj.U2Flag != nil
 }
 
-// description is TBD
-// SetU2Flag sets the PatternFlowIpv6SegmentRoutingFlagsU2Flag value in the FlowIpv6SegmentRoutingFlags object
-func (obj *flowIpv6SegmentRoutingFlags) SetU2Flag(value PatternFlowIpv6SegmentRoutingFlagsU2Flag) FlowIpv6SegmentRoutingFlags {
+// Reserved bit U2 (RFC 8754 Section 2.1). MUST be zero on normal transmission. Exposed for negative or conformance testing only.
+// SetU2Flag sets the bool value in the FlowIpv6SegmentRoutingFlags object
+func (obj *flowIpv6SegmentRoutingFlags) SetU2Flag(value bool) FlowIpv6SegmentRoutingFlags {
 
-	obj.u2FlagHolder = nil
-	obj.obj.U2Flag = value.msg()
-
+	obj.obj.U2Flag = &value
 	return obj
 }
 
@@ -506,38 +439,26 @@ func (obj *flowIpv6SegmentRoutingFlags) validateObj(vObj *validation, set_defaul
 		obj.setDefault()
 	}
 
-	if obj.obj.Protected != nil {
-
-		obj.Protected().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.Alert != nil {
-
-		obj.Alert().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.OFlag != nil {
-
-		obj.OFlag().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.HFlag != nil {
-
-		obj.HFlag().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.U1Flag != nil {
-
-		obj.U1Flag().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.U2Flag != nil {
-
-		obj.U2Flag().validateObj(vObj, set_default)
-	}
-
 }
 
 func (obj *flowIpv6SegmentRoutingFlags) setDefault() {
+	if obj.obj.Protected == nil {
+		obj.SetProtected(false)
+	}
+	if obj.obj.Alert == nil {
+		obj.SetAlert(false)
+	}
+	if obj.obj.OFlag == nil {
+		obj.SetOFlag(false)
+	}
+	if obj.obj.HFlag == nil {
+		obj.SetHFlag(false)
+	}
+	if obj.obj.U1Flag == nil {
+		obj.SetU1Flag(false)
+	}
+	if obj.obj.U2Flag == nil {
+		obj.SetU2Flag(false)
+	}
 
 }
