@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingLastEntry) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingLastEntry is 8-bit unsigned integer that contains the zero-based index of the last element in the Segment List array. For example, if the Segment List contains 3 addresses (at indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should be automatically set by the implementation to one less than the number of segments specified.
+// PatternFlowIpv6SegmentRoutingLastEntry is zero-based index of the last element in the Segment List (RFC 8754 Section 2.1). For example, a list of 3 SIDs has Last Entry = 2. When auto is assigned the value is set to one less than the number of segments specified.
 type PatternFlowIpv6SegmentRoutingLastEntry interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingLastEntry to protobuf object *otg.PatternFlowIpv6SegmentRoutingLastEntry
