@@ -1368,6 +1368,8 @@ from .snappi import PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter
 from .snappi import PatternFlowIpv6SegmentRoutingUsidLastEntry
 from .snappi import PatternFlowIpv6SegmentRoutingUsidLastEntryCounter
 from .snappi import FlowIpv6SegmentRoutinguSidFlags
+from .snappi import PatternFlowIpv6SegmentRoutinguSidFlagsOam
+from .snappi import PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter
 from .snappi import PatternFlowIpv6SegmentRoutingUsidTag
 from .snappi import PatternFlowIpv6SegmentRoutingUsidTagCounter
 from .snappi import FlowIpv6SegmentRoutingUsidSegment

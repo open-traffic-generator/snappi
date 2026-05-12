@@ -261,11 +261,11 @@ func (obj *flowIpv6SegmentRoutingUsid) setNil() {
 }
 
 // FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-// whose segment list carries uSID containers (RFC 9800 Section 4).
-// Each entry in segment_list represents one 128-bit uSID container.
+// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
+// Each entry in segment_list represents one 128-bit compressed uSID container.
 // The user supplies a structured locator prefix and a list of uSID values;
 // the implementation assembles the 128-bit wire value by packing them as:
-// LB (locator_length bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
 //
 // For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
 // maximum 6 uSIDs per container.
@@ -273,15 +273,13 @@ func (obj *flowIpv6SegmentRoutingUsid) setNil() {
 // container fc00:0:1:2:: placed in the SRH segment list entry.
 //
 // The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-// Segment[0] is the last container to visit, Segment[n-1] is the first
-// (active) container, whose value is also placed in the outer IPv6 dst.
+// segment[0] is the last container to visit, segment[n-1] is the first
+// (active) container, whose value is also placed in the outer IPv6 dst,
+// where n is the number of compressed uSID containers.
 //
 // Use this schema when the SR path requires more containers than fit in
 // the outer IPv6 dst alone. For single-container paths with no SRH, set
-// the outer ipv6.dst directly to the packed container value instead.
-//
-// Reference: RFC 8754 Section 2 (SRH format), RFC 9800 Section 4
-// (uSID container encoding in SRH).
+// the outer ipv6.dst directly to the packed compressed uSID container value instead.
 type FlowIpv6SegmentRoutingUsid interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsid to protobuf object *otg.FlowIpv6SegmentRoutingUsid
@@ -304,10 +302,10 @@ type FlowIpv6SegmentRoutingUsid interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// SegmentsLeft returns PatternFlowIpv6SegmentRoutingUsidSegmentsLeft, set in FlowIpv6SegmentRoutingUsid.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active container (RFC 8754 Section 2.1). The active container is Segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next entry. When auto is assigned the value is set to one less than the number of containers specified (last_entry value).
+	// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1).  The active compressed uSID container is segment[segments_left];  the value is decremented each time the active container is exhausted  and the pointer advances to the next compressed uSID container.  When auto is assigned the value is set to the top entry of the compressed uSID container list.
 	SegmentsLeft() PatternFlowIpv6SegmentRoutingUsidSegmentsLeft
 	// SetSegmentsLeft assigns PatternFlowIpv6SegmentRoutingUsidSegmentsLeft provided by user to FlowIpv6SegmentRoutingUsid.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active container (RFC 8754 Section 2.1). The active container is Segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next entry. When auto is assigned the value is set to one less than the number of containers specified (last_entry value).
+	// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1).  The active compressed uSID container is segment[segments_left];  the value is decremented each time the active container is exhausted  and the pointer advances to the next compressed uSID container.  When auto is assigned the value is set to the top entry of the compressed uSID container list.
 	SetSegmentsLeft(value PatternFlowIpv6SegmentRoutingUsidSegmentsLeft) FlowIpv6SegmentRoutingUsid
 	// HasSegmentsLeft checks if SegmentsLeft has been set in FlowIpv6SegmentRoutingUsid
 	HasSegmentsLeft() bool
@@ -460,7 +458,7 @@ func (obj *flowIpv6SegmentRoutingUsid) SetTag(value PatternFlowIpv6SegmentRoutin
 	return obj
 }
 
-// List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit.
+// List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit. If Reduced SRH is needed ( RFC 8754 Section 4.1.1), the first compressed uSID container  is the one already in the ipv6.dst and not included in this list.
 // SegmentList returns a []FlowIpv6SegmentRoutingUsidSegment
 func (obj *flowIpv6SegmentRoutingUsid) SegmentList() FlowIpv6SegmentRoutingUsidFlowIpv6SegmentRoutingUsidSegmentIter {
 	if len(obj.obj.SegmentList) == 0 {

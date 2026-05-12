@@ -13042,11 +13042,11 @@ message FlowIpv6SegmentRoutingSegment {
 }
 
 // IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-// whose segment list carries uSID containers (RFC 9800 Section 4).
-// Each entry in segment_list represents one 128-bit uSID container.
+// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
+// Each entry in segment_list represents one 128-bit compressed uSID container.
 // The user supplies a structured locator prefix and a list of uSID values;
 // the implementation assembles the 128-bit wire value by packing them as:
-// LB (locator_length bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
 // 
 // For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
 // maximum 6 uSIDs per container.
@@ -13054,15 +13054,13 @@ message FlowIpv6SegmentRoutingSegment {
 // container fc00:0:1:2:: placed in the SRH segment list entry.
 // 
 // The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-// Segment[0] is the last container to visit, Segment[n-1] is the first
-// (active) container, whose value is also placed in the outer IPv6 dst.
+// segment[0] is the last container to visit, segment[n-1] is the first
+// (active) container, whose value is also placed in the outer IPv6 dst,
+// where n is the number of compressed uSID containers.
 // 
 // Use this schema when the SR path requires more containers than fit in
 // the outer IPv6 dst alone. For single-container paths with no SRH, set
-// the outer ipv6.dst directly to the packed container value instead.
-// 
-// Reference: RFC 8754 Section 2 (SRH format), RFC 9800 Section 4
-// (uSID container encoding in SRH).
+// the outer ipv6.dst directly to the packed compressed uSID container value instead.
 message FlowIpv6SegmentRoutingUsid {
 
   // Description missing in models
@@ -13077,9 +13075,11 @@ message FlowIpv6SegmentRoutingUsid {
   // Description missing in models
   PatternFlowIpv6SegmentRoutingUsidTag tag = 4;
 
-  // List of pre-computed 128-bit uSID container values (RFC 9800 Section 4), encoded
-  // in reverse path order: Segment[0] is the last container, Segment[n-1] is the first
-  // container to visit.
+  // List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4),
+  // encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is
+  // the first container to visit. If Reduced SRH is needed ( RFC 8754 Section 4.1.1),
+  // the first compressed uSID container  is the one already in the ipv6.dst and not included
+  // in this list.
   repeated FlowIpv6SegmentRoutingUsidSegment segment_list = 5;
 
   // When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV
@@ -13087,18 +13087,15 @@ message FlowIpv6SegmentRoutingUsid {
   FlowIpv6SRHPadTlv pad_tlv = 6;
 }
 
-// One uSID container entry in the SRH segment list (RFC 9800 Section 4,
+// One compressed uSID container entry in the SRH segment list (RFC 9800 Section 4,
 // RFC 8754 Section 2.1). The implementation assembles the 128-bit wire
 // value by packing the locator block followed by the uSID values in order,
 // zero-padding the remainder to 128 bits (End-of-Container marker).
 // 
-// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
+// For F3216 format (RFC 9800 Section 3): Locator Block = 32 bits, each uSID = 16 bits,
 // up to 6 uSIDs per container.
 // Example - locator fc00::/32 (locator_length 32), usids [0001,0002,0003]
 // assembles to the 128-bit SRH entry fc00:0:1:2:3::
-// 
-// Reference: RFC 9800 Section 3 (F3216 format), RFC 9800 Section 4
-// (container encoding in SRH segment list).
 message FlowIpv6SegmentRoutingUsidSegment {
 
   // Description missing in models
@@ -13108,26 +13105,24 @@ message FlowIpv6SegmentRoutingUsidSegment {
   PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength locator_length = 2;
 
   // Ordered list of uSID values to pack into this container after the Locator Block (RFC
-  // 9800 Section 3). Each uSID occupies (128 - locator_length) / capacity bits. For F3216
-  // each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container. The first
-  // entry is the first uSID processed by the first hop; the implementation appends the
-  // End-of-Container zero-pad automatically. Example for F3216: [0001,0002,0003] with
-  // locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
+  // 9800 Section 3). Each uSID occupies ((128 - locator_length) / no of uSIDs) bits.
+  // For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container.
+  // The implementation appends the End-of-Container zero-pad automatically. Example for
+  // F3216: [0001,0002,0003] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
   repeated FlowIpv6SegmentRoutingUsiduSid usids = 3;
 }
 
-// One uSID value within a uSID container (RFC 9800 Section 3). Represents a single
-// network function (node SID, adjacency SID, or service SID) packed consecutively after
-// the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section 3), each
-// uSID is 16 bits (4 hex characters).
+// One uSID value within a compressed uSID container (RFC 9800 Section 3). Represents
+// a single network function (node SID, adjacency SID, or service SID) packed consecutively
+// after the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section
+// 3), each uSID is 16 bits (4 hex characters).
 message FlowIpv6SegmentRoutingUsiduSid {
 
   // The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must
-  // match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters,
-  // range 0x0001-0xFFFE. The value 0x0000 is reserved as the End-of-Container (EoC) marker
-  // and must not be used as a uSID value (RFC 9800 Section 3). Example: 0001 identifies
-  // node 1; with locator fc00::/32 this contributes the 0001 field to produce container
-  // fc00:0:1:...::
+  // match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters.
+  // The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be
+  // used as a uSID value (RFC 9800 Section 3). Example: 0001 identifies node 1; with
+  // locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
   optional string usid = 1;
 }
 
@@ -13135,37 +13130,8 @@ message FlowIpv6SegmentRoutingUsiduSid {
 // reserved.
 message FlowIpv6SegmentRoutinguSidFlags {
 
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u1_flag = 1;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u2_flag = 2;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u3_flag = 3;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u4_flag = 4;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u5_flag = 5;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u6_flag = 6;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u7_flag = 7;
-
-  // Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-  // default = False
-  optional bool u8_flag = 8;
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOam oam = 1;
 }
 
 // An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
@@ -36957,10 +36923,11 @@ message PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter {
 }
 
 // Number of SRH segment list entries remaining to be visited after the current active
-// container (RFC 8754 Section 2.1). The active container is Segment[segments_left];
-// the value is decremented each time the active container is exhausted and the pointer
-// advances to the next entry. When auto is assigned the value is set to one less than
-// the number of containers specified (last_entry value).
+// compressed uSID container (RFC 8754 Section 2.1).  The active compressed uSID container
+// is segment[segments_left];  the value is decremented each time the active container
+// is exhausted  and the pointer advances to the next compressed uSID container.  When
+// auto is assigned the value is set to the top entry of the compressed uSID container
+// list.
 message PatternFlowIpv6SegmentRoutingUsidSegmentsLeft {
 
   message Choice {
@@ -37202,6 +37169,54 @@ message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength {
 }
 
 // integer counter pattern
+message PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet
+// is an Operations, Administration, and Maintenance (OAM) packet.
+message PatternFlowIpv6SegmentRoutinguSidFlagsOam {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter decrement = 6;
+}
+
+// integer counter pattern
 message PatternFlowIpv6SegmentRoutingFlagsProtectedCounter {
 
   // Description missing in models
@@ -37264,8 +37279,8 @@ message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
   optional uint32 count = 3;
 }
 
-// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
-// (OAM) packet.
+// (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet
+// is an Operations, Administration, and Maintenance (OAM) packet.
 message PatternFlowIpv6SegmentRoutingFlagsOam {
 
   message Choice {

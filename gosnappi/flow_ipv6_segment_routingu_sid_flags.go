@@ -16,6 +16,7 @@ type flowIpv6SegmentRoutinguSidFlags struct {
 	obj          *otg.FlowIpv6SegmentRoutinguSidFlags
 	marshaller   marshalFlowIpv6SegmentRoutinguSidFlags
 	unMarshaller unMarshalFlowIpv6SegmentRoutinguSidFlags
+	oamHolder    PatternFlowIpv6SegmentRoutinguSidFlagsOam
 }
 
 func NewFlowIpv6SegmentRoutinguSidFlags() FlowIpv6SegmentRoutinguSidFlags {
@@ -29,7 +30,7 @@ func (obj *flowIpv6SegmentRoutinguSidFlags) msg() *otg.FlowIpv6SegmentRoutinguSi
 }
 
 func (obj *flowIpv6SegmentRoutinguSidFlags) setMsg(msg *otg.FlowIpv6SegmentRoutinguSidFlags) FlowIpv6SegmentRoutinguSidFlags {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalflowIpv6SegmentRoutinguSidFlags) FromPbText(value string) erro
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalflowIpv6SegmentRoutinguSidFlags) FromYaml(value string) error 
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalflowIpv6SegmentRoutinguSidFlags) FromJson(value string) error 
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *flowIpv6SegmentRoutinguSidFlags) Clone() (FlowIpv6SegmentRoutinguSidF
 	return newObj, nil
 }
 
+func (obj *flowIpv6SegmentRoutinguSidFlags) setNil() {
+	obj.oamHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // FlowIpv6SegmentRoutinguSidFlags is sRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as reserved.
 type FlowIpv6SegmentRoutinguSidFlags interface {
 	Validation
@@ -264,229 +272,42 @@ type FlowIpv6SegmentRoutinguSidFlags interface {
 	validateToAndFrom() error
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
-	// U1Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U1Flag() bool
-	// SetU1Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU1Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU1Flag checks if U1Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU1Flag() bool
-	// U2Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U2Flag() bool
-	// SetU2Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU2Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU2Flag checks if U2Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU2Flag() bool
-	// U3Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U3Flag() bool
-	// SetU3Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU3Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU3Flag checks if U3Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU3Flag() bool
-	// U4Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U4Flag() bool
-	// SetU4Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU4Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU4Flag checks if U4Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU4Flag() bool
-	// U5Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U5Flag() bool
-	// SetU5Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU5Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU5Flag checks if U5Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU5Flag() bool
-	// U6Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U6Flag() bool
-	// SetU6Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU6Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU6Flag checks if U6Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU6Flag() bool
-	// U7Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U7Flag() bool
-	// SetU7Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU7Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU7Flag checks if U7Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU7Flag() bool
-	// U8Flag returns bool, set in FlowIpv6SegmentRoutinguSidFlags.
-	U8Flag() bool
-	// SetU8Flag assigns bool provided by user to FlowIpv6SegmentRoutinguSidFlags
-	SetU8Flag(value bool) FlowIpv6SegmentRoutinguSidFlags
-	// HasU8Flag checks if U8Flag has been set in FlowIpv6SegmentRoutinguSidFlags
-	HasU8Flag() bool
+	// Oam returns PatternFlowIpv6SegmentRoutinguSidFlagsOam, set in FlowIpv6SegmentRoutinguSidFlags.
+	// PatternFlowIpv6SegmentRoutinguSidFlagsOam is (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+	Oam() PatternFlowIpv6SegmentRoutinguSidFlagsOam
+	// SetOam assigns PatternFlowIpv6SegmentRoutinguSidFlagsOam provided by user to FlowIpv6SegmentRoutinguSidFlags.
+	// PatternFlowIpv6SegmentRoutinguSidFlagsOam is (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+	SetOam(value PatternFlowIpv6SegmentRoutinguSidFlagsOam) FlowIpv6SegmentRoutinguSidFlags
+	// HasOam checks if Oam has been set in FlowIpv6SegmentRoutinguSidFlags
+	HasOam() bool
+	setNil()
 }
 
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U1Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U1Flag() bool {
-
-	return *obj.obj.U1Flag
-
+// description is TBD
+// Oam returns a PatternFlowIpv6SegmentRoutinguSidFlagsOam
+func (obj *flowIpv6SegmentRoutinguSidFlags) Oam() PatternFlowIpv6SegmentRoutinguSidFlagsOam {
+	if obj.obj.Oam == nil {
+		obj.obj.Oam = NewPatternFlowIpv6SegmentRoutinguSidFlagsOam().msg()
+	}
+	if obj.oamHolder == nil {
+		obj.oamHolder = &patternFlowIpv6SegmentRoutinguSidFlagsOam{obj: obj.obj.Oam}
+	}
+	return obj.oamHolder
 }
 
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U1Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU1Flag() bool {
-	return obj.obj.U1Flag != nil
+// description is TBD
+// Oam returns a PatternFlowIpv6SegmentRoutinguSidFlagsOam
+func (obj *flowIpv6SegmentRoutinguSidFlags) HasOam() bool {
+	return obj.obj.Oam != nil
 }
 
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU1Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU1Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
+// description is TBD
+// SetOam sets the PatternFlowIpv6SegmentRoutinguSidFlagsOam value in the FlowIpv6SegmentRoutinguSidFlags object
+func (obj *flowIpv6SegmentRoutinguSidFlags) SetOam(value PatternFlowIpv6SegmentRoutinguSidFlagsOam) FlowIpv6SegmentRoutinguSidFlags {
 
-	obj.obj.U1Flag = &value
-	return obj
-}
+	obj.oamHolder = nil
+	obj.obj.Oam = value.msg()
 
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U2Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U2Flag() bool {
-
-	return *obj.obj.U2Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U2Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU2Flag() bool {
-	return obj.obj.U2Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU2Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU2Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U2Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U3Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U3Flag() bool {
-
-	return *obj.obj.U3Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U3Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU3Flag() bool {
-	return obj.obj.U3Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU3Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU3Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U3Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U4Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U4Flag() bool {
-
-	return *obj.obj.U4Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U4Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU4Flag() bool {
-	return obj.obj.U4Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU4Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU4Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U4Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U5Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U5Flag() bool {
-
-	return *obj.obj.U5Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U5Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU5Flag() bool {
-	return obj.obj.U5Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU5Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU5Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U5Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U6Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U6Flag() bool {
-
-	return *obj.obj.U6Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U6Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU6Flag() bool {
-	return obj.obj.U6Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU6Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU6Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U6Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U7Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U7Flag() bool {
-
-	return *obj.obj.U7Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U7Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU7Flag() bool {
-	return obj.obj.U7Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU7Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU7Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U7Flag = &value
-	return obj
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U8Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) U8Flag() bool {
-
-	return *obj.obj.U8Flag
-
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// U8Flag returns a bool
-func (obj *flowIpv6SegmentRoutinguSidFlags) HasU8Flag() bool {
-	return obj.obj.U8Flag != nil
-}
-
-// Unused and for future use. MUST be 0 on transmission and ignored on receipt.
-// SetU8Flag sets the bool value in the FlowIpv6SegmentRoutinguSidFlags object
-func (obj *flowIpv6SegmentRoutinguSidFlags) SetU8Flag(value bool) FlowIpv6SegmentRoutinguSidFlags {
-
-	obj.obj.U8Flag = &value
 	return obj
 }
 
@@ -495,32 +316,13 @@ func (obj *flowIpv6SegmentRoutinguSidFlags) validateObj(vObj *validation, set_de
 		obj.setDefault()
 	}
 
+	if obj.obj.Oam != nil {
+
+		obj.Oam().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *flowIpv6SegmentRoutinguSidFlags) setDefault() {
-	if obj.obj.U1Flag == nil {
-		obj.SetU1Flag(false)
-	}
-	if obj.obj.U2Flag == nil {
-		obj.SetU2Flag(false)
-	}
-	if obj.obj.U3Flag == nil {
-		obj.SetU3Flag(false)
-	}
-	if obj.obj.U4Flag == nil {
-		obj.SetU4Flag(false)
-	}
-	if obj.obj.U5Flag == nil {
-		obj.SetU5Flag(false)
-	}
-	if obj.obj.U6Flag == nil {
-		obj.SetU6Flag(false)
-	}
-	if obj.obj.U7Flag == nil {
-		obj.SetU7Flag(false)
-	}
-	if obj.obj.U8Flag == nil {
-		obj.SetU8Flag(false)
-	}
 
 }

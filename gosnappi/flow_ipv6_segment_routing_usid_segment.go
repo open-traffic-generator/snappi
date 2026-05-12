@@ -254,18 +254,15 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingUsidSegment is one uSID container entry in the SRH segment list (RFC 9800 Section 4,
+// FlowIpv6SegmentRoutingUsidSegment is one compressed uSID container entry in the SRH segment list (RFC 9800 Section 4,
 // RFC 8754 Section 2.1). The implementation assembles the 128-bit wire
 // value by packing the locator block followed by the uSID values in order,
 // zero-padding the remainder to 128 bits (End-of-Container marker).
 //
-// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
+// For F3216 format (RFC 9800 Section 3): Locator Block = 32 bits, each uSID = 16 bits,
 // up to 6 uSIDs per container.
 // Example - locator fc00::/32 (locator_length 32), usids ["0001","0002","0003"]
 // assembles to the 128-bit SRH entry fc00:0:1:2:3::
-//
-// Reference: RFC 9800 Section 3 (F3216 format), RFC 9800 Section 4
-// (container encoding in SRH segment list).
 type FlowIpv6SegmentRoutingUsidSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsidSegment to protobuf object *otg.FlowIpv6SegmentRoutingUsidSegment
@@ -364,7 +361,7 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) SetLocatorLength(value PatternFlow
 	return obj
 }
 
-// Ordered list of uSID values to pack into this container after the Locator Block (RFC 9800 Section 3). Each uSID occupies (128 - locator_length) / capacity bits. For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container. The first entry is the first uSID processed by the first hop; the implementation appends the End-of-Container zero-pad automatically. Example for F3216: ["0001","0002","0003"] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
+// Ordered list of uSID values to pack into this container after the Locator Block (RFC 9800 Section 3). Each uSID occupies ((128 - locator_length) / no of uSIDs) bits. For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container. The implementation appends the End-of-Container zero-pad automatically. Example for F3216: ["0001","0002","0003"] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
 // Usids returns a []FlowIpv6SegmentRoutingUsiduSid
 func (obj *flowIpv6SegmentRoutingUsidSegment) Usids() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
 	if len(obj.obj.Usids) == 0 {

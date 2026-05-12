@@ -242,7 +242,7 @@ func (obj *flowIpv6SegmentRoutingUsiduSid) Clone() (FlowIpv6SegmentRoutingUsiduS
 	return newObj, nil
 }
 
-// FlowIpv6SegmentRoutingUsiduSid is one uSID value within a uSID container (RFC 9800 Section 3). Represents a single network function (node SID, adjacency SID, or service SID) packed consecutively after the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section 3), each uSID is 16 bits (4 hex characters).
+// FlowIpv6SegmentRoutingUsiduSid is one uSID value within a compressed uSID container (RFC 9800 Section 3). Represents a single network function (node SID, adjacency SID, or service SID) packed consecutively after the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section 3), each uSID is 16 bits (4 hex characters).
 type FlowIpv6SegmentRoutingUsiduSid interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsiduSid to protobuf object *otg.FlowIpv6SegmentRoutingUsiduSid
@@ -272,7 +272,7 @@ type FlowIpv6SegmentRoutingUsiduSid interface {
 	HasUsid() bool
 }
 
-// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters, range 0x0001-0xFFFE. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
+// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
 // Usid returns a string
 func (obj *flowIpv6SegmentRoutingUsiduSid) Usid() string {
 
@@ -280,13 +280,13 @@ func (obj *flowIpv6SegmentRoutingUsiduSid) Usid() string {
 
 }
 
-// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters, range 0x0001-0xFFFE. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
+// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
 // Usid returns a string
 func (obj *flowIpv6SegmentRoutingUsiduSid) HasUsid() bool {
 	return obj.obj.Usid != nil
 }
 
-// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters, range 0x0001-0xFFFE. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
+// The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be used as a uSID value (RFC 9800 Section 3). Example: "0001" identifies node 1; with locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
 // SetUsid sets the string value in the FlowIpv6SegmentRoutingUsiduSid object
 func (obj *flowIpv6SegmentRoutingUsiduSid) SetUsid(value string) FlowIpv6SegmentRoutingUsiduSid {
 

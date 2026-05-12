@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingUsidSegmentsLeft) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active container (RFC 8754 Section 2.1). The active container is Segment[segments_left]; the value is decremented each time the active container is exhausted and the pointer advances to the next entry. When auto is assigned the value is set to one less than the number of containers specified (last_entry value).
+// PatternFlowIpv6SegmentRoutingUsidSegmentsLeft is number of SRH segment list entries remaining to be visited after the current active compressed uSID container (RFC 8754 Section 2.1).  The active compressed uSID container is segment[segments_left];  the value is decremented each time the active container is exhausted  and the pointer advances to the next compressed uSID container.  When auto is assigned the value is set to the top entry of the compressed uSID container list.
 type PatternFlowIpv6SegmentRoutingUsidSegmentsLeft interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingUsidSegmentsLeft to protobuf object *otg.PatternFlowIpv6SegmentRoutingUsidSegmentsLeft

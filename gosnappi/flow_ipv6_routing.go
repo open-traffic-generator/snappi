@@ -290,11 +290,11 @@ type FlowIpv6Routing interface {
 	HasSegmentRouting() bool
 	// SegmentRoutingUsid returns FlowIpv6SegmentRoutingUsid, set in FlowIpv6Routing.
 	// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-	// whose segment list carries uSID containers (RFC 9800 Section 4).
-	// Each entry in segment_list represents one 128-bit uSID container.
+	// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
+	// Each entry in segment_list represents one 128-bit compressed uSID container.
 	// The user supplies a structured locator prefix and a list of uSID values;
 	// the implementation assembles the 128-bit wire value by packing them as:
-	// LB (locator_length bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+	// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
 	//
 	// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
 	// maximum 6 uSIDs per container.
@@ -302,23 +302,21 @@ type FlowIpv6Routing interface {
 	// container fc00:0:1:2:: placed in the SRH segment list entry.
 	//
 	// The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-	// Segment[0] is the last container to visit, Segment[n-1] is the first
-	// (active) container, whose value is also placed in the outer IPv6 dst.
+	// segment[0] is the last container to visit, segment[n-1] is the first
+	// (active) container, whose value is also placed in the outer IPv6 dst,
+	// where n is the number of compressed uSID containers.
 	//
 	// Use this schema when the SR path requires more containers than fit in
 	// the outer IPv6 dst alone. For single-container paths with no SRH, set
-	// the outer ipv6.dst directly to the packed container value instead.
-	//
-	// Reference: RFC 8754 Section 2 (SRH format), RFC 9800 Section 4
-	// (uSID container encoding in SRH).
+	// the outer ipv6.dst directly to the packed compressed uSID container value instead.
 	SegmentRoutingUsid() FlowIpv6SegmentRoutingUsid
 	// SetSegmentRoutingUsid assigns FlowIpv6SegmentRoutingUsid provided by user to FlowIpv6Routing.
 	// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-	// whose segment list carries uSID containers (RFC 9800 Section 4).
-	// Each entry in segment_list represents one 128-bit uSID container.
+	// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
+	// Each entry in segment_list represents one 128-bit compressed uSID container.
 	// The user supplies a structured locator prefix and a list of uSID values;
 	// the implementation assembles the 128-bit wire value by packing them as:
-	// LB (locator_length bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+	// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
 	//
 	// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
 	// maximum 6 uSIDs per container.
@@ -326,15 +324,13 @@ type FlowIpv6Routing interface {
 	// container fc00:0:1:2:: placed in the SRH segment list entry.
 	//
 	// The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-	// Segment[0] is the last container to visit, Segment[n-1] is the first
-	// (active) container, whose value is also placed in the outer IPv6 dst.
+	// segment[0] is the last container to visit, segment[n-1] is the first
+	// (active) container, whose value is also placed in the outer IPv6 dst,
+	// where n is the number of compressed uSID containers.
 	//
 	// Use this schema when the SR path requires more containers than fit in
 	// the outer IPv6 dst alone. For single-container paths with no SRH, set
-	// the outer ipv6.dst directly to the packed container value instead.
-	//
-	// Reference: RFC 8754 Section 2 (SRH format), RFC 9800 Section 4
-	// (uSID container encoding in SRH).
+	// the outer ipv6.dst directly to the packed compressed uSID container value instead.
 	SetSegmentRoutingUsid(value FlowIpv6SegmentRoutingUsid) FlowIpv6Routing
 	// HasSegmentRoutingUsid checks if SegmentRoutingUsid has been set in FlowIpv6Routing
 	HasSegmentRoutingUsid() bool
