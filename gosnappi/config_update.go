@@ -289,10 +289,26 @@ type ConfigUpdate interface {
 	// HasFlows checks if Flows has been set in ConfigUpdate
 	HasFlows() bool
 	// Protocols returns ProtocolsUpdate, set in ConfigUpdate.
-	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not able to maintain the current Protocols session in Up state always.
+	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not
+	// able to maintain the current Protocols session in Up state always.
+	// If the session is up but true on-the-fly update is not supported for one of the attributes selected for update
+	// (e.g. metric change on an emulated interface): a warning should be returned indicating that the session will be
+	// disabled and re-enabled,and the updated attribute(s) will be reflected once the session comes back up.
+	// a) The attributes are permanently updated in the stored config [i.e. next get_config should return modified parameters]
+	// b) If any of the protocol session(s) linked to the attributes is not in started state, an implementation return with
+	// Error rejecting the full update request OR will be applied on next start of the protocol.
+	// c) If session tied to an attribute is not in started state , the change will be reflected when session comes up next.
 	Protocols() ProtocolsUpdate
 	// SetProtocols assigns ProtocolsUpdate provided by user to ConfigUpdate.
-	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not able to maintain the current Protocols session in Up state always.
+	// ProtocolsUpdate is a container of Protocols with associated properties to be updated that may or may not
+	// able to maintain the current Protocols session in Up state always.
+	// If the session is up but true on-the-fly update is not supported for one of the attributes selected for update
+	// (e.g. metric change on an emulated interface): a warning should be returned indicating that the session will be
+	// disabled and re-enabled,and the updated attribute(s) will be reflected once the session comes back up.
+	// a) The attributes are permanently updated in the stored config [i.e. next get_config should return modified parameters]
+	// b) If any of the protocol session(s) linked to the attributes is not in started state, an implementation return with
+	// Error rejecting the full update request OR will be applied on next start of the protocol.
+	// c) If session tied to an attribute is not in started state , the change will be reflected when session comes up next.
 	SetProtocols(value ProtocolsUpdate) ConfigUpdate
 	// HasProtocols checks if Protocols has been set in ConfigUpdate
 	HasProtocols() bool

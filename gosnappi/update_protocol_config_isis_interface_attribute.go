@@ -316,7 +316,20 @@ func (obj *updateProtocolConfigIsisInterfaceAttribute) setChoice(value UpdatePro
 	return obj
 }
 
-// The metric value to be updated on the IS-IS interface. The maximum value of 16777215 (2^24-1) applies only when wide metric is enabled (RFC 5305). With narrow metrics the maximum is 63; values above 63 will be rejected. Updating the metric on an emulated interface will flap the IS-IS session. Updating the metric on a simulated interface will maintain the IS-IS session in Up state and trigger an LSP update with the new metric value sent to neighbors.
+// The metric value to be updated on the IS-IS interface.
+// The maximum value of 16777215 (2^24-1) applies only when wide metric is
+// enabled (RFC 5305). With narrow metrics the maximum is 63; values above
+// 63 will be rejected.
+//
+// On a simulated IS-IS interface (no real adjacency with the DUT), updating
+// the metric is a true on-the-fly operation: the IS-IS session remains in the
+// Up state and the router immediately re-advertises its LSP with the new metric
+// value, which neighbors receive without any session interruption.
+//
+// On an emulated IS-IS interface (real adjacency with the DUT), a true
+// on-the-fly metric update may not be supported. In that case the implementation
+// should return a warning, disable the session, re-enable it with the updated
+// metric, and reflect the new value in the LSP once the session comes back up.
 // Metric returns a uint32
 func (obj *updateProtocolConfigIsisInterfaceAttribute) Metric() uint32 {
 
@@ -328,13 +341,39 @@ func (obj *updateProtocolConfigIsisInterfaceAttribute) Metric() uint32 {
 
 }
 
-// The metric value to be updated on the IS-IS interface. The maximum value of 16777215 (2^24-1) applies only when wide metric is enabled (RFC 5305). With narrow metrics the maximum is 63; values above 63 will be rejected. Updating the metric on an emulated interface will flap the IS-IS session. Updating the metric on a simulated interface will maintain the IS-IS session in Up state and trigger an LSP update with the new metric value sent to neighbors.
+// The metric value to be updated on the IS-IS interface.
+// The maximum value of 16777215 (2^24-1) applies only when wide metric is
+// enabled (RFC 5305). With narrow metrics the maximum is 63; values above
+// 63 will be rejected.
+//
+// On a simulated IS-IS interface (no real adjacency with the DUT), updating
+// the metric is a true on-the-fly operation: the IS-IS session remains in the
+// Up state and the router immediately re-advertises its LSP with the new metric
+// value, which neighbors receive without any session interruption.
+//
+// On an emulated IS-IS interface (real adjacency with the DUT), a true
+// on-the-fly metric update may not be supported. In that case the implementation
+// should return a warning, disable the session, re-enable it with the updated
+// metric, and reflect the new value in the LSP once the session comes back up.
 // Metric returns a uint32
 func (obj *updateProtocolConfigIsisInterfaceAttribute) HasMetric() bool {
 	return obj.obj.Metric != nil
 }
 
-// The metric value to be updated on the IS-IS interface. The maximum value of 16777215 (2^24-1) applies only when wide metric is enabled (RFC 5305). With narrow metrics the maximum is 63; values above 63 will be rejected. Updating the metric on an emulated interface will flap the IS-IS session. Updating the metric on a simulated interface will maintain the IS-IS session in Up state and trigger an LSP update with the new metric value sent to neighbors.
+// The metric value to be updated on the IS-IS interface.
+// The maximum value of 16777215 (2^24-1) applies only when wide metric is
+// enabled (RFC 5305). With narrow metrics the maximum is 63; values above
+// 63 will be rejected.
+//
+// On a simulated IS-IS interface (no real adjacency with the DUT), updating
+// the metric is a true on-the-fly operation: the IS-IS session remains in the
+// Up state and the router immediately re-advertises its LSP with the new metric
+// value, which neighbors receive without any session interruption.
+//
+// On an emulated IS-IS interface (real adjacency with the DUT), a true
+// on-the-fly metric update may not be supported. In that case the implementation
+// should return a warning, disable the session, re-enable it with the updated
+// metric, and reflect the new value in the LSP once the session comes back up.
 // SetMetric sets the uint32 value in the UpdateProtocolConfigIsisInterfaceAttribute object
 func (obj *updateProtocolConfigIsisInterfaceAttribute) SetMetric(value uint32) UpdateProtocolConfigIsisInterfaceAttribute {
 	obj.setChoice(UpdateProtocolConfigIsisInterfaceAttributeChoice.METRIC)

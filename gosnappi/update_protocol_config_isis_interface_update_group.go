@@ -283,6 +283,10 @@ type UpdateProtocolConfigIsisInterfaceUpdateGroup interface {
 }
 
 // The names of the IS-IS interfaces to which all attribute updates in this group will be applied.
+//
+// x-constraint:
+// - /components/schemas/Isis.Interface/properties/name
+//
 // Names returns a []string
 func (obj *updateProtocolConfigIsisInterfaceUpdateGroup) Names() []string {
 	if obj.obj.Names == nil {
@@ -292,6 +296,10 @@ func (obj *updateProtocolConfigIsisInterfaceUpdateGroup) Names() []string {
 }
 
 // The names of the IS-IS interfaces to which all attribute updates in this group will be applied.
+//
+// x-constraint:
+// - /components/schemas/Isis.Interface/properties/name
+//
 // SetNames sets the []string value in the UpdateProtocolConfigIsisInterfaceUpdateGroup object
 func (obj *updateProtocolConfigIsisInterfaceUpdateGroup) SetNames(value []string) UpdateProtocolConfigIsisInterfaceUpdateGroup {
 
