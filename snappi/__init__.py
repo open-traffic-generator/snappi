@@ -694,6 +694,13 @@ from .snappi import PatternFlowIpv6Dst
 from .snappi import PatternFlowIpv6DstCounter
 from .snappi import PatternFlowIpv6DstMetricTag
 from .snappi import PatternFlowIpv6DstMetricTagIter
+from .snappi import FlowIpv6UsidDst
+from .snappi import PatternFlowIpv6UsidDstLocator
+from .snappi import PatternFlowIpv6UsidDstLocatorCounter
+from .snappi import PatternFlowIpv6UsidDstLocatorLength
+from .snappi import PatternFlowIpv6UsidDstLocatorLengthCounter
+from .snappi import FlowIpv6UsidDstuSid
+from .snappi import FlowIpv6UsidDstuSidIter
 from .snappi import FlowPfcPause
 from .snappi import PatternFlowPfcPauseDst
 from .snappi import PatternFlowPfcPauseDstCounter

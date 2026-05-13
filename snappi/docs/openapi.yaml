@@ -14834,6 +14834,45 @@ components:
         dst:
           x-field-uid: 8
           $ref: '#/components/schemas/Pattern.Flow.Ipv6.Dst'
+        dst_usids:
+          description: |-
+            Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with no Segment Routing Header. When present, the implementation assembles the 128-bit IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing with segment_routing_usid instead.
+          $ref: '#/components/schemas/Flow.Ipv6.UsidDst'
+          x-field-uid: 9
+    Flow.Ipv6.UsidDst:
+      description: |-
+        Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in a single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).
+        For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits, up to 6 uSIDs per container. Example - locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst = fc00:0:1:2:3::
+        When this field is present, ipv6.dst should be ignored by the implementation.
+      type: object
+      required:
+      - locator
+      properties:
+        locator:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.Locator'
+        locator_length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.LocatorLength'
+        usids:
+          description: |-
+            Ordered list of uSID values to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Flow.Ipv6.UsidDst.uSid'
+          x-field-uid: 3
+    Flow.Ipv6.UsidDst.uSid:
+      description: |-
+        One uSID value within the no-SRH uSID container (RFC 9800 Section 3). For F3216 (16-bit uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container marker and must not be used.
+      type: object
+      properties:
+        usid:
+          description: |-
+            The uSID value as a hex string. For F3216: 4 hex characters. Any '0' padding before the before uSID value should be explicitly configured. Example: "0001".
+          type: string
+          format: hex
+          x-field-uid: 1
     Flow.Ipv6.Auto:
       description: |-
         The OTG implementation can provide a system generated, value for this property.
@@ -17037,27 +17076,25 @@ components:
           x-field-uid: 1
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Segment.Segment'
     Flow.Ipv6SegmentRoutingUsid:
-      description: |-
-        IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-        whose segment list carries compressed uSID containers (RFC 9800 Section 4).
-        Each entry in segment_list represents one 128-bit compressed uSID container.
-        The user supplies a structured locator prefix and a list of uSID values;
-        the implementation assembles the 128-bit wire value by packing them as:
-        LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
-
-        For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
-        maximum 6 uSIDs per container.
-        Example - locator fc00::/32 with uSIDs 0x0001, 0x0002 assembles to
-        container fc00:0:1:2:: placed in the SRH segment list entry.
-
-        The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-        segment[0] is the last container to visit, segment[n-1] is the first
-        (active) container, whose value is also placed in the outer IPv6 dst,
-        where n is the number of compressed uSID containers.
-
-        Use this schema when the SR path requires more containers than fit in
-        the outer IPv6 dst alone. For single-container paths with no SRH, set
-        the outer ipv6.dst directly to the packed compressed uSID container value instead.
+      description: "IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section\
+        \ 2)\nwhose segment list carries compressed uSID containers (RFC 9800 Section\
+        \ 4).\nEach entry in segment_list represents one 128-bit compressed uSID container.\n\
+        The user supplies a structured locator prefix and a list of uSID values;\n\
+        the implementation assembles the 128-bit wire value by packing them as:\n\
+        LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).\n\nFor\
+        \ F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,\n\
+        maximum 6 uSIDs per container.\nExample - locator fc00::/32 with uSIDs 0x0001,\
+        \ 0x0002 assembles to\ncontainer fc00:0:1:2:: placed in the SRH segment list\
+        \ entry.\n\nThe segment list is encoded in reverse path order per RFC 8754\
+        \ Section 2.1:\nsegment[0] is the last container to visit, segment[n-1] is\
+        \ the first\n(active) container, whose value is also placed in the outer ipv6.dst_usids\
+        \ field. \nThe active container is determined by the segments_left pointer,\
+        \ \nwhich is decremented as the packet progresses through the path and containers\
+        \ are exhausted,\nwhere n is the number of compressed uSID containers.\n\n\
+        Use this schema when the SR path requires more containers than fit in\nthe\
+        \ outer ipv6.dst_usids alone. \nFor single-container paths with no SRH, set\
+        \ the locator and uSID list in ipv6.dst_usids from which \ndestination IPv6\
+        \ address will be generated by the implementation."
       type: object
       properties:
         segments_left:
@@ -17074,7 +17111,7 @@ components:
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRoutingUsid.Tag'
         segment_list:
           description: |-
-            List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit. If Reduced SRH is needed ( RFC 8754 Section 4.1.1), the first compressed uSID container  is the one already in the ipv6.dst and not included in this list.
+            List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4), encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is the first container to visit. If Reduced SRH is needed ( RFC 8754 Section 4.1.1), the first compressed uSID container  is the one already in the ipv6.dst_usids and not included in this list.
           type: array
           minItems: 1
           items:
@@ -35212,35 +35249,7 @@ components:
           x-field-uid: 3
     Pattern.Flow.Ipv6.Dst:
       description: |-
-        Destination address of the IPv6 packet.
-
-        For SRv6 uSID traffic with no Segment Routing Header (reduced
-        encapsulation, RFC 9800 Section 4), set this field to the uSID
-        container that encodes the entire SR path. A uSID container is a
-        128-bit IPv6 address that packs a sequence of Micro-SIDs
-        consecutively after a common Locator Block (LB), with 0x0000
-        (End-of-Container marker) padding unused slots to fill 128 bits.
-
-        For the F3216 format (LB = 32 bits, uSID = 16 bits, RFC 9800
-        Section 3), up to 6 uSIDs fit in one container. The bit layout is:
-        [32-bit LB][uSID-1 16-bit][uSID-2 16-bit]...[uSID-N 16-bit][zeros].
-
-        Example - path through 3 nodes, LB fc00::/32,
-        uSIDs 0x0001 (node 1), 0x0002 (node 2), 0x0003 (node 3):
-        dst = fc00:0:1:2:3::
-        where fc00:0 is the 32-bit LB, 0001/0002/0003 are the per-node
-        uSIDs, and :: represents the zero-padded End-of-Container tail.
-
-        Each uN node on the path shifts out its own uSID and forwards to
-        the next, updating the IPv6 DA in place (RFC 9800 Section 9.4):
-        after node 1 - fc00:0:2:3::
-        after node 2 - fc00:0:3::
-        after node 3 - fc00:: (all uSIDs consumed, packet delivered).
-
-        No SRH is needed when all path hops fit within a single 128-bit
-        container. For paths requiring more than 6 hops (F3216), use
-        Flow.Ipv6Routing with segment_routing_usid and carry additional
-        containers in the SRH segment list.
+        Destination address in IPv6 packet header. If dest_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
       type: object
       properties:
         choice:
@@ -35293,6 +35302,135 @@ components:
         auto:
           $ref: '#/components/schemas/Flow.Ipv6.Auto'
           x-field-uid: 8
+    Pattern.Flow.Ipv6.UsidDst.Locator.Counter:
+      description: |-
+        ipv6 counter pattern
+      type: object
+      properties:
+        start:
+          type: string
+          x-field-uid: 1
+          default: ::0
+          format: ipv6
+        step:
+          type: string
+          x-field-uid: 2
+          default: ::1
+          format: ipv6
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Ipv6.UsidDst.Locator:
+      description: |-
+        The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216 this is a /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: string
+          x-field-uid: 2
+          default: ::0
+          format: ipv6
+        values:
+          type: array
+          items:
+            type: string
+            format: ipv6
+          x-field-uid: 3
+          default:
+          - ::0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.Locator.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.Locator.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Ipv6.UsidDst.LocatorLength.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 32
+          format: uint32
+          maximum: 255
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 255
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 256
+    Pattern.Flow.Ipv6.UsidDst.LocatorLength:
+      description: |-
+        Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 32
+          format: uint32
+          maximum: 255
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 255
+          x-field-uid: 3
+          default:
+          - 32
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.LocatorLength.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Ipv6.UsidDst.LocatorLength.Counter'
+          x-field-uid: 6
     Pattern.Flow.PfcPause.Dst.Counter:
       description: |-
         mac counter pattern
