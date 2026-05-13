@@ -280,10 +280,10 @@ type FlowIpv4Options interface {
 	setChoice(value FlowIpv4OptionsChoiceEnum) FlowIpv4Options
 	// HasChoice checks if Choice has been set in FlowIpv4Options
 	HasChoice() bool
-	// getter for RouterAlert to set choice.
-	RouterAlert()
 	// getter for EndOfOptions to set choice.
 	EndOfOptions()
+	// getter for RouterAlert to set choice.
+	RouterAlert()
 	// Custom returns FlowIpv4OptionsCustom, set in FlowIpv4Options.
 	// FlowIpv4OptionsCustom is user defined IP options to be appended to the IPv4 header.
 	Custom() FlowIpv4OptionsCustom
@@ -322,14 +322,14 @@ func (obj *flowIpv4Options) Choice() FlowIpv4OptionsChoiceEnum {
 	return FlowIpv4OptionsChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for RouterAlert to set choice
-func (obj *flowIpv4Options) RouterAlert() {
-	obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
-}
-
 // getter for EndOfOptions to set choice
 func (obj *flowIpv4Options) EndOfOptions() {
 	obj.setChoice(FlowIpv4OptionsChoice.END_OF_OPTIONS)
+}
+
+// getter for RouterAlert to set choice
+func (obj *flowIpv4Options) RouterAlert() {
+	obj.setChoice(FlowIpv4OptionsChoice.ROUTER_ALERT)
 }
 
 // description is TBD
