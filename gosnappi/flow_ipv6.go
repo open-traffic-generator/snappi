@@ -343,10 +343,66 @@ type FlowIpv6 interface {
 	// HasSrc checks if Src has been set in FlowIpv6
 	HasSrc() bool
 	// Dst returns PatternFlowIpv6Dst, set in FlowIpv6.
-	// PatternFlowIpv6Dst is destination address
+	// PatternFlowIpv6Dst is destination address of the IPv6 packet.
+	//
+	// For SRv6 uSID traffic with no Segment Routing Header (reduced
+	// encapsulation, RFC 9800 Section 4), set this field to the uSID
+	// container that encodes the entire SR path. A uSID container is a
+	// 128-bit IPv6 address that packs a sequence of Micro-SIDs
+	// consecutively after a common Locator Block (LB), with 0x0000
+	// (End-of-Container marker) padding unused slots to fill 128 bits.
+	//
+	// For the F3216 format (LB = 32 bits, uSID = 16 bits, RFC 9800
+	// Section 3), up to 6 uSIDs fit in one container. The bit layout is:
+	// [32-bit LB][uSID-1 16-bit][uSID-2 16-bit]...[uSID-N 16-bit][zeros].
+	//
+	// Example - path through 3 nodes, LB fc00::/32,
+	// uSIDs 0x0001 (node 1), 0x0002 (node 2), 0x0003 (node 3):
+	// dst = fc00:0:1:2:3::
+	// where fc00:0 is the 32-bit LB, 0001/0002/0003 are the per-node
+	// uSIDs, and :: represents the zero-padded End-of-Container tail.
+	//
+	// Each uN node on the path shifts out its own uSID and forwards to
+	// the next, updating the IPv6 DA in place (RFC 9800 Section 9.4):
+	// after node 1 - fc00:0:2:3::
+	// after node 2 - fc00:0:3::
+	// after node 3 - fc00:: (all uSIDs consumed, packet delivered).
+	//
+	// No SRH is needed when all path hops fit within a single 128-bit
+	// container. For paths requiring more than 6 hops (F3216), use
+	// Flow.Ipv6Routing with segment_routing_usid and carry additional
+	// containers in the SRH segment list.
 	Dst() PatternFlowIpv6Dst
 	// SetDst assigns PatternFlowIpv6Dst provided by user to FlowIpv6.
-	// PatternFlowIpv6Dst is destination address
+	// PatternFlowIpv6Dst is destination address of the IPv6 packet.
+	//
+	// For SRv6 uSID traffic with no Segment Routing Header (reduced
+	// encapsulation, RFC 9800 Section 4), set this field to the uSID
+	// container that encodes the entire SR path. A uSID container is a
+	// 128-bit IPv6 address that packs a sequence of Micro-SIDs
+	// consecutively after a common Locator Block (LB), with 0x0000
+	// (End-of-Container marker) padding unused slots to fill 128 bits.
+	//
+	// For the F3216 format (LB = 32 bits, uSID = 16 bits, RFC 9800
+	// Section 3), up to 6 uSIDs fit in one container. The bit layout is:
+	// [32-bit LB][uSID-1 16-bit][uSID-2 16-bit]...[uSID-N 16-bit][zeros].
+	//
+	// Example - path through 3 nodes, LB fc00::/32,
+	// uSIDs 0x0001 (node 1), 0x0002 (node 2), 0x0003 (node 3):
+	// dst = fc00:0:1:2:3::
+	// where fc00:0 is the 32-bit LB, 0001/0002/0003 are the per-node
+	// uSIDs, and :: represents the zero-padded End-of-Container tail.
+	//
+	// Each uN node on the path shifts out its own uSID and forwards to
+	// the next, updating the IPv6 DA in place (RFC 9800 Section 9.4):
+	// after node 1 - fc00:0:2:3::
+	// after node 2 - fc00:0:3::
+	// after node 3 - fc00:: (all uSIDs consumed, packet delivered).
+	//
+	// No SRH is needed when all path hops fit within a single 128-bit
+	// container. For paths requiring more than 6 hops (F3216), use
+	// Flow.Ipv6Routing with segment_routing_usid and carry additional
+	// containers in the SRH segment list.
 	SetDst(value PatternFlowIpv6Dst) FlowIpv6
 	// HasDst checks if Dst has been set in FlowIpv6
 	HasDst() bool

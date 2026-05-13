@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingTag) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group, enabling shared properties or policy treatment. If not used, it MUST be set to zero.
+// PatternFlowIpv6SegmentRoutingTag is 16-bit field used to tag a packet as part of a class or group (RFC 8754 Section 2.1). If not used it MUST be set to zero.
 type PatternFlowIpv6SegmentRoutingTag interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingTag to protobuf object *otg.PatternFlowIpv6SegmentRoutingTag

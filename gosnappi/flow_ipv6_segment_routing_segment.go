@@ -250,7 +250,7 @@ func (obj *flowIpv6SegmentRoutingSegment) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingSegment is description is TBD
+// FlowIpv6SegmentRoutingSegment is one entry in the SRH Segment List (RFC 8754 Section 2.1). A single 128-bit SRv6 SID address for full-SID encoding (locator + function + argument packed into one IPv6 address).
 type FlowIpv6SegmentRoutingSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingSegment to protobuf object *otg.FlowIpv6SegmentRoutingSegment
@@ -273,10 +273,10 @@ type FlowIpv6SegmentRoutingSegment interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Segment returns PatternFlowIpv6SegmentRoutingSegmentSegment, set in FlowIpv6SegmentRoutingSegment.
-	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 address segment.
+	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".
 	Segment() PatternFlowIpv6SegmentRoutingSegmentSegment
 	// SetSegment assigns PatternFlowIpv6SegmentRoutingSegmentSegment provided by user to FlowIpv6SegmentRoutingSegment.
-	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 address segment.
+	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".
 	SetSegment(value PatternFlowIpv6SegmentRoutingSegmentSegment) FlowIpv6SegmentRoutingSegment
 	// HasSegment checks if Segment has been set in FlowIpv6SegmentRoutingSegment
 	HasSegment() bool

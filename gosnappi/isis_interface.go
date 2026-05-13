@@ -24,6 +24,7 @@ type isisInterface struct {
 	advancedHolder           IsisInterfaceAdvanced
 	linkProtectionHolder     IsisInterfaceLinkProtection
 	adjacencySidsHolder      IsisInterfaceIsisInterfaceAdjacencySidIter
+	srv6AdjacencySidsHolder  IsisSRv6AdjSidContainer
 }
 
 func NewIsisInterface() IsisInterface {
@@ -259,6 +260,7 @@ func (obj *isisInterface) setNil() {
 	obj.advancedHolder = nil
 	obj.linkProtectionHolder = nil
 	obj.adjacencySidsHolder = nil
+	obj.srv6AdjacencySidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -362,13 +364,18 @@ type IsisInterface interface {
 	SetName(value string) IsisInterface
 	// AdjacencySids returns IsisInterfaceIsisInterfaceAdjacencySidIterIter, set in IsisInterface
 	AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter
+	// Srv6AdjacencySids returns IsisSRv6AdjSidContainer, set in IsisInterface.
+	// IsisSRv6AdjSidContainer is container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.
+	Srv6AdjacencySids() IsisSRv6AdjSidContainer
+	// SetSrv6AdjacencySids assigns IsisSRv6AdjSidContainer provided by user to IsisInterface.
+	// IsisSRv6AdjSidContainer is container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.
+	SetSrv6AdjacencySids(value IsisSRv6AdjSidContainer) IsisInterface
+	// HasSrv6AdjacencySids checks if Srv6AdjacencySids has been set in IsisInterface
+	HasSrv6AdjacencySids() bool
 	setNil()
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -381,9 +388,6 @@ func (obj *isisInterface) EthName() string {
 }
 
 // The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -839,7 +843,7 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+// List of SR-MPLS Adjacency Segment Identifier (Adj-SID) sub-TLVs for this interface (RFC 8667).
 // AdjacencySids returns a []IsisInterfaceAdjacencySid
 func (obj *isisInterface) AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {
@@ -923,6 +927,34 @@ func (obj *isisInterfaceIsisInterfaceAdjacencySidIter) clearHolderSlice() IsisIn
 }
 func (obj *isisInterfaceIsisInterfaceAdjacencySidIter) appendHolderSlice(item IsisInterfaceAdjacencySid) IsisInterfaceIsisInterfaceAdjacencySidIter {
 	obj.isisInterfaceAdjacencySidSlice = append(obj.isisInterfaceAdjacencySidSlice, item)
+	return obj
+}
+
+// When present, advertises SRv6 adjacency SID sub-TLVs and per-link MSD sub-TLVs for this interface. Reference: RFC 9352 Sections 6, 8.1-8.2.
+// Srv6AdjacencySids returns a IsisSRv6AdjSidContainer
+func (obj *isisInterface) Srv6AdjacencySids() IsisSRv6AdjSidContainer {
+	if obj.obj.Srv6AdjacencySids == nil {
+		obj.obj.Srv6AdjacencySids = NewIsisSRv6AdjSidContainer().msg()
+	}
+	if obj.srv6AdjacencySidsHolder == nil {
+		obj.srv6AdjacencySidsHolder = &isisSRv6AdjSidContainer{obj: obj.obj.Srv6AdjacencySids}
+	}
+	return obj.srv6AdjacencySidsHolder
+}
+
+// When present, advertises SRv6 adjacency SID sub-TLVs and per-link MSD sub-TLVs for this interface. Reference: RFC 9352 Sections 6, 8.1-8.2.
+// Srv6AdjacencySids returns a IsisSRv6AdjSidContainer
+func (obj *isisInterface) HasSrv6AdjacencySids() bool {
+	return obj.obj.Srv6AdjacencySids != nil
+}
+
+// When present, advertises SRv6 adjacency SID sub-TLVs and per-link MSD sub-TLVs for this interface. Reference: RFC 9352 Sections 6, 8.1-8.2.
+// SetSrv6AdjacencySids sets the IsisSRv6AdjSidContainer value in the IsisInterface object
+func (obj *isisInterface) SetSrv6AdjacencySids(value IsisSRv6AdjSidContainer) IsisInterface {
+
+	obj.srv6AdjacencySidsHolder = nil
+	obj.obj.Srv6AdjacencySids = value.msg()
+
 	return obj
 }
 
@@ -1029,6 +1061,11 @@ func (obj *isisInterface) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.Srv6AdjacencySids != nil {
+
+		obj.Srv6AdjacencySids().validateObj(vObj, set_default)
 	}
 
 }
