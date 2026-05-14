@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.53.1
+/* Open Traffic Generator API 1.54.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -14143,13 +14143,17 @@ message ConfigUpdate {
     enum Enum {
       unspecified = 0;
       flows = 1;
+      protocols = 2;
     }
   }
-  // Description missing in models
+  // Selects the type of resource to update.
   optional Choice.Enum choice = 1;
 
   // Description missing in models
   FlowsUpdate flows = 2;
+
+  // Description missing in models
+  ProtocolsUpdate protocols = 3;
 }
 
 // A container of flows with associated properties to be updated without affecting the
@@ -14166,8 +14170,119 @@ message FlowsUpdate {
   // Flow properties to be updated without affecting the transmit state.
   repeated PropertyNames.Enum property_names = 1;
 
-  // The list of configured flows for which given property will be updated.
+  // The list of configured flows for which the given property will be updated.
   repeated Flow flows = 2;
+}
+
+// A container of protocol properties to be updated that may or may not be
+// able to maintain the current protocol session always in the Up state.
+// 
+// If the session is up but true on-the-fly update is not supported for one of the attributes
+// selected for update
+// (e.g. metric change on an emulated interface): a warning should be returned indicating
+// that the session will be
+// disabled and re-enabled, and the updated attribute(s) will be reflected once the
+// session comes back up.
+// 
+// The attributes are permanently updated in the stored config. [i.e. the next get_config
+// should return modified parameters]
+// 
+// If any of the protocol session(s) linked to the attributes are not in started state,
+// an implementation can
+// a) return an Error rejecting the full update request if on the fly changes are supported
+// only on
+// started protocol sessions, OR
+// b) return a Warning indicating that some of the sessions were not in started state,
+// update the configuration
+// and apply it on the next start of the protocol session.
+message ProtocolsUpdate {
+
+  // IS-IS protocol attribute updates to apply.
+  UpdateProtocolConfigIsis isis = 1;
+}
+
+// A container for IS-IS properties to be updated. Presence of this object indicates
+// that one or more IS-IS properties require updating.
+message UpdateProtocolConfigIsis {
+
+  // List of IS-IS interface update groups. One update group targets one or more IS-IS
+  // interfaces.
+  // Use multiple update groups to handle asymmetric changes across different subsets
+  // of interfaces.
+  // 
+  // All interfaces listed in names in each update group receive every attribute update
+  // specified in the attributes list.
+  // 
+  // If the session is up but true on-the-fly update is not supported for an attribute
+  // (e.g. metric change on an emulated interface),
+  // a warning is returned indicating that the session will be disabled and re-enabled,
+  // and the updated attribute will be reflected
+  // once the session comes back up.
+  // 
+  // An error should be returned if any provided name is not found in the current configuration's
+  // list of IS-IS interface names.
+  repeated UpdateProtocolConfigIsisInterfaceUpdateGroup interfaces = 1;
+}
+
+// An update group targeting one or more IS-IS interfaces. All interfaces listed in
+// names receive every attribute update specified in the attributes list. Use multiple
+// update groups to apply different updates to different subsets of interfaces (asymmetric
+// updates).
+// If the session is up but true on-the-fly update is not supported for an attribute
+// (e.g. metric change on an emulated interface): a warning is returned indicating that
+// the session will be disabled and re-enabled,
+// and the updated attribute will be reflected once the session comes back up. An error
+// should be returned if any provided name is not found in the current configuration's
+// list of IS-IS interface names.
+message UpdateProtocolConfigIsisInterfaceUpdateGroup {
+
+  // The names of the IS-IS interfaces to which all attribute updates in this group will
+  // be applied.
+  // 
+  // x-constraint:
+  // - /components/schemas/Isis.Interface/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Isis.Interface/properties/name
+  // 
+  repeated string names = 1;
+
+  // The list of interface attribute updates to apply. Each entry selects one attribute
+  // via the choice discriminator. Multiple attributes can be updated in a single group
+  // without repeating the names list.
+  repeated UpdateProtocolConfigIsisInterfaceAttribute attributes = 2;
+}
+
+// A single IS-IS interface attribute update. The choice field identifies which attribute
+// is being changed.
+message UpdateProtocolConfigIsisInterfaceAttribute {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      metric = 1;
+    }
+  }
+  // The interface attribute to be updated.
+  optional Choice.Enum choice = 1;
+
+  // The metric value to be updated on the IS-IS interface.
+  // The maximum value of 16777215 (2^24-1) applies only when wide metric is
+  // enabled (RFC 5305). With narrow metrics the maximum is 63; values above
+  // 63 will be rejected.
+  // 
+  // On a simulated IS-IS interface (no real adjacency with the DUT), updating
+  // the metric is a true on-the-fly operation: the IS-IS session remains in the
+  // Up state and the router immediately re-advertises its LSP with the new metric
+  // value, which neighbors receive without any session interruption.
+  // 
+  // On an emulated IS-IS interface (real adjacency with the DUT), a true
+  // on-the-fly metric update may not be supported. In that case the implementation
+  // should return a warning, disable the session, re-enable it with the updated
+  // metric, and reflect the new value in the LSP once the session comes back up.
+  // default = 10
+  optional uint32 metric = 2;
 }
 
 // A container for all configuration resources of various types to be appended.
