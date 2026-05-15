@@ -279,9 +279,6 @@ type Bgpv6MetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Bgp.V6peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Bgp.V6peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *bgpv6MetricsRequest) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -291,9 +288,6 @@ func (obj *bgpv6MetricsRequest) PeerNames() []string {
 }
 
 // The names of BGPv6 peers to return results for. An empty list will return results for all BGPv6 peers.
-//
-// x-constraint:
-// - /components/schemas/Bgp.V6peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Bgp.V6peer/properties/name

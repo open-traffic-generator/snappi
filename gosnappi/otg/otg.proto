@@ -146,10 +146,6 @@ message LagPort {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // required = true
   optional string port_name = 1;
 
@@ -322,17 +318,9 @@ message EthernetConnection {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 2;
 
   // Name of the LAG that the Ethernet interface is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -341,11 +329,6 @@ message EthernetConnection {
 
   // Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected
   // to.
-  // 
-  // x-constraint:
-  // - #/components/schemas/Vxlan.V4Tunnel/properties/name
-  // - #/components/schemas/Vxlan.V6Tunnel/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -370,10 +353,6 @@ message EthernetSimulatedLink {
   // the Device Under Test (has at atleast one ethernet interface with connection to the
   // port or
   // lag connected to the DUT)
-  // 
-  // x-constraint:
-  // - #/components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - #/components/schemas/Device.Ethernet/properties/name
@@ -479,10 +458,6 @@ message DeviceIpv4Loopback {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -553,10 +528,6 @@ message DeviceIpv6Loopback {
 
   // The unique name of the Ethernet interface behind which this Loopback
   // interface will be created.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -1270,10 +1241,6 @@ message Layer1 {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message Speed {
@@ -1325,16 +1292,10 @@ message Layer1 {
   // Under Review: This field is currently under review for pending exploration on use
   // cases
   // 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases
-  // 
   // Set to true to override the auto_negotiate, link_training
   // and rs_fec settings for gigabit ethernet interfaces.
   optional bool ieee_media_defaults = 6;
 
-  // Under Review: This field is currently under review for pending exploration on use
-  // cases, given that a separate configuration called `AutoNegotiation` already exists.
-  // 
   // Under Review: This field is currently under review for pending exploration on use
   // cases, given that a separate configuration called `AutoNegotiation` already exists.
   // 
@@ -1478,10 +1439,6 @@ message Capture {
 
   // The unique names of ports that the capture settings will apply to. Port_names cannot
   // be duplicated between capture objects.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -1831,10 +1788,6 @@ message IsisInterface {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // required = true
   optional string eth_name = 1;
 
@@ -1896,7 +1849,8 @@ message IsisInterface {
   // required = true
   optional string name = 13;
 
-  // List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+  // List of SR-MPLS Adjacency Segment Identifier (Adj-SID) sub-TLVs for this interface
+  // (RFC 8667).
   repeated IsisInterfaceAdjacencySid adjacency_sids = 14;
 }
 
@@ -2594,7 +2548,7 @@ message IsisV6RouteRange {
 // of the cases, is a one-hop path.
 // These segments act as topological sub-paths that can be combined together to form
 // the required path.
-// Reference: https://datatracker.ietf.org/doc/html/rfc8667.:w
+// Reference: https://datatracker.ietf.org/doc/html/rfc8667.
 // An implementation may advertise Router Capability with default values if a user does
 // not even set the properties
 // of Router Capability and Segment Routing Capability.
@@ -3030,12 +2984,6 @@ message BgpV4Interface {
 
   // The unique name of the IPv4,  Loopback IPv4 interface or DHCPv4 client used as the
   // source IP for this list of BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -3853,8 +3801,6 @@ message BgpV4RouteRange {
 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
   // optional BGP attribute, with the Type Code 16. Community and Extended Communities
   // attributes are utilized to trigger routing decisions, such as acceptance, rejection,
@@ -4367,8 +4313,6 @@ message BgpV6RouteRange {
   // required = true
   optional string name = 10;
 
-  // Deprecated: This property is deprecated in favor of property extended_communities
-  // 
   // Deprecated: This property is deprecated in favor of property extended_communities
   // 
   // Optional Extended Community settings. The Extended Communities Attribute is a transitive
@@ -6736,12 +6680,6 @@ message BgpV6Interface {
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -7003,11 +6941,6 @@ message VxlanV4Tunnel {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // required = true
   optional string source_interface = 1;
 
@@ -7031,11 +6964,6 @@ message VxlanV4Tunnel {
 message VxlanV6Tunnel {
 
   // Determines the source interface.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -7199,10 +7127,6 @@ message RsvpIpv4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -7264,11 +7188,6 @@ message RsvpLspIpv4Interface {
   // ingress and egress endpoint for  the LSPs configured on this interface. This must
   // match the name field of either ipv4_addresses or ipv4_loopbacks  on which this LSP
   // interface is configured.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -7698,10 +7617,6 @@ message DhcpServerV4 {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 2;
 
@@ -7774,10 +7689,6 @@ message DhcpServerV6 {
   optional string name = 1;
 
   // The unique name of the IPv6 on which DHCPv6 server will run.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -8086,10 +7997,6 @@ message Ospfv2Interface {
   optional string name = 1;
 
   // The globally unique name of the IPv4 interface connected to the DUT.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -8480,10 +8387,6 @@ message DeviceMacsec {
 message DeviceMacsecEthernetInterface {
 
   // The unique name of the Ethernet interface on which MACsec is enabled.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -9277,10 +9180,6 @@ message Ospfv3Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // required = true
   optional string ipv6_name = 2;
 
@@ -9526,10 +9425,6 @@ message Rocev2V4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -9645,10 +9540,6 @@ message Rocev2V6Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // required = true
   optional string ipv6_name = 1;
 
@@ -9707,10 +9598,6 @@ message DeviceBmpV4Interface {
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // 
   // required = true
   optional string ipv4_name = 1;
 
@@ -9722,10 +9609,6 @@ message DeviceBmpV4Interface {
 message DeviceBmpV6Interface {
 
   // The unique name of the IPv6 interface used as the source IP for BMP Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -10048,10 +9931,6 @@ message Flow {
   // fields. The query structure for tagged metrics inside flows metrics requires documenting
   // expected response format.
   // 
-  // Under Review: The packet header schema for egress tracking currently exposes unwanted
-  // fields. The query structure for tagged metrics inside flows metrics requires documenting
-  // expected response format.
-  // 
   // The list of protocol headers defining the shape of all
   // intended packets in corresponding flow as it is received
   // by traffic-generator port.
@@ -10118,16 +9997,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // required = true
   optional string tx_name = 1;
 
-  // Deprecated: This property is deprecated in favor of property rx_names
-  // 
   // Deprecated: This property is deprecated in favor of property rx_names
   // 
   // The unique name of a port that is the intended receive port.
@@ -10136,19 +10008,9 @@ message FlowPort {
   // - /components/schemas/Port/properties/name
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   optional string rx_name = 2;
 
   // Unique name of ports or lags that are intended receive endpoints.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -10229,41 +10091,9 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   repeated string tx_names = 2;
 
   // TBD
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Bgp.CMacIpRange/properties/name
-  // - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
@@ -10801,6 +10631,48 @@ message FlowIpv6 {
 
   // Description missing in models
   PatternFlowIpv6Dst dst = 8;
+
+  // Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with
+  // no Segment Routing Header. When present, the implementation assembles the 128-bit
+  // IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with
+  // dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing
+  // with segment_routing_usid instead.
+  FlowIpv6UsidDst dst_usids = 9;
+}
+
+// Structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4)
+// where the entire SR path fits in a single 128-bit uSID container placed directly
+// in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the
+// fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 ||
+// ... || EoC (zero-pad to 128 bits).
+// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits, up to 6
+// uSIDs per container. Example - locator fc00::/32, locator_length 32, usids [0001,0002,0003]:
+// assembled dst = fc00:0:1:2:3::
+// When this field is present, ipv6.dst should be ignored by the implementation.
+message FlowIpv6UsidDst {
+
+  // Description missing in models
+  // required = true
+  PatternFlowIpv6UsidDstLocator locator = 1;
+
+  // Description missing in models
+  PatternFlowIpv6UsidDstLocatorLength locator_length = 2;
+
+  // Ordered list of uSID values to pack after the Locator Block (RFC 9800 Section 3).
+  // For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The
+  // End-of-Container zero-pad is appended automatically by the implementation. Example:
+  // [0001,0002,0003] with locator fc00::/32 assembles to fc00:0:1:2:3::
+  repeated FlowIpv6UsidDstuSid usids = 3;
+}
+
+// One uSID value within the no-SRH uSID container (RFC 9800 Section 3). For F3216 (16-bit
+// uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container marker
+// and must not be used.
+message FlowIpv6UsidDstuSid {
+
+  // The uSID value as a hex string. For F3216: 4 hex characters. Any '0' padding before
+  // the before uSID value should be explicitly configured. Example: 0001.
+  optional string usid = 1;
 }
 
 // The OTG implementation can provide a system generated, value for this property.
@@ -12687,6 +12559,7 @@ message FlowIpv6Routing {
     enum Enum {
       unspecified = 0;
       segment_routing = 1;
+      segment_routing_usid = 2;
     }
   }
   // Description missing in models
@@ -12695,12 +12568,16 @@ message FlowIpv6Routing {
 
   // Description missing in models
   FlowIpv6SegmentRouting segment_routing = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutingUsid segment_routing_usid = 3;
 }
 
-// Defines the structure of the IPv6 Segment Routing Header (SRH) with Routing Type
-// 4. This header is an IPv6 Routing header used to specify a source-routed path for
-// a packet, guiding it through a sequence of Segment IDs (SIDs), which are typically
-// IPv6 addresses.
+// IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2) carrying full
+// 128-bit SRv6 SIDs. Each segment list entry is a complete SID (locator + function
+// + argument) as a 128-bit IPv6 address. Segment list encoded in reverse path order:
+// Segment[0] is the last hop, Segment[n-1] is the first hop (active, placed in outer
+// IPv6 dst).
 message FlowIpv6SegmentRouting {
 
   // Description missing in models
@@ -12715,19 +12592,122 @@ message FlowIpv6SegmentRouting {
   // Description missing in models
   PatternFlowIpv6SegmentRoutingTag tag = 4;
 
-  // 128-bit IPv6 addresses representing the nth segment in the Segment List. The Segment
-  // List is encoded starting from the last segment of the SR Policy. That is, the first
-  // element of the Segment List (Segment List[0]) contains the last segment of the SR
-  // Policy, the second element contains the penultimate segment of the SR Policy, and
-  // so on.
+  // List of 128-bit SRv6 SID addresses (RFC 8754 Section 2.1), encoded in reverse path
+  // order: Segment[0] is the last segment of the SR Policy, Segment[n-1] is the first
+  // segment to visit.
   repeated FlowIpv6SegmentRoutingSegment segment_list = 5;
+
+  // When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV
+  // section to align the TLV block to an 8-byte boundary. Omit to suppress.
+  FlowIpv6SRHPadTlv pad_tlv = 6;
 }
 
-// Description missing in models
+// One entry in the SRH Segment List (RFC 8754 Section 2.1). A single 128-bit SRv6 SID
+// address for full-SID encoding (locator + function + argument packed into one IPv6
+// address).
 message FlowIpv6SegmentRoutingSegment {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingSegmentSegment segment = 1;
+}
+
+// IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
+// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
+// Each entry in segment_list represents one 128-bit compressed uSID container.
+// The user supplies a structured locator prefix and a list of uSID values;
+// the implementation assembles the 128-bit wire value by packing them as:
+// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+// 
+// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
+// maximum 6 uSIDs per container.
+// Example - locator fc00::/32 with uSIDs 0x0001, 0x0002 assembles to
+// container fc00:0:1:2:: placed in the SRH segment list entry.
+// 
+// The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
+// segment[0] is the last container to visit, segment[n-1] is the first
+// (active) container, whose value is also placed in the outer ipv6.dst_usids field.
+// 
+// The active container is determined by the segments_left pointer,
+// which is decremented as the packet progresses through the path and containers are
+// exhausted,
+// where n is the number of compressed uSID containers.
+// 
+// Use this schema when the SR path requires more containers than fit in
+// the outer ipv6.dst_usids alone.
+// For single-container paths with no SRH, set the locator and uSID list in ipv6.dst_usids
+// from which
+// destination IPv6 address will be generated by the implementation.
+message FlowIpv6SegmentRoutingUsid {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentsLeft segments_left = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidLastEntry last_entry = 2;
+
+  // Description missing in models
+  FlowIpv6SegmentRoutinguSidFlags flags = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidTag tag = 4;
+
+  // List of pre-computed 128-bit compressed uSID container values (RFC 9800 Section 4),
+  // encoded in reverse path order: Segment[0] is the last container, Segment[n-1] is
+  // the first container to visit. If Reduced SRH is needed ( RFC 8754 Section 4.1.1),
+  // the first compressed uSID container  is the one already in the ipv6.dst_usids and
+  // not included in this list.
+  repeated FlowIpv6SegmentRoutingUsidSegment segment_list = 5;
+
+  // When present, includes a Padding TLV (type 4, RFC 8754 Section 2.1) in the SRH TLV
+  // section to align the TLV block to an 8-byte boundary. Omit to suppress.
+  FlowIpv6SRHPadTlv pad_tlv = 6;
+}
+
+// One compressed uSID container entry in the SRH segment list (RFC 9800 Section 4,
+// RFC 8754 Section 2.1). The implementation assembles the 128-bit wire
+// value by packing the locator block followed by the uSID values in order,
+// zero-padding the remainder to 128 bits (End-of-Container marker).
+// 
+// For F3216 format (RFC 9800 Section 3): Locator Block = 32 bits, each uSID = 16 bits,
+// up to 6 uSIDs per container.
+// Example - locator fc00::/32 (locator_length 32), usids [0001,0002,0003]
+// assembles to the 128-bit SRH entry fc00:0:1:2:3::
+message FlowIpv6SegmentRoutingUsidSegment {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocator locator = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength locator_length = 2;
+
+  // Ordered list of uSID values to pack into this container after the Locator Block (RFC
+  // 9800 Section 3). Each uSID occupies ((128 - locator_length) / no of uSIDs) bits.
+  // For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container.
+  // The implementation appends the End-of-Container zero-pad automatically. Example for
+  // F3216: [0001,0002,0003] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
+  repeated FlowIpv6SegmentRoutingUsiduSid usids = 3;
+}
+
+// One uSID value within a compressed uSID container (RFC 9800 Section 3). Represents
+// a single network function (node SID, adjacency SID, or service SID) packed consecutively
+// after the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section
+// 3), each uSID is 16 bits (4 hex characters).
+message FlowIpv6SegmentRoutingUsiduSid {
+
+  // The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must
+  // match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters.
+  // The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be
+  // used as a uSID value (RFC 9800 Section 3). Example: 0001 identifies node 1; with
+  // locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
+  optional string usid = 1;
+}
+
+// SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as
+// reserved.
+message FlowIpv6SegmentRoutinguSidFlags {
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOam oam = 1;
 }
 
 // An 8-bit field containing flags. While RFC 8754 reserves all bits as unused, earlier
@@ -12742,6 +12722,19 @@ message FlowIpv6SegmentRoutingFlags {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingFlagsAlert alert = 3;
+}
+
+// SRH Padding TLV (type 4, RFC 8754 Section 2.1). Used to align the SRH TLV block to
+// an 8-byte boundary. The padding bytes are set to zero and are skipped by transit
+// nodes. When present this TLV is included in the SRH TLV section; omit the object
+// to suppress it. Reference: RFC 8754 Section 2.1.
+message FlowIpv6SRHPadTlv {
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvType type = 1;
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvLength length = 2;
 }
 
 // The frame size which overrides the total length of the packet
@@ -13295,12 +13288,6 @@ message EventRequest {
   // - /components/schemas/Bgp.V4RouteRange/name
   // - /components/schemas/Bgp.V6RouteRange/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Bgp.V4RouteRange/name
-  // - /components/schemas/Bgp.V6RouteRange/name
-  // 
   repeated string source = 2;
 }
 
@@ -13377,10 +13364,6 @@ message LldpConnection {
   optional Choice.Enum choice = 1;
 
   // Name of the test port on which LLDP is configured on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13593,10 +13576,6 @@ message Rocev2TxPorts {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   optional string port_name = 1;
 
   // Description missing in models
@@ -13639,19 +13618,10 @@ message Rocev2Flow {
   // x-constraint:
   // - /components/schemas/Rocev2.QPs/properties/qp_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // required = true
   optional string tx_endpoint = 1;
 
   // The unique name of remote QP or port which be receiving the packets for the flow.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Rocev2.QPs/properties/qp_name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13727,10 +13697,6 @@ message Rocev2ImmediateData {
 message EgressOnlyTracking {
 
   // Name of the received port this egress tracking rule/specification has to be applied.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -13837,10 +13803,6 @@ message EgressOnlyTrackingFilter {
 message PerPortOptions {
 
   // The name of port for which this settings will be applied to.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14242,10 +14204,6 @@ message UpdateProtocolConfigIsisInterfaceUpdateGroup {
   // x-constraint:
   // - /components/schemas/Isis.Interface/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Isis.Interface/properties/name
-  // 
   repeated string names = 1;
 
   // The list of interface attribute updates to apply. Each entry selects one attribute
@@ -14331,10 +14289,6 @@ message ConfigDeleteResources {
   optional Choice.Enum choice = 1;
 
   // List of flows that will be deleted from existing configuration on the traffic generator.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -14457,10 +14411,6 @@ message StatePortLink {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message State {
@@ -14482,10 +14432,6 @@ message StatePortCapture {
   // port_names is empty or null the state will be applied to all configured ports.
   // If the list is not empty any port that is not included in the list of port_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14512,10 +14458,6 @@ message ActionPortReboot {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 }
 
@@ -14526,10 +14468,6 @@ message StateTrafficFlowTransmit {
   // flow_names is empty or null the state will be applied to all configured flows.
   // If the list is not empty any flow that is not included in the list of flow_names
   // MUST be ignored and not included in the state change.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -14593,15 +14531,6 @@ message StateProtocolRoute {
   // - /components/schemas/Ospfv2.V4RouteRange/properties/name
   // - /components/schemas/Ospfv3.V6RouteRange/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4RouteRange/properties/name
-  // - /components/schemas/Bgp.V6RouteRange/properties/name
-  // - /components/schemas/Isis.V4RouteRange/properties/name
-  // - /components/schemas/Isis.V6RouteRange/properties/name
-  // - /components/schemas/Ospfv2.V4RouteRange/properties/name
-  // - /components/schemas/Ospfv3.V6RouteRange/properties/name
-  // 
   repeated string names = 1;
 
   message State {
@@ -14646,10 +14575,6 @@ message StateProtocolLacpAdmin {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string lag_member_names = 1;
 
   message State {
@@ -14671,10 +14596,6 @@ message StateProtocolLacpMemberPorts {
 
   // The names of LAG members (ports) for which the state has to be applied. An empty
   // or null list will control all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -14715,11 +14636,6 @@ message StateProtocolBgpPeers {
 
   // The names of BGP peers for which the state has to be applied. An empty or null list
   // will control all BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -14772,10 +14688,6 @@ message StateProtocolIsisRouters {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -14819,10 +14731,6 @@ message StateProtocolOspfv2Routers {
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   repeated string router_names = 1;
 
   message State {
@@ -14862,10 +14770,6 @@ message StateProtocolOspfv3Routers {
 
   // The names of OSPFv3 routers for which the state has to be applied. An empty or null
   // list will control all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -14914,11 +14818,6 @@ message StateProtocolRocev2Peers {
   // - /components/schemas/Rocev2.V4Peer/properties/name
   // - /components/schemas/Rocev2.V6Peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4Peer/properties/name
-  // - /components/schemas/Rocev2.V6Peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message State {
@@ -14941,10 +14840,6 @@ message StateProtocolIsisSimLinks {
 
   // The names of ISIS Simulated Links to control. If no names are specified then all
   // ISIS Simulated Links in the configuration will be affected..
-  // 
-  // x-constraint:
-  // - /components/schemas/Isis.Interface/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Isis.Interface/properties/name
@@ -15158,11 +15053,6 @@ message ActionProtocolIpv4PingRequest {
   // - /components/schemas/Device.Ipv4/properties/name
   // - /components/schemas/Device.Ipv4Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   optional string src_name = 1;
 
   // Destination IPv4 address to ping.
@@ -15180,11 +15070,6 @@ message ActionResponseProtocolIpv4Ping {
 message ActionResponseProtocolIpv4PingResponse {
 
   // Name of source IPv4 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv4/properties/name
-  // - /components/schemas/Device.Ipv4Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -15261,11 +15146,6 @@ message ActionProtocolIpv6PingRequest {
   // - /components/schemas/Device.Ipv6/properties/name
   // - /components/schemas/Device.Ipv6Loopback/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   optional string src_name = 1;
 
   // Destination IPv6 address to ping.
@@ -15283,11 +15163,6 @@ message ActionResponseProtocolIpv6Ping {
 message ActionResponseProtocolIpv6PingResponse {
 
   // Name of source IPv6 interface used for ping.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ipv6/properties/name
-  // - /components/schemas/Device.Ipv6Loopback/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv6/properties/name
@@ -15344,11 +15219,6 @@ message ActionProtocolBgpNotification {
 
   // The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION
   // will be sent to all configured BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -15417,11 +15287,6 @@ message ActionProtocolBgpNotification {
 message ActionProtocolBgpInitiateGracefulRestart {
 
   // The names of device BGP peers objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -15525,10 +15390,6 @@ message ActionProtocolIsis {
 message ActionProtocolIsisInitiateRestart {
 
   // The names of device objects to control.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -15826,10 +15687,6 @@ message PortMetricsRequest {
   // x-constraint:
   // - /components/schemas/Port/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   repeated string port_names = 1;
 
   message ColumnNames {
@@ -15860,10 +15717,6 @@ message PortMetricsRequest {
 message PortMetric {
 
   // The name of a configured port
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -15962,10 +15815,6 @@ message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
   // If no flow names are specified then all flows will be returned.
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Flow/properties/name
@@ -16280,10 +16129,6 @@ message Bgpv4MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -16410,10 +16255,6 @@ message Bgpv6MetricsRequest {
   // x-constraint:
   // - /components/schemas/Bgp.V6peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V6peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -16536,10 +16377,6 @@ message IsisMetricsRequest {
 
   // The names of ISIS Routers to return results for. An empty list will return results
   // for all ISIS router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -16699,10 +16536,6 @@ message LagMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   message ColumnNames {
@@ -16729,10 +16562,6 @@ message LagMetricsRequest {
 message LagMetric {
 
   // The name of a configured LAG
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Lag/properties/name
@@ -16787,18 +16616,10 @@ message LacpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lag/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lag/properties/name
-  // 
   repeated string lag_names = 1;
 
   // The names of LAG members (ports) for which LACP metrics to be returned. An empty
   // list will return metrics for all LAG members.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -16919,10 +16740,6 @@ message LldpMetricsRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   message ColumnNames {
@@ -16981,10 +16798,6 @@ message RsvpMetricsRequest {
 
   // The names of RSVP-TE Routers to return results for. An empty list as input will return
   // results for all RSVP-TE routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
@@ -17145,10 +16958,6 @@ message Dhcpv4ClientMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string client_names = 1;
 
   message ColumnNames {
@@ -17206,10 +17015,6 @@ message Dhcpv4ServerMetricsRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4Server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4Server/properties/name
-  // 
   repeated string server_names = 1;
 
   message ColumnNames {
@@ -17263,10 +17068,6 @@ message Dhcpv6ClientMetricsRequest {
 
   // The names of DHCPv6 clients to return results for. An empty list will return results
   // for all DHCPv6 client.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -17348,10 +17149,6 @@ message Dhcpv6ServerMetricsRequest {
 
   // The names of DHCPv6 Servers to return results for. An empty list will return results
   // for all DHCPv6 Server.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6Server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -17441,10 +17238,6 @@ message Ospfv2MetricsRequest {
 
   // The names of OSPFv2 routers to return results for. An empty list will return results
   // for all OSPFv2 router.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2/properties/name
@@ -17613,10 +17406,6 @@ message ConvergenceRequest {
   // x-constraint:
   // - /components/schemas/Flow/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Flow/properties/name
-  // 
   repeated string flow_names = 1;
 }
 
@@ -17676,13 +17465,6 @@ message ConvergenceEvent {
   // - /components/schemas/Device.Bgpv4Route/properties/name
   // - /components/schemas/Device.Bgpv6Route/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // - /components/schemas/Flow/properties/name
-  // - /components/schemas/Device.Bgpv4Route/properties/name
-  // - /components/schemas/Device.Bgpv6Route/properties/name
-  // 
   optional string source = 2;
 
   // The timestamp(nanoseconds) of the starting event that triggers convergence.
@@ -17697,10 +17479,6 @@ message MacsecMetricsRequest {
 
   // The names of secure entities(secYs) to return results for. An empty list will return
   // results for all secYs.
-  // 
-  // x-constraint:
-  // - /components/schemas/Macsec/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Macsec/properties/name
@@ -17818,10 +17596,6 @@ message MkaMetricsRequest {
   // x-constraint:
   // - /components/schemas/Mka/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Mka/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -17895,10 +17669,6 @@ message Ospfv3MetricsRequest {
 
   // The names of OSPFv3 routers to return results for. An empty list will return results
   // for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -18075,10 +17845,6 @@ message Rocev2IPv4ColumnNames {
   // x-constraint:
   // - /components/schemas/Rocev2.V4peer/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V4peer/properties/name
-  // 
   repeated string peer_names = 1;
 
   message ColumnNames {
@@ -18183,10 +17949,6 @@ message Rocev2IPv6ColumnNames {
 
   // The names of RoCEv2 over IPv6 peers to return results for. An empty list will return
   // results for all RoCEv2 peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Rocev2.V6peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Rocev2.V6peer/properties/name
@@ -18446,10 +18208,6 @@ message EgressOnlyTrackingMetricsRequest {
   // x-constraint:
   // - /components/schemas/EgressOnlyTracking/properties/port_name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/EgressOnlyTracking/properties/port_name
-  // 
   repeated string port_names = 1;
 
   // Description missing in models
@@ -18599,11 +18357,6 @@ message BmpServerMetricsRequest {
 
   // The names of BMP Servers to return results for. An empty list will return results
   // for all BMP Servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bmp.ServerV4/properties/name
-  // - /components/schemas/Device.Bmp.ServerV6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Bmp.ServerV4/properties/name
@@ -18854,10 +18607,6 @@ message Neighborsv4StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -18887,10 +18636,6 @@ message Neighborsv6StatesRequest {
   // x-constraint:
   // - /components/schemas/Device.Ethernet/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ethernet/properties/name
-  // 
   repeated string ethernet_names = 1;
 }
 
@@ -18916,11 +18661,6 @@ message BgpPrefixStateRequest {
   // The names of BGP peers for which prefix information will be retrieved. If no names
   // are specified then the results will contain prefix information for all configured
   // BGP peers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Bgp.V4Peer/properties/name
-  // - /components/schemas/Bgp.V6Peer/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Bgp.V4Peer/properties/name
@@ -19609,10 +19349,6 @@ message IsisLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   repeated string isis_router_names = 1;
 }
 
@@ -19762,7 +19498,8 @@ message IsisLspExtendedNeighbor {
   // The System ID for this emulated ISIS router, e.g. 640100010000.
   optional string system_id = 1;
 
-  // List of segment routing adjacency SIDs.
+  // List of SR-MPLS Adjacency SID sub-TLVs (sub-TLV types 31/32,
+  // RFC 8667) learned from this neighbor.
   repeated IsisLspAdjacencySid adjacency_sids = 2;
 }
 
@@ -20153,10 +19890,6 @@ message LldpNeighborsStateRequest {
   // x-constraint:
   // - /components/schemas/Lldp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Lldp/properties/name
-  // 
   repeated string lldp_names = 1;
 
   // Specify the neighbors for which information will be returned. If empty  or missing
@@ -20320,10 +20053,6 @@ message RsvpLspsStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Rsvp/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Rsvp/properties/name
-  // 
   repeated string rsvp_router_names = 1;
 }
 
@@ -20458,10 +20187,6 @@ message Dhcpv4InterfaceStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4client/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4client/properties/name
-  // 
   repeated string dhcp_client_names = 1;
 }
 
@@ -20495,10 +20220,6 @@ message Dhcpv4LeaseStateRequest {
 
   // The names of DHCPv4 server to return results for. An empty list will return results
   // for all DHCPv4 servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv4server/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv4server/properties/name
@@ -20549,10 +20270,6 @@ message Dhcpv6InterfaceStateRequest {
 
   // The names of DHCPv6 client to return results for. An empty list will return results
   // for all DHCPv6 Client address information.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6client/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6client/properties/name
@@ -20608,10 +20325,6 @@ message Dhcpv6LeaseStateRequest {
   // x-constraint:
   // - /components/schemas/Device.Dhcpv6server/properties/name
   // 
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Dhcpv6server/properties/name
-  // 
   repeated string dhcp_server_names = 1;
 }
 
@@ -20659,10 +20372,6 @@ message Ospfv2LsasStateRequest {
 
   // The names of OSPFv2 routers for which learned information is requested. An empty
   // list will return results for all OSPFv2 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Ospfv2Router/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ospfv2Router/properties/name
@@ -20869,10 +20578,6 @@ message Ospfv3LsasStateRequest {
 
   // The names of OSPFv3 routers for which learned information is requested. An empty
   // list will return results for all OSPFv3 routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Ospfv3.RouterInstance/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -21095,10 +20800,6 @@ message IsisIIHsStateRequest {
 
   // The names of ISIS routers for which learned information is requested. An empty list
   // will return results of IIH States for all ISIS routers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.IsisRouter/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.IsisRouter/properties/name
@@ -21369,11 +21070,6 @@ message BmpServersStateRequest {
 
   // The names of the BMP Servers  to return results for. An empty list will return results
   // for all BMP Servers.
-  // 
-  // x-constraint:
-  // - /components/schemas/Device.Bmp.ServerV4/properties/name
-  // - /components/schemas/Device.Bmp.ServerV6/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Bmp.ServerV4/properties/name
@@ -21730,10 +21426,6 @@ message BmpPrefixIpv6UnicastState {
 message CaptureRequest {
 
   // The name of a port a capture is started on.
-  // 
-  // x-constraint:
-  // - /components/schemas/Port/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Port/properties/name
@@ -25235,7 +24927,9 @@ message PatternFlowIpv6DstMetricTag {
   optional uint32 length = 3;
 }
 
-// Destination address
+// Destination address in IPv6 packet header. If dest_usids is configured, the locator
+// and usids provided in that should be used to construct the IPv6 destination address
+// instead of this field.
 message PatternFlowIpv6Dst {
 
   message Choice {
@@ -25273,6 +24967,104 @@ message PatternFlowIpv6Dst {
 
   // Description missing in models
   FlowIpv6Auto auto = 8;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6UsidDstLocatorCounter {
+
+  // Description missing in models
+  // default = ::0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800
+// Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216
+// this is a /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.
+message PatternFlowIpv6UsidDstLocator {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6UsidDstLocatorCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6UsidDstLocatorCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6UsidDstLocatorLengthCounter {
+
+  // Description missing in models
+  // default = 32
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order
+// bits of locator are used as the LB and how many bits remain for uSID packing. For
+// F3216: 32. For F3208: 32. Valid range: 1-112.
+message PatternFlowIpv6UsidDstLocatorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 32
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [32]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6UsidDstLocatorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6UsidDstLocatorLengthCounter decrement = 6;
 }
 
 // mac counter pattern
@@ -36682,11 +36474,9 @@ message PatternFlowIpv6SegmentRoutingSegmentsLeftCounter {
   optional uint32 count = 3;
 }
 
-// 8-bit unsigned integer containing the number of remaining segments to be visited
-// before the packet reaches its final destination. It is decremented at each segment
-// endpoint. It points to the current active segment in the Segment List. This should
-// not be more than the number of segments specified in the segment list. When auto
-// is assigned the value is set to the number of segments specified.
+// Number of route segments remaining before the packet reaches its final destination
+// (RFC 8754 Section 2.1). Decremented at each segment endpoint. When auto is assigned
+// the value is set to the number of segments specified.
 message PatternFlowIpv6SegmentRoutingSegmentsLeft {
 
   message Choice {
@@ -36740,11 +36530,9 @@ message PatternFlowIpv6SegmentRoutingLastEntryCounter {
   optional uint32 count = 3;
 }
 
-// 8-bit unsigned integer that contains the zero-based index of the last element in
-// the Segment List array. For example, if the Segment List contains 3 addresses (at
-// indices 0, 1, 2), the value of Last Entry is 2. When auto is assigned the value should
-// be automatically set by the implementation to one less than the number of segments
-// specified.
+// Zero-based index of the last element in the Segment List (RFC 8754 Section 2.1).
+// For example, a list of 3 SIDs has Last Entry = 2. When auto is assigned the value
+// is set to one less than the number of segments specified.
 message PatternFlowIpv6SegmentRoutingLastEntry {
 
   message Choice {
@@ -36798,8 +36586,8 @@ message PatternFlowIpv6SegmentRoutingTagCounter {
   optional uint32 count = 3;
 }
 
-// 16-bit field used to tag a packet as part of a class or group, enabling shared properties
-// or policy treatment. If not used, it MUST be set to zero.
+// 16-bit field used to tag a packet as part of a class or group (RFC 8754 Section 2.1).
+// If not used it MUST be set to zero.
 message PatternFlowIpv6SegmentRoutingTag {
 
   message Choice {
@@ -36846,7 +36634,7 @@ message PatternFlowIpv6SegmentRoutingSegmentSegmentCounter {
   optional uint32 count = 3;
 }
 
-// A 128-bit IPv6 address segment.
+// A 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: 2001:db8::1.
 message PatternFlowIpv6SegmentRoutingSegmentSegment {
 
   message Choice {
@@ -36875,6 +36663,316 @@ message PatternFlowIpv6SegmentRoutingSegmentSegment {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingSegmentSegmentCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of SRH segment list entries remaining to be visited after the current active
+// compressed uSID container (RFC 8754 Section 2.1).  The active compressed uSID container
+// is segment[segments_left];  the value is decremented each time the active container
+// is exhausted  and the pointer advances to the next compressed uSID container.  When
+// auto is assigned the value is set to the top entry of the compressed uSID container
+// list.
+message PatternFlowIpv6SegmentRoutingUsidSegmentsLeft {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentsLeftCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingUsidLastEntryCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Zero-based index of the last element in the uSID container list (RFC 8754 Section
+// 2.1). When auto is assigned the value is set to one less than the number of containers
+// specified.
+message PatternFlowIpv6SegmentRoutingUsidLastEntry {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidLastEntryCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidLastEntryCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingUsidTagCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// 16-bit field used to tag a packet as part of a class or group (RFC 8754 Section 2.1).
+// If not used it MUST be set to zero.
+message PatternFlowIpv6SegmentRoutingUsidTag {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidTagCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidTagCounter decrement = 6;
+}
+
+// ipv6 counter pattern
+message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter {
+
+  // Description missing in models
+  // default = ::0
+  optional string start = 1;
+
+  // Description missing in models
+  // default = ::1
+  optional string step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800
+// Section 3). Defines the common high-order bits of every uSID assembled from this
+// entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given
+// by locator_length.
+message PatternFlowIpv6SegmentRoutingUsidSegmentLocator {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = ::0
+  optional string value = 2;
+
+  // Description missing in models
+  // default = ['::0']
+  repeated string values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter {
+
+  // Description missing in models
+  // default = 32
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order
+// bits of locator are used as the LB and how many bits remain for uSID packing. For
+// F3216: 32. For F3208: 32. Valid range: 1-112.
+message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 32
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [32]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet
+// is an Operations, Administration, and Maintenance (OAM) packet.
+message PatternFlowIpv6SegmentRoutinguSidFlagsOam {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowIpv6SegmentRoutinguSidFlagsOamCounter decrement = 6;
 }
 
 // integer counter pattern
@@ -36940,8 +37038,8 @@ message PatternFlowIpv6SegmentRoutingFlagsOamCounter {
   optional uint32 count = 3;
 }
 
-// OAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance
-// (OAM) packet.
+// (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet
+// is an Operations, Administration, and Maintenance (OAM) packet.
 message PatternFlowIpv6SegmentRoutingFlagsOam {
 
   message Choice {
@@ -37017,6 +37115,117 @@ message PatternFlowIpv6SegmentRoutingFlagsAlert {
 
   // Description missing in models
   PatternFlowIpv6SegmentRoutingFlagsAlertCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SRHPadTlvTypeCounter {
+
+  // Description missing in models
+  // default = 4
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// TLV type code (RFC 8754 Section 2.1). The canonical value is 4. Set to a different
+// value only for negative or conformance testing.
+message PatternFlowIpv6SRHPadTlvType {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 4
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [4]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 4
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvTypeCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvTypeCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowIpv6SRHPadTlvLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Number of padding bytes following the Type and Length fields (RFC 8754 Section 2.1).
+// When auto is assigned the implementation computes the value needed to align the TLV
+// section to an 8-byte boundary.
+message PatternFlowIpv6SRHPadTlvLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowIpv6SRHPadTlvLengthCounter decrement = 7;
 }
 
 // Version details
