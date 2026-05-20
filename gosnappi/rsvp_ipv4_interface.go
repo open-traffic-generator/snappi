@@ -333,9 +333,6 @@ type RsvpIpv4Interface interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // Ipv4Name returns a string
 func (obj *rsvpIpv4Interface) Ipv4Name() string {
 
@@ -344,9 +341,6 @@ func (obj *rsvpIpv4Interface) Ipv4Name() string {
 }
 
 // The globally unique name of the IPv4 interface connected to the DUT. This name must match the "name" field of the "ipv4_addresses" on top which this RSVP interface is configured.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
