@@ -769,6 +769,16 @@ func (obj *mkaBasic) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.MkaVersion != nil {
+
+		if *obj.obj.MkaVersion < 1 || *obj.obj.MkaVersion > 255 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("1 <= MkaBasic.MkaVersion <= 255 but Got %d", *obj.obj.MkaVersion))
+		}
+
+	}
+
 	if obj.obj.MkaHelloTime != nil {
 
 		if *obj.obj.MkaHelloTime < 500 || *obj.obj.MkaHelloTime > 10000 {
@@ -832,7 +842,7 @@ func (obj *mkaBasic) setDefault() {
 		obj.SetSendIcvIndicatiorInMkpdu(true)
 	}
 	if obj.obj.DelayProtect == nil {
-		obj.SetDelayProtect(true)
+		obj.SetDelayProtect(false)
 	}
 
 }

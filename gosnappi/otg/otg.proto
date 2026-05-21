@@ -1653,7 +1653,7 @@ message MkaBasic {
 
   // Delay Protect or not. When delay protect is enabled, it guards against delaying the
   // delivery of MACsec encrypted frames by an attacker to the recipient.
-  // default = True
+  // default = False
   optional bool delay_protect = 12;
 
   // Rekey Mode.
@@ -1708,8 +1708,9 @@ message MkaBasicKeySourcePsk {
   // default = F123456789ABCDEF0123456789ABCDEF
   optional string cak_value = 1;
 
-  // Connectivity association key(CAK) name.
-  // default = AAAA
+  // Connectivity association key(CAK) name. The value should be in sync with CAK name
+  // in DUT.
+  // default = ABCD
   optional string cak_name = 2;
 
   // 
@@ -14217,7 +14218,8 @@ message MacsecValidateFrames {
 // in MACsec header on transmit.
 message MacsecHardwareAccelerationInlineCrypto {
 
-  // Offset of Rx secTAG from the first byte in packet.
+  // Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG
+  // includes the 'ethernet type' field which has value “0x88E5”.
   // default = 12
   optional uint32 rx_sectag_offset = 1;
 
@@ -14253,8 +14255,16 @@ message MacsecHardwareAccelerationInlineCrypto {
       two_fifty_six = 9;
     }
   }
-  // The maximum number of CAs configured on the port. The maximum count supported per
-  // port is 256 for Pair-wise CA, each CA having one MACsec device.
+  // The number of CAs configured in MKA can be determined by the number of devices having
+  // different VLANs, and within the same VLAN, by the number of distinct CKNs (CAK Names).
+  // The maximum number of CAs permitted on the port. The value should be rounded to the
+  // power of 2 - the value should be the ceiling of actual number of CAs. E.g. for 5
+  // CAs, maximum CA count should be set to 8. The maximum count supported per port is
+  // 256 for Pair-wise CA, each CA having one MACsec device. Product of maximum CA count
+  // and MACsec device count per CA can have a maximum value of 256. E.g. for maximum
+  // CA count of 1, maximum 256 devices are permitted. For maximum CA count of 8, maximum
+  // 32 devices are permitted per CA. For maximum CA count of 256, maximum 1 device is
+  // permitted per CA.
   // default = MaxCaCount.Enum.one
   optional MaxCaCount.Enum max_ca_count = 4;
 }
@@ -14443,10 +14453,6 @@ message UpdateProtocolConfigIsisInterfaceUpdateGroup {
 
   // The names of the IS-IS interfaces to which all attribute updates in this group will
   // be applied.
-  // 
-  // x-constraint:
-  // - /components/schemas/Isis.Interface/properties/name
-  // 
   // 
   // x-constraint:
   // - /components/schemas/Isis.Interface/properties/name

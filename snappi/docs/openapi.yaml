@@ -2451,6 +2451,8 @@ components:
             MKA Version.
           type: integer
           format: uint32
+          minimum: 1
+          maximum: 255
           default: 3
           x-field-uid: 8
         mka_hello_time:
@@ -2481,7 +2483,7 @@ components:
           description: |-
             Delay Protect or not. When delay protect is enabled, it guards against delaying the delivery of MACsec encrypted frames by an attacker to the recipient.
           type: boolean
-          default: true
+          default: false
           x-field-uid: 12
         rekey_mode:
           description: |-
@@ -2559,12 +2561,12 @@ components:
           x-field-uid: 1
         cak_name:
           description: |-
-            Connectivity association key(CAK) name.
+            Connectivity association key(CAK) name. The value should be in sync with CAK name in DUT.
           type: string
           format: hex
           minLength: 1
           maxLength: 64
-          default: AAAA
+          default: ABCD
           x-field-uid: 2
         start_offset_time:
           description: ""
@@ -2812,7 +2814,6 @@ components:
           type: integer
           format: uint32
           minimum: 1
-          maximum: 65535
           default: 1
           x-field-uid: 3
         starting_distributed_an:
@@ -18636,9 +18637,10 @@ components:
       properties:
         rx_sectag_offset:
           description: |-
-            Offset of Rx secTAG from the first byte in packet.
+            Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
           type: integer
           format: uint32
+          minimum: 12
           default: 12
           x-field-uid: 1
         rx_sc_identifying_field:
@@ -18663,7 +18665,7 @@ components:
           x-field-uid: 3
         max_ca_count:
           description: |-
-            The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
+            The number of CAs configured in MKA can be determined by the number of devices having different VLANs, and within the same VLAN, by the number of distinct CKNs (CAK Names). The maximum number of CAs permitted on the port. The value should be rounded to the power of 2 - the value should be the ceiling of actual number of CAs. E.g. for 5 CAs, maximum CA count should be set to 8. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device. Product of maximum CA count and MACsec device count per CA can have a maximum value of 256. E.g. for maximum CA count of 1, maximum 256 devices are permitted. For maximum CA count of 8, maximum 32 devices are permitted per CA. For maximum CA count of 256, maximum 1 device is permitted per CA.
           type: string
           default: one
           x-field-uid: 4
@@ -18913,10 +18915,6 @@ components:
         names:
           description: |
             The names of the IS-IS interfaces to which all attribute updates in this group will be applied.
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
-
 
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name

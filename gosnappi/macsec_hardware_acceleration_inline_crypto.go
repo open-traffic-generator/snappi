@@ -301,7 +301,7 @@ type MacsecHardwareAccelerationInlineCrypto interface {
 	setNil()
 }
 
-// Offset of Rx secTAG from the first byte in packet.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
 // RxSectagOffset returns a uint32
 func (obj *macsecHardwareAccelerationInlineCrypto) RxSectagOffset() uint32 {
 
@@ -309,13 +309,13 @@ func (obj *macsecHardwareAccelerationInlineCrypto) RxSectagOffset() uint32 {
 
 }
 
-// Offset of Rx secTAG from the first byte in packet.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
 // RxSectagOffset returns a uint32
 func (obj *macsecHardwareAccelerationInlineCrypto) HasRxSectagOffset() bool {
 	return obj.obj.RxSectagOffset != nil
 }
 
-// Offset of Rx secTAG from the first byte in packet.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
 // SetRxSectagOffset sets the uint32 value in the MacsecHardwareAccelerationInlineCrypto object
 func (obj *macsecHardwareAccelerationInlineCrypto) SetRxSectagOffset(value uint32) MacsecHardwareAccelerationInlineCrypto {
 
@@ -416,7 +416,7 @@ func (obj *macsecHardwareAccelerationInlineCrypto) MaxCaCount() MacsecHardwareAc
 	return MacsecHardwareAccelerationInlineCryptoMaxCaCountEnum(obj.obj.MaxCaCount.Enum().String())
 }
 
-// The maximum number of CAs configured on the port. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device.
+// The number of CAs configured in MKA can be determined by the number of devices having different VLANs, and within the same VLAN, by the number of distinct CKNs (CAK Names). The maximum number of CAs permitted on the port. The value should be rounded to the power of 2 - the value should be the ceiling of actual number of CAs. E.g. for 5 CAs, maximum CA count should be set to 8. The maximum count supported per port is 256 for Pair-wise CA, each CA having one MACsec device. Product of maximum CA count and MACsec device count per CA can have a maximum value of 256. E.g. for maximum CA count of 1, maximum 256 devices are permitted. For maximum CA count of 8, maximum 32 devices are permitted per CA. For maximum CA count of 256, maximum 1 device is permitted per CA.
 // MaxCaCount returns a string
 func (obj *macsecHardwareAccelerationInlineCrypto) HasMaxCaCount() bool {
 	return obj.obj.MaxCaCount != nil
@@ -438,6 +438,16 @@ func (obj *macsecHardwareAccelerationInlineCrypto) SetMaxCaCount(value MacsecHar
 func (obj *macsecHardwareAccelerationInlineCrypto) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.RxSectagOffset != nil {
+
+		if *obj.obj.RxSectagOffset < 12 || *obj.obj.RxSectagOffset > 4294967295 {
+			vObj.validationErrors = append(
+				vObj.validationErrors,
+				fmt.Sprintf("12 <= MacsecHardwareAccelerationInlineCrypto.RxSectagOffset <= 4294967295 but Got %d", *obj.obj.RxSectagOffset))
+		}
+
 	}
 
 	if obj.obj.TypeOfCa != nil {

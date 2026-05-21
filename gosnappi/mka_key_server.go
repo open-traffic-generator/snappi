@@ -473,10 +473,10 @@ func (obj *mkaKeyServer) validateObj(vObj *validation, set_default bool) {
 
 	if obj.obj.StartingKeyNumber != nil {
 
-		if *obj.obj.StartingKeyNumber < 1 || *obj.obj.StartingKeyNumber > 65535 {
+		if *obj.obj.StartingKeyNumber < 1 || *obj.obj.StartingKeyNumber > 4294967295 {
 			vObj.validationErrors = append(
 				vObj.validationErrors,
-				fmt.Sprintf("1 <= MkaKeyServer.StartingKeyNumber <= 65535 but Got %d", *obj.obj.StartingKeyNumber))
+				fmt.Sprintf("1 <= MkaKeyServer.StartingKeyNumber <= 4294967295 but Got %d", *obj.obj.StartingKeyNumber))
 		}
 
 	}
