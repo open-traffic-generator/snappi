@@ -280,6 +280,8 @@ type MkaBasicKeySource interface {
 	HasChoice() bool
 	// getter for Psk to set choice.
 	Psk()
+	// getter for Msk to set choice.
+	Msk()
 	// Psks returns MkaBasicKeySourceMkaBasicKeySourcePskIterIter, set in MkaBasicKeySource
 	Psks() MkaBasicKeySourceMkaBasicKeySourcePskIter
 	setNil()

@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.53.0
+  version: 1.54.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -18811,16 +18811,24 @@ components:
       type: object
       properties:
         choice:
+          description: |-
+            Selects the type of resource to update.
           type: string
           x-enum:
             flows:
               x-field-uid: 1
+            protocols:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - flows
+          - protocols
         flows:
           $ref: '#/components/schemas/Flows.Update'
           x-field-uid: 2
+        protocols:
+          $ref: '#/components/schemas/Protocols.Update'
+          x-field-uid: 3
     Flows.Update:
       description: |-
         A container of flows with associated properties to be updated without affecting the flows current transmit state.
@@ -18846,10 +18854,120 @@ components:
           x-field-uid: 1
         flows:
           description: |-
-            The list of configured flows for which given property will be updated.
+            The list of configured flows for which the given property will be updated.
           type: array
           items:
             $ref: '#/components/schemas/Flow'
+          x-field-uid: 2
+    Protocols.Update:
+      description: |-
+        A container of protocol properties to be updated that may or may not be
+        able to maintain the current protocol session always in the Up state.
+
+        If the session is up but true on-the-fly update is not supported for one of the attributes selected for update
+        (e.g. metric change on an emulated interface): a warning should be returned indicating that the session will be
+        disabled and re-enabled, and the updated attribute(s) will be reflected once the session comes back up.
+
+        The attributes are permanently updated in the stored config. [i.e. the next get_config should return modified parameters]
+
+        If any of the protocol session(s) linked to the attributes are not in started state, an implementation can
+        a) return an Error rejecting the full update request if on the fly changes are supported only on
+        started protocol sessions, OR
+        b) return a Warning indicating that some of the sessions were not in started state, update the configuration
+           and apply it on the next start of the protocol session.
+      type: object
+      properties:
+        isis:
+          description: |-
+            IS-IS protocol attribute updates to apply.
+          $ref: '#/components/schemas/UpdateProtocol.Config.Isis'
+          x-field-uid: 1
+    UpdateProtocol.Config.Isis:
+      description: |-
+        A container for IS-IS properties to be updated. Presence of this object indicates that one or more IS-IS properties require updating.
+      type: object
+      properties:
+        interfaces:
+          description: "List of IS-IS interface update groups. One update group targets\
+            \ one or more IS-IS interfaces.\nUse multiple update groups to handle\
+            \ asymmetric changes across different subsets of interfaces.\n\nAll interfaces\
+            \ listed in names in each update group receive every attribute update\
+            \ specified in the attributes list. \n\nIf the session is up but true\
+            \ on-the-fly update is not supported for an attribute (e.g. metric change\
+            \ on an emulated interface),\na warning is returned indicating that the\
+            \ session will be disabled and re-enabled, and the updated attribute will\
+            \ be reflected \nonce the session comes back up.\n\nAn error should be\
+            \ returned if any provided name is not found in the current configuration's\
+            \ list of IS-IS interface names."
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Interface.UpdateGroup'
+          x-field-uid: 1
+    UpdateProtocol.Config.Isis.Interface.UpdateGroup:
+      description: |-
+        An update group targeting one or more IS-IS interfaces. All interfaces listed in names receive every attribute update specified in the attributes list. Use multiple update groups to apply different updates to different subsets of interfaces (asymmetric updates).
+        If the session is up but true on-the-fly update is not supported for an attribute (e.g. metric change on an emulated interface): a warning is returned indicating that the session will be disabled and re-enabled,
+        and the updated attribute will be reflected once the session comes back up. An error should be returned if any provided name is not found in the current configuration's list of IS-IS interface names.
+      type: object
+      properties:
+        names:
+          description: |
+            The names of the IS-IS interfaces to which all attribute updates in this group will be applied.
+
+            x-constraint:
+            - /components/schemas/Isis.Interface/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Isis.Interface/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Isis.Interface/properties/name
+          x-field-uid: 1
+        attributes:
+          description: |-
+            The list of interface attribute updates to apply. Each entry selects one attribute via the choice discriminator. Multiple attributes can be updated in a single group without repeating the names list.
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateProtocol.Config.Isis.Interface.Attribute'
+          x-field-uid: 2
+    UpdateProtocol.Config.Isis.Interface.Attribute:
+      description: |-
+        A single IS-IS interface attribute update. The choice field identifies which attribute is being changed.
+      type: object
+      properties:
+        choice:
+          description: |-
+            The interface attribute to be updated.
+          type: string
+          x-enum:
+            metric:
+              x-field-uid: 1
+          x-field-uid: 1
+          enum:
+          - metric
+        metric:
+          description: |-
+            The metric value to be updated on the IS-IS interface.
+            The maximum value of 16777215 (2^24-1) applies only when wide metric is
+            enabled (RFC 5305). With narrow metrics the maximum is 63; values above
+            63 will be rejected.
+
+            On a simulated IS-IS interface (no real adjacency with the DUT), updating
+            the metric is a true on-the-fly operation: the IS-IS session remains in the
+            Up state and the router immediately re-advertises its LSP with the new metric
+            value, which neighbors receive without any session interruption.
+
+            On an emulated IS-IS interface (real adjacency with the DUT), a true
+            on-the-fly metric update may not be supported. In that case the implementation
+            should return a warning, disable the session, re-enable it with the updated
+            metric, and reflect the new value in the LSP once the session comes back up.
+          type: integer
+          format: uint32
+          default: 10
+          maximum: 16777215
           x-field-uid: 2
     Config.Append:
       description: |-
