@@ -12908,8 +12908,7 @@ message FlowCfmSenderIdTlvChassisId {
   optional string mac_address = 6;
 
   // Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
-  // default = 00
-  optional string network_address = 7;
+  FlowCfmNetwork network_address = 7;
 
   // Identifies the interface by a system-assigned name.
   // default =

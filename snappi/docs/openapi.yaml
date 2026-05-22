@@ -16918,9 +16918,6 @@ components:
             Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
           $ref: '#/components/schemas/Flow.Cfm.Network'
           x-field-uid: 7
-          type: string
-          format: hex
-          default: '00'
         interface_name:
           description: |-
             Identifies the interface by a system-assigned name.

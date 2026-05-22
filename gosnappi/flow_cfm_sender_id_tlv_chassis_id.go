@@ -17,7 +17,7 @@ type flowCfmSenderIdTlvChassisId struct {
 	marshaller                    marshalFlowCfmSenderIdTlvChassisId
 	unMarshaller                  unMarshalFlowCfmSenderIdTlvChassisId
 	lengthHolder                  FlowCfmLength
-	networkAddressHolder          string
+	networkAddressHolder          FlowCfmNetwork
 	managementAddressDomainHolder FlowCfmSenderIdTlvMADomain
 }
 
@@ -314,10 +314,12 @@ type FlowCfmSenderIdTlvChassisId interface {
 	SetMacAddress(value string) FlowCfmSenderIdTlvChassisId
 	// HasMacAddress checks if MacAddress has been set in FlowCfmSenderIdTlvChassisId
 	HasMacAddress() bool
-	// NetworkAddress returns string, set in FlowCfmSenderIdTlvChassisId.
-	NetworkAddress() string
-	// SetNetworkAddress assigns string provided by user to FlowCfmSenderIdTlvChassisId
-	SetNetworkAddress(value string) FlowCfmSenderIdTlvChassisId
+	// NetworkAddress returns FlowCfmNetwork, set in FlowCfmSenderIdTlvChassisId.
+	// FlowCfmNetwork is typed network address used as the Sender ID TLV Chassis ID Subtype 5 (IEEE 802.1AB-2016 Table 8-3). On the wire, the choice value encodes the leading IANA address family octet (1 = IPv4, 2 = IPv6), followed by the corresponding IP address bytes.
+	NetworkAddress() FlowCfmNetwork
+	// SetNetworkAddress assigns FlowCfmNetwork provided by user to FlowCfmSenderIdTlvChassisId.
+	// FlowCfmNetwork is typed network address used as the Sender ID TLV Chassis ID Subtype 5 (IEEE 802.1AB-2016 Table 8-3). On the wire, the choice value encodes the leading IANA address family octet (1 = IPv4, 2 = IPv6), followed by the corresponding IP address bytes.
+	SetNetworkAddress(value FlowCfmNetwork) FlowCfmSenderIdTlvChassisId
 	// HasNetworkAddress checks if NetworkAddress has been set in FlowCfmSenderIdTlvChassisId
 	HasNetworkAddress() bool
 	// InterfaceName returns string, set in FlowCfmSenderIdTlvChassisId.
@@ -562,8 +564,8 @@ func (obj *flowCfmSenderIdTlvChassisId) SetMacAddress(value string) FlowCfmSende
 }
 
 // Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
-// NetworkAddress returns a string
-func (obj *flowCfmSenderIdTlvChassisId) NetworkAddress() string {
+// NetworkAddress returns a FlowCfmNetwork
+func (obj *flowCfmSenderIdTlvChassisId) NetworkAddress() FlowCfmNetwork {
 	if obj.obj.NetworkAddress == nil {
 		obj.setChoice(FlowCfmSenderIdTlvChassisIdChoice.NETWORK_ADDRESS)
 	}
@@ -574,14 +576,14 @@ func (obj *flowCfmSenderIdTlvChassisId) NetworkAddress() string {
 }
 
 // Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
-// NetworkAddress returns a string
+// NetworkAddress returns a FlowCfmNetwork
 func (obj *flowCfmSenderIdTlvChassisId) HasNetworkAddress() bool {
 	return obj.obj.NetworkAddress != nil
 }
 
 // Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
-// SetNetworkAddress sets the string value in the FlowCfmSenderIdTlvChassisId object
-func (obj *flowCfmSenderIdTlvChassisId) SetNetworkAddress(value string) FlowCfmSenderIdTlvChassisId {
+// SetNetworkAddress sets the FlowCfmNetwork value in the FlowCfmSenderIdTlvChassisId object
+func (obj *flowCfmSenderIdTlvChassisId) SetNetworkAddress(value FlowCfmNetwork) FlowCfmSenderIdTlvChassisId {
 	obj.setChoice(FlowCfmSenderIdTlvChassisIdChoice.NETWORK_ADDRESS)
 	obj.networkAddressHolder = nil
 	obj.obj.NetworkAddress = value.msg()
@@ -690,11 +692,7 @@ func (obj *flowCfmSenderIdTlvChassisId) validateObj(vObj *validation, set_defaul
 
 	if obj.obj.NetworkAddress != nil {
 
-		err := obj.validateHex(obj.NetworkAddress())
-		if err != nil {
-			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on FlowCfmSenderIdTlvChassisId.NetworkAddress"))
-		}
-
+		obj.NetworkAddress().validateObj(vObj, set_default)
 	}
 
 	if obj.obj.ManagementAddressDomain != nil {
