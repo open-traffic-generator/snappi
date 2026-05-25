@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.54.0
+  version: 1.55.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -13889,6 +13889,8 @@ components:
               x-field-uid: 23
             ipv6_extension_header:
               x-field-uid: 24
+            cfm:
+              x-field-uid: 25
           enum:
           - custom
           - ethernet
@@ -13914,6 +13916,7 @@ components:
           - macsec
           - lacp
           - ipv6_extension_header
+          - cfm
         custom:
           $ref: '#/components/schemas/Flow.Custom'
           x-field-uid: 2
@@ -13986,6 +13989,9 @@ components:
         ipv6_extension_header:
           $ref: '#/components/schemas/Flow.Ipv6ExtHeader'
           x-field-uid: 25
+        cfm:
+          $ref: '#/components/schemas/Flow.Cfm'
+          x-field-uid: 26
     Flow.Custom:
       type: object
       description: |-
@@ -16654,6 +16660,594 @@ components:
         alert:
           x-field-uid: 3
           $ref: '#/components/schemas/Pattern.Flow.Ipv6SegmentRouting.Flags.Alert'
+    Flow.Cfm:
+      description: |-
+        Defines the fields of a Connectivity Fault Management (CFM) Packet Data Unit (PDU) as specified in IEEE 802.1Q-2018 Clause 21. CCM destination MAC is a multicast address derived from the maintenance domain level (IEEE 802.1Q-2018 Table 21-3).
+      type: object
+      properties:
+        md_level:
+          description: |-
+            Maintenance Domain Level (0-7). Determines the CCM multicast destination MAC address: 01:80:c2:00:00:3X where X is the level in hex (e.g. level 5 = 01:80:c2:00:00:35, level 0 = 01:80:c2:00:00:30). Defined in IEEE 802.1Q-2018 Table 21-3.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 7
+          x-field-uid: 1
+        version:
+          description: |-
+            CFM Common Header version field (IEEE 802.1Q-2018 Table 21-6). Must be 0 for all frames compliant with this standard.
+          type: integer
+          format: uint32
+          default: 0
+          maximum: 31
+          x-field-uid: 2
+        op_code:
+          $ref: '#/components/schemas/Flow.Cfm.SelectOpCode'
+          x-field-uid: 3
+    Flow.Cfm.SelectOpCode:
+      description: |-
+        Select message header. The opcode byte in the CFM Common Header is automatically set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are supported.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: ccm
+          x-field-uid: 1
+          x-enum:
+            ccm:
+              x-field-uid: 1
+            lbm:
+              x-field-uid: 2
+            lbr:
+              x-field-uid: 3
+          enum:
+          - ccm
+          - lbm
+          - lbr
+        ccm:
+          $ref: '#/components/schemas/Flow.Cfm.Ccm'
+          x-field-uid: 2
+        lbm:
+          $ref: '#/components/schemas/Flow.Cfm.Lbm'
+          x-field-uid: 3
+        lbr:
+          $ref: '#/components/schemas/Flow.Cfm.Lbr'
+          x-field-uid: 4
+    Flow.Cfm.Ccm:
+      description: |-
+        CCM is a multicast PDU used to detect continuity and configuration errors within a Maintenance Association (MA). As defined in IEEE 802.1Q-2018 Section 12.14.6.
+      type: object
+      properties:
+        flags:
+          $ref: '#/components/schemas/Flow.Cfm.Ccm.Flags'
+          x-field-uid: 1
+        sequence_number:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.SequenceNumber'
+        ma_endpoint_identifier:
+          x-field-uid: 3
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.MaEndpointIdentifier'
+        ethernet_oam_protocol:
+          $ref: '#/components/schemas/Flow.Cfm.OamProtocol'
+          x-field-uid: 4
+        tlvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Cfm.Tlvs'
+          x-field-uid: 5
+        append_end_tlv:
+          description: |-
+            When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with a deliberately missing End TLV.
+          type: boolean
+          default: true
+          x-field-uid: 6
+    Flow.Cfm.Ccm.Flags:
+      description: |-
+        CCM flags byte has RDI and CCM Interval.
+      type: object
+      properties:
+        rdi:
+          description: |-
+            Remote Defect Indicator. When true the MEP is reporting a local defect to its remote peers (IEEE 802.1Q-2018 Section 12.14.6.1.3).
+          type: boolean
+          default: false
+          x-field-uid: 1
+        ccm_interval:
+          description: |-
+            CCM transmission interval. Encoded as a 3-bit integer in the flags byte as defined in IEEE 802.1Q-2018 Table 21-15. 0 = invalid, 1 = 3.33 ms, 2 = 10 ms, 3 = 100 ms, 4 = 1 s, 5 = 10 s, 6 = 1 min, 7 = 10 min.
+          type: integer
+          format: uint32
+          default: 4
+          maximum: 7
+          x-field-uid: 2
+    Flow.Cfm.OamProtocol:
+      description: |-
+        Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU. Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name + Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: cfm
+          x-field-uid: 1
+          x-enum:
+            cfm:
+              x-field-uid: 1
+          enum:
+          - cfm
+        cfm:
+          $ref: '#/components/schemas/Flow.Cfm.MaidCfm'
+          x-field-uid: 2
+    Flow.Cfm.MaidCfm:
+      description: |-
+        IEEE 802.1Q-2018 MAID encoding: MD Name (optional) + Short MA Name, zero-padded to fill 48 bytes in the CCM PDU. The choice selects the Short MA Name Format as defined in IEEE 802.1Q-2018 Table 21-20 and provides a typed input for each format.
+      type: object
+      properties:
+        md_name:
+          description: |-
+            Maintenance domain name encoding. When present, the MD Name field is included in the MAID using the selected format (IEEE 802.1Q-2018 Table 21-19 Formats 2-4). When absent, Format 1 (No MD Name) is encoded and the MAID begins directly with the Short MA Name.
+          $ref: '#/components/schemas/Flow.Cfm.MDNameFormat'
+          x-field-uid: 1
+        short_ma_name:
+          description: |-
+            Short MA Name encoding. The Short MA Name field is mandatory in the MAID and identifies the Maintenance Association within its Maintenance Domain. The selected format determines the on-wire encoding per IEEE 802.1Q-2018 Table 21-20 (Formats 1-4).
+          $ref: '#/components/schemas/Flow.Cfm.ShortMANameFormat'
+          x-field-uid: 2
+    Flow.Cfm.MDNameFormat:
+      type: object
+      description: |-
+        Maintenance domain name encoding. The choice selects the MD Name Format as defined in IEEE 802.1Q-2018 Table 21-19 and provides a typed input for each format. Length is auto-computed from the value unless overridden.
+      properties:
+        choice:
+          type: string
+          default: char_str
+          x-enum:
+            domain_name_str:
+              x-field-uid: 1
+            mac_addr:
+              x-field-uid: 2
+            char_str:
+              x-field-uid: 3
+          x-field-uid: 1
+          enum:
+          - domain_name_str
+          - mac_addr
+          - char_str
+        length:
+          description: |-
+            Length of the MD Name value in octets. Auto-computed by default.
+          $ref: '#/components/schemas/Flow.Cfm.Length'
+          x-field-uid: 2
+        domain_name_str:
+          description: |-
+            DNS-like domain name, e.g. "example.com" (RFC 1034 encoding). Maximum 43 octets (IEEE 802.1Q-2018 Table 21-19).
+          type: string
+          default: ''
+          x-field-uid: 3
+        mac_addr:
+          description: |-
+            MAC address + 2-octet integer (IEEE Format 3). See Flow.Cfm.MDNameMacAddr.
+          $ref: '#/components/schemas/Flow.Cfm.MDNameMacAddr'
+          x-field-uid: 4
+        char_str:
+          description: |-
+            Character string (ASCII), up to 43 octets (IEEE 802.1Q-2018 Table 21-19).
+          type: string
+          default: ''
+          x-field-uid: 5
+    Flow.Cfm.MDNameMacAddr:
+      description: |-
+        MD Name Format 3 encoding as defined in IEEE 802.1Q-2018 Table 21-19. Consists of a 6-octet MAC address followed by a 2-octet unsigned integer in network byte order. Total wire length is always 8 octets.
+      type: object
+      properties:
+        mac:
+          description: |-
+            6-octet MAC address component, e.g. "00:11:22:33:44:55".
+          type: string
+          format: mac
+          default: 00:00:00:00:00:00
+          x-field-uid: 1
+        id:
+          description: |-
+            Locally assigned 2-octet unsigned integer in network byte order that distinguishes multiple maintenance domains sharing the same MAC address (IEEE 802.1Q-2018 Table 21-19).
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 2
+    Flow.Cfm.ShortMANameFormat:
+      type: object
+      description: |-
+        Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats and provide its typed value. Length is auto-computed from the value unless overridden.
+      properties:
+        choice:
+          type: string
+          default: char_str
+          x-enum:
+            primary_vid:
+              x-field-uid: 1
+            char_str:
+              x-field-uid: 2
+            two_oct_int:
+              x-field-uid: 3
+            rfc_2685_vpn_id:
+              x-field-uid: 4
+          x-field-uid: 1
+          enum:
+          - primary_vid
+          - char_str
+          - two_oct_int
+          - rfc_2685_vpn_id
+        length:
+          description: |-
+            Length of the Short MA Name value in octets. Auto-computed by default.
+          $ref: '#/components/schemas/Flow.Cfm.Length'
+          x-field-uid: 2
+        primary_vid:
+          description: |-
+            Primary VLAN ID (1-4094). Encoded as a 2-octet unsigned integer.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 4094
+          default: 1
+          x-field-uid: 3
+        char_str:
+          description: |-
+            Character string (ASCII), up to 45 octets (RFC 2579 DisplayString).
+          type: string
+          default: ''
+          x-field-uid: 4
+        two_oct_int:
+          description: |-
+            2-octet unsigned integer, e.g. a locally assigned VLAN tag.
+          type: integer
+          format: uint32
+          maximum: 65535
+          default: 0
+          x-field-uid: 5
+        rfc_2685_vpn_id:
+          description: |-
+            RFC 2685 VPN ID, exactly 7 octets (3-octet OUI + 4-octet index). Encode as 14 hex characters, e.g. "00000000000000".
+          type: string
+          format: hex
+          default: '00000000000000'
+          x-field-uid: 6
+    Flow.Cfm.Lbm:
+      description: |-
+        Loopback Message (LBM) is a diagnostic frame used to verify connectivity between Maintenance End Points (MEPs) and Maintenance Intermediate Points (MIPs). LBM flag bits are reserved and set to zero.
+      type: object
+      properties:
+        transaction_id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbm.TransactionId'
+        tlvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Cfm.Tlvs'
+          x-field-uid: 2
+        append_end_tlv:
+          description: |-
+            When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with a deliberately missing End TLV.
+          type: boolean
+          default: true
+          x-field-uid: 3
+    Flow.Cfm.Lbr:
+      description: |-
+        Loopback Reply (LBR) messages are unicast frames sent by a Maintenance Association End Point (MEP) or Intermediate Point (MIP) to a source MEP in response to a Loopback Message (LBM). LBR flag bits are reserved and set to zero.
+      type: object
+      properties:
+        transaction_id:
+          x-field-uid: 1
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbr.TransactionId'
+        tlvs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Flow.Cfm.Tlvs'
+          x-field-uid: 2
+        append_end_tlv:
+          description: |-
+            When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour with a deliberately missing End TLV.
+          type: boolean
+          default: true
+          x-field-uid: 3
+    Flow.Cfm.Tlvs:
+      description: |-
+        CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically from the choice: Sender ID=1, Port Status=2, Data=3, Interface Status=4. Length (2 octets) and Value are defined per TLV type.
+      type: object
+      properties:
+        choice:
+          type: string
+          default: sender_id
+          x-field-uid: 1
+          x-enum:
+            sender_id:
+              x-field-uid: 1
+            port_status:
+              x-field-uid: 2
+            interface_status:
+              x-field-uid: 3
+            data:
+              x-field-uid: 4
+          enum:
+          - sender_id
+          - port_status
+          - interface_status
+          - data
+        length:
+          x-field-uid: 2
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length'
+        sender_id:
+          $ref: '#/components/schemas/Flow.Cfm.SenderIdTlv'
+          x-field-uid: 3
+        port_status:
+          $ref: '#/components/schemas/Flow.Cfm.PortStatusTlv'
+          x-field-uid: 4
+        interface_status:
+          $ref: '#/components/schemas/Flow.Cfm.InterfaceStatusTlv'
+          x-field-uid: 5
+        data:
+          $ref: '#/components/schemas/Flow.Cfm.DataTlv'
+          x-field-uid: 6
+    Flow.Cfm.SenderIdTlv:
+      description: |-
+        Sender ID TLV (Type 1) carries the sender's chassis identity and optionally a Management Address so that the receiving MEP can identify and reach back to the sender, as defined in IEEE 802.1Q-2018 Section 21.5.5, Table 21-16.
+      type: object
+      properties:
+        chassis_id:
+          description: |-
+            Chassis identifier of the sender. When absent, the Chassis ID Length field is set to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+          $ref: '#/components/schemas/Flow.Cfm.SenderIdTlv.ChassisId'
+          x-field-uid: 1
+    Flow.Cfm.SenderIdTlv.ChassisId:
+      description: |-
+        Sender ID TLV with Chassis ID
+      type: object
+      properties:
+        choice:
+          description: |-
+            Select the LLDP Chassis ID Subtype (IEEE 802.1AB-2016 Table 8-3).
+          type: string
+          default: mac_address
+          x-enum:
+            chassis_component:
+              x-field-uid: 1
+            interface_alias:
+              x-field-uid: 2
+            port_component:
+              x-field-uid: 3
+            mac_address:
+              x-field-uid: 4
+            network_address:
+              x-field-uid: 5
+            interface_name:
+              x-field-uid: 6
+            locally_assigned:
+              x-field-uid: 7
+          x-field-uid: 1
+          enum:
+          - chassis_component
+          - interface_alias
+          - port_component
+          - mac_address
+          - network_address
+          - interface_name
+          - locally_assigned
+        length:
+          $ref: '#/components/schemas/Flow.Cfm.Length'
+          x-field-uid: 2
+        chassis_component:
+          description: |-
+            Identifies the hardware component FRU/shelf.
+          type: string
+          default: ''
+          x-field-uid: 3
+        interface_alias:
+          description: |-
+            Identifies the interface by its manager-assigned name.
+          type: string
+          default: ''
+          x-field-uid: 4
+        port_component:
+          description: |-
+            Identifies a port-class physical component of the chassis.
+          type: string
+          default: ''
+          x-field-uid: 5
+        mac_address:
+          description: |-
+            MAC address identifying the chassis.
+          type: string
+          format: mac
+          default: 00:00:00:00:00:00
+          x-field-uid: 6
+        network_address:
+          description: |-
+            Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
+          $ref: '#/components/schemas/Flow.Cfm.Network'
+          x-field-uid: 7
+        interface_name:
+          description: |-
+            Identifies the interface by a system-assigned name.
+          type: string
+          default: ''
+          x-field-uid: 8
+        locally_assigned:
+          description: |-
+            String assigned by the local administrator.
+          type: string
+          default: ''
+          x-field-uid: 9
+        management_address_domain:
+          description: |-
+            Management Address Domain and address of the sender. When absent, the Management Address Domain Length field is set to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+          $ref: '#/components/schemas/Flow.Cfm.SenderIdTlv.MADomain'
+          x-field-uid: 10
+    Flow.Cfm.SenderIdTlv.MADomain:
+      description: |-
+        Sender ID TLV with Management Address Domain
+      type: object
+      properties:
+        length:
+          $ref: '#/components/schemas/Flow.Cfm.Length'
+          x-field-uid: 1
+        domain:
+          description: |-
+            The domain is a full BER-encoded OID identifying the transport/protocol, CFM follows the SNMPv3 RFC 3411.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 2
+        management_address:
+          description: |-
+            Management Address of the sender. When absent, the Management Address Length field is set to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+          $ref: '#/components/schemas/Flow.Cfm.SenderIdTlv.MgmtAddress'
+          x-field-uid: 3
+    Flow.Cfm.SenderIdTlv.MgmtAddress:
+      description: |-
+        Sender ID TLV with Management Address
+      type: object
+      properties:
+        length:
+          $ref: '#/components/schemas/Flow.Cfm.Length'
+          x-field-uid: 1
+        address:
+          description: |-
+            The address is in the format defined by the domain. This lets the receiver know exactly how to dial back into the sender's management stack.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 2
+    Flow.Cfm.Network:
+      description: |-
+        Typed network address used as the Sender ID TLV Chassis ID Subtype 5 (IEEE 802.1AB-2016 Table 8-3). On the wire, the choice value encodes the leading IANA address family octet (1 = IPv4, 2 = IPv6), followed by the corresponding IP address bytes.
+      type: object
+      properties:
+        choice:
+          description: |-
+            IANA address family, encodes the first octet of the network address.
+          type: string
+          default: ipv4
+          x-enum:
+            ipv4:
+              x-field-uid: 1
+            ipv6:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - ipv4
+          - ipv6
+        ipv4:
+          description: |-
+            Chassis ID IPv4 address
+          type: string
+          format: ipv4
+          default: 0.0.0.0
+          x-field-uid: 2
+        ipv6:
+          description: |-
+            Chassis ID IPv6 address
+          type: string
+          format: ipv6
+          default: ::0
+          x-field-uid: 3
+    Flow.Cfm.PortStatusTlv:
+      description: |-
+        Port Status TLV (Type 2) indicates the ability of the Bridge Port to pass ordinary data traffic, as defined in IEEE 802.1Q-2018 Section 12.14.3.3.
+      type: object
+      properties:
+        status:
+          description: |-
+            Port status can be either port blocked or port up.
+          type: string
+          default: port_up
+          x-enum:
+            port_blocked:
+              x-field-uid: 1
+            port_up:
+              x-field-uid: 2
+          x-field-uid: 1
+          enum:
+          - port_blocked
+          - port_up
+    Flow.Cfm.InterfaceStatusTlv:
+      description: |-
+        Interface Status TLV (Type 4) indicates the operational state of a physical or logical interface between Provider Edge (PE) and Customer Edge (CE) devices. As defined in IEEE 802.1Q-2018 Section 12.14.3.4.
+      type: object
+      properties:
+        status:
+          description: |-
+            Defined Interface status.
+          type: string
+          default: up
+          x-enum:
+            up:
+              x-field-uid: 1
+            down:
+              x-field-uid: 2
+            testing:
+              x-field-uid: 3
+            unknown:
+              x-field-uid: 4
+            dormant:
+              x-field-uid: 5
+            not_present:
+              x-field-uid: 6
+            lower_layer_down:
+              x-field-uid: 7
+          x-field-uid: 1
+          enum:
+          - up
+          - down
+          - testing
+          - unknown
+          - dormant
+          - not_present
+          - lower_layer_down
+    Flow.Cfm.DataTlv:
+      description: |-
+        Data TLV (Type 3) used to carry arbitrary test data, typically for loopback testing. As defined in IEEE 802.1Q-2018 Section 12.14.3.2.
+      type: object
+      properties:
+        data:
+          description: |-
+            Arbitrary test data payload. The length field of the parent TLV entry should be set to auto to match the byte count of this value.
+          type: string
+          format: hex
+          default: '00'
+          x-field-uid: 1
+    Flow.Cfm.Length:
+      description: |-
+        Length field with auto-compute or explicit-value choice. When auto, the implementation derives the value from the associated data field.
+      type: object
+      properties:
+        choice:
+          description: |-
+            auto or configured value.
+          type: string
+          default: auto
+          x-field-uid: 1
+          x-enum:
+            auto:
+              x-field-uid: 1
+            value:
+              x-field-uid: 2
+          enum:
+          - auto
+          - value
+        auto:
+          description: |-
+            The OTG implementation will provide a system generated value for this property.  If the OTG implementation is unable to generate a value the default value must be used.
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 1
+          x-field-uid: 2
+        value:
+          type: integer
+          format: uint32
+          maximum: 255
+          default: 1
+          x-field-uid: 3
     Flow.Size:
       description: |-
         The frame size which overrides the total length of the packet
@@ -51751,6 +52345,339 @@ components:
       x-constants:
         no_alert: 0
         alert: 1
+    Pattern.Flow.Cfm.Ccm.SequenceNumber.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Cfm.Ccm.SequenceNumber:
+      description: |-
+        CCM unique sequence number.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.SequenceNumber.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.SequenceNumber.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Ccm.MaEndpointIdentifier.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 1
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Cfm.Ccm.MaEndpointIdentifier:
+      description: |-
+        Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 1
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.MaEndpointIdentifier.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Ccm.MaEndpointIdentifier.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Lbm.TransactionId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Cfm.Lbm.TransactionId:
+      description: |-
+        Transaction identifier copied verbatim into the corresponding LBR, allowing the sender to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbm.TransactionId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbm.TransactionId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Lbr.TransactionId.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+    Pattern.Flow.Cfm.Lbr.TransactionId:
+      description: |-
+        Transaction id or sequence number copied from the LBM to match the reply to the specific request.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: value
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 3
+          default:
+          - 0
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbr.TransactionId.Counter'
+          x-field-uid: 5
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Lbr.TransactionId.Counter'
+          x-field-uid: 6
+    Pattern.Flow.Cfm.Tlvs.Length.Counter:
+      description: |-
+        integer counter pattern
+      type: object
+      properties:
+        start:
+          type: integer
+          x-field-uid: 1
+          default: 0
+          format: uint32
+          maximum: 65535
+        step:
+          type: integer
+          x-field-uid: 2
+          default: 1
+          format: uint32
+          maximum: 65535
+        count:
+          type: integer
+          x-field-uid: 3
+          default: 1
+          format: uint32
+          maximum: 65536
+    Pattern.Flow.Cfm.Tlvs.Length:
+      description: |-
+        Length of the TLV value field in octets (IEEE 802.1Q-2018 Table 21-16). When auto, derived from the selected TLV sub-object.
+      type: object
+      properties:
+        choice:
+          type: string
+          x-enum:
+            value:
+              x-field-uid: 2
+            values:
+              x-field-uid: 3
+            auto:
+              x-field-uid: 1
+            increment:
+              x-field-uid: 4
+            decrement:
+              x-field-uid: 5
+          default: auto
+          x-field-uid: 1
+          enum:
+          - value
+          - values
+          - auto
+          - increment
+          - decrement
+        value:
+          type: integer
+          x-field-uid: 2
+          default: 0
+          format: uint32
+          maximum: 65535
+        values:
+          type: array
+          items:
+            type: integer
+            format: uint32
+            maximum: 65535
+          x-field-uid: 3
+          default:
+          - 0
+        auto:
+          description: |-
+            The OTG implementation can provide a system generated
+            value for this property. If the OTG is unable to generate a value
+            the default value must be used.
+          type: integer
+          x-field-uid: 4
+          default: 0
+          format: uint32
+          maximum: 65535
+        increment:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length.Counter'
+          x-field-uid: 6
+        decrement:
+          $ref: '#/components/schemas/Pattern.Flow.Cfm.Tlvs.Length.Counter'
+          x-field-uid: 7
     Version:
       description: |-
         Version details
