@@ -18,7 +18,6 @@ type flowIpv6UsidDst struct {
 	unMarshaller        unMarshalFlowIpv6UsidDst
 	locatorHolder       PatternFlowIpv6UsidDstLocator
 	locatorLengthHolder PatternFlowIpv6UsidDstLocatorLength
-	usidsHolder         FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
 }
 
 func NewFlowIpv6UsidDst() FlowIpv6UsidDst {
@@ -248,7 +247,6 @@ func (obj *flowIpv6UsidDst) Clone() (FlowIpv6UsidDst, error) {
 func (obj *flowIpv6UsidDst) setNil() {
 	obj.locatorHolder = nil
 	obj.locatorLengthHolder = nil
-	obj.usidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -285,15 +283,17 @@ type FlowIpv6UsidDst interface {
 	// PatternFlowIpv6UsidDstLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits packed into the 128-bit dst. For F3216 this is a /32 prefix (e.g., fc00::). The number of bits used is given by locator_length.
 	SetLocator(value PatternFlowIpv6UsidDstLocator) FlowIpv6UsidDst
 	// LocatorLength returns PatternFlowIpv6UsidDstLocatorLength, set in FlowIpv6UsidDst.
-	// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+	// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries a fully formed SRv6 SID with a LB.
 	LocatorLength() PatternFlowIpv6UsidDstLocatorLength
 	// SetLocatorLength assigns PatternFlowIpv6UsidDstLocatorLength provided by user to FlowIpv6UsidDst.
-	// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+	// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries a fully formed SRv6 SID with a LB.
 	SetLocatorLength(value PatternFlowIpv6UsidDstLocatorLength) FlowIpv6UsidDst
 	// HasLocatorLength checks if LocatorLength has been set in FlowIpv6UsidDst
 	HasLocatorLength() bool
-	// Usids returns FlowIpv6UsidDstFlowIpv6UsidDstuSidIterIter, set in FlowIpv6UsidDst
-	Usids() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
+	// Usids returns []string, set in FlowIpv6UsidDst.
+	Usids() []string
+	// SetUsids assigns []string provided by user to FlowIpv6UsidDst
+	SetUsids(value []string) FlowIpv6UsidDst
 	setNil()
 }
 
@@ -347,90 +347,24 @@ func (obj *flowIpv6UsidDst) SetLocatorLength(value PatternFlowIpv6UsidDstLocator
 	return obj
 }
 
-// Ordered list of uSID values to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
-// Usids returns a []FlowIpv6UsidDstuSid
-func (obj *flowIpv6UsidDst) Usids() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	if len(obj.obj.Usids) == 0 {
-		obj.obj.Usids = []*otg.FlowIpv6UsidDstuSid{}
+// Ordered list of uSID values (hex strings) to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. The value 0x0000 is reserved as the End-of-Container marker and must not be used. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
+// Usids returns a []string
+func (obj *flowIpv6UsidDst) Usids() []string {
+	if obj.obj.Usids == nil {
+		obj.obj.Usids = make([]string, 0)
 	}
-	if obj.usidsHolder == nil {
-		obj.usidsHolder = newFlowIpv6UsidDstFlowIpv6UsidDstuSidIter(&obj.obj.Usids).setMsg(obj)
+	return obj.obj.Usids
+}
+
+// Ordered list of uSID values (hex strings) to pack after the Locator Block (RFC 9800 Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The End-of-Container zero-pad is appended automatically by the implementation. The value 0x0000 is reserved as the End-of-Container marker and must not be used. Example: ["0001","0002","0003"] with locator fc00::/32 assembles to fc00:0:1:2:3::
+// SetUsids sets the []string value in the FlowIpv6UsidDst object
+func (obj *flowIpv6UsidDst) SetUsids(value []string) FlowIpv6UsidDst {
+
+	if obj.obj.Usids == nil {
+		obj.obj.Usids = make([]string, 0)
 	}
-	return obj.usidsHolder
-}
+	obj.obj.Usids = value
 
-type flowIpv6UsidDstFlowIpv6UsidDstuSidIter struct {
-	obj                      *flowIpv6UsidDst
-	flowIpv6UsidDstuSidSlice []FlowIpv6UsidDstuSid
-	fieldPtr                 *[]*otg.FlowIpv6UsidDstuSid
-}
-
-func newFlowIpv6UsidDstFlowIpv6UsidDstuSidIter(ptr *[]*otg.FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	return &flowIpv6UsidDstFlowIpv6UsidDstuSidIter{fieldPtr: ptr}
-}
-
-type FlowIpv6UsidDstFlowIpv6UsidDstuSidIter interface {
-	setMsg(*flowIpv6UsidDst) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-	Items() []FlowIpv6UsidDstuSid
-	Add() FlowIpv6UsidDstuSid
-	Append(items ...FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-	Set(index int, newObj FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-	Clear() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-	clearHolderSlice() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-	appendHolderSlice(item FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter
-}
-
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) setMsg(msg *flowIpv6UsidDst) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&flowIpv6UsidDstuSid{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) Items() []FlowIpv6UsidDstuSid {
-	return obj.flowIpv6UsidDstuSidSlice
-}
-
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) Add() FlowIpv6UsidDstuSid {
-	newObj := &otg.FlowIpv6UsidDstuSid{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &flowIpv6UsidDstuSid{obj: newObj}
-	newLibObj.setDefault()
-	obj.flowIpv6UsidDstuSidSlice = append(obj.flowIpv6UsidDstuSidSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) Append(items ...FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.flowIpv6UsidDstuSidSlice = append(obj.flowIpv6UsidDstuSidSlice, item)
-	}
-	return obj
-}
-
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) Set(index int, newObj FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.flowIpv6UsidDstuSidSlice[index] = newObj
-	return obj
-}
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) Clear() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.FlowIpv6UsidDstuSid{}
-		obj.flowIpv6UsidDstuSidSlice = []FlowIpv6UsidDstuSid{}
-	}
-	return obj
-}
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) clearHolderSlice() FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	if len(obj.flowIpv6UsidDstuSidSlice) > 0 {
-		obj.flowIpv6UsidDstuSidSlice = []FlowIpv6UsidDstuSid{}
-	}
-	return obj
-}
-func (obj *flowIpv6UsidDstFlowIpv6UsidDstuSidIter) appendHolderSlice(item FlowIpv6UsidDstuSid) FlowIpv6UsidDstFlowIpv6UsidDstuSidIter {
-	obj.flowIpv6UsidDstuSidSlice = append(obj.flowIpv6UsidDstuSidSlice, item)
 	return obj
 }
 
@@ -454,16 +388,11 @@ func (obj *flowIpv6UsidDst) validateObj(vObj *validation, set_default bool) {
 		obj.LocatorLength().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Usids) != 0 {
+	if obj.obj.Usids != nil {
 
-		if set_default {
-			obj.Usids().clearHolderSlice()
-			for _, item := range obj.obj.Usids {
-				obj.Usids().appendHolderSlice(&flowIpv6UsidDstuSid{obj: item})
-			}
-		}
-		for _, item := range obj.Usids().Items() {
-			item.validateObj(vObj, set_default)
+		err := obj.validateHexSlice(obj.Usids())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on FlowIpv6UsidDst.Usids"))
 		}
 
 	}

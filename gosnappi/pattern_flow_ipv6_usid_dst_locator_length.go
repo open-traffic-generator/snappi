@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6UsidDstLocatorLength) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+// PatternFlowIpv6UsidDstLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for CSID packing. Valid range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6 DA always carries a fully formed SRv6 SID with a LB.
 type PatternFlowIpv6UsidDstLocatorLength interface {
 	Validation
 	// msg marshals PatternFlowIpv6UsidDstLocatorLength to protobuf object *otg.PatternFlowIpv6UsidDstLocatorLength

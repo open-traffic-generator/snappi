@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.54.0
+/* Open Traffic Generator API 1.55.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -10143,6 +10143,7 @@ message FlowHeader {
       macsec = 22;
       lacp = 23;
       ipv6_extension_header = 24;
+      cfm = 25;
     }
   }
   // The available types of flow headers. If one is not provided the
@@ -10221,6 +10222,9 @@ message FlowHeader {
 
   // Description missing in models
   FlowIpv6ExtHeader ipv6_extension_header = 25;
+
+  // Description missing in models
+  FlowCfm cfm = 26;
 }
 
 // Custom packet header
@@ -10658,21 +10662,12 @@ message FlowIpv6UsidDst {
   // Description missing in models
   PatternFlowIpv6UsidDstLocatorLength locator_length = 2;
 
-  // Ordered list of uSID values to pack after the Locator Block (RFC 9800 Section 3).
-  // For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container. The
-  // End-of-Container zero-pad is appended automatically by the implementation. Example:
+  // Ordered list of uSID values (hex strings) to pack after the Locator Block (RFC 9800
+  // Section 3). For F3216 each uSID is 16 bits (4 hex chars); up to 6 uSIDs fit per container.
+  // The End-of-Container zero-pad is appended automatically by the implementation. The
+  // value 0x0000 is reserved as the End-of-Container marker and must not be used. Example:
   // [0001,0002,0003] with locator fc00::/32 assembles to fc00:0:1:2:3::
-  repeated FlowIpv6UsidDstuSid usids = 3;
-}
-
-// One uSID value within the no-SRH uSID container (RFC 9800 Section 3). For F3216 (16-bit
-// uSID): 4 hex characters. The value 0x0000 is reserved as the End-of-Container marker
-// and must not be used.
-message FlowIpv6UsidDstuSid {
-
-  // The uSID value as a hex string. For F3216: 4 hex characters. Any '0' padding before
-  // the before uSID value should be explicitly configured. Example: 0001.
-  optional string usid = 1;
+  repeated string usids = 3;
 }
 
 // The OTG implementation can provide a system generated, value for this property.
@@ -12612,31 +12607,44 @@ message FlowIpv6SegmentRoutingSegment {
 }
 
 // IPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-// whose segment list carries compressed uSID containers (RFC 9800 Section 4).
-// Each entry in segment_list represents one 128-bit compressed uSID container.
-// The user supplies a structured locator prefix and a list of uSID values;
-// the implementation assembles the 128-bit wire value by packing them as:
-// LB (Locator Block bits) || uSID-1 || uSID-2 || ... || EoC (zeros).
+// whose segment list carries compressed CSID containers (RFC 9800 Section 4).
+// Each entry in segment_list represents one 128-bit CSID container.
 // 
-// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits,
-// maximum 6 uSIDs per container.
-// Example - locator fc00::/32 with uSIDs 0x0001, 0x0002 assembles to
-// container fc00:0:1:2:: placed in the SRH segment list entry.
+// Two SR Segment Endpoint Flavors are supported (RFC 9800 Sections 4.1 and 4.2):
+// 
+// NEXT-CSID (locator_length > 0, RFC 9800 Section 4.1):
+// Each SRH entry is a fully formed 128-bit SRv6 SID.
+// Assembly: LB (locator_length bits) || CSID-1 || CSID-2 || ... || EoC (zeros).
+// For F3216 (RFC 9800 Section 3): LB = 32 bits, CSID = 16 bits, max 6 CSIDs per entry.
+// Example - locator fc00::/32 with CSIDs 0x0001, 0x0002 assembles to fc00:0:1:2::
+// 
+// REPLACE-CSID (RFC 9800 Section 4.2): two distinct entry types in the SRH:
+// First container (locator_length > 0): a fully formed SRv6 SID, same structure as
+// NEXT-CSID, with a single usid value = the Locator-Node+Function bits and an
+// implicit Argument (index) of 0. Valid LNFL: 16-bit or 32-bit (RFC 9800 Section
+// 4.2);
+// implementations MUST support 32-bit.
+// Example - locator 2001:db8:: /32, usids [00010001] assembles to 2001:db8:1:1::
+// Subsequent packed containers (locator_length = 0): NOT a valid IPv6 SID.
+// The 128-bit entry is K = floor(128 / LNFL) slots of LNFL bits each.
+// CSIDs are packed from the LEAST SIGNIFICANT position (RFC 9800 Section 4.2):
+// usids[0] goes to position K-1 (bits [128-LNFL..127], LSB),
+// usids[1] to position K-2, etc. Unused MSB positions are zero-padded.
+// The CSID length (LNFL) is inferred from the hex string width of usids:
+// 4 hex chars = 16-bit CSID (K = 8); 8 hex chars = 32-bit CSID (K = 4).
+// Both 16-bit and 32-bit LNFL are valid; 32-bit MUST be supported (RFC 9800 Section
+// 4.2).
+// Example LNFL=32: usids [00010002,00030004] -> wire [0][0][00030004][00010002]
+// (MSB to LSB) -> IPv6 0000:0000:0000:0000:0003:0004:0001:0002 = ::3:4:1:2
+// Example LNFL=16: usids [0001,0002,0003,0004] -> wire [0][0][0][0][0004][0003][0002][0001]
+// (MSB to LSB) -> IPv6 0000:0000:0000:0000:0004:0003:0002:0001 = ::4:3:2:1
 // 
 // The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
 // segment[0] is the last container to visit, segment[n-1] is the first
-// (active) container, whose value is also placed in the outer ipv6.dst_usids field.
+// (active) container.
 // 
-// The active container is determined by the segments_left pointer,
-// which is decremented as the packet progresses through the path and containers are
-// exhausted,
-// where n is the number of compressed uSID containers.
-// 
-// Use this schema when the SR path requires more containers than fit in
-// the outer ipv6.dst_usids alone.
-// For single-container paths with no SRH, set the locator and uSID list in ipv6.dst_usids
-// from which
-// destination IPv6 address will be generated by the implementation.
+// Use this schema when the SR path requires more than one container.
+// For single-container NEXT-CSID paths with no SRH, use ipv6.dst_usids instead.
 message FlowIpv6SegmentRoutingUsid {
 
   // Description missing in models
@@ -12663,15 +12671,16 @@ message FlowIpv6SegmentRoutingUsid {
   FlowIpv6SRHPadTlv pad_tlv = 6;
 }
 
-// One compressed uSID container entry in the SRH segment list (RFC 9800 Section 4,
-// RFC 8754 Section 2.1). The implementation assembles the 128-bit wire
-// value by packing the locator block followed by the uSID values in order,
-// zero-padding the remainder to 128 bits (End-of-Container marker).
+// One CSID container entry in the SRH segment list (RFC 9800, RFC 8754 Section 2.1).
+// Supports both NEXT-CSID (locator_length > 0) and REPLACE-CSID packed format
+// (locator_length = 0) as described in Flow.Ipv6SegmentRoutingUsid.
 // 
-// For F3216 format (RFC 9800 Section 3): Locator Block = 32 bits, each uSID = 16 bits,
-// up to 6 uSIDs per container.
-// Example - locator fc00::/32 (locator_length 32), usids [0001,0002,0003]
-// assembles to the 128-bit SRH entry fc00:0:1:2:3::
+// NEXT-CSID example (F3216: locator_length=32, 16-bit CSIDs):
+// locator fc00::/32, usids [0001,0002,0003] -> SRH entry fc00:0:1:2:3::
+// 
+// REPLACE-CSID packed example (LNFL=32, K=4, locator_length=0):
+// usids [00010002,00030004] -> wire [0][0][00030004][00010002] (MSB->LSB)
+// -> SRH entry ::3:4:1:2
 message FlowIpv6SegmentRoutingUsidSegment {
 
   // Description missing in models
@@ -12680,26 +12689,17 @@ message FlowIpv6SegmentRoutingUsidSegment {
   // Description missing in models
   PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength locator_length = 2;
 
-  // Ordered list of uSID values to pack into this container after the Locator Block (RFC
-  // 9800 Section 3). Each uSID occupies ((128 - locator_length) / no of uSIDs) bits.
-  // For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container.
-  // The implementation appends the End-of-Container zero-pad automatically. Example for
-  // F3216: [0001,0002,0003] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
-  repeated FlowIpv6SegmentRoutingUsiduSid usids = 3;
-}
-
-// One uSID value within a compressed uSID container (RFC 9800 Section 3). Represents
-// a single network function (node SID, adjacency SID, or service SID) packed consecutively
-// after the Locator Block inside the 128-bit container. For F3216 (RFC 9800 Section
-// 3), each uSID is 16 bits (4 hex characters).
-message FlowIpv6SegmentRoutingUsiduSid {
-
-  // The uSID value expressed as a hex string (RFC 9800 Section 3). The string width must
-  // match the uSID bit length divided by 4. For F3216 (16-bit uSID): 4 hex characters.
-  // The value 0x0000 is reserved as the End-of-Container (EoC) marker and must not be
-  // used as a uSID value (RFC 9800 Section 3). Example: 0001 identifies node 1; with
-  // locator fc00::/32 this contributes the 0001 field to produce container fc00:0:1:...::
-  optional string usid = 1;
+  // Ordered list of CSID hex strings for this container (RFC 9800 Section 3). For NEXT-CSID
+  // (locator_length > 0): CSIDs are packed in forward order after the Locator Block.
+  // usids[0] immediately follows the LB, usids[1] follows, etc. The value 0x0 (all zeros)
+  // is reserved as the End-of-Container marker. Example F3216: [0001,0002,0003] with
+  // locator fc00::/32 -> fc00:0:1:2:3:: For REPLACE-CSID packed format (locator_length
+  // = 0): CSIDs are packed in reverse order from the LSB (RFC 9800 Section 4.2, Figure
+  // 4). K = floor(128 / LNFL) where LNFL is inferred from hex string width (8 chars =
+  // 32-bit CSID, K = 4). usids[0] goes to position K-1 (LSB, bits [128-LNFL..127]), usids[1]
+  // to position K-2, etc. Unused MSB positions are zero-padded. Example LNFL=32: [00010002,00030004]
+  // -> wire [0][0][00030004][00010002] (MSB to LSB) -> SRH entry ::3:4:1:2
+  repeated string usids = 3;
 }
 
 // SRH Flags field (RFC 8754 Section 2.1). An 8-bit field; RFC 8754 marks all bits as
@@ -12735,6 +12735,480 @@ message FlowIpv6SRHPadTlv {
 
   // Description missing in models
   PatternFlowIpv6SRHPadTlvLength length = 2;
+}
+
+// Defines the fields of a Connectivity Fault Management (CFM) Packet Data Unit (PDU)
+// as specified in IEEE 802.1Q-2018 Clause 21. CCM destination MAC is a multicast address
+// derived from the maintenance domain level (IEEE 802.1Q-2018 Table 21-3).
+message FlowCfm {
+
+  // Maintenance Domain Level (0-7). Determines the CCM multicast destination MAC address:
+  // 01:80:c2:00:00:3X where X is the level in hex (e.g. level 5 = 01:80:c2:00:00:35,
+  // level 0 = 01:80:c2:00:00:30). Defined in IEEE 802.1Q-2018 Table 21-3.
+  // default = 0
+  optional uint32 md_level = 1;
+
+  // CFM Common Header version field (IEEE 802.1Q-2018 Table 21-6). Must be 0 for all
+  // frames compliant with this standard.
+  // default = 0
+  optional uint32 version = 2;
+
+  // Description missing in models
+  FlowCfmSelectOpCode op_code = 3;
+}
+
+// Select message header. The opcode byte in the CFM Common Header is automatically
+// set based on the choice as defined in IEEE 802.1Q-2018 Table 21-7. Currently only
+// Continuity Check Message (CCM), Loopback Message (LBM) and Loopback Reply (LBR) are
+// supported.
+message FlowCfmSelectOpCode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ccm = 1;
+      lbm = 2;
+      lbr = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.ccm
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowCfmCcm ccm = 2;
+
+  // Description missing in models
+  FlowCfmLbm lbm = 3;
+
+  // Description missing in models
+  FlowCfmLbr lbr = 4;
+}
+
+// CCM is a multicast PDU used to detect continuity and configuration errors within
+// a Maintenance Association (MA). As defined in IEEE 802.1Q-2018 Section 12.14.6.
+message FlowCfmCcm {
+
+  // Description missing in models
+  FlowCfmCcmFlags flags = 1;
+
+  // Description missing in models
+  PatternFlowCfmCcmSequenceNumber sequence_number = 2;
+
+  // Description missing in models
+  PatternFlowCfmCcmMaEndpointIdentifier ma_endpoint_identifier = 3;
+
+  // Description missing in models
+  FlowCfmOamProtocol ethernet_oam_protocol = 4;
+
+  // Description missing in models
+  repeated FlowCfmTlvs tlvs = 5;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 6;
+}
+
+// CCM flags byte has RDI and CCM Interval.
+message FlowCfmCcmFlags {
+
+  // Remote Defect Indicator. When true the MEP is reporting a local defect to its remote
+  // peers (IEEE 802.1Q-2018 Section 12.14.6.1.3).
+  // default = False
+  optional bool rdi = 1;
+
+  // CCM transmission interval. Encoded as a 3-bit integer in the flags byte as defined
+  // in IEEE 802.1Q-2018 Table 21-15. 0 = invalid, 1 = 3.33 ms, 2 = 10 ms, 3 = 100 ms,
+  // 4 = 1 s, 5 = 10 s, 6 = 1 min, 7 = 10 min.
+  // default = 4
+  optional uint32 ccm_interval = 2;
+}
+
+// Ethernet OAM standard used to encode the 48-byte identifier field in the CCM PDU.
+// Currently only the cfm choice is available; IEEE 802.1Q-2018 MAID encoding (MD Name
+// + Short MA Name) is used. Future choices may include ITU-T Y.1731 MEG ID encoding.
+message FlowCfmOamProtocol {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      cfm = 1;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.cfm
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowCfmMaidCfm cfm = 2;
+}
+
+// IEEE 802.1Q-2018 MAID encoding: MD Name (optional) + Short MA Name, zero-padded to
+// fill 48 bytes in the CCM PDU. The choice selects the Short MA Name Format as defined
+// in IEEE 802.1Q-2018 Table 21-20 and provides a typed input for each format.
+message FlowCfmMaidCfm {
+
+  // Maintenance domain name encoding. When present, the MD Name field is included in
+  // the MAID using the selected format (IEEE 802.1Q-2018 Table 21-19 Formats 2-4). When
+  // absent, Format 1 (No MD Name) is encoded and the MAID begins directly with the Short
+  // MA Name.
+  FlowCfmMDNameFormat md_name = 1;
+
+  // Short MA Name encoding. The Short MA Name field is mandatory in the MAID and identifies
+  // the Maintenance Association within its Maintenance Domain. The selected format determines
+  // the on-wire encoding per IEEE 802.1Q-2018 Table 21-20 (Formats 1-4).
+  FlowCfmShortMANameFormat short_ma_name = 2;
+}
+
+// Maintenance domain name encoding. The choice selects the MD Name Format as defined
+// in IEEE 802.1Q-2018 Table 21-19 and provides a typed input for each format. Length
+// is auto-computed from the value unless overridden.
+message FlowCfmMDNameFormat {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      domain_name_str = 1;
+      mac_addr = 2;
+      char_str = 3;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.char_str
+  optional Choice.Enum choice = 1;
+
+  // Length of the MD Name value in octets. Auto-computed by default.
+  FlowCfmLength length = 2;
+
+  // DNS-like domain name, e.g. example.com (RFC 1034 encoding). Maximum 43 octets (IEEE
+  // 802.1Q-2018 Table 21-19).
+  // default =
+  optional string domain_name_str = 3;
+
+  // MAC address + 2-octet integer (IEEE Format 3). See Flow.Cfm.MDNameMacAddr.
+  FlowCfmMDNameMacAddr mac_addr = 4;
+
+  // Character string (ASCII), up to 43 octets (IEEE 802.1Q-2018 Table 21-19).
+  // default =
+  optional string char_str = 5;
+}
+
+// MD Name Format 3 encoding as defined in IEEE 802.1Q-2018 Table 21-19. Consists of
+// a 6-octet MAC address followed by a 2-octet unsigned integer in network byte order.
+// Total wire length is always 8 octets.
+message FlowCfmMDNameMacAddr {
+
+  // 6-octet MAC address component, e.g. 00:11:22:33:44:55.
+  // default = 00:00:00:00:00:00
+  optional string mac = 1;
+
+  // Locally assigned 2-octet unsigned integer in network byte order that distinguishes
+  // multiple maintenance domains sharing the same MAC address (IEEE 802.1Q-2018 Table
+  // 21-19).
+  // default = 0
+  optional uint32 id = 2;
+}
+
+// Short MA Name encoding (IEEE 802.1Q-2018 Table 21-20). Choose one of four formats
+// and provide its typed value. Length is auto-computed from the value unless overridden.
+message FlowCfmShortMANameFormat {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      primary_vid = 1;
+      char_str = 2;
+      two_oct_int = 3;
+      rfc_2685_vpn_id = 4;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.char_str
+  optional Choice.Enum choice = 1;
+
+  // Length of the Short MA Name value in octets. Auto-computed by default.
+  FlowCfmLength length = 2;
+
+  // Primary VLAN ID (1-4094). Encoded as a 2-octet unsigned integer.
+  // default = 1
+  optional uint32 primary_vid = 3;
+
+  // Character string (ASCII), up to 45 octets (RFC 2579 DisplayString).
+  // default =
+  optional string char_str = 4;
+
+  // 2-octet unsigned integer, e.g. a locally assigned VLAN tag.
+  // default = 0
+  optional uint32 two_oct_int = 5;
+
+  // RFC 2685 VPN ID, exactly 7 octets (3-octet OUI + 4-octet index). Encode as 14 hex
+  // characters, e.g. 00000000000000.
+  // default = 00000000000000
+  optional string rfc_2685_vpn_id = 6;
+}
+
+// Loopback Message (LBM) is a diagnostic frame used to verify connectivity between
+// Maintenance End Points (MEPs) and Maintenance Intermediate Points (MIPs). LBM flag
+// bits are reserved and set to zero.
+message FlowCfmLbm {
+
+  // Description missing in models
+  PatternFlowCfmLbmTransactionId transaction_id = 1;
+
+  // Description missing in models
+  repeated FlowCfmTlvs tlvs = 2;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 3;
+}
+
+// Loopback Reply (LBR) messages are unicast frames sent by a Maintenance Association
+// End Point (MEP) or Intermediate Point (MIP) to a source MEP in response to a Loopback
+// Message (LBM). LBR flag bits are reserved and set to zero.
+message FlowCfmLbr {
+
+  // Description missing in models
+  PatternFlowCfmLbrTransactionId transaction_id = 1;
+
+  // Description missing in models
+  repeated FlowCfmTlvs tlvs = 2;
+
+  // When true, the implementation appends an End TLV (Type 0, IEEE 802.1Q-2018 Table
+  // 21-17) after all TLVs in the tlvs list. Set to false only when testing DUT behaviour
+  // with a deliberately missing End TLV.
+  // default = True
+  optional bool append_end_tlv = 3;
+}
+
+// CFM TLV entry. The Type byte (IEEE 802.1Q-2018 Table 21-17) is set automatically
+// from the choice: Sender ID=1, Port Status=2, Data=3, Interface Status=4. Length (2
+// octets) and Value are defined per TLV type.
+message FlowCfmTlvs {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      sender_id = 1;
+      port_status = 2;
+      interface_status = 3;
+      data = 4;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.sender_id
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  PatternFlowCfmTlvsLength length = 2;
+
+  // Description missing in models
+  FlowCfmSenderIdTlv sender_id = 3;
+
+  // Description missing in models
+  FlowCfmPortStatusTlv port_status = 4;
+
+  // Description missing in models
+  FlowCfmInterfaceStatusTlv interface_status = 5;
+
+  // Description missing in models
+  FlowCfmDataTlv data = 6;
+}
+
+// Sender ID TLV (Type 1) carries the sender's chassis identity and optionally a Management
+// Address so that the receiving MEP can identify and reach back to the sender, as defined
+// in IEEE 802.1Q-2018 Section 21.5.5, Table 21-16.
+message FlowCfmSenderIdTlv {
+
+  // Chassis identifier of the sender. When absent, the Chassis ID Length field is set
+  // to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+  FlowCfmSenderIdTlvChassisId chassis_id = 1;
+}
+
+// Sender ID TLV with Chassis ID
+message FlowCfmSenderIdTlvChassisId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      chassis_component = 1;
+      interface_alias = 2;
+      port_component = 3;
+      mac_address = 4;
+      network_address = 5;
+      interface_name = 6;
+      locally_assigned = 7;
+    }
+  }
+  // Select the LLDP Chassis ID Subtype (IEEE 802.1AB-2016 Table 8-3).
+  // default = Choice.Enum.mac_address
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  FlowCfmLength length = 2;
+
+  // Identifies the hardware component FRU/shelf.
+  // default =
+  optional string chassis_component = 3;
+
+  // Identifies the interface by its manager-assigned name.
+  // default =
+  optional string interface_alias = 4;
+
+  // Identifies a port-class physical component of the chassis.
+  // default =
+  optional string port_component = 5;
+
+  // MAC address identifying the chassis.
+  // default = 00:00:00:00:00:00
+  optional string mac_address = 6;
+
+  // Network address identifying the chassis (IEEE 802.1AB-2016 Chassis ID Subtype 5).
+  FlowCfmNetwork network_address = 7;
+
+  // Identifies the interface by a system-assigned name.
+  // default =
+  optional string interface_name = 8;
+
+  // String assigned by the local administrator.
+  // default =
+  optional string locally_assigned = 9;
+
+  // Management Address Domain and address of the sender. When absent, the Management
+  // Address Domain Length field is set to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section
+  // 21.5.5.1).
+  FlowCfmSenderIdTlvMADomain management_address_domain = 10;
+}
+
+// Sender ID TLV with Management Address Domain
+message FlowCfmSenderIdTlvMADomain {
+
+  // Description missing in models
+  FlowCfmLength length = 1;
+
+  // The domain is a full BER-encoded OID identifying the transport/protocol, CFM follows
+  // the SNMPv3 RFC 3411.
+  // default = 00
+  optional string domain = 2;
+
+  // Management Address of the sender. When absent, the Management Address Length field
+  // is set to 0 in the Sender ID TLV (IEEE 802.1Q-2018 Section 21.5.5.1).
+  FlowCfmSenderIdTlvMgmtAddress management_address = 3;
+}
+
+// Sender ID TLV with Management Address
+message FlowCfmSenderIdTlvMgmtAddress {
+
+  // Description missing in models
+  FlowCfmLength length = 1;
+
+  // The address is in the format defined by the domain. This lets the receiver know exactly
+  // how to dial back into the sender's management stack.
+  // default = 00
+  optional string address = 2;
+}
+
+// Typed network address used as the Sender ID TLV Chassis ID Subtype 5 (IEEE 802.1AB-2016
+// Table 8-3). On the wire, the choice value encodes the leading IANA address family
+// octet (1 = IPv4, 2 = IPv6), followed by the corresponding IP address bytes.
+message FlowCfmNetwork {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      ipv4 = 1;
+      ipv6 = 2;
+    }
+  }
+  // IANA address family, encodes the first octet of the network address.
+  // default = Choice.Enum.ipv4
+  optional Choice.Enum choice = 1;
+
+  // Chassis ID IPv4 address
+  // default = 0.0.0.0
+  optional string ipv4 = 2;
+
+  // Chassis ID IPv6 address
+  // default = ::0
+  optional string ipv6 = 3;
+}
+
+// Port Status TLV (Type 2) indicates the ability of the Bridge Port to pass ordinary
+// data traffic, as defined in IEEE 802.1Q-2018 Section 12.14.3.3.
+message FlowCfmPortStatusTlv {
+
+  message Status {
+    enum Enum {
+      unspecified = 0;
+      port_blocked = 1;
+      port_up = 2;
+    }
+  }
+  // Port status can be either port blocked or port up.
+  // default = Status.Enum.port_up
+  optional Status.Enum status = 1;
+}
+
+// Interface Status TLV (Type 4) indicates the operational state of a physical or logical
+// interface between Provider Edge (PE) and Customer Edge (CE) devices. As defined in
+// IEEE 802.1Q-2018 Section 12.14.3.4.
+message FlowCfmInterfaceStatusTlv {
+
+  message Status {
+    enum Enum {
+      unspecified = 0;
+      up = 1;
+      down = 2;
+      testing = 3;
+      unknown = 4;
+      dormant = 5;
+      not_present = 6;
+      lower_layer_down = 7;
+    }
+  }
+  // Defined Interface status.
+  // default = Status.Enum.up
+  optional Status.Enum status = 1;
+}
+
+// Data TLV (Type 3) used to carry arbitrary test data, typically for loopback testing.
+// As defined in IEEE 802.1Q-2018 Section 12.14.3.2.
+message FlowCfmDataTlv {
+
+  // Arbitrary test data payload. The length field of the parent TLV entry should be set
+  // to auto to match the byte count of this value.
+  // default = 00
+  optional string data = 1;
+}
+
+// Length field with auto-compute or explicit-value choice. When auto, the implementation
+// derives the value from the associated data field.
+message FlowCfmLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      auto = 1;
+      value = 2;
+    }
+  }
+  // auto or configured value.
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // The OTG implementation will provide a system generated value for this property.
+  // If the OTG implementation is unable to generate a value the default value must be
+  // used.
+  // default = 1
+  optional uint32 auto = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 3;
 }
 
 // The frame size which overrides the total length of the packet
@@ -24927,7 +25401,7 @@ message PatternFlowIpv6DstMetricTag {
   optional uint32 length = 3;
 }
 
-// Destination address in IPv6 packet header. If dest_usids is configured, the locator
+// Destination address in IPv6 packet header. If dst_usids is configured, the locator
 // and usids provided in that should be used to construct the IPv6 destination address
 // instead of this field.
 message PatternFlowIpv6Dst {
@@ -25035,8 +25509,10 @@ message PatternFlowIpv6UsidDstLocatorLengthCounter {
 }
 
 // Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order
-// bits of locator are used as the LB and how many bits remain for uSID packing. For
-// F3216: 32. For F3208: 32. Valid range: 1-112.
+// bits of locator are used as the LB and how many bits remain for CSID packing. Valid
+// range: 1-112. For NEXT-CSID F3216 (RFC 9800 Section 3): 32. For REPLACE-CSID first
+// container (RFC 9800 Section 4.2): use the LB length (e.g. 32 or 48); the outer IPv6
+// DA always carries a fully formed SRv6 SID with a LB.
 message PatternFlowIpv6UsidDstLocatorLength {
 
   message Choice {
@@ -36847,7 +37323,8 @@ message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorCounter {
 // The Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800
 // Section 3). Defines the common high-order bits of every uSID assembled from this
 // entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given
-// by locator_length.
+// by locator_length. Ignored when locator_length is 0 (REPLACE-CSID flavor, RFC 9800
+// Section 5).
 message PatternFlowIpv6SegmentRoutingUsidSegmentLocator {
 
   message Choice {
@@ -36894,9 +37371,13 @@ message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLengthCounter {
   optional uint32 count = 3;
 }
 
-// Length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order
-// bits of locator are used as the LB and how many bits remain for uSID packing. For
-// F3216: 32. For F3208: 32. Valid range: 1-112.
+// Length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For
+// NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the
+// LB; usids are packed after it in forward order. For REPLACE-CSID first container
+// (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function
+// value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator
+// field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits
+// each; usids are packed from the LSB (RFC 9800 Section 4.2).
 message PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength {
 
   message Choice {
@@ -37226,6 +37707,252 @@ message PatternFlowIpv6SRHPadTlvLength {
 
   // Description missing in models
   PatternFlowIpv6SRHPadTlvLengthCounter decrement = 7;
+}
+
+// integer counter pattern
+message PatternFlowCfmCcmSequenceNumberCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// CCM unique sequence number.
+message PatternFlowCfmCcmSequenceNumber {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmCcmSequenceNumberCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmCcmSequenceNumberCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmCcmMaEndpointIdentifierCounter {
+
+  // Description missing in models
+  // default = 1
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Maintenance Association End Point Identifier (MEP ID). Unique within the MA. Range
+// 1-8191 per IEEE 802.1Q-2018 Section 12.14.6.3.2.
+message PatternFlowCfmCcmMaEndpointIdentifier {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [1]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmCcmMaEndpointIdentifierCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmCcmMaEndpointIdentifierCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmLbmTransactionIdCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Transaction identifier copied verbatim into the corresponding LBR, allowing the sender
+// to match the reply to this request (IEEE 802.1Q-2018 Figure 21-5).
+message PatternFlowCfmLbmTransactionId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmLbmTransactionIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmLbmTransactionIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmLbrTransactionIdCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Transaction id or sequence number copied from the LBM to match the reply to the specific
+// request.
+message PatternFlowCfmLbrTransactionId {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.value
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // Description missing in models
+  PatternFlowCfmLbrTransactionIdCounter increment = 5;
+
+  // Description missing in models
+  PatternFlowCfmLbrTransactionIdCounter decrement = 6;
+}
+
+// integer counter pattern
+message PatternFlowCfmTlvsLengthCounter {
+
+  // Description missing in models
+  // default = 0
+  optional uint32 start = 1;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 step = 2;
+
+  // Description missing in models
+  // default = 1
+  optional uint32 count = 3;
+}
+
+// Length of the TLV value field in octets (IEEE 802.1Q-2018 Table 21-16). When auto,
+// derived from the selected TLV sub-object.
+message PatternFlowCfmTlvsLength {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      value = 2;
+      values = 3;
+      auto = 1;
+      increment = 4;
+      decrement = 5;
+    }
+  }
+  // Description missing in models
+  // default = Choice.Enum.auto
+  optional Choice.Enum choice = 1;
+
+  // Description missing in models
+  // default = 0
+  optional uint32 value = 2;
+
+  // Description missing in models
+  // default = [0]
+  repeated uint32 values = 3;
+
+  // The OTG implementation can provide a system generated
+  // value for this property. If the OTG is unable to generate a value
+  // the default value must be used.
+  // default = 0
+  optional uint32 auto = 4;
+
+  // Description missing in models
+  PatternFlowCfmTlvsLengthCounter increment = 6;
+
+  // Description missing in models
+  PatternFlowCfmTlvsLengthCounter decrement = 7;
 }
 
 // Version details

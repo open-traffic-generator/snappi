@@ -18,7 +18,6 @@ type flowIpv6SegmentRoutingUsidSegment struct {
 	unMarshaller        unMarshalFlowIpv6SegmentRoutingUsidSegment
 	locatorHolder       PatternFlowIpv6SegmentRoutingUsidSegmentLocator
 	locatorLengthHolder PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
-	usidsHolder         FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
 }
 
 func NewFlowIpv6SegmentRoutingUsidSegment() FlowIpv6SegmentRoutingUsidSegment {
@@ -248,21 +247,21 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) Clone() (FlowIpv6SegmentRoutingUsi
 func (obj *flowIpv6SegmentRoutingUsidSegment) setNil() {
 	obj.locatorHolder = nil
 	obj.locatorLengthHolder = nil
-	obj.usidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingUsidSegment is one compressed uSID container entry in the SRH segment list (RFC 9800 Section 4,
-// RFC 8754 Section 2.1). The implementation assembles the 128-bit wire
-// value by packing the locator block followed by the uSID values in order,
-// zero-padding the remainder to 128 bits (End-of-Container marker).
+// FlowIpv6SegmentRoutingUsidSegment is one CSID container entry in the SRH segment list (RFC 9800, RFC 8754 Section 2.1).
+// Supports both NEXT-CSID (locator_length > 0) and REPLACE-CSID packed format
+// (locator_length = 0) as described in Flow.Ipv6SegmentRoutingUsid.
 //
-// For F3216 format (RFC 9800 Section 3): Locator Block = 32 bits, each uSID = 16 bits,
-// up to 6 uSIDs per container.
-// Example - locator fc00::/32 (locator_length 32), usids ["0001","0002","0003"]
-// assembles to the 128-bit SRH entry fc00:0:1:2:3::
+// NEXT-CSID example (F3216: locator_length=32, 16-bit CSIDs):
+// locator fc00::/32, usids ["0001","0002","0003"] -> SRH entry fc00:0:1:2:3::
+//
+// REPLACE-CSID packed example (LNFL=32, K=4, locator_length=0):
+// usids ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB->LSB)
+// -> SRH entry ::3:4:1:2
 type FlowIpv6SegmentRoutingUsidSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsidSegment to protobuf object *otg.FlowIpv6SegmentRoutingUsidSegment
@@ -285,23 +284,25 @@ type FlowIpv6SegmentRoutingUsidSegment interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Locator returns PatternFlowIpv6SegmentRoutingUsidSegmentLocator, set in FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length.
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is 0 (REPLACE-CSID flavor, RFC 9800 Section 5).
 	Locator() PatternFlowIpv6SegmentRoutingUsidSegmentLocator
 	// SetLocator assigns PatternFlowIpv6SegmentRoutingUsidSegmentLocator provided by user to FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length.
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is 0 (REPLACE-CSID flavor, RFC 9800 Section 5).
 	SetLocator(value PatternFlowIpv6SegmentRoutingUsidSegmentLocator) FlowIpv6SegmentRoutingUsidSegment
 	// HasLocator checks if Locator has been set in FlowIpv6SegmentRoutingUsidSegment
 	HasLocator() bool
 	// LocatorLength returns PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength, set in FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the LB; usids are packed after it in forward order. For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits each; usids are packed from the LSB (RFC 9800 Section 4.2).
 	LocatorLength() PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
 	// SetLocatorLength assigns PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength provided by user to FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Determines how many high-order bits of locator are used as the LB and how many bits remain for uSID packing. For F3216: 32. For F3208: 32. Valid range: 1-112.
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the LB; usids are packed after it in forward order. For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits each; usids are packed from the LSB (RFC 9800 Section 4.2).
 	SetLocatorLength(value PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength) FlowIpv6SegmentRoutingUsidSegment
 	// HasLocatorLength checks if LocatorLength has been set in FlowIpv6SegmentRoutingUsidSegment
 	HasLocatorLength() bool
-	// Usids returns FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIterIter, set in FlowIpv6SegmentRoutingUsidSegment
-	Usids() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
+	// Usids returns []string, set in FlowIpv6SegmentRoutingUsidSegment.
+	Usids() []string
+	// SetUsids assigns []string provided by user to FlowIpv6SegmentRoutingUsidSegment
+	SetUsids(value []string) FlowIpv6SegmentRoutingUsidSegment
 	setNil()
 }
 
@@ -361,90 +362,24 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) SetLocatorLength(value PatternFlow
 	return obj
 }
 
-// Ordered list of uSID values to pack into this container after the Locator Block (RFC 9800 Section 3). Each uSID occupies ((128 - locator_length) / no of uSIDs) bits. For F3216 each uSID is 16 bits (4 hex chars) and up to 6 uSIDs fit per container. The implementation appends the End-of-Container zero-pad automatically. Example for F3216: ["0001","0002","0003"] with locator fc00::/32 assembles to SRH entry fc00:0:1:2:3::
-// Usids returns a []FlowIpv6SegmentRoutingUsiduSid
-func (obj *flowIpv6SegmentRoutingUsidSegment) Usids() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	if len(obj.obj.Usids) == 0 {
-		obj.obj.Usids = []*otg.FlowIpv6SegmentRoutingUsiduSid{}
+// Ordered list of CSID hex strings for this container (RFC 9800 Section 3). For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc. The value 0x0 (all zeros) is reserved as the End-of-Container marker. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3:: For REPLACE-CSID packed format (locator_length = 0): CSIDs are packed in reverse order from the LSB (RFC 9800 Section 4.2, Figure 4). K = floor(128 / LNFL) where LNFL is inferred from hex string width (8 chars = 32-bit CSID, K = 4). usids[0] goes to position K-1 (LSB, bits [128-LNFL..127]), usids[1] to position K-2, etc. Unused MSB positions are zero-padded. Example LNFL=32: ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB to LSB) -> SRH entry ::3:4:1:2
+// Usids returns a []string
+func (obj *flowIpv6SegmentRoutingUsidSegment) Usids() []string {
+	if obj.obj.Usids == nil {
+		obj.obj.Usids = make([]string, 0)
 	}
-	if obj.usidsHolder == nil {
-		obj.usidsHolder = newFlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter(&obj.obj.Usids).setMsg(obj)
+	return obj.obj.Usids
+}
+
+// Ordered list of CSID hex strings for this container (RFC 9800 Section 3). For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc. The value 0x0 (all zeros) is reserved as the End-of-Container marker. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3:: For REPLACE-CSID packed format (locator_length = 0): CSIDs are packed in reverse order from the LSB (RFC 9800 Section 4.2, Figure 4). K = floor(128 / LNFL) where LNFL is inferred from hex string width (8 chars = 32-bit CSID, K = 4). usids[0] goes to position K-1 (LSB, bits [128-LNFL..127]), usids[1] to position K-2, etc. Unused MSB positions are zero-padded. Example LNFL=32: ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB to LSB) -> SRH entry ::3:4:1:2
+// SetUsids sets the []string value in the FlowIpv6SegmentRoutingUsidSegment object
+func (obj *flowIpv6SegmentRoutingUsidSegment) SetUsids(value []string) FlowIpv6SegmentRoutingUsidSegment {
+
+	if obj.obj.Usids == nil {
+		obj.obj.Usids = make([]string, 0)
 	}
-	return obj.usidsHolder
-}
+	obj.obj.Usids = value
 
-type flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter struct {
-	obj                                 *flowIpv6SegmentRoutingUsidSegment
-	flowIpv6SegmentRoutingUsiduSidSlice []FlowIpv6SegmentRoutingUsiduSid
-	fieldPtr                            *[]*otg.FlowIpv6SegmentRoutingUsiduSid
-}
-
-func newFlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter(ptr *[]*otg.FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	return &flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter{fieldPtr: ptr}
-}
-
-type FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter interface {
-	setMsg(*flowIpv6SegmentRoutingUsidSegment) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-	Items() []FlowIpv6SegmentRoutingUsiduSid
-	Add() FlowIpv6SegmentRoutingUsiduSid
-	Append(items ...FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-	Set(index int, newObj FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-	Clear() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-	clearHolderSlice() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-	appendHolderSlice(item FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter
-}
-
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) setMsg(msg *flowIpv6SegmentRoutingUsidSegment) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&flowIpv6SegmentRoutingUsiduSid{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) Items() []FlowIpv6SegmentRoutingUsiduSid {
-	return obj.flowIpv6SegmentRoutingUsiduSidSlice
-}
-
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) Add() FlowIpv6SegmentRoutingUsiduSid {
-	newObj := &otg.FlowIpv6SegmentRoutingUsiduSid{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &flowIpv6SegmentRoutingUsiduSid{obj: newObj}
-	newLibObj.setDefault()
-	obj.flowIpv6SegmentRoutingUsiduSidSlice = append(obj.flowIpv6SegmentRoutingUsiduSidSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) Append(items ...FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.flowIpv6SegmentRoutingUsiduSidSlice = append(obj.flowIpv6SegmentRoutingUsiduSidSlice, item)
-	}
-	return obj
-}
-
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) Set(index int, newObj FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.flowIpv6SegmentRoutingUsiduSidSlice[index] = newObj
-	return obj
-}
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) Clear() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.FlowIpv6SegmentRoutingUsiduSid{}
-		obj.flowIpv6SegmentRoutingUsiduSidSlice = []FlowIpv6SegmentRoutingUsiduSid{}
-	}
-	return obj
-}
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) clearHolderSlice() FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	if len(obj.flowIpv6SegmentRoutingUsiduSidSlice) > 0 {
-		obj.flowIpv6SegmentRoutingUsiduSidSlice = []FlowIpv6SegmentRoutingUsiduSid{}
-	}
-	return obj
-}
-func (obj *flowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter) appendHolderSlice(item FlowIpv6SegmentRoutingUsiduSid) FlowIpv6SegmentRoutingUsidSegmentFlowIpv6SegmentRoutingUsiduSidIter {
-	obj.flowIpv6SegmentRoutingUsiduSidSlice = append(obj.flowIpv6SegmentRoutingUsiduSidSlice, item)
 	return obj
 }
 
@@ -463,16 +398,11 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) validateObj(vObj *validation, set_
 		obj.LocatorLength().validateObj(vObj, set_default)
 	}
 
-	if len(obj.obj.Usids) != 0 {
+	if obj.obj.Usids != nil {
 
-		if set_default {
-			obj.Usids().clearHolderSlice()
-			for _, item := range obj.obj.Usids {
-				obj.Usids().appendHolderSlice(&flowIpv6SegmentRoutingUsiduSid{obj: item})
-			}
-		}
-		for _, item := range obj.Usids().Items() {
-			item.validateObj(vObj, set_default)
+		err := obj.validateHexSlice(obj.Usids())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on FlowIpv6SegmentRoutingUsidSegment.Usids"))
 		}
 
 	}

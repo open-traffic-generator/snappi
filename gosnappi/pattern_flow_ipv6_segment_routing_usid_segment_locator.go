@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingUsidSegmentLocator) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length.
+// PatternFlowIpv6SegmentRoutingUsidSegmentLocator is the Locator Block (LB) IPv6 prefix shared by all uSIDs in this container (RFC 9800 Section 3). Defines the common high-order bits of every uSID assembled from this entry. For F3216, this is a /32 prefix (e.g., fc00::). The prefix length is given by locator_length. Ignored when locator_length is 0 (REPLACE-CSID flavor, RFC 9800 Section 5).
 type PatternFlowIpv6SegmentRoutingUsidSegmentLocator interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingUsidSegmentLocator to protobuf object *otg.PatternFlowIpv6SegmentRoutingUsidSegmentLocator
