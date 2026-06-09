@@ -259,9 +259,16 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) setNil() {
 // NEXT-CSID example (F3216: locator_length=32, 16-bit CSIDs):
 // locator fc00::/32, usids ["0001","0002","0003"] -> SRH entry fc00:0:1:2:3::
 //
-// REPLACE-CSID packed example (LNFL=32, K=4, locator_length=0):
-// usids ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB->LSB)
-// -> SRH entry ::3:4:1:2
+// REPLACE-CSID packed examples (LNFL=32, K=4, locator_length=0):
+// Fully packed (4 CSIDs):
+// usids ["00050005","00040004","00030003","00020002"]
+// wire: [00050005][00040004][00030003][00020002] -> 5:5:4:4:3:3:2:2
+// (usids[3]=00020002 at LSB is processed first by the router)
+//
+// Partially packed (2 CSIDs; MSB slots are zero-padded automatically):
+// usids ["00030004","00010002"]
+// wire: [0][0][00030004][00010002] -> ::3:4:1:2
+// (usids[1]=00010002 at LSB is processed first by the router)
 type FlowIpv6SegmentRoutingUsidSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingUsidSegment to protobuf object *otg.FlowIpv6SegmentRoutingUsidSegment
@@ -292,10 +299,28 @@ type FlowIpv6SegmentRoutingUsidSegment interface {
 	// HasLocator checks if Locator has been set in FlowIpv6SegmentRoutingUsidSegment
 	HasLocator() bool
 	// LocatorLength returns PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength, set in FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the LB; usids are packed after it in forward order. For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits each; usids are packed from the LSB (RFC 9800 Section 4.2).
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3).
+	// Valid range: 0-112.
+	// For NEXT-CSID (locator_length > 0): high-order locator_length bits of
+	// locator form the LB; usids are packed after it in forward order.
+	// For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID
+	// structure; use a single usid = Locator-Node+Function value (LNFL bits).
+	// For REPLACE-CSID packed containers (locator_length = 0): the locator
+	// field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots
+	// of LNFL bits each; usids are provided in wire order (MSB first) - see usids
+	// field description for examples (RFC 9800 Section 4.2).
 	LocatorLength() PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength
 	// SetLocatorLength assigns PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength provided by user to FlowIpv6SegmentRoutingUsidSegment.
-	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the LB; usids are packed after it in forward order. For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits each; usids are packed from the LSB (RFC 9800 Section 4.2).
+	// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3).
+	// Valid range: 0-112.
+	// For NEXT-CSID (locator_length > 0): high-order locator_length bits of
+	// locator form the LB; usids are packed after it in forward order.
+	// For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID
+	// structure; use a single usid = Locator-Node+Function value (LNFL bits).
+	// For REPLACE-CSID packed containers (locator_length = 0): the locator
+	// field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots
+	// of LNFL bits each; usids are provided in wire order (MSB first) - see usids
+	// field description for examples (RFC 9800 Section 4.2).
 	SetLocatorLength(value PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength) FlowIpv6SegmentRoutingUsidSegment
 	// HasLocatorLength checks if LocatorLength has been set in FlowIpv6SegmentRoutingUsidSegment
 	HasLocatorLength() bool
@@ -362,7 +387,31 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) SetLocatorLength(value PatternFlow
 	return obj
 }
 
-// Ordered list of CSID hex strings for this container (RFC 9800 Section 3). For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc. The value 0x0 (all zeros) is reserved as the End-of-Container marker. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3:: For REPLACE-CSID packed format (locator_length = 0): CSIDs are packed in reverse order from the LSB (RFC 9800 Section 4.2, Figure 4). K = floor(128 / LNFL) where LNFL is inferred from hex string width (8 chars = 32-bit CSID, K = 4). usids[0] goes to position K-1 (LSB, bits [128-LNFL..127]), usids[1] to position K-2, etc. Unused MSB positions are zero-padded. Example LNFL=32: ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB to LSB) -> SRH entry ::3:4:1:2
+// Ordered list of CSID hex strings for this container (RFC 9800 Section 3).
+// For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after
+// the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc.
+// The value 0x0 (all zeros) is reserved as the End-of-Container marker.
+// Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3::
+//
+// For REPLACE-CSID packed containers (locator_length = 0): provide only the
+// non-zero CSIDs in wire order (left to right, MSB first among the provided
+// values). LNFL is inferred from hex string width (8 chars = 32-bit CSID,
+// K = 4; 4 chars = 16-bit CSID, K = 8). The implementation right-aligns the
+// provided CSIDs to the LSB end of the 128-bit container and zero-pads the
+// remaining MSB slots automatically - no need to supply leading zero entries.
+// Per RFC 9800 Section 4.2, DA.Arg.Index starts at the last occupied slot
+// (LSB = usids[-1]) and decrements each hop, so usids[-1] is the first CSID
+// the router processes and usids[0] is the last.
+//
+// Example LNFL=32, K=4, fully packed (4 CSIDs):
+// usids ["00050005","00040004","00030003","00020002"]
+// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
+// Router processes: 00020002 first, then 00030003, 00040004, 00050005.
+//
+// Example LNFL=32, K=4, partially packed (2 CSIDs; MSB slots zeroed automatically):
+// usids ["00030004","00010002"]
+// wire: [0][0][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+// Router processes: 00010002 first, then 00030004.
 // Usids returns a []string
 func (obj *flowIpv6SegmentRoutingUsidSegment) Usids() []string {
 	if obj.obj.Usids == nil {
@@ -371,7 +420,31 @@ func (obj *flowIpv6SegmentRoutingUsidSegment) Usids() []string {
 	return obj.obj.Usids
 }
 
-// Ordered list of CSID hex strings for this container (RFC 9800 Section 3). For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc. The value 0x0 (all zeros) is reserved as the End-of-Container marker. Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3:: For REPLACE-CSID packed format (locator_length = 0): CSIDs are packed in reverse order from the LSB (RFC 9800 Section 4.2, Figure 4). K = floor(128 / LNFL) where LNFL is inferred from hex string width (8 chars = 32-bit CSID, K = 4). usids[0] goes to position K-1 (LSB, bits [128-LNFL..127]), usids[1] to position K-2, etc. Unused MSB positions are zero-padded. Example LNFL=32: ["00010002","00030004"] -> wire [0][0][00030004][00010002] (MSB to LSB) -> SRH entry ::3:4:1:2
+// Ordered list of CSID hex strings for this container (RFC 9800 Section 3).
+// For NEXT-CSID (locator_length > 0): CSIDs are packed in forward order after
+// the Locator Block. usids[0] immediately follows the LB, usids[1] follows, etc.
+// The value 0x0 (all zeros) is reserved as the End-of-Container marker.
+// Example F3216: ["0001","0002","0003"] with locator fc00::/32 -> fc00:0:1:2:3::
+//
+// For REPLACE-CSID packed containers (locator_length = 0): provide only the
+// non-zero CSIDs in wire order (left to right, MSB first among the provided
+// values). LNFL is inferred from hex string width (8 chars = 32-bit CSID,
+// K = 4; 4 chars = 16-bit CSID, K = 8). The implementation right-aligns the
+// provided CSIDs to the LSB end of the 128-bit container and zero-pads the
+// remaining MSB slots automatically - no need to supply leading zero entries.
+// Per RFC 9800 Section 4.2, DA.Arg.Index starts at the last occupied slot
+// (LSB = usids[-1]) and decrements each hop, so usids[-1] is the first CSID
+// the router processes and usids[0] is the last.
+//
+// Example LNFL=32, K=4, fully packed (4 CSIDs):
+// usids ["00050005","00040004","00030003","00020002"]
+// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
+// Router processes: 00020002 first, then 00030003, 00040004, 00050005.
+//
+// Example LNFL=32, K=4, partially packed (2 CSIDs; MSB slots zeroed automatically):
+// usids ["00030004","00010002"]
+// wire: [0][0][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+// Router processes: 00010002 first, then 00030004.
 // SetUsids sets the []string value in the FlowIpv6SegmentRoutingUsidSegment object
 func (obj *flowIpv6SegmentRoutingUsidSegment) SetUsids(value []string) FlowIpv6SegmentRoutingUsidSegment {
 

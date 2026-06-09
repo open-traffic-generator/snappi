@@ -252,7 +252,16 @@ func (obj *patternFlowIpv6SegmentRoutingUsidSegmentLocatorLength) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3). Valid range: 0-112. For NEXT-CSID (locator_length > 0): high-order locator_length bits of locator form the LB; usids are packed after it in forward order. For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID structure; use a single usid = Locator-Node+Function value (LNFL bits). For REPLACE-CSID packed containers (locator_length = 0): the locator field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots of LNFL bits each; usids are packed from the LSB (RFC 9800 Section 4.2).
+// PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength is length of the Locator Block in bits (RFC 9800 Section 3).
+// Valid range: 0-112.
+// For NEXT-CSID (locator_length > 0): high-order locator_length bits of
+// locator form the LB; usids are packed after it in forward order.
+// For REPLACE-CSID first container (locator_length > 0): same as NEXT-CSID
+// structure; use a single usid = Locator-Node+Function value (LNFL bits).
+// For REPLACE-CSID packed containers (locator_length = 0): the locator
+// field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots
+// of LNFL bits each; usids are provided in wire order (MSB first) - see usids
+// field description for examples (RFC 9800 Section 4.2).
 type PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength to protobuf object *otg.PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength

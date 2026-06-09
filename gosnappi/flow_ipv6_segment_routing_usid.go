@@ -260,42 +260,39 @@ func (obj *flowIpv6SegmentRoutingUsid) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingUsid is iPv6 Segment Routing Header (SRH, Routing Type 4, RFC 8754 Section 2)
-// whose segment list carries compressed CSID containers (RFC 9800 Section 4).
-// Each entry in segment_list represents one 128-bit CSID container.
-//
-// Two SR Segment Endpoint Flavors are supported (RFC 9800 Sections 4.1 and 4.2):
+// FlowIpv6SegmentRoutingUsid is sRH (Routing Type 4, RFC 8754 Section 2) whose segment_list entries each
+// represent one 128-bit CSID container (RFC 9800 Section 4). Supports two flavors:
 //
 // NEXT-CSID (locator_length > 0, RFC 9800 Section 4.1):
-// Each SRH entry is a fully formed 128-bit SRv6 SID.
-// Assembly: LB (locator_length bits) || CSID-1 || CSID-2 || ... || EoC (zeros).
-// For F3216 (RFC 9800 Section 3): LB = 32 bits, CSID = 16 bits, max 6 CSIDs per entry.
-// Example - locator fc00::/32 with CSIDs 0x0001, 0x0002 assembles to fc00:0:1:2::
+// Each SRH entry is a fully formed SRv6 SID: LB (locator_length bits) || CSID-1 || ... || EoC (zeros).
+// F3216 (LB=32, CSID=16): locator fc00::/32, CSIDs [0x0001, 0x0002] -> fc00:0:1:2::
+// Processing: the router reads its own CSID from the DA function field, then
+// left-shifts the DA by one CSID width so the next CSID moves into the active
+// function position. When the shifted suffix is all-zero (End-of-Container), the
+// container is exhausted: segments_left is decremented and the next SRH entry
+// is loaded as the new DA.
 //
-// REPLACE-CSID (RFC 9800 Section 4.2): two distinct entry types in the SRH:
-// First container (locator_length > 0): a fully formed SRv6 SID, same structure as
-// NEXT-CSID, with a single usid value = the Locator-Node+Function bits and an
-// implicit Argument (index) of 0. Valid LNFL: 16-bit or 32-bit (RFC 9800 Section 4.2);
-// implementations MUST support 32-bit.
-// Example - locator "2001:db8::" /32, usids ["00010001"] assembles to 2001:db8:1:1::
-// Subsequent packed containers (locator_length = 0): NOT a valid IPv6 SID.
-// The 128-bit entry is K = floor(128 / LNFL) slots of LNFL bits each.
-// CSIDs are packed from the LEAST SIGNIFICANT position (RFC 9800 Section 4.2):
-// usids[0] goes to position K-1 (bits [128-LNFL..127], LSB),
-// usids[1] to position K-2, etc. Unused MSB positions are zero-padded.
-// The CSID length (LNFL) is inferred from the hex string width of usids:
-// 4 hex chars = 16-bit CSID (K = 8); 8 hex chars = 32-bit CSID (K = 4).
-// Both 16-bit and 32-bit LNFL are valid; 32-bit MUST be supported (RFC 9800 Section 4.2).
-// Example LNFL=32: usids ["00010002","00030004"] -> wire [0][0][00030004][00010002]
-// (MSB to LSB) -> IPv6 0000:0000:0000:0000:0003:0004:0001:0002 = ::3:4:1:2
-// Example LNFL=16: usids ["0001","0002","0003","0004"] -> wire [0][0][0][0][0004][0003][0002][0001]
-// (MSB to LSB) -> IPv6 0000:0000:0000:0000:0004:0003:0002:0001 = ::4:3:2:1
+// REPLACE-CSID (RFC 9800 Section 4.2):
+// First entry (locator_length > 0): fully formed SRv6 SID, same structure as NEXT-CSID.
+// Subsequent entries (locator_length = 0): K = floor(128 / LNFL) CSID slots packed
+// into a 128-bit SRH entry. Provide only the non-zero CSIDs in wire order (left to
+// right, MSB first among the provided values). The implementation right-aligns them
+// to the LSB end and zero-pads the remaining MSB slots automatically.
+// CSID width is inferred from hex string length (8 chars = 32-bit, 4 chars = 16-bit).
 //
-// The segment list is encoded in reverse path order per RFC 8754 Section 2.1:
-// segment[0] is the last container to visit, segment[n-1] is the first
-// (active) container.
+// Example LNFL=32, K=4, fully packed (4 CSIDs):
+// usids ["00050005","00040004","00030003","00020002"]
+// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
+// DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.
 //
-// Use this schema when the SR path requires more than one container.
+// Example LNFL=32, K=4, partially packed (2 CSIDs, MSB slots zeroed automatically):
+// usids ["00030004","00010002"]
+// wire: [0][0][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+// usids[1]=00010002 is at LSB and processed first by the router.
+//
+// Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the
+// first active container.
+//
 // For single-container NEXT-CSID paths with no SRH, use ipv6.dst_usids instead.
 type FlowIpv6SegmentRoutingUsid interface {
 	Validation
