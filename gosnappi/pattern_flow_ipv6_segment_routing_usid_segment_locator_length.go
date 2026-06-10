@@ -260,8 +260,8 @@ func (obj *patternFlowIpv6SegmentRoutingUsidSegmentLocatorLength) setNil() {
 // structure; use a single usid = Locator-Node+Function value (LNFL bits).
 // For REPLACE-CSID packed containers (locator_length = 0): the locator
 // field is ignored; the 128-bit SRH entry is K = floor(128/LNFL) slots
-// of LNFL bits each; usids are provided in wire order (MSB first) - see usids
-// field description for examples (RFC 9800 Section 4.2).
+// of LNFL bits each; exactly K usids must be provided in wire order (MSB first);
+// see usids field description for examples (RFC 9800 Section 4.2).
 type PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength to protobuf object *otg.PatternFlowIpv6SegmentRoutingUsidSegmentLocatorLength

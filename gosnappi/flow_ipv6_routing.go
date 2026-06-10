@@ -304,9 +304,8 @@ type FlowIpv6Routing interface {
 	// REPLACE-CSID (RFC 9800 Section 4.2):
 	// First entry (locator_length > 0): fully formed SRv6 SID, same structure as NEXT-CSID.
 	// Subsequent entries (locator_length = 0): K = floor(128 / LNFL) CSID slots packed
-	// into a 128-bit SRH entry. Provide only the non-zero CSIDs in wire order (left to
-	// right, MSB first among the provided values). The implementation right-aligns them
-	// to the LSB end and zero-pads the remaining MSB slots automatically.
+	// into a 128-bit SRH entry. Provide exactly K CSIDs in wire order (left to right,
+	// MSB first). Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.
 	// CSID width is inferred from hex string length (8 chars = 32-bit, 4 chars = 16-bit).
 	//
 	// Example LNFL=32, K=4, fully packed (4 CSIDs):
@@ -314,10 +313,10 @@ type FlowIpv6Routing interface {
 	// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
 	// DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.
 	//
-	// Example LNFL=32, K=4, partially packed (2 CSIDs, MSB slots zeroed automatically):
-	// usids ["00030004","00010002"]
-	// wire: [0][0][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
-	// usids[1]=00010002 is at LSB and processed first by the router.
+	// Example LNFL=32, K=4, partially used (2 CSIDs, unused MSB slots set to zero):
+	// usids ["00000000","00000000","00030004","00010002"]
+	// wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+	// usids[3]=00010002 is at LSB and processed first by the router.
 	//
 	// Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the
 	// first active container.
@@ -340,9 +339,8 @@ type FlowIpv6Routing interface {
 	// REPLACE-CSID (RFC 9800 Section 4.2):
 	// First entry (locator_length > 0): fully formed SRv6 SID, same structure as NEXT-CSID.
 	// Subsequent entries (locator_length = 0): K = floor(128 / LNFL) CSID slots packed
-	// into a 128-bit SRH entry. Provide only the non-zero CSIDs in wire order (left to
-	// right, MSB first among the provided values). The implementation right-aligns them
-	// to the LSB end and zero-pads the remaining MSB slots automatically.
+	// into a 128-bit SRH entry. Provide exactly K CSIDs in wire order (left to right,
+	// MSB first). Use "00000000" (32-bit) or "0000" (16-bit) for unused slots.
 	// CSID width is inferred from hex string length (8 chars = 32-bit, 4 chars = 16-bit).
 	//
 	// Example LNFL=32, K=4, fully packed (4 CSIDs):
@@ -350,10 +348,10 @@ type FlowIpv6Routing interface {
 	// wire: [00050005][00040004][00030003][00020002] (MSB->LSB) -> 5:5:4:4:3:3:2:2
 	// DA.Arg.Index starts at K-1=3; usids[3]=00020002 is processed first.
 	//
-	// Example LNFL=32, K=4, partially packed (2 CSIDs, MSB slots zeroed automatically):
-	// usids ["00030004","00010002"]
-	// wire: [0][0][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
-	// usids[1]=00010002 is at LSB and processed first by the router.
+	// Example LNFL=32, K=4, partially used (2 CSIDs, unused MSB slots set to zero):
+	// usids ["00000000","00000000","00030004","00010002"]
+	// wire: [00000000][00000000][00030004][00010002] (MSB->LSB) -> ::3:4:1:2
+	// usids[3]=00010002 is at LSB and processed first by the router.
 	//
 	// Segment list is in reverse path order (RFC 8754 Section 2.1): segment[n-1] is the
 	// first active container.
