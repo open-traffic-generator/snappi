@@ -277,10 +277,10 @@ type MacsecMetricsRequest interface {
 // The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
 //
 // x-constraint:
-// - /components/schemas/Macsec/properties/name
+// - /components/schemas/SecureEntity/properties/name
 //
 // x-constraint:
-// - /components/schemas/Macsec/properties/name
+// - /components/schemas/SecureEntity/properties/name
 //
 // SecureEntityNames returns a []string
 func (obj *macsecMetricsRequest) SecureEntityNames() []string {
@@ -293,10 +293,10 @@ func (obj *macsecMetricsRequest) SecureEntityNames() []string {
 // The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
 //
 // x-constraint:
-// - /components/schemas/Macsec/properties/name
+// - /components/schemas/SecureEntity/properties/name
 //
 // x-constraint:
-// - /components/schemas/Macsec/properties/name
+// - /components/schemas/SecureEntity/properties/name
 //
 // SetSecureEntityNames sets the []string value in the MacsecMetricsRequest object
 func (obj *macsecMetricsRequest) SetSecureEntityNames(value []string) MacsecMetricsRequest {

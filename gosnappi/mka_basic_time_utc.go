@@ -502,5 +502,23 @@ func (obj *mkaBasicTimeUtc) validateObj(vObj *validation, set_default bool) {
 }
 
 func (obj *mkaBasicTimeUtc) setDefault() {
+	if obj.obj.Day == nil {
+		obj.SetDay(1)
+	}
+	if obj.obj.Month == nil {
+		obj.SetMonth(1)
+	}
+	if obj.obj.Year == nil {
+		obj.SetYear(1970)
+	}
+	if obj.obj.Hour == nil {
+		obj.SetHour(0)
+	}
+	if obj.obj.Minute == nil {
+		obj.SetMinute(0)
+	}
+	if obj.obj.Second == nil {
+		obj.SetSecond(0)
+	}
 
 }
