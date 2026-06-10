@@ -24,6 +24,7 @@ type flowIpv6 struct {
 	hopLimitHolder      PatternFlowIpv6HopLimit
 	srcHolder           PatternFlowIpv6Src
 	dstHolder           PatternFlowIpv6Dst
+	dstUsidsHolder      FlowIpv6UsidDst
 }
 
 func NewFlowIpv6() FlowIpv6 {
@@ -259,6 +260,7 @@ func (obj *flowIpv6) setNil() {
 	obj.hopLimitHolder = nil
 	obj.srcHolder = nil
 	obj.dstHolder = nil
+	obj.dstUsidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -343,13 +345,25 @@ type FlowIpv6 interface {
 	// HasSrc checks if Src has been set in FlowIpv6
 	HasSrc() bool
 	// Dst returns PatternFlowIpv6Dst, set in FlowIpv6.
-	// PatternFlowIpv6Dst is destination address
+	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
 	Dst() PatternFlowIpv6Dst
 	// SetDst assigns PatternFlowIpv6Dst provided by user to FlowIpv6.
-	// PatternFlowIpv6Dst is destination address
+	// PatternFlowIpv6Dst is destination address in IPv6 packet header. If dst_usids is configured, the locator and usids provided in that should be used to construct the IPv6 destination address instead of this field.
 	SetDst(value PatternFlowIpv6Dst) FlowIpv6
 	// HasDst checks if Dst has been set in FlowIpv6
 	HasDst() bool
+	// DstUsids returns FlowIpv6UsidDst, set in FlowIpv6.
+	// FlowIpv6UsidDst is structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in a single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).
+	// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits, up to 6 uSIDs per container. Example - locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst = fc00:0:1:2:3::
+	// When this field is present, ipv6.dst should be ignored by the implementation.
+	DstUsids() FlowIpv6UsidDst
+	// SetDstUsids assigns FlowIpv6UsidDst provided by user to FlowIpv6.
+	// FlowIpv6UsidDst is structured input for the SRv6 uSID reduced encapsulation case (RFC 9800 Section 4) where the entire SR path fits in a single 128-bit uSID container placed directly in the outer IPv6 dst, with no Segment Routing Header. The implementation packs the fields as: LB (locator_length high-order bits of locator) || uSID-1 || uSID-2 || ... || EoC (zero-pad to 128 bits).
+	// For F3216 format (RFC 9800 Section 3): LB = 32 bits, each uSID = 16 bits, up to 6 uSIDs per container. Example - locator fc00::/32, locator_length 32, usids ["0001","0002","0003"]: assembled dst = fc00:0:1:2:3::
+	// When this field is present, ipv6.dst should be ignored by the implementation.
+	SetDstUsids(value FlowIpv6UsidDst) FlowIpv6
+	// HasDstUsids checks if DstUsids has been set in FlowIpv6
+	HasDstUsids() bool
 	setNil()
 }
 
@@ -577,6 +591,34 @@ func (obj *flowIpv6) SetDst(value PatternFlowIpv6Dst) FlowIpv6 {
 	return obj
 }
 
+// Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with no Segment Routing Header. When present, the implementation assembles the 128-bit IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing with segment_routing_usid instead.
+// DstUsids returns a FlowIpv6UsidDst
+func (obj *flowIpv6) DstUsids() FlowIpv6UsidDst {
+	if obj.obj.DstUsids == nil {
+		obj.obj.DstUsids = NewFlowIpv6UsidDst().msg()
+	}
+	if obj.dstUsidsHolder == nil {
+		obj.dstUsidsHolder = &flowIpv6UsidDst{obj: obj.obj.DstUsids}
+	}
+	return obj.dstUsidsHolder
+}
+
+// Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with no Segment Routing Header. When present, the implementation assembles the 128-bit IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing with segment_routing_usid instead.
+// DstUsids returns a FlowIpv6UsidDst
+func (obj *flowIpv6) HasDstUsids() bool {
+	return obj.obj.DstUsids != nil
+}
+
+// Structured uSID container for SRv6 reduced encapsulation (RFC 9800 Section 4) with no Segment Routing Header. When present, the implementation assembles the 128-bit IPv6 dst from the locator block and the ordered uSID list. Mutually exclusive with dst; do not set both. For paths requiring more than one container, use Flow.Ipv6Routing with segment_routing_usid instead.
+// SetDstUsids sets the FlowIpv6UsidDst value in the FlowIpv6 object
+func (obj *flowIpv6) SetDstUsids(value FlowIpv6UsidDst) FlowIpv6 {
+
+	obj.dstUsidsHolder = nil
+	obj.obj.DstUsids = value.msg()
+
+	return obj
+}
+
 func (obj *flowIpv6) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -620,6 +662,11 @@ func (obj *flowIpv6) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Dst != nil {
 
 		obj.Dst().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.DstUsids != nil {
+
+		obj.DstUsids().validateObj(vObj, set_default)
 	}
 
 }

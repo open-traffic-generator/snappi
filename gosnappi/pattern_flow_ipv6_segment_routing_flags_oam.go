@@ -252,7 +252,7 @@ func (obj *patternFlowIpv6SegmentRoutingFlagsOam) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// PatternFlowIpv6SegmentRoutingFlagsOam is oAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+// PatternFlowIpv6SegmentRoutingFlagsOam is (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
 type PatternFlowIpv6SegmentRoutingFlagsOam interface {
 	Validation
 	// msg marshals PatternFlowIpv6SegmentRoutingFlagsOam to protobuf object *otg.PatternFlowIpv6SegmentRoutingFlagsOam
