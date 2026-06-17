@@ -285,10 +285,10 @@ type FlowIpv6SegmentRoutingFlags interface {
 	// HasProtected checks if Protected has been set in FlowIpv6SegmentRoutingFlags
 	HasProtected() bool
 	// Oam returns PatternFlowIpv6SegmentRoutingFlagsOam, set in FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOam is oAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+	// PatternFlowIpv6SegmentRoutingFlagsOam is (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
 	Oam() PatternFlowIpv6SegmentRoutingFlagsOam
 	// SetOam assigns PatternFlowIpv6SegmentRoutingFlagsOam provided by user to FlowIpv6SegmentRoutingFlags.
-	// PatternFlowIpv6SegmentRoutingFlagsOam is oAM Flag. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
+	// PatternFlowIpv6SegmentRoutingFlagsOam is (RFC 9259, section 2) OAM flag or O-flag is set at bit-2. Indicates if the packet is an Operations, Administration, and Maintenance (OAM) packet.
 	SetOam(value PatternFlowIpv6SegmentRoutingFlagsOam) FlowIpv6SegmentRoutingFlags
 	// HasOam checks if Oam has been set in FlowIpv6SegmentRoutingFlags
 	HasOam() bool

@@ -833,7 +833,7 @@ func (obj *isisInterface) SetName(value string) IsisInterface {
 	return obj
 }
 
-// List of Adjacency Segment Identifier (Adj-SID) sub-TLVs.
+// List of SR-MPLS Adjacency Segment Identifier (Adj-SID) sub-TLVs for this interface (RFC 8667).
 // AdjacencySids returns a []IsisInterfaceAdjacencySid
 func (obj *isisInterface) AdjacencySids() IsisInterfaceIsisInterfaceAdjacencySidIter {
 	if len(obj.obj.AdjacencySids) == 0 {

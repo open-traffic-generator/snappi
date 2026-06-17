@@ -3,5 +3,5 @@ protobuf~=6.33.6
 grpcio~=1.80.0
 grpcio-tools~=1.80.0
 requests
-urllib3
 semantic_version
+urllib3
