@@ -138,3 +138,4 @@ class SnappiRestClient(object):
 ```
 
 - The second and third block in the diagram can be merged into a singe docker container.
+
