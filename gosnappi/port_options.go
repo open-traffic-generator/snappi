@@ -276,6 +276,12 @@ type PortOptions interface {
 	SetDataIntegrity(value bool) PortOptions
 	// HasDataIntegrity checks if DataIntegrity has been set in PortOptions
 	HasDataIntegrity() bool
+	// FrameOrdering returns PortOptionsFrameOrderingEnum, set in PortOptions
+	FrameOrdering() PortOptionsFrameOrderingEnum
+	// SetFrameOrdering assigns PortOptionsFrameOrderingEnum provided by user to PortOptions
+	SetFrameOrdering(value PortOptionsFrameOrderingEnum) PortOptions
+	// HasFrameOrdering checks if FrameOrdering has been set in PortOptions
+	HasFrameOrdering() bool
 }
 
 // Preempt all the test port locations as defined by the  Port.Port.properties.location. If the test ports defined by their location values are in use and  this value is true, the test ports will be preempted.
@@ -322,6 +328,40 @@ func (obj *portOptions) SetDataIntegrity(value bool) PortOptions {
 	return obj
 }
 
+type PortOptionsFrameOrderingEnum string
+
+// Enum of FrameOrdering on PortOptions
+var PortOptionsFrameOrdering = struct {
+	NO_ORDERING PortOptionsFrameOrderingEnum
+	RFC2889     PortOptionsFrameOrderingEnum
+}{
+	NO_ORDERING: PortOptionsFrameOrderingEnum("no_ordering"),
+	RFC2889:     PortOptionsFrameOrderingEnum("rfc2889"),
+}
+
+func (obj *portOptions) FrameOrdering() PortOptionsFrameOrderingEnum {
+	return PortOptionsFrameOrderingEnum(obj.obj.FrameOrdering.Enum().String())
+}
+
+// Frame ordering is done when data is transmitted as a sequence of frames in a network comprising multiple terminal stations. Each terminal has a provision for arranging the received messages in the order of reception of frames. Within each frame, the received messages are arranged in a predetermined order of frames received.
+// FrameOrdering returns a string
+func (obj *portOptions) HasFrameOrdering() bool {
+	return obj.obj.FrameOrdering != nil
+}
+
+func (obj *portOptions) SetFrameOrdering(value PortOptionsFrameOrderingEnum) PortOptions {
+	intValue, ok := otg.PortOptions_FrameOrdering_Enum_value[string(value)]
+	if !ok {
+		obj.validationErrors = append(obj.validationErrors, fmt.Sprintf(
+			"%s is not a valid choice on PortOptionsFrameOrderingEnum", string(value)))
+		return obj
+	}
+	enumValue := otg.PortOptions_FrameOrdering_Enum(intValue)
+	obj.obj.FrameOrdering = &enumValue
+
+	return obj
+}
+
 func (obj *portOptions) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -335,6 +375,10 @@ func (obj *portOptions) setDefault() {
 	}
 	if obj.obj.DataIntegrity == nil {
 		obj.SetDataIntegrity(false)
+	}
+	if obj.obj.FrameOrdering == nil {
+		obj.SetFrameOrdering(PortOptionsFrameOrdering.NO_ORDERING)
+
 	}
 
 }
