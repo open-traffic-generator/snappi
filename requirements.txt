@@ -1,6 +1,6 @@
-PyYAML
-grpcio-tools~=1.80.0
 grpcio~=1.80.0
+grpcio-tools~=1.80.0
+PyYAML
 protobuf~=6.33.6
 requests
 urllib3

@@ -278,6 +278,12 @@ type FlowRouter interface {
 	RxNames() []string
 	// SetRxNames assigns []string provided by user to FlowRouter
 	SetRxNames(value []string) FlowRouter
+	// Bidirectional returns bool, set in FlowRouter.
+	Bidirectional() bool
+	// SetBidirectional assigns bool provided by user to FlowRouter
+	SetBidirectional(value bool) FlowRouter
+	// HasBidirectional checks if Bidirectional has been set in FlowRouter
+	HasBidirectional() bool
 }
 
 type FlowRouterModeEnum string
@@ -357,21 +363,6 @@ func (obj *flowRouter) SetMode(value FlowRouterModeEnum) FlowRouter {
 // - /components/schemas/Device.Dhcpv4client/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
 // TxNames returns a []string
 func (obj *flowRouter) TxNames() []string {
 	if obj.obj.TxNames == nil {
@@ -381,21 +372,6 @@ func (obj *flowRouter) TxNames() []string {
 }
 
 // TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -440,21 +416,6 @@ func (obj *flowRouter) SetTxNames(value []string) FlowRouter {
 // - /components/schemas/Ospfv3.V6RouteRange/properties/name
 // - /components/schemas/Device.Dhcpv6client/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
-//
 // RxNames returns a []string
 func (obj *flowRouter) RxNames() []string {
 	if obj.obj.RxNames == nil {
@@ -464,21 +425,6 @@ func (obj *flowRouter) RxNames() []string {
 }
 
 // TBD
-//
-// x-constraint:
-// - /components/schemas/Device.Ethernet/properties/name
-// - /components/schemas/Device.Ipv4/properties/name
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Bgp.V4RouteRange/properties/name
-// - /components/schemas/Bgp.V6RouteRange/properties/name
-// - /components/schemas/Bgp.CMacIpRange/properties/name
-// - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-// - /components/schemas/Isis.V4RouteRange/properties/name
-// - /components/schemas/Isis.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv4client/properties/name
-// - /components/schemas/Ospfv2.V4RouteRange/properties/name
-// - /components/schemas/Ospfv3.V6RouteRange/properties/name
-// - /components/schemas/Device.Dhcpv6client/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ethernet/properties/name
@@ -506,6 +452,31 @@ func (obj *flowRouter) SetRxNames(value []string) FlowRouter {
 	return obj
 }
 
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// Bidirectional returns a bool
+func (obj *flowRouter) Bidirectional() bool {
+
+	return *obj.obj.Bidirectional
+
+}
+
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// Bidirectional returns a bool
+func (obj *flowRouter) HasBidirectional() bool {
+	return obj.obj.Bidirectional != nil
+}
+
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// SetBidirectional sets the bool value in the FlowRouter object
+func (obj *flowRouter) SetBidirectional(value bool) FlowRouter {
+
+	obj.obj.Bidirectional = &value
+	return obj
+}
+
 func (obj *flowRouter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -517,6 +488,9 @@ func (obj *flowRouter) setDefault() {
 	if obj.obj.Mode == nil {
 		obj.SetMode(FlowRouterMode.MESH)
 
+	}
+	if obj.obj.Bidirectional == nil {
+		obj.SetBidirectional(false)
 	}
 
 }
