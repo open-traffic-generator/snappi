@@ -1447,6 +1447,7 @@ from .snappi import EventCPEvents
 from .snappi import EventDPEvents
 from .snappi import ConfigOptions
 from .snappi import PortOptions
+from .snappi import PortOptionsFrameOrderingMode
 from .snappi import ProtocolOptions
 from .snappi import PerPortOptions
 from .snappi import PortProtocol

@@ -114,19 +114,26 @@ message PortOptions {
   // default = False
   optional bool data_integrity = 2;
 
-  message FrameOrdering {
+  // Description missing in models
+  PortOptionsFrameOrderingMode frame_ordering_mode = 3;
+}
+
+// Frame ordering is done when data is transmitted as a sequence of frames in a network
+// comprising multiple terminal stations. Each terminal has a provision for arranging
+// the received messages in the order of reception of frames. Within each frame, the
+// received messages are arranged in a predetermined order of frames received.
+message PortOptionsFrameOrderingMode {
+
+  message Choice {
     enum Enum {
       unspecified = 0;
       no_ordering = 1;
       rfc2889 = 2;
     }
   }
-  // Frame ordering is done when data is transmitted as a sequence of frames in a network
-  // comprising multiple terminal stations. Each terminal has a provision for arranging
-  // the received messages in the order of reception of frames. Within each frame, the
-  // received messages are arranged in a predetermined order of frames received.
-  // default = FrameOrdering.Enum.no_ordering
-  optional FrameOrdering.Enum frame_ordering = 3;
+  // The type of frame ordering mode.
+  // default = Choice.Enum.no_ordering
+  optional Choice.Enum choice = 1;
 }
 
 // The container for LAG (ports group) - aggregation of multiple LAG members (ports)
