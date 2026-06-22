@@ -242,7 +242,8 @@ func (obj *portOptionsFrameOrderingMode) Clone() (PortOptionsFrameOrderingMode, 
 	return newObj, nil
 }
 
-// PortOptionsFrameOrderingMode is frame ordering is done when data is transmitted as a sequence of frames in a network comprising multiple terminal stations. Each terminal has a provision for arranging the received messages in the order of reception of frames. Within each frame, the received messages are arranged in a predetermined order of frames received.
+// PortOptionsFrameOrderingMode is controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.
+// A flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards a common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.
 type PortOptionsFrameOrderingMode interface {
 	Validation
 	// msg marshals PortOptionsFrameOrderingMode to protobuf object *otg.PortOptionsFrameOrderingMode
