@@ -270,10 +270,10 @@ type LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration int
 	setChoice(value LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum) LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	// HasChoice checks if Choice has been set in LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration
 	HasChoice() bool
-	// getter for None to set choice.
-	None()
 	// getter for InlineCrypto to set choice.
 	InlineCrypto()
+	// getter for None to set choice.
+	None()
 }
 
 type LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum string
@@ -291,14 +291,14 @@ func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerati
 	return LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for None to set choice
-func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) None() {
-	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.NONE)
-}
-
 // getter for InlineCrypto to set choice
 func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) InlineCrypto() {
 	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.INLINE_CRYPTO)
+}
+
+// getter for None to set choice
+func (obj *lagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAcceleration) None() {
+	obj.setChoice(LagPortMacsecSecureEntityCryptoEngineEncryptDecryptHardwareAccelerationChoice.NONE)
 }
 
 // Hardware acceleration types.
