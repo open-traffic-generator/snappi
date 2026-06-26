@@ -1561,6 +1561,7 @@ from .snappi import ActionProtocolIsis
 from .snappi import ActionProtocolIsisInitiateRestart
 from .snappi import ActionProtocolIsisUnplannedRestart
 from .snappi import ActionProtocolIsisPlannedRestart
+from .snappi import ActionProtocolIsisOverloadBit
 from .snappi import ActionPort
 from .snappi import ActionPortReboot
 from .snappi import ControlActionResponse

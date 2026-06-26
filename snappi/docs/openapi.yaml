@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.57.0
+  version: 1.58.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -21388,14 +21388,22 @@ components:
           x-enum:
             initiate_graceful_restart:
               x-field-uid: 1
+            update_overload_bit:
+              x-field-uid: 2
           x-field-uid: 1
           enum:
           - initiate_graceful_restart
+          - update_overload_bit
         initiate_graceful_restart:
           description: |-
             Configuration for the initiation of the IS-IS Graceful Restart.
           $ref: '#/components/schemas/Action.Protocol.Isis.InitiateRestart'
           x-field-uid: 2
+        update_overload_bit:
+          description: |-
+            Configuration for setting or clearing the IS-IS overload bit on selected routers.
+          $ref: '#/components/schemas/Action.Protocol.Isis.OverloadBit'
+          x-field-uid: 3
     Action.Protocol.Isis.InitiateRestart:
       description: "Timers T1 and T2 are used both by a restarting router and a starting\
         \ router. Timer T3 is used only by a restarting router.\n- Timer T1 is maintained\
@@ -21491,6 +21499,55 @@ components:
           default: 10
           minimum: 0
           x-field-uid: 3
+    Action.Protocol.Isis.OverloadBit:
+      description: |-
+        Sets or clears the LSP Database Overload (OL) bit (Bit 3 of the
+        P/ATT/LSPDBOL/IS-Type octet, ISO/IEC 10589:2002 Section 9.8) in
+        LSP Number zero of the selected routers without restarting the IS-IS
+        session (Section 7.2.5).
+        When set, other routers exclude this router from transit IS SPF
+        calculations; End System reachability through it is preserved
+        (Section 7.2.8.1, RFC 3787 Section 4).
+        The router re-originates LSP Number zero with an incremented sequence
+        number; IS-IS floods it domain-wide so all routers recompute SPF.
+        Typical uses: planned maintenance; simulating an overloaded router.
+      type: object
+      properties:
+        router_names:
+          description: |
+            The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+
+
+            x-constraint:
+            - /components/schemas/Device.IsisRouter/properties/name
+          type: array
+          items:
+            type: string
+          x-constraint:
+          - /components/schemas/Device.IsisRouter/properties/name
+          x-field-uid: 1
+        choice:
+          description: |-
+            set: The router sets the OL bit in its LSP Number zero. Other routers
+            exclude this router from transit SPF path calculations for Intermediate
+            System neighbours. End System reachability through this router is
+            preserved.
+            unset: The router clears the OL bit from its LSP Number zero. Normal
+            transit path calculations resume for all routers.
+          type: string
+          x-field-uid: 2
+          default: set
+          x-enum:
+            set:
+              x-field-uid: 1
+            unset:
+              x-field-uid: 2
+          enum:
+          - set
+          - unset
     Metrics.Request:
       description: |-
         Request to traffic generator for metrics of choice.

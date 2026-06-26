@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.57.0
+/* Open Traffic Generator API 1.58.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -16567,6 +16567,7 @@ message ActionProtocolIsis {
     enum Enum {
       unspecified = 0;
       initiate_graceful_restart = 1;
+      update_overload_bit = 2;
     }
   }
   // Description missing in models
@@ -16575,6 +16576,9 @@ message ActionProtocolIsis {
 
   // Configuration for the initiation of the IS-IS Graceful Restart.
   ActionProtocolIsisInitiateRestart initiate_graceful_restart = 2;
+
+  // Configuration for setting or clearing the IS-IS overload bit on selected routers.
+  ActionProtocolIsisOverloadBit update_overload_bit = 3;
 }
 
 // Timers T1 and T2 are used both by a restarting router and a starting router. Timer
@@ -16673,6 +16677,47 @@ message ActionProtocolIsisPlannedRestart {
   // and hold_timer is reset to normal.
   // default = 10
   optional uint32 restart_after = 3;
+}
+
+// Sets or clears the LSP Database Overload (OL) bit (Bit 3 of the
+// P/ATT/LSPDBOL/IS-Type octet, ISO/IEC 10589:2002 Section 9.8) in
+// LSP Number zero of the selected routers without restarting the IS-IS
+// session (Section 7.2.5).
+// When set, other routers exclude this router from transit IS SPF
+// calculations; End System reachability through it is preserved
+// (Section 7.2.8.1, RFC 3787 Section 4).
+// The router re-originates LSP Number zero with an incremented sequence
+// number; IS-IS floods it domain-wide so all routers recompute SPF.
+// Typical uses: planned maintenance; simulating an overloaded router.
+message ActionProtocolIsisOverloadBit {
+
+  // The names of IS-IS routers on which to apply the overload bit state. If no names
+  // are specified then the action is applied to all configured IS-IS routers.
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  // 
+  // x-constraint:
+  // - /components/schemas/Device.IsisRouter/properties/name
+  // 
+  repeated string router_names = 1;
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      set = 1;
+      unset = 2;
+    }
+  }
+  // set: The router sets the OL bit in its LSP Number zero. Other routers
+  // exclude this router from transit SPF path calculations for Intermediate
+  // System neighbours. End System reachability through this router is
+  // preserved.
+  // unset: The router clears the OL bit from its LSP Number zero. Normal
+  // transit path calculations resume for all routers.
+  // default = Choice.Enum.set
+  optional Choice.Enum choice = 2;
 }
 
 // Request to traffic generator for metrics of choice.
