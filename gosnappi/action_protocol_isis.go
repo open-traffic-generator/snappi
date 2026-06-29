@@ -17,6 +17,7 @@ type actionProtocolIsis struct {
 	marshaller                    marshalActionProtocolIsis
 	unMarshaller                  unMarshalActionProtocolIsis
 	initiateGracefulRestartHolder ActionProtocolIsisInitiateRestart
+	updateOverloadBitHolder       ActionProtocolIsisOverloadBit
 }
 
 func NewActionProtocolIsis() ActionProtocolIsis {
@@ -245,6 +246,7 @@ func (obj *actionProtocolIsis) Clone() (ActionProtocolIsis, error) {
 
 func (obj *actionProtocolIsis) setNil() {
 	obj.initiateGracefulRestartHolder = nil
+	obj.updateOverloadBitHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,32 @@ type ActionProtocolIsis interface {
 	SetInitiateGracefulRestart(value ActionProtocolIsisInitiateRestart) ActionProtocolIsis
 	// HasInitiateGracefulRestart checks if InitiateGracefulRestart has been set in ActionProtocolIsis
 	HasInitiateGracefulRestart() bool
+	// UpdateOverloadBit returns ActionProtocolIsisOverloadBit, set in ActionProtocolIsis.
+	// ActionProtocolIsisOverloadBit is sets or clears the LSP Database Overload (OL) bit (Bit 3 of the
+	// P/ATT/LSPDBOL/IS-Type octet, ISO/IEC 10589:2002 Section 9.8) in
+	// LSP Number zero of the selected routers without restarting the IS-IS
+	// session (Section 7.2.5).
+	// When set, other routers exclude this router from transit IS SPF
+	// calculations; End System reachability through it is preserved
+	// (Section 7.2.8.1, RFC 3787 Section 4).
+	// The router re-originates LSP Number zero with an incremented sequence
+	// number; IS-IS floods it domain-wide so all routers recompute SPF.
+	// Typical uses: planned maintenance; simulating an overloaded router.
+	UpdateOverloadBit() ActionProtocolIsisOverloadBit
+	// SetUpdateOverloadBit assigns ActionProtocolIsisOverloadBit provided by user to ActionProtocolIsis.
+	// ActionProtocolIsisOverloadBit is sets or clears the LSP Database Overload (OL) bit (Bit 3 of the
+	// P/ATT/LSPDBOL/IS-Type octet, ISO/IEC 10589:2002 Section 9.8) in
+	// LSP Number zero of the selected routers without restarting the IS-IS
+	// session (Section 7.2.5).
+	// When set, other routers exclude this router from transit IS SPF
+	// calculations; End System reachability through it is preserved
+	// (Section 7.2.8.1, RFC 3787 Section 4).
+	// The router re-originates LSP Number zero with an incremented sequence
+	// number; IS-IS floods it domain-wide so all routers recompute SPF.
+	// Typical uses: planned maintenance; simulating an overloaded router.
+	SetUpdateOverloadBit(value ActionProtocolIsisOverloadBit) ActionProtocolIsis
+	// HasUpdateOverloadBit checks if UpdateOverloadBit has been set in ActionProtocolIsis
+	HasUpdateOverloadBit() bool
 	setNil()
 }
 
@@ -304,8 +332,10 @@ type ActionProtocolIsisChoiceEnum string
 // Enum of Choice on ActionProtocolIsis
 var ActionProtocolIsisChoice = struct {
 	INITIATE_GRACEFUL_RESTART ActionProtocolIsisChoiceEnum
+	UPDATE_OVERLOAD_BIT       ActionProtocolIsisChoiceEnum
 }{
 	INITIATE_GRACEFUL_RESTART: ActionProtocolIsisChoiceEnum("initiate_graceful_restart"),
+	UPDATE_OVERLOAD_BIT:       ActionProtocolIsisChoiceEnum("update_overload_bit"),
 }
 
 func (obj *actionProtocolIsis) Choice() ActionProtocolIsisChoiceEnum {
@@ -321,11 +351,17 @@ func (obj *actionProtocolIsis) setChoice(value ActionProtocolIsisChoiceEnum) Act
 	}
 	enumValue := otg.ActionProtocolIsis_Choice_Enum(intValue)
 	obj.obj.Choice = &enumValue
+	obj.obj.UpdateOverloadBit = nil
+	obj.updateOverloadBitHolder = nil
 	obj.obj.InitiateGracefulRestart = nil
 	obj.initiateGracefulRestartHolder = nil
 
 	if value == ActionProtocolIsisChoice.INITIATE_GRACEFUL_RESTART {
 		obj.obj.InitiateGracefulRestart = NewActionProtocolIsisInitiateRestart().msg()
+	}
+
+	if value == ActionProtocolIsisChoice.UPDATE_OVERLOAD_BIT {
+		obj.obj.UpdateOverloadBit = NewActionProtocolIsisOverloadBit().msg()
 	}
 
 	return obj
@@ -359,6 +395,34 @@ func (obj *actionProtocolIsis) SetInitiateGracefulRestart(value ActionProtocolIs
 	return obj
 }
 
+// Configuration for setting or clearing the IS-IS overload bit on selected routers.
+// UpdateOverloadBit returns a ActionProtocolIsisOverloadBit
+func (obj *actionProtocolIsis) UpdateOverloadBit() ActionProtocolIsisOverloadBit {
+	if obj.obj.UpdateOverloadBit == nil {
+		obj.setChoice(ActionProtocolIsisChoice.UPDATE_OVERLOAD_BIT)
+	}
+	if obj.updateOverloadBitHolder == nil {
+		obj.updateOverloadBitHolder = &actionProtocolIsisOverloadBit{obj: obj.obj.UpdateOverloadBit}
+	}
+	return obj.updateOverloadBitHolder
+}
+
+// Configuration for setting or clearing the IS-IS overload bit on selected routers.
+// UpdateOverloadBit returns a ActionProtocolIsisOverloadBit
+func (obj *actionProtocolIsis) HasUpdateOverloadBit() bool {
+	return obj.obj.UpdateOverloadBit != nil
+}
+
+// Configuration for setting or clearing the IS-IS overload bit on selected routers.
+// SetUpdateOverloadBit sets the ActionProtocolIsisOverloadBit value in the ActionProtocolIsis object
+func (obj *actionProtocolIsis) SetUpdateOverloadBit(value ActionProtocolIsisOverloadBit) ActionProtocolIsis {
+	obj.setChoice(ActionProtocolIsisChoice.UPDATE_OVERLOAD_BIT)
+	obj.updateOverloadBitHolder = nil
+	obj.obj.UpdateOverloadBit = value.msg()
+
+	return obj
+}
+
 func (obj *actionProtocolIsis) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -374,6 +438,11 @@ func (obj *actionProtocolIsis) validateObj(vObj *validation, set_default bool) {
 		obj.InitiateGracefulRestart().validateObj(vObj, set_default)
 	}
 
+	if obj.obj.UpdateOverloadBit != nil {
+
+		obj.UpdateOverloadBit().validateObj(vObj, set_default)
+	}
+
 }
 
 func (obj *actionProtocolIsis) setDefault() {
@@ -383,6 +452,11 @@ func (obj *actionProtocolIsis) setDefault() {
 	if obj.obj.InitiateGracefulRestart != nil {
 		choices_set += 1
 		choice = ActionProtocolIsisChoice.INITIATE_GRACEFUL_RESTART
+	}
+
+	if obj.obj.UpdateOverloadBit != nil {
+		choices_set += 1
+		choice = ActionProtocolIsisChoice.UPDATE_OVERLOAD_BIT
 	}
 	if choices_set == 1 && choice != "" {
 		if obj.obj.Choice != nil {
