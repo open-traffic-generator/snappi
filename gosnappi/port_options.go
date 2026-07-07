@@ -13,9 +13,10 @@ import (
 // ***** PortOptions *****
 type portOptions struct {
 	validation
-	obj          *otg.PortOptions
-	marshaller   marshalPortOptions
-	unMarshaller unMarshalPortOptions
+	obj                     *otg.PortOptions
+	marshaller              marshalPortOptions
+	unMarshaller            unMarshalPortOptions
+	frameOrderingModeHolder PortOptionsFrameOrderingMode
 }
 
 func NewPortOptions() PortOptions {
@@ -29,7 +30,7 @@ func (obj *portOptions) msg() *otg.PortOptions {
 }
 
 func (obj *portOptions) setMsg(msg *otg.PortOptions) PortOptions {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalportOptions) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalportOptions) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalportOptions) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -242,6 +243,13 @@ func (obj *portOptions) Clone() (PortOptions, error) {
 	return newObj, nil
 }
 
+func (obj *portOptions) setNil() {
+	obj.frameOrderingModeHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
+}
+
 // PortOptions is common port options that apply to all configured Port objects.
 type PortOptions interface {
 	Validation
@@ -276,6 +284,17 @@ type PortOptions interface {
 	SetDataIntegrity(value bool) PortOptions
 	// HasDataIntegrity checks if DataIntegrity has been set in PortOptions
 	HasDataIntegrity() bool
+	// FrameOrderingMode returns PortOptionsFrameOrderingMode, set in PortOptions.
+	// PortOptionsFrameOrderingMode is controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.
+	// A flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards a common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.
+	FrameOrderingMode() PortOptionsFrameOrderingMode
+	// SetFrameOrderingMode assigns PortOptionsFrameOrderingMode provided by user to PortOptions.
+	// PortOptionsFrameOrderingMode is controls how an implementation arranges (interleaves) the frames of multiple flows that share source ports and destination ports.
+	// A flow transmits frames from its source port(s) to its destination port(s). When multiple flows transmit simultaneously towards a common destination port, the transmit ordering determines how the frames of the different flows are interleaved on the wire from the source ports. This is independent of the per-flow payload sequence used for loss and latency measurement.
+	SetFrameOrderingMode(value PortOptionsFrameOrderingMode) PortOptions
+	// HasFrameOrderingMode checks if FrameOrderingMode has been set in PortOptions
+	HasFrameOrderingMode() bool
+	setNil()
 }
 
 // Preempt all the test port locations as defined by the  Port.Port.properties.location. If the test ports defined by their location values are in use and  this value is true, the test ports will be preempted.
@@ -322,9 +341,42 @@ func (obj *portOptions) SetDataIntegrity(value bool) PortOptions {
 	return obj
 }
 
+// description is TBD
+// FrameOrderingMode returns a PortOptionsFrameOrderingMode
+func (obj *portOptions) FrameOrderingMode() PortOptionsFrameOrderingMode {
+	if obj.obj.FrameOrderingMode == nil {
+		obj.obj.FrameOrderingMode = NewPortOptionsFrameOrderingMode().msg()
+	}
+	if obj.frameOrderingModeHolder == nil {
+		obj.frameOrderingModeHolder = &portOptionsFrameOrderingMode{obj: obj.obj.FrameOrderingMode}
+	}
+	return obj.frameOrderingModeHolder
+}
+
+// description is TBD
+// FrameOrderingMode returns a PortOptionsFrameOrderingMode
+func (obj *portOptions) HasFrameOrderingMode() bool {
+	return obj.obj.FrameOrderingMode != nil
+}
+
+// description is TBD
+// SetFrameOrderingMode sets the PortOptionsFrameOrderingMode value in the PortOptions object
+func (obj *portOptions) SetFrameOrderingMode(value PortOptionsFrameOrderingMode) PortOptions {
+
+	obj.frameOrderingModeHolder = nil
+	obj.obj.FrameOrderingMode = value.msg()
+
+	return obj
+}
+
 func (obj *portOptions) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
+	}
+
+	if obj.obj.FrameOrderingMode != nil {
+
+		obj.FrameOrderingMode().validateObj(vObj, set_default)
 	}
 
 }
