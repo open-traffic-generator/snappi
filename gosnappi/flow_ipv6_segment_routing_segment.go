@@ -13,11 +13,10 @@ import (
 // ***** FlowIpv6SegmentRoutingSegment *****
 type flowIpv6SegmentRoutingSegment struct {
 	validation
-	obj                 *otg.FlowIpv6SegmentRoutingSegment
-	marshaller          marshalFlowIpv6SegmentRoutingSegment
-	unMarshaller        unMarshalFlowIpv6SegmentRoutingSegment
-	segmentHolder       PatternFlowIpv6SegmentRoutingSegmentSegment
-	usidContainerHolder FlowIpv6SegmentRoutingUSidContainer
+	obj           *otg.FlowIpv6SegmentRoutingSegment
+	marshaller    marshalFlowIpv6SegmentRoutingSegment
+	unMarshaller  unMarshalFlowIpv6SegmentRoutingSegment
+	segmentHolder PatternFlowIpv6SegmentRoutingSegmentSegment
 }
 
 func NewFlowIpv6SegmentRoutingSegment() FlowIpv6SegmentRoutingSegment {
@@ -246,13 +245,12 @@ func (obj *flowIpv6SegmentRoutingSegment) Clone() (FlowIpv6SegmentRoutingSegment
 
 func (obj *flowIpv6SegmentRoutingSegment) setNil() {
 	obj.segmentHolder = nil
-	obj.usidContainerHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// FlowIpv6SegmentRoutingSegment is one entry in the SRH Segment List (RFC 8754 Section 2.1). Two encodings are supported: 'segment' - a single 128-bit SRv6 SID address (full-SID encoding, default). 'usid_container' - a packed 128-bit uSID container holding multiple micro-SIDs per RFC 9800. Set 'usid_container' to provide structured input; leave it unset and use 'segment' for standard full-SID entries.
+// FlowIpv6SegmentRoutingSegment is one entry in the SRH Segment List (RFC 8754 Section 2.1). A single 128-bit SRv6 SID address for full-SID encoding (locator + function + argument packed into one IPv6 address).
 type FlowIpv6SegmentRoutingSegment interface {
 	Validation
 	// msg marshals FlowIpv6SegmentRoutingSegment to protobuf object *otg.FlowIpv6SegmentRoutingSegment
@@ -275,27 +273,13 @@ type FlowIpv6SegmentRoutingSegment interface {
 	validateObj(vObj *validation, set_default bool)
 	setDefault()
 	// Segment returns PatternFlowIpv6SegmentRoutingSegmentSegment, set in FlowIpv6SegmentRoutingSegment.
-	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Use for standard full-SID encoding where each segment carries a complete locator + function + argument value. Example: "2001:db8::1".
+	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".
 	Segment() PatternFlowIpv6SegmentRoutingSegmentSegment
 	// SetSegment assigns PatternFlowIpv6SegmentRoutingSegmentSegment provided by user to FlowIpv6SegmentRoutingSegment.
-	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Use for standard full-SID encoding where each segment carries a complete locator + function + argument value. Example: "2001:db8::1".
+	// PatternFlowIpv6SegmentRoutingSegmentSegment is a 128-bit IPv6 SID address (RFC 8754 Section 2.1). Example: "2001:db8::1".
 	SetSegment(value PatternFlowIpv6SegmentRoutingSegmentSegment) FlowIpv6SegmentRoutingSegment
 	// HasSegment checks if Segment has been set in FlowIpv6SegmentRoutingSegment
 	HasSegment() bool
-	// UsidContainer returns FlowIpv6SegmentRoutingUSidContainer, set in FlowIpv6SegmentRoutingSegment.
-	// FlowIpv6SegmentRoutingUSidContainer is a uSID container segment (RFC 9800) - a 128-bit IPv6 address packed with multiple Micro-SIDs (uSIDs). The implementation assembles the 128-bit value by placing the locator block prefix in the high bits, then packing each uSID (locator_node + function) consecutively in units of (locator_node_length + function_length) bits, padding the remainder with zeros. Example using F3216 (lb=32, ln=16, fn=16, arg=0) and locator block fc00::/32:
-	// usids = [{node: "0001", function: "0001"}, {node: "0002", function: "0001"}]
-	// => container = fc00:0:1:1:2:1:: (2-hop path, nodes 1 and 2, function 1)
-	// Reference: RFC 9800 Section 4.
-	UsidContainer() FlowIpv6SegmentRoutingUSidContainer
-	// SetUsidContainer assigns FlowIpv6SegmentRoutingUSidContainer provided by user to FlowIpv6SegmentRoutingSegment.
-	// FlowIpv6SegmentRoutingUSidContainer is a uSID container segment (RFC 9800) - a 128-bit IPv6 address packed with multiple Micro-SIDs (uSIDs). The implementation assembles the 128-bit value by placing the locator block prefix in the high bits, then packing each uSID (locator_node + function) consecutively in units of (locator_node_length + function_length) bits, padding the remainder with zeros. Example using F3216 (lb=32, ln=16, fn=16, arg=0) and locator block fc00::/32:
-	// usids = [{node: "0001", function: "0001"}, {node: "0002", function: "0001"}]
-	// => container = fc00:0:1:1:2:1:: (2-hop path, nodes 1 and 2, function 1)
-	// Reference: RFC 9800 Section 4.
-	SetUsidContainer(value FlowIpv6SegmentRoutingUSidContainer) FlowIpv6SegmentRoutingSegment
-	// HasUsidContainer checks if UsidContainer has been set in FlowIpv6SegmentRoutingSegment
-	HasUsidContainer() bool
 	setNil()
 }
 
@@ -327,34 +311,6 @@ func (obj *flowIpv6SegmentRoutingSegment) SetSegment(value PatternFlowIpv6Segmen
 	return obj
 }
 
-// Structured uSID container encoding (RFC 9800). When set, the implementation assembles the 128-bit container value from the constituent uSIDs and places it in the SRH segment list entry. Takes precedence over 'segment' if both are provided.
-// UsidContainer returns a FlowIpv6SegmentRoutingUSidContainer
-func (obj *flowIpv6SegmentRoutingSegment) UsidContainer() FlowIpv6SegmentRoutingUSidContainer {
-	if obj.obj.UsidContainer == nil {
-		obj.obj.UsidContainer = NewFlowIpv6SegmentRoutingUSidContainer().msg()
-	}
-	if obj.usidContainerHolder == nil {
-		obj.usidContainerHolder = &flowIpv6SegmentRoutingUSidContainer{obj: obj.obj.UsidContainer}
-	}
-	return obj.usidContainerHolder
-}
-
-// Structured uSID container encoding (RFC 9800). When set, the implementation assembles the 128-bit container value from the constituent uSIDs and places it in the SRH segment list entry. Takes precedence over 'segment' if both are provided.
-// UsidContainer returns a FlowIpv6SegmentRoutingUSidContainer
-func (obj *flowIpv6SegmentRoutingSegment) HasUsidContainer() bool {
-	return obj.obj.UsidContainer != nil
-}
-
-// Structured uSID container encoding (RFC 9800). When set, the implementation assembles the 128-bit container value from the constituent uSIDs and places it in the SRH segment list entry. Takes precedence over 'segment' if both are provided.
-// SetUsidContainer sets the FlowIpv6SegmentRoutingUSidContainer value in the FlowIpv6SegmentRoutingSegment object
-func (obj *flowIpv6SegmentRoutingSegment) SetUsidContainer(value FlowIpv6SegmentRoutingUSidContainer) FlowIpv6SegmentRoutingSegment {
-
-	obj.usidContainerHolder = nil
-	obj.obj.UsidContainer = value.msg()
-
-	return obj
-}
-
 func (obj *flowIpv6SegmentRoutingSegment) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -363,11 +319,6 @@ func (obj *flowIpv6SegmentRoutingSegment) validateObj(vObj *validation, set_defa
 	if obj.obj.Segment != nil {
 
 		obj.Segment().validateObj(vObj, set_default)
-	}
-
-	if obj.obj.UsidContainer != nil {
-
-		obj.UsidContainer().validateObj(vObj, set_default)
 	}
 
 }

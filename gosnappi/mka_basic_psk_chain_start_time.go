@@ -250,7 +250,7 @@ func (obj *mkaBasicPskChainStartTime) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// MkaBasicPskChainStartTime is pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. If this time is set, the key start time will be relative to this value. Otherwise if this value is not set, key start time will be relative to test start time.
+// MkaBasicPskChainStartTime is pre-shared key(PSK) chain start time in UTC time format DD-MM-YYYY HH:MM:SS. For any key in chain, key start offset time and end offset time will be relative to this chain start time. There can be two cases depending on number of keys in key chain. 1) Single key in key chain - Test port and DUT need not be time synced for single key if key chain start time is set to some past time. As default key chain start time is Unix epoch time, default value suffices for single key in chain. 2) More than one key - Test program should set key chain start time to some future time e.g. few minutes ahead of current time in both test config and DUT config. This requires both test port and DUT to be time synced.
 type MkaBasicPskChainStartTime interface {
 	Validation
 	// msg marshals MkaBasicPskChainStartTime to protobuf object *otg.MkaBasicPskChainStartTime

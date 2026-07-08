@@ -313,7 +313,7 @@ func (obj *flowsUpdate) SetPropertyNames(value []FlowsUpdatePropertyNamesEnum) F
 	return obj
 }
 
-// The list of configured flows for which given property will be updated.
+// The list of configured flows for which the given property will be updated.
 // Flows returns a []Flow
 func (obj *flowsUpdate) Flows() FlowsUpdateFlowIter {
 	if len(obj.obj.Flows) == 0 {

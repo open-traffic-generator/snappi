@@ -289,6 +289,12 @@ type IsisSRv6AdjSid interface {
 	SetFunction(value string) IsisSRv6AdjSid
 	// HasFunction checks if Function has been set in IsisSRv6AdjSid
 	HasFunction() bool
+	// Argument returns string, set in IsisSRv6AdjSid.
+	Argument() string
+	// SetArgument assigns string provided by user to IsisSRv6AdjSid
+	SetArgument(value string) IsisSRv6AdjSid
+	// HasArgument checks if Argument has been set in IsisSRv6AdjSid
+	HasArgument() bool
 	// EndpointBehavior returns IsisSRv6AdjSidEndpointBehaviorEnum, set in IsisSRv6AdjSid
 	EndpointBehavior() IsisSRv6AdjSidEndpointBehaviorEnum
 	// SetEndpointBehavior assigns IsisSRv6AdjSidEndpointBehaviorEnum provided by user to IsisSRv6AdjSid
@@ -420,6 +426,28 @@ func (obj *isisSRv6AdjSid) HasFunction() bool {
 func (obj *isisSRv6AdjSid) SetFunction(value string) IsisSRv6AdjSid {
 
 	obj.obj.Function = &value
+	return obj
+}
+
+// The Argument part of this adjacency SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+// Argument returns a string
+func (obj *isisSRv6AdjSid) Argument() string {
+
+	return *obj.obj.Argument
+
+}
+
+// The Argument part of this adjacency SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+// Argument returns a string
+func (obj *isisSRv6AdjSid) HasArgument() bool {
+	return obj.obj.Argument != nil
+}
+
+// The Argument part of this adjacency SID expressed as a hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+// SetArgument sets the string value in the IsisSRv6AdjSid object
+func (obj *isisSRv6AdjSid) SetArgument(value string) IsisSRv6AdjSid {
+
+	obj.obj.Argument = &value
 	return obj
 }
 
@@ -628,6 +656,15 @@ func (obj *isisSRv6AdjSid) validateObj(vObj *validation, set_default bool) {
 
 	}
 
+	if obj.obj.Argument != nil {
+
+		err := obj.validateHex(obj.Argument())
+		if err != nil {
+			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on IsisSRv6AdjSid.Argument"))
+		}
+
+	}
+
 	if obj.obj.Weight != nil {
 
 		if *obj.obj.Weight > 255 {
@@ -654,6 +691,9 @@ func (obj *isisSRv6AdjSid) setDefault() {
 	if obj.obj.Locator == nil {
 		obj.SetLocator(IsisSRv6AdjSidLocator.AUTO)
 
+	}
+	if obj.obj.Argument == nil {
+		obj.SetArgument("0000")
 	}
 	if obj.obj.EndpointBehavior == nil {
 		obj.SetEndpointBehavior(IsisSRv6AdjSidEndpointBehavior.END_X)
