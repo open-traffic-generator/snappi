@@ -278,6 +278,12 @@ type FlowRouter interface {
 	RxNames() []string
 	// SetRxNames assigns []string provided by user to FlowRouter
 	SetRxNames(value []string) FlowRouter
+	// Bidirectional returns bool, set in FlowRouter.
+	Bidirectional() bool
+	// SetBidirectional assigns bool provided by user to FlowRouter
+	SetBidirectional(value bool) FlowRouter
+	// HasBidirectional checks if Bidirectional has been set in FlowRouter
+	HasBidirectional() bool
 }
 
 type FlowRouterModeEnum string
@@ -446,6 +452,64 @@ func (obj *flowRouter) SetRxNames(value []string) FlowRouter {
 	return obj
 }
 
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
+//
+// The implementation should create two sub-flows with full endpoint source and
+// destination reversal, including eth.src/eth.dst, ip.src/ip.dst,
+// udp.src/udp.dst, and tcp.src/tcp.dst.
+//
+// For bidirectional flows, metrics are reported for each generated sub-flow separately.
+// Both sub-flows share the same flow name but are differentiated by their
+// port_tx and port_rx values, which are reversed for the reverse sub-flow.
+// Consequently, flow metrics for a bidirectional flow are exposed as two
+// separate metric entries, one for each traffic direction.
+// Bidirectional returns a bool
+func (obj *flowRouter) Bidirectional() bool {
+
+	return *obj.obj.Bidirectional
+
+}
+
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
+//
+// The implementation should create two sub-flows with full endpoint source and
+// destination reversal, including eth.src/eth.dst, ip.src/ip.dst,
+// udp.src/udp.dst, and tcp.src/tcp.dst.
+//
+// For bidirectional flows, metrics are reported for each generated sub-flow separately.
+// Both sub-flows share the same flow name but are differentiated by their
+// port_tx and port_rx values, which are reversed for the reverse sub-flow.
+// Consequently, flow metrics for a bidirectional flow are exposed as two
+// separate metric entries, one for each traffic direction.
+// Bidirectional returns a bool
+func (obj *flowRouter) HasBidirectional() bool {
+	return obj.obj.Bidirectional != nil
+}
+
+// Allows traffic sub-flow(s) to be created on both forward and reverse directions between the device endpoint pairs.
+// When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names → tx_names</b>.
+// The bidirectional option creates two separate sub-flows under the same flow name, Only the flow endpoints are reversed automatically for the reverse sub-flow.
+//
+// The implementation should create two sub-flows with full endpoint source and
+// destination reversal, including eth.src/eth.dst, ip.src/ip.dst,
+// udp.src/udp.dst, and tcp.src/tcp.dst.
+//
+// For bidirectional flows, metrics are reported for each generated sub-flow separately.
+// Both sub-flows share the same flow name but are differentiated by their
+// port_tx and port_rx values, which are reversed for the reverse sub-flow.
+// Consequently, flow metrics for a bidirectional flow are exposed as two
+// separate metric entries, one for each traffic direction.
+// SetBidirectional sets the bool value in the FlowRouter object
+func (obj *flowRouter) SetBidirectional(value bool) FlowRouter {
+
+	obj.obj.Bidirectional = &value
+	return obj
+}
+
 func (obj *flowRouter) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -457,6 +521,9 @@ func (obj *flowRouter) setDefault() {
 	if obj.obj.Mode == nil {
 		obj.SetMode(FlowRouterMode.MESH)
 
+	}
+	if obj.obj.Bidirectional == nil {
+		obj.SetBidirectional(false)
 	}
 
 }

@@ -332,9 +332,11 @@ type MetricsRequest interface {
 	HasPort() bool
 	// Flow returns FlowMetricsRequest, set in MetricsRequest.
 	// FlowMetricsRequest is the container for a flow metric request.
+	// For bidirectional flows, metrics are reported for each generated sub-flow separately. Both sub-flows share the same flow name but are differentiated by their port_tx and port_rx values, which are reversed for the reverse sub-flow. Consequently, flow metrics for a bidirectional flow are exposed as two separate metric entries, one for each traffic direction.
 	Flow() FlowMetricsRequest
 	// SetFlow assigns FlowMetricsRequest provided by user to MetricsRequest.
 	// FlowMetricsRequest is the container for a flow metric request.
+	// For bidirectional flows, metrics are reported for each generated sub-flow separately. Both sub-flows share the same flow name but are differentiated by their port_tx and port_rx values, which are reversed for the reverse sub-flow. Consequently, flow metrics for a bidirectional flow are exposed as two separate metric entries, one for each traffic direction.
 	SetFlow(value FlowMetricsRequest) MetricsRequest
 	// HasFlow checks if Flow has been set in MetricsRequest
 	HasFlow() bool

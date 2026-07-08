@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.58.0
+/* Open Traffic Generator API 1.59.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -113,6 +113,48 @@ message PortOptions {
   // as frames_rx and for frames which has payload modified during transit as errors.
   // default = False
   optional bool data_integrity = 2;
+
+  // Description missing in models
+  PortOptionsFrameOrderingMode frame_ordering_mode = 3;
+}
+
+// Controls how an implementation arranges (interleaves) the frames of multiple flows
+// that share source ports and destination ports.
+// A flow transmits frames from its source port(s) to its destination port(s). When
+// multiple flows transmit simultaneously towards a common destination port, the transmit
+// ordering determines how the frames of the different flows are interleaved on the
+// wire from the source ports. This is independent of the per-flow payload sequence
+// used for loss and latency measurement.
+message PortOptionsFrameOrderingMode {
+
+  message Choice {
+    enum Enum {
+      unspecified = 0;
+      no_ordering = 1;
+      rfc2889 = 2;
+    }
+  }
+  // The type of frame ordering mode.
+  // 
+  // - no_ordering: No specific ordering is applied across flows when frames are transmitted
+  // from the source ports. The implementation is free to interleave the frames of concurrent
+  // flows towards the destination ports in whatever manner is most efficient. This is
+  // the lowest-overhead setting and is appropriate when per-flow transmit sequence integrity
+  // is not being measured, for example pure throughput or line-rate saturation, loss-only
+  // or latency-only measurements, a single flow from one source port to one destination
+  // port, and protocol emulation traffic whose ordering is governed by the protocol itself.
+  // 
+  // - rfc2889: Transmit ordering follows the methodology defined in RFC 2889, Benchmarking
+  // Methodology for LAN Switching Devices. The interleaved frames of flow that share
+  // source ports and destination ports are arranged using round-robin sequencing before
+  // they are transmitted from the source ports. This prevents a destination port from
+  // being overloaded by simultaneous flows arriving from multiple source ports and keeps
+  // per-flow sequencing valid under load. It is appropriate for RFC 2889 test types such
+  // as fully-meshed (many source ports to many destination ports) forwarding, congestion
+  // control / head-of-line blocking (many source ports to one destination port), and
+  // maximum forwarding rate measurements.
+  // default = Choice.Enum.no_ordering
+  optional Choice.Enum choice = 1;
 }
 
 // The container for LAG (ports group) - aggregation of multiple LAG members (ports)
@@ -10854,6 +10896,25 @@ message FlowRouter {
   // - /components/schemas/Device.Dhcpv6client/properties/name
   // 
   repeated string rx_names = 3;
+
+  // Allows traffic sub-flow(s) to be created on both forward and reverse directions between
+  // the device endpoint pairs.
+  // When enabled, traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names
+  // → tx_names</b>.
+  // The bidirectional option creates two separate sub-flows under the same flow name,
+  // Only the flow endpoints are reversed automatically for the reverse sub-flow.
+  // 
+  // The implementation should create two sub-flows with full endpoint source and
+  // destination reversal, including eth.src/eth.dst, ip.src/ip.dst,
+  // udp.src/udp.dst, and tcp.src/tcp.dst.
+  // 
+  // For bidirectional flows, metrics are reported for each generated sub-flow separately.
+  // Both sub-flows share the same flow name but are differentiated by their
+  // port_tx and port_rx values, which are reversed for the reverse sub-flow.
+  // Consequently, flow metrics for a bidirectional flow are exposed as two
+  // separate metric entries, one for each traffic direction.
+  // default = False
+  optional bool bidirectional = 4;
 }
 
 // Configuration for all traffic packet headers
@@ -17236,6 +17297,11 @@ message MetricDataIntegrity {
 }
 
 // The container for a flow metric request.
+// For bidirectional flows, metrics are reported for each generated sub-flow separately.
+// Both sub-flows share the same flow name but are differentiated by their port_tx and
+// port_rx values, which are reversed for the reverse sub-flow. Consequently, flow metrics
+// for a bidirectional flow are exposed as two separate metric entries, one for each
+// traffic direction.
 message FlowMetricsRequest {
 
   // Flow metrics will be retrieved for these flow names.
