@@ -279,9 +279,6 @@ type Rocev2IPv4ColumnNames interface {
 // x-constraint:
 // - /components/schemas/Rocev2.V4peer/properties/name
 //
-// x-constraint:
-// - /components/schemas/Rocev2.V4peer/properties/name
-//
 // PeerNames returns a []string
 func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
 	if obj.obj.PeerNames == nil {
@@ -291,9 +288,6 @@ func (obj *rocev2IPv4ColumnNames) PeerNames() []string {
 }
 
 // The names of RoCEv2 over IPv4 peers to return results for. An empty list will return results for all RoCEv2 peers.
-//
-// x-constraint:
-// - /components/schemas/Rocev2.V4peer/properties/name
 //
 // x-constraint:
 // - /components/schemas/Rocev2.V4peer/properties/name
