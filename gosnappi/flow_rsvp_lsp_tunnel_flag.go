@@ -272,10 +272,10 @@ type FlowRSVPLspTunnelFlag interface {
 	HasChoice() bool
 	// getter for LocalProtectionDesired to set choice.
 	LocalProtectionDesired()
-	// getter for SeStyleDesired to set choice.
-	SeStyleDesired()
 	// getter for LabelRecordingDesired to set choice.
 	LabelRecordingDesired()
+	// getter for SeStyleDesired to set choice.
+	SeStyleDesired()
 }
 
 type FlowRSVPLspTunnelFlagChoiceEnum string
@@ -300,14 +300,14 @@ func (obj *flowRSVPLspTunnelFlag) LocalProtectionDesired() {
 	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LOCAL_PROTECTION_DESIRED)
 }
 
-// getter for SeStyleDesired to set choice
-func (obj *flowRSVPLspTunnelFlag) SeStyleDesired() {
-	obj.setChoice(FlowRSVPLspTunnelFlagChoice.SE_STYLE_DESIRED)
-}
-
 // getter for LabelRecordingDesired to set choice
 func (obj *flowRSVPLspTunnelFlag) LabelRecordingDesired() {
 	obj.setChoice(FlowRSVPLspTunnelFlagChoice.LABEL_RECORDING_DESIRED)
+}
+
+// getter for SeStyleDesired to set choice
+func (obj *flowRSVPLspTunnelFlag) SeStyleDesired() {
+	obj.setChoice(FlowRSVPLspTunnelFlagChoice.SE_STYLE_DESIRED)
 }
 
 // description is TBD
