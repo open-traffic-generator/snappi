@@ -299,6 +299,12 @@ type Ospfv2ExternalAsLsa interface {
 	SetMetricType(value uint32) Ospfv2ExternalAsLsa
 	// HasMetricType checks if MetricType has been set in Ospfv2ExternalAsLsa
 	HasMetricType() bool
+	// Label returns uint32, set in Ospfv2ExternalAsLsa.
+	Label() uint32
+	// SetLabel assigns uint32 provided by user to Ospfv2ExternalAsLsa
+	SetLabel(value uint32) Ospfv2ExternalAsLsa
+	// HasLabel checks if Label has been set in Ospfv2ExternalAsLsa
+	HasLabel() bool
 	setNil()
 }
 
@@ -393,6 +399,28 @@ func (obj *ospfv2ExternalAsLsa) HasMetricType() bool {
 func (obj *ospfv2ExternalAsLsa) SetMetricType(value uint32) Ospfv2ExternalAsLsa {
 
 	obj.obj.MetricType = &value
+	return obj
+}
+
+// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+// Label returns a uint32
+func (obj *ospfv2ExternalAsLsa) Label() uint32 {
+
+	return *obj.obj.Label
+
+}
+
+// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+// Label returns a uint32
+func (obj *ospfv2ExternalAsLsa) HasLabel() bool {
+	return obj.obj.Label != nil
+}
+
+// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+// SetLabel sets the uint32 value in the Ospfv2ExternalAsLsa object
+func (obj *ospfv2ExternalAsLsa) SetLabel(value uint32) Ospfv2ExternalAsLsa {
+
+	obj.obj.Label = &value
 	return obj
 }
 

@@ -21,6 +21,7 @@ type deviceOspfv2Router struct {
 	capabilitiesHolder    Ospfv2Options
 	interfacesHolder      DeviceOspfv2RouterOspfv2InterfaceIter
 	v4RoutesHolder        DeviceOspfv2RouterOspfv2V4RouteRangeIter
+	segmentRoutingHolder  Ospfv2SegmentRouting
 }
 
 func NewDeviceOspfv2Router() DeviceOspfv2Router {
@@ -253,6 +254,7 @@ func (obj *deviceOspfv2Router) setNil() {
 	obj.capabilitiesHolder = nil
 	obj.interfacesHolder = nil
 	obj.v4RoutesHolder = nil
+	obj.segmentRoutingHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -354,6 +356,30 @@ type DeviceOspfv2Router interface {
 	Interfaces() DeviceOspfv2RouterOspfv2InterfaceIter
 	// V4Routes returns DeviceOspfv2RouterOspfv2V4RouteRangeIterIter, set in DeviceOspfv2Router
 	V4Routes() DeviceOspfv2RouterOspfv2V4RouteRangeIter
+	// SegmentRouting returns Ospfv2SegmentRouting, set in DeviceOspfv2Router.
+	// Ospfv2SegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP
+	// topologies by encoding paths as sequences of topological sub-paths, called "segments".
+	// In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
+	// Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
+	// are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
+	// is carried in the Extended Prefix Opaque LSA for the router loopback.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
+	// An implementation may advertise the SR capabilities with default values if a user does
+	// not set any of the properties of Segment Routing.
+	SegmentRouting() Ospfv2SegmentRouting
+	// SetSegmentRouting assigns Ospfv2SegmentRouting provided by user to DeviceOspfv2Router.
+	// Ospfv2SegmentRouting is segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP
+	// topologies by encoding paths as sequences of topological sub-paths, called "segments".
+	// In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
+	// Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
+	// are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
+	// is carried in the Extended Prefix Opaque LSA for the router loopback.
+	// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
+	// An implementation may advertise the SR capabilities with default values if a user does
+	// not set any of the properties of Segment Routing.
+	SetSegmentRouting(value Ospfv2SegmentRouting) DeviceOspfv2Router
+	// HasSegmentRouting checks if SegmentRouting has been set in DeviceOspfv2Router
+	HasSegmentRouting() bool
 	setNil()
 }
 
@@ -741,6 +767,34 @@ func (obj *deviceOspfv2RouterOspfv2V4RouteRangeIter) appendHolderSlice(item Ospf
 	return obj
 }
 
+// Optional Segment Routing (SR) configuration for this OSPFv2 router.
+// SegmentRouting returns a Ospfv2SegmentRouting
+func (obj *deviceOspfv2Router) SegmentRouting() Ospfv2SegmentRouting {
+	if obj.obj.SegmentRouting == nil {
+		obj.obj.SegmentRouting = NewOspfv2SegmentRouting().msg()
+	}
+	if obj.segmentRoutingHolder == nil {
+		obj.segmentRoutingHolder = &ospfv2SegmentRouting{obj: obj.obj.SegmentRouting}
+	}
+	return obj.segmentRoutingHolder
+}
+
+// Optional Segment Routing (SR) configuration for this OSPFv2 router.
+// SegmentRouting returns a Ospfv2SegmentRouting
+func (obj *deviceOspfv2Router) HasSegmentRouting() bool {
+	return obj.obj.SegmentRouting != nil
+}
+
+// Optional Segment Routing (SR) configuration for this OSPFv2 router.
+// SetSegmentRouting sets the Ospfv2SegmentRouting value in the DeviceOspfv2Router object
+func (obj *deviceOspfv2Router) SetSegmentRouting(value Ospfv2SegmentRouting) DeviceOspfv2Router {
+
+	obj.segmentRoutingHolder = nil
+	obj.obj.SegmentRouting = value.msg()
+
+	return obj
+}
+
 func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -822,6 +876,11 @@ func (obj *deviceOspfv2Router) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.SegmentRouting != nil {
+
+		obj.SegmentRouting().validateObj(vObj, set_default)
 	}
 
 }

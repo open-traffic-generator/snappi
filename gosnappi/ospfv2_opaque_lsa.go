@@ -17,6 +17,7 @@ type ospfv2OpaqueLsa struct {
 	marshaller   marshalOspfv2OpaqueLsa
 	unMarshaller unMarshalOspfv2OpaqueLsa
 	headerHolder Ospfv2LsaHeader
+	tlvsHolder   Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 }
 
 func NewOspfv2OpaqueLsa() Ospfv2OpaqueLsa {
@@ -245,6 +246,7 @@ func (obj *ospfv2OpaqueLsa) Clone() (Ospfv2OpaqueLsa, error) {
 
 func (obj *ospfv2OpaqueLsa) setNil() {
 	obj.headerHolder = nil
+	obj.tlvsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -286,6 +288,8 @@ type Ospfv2OpaqueLsa interface {
 	SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueLsa
 	// HasType checks if Type has been set in Ospfv2OpaqueLsa
 	HasType() bool
+	// Tlvs returns Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIterIter, set in Ospfv2OpaqueLsa
+	Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
 	setNil()
 }
 
@@ -353,6 +357,93 @@ func (obj *ospfv2OpaqueLsa) SetType(value Ospfv2OpaqueLsaTypeEnum) Ospfv2OpaqueL
 	return obj
 }
 
+// The list of TLVs learned in this Opaque LSA. The Segment Routing information is carried here, e.g. the Extended Prefix TLV (with the Prefix-SID sub-TLV), the Extended Link TLV (with the Adjacency-SID / LAN Adjacency-SID sub-TLVs), and the Router Information (RI) SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB) and SRMS Preference TLVs.
+// Tlvs returns a []Ospfv2OpaqueLsaTlv
+func (obj *ospfv2OpaqueLsa) Tlvs() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(obj.obj.Tlvs) == 0 {
+		obj.obj.Tlvs = []*otg.Ospfv2OpaqueLsaTlv{}
+	}
+	if obj.tlvsHolder == nil {
+		obj.tlvsHolder = newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(&obj.obj.Tlvs).setMsg(obj)
+	}
+	return obj.tlvsHolder
+}
+
+type ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter struct {
+	obj                     *ospfv2OpaqueLsa
+	ospfv2OpaqueLsaTlvSlice []Ospfv2OpaqueLsaTlv
+	fieldPtr                *[]*otg.Ospfv2OpaqueLsaTlv
+}
+
+func newOspfv2OpaqueLsaOspfv2OpaqueLsaTlvIter(ptr *[]*otg.Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	return &ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter{fieldPtr: ptr}
+}
+
+type Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter interface {
+	setMsg(*ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Items() []Ospfv2OpaqueLsaTlv
+	Add() Ospfv2OpaqueLsaTlv
+	Append(items ...Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Set(index int, newObj Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+	appendHolderSlice(item Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) setMsg(msg *ospfv2OpaqueLsa) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Items() []Ospfv2OpaqueLsaTlv {
+	return obj.ospfv2OpaqueLsaTlvSlice
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Add() Ospfv2OpaqueLsaTlv {
+	newObj := &otg.Ospfv2OpaqueLsaTlv{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2OpaqueLsaTlv{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Append(items ...Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Set(index int, newObj Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2OpaqueLsaTlvSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) Clear() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2OpaqueLsaTlv{}
+		obj.ospfv2OpaqueLsaTlvSlice = []Ospfv2OpaqueLsaTlv{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) clearHolderSlice() Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	if len(obj.ospfv2OpaqueLsaTlvSlice) > 0 {
+		obj.ospfv2OpaqueLsaTlvSlice = []Ospfv2OpaqueLsaTlv{}
+	}
+	return obj
+}
+func (obj *ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter) appendHolderSlice(item Ospfv2OpaqueLsaTlv) Ospfv2OpaqueLsaOspfv2OpaqueLsaTlvIter {
+	obj.ospfv2OpaqueLsaTlvSlice = append(obj.ospfv2OpaqueLsaTlvSlice, item)
+	return obj
+}
+
 func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -361,6 +452,20 @@ func (obj *ospfv2OpaqueLsa) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Header != nil {
 
 		obj.Header().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.Tlvs) != 0 {
+
+		if set_default {
+			obj.Tlvs().clearHolderSlice()
+			for _, item := range obj.obj.Tlvs {
+				obj.Tlvs().appendHolderSlice(&ospfv2OpaqueLsaTlv{obj: item})
+			}
+		}
+		for _, item := range obj.Tlvs().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }

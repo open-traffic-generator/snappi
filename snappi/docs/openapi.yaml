@@ -484,8 +484,7 @@ components:
       properties:
         port_name:
           description: "The name of a port object that will be part of the LAG. \n\
-            \nx-constraint:\n- /components/schemas/Port/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n"
+            \nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -754,10 +753,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -768,10 +763,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Lag/properties/name
@@ -779,11 +770,6 @@ components:
         vxlan_name:
           description: |
             Name of the VXLAN instance (or VXLAN tunnel) that this Ethernet interface is connected to.
-
-            x-constraint:
-            - #/components/schemas/Vxlan.V4Tunnel/properties/name
-            - #/components/schemas/Vxlan.V6Tunnel/properties/name
-
 
             x-constraint:
             - #/components/schemas/Vxlan.V4Tunnel/properties/name
@@ -808,8 +794,7 @@ components:
             \ an unconnected device in a simulated topology \n( all ethernet links\
             \ of type simulated_link ) or an emulated device connected to the Device\
             \ Under Test (has at atleast one ethernet interface with connection to\
-            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
+            \ the port or\n lag connected to the DUT)\n\nx-constraint:\n- #/components/schemas/Device.Ethernet/properties/name\n"
           x-constraint:
           - '#/components/schemas/Device.Ethernet/properties/name'
           x-field-uid: 1
@@ -950,10 +935,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -1053,8 +1034,7 @@ components:
       properties:
         eth_name:
           description: "The unique name of the Ethernet interface behind which this\
-            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
+            \ Loopback \n interface will be created.\n\nx-constraint:\n- /components/schemas/Device.Ethernet/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ethernet/properties/name
@@ -2035,10 +2015,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which MACsec is enabled.
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -3362,8 +3338,7 @@ components:
       properties:
         port_names:
           description: "A list of unique names of port objects that will share the\n\
-            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
+            choice settings. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n"
           type: array
           items:
             type: string
@@ -3457,8 +3432,6 @@ components:
           description: |-
             Under Review: This field is currently under review for pending exploration on use cases
 
-            Under Review: This field is currently under review for pending exploration on use cases
-
             Set to true to override the auto_negotiate, link_training
             and rs_fec settings for gigabit ethernet interfaces.
           type: boolean
@@ -3469,8 +3442,6 @@ components:
               on use cases
         auto_negotiate:
           description: |-
-            Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
-
             Under Review: This field is currently under review for pending exploration on use cases, given that a separate configuration called `AutoNegotiation` already exists.
 
             Enable/disable auto negotiation.
@@ -3681,10 +3652,6 @@ components:
         port_names:
           description: |
             The unique names of ports that the capture settings will apply to. Port_names cannot be duplicated between capture objects.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -4128,10 +4095,6 @@ components:
         eth_name:
           description: |
             The unique name of the Ethernet interface on which ISIS is running. Two ISIS interfaces cannot share the same Ethernet. The underlying Ethernet Interface can an emulated or simulated interface. A simulated ethernet interface can be assumed to be connected by  a primary (internal to a simulated topology)  or a secondary link (connected to a device behind a different simulated topology).
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
@@ -5788,12 +5751,6 @@ components:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -6793,8 +6750,6 @@ components:
           description: |-
             Deprecated: This property is deprecated in favor of property extended_communities
 
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
           type: array
           items:
@@ -7382,8 +7337,6 @@ components:
             information: This property is deprecated in favor of property extended_communities
           x-field-uid: 11
           description: |-
-            Deprecated: This property is deprecated in favor of property extended_communities
-
             Deprecated: This property is deprecated in favor of property extended_communities
 
             Optional Extended Community settings. The Extended Communities Attribute is a transitive optional BGP attribute, with the Type Code 16. Community and Extended Communities  attributes are utilized to trigger routing decisions, such as acceptance, rejection,  preference, or redistribution. An extended community is an 8-Bytes value. It is divided into two main parts. The first 2 Bytes of the community encode a type and sub-type fields and the last 6 Bytes carry a unique set of data in a format defined by the type and sub-type field. Extended communities provide a larger  range for grouping or categorizing communities. When type is administrator_as_2octet or administrator_as_4octet, the valid sub types are route target and origin. The valid value for  administrator_as_2octet and administrator_as_4octet type is either two byte AS followed by four byte local administrator id or four byte AS followed by two  byte local administrator id.  When type is administrator_ipv4_address the valid sub types are route target and origin. The valid value for  administrator_ipv4_address is a four byte IPv4 address followed by a two byte local administrator id.  When type is opaque, valid sub types are color and encapsulation. When sub type is color, first two bytes of the value field contain flags and last four bytes  contains the value of the color. When sub type is encapsulation the first four bytes of value field are reserved and last two bytes carries the tunnel type from  IANA's "ETHER TYPES" registry e.g IPv4 (protocol type = 0x0800), IPv6 (protocol type = 0x86dd), and MPLS (protocol type = 0x8847). When type is administrator_as_2octet_link_bandwidth the valid sub type is extended_bandwidth. The first two bytes of the value field contains the AS number and the last four bytes contains the bandwidth in IEEE floating point format.  When type is evpn the valid subtype is mac_address. In the value field the low-order bit of the first byte(Flags) is defined as the "Sticky/static" flag and may be set to 1, indicating the MAC address is static and cannot move. The second byte is reserved and the  last four bytes contain the sequence number which is used to ensure that PEs retain the correct MAC/IP Advertisement route when multiple updates  occur for the same MAC address.  Note evpn type is defined mainly for use with evpn route updates and not for IPv4 and IPv6 route updates.
@@ -10414,12 +10367,6 @@ components:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -10738,11 +10685,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -10778,11 +10720,6 @@ components:
         source_interface:
           description: |
             Determines the source interface.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -10990,7 +10927,6 @@ components:
           description: "The globally unique name of the IPv4 interface connected to\
             \ the DUT. This name must match the \"name\" field of the \"ipv4_addresses\"\
             \ on top which this RSVP interface is configured.          \n\nx-constraint:\n\
-            - /components/schemas/Device.Ipv4/properties/name\n\n\nx-constraint:\n\
             - /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
@@ -11079,11 +11015,6 @@ components:
         ipv4_name:
           description: |
             The globally unique name of the IPv4 or Loopback IPv4 interface acting as the RSVP ingress and egress endpoint for  the LSPs configured on this interface. This must match the "name" field of either "ipv4_addresses" or "ipv4_loopbacks"  on which this LSP interface is configured.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -11658,10 +11589,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -11779,10 +11706,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 on which DHCPv6 server will run.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -12091,6 +12014,11 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.V4RouteRange'
           x-field-uid: 11
+        segment_routing:
+          description: |-
+            Optional Segment Routing (SR) configuration for this OSPFv2 router.
+          $ref: '#/components/schemas/Ospfv2.SegmentRouting'
+          x-field-uid: 12
     Ospfv2.RouterId:
       description: |-
         Container for OSPFv2 Router ID configuration.
@@ -12214,8 +12142,7 @@ components:
           x-unique: global
         ipv4_name:
           description: "The globally unique name of the IPv4 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12266,6 +12193,13 @@ components:
             maximum: 16777215
             default: 0
           x-field-uid: 9
+        adjacency_sids:
+          description: |-
+            List of OSPFv2 Adjacency SID sub-TLVs advertised in the Extended Link Opaque LSA for this interface (RFC 8665). Typically used on point-to-point links.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Interface.AdjacencySid'
+          x-field-uid: 10
     Ospfv2Interface.Area:
       description: "Container for OSPF Area ID identifies the routing area to which\
         \ the host belongs..      "
@@ -12556,6 +12490,92 @@ components:
           type: boolean
           default: false
           x-field-uid: 8
+    Ospfv2Interface.AdjacencySid:
+      description: |-
+        Optional container for the OSPFv2 Adjacency SID sub-TLV.
+        The Adjacency SID sub-TLV is carried inside the OSPFv2 Extended Link TLV of the
+        Extended Link Opaque LSA and describes a segment associated with a specific adjacency
+        (typically a point-to-point link).
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-adjacency-sid-sub-tlv.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Choice of whether the Adjacency SID carries absolute values (local labels) or relative
+            indices. This choice sets the V-Flag (Value/Index) and the L-Flag (Local/Global) of the
+            Adjacency SID sub-TLV as follows:
+            - sid_values: V-Flag and L-Flag are set (both 1). Each Adj-SID carries a 3-octet local
+              label value with local significance, typically from the SRLB. Please refer to
+              device.ospfv2.segment_routing.srlb_ranges.
+            - sid_indices: V-Flag and L-Flag are unset (both 0). Each Adj-SID carries a 4-octet
+              index that is an offset into the SRGB.
+            A user needs to configure at least one entry of SID value or SID index.
+          type: string
+          default: sid_values
+          x-field-uid: 1
+          x-enum:
+            sid_values:
+              x-field-uid: 1
+            sid_indices:
+              x-field-uid: 2
+          enum:
+          - sid_values
+          - sid_indices
+        sid_values:
+          description: |-
+            The corresponding Adjacency SID as one or more absolute local label values for the link. Used when the choice is sid_values.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 16
+            minimum: 16
+            maximum: 1048575
+          x-field-uid: 2
+        sid_indices:
+          description: |-
+            One or more Adjacency SID indices, relative to the SRGB. Used when the choice is sid_indices.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 0
+            minimum: 0
+            maximum: 4294967295
+          x-field-uid: 3
+        b_flag:
+          description: |-
+            B-Flag: Backup Flag.
+            If set, the Adjacency SID is eligible for protection, for example using
+            Fast Reroute (FRR) / Loop-Free Alternate (LFA).
+          type: boolean
+          default: false
+          x-field-uid: 4
+        g_flag:
+          description: |-
+            G-Flag: Group Flag.
+            When set, the G-Flag indicates that the Adj-SID refers to a group of adjacencies and
+            therefore MAY be assigned to other adjacencies as well.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        p_flag:
+          description: |-
+            P-Flag: Persistent Flag.
+            When set, the P-Flag indicates that the Adj-SID is persistently allocated, i.e. the
+            Adj-SID value remains consistent across router restart and/or interface flap.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        weight:
+          description: |-
+            The value represents the weight of the Adj-SID for the purpose of load balancing.
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 255
+          x-field-uid: 7
     Ospfv2.V4RouteRange:
       description: |-
         Emulated OSPFv2 IPv4 routes.
@@ -12588,6 +12608,13 @@ components:
             The type of the OSPFv2 routes.
           $ref: '#/components/schemas/Ospfv2V4RR.RouteOrigin'
           x-field-uid: 4
+        prefix_sids:
+          description: |-
+            A list of OSPFv2 Prefix-SID sub-TLVs advertised in the Extended Prefix Opaque LSA for this group of IPv4 route addresses (RFC 8665).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2SR.PrefixSid'
+          x-field-uid: 5
       required:
       - name
     Ospfv2V4RR.RouteOrigin:
@@ -12723,6 +12750,310 @@ components:
           type: boolean
           default: false
           x-field-uid: 2
+    Ospfv2SR.PrefixSid:
+      description: |-
+        This contains the properties of an OSPFv2 Prefix-SID sub-TLV and its attributes.
+        The Prefix-SID sub-TLV is carried inside the OSPFv2 Extended Prefix TLV of the
+        Extended Prefix Opaque LSA and is associated with a specific IPv4 prefix.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Choice of whether the Prefix-SID carries absolute values (local labels) or relative
+            indices into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag
+            (Local/Global) of the Prefix-SID sub-TLV as follows:
+            - sid_indices: V-Flag and L-Flag are unset (both 0). Each Prefix-SID carries a 4-octet
+              index that is an offset into the SRGB advertised by the router. Please refer to
+              device.ospfv2.segment_routing.srgb_ranges.
+            - sid_values: V-Flag and L-Flag are set (both 1). Each Prefix-SID carries a 3-octet
+              local label value with local significance.
+            A user needs to configure at least one entry of SID value or SID index. If no entry is
+            configured, an implementation may advertise an appropriate default SID value/index
+            based on the choice, e.g. the first value from the SRGB range.
+          type: string
+          default: sid_indices
+          x-field-uid: 1
+          x-enum:
+            sid_values:
+              x-field-uid: 1
+            sid_indices:
+              x-field-uid: 2
+          enum:
+          - sid_values
+          - sid_indices
+        sid_values:
+          description: |-
+            SID/Label as one or more absolute local label values associated with the IGP Prefix segment attached to the specific IPv4 prefix. Used when the choice is sid_values.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 16
+            minimum: 16
+            maximum: 1048575
+          x-field-uid: 2
+        sid_indices:
+          description: |-
+            One or more SID/Label indices associated with the IGP Prefix segment attached to the specific IPv4 prefix. Each index is an offset into the SRGB. Used when the choice is sid_indices.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 0
+            minimum: 0
+            maximum: 4294967295
+          x-field-uid: 3
+        np_flag:
+          description: |-
+            NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+            If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
+            packet to the node that advertised the Prefix-SID.
+          type: boolean
+          default: true
+          x-field-uid: 4
+        m_flag:
+          description: |-
+            M-Flag: Mapping Server Flag.
+            If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and
+            the E-Flag MUST be ignored on reception.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        e_flag:
+          description: |-
+            E-Flag: Explicit-Null Flag.
+            If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
+            with the Explicit-NULL label before forwarding the packet.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        algorithm:
+          description: |-
+            The Segment Routing Algorithm the Prefix-SID is associated with. The value matches an
+            algorithm advertised in the SR-Algorithm TLV, e.g. 0 for SPF or 1 for Strict SPF.
+            Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 255
+          x-field-uid: 7
+    Ospfv2.SegmentRouting:
+      description: |-
+        Segment Routing (SR) allows for a flexible definition of end-to-end paths within IGP
+        topologies by encoding paths as sequences of topological sub-paths, called "segments".
+        In OSPFv2 the SR-specific information is advertised using Opaque LSAs. The router level
+        Segment Routing capabilities (SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB))
+        are carried in the Router Information (RI) Opaque LSA, and the router's own Node Prefix-SID
+        is carried in the Extended Prefix Opaque LSA for the router loopback.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665.
+        An implementation may advertise the SR capabilities with default values if a user does
+        not set any of the properties of Segment Routing.
+      type: object
+      properties:
+        algorithms:
+          description: |-
+            The SR-Algorithm TLV, if present, carries one or more Segment Routing Algorithms that
+            the router supports when calculating reachability to other nodes or to prefixes
+            attached to these nodes.
+            - 0: SPF algorithm based on link metric.
+            - 1: Strict SPF algorithm based on link metric.
+            Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-algorithm-tlv.
+            When the originating router does not advertise the SR-Algorithm TLV, it implies that
+            algorithm 0 is the only algorithm supported. When advertised, algorithm 0 MUST be
+            present while non-zero algorithms MAY be present.
+          type: array
+          items:
+            type: integer
+            format: uint32
+            default: 0
+            minimum: 0
+            maximum: 255
+          x-field-uid: 1
+        srgb_ranges:
+          description: |-
+            The list of Segment Routing Global Block (SRGB) ranges advertised in the
+            SID/Label Range TLV of the RI Opaque LSA.
+            If no SRGB range is configured, an implementation should advertise one SRGB range with
+            default values.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2SR.Srgb'
+          x-field-uid: 2
+        srlb_ranges:
+          description: |-
+            The list of SR Local Block (SRLB) ranges advertised in the SR Local Block TLV of the
+            RI Opaque LSA. The SRLB contains the range of labels the node has reserved for local
+            SIDs, for example Adjacency SIDs.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2SR.Srlb'
+          x-field-uid: 3
+        node_prefix_sid:
+          description: |-
+            Optional Node (loopback) Prefix-SID advertised by this router in the Extended Prefix
+            Opaque LSA for its own loopback address. The Node Prefix-SID identifies the router in
+            the Segment Routing domain.
+          $ref: '#/components/schemas/Ospfv2SR.RouterNodeSid'
+          x-field-uid: 4
+    Ospfv2SR.Srgb:
+      description: |-
+        This contains the properties of a single Segment Routing Global Block (SRGB) range.
+        The SID/Label Range TLV carries the size of the range and a mandatory SID/Label sub-TLV
+        that provides the first (base) SID/Label value of the range.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sidlabel-range-tlv.
+      type: object
+      properties:
+        starting_sid:
+          description: |-
+            The first value of the SRGB range provided by the SID/Label sub-TLV.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 4294967295
+          default: 16000
+          x-field-uid: 1
+        range:
+          description: |-
+            The Range Size, i.e. the number of SIDs in this SRGB range. MUST be greater than zero.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 16777215
+          default: 8000
+          x-field-uid: 2
+    Ospfv2SR.Srlb:
+      description: |-
+        This contains the properties of a single SR Local Block (SRLB) range.
+        The SR Local Block TLV carries the size of the range and a mandatory SID/Label sub-TLV
+        that provides the first (base) SID/Label value of the local block.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-sr-local-block-tlv.
+      type: object
+      properties:
+        starting_sid:
+          description: |-
+            The first value of the SRLB range provided by the SID/Label sub-TLV.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 4294967295
+          default: 16000
+          x-field-uid: 1
+        range:
+          description: |-
+            The Range Size, i.e. the number of SIDs in this SRLB range. MUST be greater than zero.
+          type: integer
+          format: uint32
+          minimum: 1
+          maximum: 16777215
+          default: 8000
+          x-field-uid: 2
+    Ospfv2SR.RouterNodeSid:
+      description: |-
+        The Node (loopback) Prefix-SID advertised by this router for its own loopback address.
+        It is advertised as a Prefix-SID sub-TLV inside the Extended Prefix TLV of the Extended
+        Prefix Opaque LSA, together with the one-octet Extended Prefix flags.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665#name-prefix-sid-sub-tlv.
+      type: object
+      properties:
+        choice:
+          description: |-
+            Choice of whether the Node Prefix-SID carries an absolute value (local label) or a
+            relative index into the SRGB. This choice sets the V-Flag (Value/Index) and the L-Flag
+            (Local/Global) as follows:
+            - sid_index: V-Flag and L-Flag are unset (both 0). The SID carries a 4-octet index that
+              is an offset into the SRGB. Please refer to device.ospfv2.segment_routing.srgb_ranges.
+            - sid_value: V-Flag and L-Flag are set (both 1). The SID carries a 3-octet local label
+              value with local significance.
+          type: string
+          default: sid_index
+          x-field-uid: 1
+          x-enum:
+            sid_value:
+              x-field-uid: 1
+            sid_index:
+              x-field-uid: 2
+          enum:
+          - sid_value
+          - sid_index
+        sid_value:
+          description: |-
+            The Node SID/Label as an absolute local label value. Used when the choice is sid_value.
+          type: integer
+          format: uint32
+          default: 16
+          minimum: 16
+          maximum: 1048575
+          x-field-uid: 2
+        sid_index:
+          description: |-
+            The Node SID/Label index, an offset into the SRGB. Used when the choice is sid_index.
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 4294967295
+          x-field-uid: 3
+        np_flag:
+          description: |-
+            NP-Flag: No-PHP (No Penultimate Hop-Popping) Flag.
+            If set, then the penultimate hop MUST NOT pop the Prefix-SID before delivering the
+            packet to this node.
+          type: boolean
+          default: true
+          x-field-uid: 4
+        m_flag:
+          description: |-
+            M-Flag: Mapping Server Flag.
+            If set, then the SID was advertised by an SR Mapping Server. When set, the NP-Flag and
+            the E-Flag MUST be ignored on reception.
+          type: boolean
+          default: false
+          x-field-uid: 5
+        e_flag:
+          description: |-
+            E-Flag: Explicit-Null Flag.
+            If set, any upstream neighbor of the Prefix-SID originator MUST replace the Prefix-SID
+            with the Explicit-NULL label before forwarding the packet.
+          type: boolean
+          default: false
+          x-field-uid: 6
+        algorithm:
+          description: |-
+            The Segment Routing Algorithm the Node Prefix-SID is associated with, e.g. 0 for SPF
+            or 1 for Strict SPF.
+          type: integer
+          format: uint32
+          default: 0
+          minimum: 0
+          maximum: 255
+          x-field-uid: 7
+        n_flag:
+          description: |-
+            N-Flag (Node Flag) of the Extended Prefix TLV flags. Set when the prefix identifies the
+            advertising router, i.e. it is a host prefix advertising a globally reachable address
+            typically associated with a loopback address. This is normally set for a Node SID.
+          type: boolean
+          default: true
+          x-field-uid: 8
+        a_flag:
+          description: |-
+            A-Flag (Attach Flag) of the Extended Prefix TLV flags. An Area Border Router (ABR)
+            generating an OSPFv2 Extended Prefix TLV for an inter-area prefix that is locally
+            connected or attached in another connected area SHOULD set this flag.
+          type: boolean
+          default: false
+          x-field-uid: 9
+        additional_prefix_sids:
+          description: |-
+            An optional list of additional Node Prefix-SIDs advertised for the same loopback
+            prefix but with different Segment Routing algorithms (one Prefix-SID sub-TLV per
+            algorithm).
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2SR.PrefixSid'
+          x-field-uid: 10
     Device.Ospfv3Router:
       description: |-
         A container of properties for an OSPFv3 router.
@@ -12880,8 +13211,7 @@ components:
           x-unique: global
         ipv6_name:
           description: "The globally unique name of the IPv6 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n\
-            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
+            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv6/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -13219,10 +13549,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -13394,10 +13720,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -13479,10 +13801,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -13505,10 +13823,6 @@ components:
         ipv6_name:
           description: |
             The unique name of the IPv6 interface used as the source IP for BMP Server.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -13861,10 +14175,7 @@ components:
           description: "Under Review: The packet header schema for egress tracking\
             \ currently exposes unwanted fields. The query structure for tagged metrics\
             \ inside flows metrics requires documenting expected response format.\n\
-            \nUnder Review: The packet header schema for egress tracking currently\
-            \ exposes unwanted fields. The query structure for tagged metrics inside\
-            \ flows metrics requires documenting expected response format.\n\nThe\
-            \ list of protocol headers defining the shape of all \nintended packets\
+            \nThe list of protocol headers defining the shape of all \nintended packets\
             \ in corresponding flow as it is received\nby traffic-generator port.\n\
             \nFor all protocol headers, only the `metric_tags` property is configurable."
           type: array
@@ -13949,11 +14260,6 @@ components:
             x-constraint:
             - /components/schemas/Port/properties/name
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -13963,14 +14269,7 @@ components:
           description: |
             Deprecated: This property is deprecated in favor of property rx_names
 
-            Deprecated: This property is deprecated in favor of property rx_names
-
             The unique name of a port that is the intended receive port.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -13986,11 +14285,6 @@ components:
         rx_names:
           description: |
             Unique name of ports or lags that are intended receive endpoints.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -14103,22 +14397,6 @@ components:
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv4client/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PIngressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
         rx_names:
           type: array
           items:
@@ -14165,27 +14443,11 @@ components:
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
             - /components/schemas/Device.Dhcpv6client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Bgp.CMacIpRange/properties/name
-            - /components/schemas/Rsvp.LspIpv4Interface.P2PEgressIpv4Lsp/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv4client/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
-            - /components/schemas/Device.Dhcpv6client/properties/name
         bidirectional:
           description: "Allows traffic sub-flow(s) to be created on both forward and\
             \ reverse directions between the device endpoint pairs. \nWhen enabled,\
-            \ traffic is sent from <b>tx_names → rx_names</b> as well as from <b>rx_names\
-            \ → tx_names</b>.\nThe bidirectional option creates two separate sub-flows\
+            \ traffic is sent from <b>tx_names to rx_names</b> as well as from <b>rx_names\
+            \ to tx_names</b>.\nThe bidirectional option creates two separate sub-flows\
             \ under the same flow name, Only the flow endpoints are reversed automatically\
             \ for the reverse sub-flow.\n\nThe implementation should create two sub-flows\
             \ with full endpoint source and\ndestination reversal, including eth.src/eth.dst,\
@@ -18517,8 +18779,7 @@ components:
           description: "Constrain the events being returned by specifying event sources.\
             \ \nIf the list is empty then all event sources will be returned. \n\n\
             x-constraint:\n- /components/schemas/Port/properties/name\n- /components/schemas/Bgp.V4RouteRange/name\n\
-            - /components/schemas/Bgp.V6RouteRange/name\n\n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
-            - /components/schemas/Bgp.V4RouteRange/name\n- /components/schemas/Bgp.V6RouteRange/name\n"
+            - /components/schemas/Bgp.V6RouteRange/name\n"
           type: array
           items:
             type: string
@@ -18621,10 +18882,6 @@ components:
         port_name:
           description: |
             Name of the test port on which LLDP is configured on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -18887,10 +19144,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -18948,10 +19201,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.QPs/properties/qp_name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.QPs/properties/qp_name
           type: string
           x-constraint:
           - /components/schemas/Rocev2.QPs/properties/qp_name
@@ -18959,11 +19208,6 @@ components:
         rx_endpoint:
           description: |
             The unique name of remote QP or port which be receiving the packets for the flow.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-            - /components/schemas/Rocev2.QPs/properties/qp_name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19069,10 +19313,6 @@ components:
         port_name:
           description: |
             Name of the received port this egress tracking rule/specification has to be applied.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19200,10 +19440,6 @@ components:
         port_name:
           description: |
             The name of port for which this settings will be applied to.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -19626,7 +19862,7 @@ components:
       properties:
         rx_sectag_offset:
           description: |-
-            Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+            Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value '0x88E5'.
           type: integer
           format: uint32
           minimum: 12
@@ -19907,10 +20143,6 @@ components:
 
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -20015,10 +20247,6 @@ components:
         flows:
           description: |
             List of flows that will be deleted from existing configuration on the traffic generator.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -20170,10 +20398,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20207,10 +20431,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20241,10 +20461,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20262,10 +20478,6 @@ components:
           description: |
             The names of flows to which the transmit state will be applied to. If the list of flow_names is empty or null the state will be applied to all configured flows.
             If the list is not empty any flow that is not included in the list of flow_names MUST be ignored and not included in the state change.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -20337,15 +20549,6 @@ components:
             - /components/schemas/Isis.V6RouteRange/properties/name
             - /components/schemas/Ospfv2.V4RouteRange/properties/name
             - /components/schemas/Ospfv3.V6RouteRange/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4RouteRange/properties/name
-            - /components/schemas/Bgp.V6RouteRange/properties/name
-            - /components/schemas/Isis.V4RouteRange/properties/name
-            - /components/schemas/Isis.V6RouteRange/properties/name
-            - /components/schemas/Ospfv2.V4RouteRange/properties/name
-            - /components/schemas/Ospfv3.V6RouteRange/properties/name
           type: array
           items:
             type: string
@@ -20406,10 +20609,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -20438,10 +20637,6 @@ components:
         lag_member_names:
           description: |
             The names of LAG members (ports) for which the state has to be applied. An empty or null list will control all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -20491,11 +20686,6 @@ components:
         peer_names:
           description: |
             The names of BGP peers for which the state has to be applied. An empty or null list will control all BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -20559,10 +20749,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -20614,10 +20800,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
           type: array
           items:
             type: string
@@ -20666,10 +20848,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -20725,11 +20903,6 @@ components:
             x-constraint:
             - /components/schemas/Rocev2.V4Peer/properties/name
             - /components/schemas/Rocev2.V6Peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4Peer/properties/name
-            - /components/schemas/Rocev2.V6Peer/properties/name
           type: array
           items:
             type: string
@@ -20763,10 +20936,6 @@ components:
 
             x-constraint:
             - /components/schemas/Isis.Interface/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Isis.Interface/properties/name
           type: array
           items:
             type: string
@@ -20775,8 +20944,8 @@ components:
           x-field-uid: 1
         state:
           description: "Sets the Control State of one or more Simulated Links to UP\
-            \ or DOWN. \nThe state change is applied bidirectionally — a link between\
-            \ IS-IS Routers A and B is affected \nin both directions simultaneously.\n\
+            \ or DOWN. \nThe state change is applied bidirectionally - a link between\
+            \ IS-IS Routers A and B is affected\nin both directions simultaneously.\n\
             Setting Control State to DOWN transitions the selected Simulated Links\
             \ to a disconnected state. \nBoth the Simulated/Emulated Router hosting\
             \ the link and the neighboring router at the far end \nwill remove the\
@@ -21003,11 +21172,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
             - /components/schemas/Device.Ipv4Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -21043,11 +21207,6 @@ components:
         src_name:
           description: |
             Name of source IPv4 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv4/properties/name
-            - /components/schemas/Device.Ipv4Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv4/properties/name
@@ -21137,11 +21296,6 @@ components:
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
             - /components/schemas/Device.Ipv6Loopback/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv6/properties/name
@@ -21177,11 +21331,6 @@ components:
         src_name:
           description: |
             Name of source IPv6 interface used for ping.
-
-            x-constraint:
-            - /components/schemas/Device.Ipv6/properties/name
-            - /components/schemas/Device.Ipv6Loopback/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ipv6/properties/name
@@ -21247,11 +21396,6 @@ components:
         names:
           description: |
             The names of BGP Peers to send NOTIFICATION to. If no name is specified then NOTIFICATION will be sent to all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -21331,11 +21475,6 @@ components:
         peer_names:
           description: |
             The names of device BGP peers objects to control.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -21469,10 +21608,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -21560,10 +21695,6 @@ components:
         router_names:
           description: |
             The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -21947,10 +22078,6 @@ components:
 
             x-constraint:
             - /components/schemas/Port/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
           type: array
           items:
             type: string
@@ -22014,10 +22141,6 @@ components:
         name:
           description: |
             The name of a configured port
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -22158,10 +22281,6 @@ components:
           description: |
             Flow metrics will be retrieved for these flow names.
             If no flow names are specified then all flows will be returned.
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
-
 
             x-constraint:
             - /components/schemas/Flow/properties/name
@@ -22682,10 +22801,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V4peer/properties/name
           type: array
           items:
             type: string
@@ -22892,10 +23007,6 @@ components:
 
             x-constraint:
             - /components/schemas/Bgp.V6peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Bgp.V6peer/properties/name
           type: array
           items:
             type: string
@@ -23099,10 +23210,6 @@ components:
         router_names:
           description: |
             The names of ISIS Routers to return results for. An empty list will return results for all ISIS router.
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
@@ -23412,10 +23519,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -23467,10 +23570,6 @@ components:
         name:
           description: |
             The name of a configured LAG
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
-
 
             x-constraint:
             - /components/schemas/Lag/properties/name
@@ -23553,10 +23652,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lag/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lag/properties/name
           type: array
           items:
             type: string
@@ -23566,10 +23661,6 @@ components:
         lag_member_port_names:
           description: |
             The names of LAG members (ports) for which LACP metrics to be returned. An empty list will return metrics for all LAG members.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name
@@ -23767,10 +23858,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -23858,10 +23945,6 @@ components:
         router_names:
           description: |
             The names of RSVP-TE Routers to return results for. An empty list as input will return results for all RSVP-TE routers.
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
@@ -24162,10 +24245,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -24265,10 +24344,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4Server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4Server/properties/name
           type: array
           items:
             type: string
@@ -24365,10 +24440,6 @@ components:
         client_names:
           description: |
             The names of DHCPv6 clients to return results for. An empty list will return results for all DHCPv6 client.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -24522,10 +24593,6 @@ components:
         server_names:
           description: |
             The names of DHCPv6 Servers to return results for. An empty list will return results for all DHCPv6 Server.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6Server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6Server/properties/name
@@ -24697,10 +24764,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers to return results for. An empty list will return results for all OSPFv2 router.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2/properties/name
@@ -25040,10 +25103,6 @@ components:
 
             x-constraint:
             - /components/schemas/Flow/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Flow/properties/name
           type: array
           items:
             type: string
@@ -25119,9 +25178,7 @@ components:
             \ one of the x-constraint paths,\nwhich means the source MUST be a unique\
             \ name in the configuration. \n\nx-constraint:\n- /components/schemas/Port/properties/name\n\
             - /components/schemas/Flow/properties/name\n- /components/schemas/Device.Bgpv4Route/properties/name\n\
-            - /components/schemas/Device.Bgpv6Route/properties/name\n\n\nx-constraint:\n\
-            - /components/schemas/Port/properties/name\n- /components/schemas/Flow/properties/name\n\
-            - /components/schemas/Device.Bgpv4Route/properties/name\n- /components/schemas/Device.Bgpv6Route/properties/name\n"
+            - /components/schemas/Device.Bgpv6Route/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Port/properties/name
@@ -25149,10 +25206,6 @@ components:
         secure_entity_names:
           description: |
             The names of secure entities(secYs) to return results for. An empty list will return results for all secYs.
-
-            x-constraint:
-            - /components/schemas/SecureEntity/properties/name
-
 
             x-constraint:
             - /components/schemas/SecureEntity/properties/name
@@ -25370,10 +25423,6 @@ components:
 
             x-constraint:
             - /components/schemas/Mka/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Mka/properties/name
           type: array
           items:
             type: string
@@ -25504,10 +25553,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers to return results for. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -25849,10 +25894,6 @@ components:
 
             x-constraint:
             - /components/schemas/Rocev2.V4peer/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Rocev2.V4peer/properties/name
           items:
             type: string
           x-constraint:
@@ -26042,10 +26083,6 @@ components:
         peer_names:
           description: |
             The names of RoCEv2 over IPv6 peers to return results for. An empty list will return results for all RoCEv2 peers.
-
-            x-constraint:
-            - /components/schemas/Rocev2.V6peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Rocev2.V6peer/properties/name
@@ -26546,10 +26583,6 @@ components:
 
             x-constraint:
             - /components/schemas/EgressOnlyTracking/properties/port_name
-
-
-            x-constraint:
-            - /components/schemas/EgressOnlyTracking/properties/port_name
           type: array
           items:
             type: string
@@ -26786,11 +26819,6 @@ components:
         server_names:
           description: |
             The names of BMP Servers to return results for. An empty list will return results for all BMP Servers.
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bmp.ServerV4/properties/name
@@ -27174,10 +27202,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -27220,10 +27244,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Ethernet/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Ethernet/properties/name
           type: array
           items:
             type: string
@@ -27263,11 +27283,6 @@ components:
         bgp_peer_names:
           description: |
             The names of BGP peers for which prefix information will be retrieved. If no names are specified then the results will contain prefix information for all configured BGP peers.
-
-            x-constraint:
-            - /components/schemas/Bgp.V4Peer/properties/name
-            - /components/schemas/Bgp.V6Peer/properties/name
-
 
             x-constraint:
             - /components/schemas/Bgp.V4Peer/properties/name
@@ -28216,10 +28231,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -29009,10 +29020,6 @@ components:
 
             x-constraint:
             - /components/schemas/Lldp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Lldp/properties/name
           type: array
           items:
             type: string
@@ -29248,10 +29255,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Rsvp/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Rsvp/properties/name
           type: array
           items:
             type: string
@@ -29456,10 +29459,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4client/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4client/properties/name
           type: array
           items:
             type: string
@@ -29519,10 +29518,6 @@ components:
         dhcp_server_names:
           description: |
             The names of DHCPv4 server to return results for. An empty list will return results for all DHCPv4 servers.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv4server/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv4server/properties/name
@@ -29604,10 +29599,6 @@ components:
         dhcp_client_names:
           description: |
             The names of DHCPv6 client to return results for. An empty list will return results for all DHCPv6 Client address information.
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6client/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6client/properties/name
@@ -29699,10 +29690,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.Dhcpv6server/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.Dhcpv6server/properties/name
           type: array
           items:
             type: string
@@ -29781,10 +29768,6 @@ components:
         router_names:
           description: |
             The names of OSPFv2 routers for which learned information is requested. An empty list will return results for all OSPFv2 routers.
-
-            x-constraint:
-            - /components/schemas/Device.Ospfv2Router/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Ospfv2Router/properties/name
@@ -29870,6 +29853,17 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Link'
           x-field-uid: 2
+        label:
+          description: |-
+            The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
+          type: integer
+          format: uint32
+          x-field-uid: 3
+        srgb:
+          description: |-
+            The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
+          type: string
+          x-field-uid: 4
     Ospfv2.NetworkLsa:
       description: |-
         Contents of the Network LSA.
@@ -29917,6 +29911,12 @@ components:
           type: integer
           format: uint32
           x-field-uid: 3
+        label:
+          description: |-
+            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+          type: integer
+          format: uint32
+          x-field-uid: 4
     Ospfv2.SummaryAsLsa:
       description: |-
         Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
@@ -29968,6 +29968,12 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
+        label:
+          description: |-
+            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+          type: integer
+          format: uint32
+          x-field-uid: 5
     Ospfv2.NssaLsa:
       description: |-
         Contents of OSPFv2 NSSA LSA - Type 7.
@@ -30003,6 +30009,12 @@ components:
           type: string
           format: ipv4
           x-field-uid: 5
+        label:
+          description: |-
+            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+          type: integer
+          format: uint32
+          x-field-uid: 6
     Ospfv2.OpaqueLsa:
       description: |-
         Contents of OSPFv2 Opaque LSA - Type 7.
@@ -30029,6 +30041,13 @@ components:
           - local
           - area
           - domain
+        tlvs:
+          description: |-
+            The list of TLVs learned in this Opaque LSA. The Segment Routing information is carried here, e.g. the Extended Prefix TLV (with the Prefix-SID sub-TLV), the Extended Link TLV (with the Adjacency-SID / LAN Adjacency-SID sub-TLVs), and the Router Information (RI) SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB) and SRMS Preference TLVs.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.OpaqueLsaTlv'
+          x-field-uid: 4
     Ospfv2.LsaHeader:
       description: |-
         Attributes in LSA Header.
@@ -30117,6 +30136,121 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
+        adjacency_label:
+          description: |-
+            The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+          type: integer
+          format: uint32
+          x-field-uid: 5
+    Ospfv2.OpaqueLsaTlv:
+      description: |-
+        A single TLV learned within an OSPFv2 Opaque LSA, reported as a type, length and raw value.
+      type: object
+      properties:
+        type:
+          description: |-
+            The Opaque LSA TLV type. The Segment Routing related types are the Extended Prefix TLV,
+            the Extended Prefix Range TLV, the Router Information (RI) SR-Algorithm TLV, the RI
+            Global (SRGB) and Local (SRLB) Label Range TLVs, the RI SRMS Preference TLV and the
+            Extended Link TLV.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            unknown:
+              x-field-uid: 1
+            router_address:
+              x-field-uid: 2
+            link:
+              x-field-uid: 3
+            extended_prefix:
+              x-field-uid: 4
+            extended_prefix_range:
+              x-field-uid: 5
+            ri_sr_algorithm:
+              x-field-uid: 6
+            ri_global_label_range:
+              x-field-uid: 7
+            ri_local_label_range:
+              x-field-uid: 8
+            ri_srms_preference:
+              x-field-uid: 9
+            extended_link:
+              x-field-uid: 10
+            ri_flex_algo_definition:
+              x-field-uid: 11
+          enum:
+          - unknown
+          - router_address
+          - link
+          - extended_prefix
+          - extended_prefix_range
+          - ri_sr_algorithm
+          - ri_global_label_range
+          - ri_local_label_range
+          - ri_srms_preference
+          - extended_link
+          - ri_flex_algo_definition
+        length:
+          description: |-
+            The length of the TLV value.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        value:
+          description: |-
+            The raw value of the TLV.
+          type: string
+          x-field-uid: 3
+        sub_tlvs:
+          description: |-
+            The list of sub-TLVs learned within this TLV, e.g. the Prefix-SID, SID/Label, Adjacency-SID and LAN Adjacency-SID sub-TLVs.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2.OpaqueLsaSubTlv'
+          x-field-uid: 4
+    Ospfv2.OpaqueLsaSubTlv:
+      description: |-
+        A single sub-TLV learned within an OSPFv2 Opaque LSA TLV, reported as a type, length and raw value.
+      type: object
+      properties:
+        type:
+          description: |-
+            The Opaque LSA sub-TLV type. The Segment Routing related sub-TLV types are the
+            Prefix-SID, the SID/Label, the Adjacency-SID (Adj SID or Label), the LAN Adjacency-SID
+            (LAN Adj SID or Label) and the Source Router ID.
+          type: string
+          x-field-uid: 1
+          x-enum:
+            unknown:
+              x-field-uid: 1
+            prefix_sid:
+              x-field-uid: 2
+            sid_label:
+              x-field-uid: 3
+            adj_sid_label:
+              x-field-uid: 4
+            lan_adj_sid_label:
+              x-field-uid: 5
+            source_router_id:
+              x-field-uid: 6
+          enum:
+          - unknown
+          - prefix_sid
+          - sid_label
+          - adj_sid_label
+          - lan_adj_sid_label
+          - source_router_id
+        length:
+          description: |-
+            The length of the sub-TLV value.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+        value:
+          description: |-
+            The raw value of the sub-TLV.
+          type: string
+          x-field-uid: 3
     Ospfv3Lsas.State.Request:
       description: |-
         The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned by the routers.
@@ -30125,10 +30259,6 @@ components:
         router_names:
           description: |
             The names of OSPFv3 routers for which learned information is requested. An empty list will return results for all OSPFv3 routers.
-
-            x-constraint:
-            - /components/schemas/Ospfv3.RouterInstance/properties/name
-
 
             x-constraint:
             - /components/schemas/Ospfv3.RouterInstance/properties/name
@@ -30512,10 +30642,6 @@ components:
 
             x-constraint:
             - /components/schemas/Device.IsisRouter/properties/name
-
-
-            x-constraint:
-            - /components/schemas/Device.IsisRouter/properties/name
           type: array
           items:
             type: string
@@ -30874,11 +31000,6 @@ components:
         bmp_server_names:
           description: |
             The names of the BMP Servers  to return results for. An empty list will return results for all BMP Servers.
-
-            x-constraint:
-            - /components/schemas/Device.Bmp.ServerV4/properties/name
-            - /components/schemas/Device.Bmp.ServerV6/properties/name
-
 
             x-constraint:
             - /components/schemas/Device.Bmp.ServerV4/properties/name
@@ -31386,10 +31507,6 @@ components:
         port_name:
           description: |
             The name of a port a capture is started on.
-
-            x-constraint:
-            - /components/schemas/Port/properties/name
-
 
             x-constraint:
             - /components/schemas/Port/properties/name

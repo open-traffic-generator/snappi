@@ -18,6 +18,7 @@ type ospfv2V4RouteRange struct {
 	unMarshaller      unMarshalOspfv2V4RouteRange
 	addressesHolder   Ospfv2V4RouteRangeV4RouteAddressIter
 	routeOriginHolder Ospfv2V4RRRouteOrigin
+	prefixSidsHolder  Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
 }
 
 func NewOspfv2V4RouteRange() Ospfv2V4RouteRange {
@@ -247,6 +248,7 @@ func (obj *ospfv2V4RouteRange) Clone() (Ospfv2V4RouteRange, error) {
 func (obj *ospfv2V4RouteRange) setNil() {
 	obj.addressesHolder = nil
 	obj.routeOriginHolder = nil
+	obj.prefixSidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -296,6 +298,8 @@ type Ospfv2V4RouteRange interface {
 	SetRouteOrigin(value Ospfv2V4RRRouteOrigin) Ospfv2V4RouteRange
 	// HasRouteOrigin checks if RouteOrigin has been set in Ospfv2V4RouteRange
 	HasRouteOrigin() bool
+	// PrefixSids returns Ospfv2V4RouteRangeOspfv2SRPrefixSidIterIter, set in Ospfv2V4RouteRange
+	PrefixSids() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
 	setNil()
 }
 
@@ -452,6 +456,93 @@ func (obj *ospfv2V4RouteRange) SetRouteOrigin(value Ospfv2V4RRRouteOrigin) Ospfv
 	return obj
 }
 
+// A list of OSPFv2 Prefix-SID sub-TLVs advertised in the Extended Prefix Opaque LSA for this group of IPv4 route addresses (RFC 8665).
+// PrefixSids returns a []Ospfv2SRPrefixSid
+func (obj *ospfv2V4RouteRange) PrefixSids() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	if len(obj.obj.PrefixSids) == 0 {
+		obj.obj.PrefixSids = []*otg.Ospfv2SRPrefixSid{}
+	}
+	if obj.prefixSidsHolder == nil {
+		obj.prefixSidsHolder = newOspfv2V4RouteRangeOspfv2SRPrefixSidIter(&obj.obj.PrefixSids).setMsg(obj)
+	}
+	return obj.prefixSidsHolder
+}
+
+type ospfv2V4RouteRangeOspfv2SRPrefixSidIter struct {
+	obj                    *ospfv2V4RouteRange
+	ospfv2SRPrefixSidSlice []Ospfv2SRPrefixSid
+	fieldPtr               *[]*otg.Ospfv2SRPrefixSid
+}
+
+func newOspfv2V4RouteRangeOspfv2SRPrefixSidIter(ptr *[]*otg.Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	return &ospfv2V4RouteRangeOspfv2SRPrefixSidIter{fieldPtr: ptr}
+}
+
+type Ospfv2V4RouteRangeOspfv2SRPrefixSidIter interface {
+	setMsg(*ospfv2V4RouteRange) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+	Items() []Ospfv2SRPrefixSid
+	Add() Ospfv2SRPrefixSid
+	Append(items ...Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+	Set(index int, newObj Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+	Clear() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+	clearHolderSlice() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+	appendHolderSlice(item Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter
+}
+
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) setMsg(msg *ospfv2V4RouteRange) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2SRPrefixSid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) Items() []Ospfv2SRPrefixSid {
+	return obj.ospfv2SRPrefixSidSlice
+}
+
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) Add() Ospfv2SRPrefixSid {
+	newObj := &otg.Ospfv2SRPrefixSid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2SRPrefixSid{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) Append(items ...Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) Set(index int, newObj Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2SRPrefixSidSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) Clear() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2SRPrefixSid{}
+		obj.ospfv2SRPrefixSidSlice = []Ospfv2SRPrefixSid{}
+	}
+	return obj
+}
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) clearHolderSlice() Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	if len(obj.ospfv2SRPrefixSidSlice) > 0 {
+		obj.ospfv2SRPrefixSidSlice = []Ospfv2SRPrefixSid{}
+	}
+	return obj
+}
+func (obj *ospfv2V4RouteRangeOspfv2SRPrefixSidIter) appendHolderSlice(item Ospfv2SRPrefixSid) Ospfv2V4RouteRangeOspfv2SRPrefixSidIter {
+	obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, item)
+	return obj
+}
+
 func (obj *ospfv2V4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -489,6 +580,20 @@ func (obj *ospfv2V4RouteRange) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.RouteOrigin != nil {
 
 		obj.RouteOrigin().validateObj(vObj, set_default)
+	}
+
+	if len(obj.obj.PrefixSids) != 0 {
+
+		if set_default {
+			obj.PrefixSids().clearHolderSlice()
+			for _, item := range obj.obj.PrefixSids {
+				obj.PrefixSids().appendHolderSlice(&ospfv2SRPrefixSid{obj: item})
+			}
+		}
+		for _, item := range obj.PrefixSids().Items() {
+			item.validateObj(vObj, set_default)
+		}
+
 	}
 
 }
