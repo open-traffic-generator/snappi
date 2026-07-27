@@ -413,6 +413,8 @@ from .snappi import Ospfv2AuthenticationMd5
 from .snappi import Ospfv2AuthenticationMd5Iter
 from .snappi import Ospfv2InterfaceAdvanced
 from .snappi import Ospfv2InterfaceLinkProtection
+from .snappi import Ospfv2InterfaceAdjacencySid
+from .snappi import Ospfv2InterfaceAdjacencySidIter
 from .snappi import Ospfv2InterfaceIter
 from .snappi import Ospfv2V4RouteRange
 from .snappi import Ospfv2V4RRRouteOrigin
@@ -422,7 +424,15 @@ from .snappi import Ospfv2V4RRInterArea
 from .snappi import Ospfv2V4RRExternalType1
 from .snappi import Ospfv2V4RRExternalType2
 from .snappi import Ospfv2V4RRNssaExternal
+from .snappi import Ospfv2SRPrefixSid
+from .snappi import Ospfv2SRPrefixSidIter
 from .snappi import Ospfv2V4RouteRangeIter
+from .snappi import Ospfv2SegmentRouting
+from .snappi import Ospfv2SRSrgb
+from .snappi import Ospfv2SRSrgbIter
+from .snappi import Ospfv2SRSrlb
+from .snappi import Ospfv2SRSrlbIter
+from .snappi import Ospfv2SRRouterNodeSid
 from .snappi import DeviceMacsec
 from .snappi import DeviceMacsecEthernetInterface
 from .snappi import SecureEntity
@@ -1835,6 +1845,10 @@ from .snappi import Ospfv2ExternalAsLsaIter
 from .snappi import Ospfv2NssaLsa
 from .snappi import Ospfv2NssaLsaIter
 from .snappi import Ospfv2OpaqueLsa
+from .snappi import Ospfv2OpaqueLsaTlv
+from .snappi import Ospfv2OpaqueLsaSubTlv
+from .snappi import Ospfv2OpaqueLsaSubTlvIter
+from .snappi import Ospfv2OpaqueLsaTlvIter
 from .snappi import Ospfv2OpaqueLsaIter
 from .snappi import Ospfv2LsaStateIter
 from .snappi import Ospfv3LsaState

@@ -22,6 +22,7 @@ type ospfv2Interface struct {
 	authenticationHolder     Ospfv2InterfaceAuthentication
 	advancedHolder           Ospfv2InterfaceAdvanced
 	linkProtectionHolder     Ospfv2InterfaceLinkProtection
+	adjacencySidsHolder      Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
 }
 
 func NewOspfv2Interface() Ospfv2Interface {
@@ -255,6 +256,7 @@ func (obj *ospfv2Interface) setNil() {
 	obj.authenticationHolder = nil
 	obj.advancedHolder = nil
 	obj.linkProtectionHolder = nil
+	obj.adjacencySidsHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -344,6 +346,8 @@ type Ospfv2Interface interface {
 	SrlgValues() []uint32
 	// SetSrlgValues assigns []uint32 provided by user to Ospfv2Interface
 	SetSrlgValues(value []uint32) Ospfv2Interface
+	// AdjacencySids returns Ospfv2InterfaceOspfv2InterfaceAdjacencySidIterIter, set in Ospfv2Interface
+	AdjacencySids() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
 	setNil()
 }
 
@@ -368,9 +372,6 @@ func (obj *ospfv2Interface) SetName(value string) Ospfv2Interface {
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
-//
 // Ipv4Name returns a string
 func (obj *ospfv2Interface) Ipv4Name() string {
 
@@ -379,9 +380,6 @@ func (obj *ospfv2Interface) Ipv4Name() string {
 }
 
 // The globally unique name of the IPv4 interface connected to the DUT.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv4/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
@@ -654,6 +652,93 @@ func (obj *ospfv2Interface) SetSrlgValues(value []uint32) Ospfv2Interface {
 	return obj
 }
 
+// List of OSPFv2 Adjacency SID sub-TLVs advertised in the Extended Link Opaque LSA for this interface (RFC 8665). Typically used on point-to-point links.
+// AdjacencySids returns a []Ospfv2InterfaceAdjacencySid
+func (obj *ospfv2Interface) AdjacencySids() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	if len(obj.obj.AdjacencySids) == 0 {
+		obj.obj.AdjacencySids = []*otg.Ospfv2InterfaceAdjacencySid{}
+	}
+	if obj.adjacencySidsHolder == nil {
+		obj.adjacencySidsHolder = newOspfv2InterfaceOspfv2InterfaceAdjacencySidIter(&obj.obj.AdjacencySids).setMsg(obj)
+	}
+	return obj.adjacencySidsHolder
+}
+
+type ospfv2InterfaceOspfv2InterfaceAdjacencySidIter struct {
+	obj                              *ospfv2Interface
+	ospfv2InterfaceAdjacencySidSlice []Ospfv2InterfaceAdjacencySid
+	fieldPtr                         *[]*otg.Ospfv2InterfaceAdjacencySid
+}
+
+func newOspfv2InterfaceOspfv2InterfaceAdjacencySidIter(ptr *[]*otg.Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	return &ospfv2InterfaceOspfv2InterfaceAdjacencySidIter{fieldPtr: ptr}
+}
+
+type Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter interface {
+	setMsg(*ospfv2Interface) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+	Items() []Ospfv2InterfaceAdjacencySid
+	Add() Ospfv2InterfaceAdjacencySid
+	Append(items ...Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+	Set(index int, newObj Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+	Clear() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+	clearHolderSlice() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+	appendHolderSlice(item Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter
+}
+
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) setMsg(msg *ospfv2Interface) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	obj.clearHolderSlice()
+	for _, val := range *obj.fieldPtr {
+		obj.appendHolderSlice(&ospfv2InterfaceAdjacencySid{obj: val})
+	}
+	obj.obj = msg
+	return obj
+}
+
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) Items() []Ospfv2InterfaceAdjacencySid {
+	return obj.ospfv2InterfaceAdjacencySidSlice
+}
+
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) Add() Ospfv2InterfaceAdjacencySid {
+	newObj := &otg.Ospfv2InterfaceAdjacencySid{}
+	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+	newLibObj := &ospfv2InterfaceAdjacencySid{obj: newObj}
+	newLibObj.setDefault()
+	obj.ospfv2InterfaceAdjacencySidSlice = append(obj.ospfv2InterfaceAdjacencySidSlice, newLibObj)
+	return newLibObj
+}
+
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) Append(items ...Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	for _, item := range items {
+		newObj := item.msg()
+		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
+		obj.ospfv2InterfaceAdjacencySidSlice = append(obj.ospfv2InterfaceAdjacencySidSlice, item)
+	}
+	return obj
+}
+
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) Set(index int, newObj Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	(*obj.fieldPtr)[index] = newObj.msg()
+	obj.ospfv2InterfaceAdjacencySidSlice[index] = newObj
+	return obj
+}
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) Clear() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	if len(*obj.fieldPtr) > 0 {
+		*obj.fieldPtr = []*otg.Ospfv2InterfaceAdjacencySid{}
+		obj.ospfv2InterfaceAdjacencySidSlice = []Ospfv2InterfaceAdjacencySid{}
+	}
+	return obj
+}
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) clearHolderSlice() Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	if len(obj.ospfv2InterfaceAdjacencySidSlice) > 0 {
+		obj.ospfv2InterfaceAdjacencySidSlice = []Ospfv2InterfaceAdjacencySid{}
+	}
+	return obj
+}
+func (obj *ospfv2InterfaceOspfv2InterfaceAdjacencySidIter) appendHolderSlice(item Ospfv2InterfaceAdjacencySid) Ospfv2InterfaceOspfv2InterfaceAdjacencySidIter {
+	obj.ospfv2InterfaceAdjacencySidSlice = append(obj.ospfv2InterfaceAdjacencySidSlice, item)
+	return obj
+}
+
 func (obj *ospfv2Interface) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -717,6 +802,20 @@ func (obj *ospfv2Interface) validateObj(vObj *validation, set_default bool) {
 					fmt.Sprintf("min(uint32) <= Ospfv2Interface.SrlgValues <= 16777215 but Got %d", item))
 			}
 
+		}
+
+	}
+
+	if len(obj.obj.AdjacencySids) != 0 {
+
+		if set_default {
+			obj.AdjacencySids().clearHolderSlice()
+			for _, item := range obj.obj.AdjacencySids {
+				obj.AdjacencySids().appendHolderSlice(&ospfv2InterfaceAdjacencySid{obj: item})
+			}
+		}
+		for _, item := range obj.AdjacencySids().Items() {
+			item.validateObj(vObj, set_default)
 		}
 
 	}

@@ -288,9 +288,6 @@ type PerPortOptions interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *perPortOptions) PortName() string {
 
@@ -303,18 +300,12 @@ func (obj *perPortOptions) PortName() string {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortName returns a string
 func (obj *perPortOptions) HasPortName() bool {
 	return obj.obj.PortName != nil
 }
 
 // The name of port for which this settings will be applied to.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

@@ -284,6 +284,18 @@ type Ospfv2RouterLsa interface {
 	HasHeader() bool
 	// Links returns Ospfv2RouterLsaOspfv2LinkIterIter, set in Ospfv2RouterLsa
 	Links() Ospfv2RouterLsaOspfv2LinkIter
+	// Label returns uint32, set in Ospfv2RouterLsa.
+	Label() uint32
+	// SetLabel assigns uint32 provided by user to Ospfv2RouterLsa
+	SetLabel(value uint32) Ospfv2RouterLsa
+	// HasLabel checks if Label has been set in Ospfv2RouterLsa
+	HasLabel() bool
+	// Srgb returns string, set in Ospfv2RouterLsa.
+	Srgb() string
+	// SetSrgb assigns string provided by user to Ospfv2RouterLsa
+	SetSrgb(value string) Ospfv2RouterLsa
+	// HasSrgb checks if Srgb has been set in Ospfv2RouterLsa
+	HasSrgb() bool
 	setNil()
 }
 
@@ -399,6 +411,50 @@ func (obj *ospfv2RouterLsaOspfv2LinkIter) clearHolderSlice() Ospfv2RouterLsaOspf
 }
 func (obj *ospfv2RouterLsaOspfv2LinkIter) appendHolderSlice(item Ospfv2Link) Ospfv2RouterLsaOspfv2LinkIter {
 	obj.ospfv2LinkSlice = append(obj.ospfv2LinkSlice, item)
+	return obj
+}
+
+// The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
+// Label returns a uint32
+func (obj *ospfv2RouterLsa) Label() uint32 {
+
+	return *obj.obj.Label
+
+}
+
+// The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
+// Label returns a uint32
+func (obj *ospfv2RouterLsa) HasLabel() bool {
+	return obj.obj.Label != nil
+}
+
+// The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
+// SetLabel sets the uint32 value in the Ospfv2RouterLsa object
+func (obj *ospfv2RouterLsa) SetLabel(value uint32) Ospfv2RouterLsa {
+
+	obj.obj.Label = &value
+	return obj
+}
+
+// The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
+// Srgb returns a string
+func (obj *ospfv2RouterLsa) Srgb() string {
+
+	return *obj.obj.Srgb
+
+}
+
+// The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
+// Srgb returns a string
+func (obj *ospfv2RouterLsa) HasSrgb() bool {
+	return obj.obj.Srgb != nil
+}
+
+// The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
+// SetSrgb sets the string value in the Ospfv2RouterLsa object
+func (obj *ospfv2RouterLsa) SetSrgb(value string) Ospfv2RouterLsa {
+
+	obj.obj.Srgb = &value
 	return obj
 }
 

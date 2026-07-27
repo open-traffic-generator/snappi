@@ -298,9 +298,6 @@ type FlowMetricsRequest interface {
 // x-constraint:
 // - /components/schemas/Flow/properties/name
 //
-// x-constraint:
-// - /components/schemas/Flow/properties/name
-//
 // FlowNames returns a []string
 func (obj *flowMetricsRequest) FlowNames() []string {
 	if obj.obj.FlowNames == nil {
@@ -311,9 +308,6 @@ func (obj *flowMetricsRequest) FlowNames() []string {
 
 // Flow metrics will be retrieved for these flow names.
 // If no flow names are specified then all flows will be returned.
-//
-// x-constraint:
-// - /components/schemas/Flow/properties/name
 //
 // x-constraint:
 // - /components/schemas/Flow/properties/name

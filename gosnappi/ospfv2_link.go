@@ -288,6 +288,12 @@ type Ospfv2Link interface {
 	SetMetric(value uint32) Ospfv2Link
 	// HasMetric checks if Metric has been set in Ospfv2Link
 	HasMetric() bool
+	// AdjacencyLabel returns uint32, set in Ospfv2Link.
+	AdjacencyLabel() uint32
+	// SetAdjacencyLabel assigns uint32 provided by user to Ospfv2Link
+	SetAdjacencyLabel(value uint32) Ospfv2Link
+	// HasAdjacencyLabel checks if AdjacencyLabel has been set in Ospfv2Link
+	HasAdjacencyLabel() bool
 }
 
 type Ospfv2LinkTypeEnum string
@@ -424,6 +430,28 @@ func (obj *ospfv2Link) HasMetric() bool {
 func (obj *ospfv2Link) SetMetric(value uint32) Ospfv2Link {
 
 	obj.obj.Metric = &value
+	return obj
+}
+
+// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+// AdjacencyLabel returns a uint32
+func (obj *ospfv2Link) AdjacencyLabel() uint32 {
+
+	return *obj.obj.AdjacencyLabel
+
+}
+
+// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+// AdjacencyLabel returns a uint32
+func (obj *ospfv2Link) HasAdjacencyLabel() bool {
+	return obj.obj.AdjacencyLabel != nil
+}
+
+// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+// SetAdjacencyLabel sets the uint32 value in the Ospfv2Link object
+func (obj *ospfv2Link) SetAdjacencyLabel(value uint32) Ospfv2Link {
+
+	obj.obj.AdjacencyLabel = &value
 	return obj
 }
 
