@@ -285,10 +285,6 @@ type ActionProtocolIpv6PingRequest interface {
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv6PingRequest) SrcName() string {
 
@@ -302,20 +298,12 @@ func (obj *actionProtocolIpv6PingRequest) SrcName() string {
 // - /components/schemas/Device.Ipv6/properties/name
 // - /components/schemas/Device.Ipv6Loopback/properties/name
 //
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
-//
 // SrcName returns a string
 func (obj *actionProtocolIpv6PingRequest) HasSrcName() bool {
 	return obj.obj.SrcName != nil
 }
 
 // Name of source IPv6 interface to be used.
-//
-// x-constraint:
-// - /components/schemas/Device.Ipv6/properties/name
-// - /components/schemas/Device.Ipv6Loopback/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv6/properties/name

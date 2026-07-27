@@ -283,16 +283,13 @@ type ActionProtocolIsisOverloadBit interface {
 	setChoice(value ActionProtocolIsisOverloadBitChoiceEnum) ActionProtocolIsisOverloadBit
 	// HasChoice checks if Choice has been set in ActionProtocolIsisOverloadBit
 	HasChoice() bool
-	// getter for Set to set choice.
-	Set()
 	// getter for Unset to set choice.
 	Unset()
+	// getter for Set to set choice.
+	Set()
 }
 
 // The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
@@ -306,9 +303,6 @@ func (obj *actionProtocolIsisOverloadBit) RouterNames() []string {
 }
 
 // The names of IS-IS routers on which to apply the overload bit state. If no names are specified then the action is applied to all configured IS-IS routers.
-//
-// x-constraint:
-// - /components/schemas/Device.IsisRouter/properties/name
 //
 // x-constraint:
 // - /components/schemas/Device.IsisRouter/properties/name
@@ -339,14 +333,14 @@ func (obj *actionProtocolIsisOverloadBit) Choice() ActionProtocolIsisOverloadBit
 	return ActionProtocolIsisOverloadBitChoiceEnum(obj.obj.Choice.Enum().String())
 }
 
-// getter for Set to set choice
-func (obj *actionProtocolIsisOverloadBit) Set() {
-	obj.setChoice(ActionProtocolIsisOverloadBitChoice.SET)
-}
-
 // getter for Unset to set choice
 func (obj *actionProtocolIsisOverloadBit) Unset() {
 	obj.setChoice(ActionProtocolIsisOverloadBitChoice.UNSET)
+}
+
+// getter for Set to set choice
+func (obj *actionProtocolIsisOverloadBit) Set() {
+	obj.setChoice(ActionProtocolIsisOverloadBitChoice.SET)
 }
 
 // set: The router sets the OL bit in its LSP Number zero. Other routers

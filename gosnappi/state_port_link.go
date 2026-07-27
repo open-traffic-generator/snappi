@@ -279,9 +279,6 @@ type StatePortLink interface {
 // x-constraint:
 // - /components/schemas/Port/properties/name
 //
-// x-constraint:
-// - /components/schemas/Port/properties/name
-//
 // PortNames returns a []string
 func (obj *statePortLink) PortNames() []string {
 	if obj.obj.PortNames == nil {
@@ -291,9 +288,6 @@ func (obj *statePortLink) PortNames() []string {
 }
 
 // The names of target ports. An empty or null list will target all ports.
-//
-// x-constraint:
-// - /components/schemas/Port/properties/name
 //
 // x-constraint:
 // - /components/schemas/Port/properties/name

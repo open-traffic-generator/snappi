@@ -279,9 +279,6 @@ type StateProtocolOspfv3Routers interface {
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
-//
 // RouterNames returns a []string
 func (obj *stateProtocolOspfv3Routers) RouterNames() []string {
 	if obj.obj.RouterNames == nil {
@@ -291,9 +288,6 @@ func (obj *stateProtocolOspfv3Routers) RouterNames() []string {
 }
 
 // The names of OSPFv3 routers for which the state has to be applied. An empty or null list will control all OSPFv3 routers.
-//
-// x-constraint:
-// - /components/schemas/Ospfv3.RouterInstance/properties/name
 //
 // x-constraint:
 // - /components/schemas/Ospfv3.RouterInstance/properties/name

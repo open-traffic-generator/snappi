@@ -19,6 +19,7 @@ type flowTaggedMetric struct {
 	tagsHolder       FlowTaggedMetricFlowMetricTagIter
 	timestampsHolder MetricTimestamp
 	latencyHolder    MetricLatency
+	packetLossHolder FlowPacketLoss
 }
 
 func NewFlowTaggedMetric() FlowTaggedMetric {
@@ -249,6 +250,7 @@ func (obj *flowTaggedMetric) setNil() {
 	obj.tagsHolder = nil
 	obj.timestampsHolder = nil
 	obj.latencyHolder = nil
+	obj.packetLossHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -410,6 +412,16 @@ type FlowTaggedMetric interface {
 	SetRxRateMbps(value float32) FlowTaggedMetric
 	// HasRxRateMbps checks if RxRateMbps has been set in FlowTaggedMetric
 	HasRxRateMbps() bool
+	// PacketLoss returns FlowPacketLoss, set in FlowTaggedMetric.
+	// FlowPacketLoss is the container for packet loss duration metrics. The container will be empty if
+	// options.flow_options.packet_loss_duration has not been enabled during set_config.
+	PacketLoss() FlowPacketLoss
+	// SetPacketLoss assigns FlowPacketLoss provided by user to FlowTaggedMetric.
+	// FlowPacketLoss is the container for packet loss duration metrics. The container will be empty if
+	// options.flow_options.packet_loss_duration has not been enabled during set_config.
+	SetPacketLoss(value FlowPacketLoss) FlowTaggedMetric
+	// HasPacketLoss checks if PacketLoss has been set in FlowTaggedMetric
+	HasPacketLoss() bool
 	setNil()
 }
 
@@ -930,6 +942,34 @@ func (obj *flowTaggedMetric) SetRxRateMbps(value float32) FlowTaggedMetric {
 	return obj
 }
 
+// description is TBD
+// PacketLoss returns a FlowPacketLoss
+func (obj *flowTaggedMetric) PacketLoss() FlowPacketLoss {
+	if obj.obj.PacketLoss == nil {
+		obj.obj.PacketLoss = NewFlowPacketLoss().msg()
+	}
+	if obj.packetLossHolder == nil {
+		obj.packetLossHolder = &flowPacketLoss{obj: obj.obj.PacketLoss}
+	}
+	return obj.packetLossHolder
+}
+
+// description is TBD
+// PacketLoss returns a FlowPacketLoss
+func (obj *flowTaggedMetric) HasPacketLoss() bool {
+	return obj.obj.PacketLoss != nil
+}
+
+// description is TBD
+// SetPacketLoss sets the FlowPacketLoss value in the FlowTaggedMetric object
+func (obj *flowTaggedMetric) SetPacketLoss(value FlowPacketLoss) FlowTaggedMetric {
+
+	obj.packetLossHolder = nil
+	obj.obj.PacketLoss = value.msg()
+
+	return obj
+}
+
 func (obj *flowTaggedMetric) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -957,6 +997,11 @@ func (obj *flowTaggedMetric) validateObj(vObj *validation, set_default bool) {
 	if obj.obj.Latency != nil {
 
 		obj.Latency().validateObj(vObj, set_default)
+	}
+
+	if obj.obj.PacketLoss != nil {
+
+		obj.PacketLoss().validateObj(vObj, set_default)
 	}
 
 }
