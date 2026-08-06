@@ -334,7 +334,7 @@ def testgo():
         run(
             ["go test ./... -v -coverprofile coverage.txt | tee coverage.out"],
             raise_exception=True,
-            msg="Exception occured while running the tests",
+            msg="Exception occurred while running the tests",
         )
     finally:
         os.chdir("..")
