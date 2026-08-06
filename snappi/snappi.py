@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.59.0
+# Open Traffic Generator API 1.60.0
 # License: MIT
 
 import importlib
@@ -13149,6 +13149,7 @@ class IsisInterface(OpenApiObject):
         },
         "name": {"type": str},
         "adjacency_sids": {"type": "IsisInterfaceAdjacencySidIter"},
+        "srv6_adjacency_sids": {"type": "IsisSRv6AdjSidContainer"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ("eth_name", "name")  # type: tuple(str)
@@ -13423,6 +13424,17 @@ class IsisInterface(OpenApiObject):
         return self._get_property(
             "adjacency_sids", IsisInterfaceAdjacencySidIter, self._parent, self._choice
         )
+
+    @property
+    def srv6_adjacency_sids(self):
+        # type: () -> IsisSRv6AdjSidContainer
+        """srv6_adjacency_sids getter
+
+        Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.Container for SRv6 adjacency-related sub-TLVs advertised on an IS-IS interface. Groups the list of End.X SID sub-TLVs (RFC 9352 Sections 8.1-8.2) with the per-link Maximum SID Depth (MSD) sub-TLVs (RFC 9352 Section 6) that are advertised together in the Extended IS Reachability TLV for this interface.When present, advertises SRv6 adjacency SID sub-TLVs and per-link MSD sub-TLVs for this interface. Reference: RFC 9352 Sections 6, 8.1-8.2.
+
+        Returns: IsisSRv6AdjSidContainer
+        """
+        return self._get_property("srv6_adjacency_sids", IsisSRv6AdjSidContainer)
 
 
 class IsisInterfaceLevel(OpenApiObject):
@@ -15051,6 +15063,656 @@ class IsisInterfaceAdjacencySidIter(OpenApiIter):
         )
         self._add(item)
         return item
+
+
+class IsisSRv6AdjSidContainer(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sids": {"type": "IsisSRv6AdjSidIter"},
+        "srv6_link_msd": {"type": "IsisSRv6Msd"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(IsisSRv6AdjSidContainer, self).__init__()
+        self._parent = parent
+
+    @property
+    def sids(self):
+        # type: () -> IsisSRv6AdjSidIter
+        """sids getter
+
+        List of SRv6 Adjacency SID sub-TLVs (End.X SID) for this interface. Point-to-point interfaces advertise End.X SID sub-TLV (sub-TLV type 43); broadcast interfaces advertise LAN End.X SID sub-TLV (sub-TLV type 44). Each entry binds 128-bit SRv6 SID to this specific outgoing adjacency and advertises the associated endpoint behavior. Reference: RFC 9352 Sections 8.1-8.2.
+
+        Returns: IsisSRv6AdjSidIter
+        """
+        return self._get_property(
+            "sids", IsisSRv6AdjSidIter, self._parent, self._choice
+        )
+
+    @property
+    def srv6_link_msd(self):
+        # type: () -> IsisSRv6Msd
+        """srv6_link_msd getter
+
+        SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.When present, advertises per-link SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Extended IS Reachability TLV for this interface. Each populated child object causes the corresponding link MSD sub-TLV to be advertised; omit child object to suppress that MSD type. Reference: RFC 9352 Section 6.
+
+        Returns: IsisSRv6Msd
+        """
+        return self._get_property("srv6_link_msd", IsisSRv6Msd)
+
+
+class IsisSRv6AdjSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator": {
+            "type": str,
+            "enum": [
+                "auto",
+                "custom_locator_reference",
+            ],
+        },
+        "custom_locator_reference": {"type": str},
+        "function": {
+            "type": str,
+            "format": "hex",
+        },
+        "argument": {
+            "type": str,
+            "format": "hex",
+        },
+        "endpoint_behavior": {
+            "type": str,
+            "enum": [
+                "end_x",
+                "end_x_with_psp",
+                "end_x_with_usp",
+                "end_x_with_psp_usp",
+                "end_x_with_usd",
+                "end_x_with_psp_usd",
+                "end_x_with_usp_usd",
+                "end_x_with_psp_usp_usd",
+                "end_dx4",
+                "end_dx6",
+            ],
+        },
+        "b_flag": {"type": bool},
+        "s_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "locator": "auto",
+        "argument": "0000",
+        "endpoint_behavior": "end_x",
+        "b_flag": False,
+        "s_flag": False,
+        "p_flag": False,
+        "weight": 0,
+        "algorithm": 0,
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    AUTO = "auto"  # type: str
+    CUSTOM_LOCATOR_REFERENCE = "custom_locator_reference"  # type: str
+
+    END_X = "end_x"  # type: str
+    END_X_WITH_PSP = "end_x_with_psp"  # type: str
+    END_X_WITH_USP = "end_x_with_usp"  # type: str
+    END_X_WITH_PSP_USP = "end_x_with_psp_usp"  # type: str
+    END_X_WITH_USD = "end_x_with_usd"  # type: str
+    END_X_WITH_PSP_USD = "end_x_with_psp_usd"  # type: str
+    END_X_WITH_USP_USD = "end_x_with_usp_usd"  # type: str
+    END_X_WITH_PSP_USP_USD = "end_x_with_psp_usp_usd"  # type: str
+    END_DX4 = "end_dx4"  # type: str
+    END_DX6 = "end_dx6"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        super(IsisSRv6AdjSid, self).__init__()
+        self._parent = parent
+        self._set_property("locator", locator)
+        self._set_property("custom_locator_reference", custom_locator_reference)
+        self._set_property("function", function)
+        self._set_property("argument", argument)
+        self._set_property("endpoint_behavior", endpoint_behavior)
+        self._set_property("b_flag", b_flag)
+        self._set_property("s_flag", s_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("weight", weight)
+        self._set_property("algorithm", algorithm)
+        self._set_property("c_flag", c_flag)
+
+    def set(
+        self,
+        locator=None,
+        custom_locator_reference=None,
+        function=None,
+        argument=None,
+        endpoint_behavior=None,
+        b_flag=None,
+        s_flag=None,
+        p_flag=None,
+        weight=None,
+        algorithm=None,
+        c_flag=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator(self):
+        # type: () -> Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """locator getter
+
+        Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference use this when multiple locators are configured and particular one must be selected, e.g. for Flex-Algo binding.
+
+        Returns: Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """
+        return self._get_property("locator")
+
+    @locator.setter
+    def locator(self, value):
+        """locator setter
+
+        Selects which locator from the IsisSRv6.Locator list to use as the locator part of this adjacency SID. 'auto' (default) uses the first locator defined in isis.segment_routing.srv6_locators suitable when only one locator is configured. 'custom_locator_reference' uses the specific locator identified by custom_locator_reference use this when multiple locators are configured and particular one must be selected, e.g. for Flex-Algo binding.
+
+        value: Union[Literal["auto"], Literal["custom_locator_reference"]]
+        """
+        self._set_property("locator", value)
+
+    @property
+    def custom_locator_reference(self):
+        # type: () -> str
+        """custom_locator_reference getter
+
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+
+        Returns: str
+        """
+        return self._get_property("custom_locator_reference")
+
+    @custom_locator_reference.setter
+    def custom_locator_reference(self, value):
+        """custom_locator_reference setter
+
+        Name of the IsisSRv6.Locator to use when locator is set to 'custom_locator_reference'. Must match the locator_name of locator configured in isis.segment_routing.srv6_locators. Example: "loc2" selects the locator whose locator_name is "loc2".. x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name. . x-constraint:. /components/schemas/IsisSRv6.Locator/properties/locator_name.
+
+        value: str
+        """
+        self._set_property("custom_locator_reference", value)
+
+    @property
+    def function(self):
+        # type: () -> str
+        """function getter
+
+        The Function part of this adjacency SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by - e.g. function_length 16 requires 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+
+        Returns: str
+        """
+        return self._get_property("function")
+
+    @function.setter
+    def function(self, value):
+        """function setter
+
+        The Function part of this adjacency SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must match function_length in the selected IsisSRv6.Locator.sid_structure divided by - e.g. function_length 16 requires 4-nibble string. Example: "00c8" places the value 200 (0xc8) in the function field; with locator fc00:0:1:: /48 (selected via auto or custom_locator_reference) the resulting SID is fc00:0:1:c8::.
+
+        value: str
+        """
+        self._set_property("function", value)
+
+    @property
+    def argument(self):
+        # type: () -> str
+        """argument getter
+
+        The Argument part of this adjacency SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        Returns: str
+        """
+        return self._get_property("argument")
+
+    @argument.setter
+    def argument(self, value):
+        """argument setter
+
+        The Argument part of this adjacency SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the selected IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        value: str
+        """
+        self._set_property("argument", value)
+
+    @property
+    def endpoint_behavior(self):
+        # type: () -> Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """endpoint_behavior getter
+
+        The endpoint behavior for this adjacency SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Valid adjacency-level behaviors for End.X SID Sub-TLV types 43/44 are End.X variants (with PSP/USP/USD flavors) and per-CE cross-connect decapsulation behaviors (End.DX4, End.DX6).
+
+        Returns: Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """
+        return self._get_property("endpoint_behavior")
+
+    @endpoint_behavior.setter
+    def endpoint_behavior(self, value):
+        """endpoint_behavior setter
+
+        The endpoint behavior for this adjacency SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Valid adjacency-level behaviors for End.X SID Sub-TLV types 43/44 are End.X variants (with PSP/USP/USD flavors) and per-CE cross-connect decapsulation behaviors (End.DX4, End.DX6).
+
+        value: Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]]
+        """
+        self._set_property("endpoint_behavior", value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        Backup flag (B-flag, bit 0). When set, the End.X SID is eligible for IP Fast-ReRoute (IP-FRR) protection, indicating backup adjacency that can protect traffic when the primary adjacency fails (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        Backup flag (B-flag, bit 0). When set, the End.X SID is eligible for IP Fast-ReRoute (IP-FRR) protection, indicating backup adjacency that can protect traffic when the primary adjacency fails (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def s_flag(self):
+        # type: () -> bool
+        """s_flag getter
+
+        Set flag (S-flag, bit 1). When set, the End.X SID refers to set of adjacencies (e.g., parallel links, ECMP group). The same SID value may be assigned to multiple adjacencies forming the set (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("s_flag")
+
+    @s_flag.setter
+    def s_flag(self, value):
+        """s_flag setter
+
+        Set flag (S-flag, bit 1). When set, the End.X SID refers to set of adjacencies (e.g., parallel links, ECMP group). The same SID value may be assigned to multiple adjacencies forming the set (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("s_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        Persistent flag (P-flag, bit 2). When set, the End.X SID value is persistently allocated and remains consistent across router restarts and interface flap events (RFC 9352 Section 8.1).
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        Persistent flag (P-flag, bit 2). When set, the End.X SID value is persistently allocated and remains consistent across router restarts and interface flap events (RFC 9352 Section 8.1).
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        Weight for load balancing across adjacencies sharing the same End.X SID (applicable when S-flag is set). Traffic is distributed proportionally across the adjacency set according to the weight values (RFC 9352 Section 8.1).
+
+        Returns: int
+        """
+        return self._get_property("weight")
+
+    @weight.setter
+    def weight(self, value):
+        """weight setter
+
+        Weight for load balancing across adjacencies sharing the same End.X SID (applicable when S-flag is set). Traffic is distributed proportionally across the adjacency set according to the weight values (RFC 9352 Section 8.1).
+
+        value: int
+        """
+        self._set_property("weight", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        IGP algorithm associated with this adjacency SID (RFC 8665). = standard SPF, = Strict SPF, 128-255 Flex-Algo (RFC 9350). Binds the adjacency SID to the corresponding topology or path computation algorithm.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        IGP algorithm associated with this adjacency SID (RFC 8665). = standard SPF, = Strict SPF, 128-255 Flex-Algo (RFC 9350). Binds the adjacency SID to the corresponding topology or path computation algorithm.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag. When set, this adjacency SID is Micro-SID (uSID) End.X per RFC 9800. headend can pack it into shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over specific L3 adjacency within compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "00c8" => uSID fc00:0:1:c8:: (End.X). c_flag=true, function "00c9" => uSID fc00:0:1:c9:: (End.X alternate link). For path routed via node 1's adjacency "00c8" then node End "0001", the headend builds DA fc00:0:1:c8:2:1:: encoding both hops in single 128-bit address. Reference: RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag. When set, this adjacency SID is Micro-SID (uSID) End.X per RFC 9800. headend can pack it into shared 128-bit uSID container alongside node uSIDs from the same /32 block, directing traffic over specific L3 adjacency within compressed segment list. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the selected IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "00c8" => uSID fc00:0:1:c8:: (End.X). c_flag=true, function "00c9" => uSID fc00:0:1:c9:: (End.X alternate link). For path routed via node 1's adjacency "00c8" then node End "0001", the headend builds DA fc00:0:1:c8:2:1:: encoding both hops in single 128-bit address. Reference: RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6AdjSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6AdjSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6AdjSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6AdjSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6AdjSid
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6AdjSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6AdjSid):
+            raise Exception("Item is not an instance of IsisSRv6AdjSid")
+
+    def adjsid(
+        self,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        # type: (Union[Literal["auto"], Literal["custom_locator_reference"]],str,str,str,Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]],bool,bool,bool,int,int,bool) -> IsisSRv6AdjSidIter
+        """Factory method that creates an instance of the IsisSRv6AdjSid class
+
+        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds 128-bit SRv6 SID to specific outgoing interface and next-hop, enabling traffic steering across specific L3 adjacency. The full 128-bit SID is assembled as:. Locator (selected via locator/custom_locator_reference) Function Argument. Example given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. locator auto (=> fc00:0:1::), function "00c8". => final adjacency SID: fc00:0:1:c8::. locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9". => final adjacency SID: fc00:0:2:c9::. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3. The SID bit-field structure (locator block, locator node, function, and argument lengths) is inherited from IsisSRv6.Locator.sid_structure of the selected locator per RFC 9352 Section 9. No per-adjacency structure override is defined in the RFC.
+
+        Returns: IsisSRv6AdjSidIter
+        """
+        item = IsisSRv6AdjSid(
+            parent=self._parent,
+            locator=locator,
+            custom_locator_reference=custom_locator_reference,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            b_flag=b_flag,
+            s_flag=s_flag,
+            p_flag=p_flag,
+            weight=weight,
+            algorithm=algorithm,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        locator="auto",
+        custom_locator_reference=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end_x",
+        b_flag=False,
+        s_flag=False,
+        p_flag=False,
+        weight=0,
+        algorithm=0,
+        c_flag=False,
+    ):
+        # type: (Union[Literal["auto"], Literal["custom_locator_reference"]],str,str,str,Union[Literal["end_dx4"], Literal["end_dx6"], Literal["end_x"], Literal["end_x_with_psp"], Literal["end_x_with_psp_usd"], Literal["end_x_with_psp_usp"], Literal["end_x_with_psp_usp_usd"], Literal["end_x_with_usd"], Literal["end_x_with_usp"], Literal["end_x_with_usp_usd"]],bool,bool,bool,int,int,bool) -> IsisSRv6AdjSid
+        """Add method that creates and returns an instance of the IsisSRv6AdjSid class
+
+        SRv6 Adjacency SID Sub-TLV for IS-IS interfaces. Point-to-point adjacencies use End.X SID Sub-TLV (sub-TLV type 43); LAN adjacencies use LAN End.X SID Sub-TLV (sub-TLV type 44). The End.X SID binds 128-bit SRv6 SID to specific outgoing interface and next-hop, enabling traffic steering across specific L3 adjacency. The full 128-bit SID is assembled as:. Locator (selected via locator/custom_locator_reference) Function Argument. Example given locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. locator auto (=> fc00:0:1::), function "00c8". => final adjacency SID: fc00:0:1:c8::. locator custom_locator_reference "loc2" (fc00:0:2:: /48), function "00c9". => final adjacency SID: fc00:0:2:c9::. Valid behaviors include End.X variants (with PSP/USP/USD flavors) and cross-connect decapsulation behaviors (End.DX4, End.DX6). Reference: RFC 9352 Sections 8.1-8.2, RFC 8986 Section 4.3. The SID bit-field structure (locator block, locator node, function, and argument lengths) is inherited from IsisSRv6.Locator.sid_structure of the selected locator per RFC 9352 Section 9. No per-adjacency structure override is defined in the RFC.
+
+        Returns: IsisSRv6AdjSid
+        """
+        item = IsisSRv6AdjSid(
+            parent=self._parent,
+            locator=locator,
+            custom_locator_reference=custom_locator_reference,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            b_flag=b_flag,
+            s_flag=s_flag,
+            p_flag=p_flag,
+            weight=weight,
+            algorithm=algorithm,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return item
+
+
+class IsisSRv6Msd(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "max_sl": {"type": "IsisSRv6MsdValue"},
+        "max_end_pop_srh": {"type": "IsisSRv6MsdValue"},
+        "max_h_encaps": {"type": "IsisSRv6MsdValue"},
+        "max_end_d_srh": {"type": "IsisSRv6MsdValue"},
+        "max_t_insert": {"type": "IsisSRv6MsdValue"},
+        "max_t_encaps": {"type": "IsisSRv6MsdValue"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None):
+        super(IsisSRv6Msd, self).__init__()
+        self._parent = parent
+
+    @property
+    def max_sl(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_sl getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum Segments Left (Max-SL, MSD type 41, RFC 9352 Section 6) the maximum value of the Segments Left field in an SRH that this node can correctly process.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_sl", IsisSRv6MsdValue)
+
+    @property
+    def max_end_pop_srh(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_end_pop_srh getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum End Pop SRH (Max-End-Pop, MSD type 42, RFC 9352 Section 6) the maximum size of the SRH this node can remove when processing an End.Pop operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_end_pop_srh", IsisSRv6MsdValue)
+
+    @property
+    def max_h_encaps(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_h_encaps getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum H.Encaps (Max-H.Encaps, MSD type 44, RFC 9352 Section 6) the maximum number of SRv6 SID encapsulations this node can perform as headend.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_h_encaps", IsisSRv6MsdValue)
+
+    @property
+    def max_end_d_srh(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_end_d_srh getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum End.D SRH (Max-End-D, MSD type 45, RFC 9352 Section 6) the maximum size of the SRH this node can process when performing an End.D decapsulation function.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_end_d_srh", IsisSRv6MsdValue)
+
+    @property
+    def max_t_insert(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_t_insert getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum T.Insert (Max-T.Insert, MSD type 46, RFC 9352 Section 6) the maximum size of the SRH this node can insert using T.Insert operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_t_insert", IsisSRv6MsdValue)
+
+    @property
+    def max_t_encaps(self):
+        # type: () -> IsisSRv6MsdValue
+        """max_t_encaps getter
+
+        A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.A single MSD (Maximum SID Depth) value entry (RFC 9352 Section 6). When this object is present, the parent MSD type is advertised with the configured value. Omit the object to suppress advertisement of that MSD type.When present, advertises Maximum T.Encaps (Max-T.Encaps, MSD type 47, RFC 9352 Section 6) the maximum size of the SRH this node can insert using T.Encaps operation.
+
+        Returns: IsisSRv6MsdValue
+        """
+        return self._get_property("max_t_encaps", IsisSRv6MsdValue)
+
+
+class IsisSRv6MsdValue(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(IsisSRv6MsdValue, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> int
+        """value getter
+
+        The MSD depth value (0-255, RFC 9352 Section 6). value of indicates that the node has no capability for the corresponding SRH operation but still causes the sub-TLV to be advertised. To suppress advertisement entirely, omit the parent object.
+
+        Returns: int
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        The MSD depth value (0-255, RFC 9352 Section 6). value of indicates that the node has no capability for the corresponding SRH operation but still causes the sub-TLV to be advertised. To suppress advertisement entirely, omit the parent object.
+
+        value: int
+        """
+        self._set_property("value", value)
 
 
 class IsisInterfaceIter(OpenApiIter):
@@ -17326,6 +17988,7 @@ class IsisSegmentRouting(OpenApiObject):
 
     _TYPES = {
         "router_capability": {"type": "IsisRouterCapability"},
+        "srv6_locators": {"type": "IsisSRv6LocatorIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -17348,6 +18011,19 @@ class IsisSegmentRouting(OpenApiObject):
         Returns: IsisRouterCapability
         """
         return self._get_property("router_capability", IsisRouterCapability)
+
+    @property
+    def srv6_locators(self):
+        # type: () -> IsisSRv6LocatorIter
+        """srv6_locators getter
+
+        List of SRv6 Locator TLVs (TLV type 27) to be advertised by this IS-IS router. Each locator binds an IPv6 prefix to an IGP algorithm (standard SPF or Flex-Algo per RFC 9350) and carries End SID Sub-TLVs for locally instantiated node-level SRv6 SIDs. One Locator TLV is required per topology/algorithm combination. Locators are scoped to this IS-IS instance and cannot be shared across other protocol instances. Reference: RFC 9352 Section 7.1.
+
+        Returns: IsisSRv6LocatorIter
+        """
+        return self._get_property(
+            "srv6_locators", IsisSRv6LocatorIter, self._parent, self._choice
+        )
 
 
 class IsisRouterCapability(OpenApiObject):
@@ -17389,6 +18065,7 @@ class IsisRouterCapability(OpenApiObject):
             "maximum": 255,
         },
         "srlb_ranges": {"type": "IsisSRSrlbIter"},
+        "srv6_capability": {"type": "IsisSRv6NodeCapability"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -17569,6 +18246,17 @@ class IsisRouterCapability(OpenApiObject):
         return self._get_property(
             "srlb_ranges", IsisSRSrlbIter, self._parent, self._choice
         )
+
+    @property
+    def srv6_capability(self):
+        # type: () -> IsisSRv6NodeCapability
+        """srv6_capability getter
+
+        SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Announces that this IS-IS router is an SRv6 Segment Endpoint Node and optionally supports the O-bit for OAM operations. Reference: RFC 9352 Section 2.SRv6 Capabilities Sub-TLV (sub-TLV type 25) carried within this Router CAPABILITY TLV. Announces that this router is an SRv6 Segment Endpoint Node and advertises optional OAM (O-flag) support and node-level SRv6 Maximum SID Depth (MSD) values. Reference: RFC 9352 Section 2, RFC 8491.
+
+        Returns: IsisSRv6NodeCapability
+        """
+        return self._get_property("srv6_capability", IsisSRv6NodeCapability)
 
 
 class IsisSRCapability(OpenApiObject):
@@ -17953,6 +18641,1064 @@ class IsisSRSrlbIter(OpenApiIter):
         Returns: IsisSRSrlb
         """
         item = IsisSRSrlb(parent=self._parent, starting_sid=starting_sid, range=range)
+        self._add(item)
+        return item
+
+
+class IsisSRv6NodeCapability(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "o_flag": {"type": bool},
+        "node_msds": {"type": "IsisSRv6Msd"},
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "o_flag": False,
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, o_flag=False, c_flag=False):
+        super(IsisSRv6NodeCapability, self).__init__()
+        self._parent = parent
+        self._set_property("o_flag", o_flag)
+        self._set_property("c_flag", c_flag)
+
+    def set(self, o_flag=None, c_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def o_flag(self):
+        # type: () -> bool
+        """o_flag getter
+
+        OAM flag (bit of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+
+        Returns: bool
+        """
+        return self._get_property("o_flag")
+
+    @o_flag.setter
+    def o_flag(self, value):
+        """o_flag setter
+
+        OAM flag (bit of the Flags field in the SRv6 Capabilities Sub-TLV). When set, indicates that this router supports the use of the O-bit in the Segment Routing Header (SRH) for Operations, Administration and Maintenance (OAM) operations as defined in RFC 9259.
+
+        value: bool
+        """
+        self._set_property("o_flag", value)
+
+    @property
+    def node_msds(self):
+        # type: () -> IsisSRv6Msd
+        """node_msds getter
+
+        SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.SRv6 Maximum SID Depth (MSD) sub-TLV values, used for both node-level advertisement (carried in IS-IS Router CAPABILITY TLV 242 via Node MSD sub-TLV type 23, RFC 9352 Section 6) and link-level advertisement (carried in Extended IS Reachability TLV via Link MSD sub-TLV type 15, RFC 9352 Section 6). When property is present, the corresponding MSD sub-TLV is advertised with the configured value. Omit property to suppress advertisement of that MSD type. Reference: RFC 9352 Section 6.When present, advertises SRv6 Maximum SID Depth (MSD) sub-TLVs within the IS-IS Router CAPABILITY TLV (TLV 242, RFC 7981). Each populated child object causes the corresponding MSD sub-TLV to be advertised; omit child object to suppress that MSD type. Reference: RFC 9352 Section 6.
+
+        Returns: IsisSRv6Msd
+        """
+        return self._get_property("node_msds", IsisSRv6Msd)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag (RFC 9800). When set, announces that this IS-IS router supports Micro-SID (uSID) compressed SRv6 encoding. Acts as node-level prerequisite; individual End SIDs and Adj SIDs must also set their own c_flag to be treated as uSIDs. Carried in the SRv6 Capabilities Sub-TLV (sub-TLV type 25) Flags field. Reference: RFC 9352 Section 2, RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6Locator(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator_name": {"type": str},
+        "locator": {
+            "type": str,
+            "format": "ipv6",
+        },
+        "prefix_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 128,
+        },
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
+        "d_flag": {"type": bool},
+        "mt_id": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+            "maximum": 4095,
+        },
+        "end_sids": {"type": "IsisSRv6EndSidIter"},
+        "sid_structure": {"type": "IsisSRv6SidStructure"},
+        "advertise_locator_as_prefix": {"type": "IsisSRv6AdvertiseLocatorAsPrefix"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ("locator", "locator_name")  # type: tuple(str)
+
+    _DEFAULTS = {
+        "prefix_length": 64,
+        "algorithm": 0,
+        "metric": 0,
+        "d_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        super(IsisSRv6Locator, self).__init__()
+        self._parent = parent
+        self._set_property("locator_name", locator_name)
+        self._set_property("locator", locator)
+        self._set_property("prefix_length", prefix_length)
+        self._set_property("algorithm", algorithm)
+        self._set_property("metric", metric)
+        self._set_property("d_flag", d_flag)
+        self._set_property("mt_id", mt_id)
+
+    def set(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=None,
+        algorithm=None,
+        metric=None,
+        d_flag=None,
+        mt_id=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator_name(self):
+        # type: () -> str
+        """locator_name getter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        Returns: str
+        """
+        return self._get_property("locator_name")
+
+    @locator_name.setter
+    def locator_name(self, value):
+        """locator_name setter
+
+        Globally unique name of an object. It also serves as the primary key for arrays of objects.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property locator_name as None")
+        self._set_property("locator_name", value)
+
+    @property
+    def locator(self):
+        # type: () -> str
+        """locator getter
+
+        The SRv6 locator IPv6 prefix for this TLV. This routable IPv6 prefix identifies the advertising node within the SRv6 domain. All SRv6 SIDs advertised under this locator must be allocated from this prefix.
+
+        Returns: str
+        """
+        return self._get_property("locator")
+
+    @locator.setter
+    def locator(self, value):
+        """locator setter
+
+        The SRv6 locator IPv6 prefix for this TLV. This routable IPv6 prefix identifies the advertising node within the SRv6 domain. All SRv6 SIDs advertised under this locator must be allocated from this prefix.
+
+        value: str
+        """
+        if value is None:
+            raise TypeError("Cannot set required property locator as None")
+        self._set_property("locator", value)
+
+    @property
+    def prefix_length(self):
+        # type: () -> int
+        """prefix_length getter
+
+        Number of significant bits in the locator field (1-128). Defines the length of the SRv6 locator prefix. The combined bit budget of the locator, function, and argument fields must not exceed 128 bits (RFC 9352 Section 3.1).
+
+        Returns: int
+        """
+        return self._get_property("prefix_length")
+
+    @prefix_length.setter
+    def prefix_length(self, value):
+        """prefix_length setter
+
+        Number of significant bits in the locator field (1-128). Defines the length of the SRv6 locator prefix. The combined bit budget of the locator, function, and argument fields must not exceed 128 bits (RFC 9352 Section 3.1).
+
+        value: int
+        """
+        self._set_property("prefix_length", value)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        IGP Algorithm identifier for this locator (RFC 8665). = standard SPF, = Strict SPF. Values 128-255 represent Flexible Algorithms (Flex-Algo) as defined in RFC 9350. The algorithm determines the path computation method used to reach this locator. One Locator TLV is required per algorithm binding.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        IGP Algorithm identifier for this locator (RFC 8665). = standard SPF, = Strict SPF. Values 128-255 represent Flexible Algorithms (Flex-Algo) as defined in RFC 9350. The algorithm determines the path computation method used to reach this locator. One Locator TLV is required per algorithm binding.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+    @property
+    def metric(self):
+        # type: () -> int
+        """metric getter
+
+        The metric (cost) associated with this SRv6 locator prefix. Uses the same semantics as IS-IS Extended IP reachability metric (RFC 9352 Section 7.1).
+
+        Returns: int
+        """
+        return self._get_property("metric")
+
+    @metric.setter
+    def metric(self, value):
+        """metric setter
+
+        The metric (cost) associated with this SRv6 locator prefix. Uses the same semantics as IS-IS Extended IP reachability metric (RFC 9352 Section 7.1).
+
+        value: int
+        """
+        self._set_property("metric", value)
+
+    @property
+    def d_flag(self):
+        # type: () -> bool
+        """d_flag getter
+
+        Down bit (D-flag, bit of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level to Level to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
+
+        Returns: bool
+        """
+        return self._get_property("d_flag")
+
+    @d_flag.setter
+    def d_flag(self, value):
+        """d_flag setter
+
+        Down bit (D-flag, bit of the Flags field in the SRv6 Locator TLV). MUST be set when the locator is leaked from Level to Level to prevent routing loops. Locator TLVs with the D-flag set MUST NOT be re-advertised from L1 to L2 (RFC 9352 Section 7.1).
+
+        value: bool
+        """
+        self._set_property("d_flag", value)
+
+    @property
+    def mt_id(self):
+        # type: () -> List[int]
+        """mt_id getter
+
+        List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. = default topology. Valid range 0-4095 per RFC 5120 Section (12-bit field).
+
+        Returns: List[int]
+        """
+        return self._get_property("mt_id")
+
+    @mt_id.setter
+    def mt_id(self, value):
+        """mt_id setter
+
+        List of Multi-Topology Identifiers (MT-IDs) for this locator advertisement. Specifies the IS-IS topologies this locator belongs to. = default topology. Valid range 0-4095 per RFC 5120 Section (12-bit field).
+
+        value: List[int]
+        """
+        self._set_property("mt_id", value)
+
+    @property
+    def end_sids(self):
+        # type: () -> IsisSRv6EndSidIter
+        """end_sids getter
+
+        List of SRv6 End SID Sub-TLVs (sub-TLV type 5) associated with this locator. Each End SID advertises locally instantiated node-local SRv6 SID and its endpoint behavior (End, End.DT4, End.DT6, End.DT46 and their flavor variants). Reference: RFC 9352 Section 7.2.
+
+        Returns: IsisSRv6EndSidIter
+        """
+        return self._get_property(
+            "end_sids", IsisSRv6EndSidIter, self._parent, self._choice
+        )
+
+    @property
+    def sid_structure(self):
+        # type: () -> IsisSRv6SidStructure
+        """sid_structure getter
+
+        SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1), carried within SRv6 SID Sub-TLVs (End SID type 5, End.X SID type 43/44). Describes the internal bit-field decomposition of the SRv6 SID value so that receiving routers can interpret each field independently. The four length fields (lb_length ln_length function_length argument_length) MUST NOT exceed 128 bits. Required when advertising Micro-SID (uSID) SIDs to describe the compressed encoding. Example for common uSID F3216 format:. lb_length=32, ln_length=16, function_length=16, argument_length=0. Reference: RFC 9352 Section 9, RFC 9800.SRv6 SID Structure Sub-Sub-TLV (type 1) describing the internal bit-field decomposition shared by all SIDs within this locator. Specifies the Locator Block, Locator Node, Function, and Argument lengths in bits. The sum of all four lengths must not exceed 128. All End SIDs and Adjacency SIDs under this locator share the same structure. Typically set when c_flag is true (RFC 9352 Section 9).
+
+        Returns: IsisSRv6SidStructure
+        """
+        return self._get_property("sid_structure", IsisSRv6SidStructure)
+
+    @property
+    def advertise_locator_as_prefix(self):
+        # type: () -> IsisSRv6AdvertiseLocatorAsPrefix
+        """advertise_locator_as_prefix getter
+
+        Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.Controls advertisement of the SRv6 locator prefix as an IS-IS IPv6 Reachability prefix (TLV 236/237) alongside the SRv6 Locator TLV (type 27). When this object is present the secondary prefix advertisement is enabled; when absent it is suppressed. Reference: RFC 9352 Section 7.1.When present, the locator prefix is also advertised as an IS-IS IPv6 Reachability prefix (TLV 236/237) in addition to the SRv6 Locator TLV (type 27). This enables non-SRv6-capable routers to route toward the locator as an ordinary IPv6 prefix. Absence of this object suppresses the secondary prefix advertisement.
+
+        Returns: IsisSRv6AdvertiseLocatorAsPrefix
+        """
+        return self._get_property(
+            "advertise_locator_as_prefix", IsisSRv6AdvertiseLocatorAsPrefix
+        )
+
+
+class IsisSRv6EndSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "function": {
+            "type": str,
+            "format": "hex",
+        },
+        "argument": {
+            "type": str,
+            "format": "hex",
+        },
+        "endpoint_behavior": {
+            "type": str,
+            "enum": [
+                "end",
+                "end_with_psp",
+                "end_with_usp",
+                "end_with_psp_usp",
+                "end_with_usd",
+                "end_with_psp_usd",
+                "end_with_usp_usd",
+                "end_with_psp_usp_usd",
+                "end_dt4",
+                "end_dt6",
+                "end_dt46",
+            ],
+        },
+        "c_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "argument": "0000",
+        "endpoint_behavior": "end",
+        "c_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    END = "end"  # type: str
+    END_WITH_PSP = "end_with_psp"  # type: str
+    END_WITH_USP = "end_with_usp"  # type: str
+    END_WITH_PSP_USP = "end_with_psp_usp"  # type: str
+    END_WITH_USD = "end_with_usd"  # type: str
+    END_WITH_PSP_USD = "end_with_psp_usd"  # type: str
+    END_WITH_USP_USD = "end_with_usp_usd"  # type: str
+    END_WITH_PSP_USP_USD = "end_with_psp_usp_usd"  # type: str
+    END_DT4 = "end_dt4"  # type: str
+    END_DT6 = "end_dt6"  # type: str
+    END_DT46 = "end_dt46"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        function=None,
+        argument="0000",
+        endpoint_behavior="end",
+        c_flag=False,
+    ):
+        super(IsisSRv6EndSid, self).__init__()
+        self._parent = parent
+        self._set_property("function", function)
+        self._set_property("argument", argument)
+        self._set_property("endpoint_behavior", endpoint_behavior)
+        self._set_property("c_flag", c_flag)
+
+    def set(self, function=None, argument=None, endpoint_behavior=None, c_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def function(self):
+        # type: () -> str
+        """function getter
+
+        The Function part of this End SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure divided by - for example, function_length of 16 requires 4-nibble string. Example: "0001" with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
+
+        Returns: str
+        """
+        return self._get_property("function")
+
+    @function.setter
+    def function(self, value):
+        """function setter
+
+        The Function part of this End SID expressed as hex string, occupying the function bits immediately after the locator prefix in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal function_length from the parent IsisSRv6.Locator.sid_structure divided by - for example, function_length of 16 requires 4-nibble string. Example: "0001" with parent locator fc00:0:1:: /48 gives SID fc00:0:1:1::.
+
+        value: str
+        """
+        self._set_property("function", value)
+
+    @property
+    def argument(self):
+        # type: () -> str
+        """argument getter
+
+        The Argument part of this End SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        Returns: str
+        """
+        return self._get_property("argument")
+
+    @argument.setter
+    def argument(self, value):
+        """argument setter
+
+        The Argument part of this End SID expressed as hex string, occupying the argument bits immediately after the function in the 128-bit SID (RFC 8986 Section 3.1). The number of hex digits must equal argument_length from the parent IsisSRv6.Locator.sid_structure divided by 4. Use the default "0000" when no argument is carried (argument_length is 0).
+
+        value: str
+        """
+        self._set_property("argument", value)
+
+    @property
+    def endpoint_behavior(self):
+        # type: () -> Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """endpoint_behavior getter
+
+        The endpoint behavior for this SRv6 End SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Defines how the router processes packets arriving with this SID as the Active Segment. Valid node-level behaviors for End SID Sub-TLV type are End variants (with PSP/USP/USD flavors) and decapsulation behaviors.
+
+        Returns: Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """
+        return self._get_property("endpoint_behavior")
+
+    @endpoint_behavior.setter
+    def endpoint_behavior(self, value):
+        """endpoint_behavior setter
+
+        The endpoint behavior for this SRv6 End SID, encoded as 2-octet behavior codepoint (RFC 8986 Section 7.4). Defines how the router processes packets arriving with this SID as the Active Segment. Valid node-level behaviors for End SID Sub-TLV type are End variants (with PSP/USP/USD flavors) and decapsulation behaviors.
+
+        value: Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]]
+        """
+        self._set_property("endpoint_behavior", value)
+
+    @property
+    def c_flag(self):
+        # type: () -> bool
+        """c_flag getter
+
+        Compression (uSID) flag. When set, this End SID is Micro-SID (uSID) per RFC 9800. headend router can pack it into shared 128-bit uSID container alongside uSIDs from other nodes in the same /32 uSID block, steering multi-hop path without Segment Routing Header. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the parent IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "0001" => uSID fc00:0:1:1:: (End). c_flag=true, function "0002" => uSID fc00:0:1:2:: (End.DT46). For 2-hop path via node (End "0001") then node (End "0001"), the headend builds container DA fc00:0:1:1:2:1:: two 32-bit uSID slots [LN=1,FN=1] and [LN=2,FN=1] packed after the /32 block prefix. Reference: RFC 9800.
+
+        Returns: bool
+        """
+        return self._get_property("c_flag")
+
+    @c_flag.setter
+    def c_flag(self, value):
+        """c_flag setter
+
+        Compression (uSID) flag. When set, this End SID is Micro-SID (uSID) per RFC 9800. headend router can pack it into shared 128-bit uSID container alongside uSIDs from other nodes in the same /32 uSID block, steering multi-hop path without Segment Routing Header. The node-level IsisSRv6.NodeCapability.c_flag must also be set. The SID bit layout is governed by the parent IsisSRv6.Locator.sid_structure. Example using F3216 (lb=32, ln=16, fn=16, arg=0), uSID block fc00::/32, locator fc00:0:1:: /48:. c_flag=true, function "0001" => uSID fc00:0:1:1:: (End). c_flag=true, function "0002" => uSID fc00:0:1:2:: (End.DT46). For 2-hop path via node (End "0001") then node (End "0001"), the headend builds container DA fc00:0:1:1:2:1:: two 32-bit uSID slots [LN=1,FN=1] and [LN=2,FN=1] packed after the /32 block prefix. Reference: RFC 9800.
+
+        value: bool
+        """
+        self._set_property("c_flag", value)
+
+
+class IsisSRv6EndSidIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6EndSidIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6EndSid]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6EndSidIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6EndSid
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6EndSid
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6EndSid):
+            raise Exception("Item is not an instance of IsisSRv6EndSid")
+
+    def endsid(
+        self, function=None, argument="0000", endpoint_behavior="end", c_flag=False
+    ):
+        # type: (str,str,Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]],bool) -> IsisSRv6EndSidIter
+        """Factory method that creates an instance of the IsisSRv6EndSid class
+
+        SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV (TLV type 27, RFC 9352 Section 7.2). Advertises locally instantiated, node-level SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the parent IsisSRv6.Locator; only the Function and Argument fields need to be specified here. The full 128-bit SID is assembled as:. <parent locator prefix> Function Argument. Example given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. function "0001", argument "0000" => SID fc00:0:1:1::. function "0064", argument "0000" => SID fc00:0:1:64::. Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
+
+        Returns: IsisSRv6EndSidIter
+        """
+        item = IsisSRv6EndSid(
+            parent=self._parent,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self, function=None, argument="0000", endpoint_behavior="end", c_flag=False
+    ):
+        # type: (str,str,Union[Literal["end"], Literal["end_dt4"], Literal["end_dt46"], Literal["end_dt6"], Literal["end_with_psp"], Literal["end_with_psp_usd"], Literal["end_with_psp_usp"], Literal["end_with_psp_usp_usd"], Literal["end_with_usd"], Literal["end_with_usp"], Literal["end_with_usp_usd"]],bool) -> IsisSRv6EndSid
+        """Add method that creates and returns an instance of the IsisSRv6EndSid class
+
+        SRv6 End SID Sub-TLV (sub-TLV type 5) nested within the enclosing SRv6 Locator TLV (TLV type 27, RFC 9352 Section 7.2). Advertises locally instantiated, node-level SRv6 SID and its associated endpoint behavior. The locator prefix is taken from the parent IsisSRv6.Locator; only the Function and Argument fields need to be specified here. The full 128-bit SID is assembled as:. <parent locator prefix> Function Argument. Example given parent locator fc00:0:1:: /48 with sid_structure lb=32, ln=16, fn=16, arg=0:. function "0001", argument "0000" => SID fc00:0:1:1::. function "0064", argument "0000" => SID fc00:0:1:64::. Valid behaviors are End variants (with PSP/USP/USD flavors) and decapsulation behaviors (End.DT4, End.DT6, End.DT46). Reference: RFC 9352 Section 7.2, RFC 8986.
+
+        Returns: IsisSRv6EndSid
+        """
+        item = IsisSRv6EndSid(
+            parent=self._parent,
+            function=function,
+            argument=argument,
+            endpoint_behavior=endpoint_behavior,
+            c_flag=c_flag,
+        )
+        self._add(item)
+        return item
+
+
+class IsisSRv6SidStructure(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "locator_block_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 1,
+            "maximum": 128,
+        },
+        "locator_node_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+        "function_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+        "argument_length": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 128,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "locator_block_length": 32,
+        "locator_node_length": 16,
+        "function_length": 16,
+        "argument_length": 0,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        locator_block_length=32,
+        locator_node_length=16,
+        function_length=16,
+        argument_length=0,
+    ):
+        super(IsisSRv6SidStructure, self).__init__()
+        self._parent = parent
+        self._set_property("locator_block_length", locator_block_length)
+        self._set_property("locator_node_length", locator_node_length)
+        self._set_property("function_length", function_length)
+        self._set_property("argument_length", argument_length)
+
+    def set(
+        self,
+        locator_block_length=None,
+        locator_node_length=None,
+        function_length=None,
+        argument_length=None,
+    ):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def locator_block_length(self):
+        # type: () -> int
+        """locator_block_length getter
+
+        Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value (a zero-bit locator block is not meaningful).
+
+        Returns: int
+        """
+        return self._get_property("locator_block_length")
+
+    @locator_block_length.setter
+    def locator_block_length(self, value):
+        """locator_block_length setter
+
+        Number of bits in the Locator Block (LB) field of the SID. The Locator Block is the common IPv6 prefix shared across all SIDs within the same SRv6 domain block (e.g., 32 bits in the uSID F3216 format). Minimum value (a zero-bit locator block is not meaningful).
+
+        value: int
+        """
+        self._set_property("locator_block_length", value)
+
+    @property
+    def locator_node_length(self):
+        # type: () -> int
+        """locator_node_length getter
+
+        Number of bits in the Locator Node (LN) field of the SID. Identifies the specific node within the Locator Block (e.g., 16 bits in the uSID F3216 format, providing up to 65534 addressable nodes per domain block).
+
+        Returns: int
+        """
+        return self._get_property("locator_node_length")
+
+    @locator_node_length.setter
+    def locator_node_length(self, value):
+        """locator_node_length setter
+
+        Number of bits in the Locator Node (LN) field of the SID. Identifies the specific node within the Locator Block (e.g., 16 bits in the uSID F3216 format, providing up to 65534 addressable nodes per domain block).
+
+        value: int
+        """
+        self._set_property("locator_node_length", value)
+
+    @property
+    def function_length(self):
+        # type: () -> int
+        """function_length getter
+
+        Number of bits in the Function field of the SID. Identifies the specific endpoint behavior instantiated on this node (e.g., 16 bits in the uSID F3216 format, supporting up to 65534 distinct functions per node).
+
+        Returns: int
+        """
+        return self._get_property("function_length")
+
+    @function_length.setter
+    def function_length(self, value):
+        """function_length setter
+
+        Number of bits in the Function field of the SID. Identifies the specific endpoint behavior instantiated on this node (e.g., 16 bits in the uSID F3216 format, supporting up to 65534 distinct functions per node).
+
+        value: int
+        """
+        self._set_property("function_length", value)
+
+    @property
+    def argument_length(self):
+        # type: () -> int
+        """argument_length getter
+
+        Number of bits in the Argument field of the SID. Carries additional per-behavior information such as VPN table identifiers or compressed next-SID encodings for Micro-SID stacking. Set to for standard SIDs that carry no argument. When non-zero in uSID context, enables packing multiple micro-segment identifiers within single 128-bit SID carrier (RFC 9800).
+
+        Returns: int
+        """
+        return self._get_property("argument_length")
+
+    @argument_length.setter
+    def argument_length(self, value):
+        """argument_length setter
+
+        Number of bits in the Argument field of the SID. Carries additional per-behavior information such as VPN table identifiers or compressed next-SID encodings for Micro-SID stacking. Set to for standard SIDs that carry no argument. When non-zero in uSID context, enables packing multiple micro-segment identifiers within single 128-bit SID carrier (RFC 9800).
+
+        value: int
+        """
+        self._set_property("argument_length", value)
+
+
+class IsisSRv6AdvertiseLocatorAsPrefix(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "route_metric": {
+            "type": int,
+            "format": "uint32",
+            "maximum": 16777215,
+        },
+        "redistribution_type": {
+            "type": str,
+            "enum": [
+                "up",
+                "down",
+            ],
+        },
+        "route_origin": {
+            "type": str,
+            "enum": [
+                "internal",
+                "external",
+            ],
+        },
+        "prefix_attributes": {"type": "IsisSRv6PrefixAttributes"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "route_metric": 0,
+        "redistribution_type": "up",
+        "route_origin": "internal",
+    }  # type: Dict[str, Union(type)]
+
+    UP = "up"  # type: str
+    DOWN = "down"  # type: str
+
+    INTERNAL = "internal"  # type: str
+    EXTERNAL = "external"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        route_metric=0,
+        redistribution_type="up",
+        route_origin="internal",
+    ):
+        super(IsisSRv6AdvertiseLocatorAsPrefix, self).__init__()
+        self._parent = parent
+        self._set_property("route_metric", route_metric)
+        self._set_property("redistribution_type", redistribution_type)
+        self._set_property("route_origin", route_origin)
+
+    def set(self, route_metric=None, redistribution_type=None, route_origin=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def route_metric(self):
+        # type: () -> int
+        """route_metric getter
+
+        Metric value used when advertising the locator prefix in the IPv6 Reachability TLV (TLV 236/237).
+
+        Returns: int
+        """
+        return self._get_property("route_metric")
+
+    @route_metric.setter
+    def route_metric(self, value):
+        """route_metric setter
+
+        Metric value used when advertising the locator prefix in the IPv6 Reachability TLV (TLV 236/237).
+
+        value: int
+        """
+        self._set_property("route_metric", value)
+
+    @property
+    def redistribution_type(self):
+        # type: () -> Union[Literal["down"], Literal["up"]]
+        """redistribution_type getter
+
+        Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' normal advertisement (default); 'down' the locator has been leaked from Level to Level (RFC 5305).
+
+        Returns: Union[Literal["down"], Literal["up"]]
+        """
+        return self._get_property("redistribution_type")
+
+    @redistribution_type.setter
+    def redistribution_type(self, value):
+        """redistribution_type setter
+
+        Controls the Up/Down redistribution bit for this locator prefix when advertised in the IPv6 Reachability TLV (TLV 236/237). 'up' normal advertisement (default); 'down' the locator has been leaked from Level to Level (RFC 5305).
+
+        value: Union[Literal["down"], Literal["up"]]
+        """
+        self._set_property("redistribution_type", value)
+
+    @property
+    def route_origin(self):
+        # type: () -> Union[Literal["external"], Literal["internal"]]
+        """route_origin getter
+
+        Origin type for the locator prefix in the IPv6 Reachability TLV (TLV 236/237). 'internal' intra-area prefix (default); 'external' redistributed from another protocol.
+
+        Returns: Union[Literal["external"], Literal["internal"]]
+        """
+        return self._get_property("route_origin")
+
+    @route_origin.setter
+    def route_origin(self, value):
+        """route_origin setter
+
+        Origin type for the locator prefix in the IPv6 Reachability TLV (TLV 236/237). 'internal' intra-area prefix (default); 'external' redistributed from another protocol.
+
+        value: Union[Literal["external"], Literal["internal"]]
+        """
+        self._set_property("route_origin", value)
+
+    @property
+    def prefix_attributes(self):
+        # type: () -> IsisSRv6PrefixAttributes
+        """prefix_attributes getter
+
+        Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) for an SRv6 locator prefix advertisement. Carried within the IS-IS IPv6 Reachability TLV (TLV 236/237) when the locator is also advertised as prefix. Presence of this object causes the sub-TLV to be included; absence suppresses it. Reference: RFC 7794.When present, the Prefix Attribute Flags Sub-TLV (sub-TLV type 4, RFC 7794) is included in this prefix advertisement, carrying the X, R, and flags. Absence suppresses the sub-TLV.
+
+        Returns: IsisSRv6PrefixAttributes
+        """
+        return self._get_property("prefix_attributes", IsisSRv6PrefixAttributes)
+
+
+class IsisSRv6PrefixAttributes(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "x_flag": {"type": bool},
+        "r_flag": {"type": bool},
+        "n_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "x_flag": False,
+        "r_flag": False,
+        "n_flag": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, x_flag=False, r_flag=False, n_flag=False):
+        super(IsisSRv6PrefixAttributes, self).__init__()
+        self._parent = parent
+        self._set_property("x_flag", x_flag)
+        self._set_property("r_flag", r_flag)
+        self._set_property("n_flag", n_flag)
+
+    def set(self, x_flag=None, r_flag=None, n_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def x_flag(self):
+        # type: () -> bool
+        """x_flag getter
+
+        External prefix flag (bit 0, RFC 7794). When set, indicates this locator prefix was redistributed from another protocol.
+
+        Returns: bool
+        """
+        return self._get_property("x_flag")
+
+    @x_flag.setter
+    def x_flag(self, value):
+        """x_flag setter
+
+        External prefix flag (bit 0, RFC 7794). When set, indicates this locator prefix was redistributed from another protocol.
+
+        value: bool
+        """
+        self._set_property("x_flag", value)
+
+    @property
+    def r_flag(self):
+        # type: () -> bool
+        """r_flag getter
+
+        Re-advertisement flag (bit 1, RFC 7794). When set, indicates this locator prefix has been leaked between IS-IS levels.
+
+        Returns: bool
+        """
+        return self._get_property("r_flag")
+
+    @r_flag.setter
+    def r_flag(self, value):
+        """r_flag setter
+
+        Re-advertisement flag (bit 1, RFC 7794). When set, indicates this locator prefix has been leaked between IS-IS levels.
+
+        value: bool
+        """
+        self._set_property("r_flag", value)
+
+    @property
+    def n_flag(self):
+        # type: () -> bool
+        """n_flag getter
+
+        Node flag (bit 2, RFC 7794). When set, indicates this prefix identifies the advertising router (e.g., loopback or router-ID prefix).
+
+        Returns: bool
+        """
+        return self._get_property("n_flag")
+
+    @n_flag.setter
+    def n_flag(self, value):
+        """n_flag setter
+
+        Node flag (bit 2, RFC 7794). When set, indicates this prefix identifies the advertising router (e.g., loopback or router-ID prefix).
+
+        value: bool
+        """
+        self._set_property("n_flag", value)
+
+
+class IsisSRv6LocatorIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(IsisSRv6LocatorIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[IsisSRv6Locator]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> IsisSRv6LocatorIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> IsisSRv6Locator
+        return self._next()
+
+    def next(self):
+        # type: () -> IsisSRv6Locator
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, IsisSRv6Locator):
+            raise Exception("Item is not an instance of IsisSRv6Locator")
+
+    def locator(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        # type: (str,str,int,int,int,bool,List[int]) -> IsisSRv6LocatorIter
+        """Factory method that creates an instance of the IsisSRv6Locator class
+
+        IS-IS SRv6 Locator TLV (TLV type 27), as defined in RFC 9352 Section 7.1. Advertises an SRv6 locator prefix that identifies this SRv6-capable router and binds it to specific IGP algorithm (standard SPF or Flex-Algo per RFC 9350). One Locator TLV is required per topology/algorithm combination. The SRv6 SID space is structured as: Locator prefix Function Argument, where the locator prefix is routable and the function identifies the specific endpoint behavior (RFC 8986 Section 3.1).
+
+        Returns: IsisSRv6LocatorIter
+        """
+        item = IsisSRv6Locator(
+            parent=self._parent,
+            locator_name=locator_name,
+            locator=locator,
+            prefix_length=prefix_length,
+            algorithm=algorithm,
+            metric=metric,
+            d_flag=d_flag,
+            mt_id=mt_id,
+        )
+        self._add(item)
+        return self
+
+    def add(
+        self,
+        locator_name=None,
+        locator=None,
+        prefix_length=64,
+        algorithm=0,
+        metric=0,
+        d_flag=False,
+        mt_id=None,
+    ):
+        # type: (str,str,int,int,int,bool,List[int]) -> IsisSRv6Locator
+        """Add method that creates and returns an instance of the IsisSRv6Locator class
+
+        IS-IS SRv6 Locator TLV (TLV type 27), as defined in RFC 9352 Section 7.1. Advertises an SRv6 locator prefix that identifies this SRv6-capable router and binds it to specific IGP algorithm (standard SPF or Flex-Algo per RFC 9350). One Locator TLV is required per topology/algorithm combination. The SRv6 SID space is structured as: Locator prefix Function Argument, where the locator prefix is routable and the function identifies the specific endpoint behavior (RFC 8986 Section 3.1).
+
+        Returns: IsisSRv6Locator
+        """
+        item = IsisSRv6Locator(
+            parent=self._parent,
+            locator_name=locator_name,
+            locator=locator,
+            prefix_length=prefix_length,
+            algorithm=algorithm,
+            metric=metric,
+            d_flag=d_flag,
+            mt_id=mt_id,
+        )
         self._add(item)
         return item
 
@@ -161211,7 +162957,7 @@ class MacsecHardwareAccelerationInlineCrypto(OpenApiObject):
         # type: () -> int
         """rx_sectag_offset getter
 
-        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
 
         Returns: int
         """
@@ -161221,7 +162967,7 @@ class MacsecHardwareAccelerationInlineCrypto(OpenApiObject):
     def rx_sectag_offset(self, value):
         """rx_sectag_offset setter
 
-        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+        Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
 
         value: int
         """
@@ -210885,8 +212631,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.59.0"
-        self._version_meta.sdk_version = "1.59.1"
+        self._version_meta.api_spec_version = "1.60.0"
+        self._version_meta.sdk_version = "1.60.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

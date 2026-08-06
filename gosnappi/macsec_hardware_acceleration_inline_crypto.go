@@ -301,7 +301,7 @@ type MacsecHardwareAccelerationInlineCrypto interface {
 	setNil()
 }
 
-// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
 // RxSectagOffset returns a uint32
 func (obj *macsecHardwareAccelerationInlineCrypto) RxSectagOffset() uint32 {
 
@@ -309,13 +309,13 @@ func (obj *macsecHardwareAccelerationInlineCrypto) RxSectagOffset() uint32 {
 
 }
 
-// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
 // RxSectagOffset returns a uint32
 func (obj *macsecHardwareAccelerationInlineCrypto) HasRxSectagOffset() bool {
 	return obj.obj.RxSectagOffset != nil
 }
 
-// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value “0x88E5”.
+// Offset of Rx secTAG from the first byte in packet. It is set to 12 when the secTAG includes the 'ethernet type' field which has value "0x88E5".
 // SetRxSectagOffset sets the uint32 value in the MacsecHardwareAccelerationInlineCrypto object
 func (obj *macsecHardwareAccelerationInlineCrypto) SetRxSectagOffset(value uint32) MacsecHardwareAccelerationInlineCrypto {
 
