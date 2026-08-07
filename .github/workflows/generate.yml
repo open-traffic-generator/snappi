@@ -39,13 +39,13 @@ jobs:
         run: |
           git config user.name "Github Actions Bot"
           git config user.email "actions@github.com"
-          git pull
           git add --force gosnappi/\*
           git add --force snappi/\*
           git add --force requirements.txt
           if git status --porcelain | grep .
             then
               git commit -m "Update auto generated go snappi"
+              git pull --rebase
               git push
             else
               echo "No change in auto generated go snappi"
