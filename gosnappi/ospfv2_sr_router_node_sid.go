@@ -13,10 +13,9 @@ import (
 // ***** Ospfv2SRRouterNodeSid *****
 type ospfv2SRRouterNodeSid struct {
 	validation
-	obj                        *otg.Ospfv2SRRouterNodeSid
-	marshaller                 marshalOspfv2SRRouterNodeSid
-	unMarshaller               unMarshalOspfv2SRRouterNodeSid
-	additionalPrefixSidsHolder Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
+	obj          *otg.Ospfv2SRRouterNodeSid
+	marshaller   marshalOspfv2SRRouterNodeSid
+	unMarshaller unMarshalOspfv2SRRouterNodeSid
 }
 
 func NewOspfv2SRRouterNodeSid() Ospfv2SRRouterNodeSid {
@@ -30,7 +29,7 @@ func (obj *ospfv2SRRouterNodeSid) msg() *otg.Ospfv2SRRouterNodeSid {
 }
 
 func (obj *ospfv2SRRouterNodeSid) setMsg(msg *otg.Ospfv2SRRouterNodeSid) Ospfv2SRRouterNodeSid {
-	obj.setNil()
+
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -113,7 +112,7 @@ func (m *unMarshalospfv2SRRouterNodeSid) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -159,7 +158,7 @@ func (m *unMarshalospfv2SRRouterNodeSid) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -198,7 +197,7 @@ func (m *unMarshalospfv2SRRouterNodeSid) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-	m.obj.setNil()
+
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -241,13 +240,6 @@ func (obj *ospfv2SRRouterNodeSid) Clone() (Ospfv2SRRouterNodeSid, error) {
 		return nil, pbErr
 	}
 	return newObj, nil
-}
-
-func (obj *ospfv2SRRouterNodeSid) setNil() {
-	obj.additionalPrefixSidsHolder = nil
-	obj.validationErrors = nil
-	obj.warnings = nil
-	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // Ospfv2SRRouterNodeSid is the Node (loopback) Prefix-SID advertised by this router for its own loopback address.
@@ -329,9 +321,6 @@ type Ospfv2SRRouterNodeSid interface {
 	SetAFlag(value bool) Ospfv2SRRouterNodeSid
 	// HasAFlag checks if AFlag has been set in Ospfv2SRRouterNodeSid
 	HasAFlag() bool
-	// AdditionalPrefixSids returns Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIterIter, set in Ospfv2SRRouterNodeSid
-	AdditionalPrefixSids() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	setNil()
 }
 
 type Ospfv2SRRouterNodeSidChoiceEnum string
@@ -603,95 +592,6 @@ func (obj *ospfv2SRRouterNodeSid) SetAFlag(value bool) Ospfv2SRRouterNodeSid {
 	return obj
 }
 
-// An optional list of additional Node Prefix-SIDs advertised for the same loopback
-// prefix but with different Segment Routing algorithms (one Prefix-SID sub-TLV per
-// algorithm).
-// AdditionalPrefixSids returns a []Ospfv2SRPrefixSid
-func (obj *ospfv2SRRouterNodeSid) AdditionalPrefixSids() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	if len(obj.obj.AdditionalPrefixSids) == 0 {
-		obj.obj.AdditionalPrefixSids = []*otg.Ospfv2SRPrefixSid{}
-	}
-	if obj.additionalPrefixSidsHolder == nil {
-		obj.additionalPrefixSidsHolder = newOspfv2SRRouterNodeSidOspfv2SRPrefixSidIter(&obj.obj.AdditionalPrefixSids).setMsg(obj)
-	}
-	return obj.additionalPrefixSidsHolder
-}
-
-type ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter struct {
-	obj                    *ospfv2SRRouterNodeSid
-	ospfv2SRPrefixSidSlice []Ospfv2SRPrefixSid
-	fieldPtr               *[]*otg.Ospfv2SRPrefixSid
-}
-
-func newOspfv2SRRouterNodeSidOspfv2SRPrefixSidIter(ptr *[]*otg.Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	return &ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter{fieldPtr: ptr}
-}
-
-type Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter interface {
-	setMsg(*ospfv2SRRouterNodeSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	Items() []Ospfv2SRPrefixSid
-	Add() Ospfv2SRPrefixSid
-	Append(items ...Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	Set(index int, newObj Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	Clear() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	clearHolderSlice() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-	appendHolderSlice(item Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter
-}
-
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) setMsg(msg *ospfv2SRRouterNodeSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	obj.clearHolderSlice()
-	for _, val := range *obj.fieldPtr {
-		obj.appendHolderSlice(&ospfv2SRPrefixSid{obj: val})
-	}
-	obj.obj = msg
-	return obj
-}
-
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) Items() []Ospfv2SRPrefixSid {
-	return obj.ospfv2SRPrefixSidSlice
-}
-
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) Add() Ospfv2SRPrefixSid {
-	newObj := &otg.Ospfv2SRPrefixSid{}
-	*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-	newLibObj := &ospfv2SRPrefixSid{obj: newObj}
-	newLibObj.setDefault()
-	obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, newLibObj)
-	return newLibObj
-}
-
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) Append(items ...Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	for _, item := range items {
-		newObj := item.msg()
-		*obj.fieldPtr = append(*obj.fieldPtr, newObj)
-		obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, item)
-	}
-	return obj
-}
-
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) Set(index int, newObj Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	(*obj.fieldPtr)[index] = newObj.msg()
-	obj.ospfv2SRPrefixSidSlice[index] = newObj
-	return obj
-}
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) Clear() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	if len(*obj.fieldPtr) > 0 {
-		*obj.fieldPtr = []*otg.Ospfv2SRPrefixSid{}
-		obj.ospfv2SRPrefixSidSlice = []Ospfv2SRPrefixSid{}
-	}
-	return obj
-}
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) clearHolderSlice() Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	if len(obj.ospfv2SRPrefixSidSlice) > 0 {
-		obj.ospfv2SRPrefixSidSlice = []Ospfv2SRPrefixSid{}
-	}
-	return obj
-}
-func (obj *ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter) appendHolderSlice(item Ospfv2SRPrefixSid) Ospfv2SRRouterNodeSidOspfv2SRPrefixSidIter {
-	obj.ospfv2SRPrefixSidSlice = append(obj.ospfv2SRPrefixSidSlice, item)
-	return obj
-}
-
 func (obj *ospfv2SRRouterNodeSid) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -723,20 +623,6 @@ func (obj *ospfv2SRRouterNodeSid) validateObj(vObj *validation, set_default bool
 			vObj.validationErrors = append(
 				vObj.validationErrors,
 				fmt.Sprintf("0 <= Ospfv2SRRouterNodeSid.Algorithm <= 255 but Got %d", *obj.obj.Algorithm))
-		}
-
-	}
-
-	if len(obj.obj.AdditionalPrefixSids) != 0 {
-
-		if set_default {
-			obj.AdditionalPrefixSids().clearHolderSlice()
-			for _, item := range obj.obj.AdditionalPrefixSids {
-				obj.AdditionalPrefixSids().appendHolderSlice(&ospfv2SRPrefixSid{obj: item})
-			}
-		}
-		for _, item := range obj.AdditionalPrefixSids().Items() {
-			item.validateObj(vObj, set_default)
 		}
 
 	}
