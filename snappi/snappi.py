@@ -44272,7 +44272,7 @@ class Ospfv2Interface(OpenApiObject):
         # type: () -> str
         """ipv4_name getter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         Returns: str
         """
@@ -44282,7 +44282,7 @@ class Ospfv2Interface(OpenApiObject):
     def ipv4_name(self, value):
         """ipv4_name setter
 
-        The globally unique name of the IPv4 interface connected to the DUT. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
+        The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name lag_name, i.e. connected to port and the DUT) or simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses simulated_link, this OSPFv2 interface belongs to simulated router inside simulated topology behind the emulated router, connected either by primary link (internal to the simulated topology) or secondary link (to device behind different simulated topology). This is how OSPFv2 simulated topologies are built a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections. . x-constraint:. /components/schemas/Device.Ipv4/properties/name.
 
         value: str
         """
@@ -46580,7 +46580,7 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRangeIter
         """Factory method that creates an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRangeIter
         """
@@ -46592,7 +46592,7 @@ class Ospfv2V4RouteRangeIter(OpenApiIter):
         # type: (str,int) -> Ospfv2V4RouteRange
         """Add method that creates and returns an instance of the Ospfv2V4RouteRange class
 
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.. The router may be an emulated router (connected to the DUT via port) or simulated. router inside simulated topology (its Ethernet uses simulated_link connection). The. route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,. external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment. Routing Prefix-SID(s) for these routes.
 
         Returns: Ospfv2V4RouteRange
         """
@@ -46998,7 +46998,6 @@ class Ospfv2SRRouterNodeSid(OpenApiObject):
         },
         "n_flag": {"type": bool},
         "a_flag": {"type": bool},
-        "additional_prefix_sids": {"type": "Ospfv2SRPrefixSidIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -47255,19 +47254,6 @@ class Ospfv2SRRouterNodeSid(OpenApiObject):
         value: bool
         """
         self._set_property("a_flag", value)
-
-    @property
-    def additional_prefix_sids(self):
-        # type: () -> Ospfv2SRPrefixSidIter
-        """additional_prefix_sids getter
-
-        An optional list of additional Node Prefix-SIDs advertised for the same loopback. prefix but with different Segment Routing algorithms (one Prefix-SID sub-TLV per. algorithm).
-
-        Returns: Ospfv2SRPrefixSidIter
-        """
-        return self._get_property(
-            "additional_prefix_sids", Ospfv2SRPrefixSidIter, self._parent, self._choice
-        )
 
 
 class DeviceMacsec(OpenApiObject):
@@ -205233,11 +205219,8 @@ class Ospfv2RouterLsa(OpenApiObject):
     _TYPES = {
         "header": {"type": "Ospfv2LsaHeader"},
         "links": {"type": "Ospfv2LinkIter"},
-        "label": {
-            "type": int,
-            "format": "uint32",
-        },
-        "srgb": {"type": str},
+        "sr_capability": {"type": "Ospfv2LsaSrCapability"},
+        "prefix_sid": {"type": "Ospfv2LsaPrefixSid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -205246,16 +205229,9 @@ class Ospfv2RouterLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, label=None, srgb=None):
+    def __init__(self, parent=None):
         super(Ospfv2RouterLsa, self).__init__()
         self._parent = parent
-        self._set_property("label", label)
-        self._set_property("srgb", srgb)
-
-    def set(self, label=None, srgb=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
 
     @property
     def header(self):
@@ -205280,46 +205256,26 @@ class Ospfv2RouterLsa(OpenApiObject):
         return self._get_property("links", Ospfv2LinkIter, self._parent, self._choice)
 
     @property
-    def label(self):
-        # type: () -> int
-        """label getter
+    def sr_capability(self):
+        # type: () -> Ospfv2LsaSrCapability
+        """sr_capability getter
 
-        The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
+        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned from the Router Information (RI) Opaque LSA:. the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.. Reference: https://datatracker.ietf.org/doc/html/rfc8665.The Segment Routing capability learned for this router, decoded from the Router. Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and. SR Local Block (SRLB) TLV (RFC 8665).
 
-        Returns: int
+        Returns: Ospfv2LsaSrCapability
         """
-        return self._get_property("label")
-
-    @label.setter
-    def label(self, value):
-        """label setter
-
-        The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
-
-        value: int
-        """
-        self._set_property("label", value)
+        return self._get_property("sr_capability", Ospfv2LsaSrCapability)
 
     @property
-    def srgb(self):
-        # type: () -> str
-        """srgb getter
+    def prefix_sid(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        """prefix_sid getter
 
-        The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of. the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
 
-        Returns: str
+        Returns: Ospfv2LsaPrefixSid
         """
-        return self._get_property("srgb")
-
-    @srgb.setter
-    def srgb(self, value):
-        """srgb setter
-
-        The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
-
-        value: str
-        """
-        self._set_property("srgb", value)
+        return self._get_property("prefix_sid", Ospfv2LsaPrefixSid)
 
 
 class Ospfv2LsaHeader(OpenApiObject):
@@ -205514,10 +205470,7 @@ class Ospfv2Link(OpenApiObject):
             "type": int,
             "format": "uint32",
         },
-        "adjacency_label": {
-            "type": int,
-            "format": "uint32",
-        },
+        "adjacency_sid": {"type": "Ospfv2LsaAdjacencySid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -205531,24 +205484,15 @@ class Ospfv2Link(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self,
-        parent=None,
-        type=None,
-        id=None,
-        data=None,
-        metric=None,
-        adjacency_label=None,
-    ):
+    def __init__(self, parent=None, type=None, id=None, data=None, metric=None):
         super(Ospfv2Link, self).__init__()
         self._parent = parent
         self._set_property("type", type)
         self._set_property("id", id)
         self._set_property("data", data)
         self._set_property("metric", metric)
-        self._set_property("adjacency_label", adjacency_label)
 
-    def set(self, type=None, id=None, data=None, metric=None, adjacency_label=None):
+    def set(self, type=None, id=None, data=None, metric=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -205638,25 +205582,279 @@ class Ospfv2Link(OpenApiObject):
         self._set_property("metric", value)
 
     @property
-    def adjacency_label(self):
-        # type: () -> int
-        """adjacency_label getter
+    def adjacency_sid(self):
+        # type: () -> Ospfv2LsaAdjacencySid
+        """adjacency_sid getter
 
-        The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+        The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID LAN Adj-SID. sub-TLV of the Extended Link Opaque LSA (RFC 8665).The Adjacency-SID learned for this link, decoded from the Adj-SID LAN Adj-SID sub-TLV. of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link. (RFC 8665).
+
+        Returns: Ospfv2LsaAdjacencySid
+        """
+        return self._get_property("adjacency_sid", Ospfv2LsaAdjacencySid)
+
+
+class Ospfv2LsaAdjacencySid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "type": {
+            "type": str,
+            "enum": [
+                "adj_sid",
+                "lan_adj_sid",
+            ],
+        },
+        "sids": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaAdjSidFlags"},
+        "weight": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    ADJ_SID = "adj_sid"  # type: str
+    LAN_ADJ_SID = "lan_adj_sid"  # type: str
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, type=None, sids=None, weight=None):
+        super(Ospfv2LsaAdjacencySid, self).__init__()
+        self._parent = parent
+        self._set_property("type", type)
+        self._set_property("sids", sids)
+        self._set_property("weight", weight)
+
+    def set(self, type=None, sids=None, weight=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def type(self):
+        # type: () -> Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """type getter
+
+        Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
+
+        Returns: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        return self._get_property("type")
+
+    @type.setter
+    def type(self, value):
+        """type setter
+
+        Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
+
+        value: Union[Literal["adj_sid"], Literal["lan_adj_sid"]]
+        """
+        self._set_property("type", value)
+
+    @property
+    def sids(self):
+        # type: () -> List[int]
+        """sids getter
+
+        One or more SID/Label values or indices associated with the adjacency.
+
+        Returns: List[int]
+        """
+        return self._get_property("sids")
+
+    @sids.setter
+    def sids(self, value):
+        """sids setter
+
+        One or more SID/Label values or indices associated with the adjacency.
+
+        value: List[int]
+        """
+        self._set_property("sids", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaAdjSidFlags
+        """flags getter
+
+        One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).Flags associated with the Adjacency-SID.
+
+        Returns: Ospfv2LsaAdjSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaAdjSidFlags)
+
+    @property
+    def weight(self):
+        # type: () -> int
+        """weight getter
+
+        The weight of the Adjacency-SID for the purpose of load balancing.
 
         Returns: int
         """
-        return self._get_property("adjacency_label")
+        return self._get_property("weight")
 
-    @adjacency_label.setter
-    def adjacency_label(self, value):
-        """adjacency_label setter
+    @weight.setter
+    def weight(self, value):
+        """weight setter
 
-        The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
+        The weight of the Adjacency-SID for the purpose of load balancing.
 
         value: int
         """
-        self._set_property("adjacency_label", value)
+        self._set_property("weight", value)
+
+
+class Ospfv2LsaAdjSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "b_flag": {"type": bool},
+        "g_flag": {"type": bool},
+        "p_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        b_flag=None,
+        g_flag=None,
+        p_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaAdjSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("b_flag", b_flag)
+        self._set_property("g_flag", g_flag)
+        self._set_property("p_flag", p_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, b_flag=None, g_flag=None, p_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def b_flag(self):
+        # type: () -> bool
+        """b_flag getter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        Returns: bool
+        """
+        return self._get_property("b_flag")
+
+    @b_flag.setter
+    def b_flag(self, value):
+        """b_flag setter
+
+        B-Flag (Backup): the Adjacency-SID is eligible for protection.
+
+        value: bool
+        """
+        self._set_property("b_flag", value)
+
+    @property
+    def g_flag(self):
+        # type: () -> bool
+        """g_flag getter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        Returns: bool
+        """
+        return self._get_property("g_flag")
+
+    @g_flag.setter
+    def g_flag(self, value):
+        """g_flag setter
+
+        G-Flag (Group): the Adjacency-SID refers to group of adjacencies.
+
+        value: bool
+        """
+        self._set_property("g_flag", value)
+
+    @property
+    def p_flag(self):
+        # type: () -> bool
+        """p_flag getter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        Returns: bool
+        """
+        return self._get_property("p_flag")
+
+    @p_flag.setter
+    def p_flag(self, value):
+        """p_flag setter
+
+        P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+
+        value: bool
+        """
+        self._set_property("p_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
 
 
 class Ospfv2LinkIter(OpenApiIter):
@@ -205689,8 +205887,8 @@ class Ospfv2LinkIter(OpenApiIter):
         if not isinstance(item, Ospfv2Link):
             raise Exception("Item is not an instance of Ospfv2Link")
 
-    def link(self, type=None, id=None, data=None, metric=None, adjacency_label=None):
-        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str,int,int) -> Ospfv2LinkIter
+    def link(self, type=None, id=None, data=None, metric=None):
+        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str,int) -> Ospfv2LinkIter
         """Factory method that creates an instance of the Ospfv2Link class
 
         Generic attributes used to identify links within OSPFv2.
@@ -205698,18 +205896,13 @@ class Ospfv2LinkIter(OpenApiIter):
         Returns: Ospfv2LinkIter
         """
         item = Ospfv2Link(
-            parent=self._parent,
-            type=type,
-            id=id,
-            data=data,
-            metric=metric,
-            adjacency_label=adjacency_label,
+            parent=self._parent, type=type, id=id, data=data, metric=metric
         )
         self._add(item)
         return self
 
-    def add(self, type=None, id=None, data=None, metric=None, adjacency_label=None):
-        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str,int,int) -> Ospfv2Link
+    def add(self, type=None, id=None, data=None, metric=None):
+        # type: (Union[Literal["point_to_point"], Literal["stub"], Literal["transit"], Literal["virtual"]],str,str,int) -> Ospfv2Link
         """Add method that creates and returns an instance of the Ospfv2Link class
 
         Generic attributes used to identify links within OSPFv2.
@@ -205717,15 +205910,587 @@ class Ospfv2LinkIter(OpenApiIter):
         Returns: Ospfv2Link
         """
         item = Ospfv2Link(
-            parent=self._parent,
-            type=type,
-            id=id,
-            data=data,
-            metric=metric,
-            adjacency_label=adjacency_label,
+            parent=self._parent, type=type, id=id, data=data, metric=metric
         )
         self._add(item)
         return item
+
+
+class Ospfv2LsaSrCapability(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "algorithms": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "srgb_ranges": {"type": "Ospfv2LsaSrgbIter"},
+        "srlb_ranges": {"type": "Ospfv2LsaSrlbIter"},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, algorithms=None):
+        super(Ospfv2LsaSrCapability, self).__init__()
+        self._parent = parent
+        self._set_property("algorithms", algorithms)
+
+    def set(self, algorithms=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def algorithms(self):
+        # type: () -> List[int]
+        """algorithms getter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        Returns: List[int]
+        """
+        return self._get_property("algorithms")
+
+    @algorithms.setter
+    def algorithms(self, value):
+        """algorithms setter
+
+        The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 SPF, = Strict SPF).
+
+        value: List[int]
+        """
+        self._set_property("algorithms", value)
+
+    @property
+    def srgb_ranges(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        """srgb_ranges getter
+
+        The learned Segment Routing Global Block (SRGB) ranges from the SID/Label Range TLV.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        return self._get_property(
+            "srgb_ranges", Ospfv2LsaSrgbIter, self._parent, self._choice
+        )
+
+    @property
+    def srlb_ranges(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        """srlb_ranges getter
+
+        The learned SR Local Block (SRLB) ranges from the SR Local Block TLV.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        return self._get_property(
+            "srlb_ranges", Ospfv2LsaSrlbIter, self._parent, self._choice
+        )
+
+
+class Ospfv2LsaSrgb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrgb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRGB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRGB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRGB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrgbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrgbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrgb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrgbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrgb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrgb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrgb")
+
+    def srgb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgbIter
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrgb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrgb class
+
+        A learned Segment Routing Global Block (SRGB) range.
+
+        Returns: Ospfv2LsaSrgb
+        """
+        item = Ospfv2LsaSrgb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaSrlb(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "starting_sid": {
+            "type": int,
+            "format": "uint32",
+        },
+        "range": {
+            "type": int,
+            "format": "uint32",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, starting_sid=None, range=None):
+        super(Ospfv2LsaSrlb, self).__init__()
+        self._parent = parent
+        self._set_property("starting_sid", starting_sid)
+        self._set_property("range", range)
+
+    def set(self, starting_sid=None, range=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def starting_sid(self):
+        # type: () -> int
+        """starting_sid getter
+
+        The first value (base SID/label) of the SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("starting_sid")
+
+    @starting_sid.setter
+    def starting_sid(self, value):
+        """starting_sid setter
+
+        The first value (base SID/label) of the SRLB range.
+
+        value: int
+        """
+        self._set_property("starting_sid", value)
+
+    @property
+    def range(self):
+        # type: () -> int
+        """range getter
+
+        The number of SIDs in this SRLB range.
+
+        Returns: int
+        """
+        return self._get_property("range")
+
+    @range.setter
+    def range(self, value):
+        """range setter
+
+        The number of SIDs in this SRLB range.
+
+        value: int
+        """
+        self._set_property("range", value)
+
+
+class Ospfv2LsaSrlbIter(OpenApiIter):
+    __slots__ = ("_parent", "_choice")
+
+    _GETITEM_RETURNS_CHOICE_OBJECT = False
+
+    def __init__(self, parent=None, choice=None):
+        super(Ospfv2LsaSrlbIter, self).__init__()
+        self._parent = parent
+        self._choice = choice
+
+    def __getitem__(self, key):
+        # type: (str) -> Union[Ospfv2LsaSrlb]
+        return self._getitem(key)
+
+    def __iter__(self):
+        # type: () -> Ospfv2LsaSrlbIter
+        return self._iter()
+
+    def __next__(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def next(self):
+        # type: () -> Ospfv2LsaSrlb
+        return self._next()
+
+    def _instanceOf(self, item):
+        if not isinstance(item, Ospfv2LsaSrlb):
+            raise Exception("Item is not an instance of Ospfv2LsaSrlb")
+
+    def srlb(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlbIter
+        """Factory method that creates an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlbIter
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return self
+
+    def add(self, starting_sid=None, range=None):
+        # type: (int,int) -> Ospfv2LsaSrlb
+        """Add method that creates and returns an instance of the Ospfv2LsaSrlb class
+
+        A learned SR Local Block (SRLB) range.
+
+        Returns: Ospfv2LsaSrlb
+        """
+        item = Ospfv2LsaSrlb(
+            parent=self._parent, starting_sid=starting_sid, range=range
+        )
+        self._add(item)
+        return item
+
+
+class Ospfv2LsaPrefixSid(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "sids": {
+            "type": list,
+            "itemtype": int,
+            "itemformat": "uint32",
+        },
+        "flags": {"type": "Ospfv2LsaPrefixSidFlags"},
+        "algorithm": {
+            "type": int,
+            "format": "uint32",
+            "minimum": 0,
+            "maximum": 255,
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, sids=None, algorithm=None):
+        super(Ospfv2LsaPrefixSid, self).__init__()
+        self._parent = parent
+        self._set_property("sids", sids)
+        self._set_property("algorithm", algorithm)
+
+    def set(self, sids=None, algorithm=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def sids(self):
+        # type: () -> List[int]
+        """sids getter
+
+        One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
+
+        Returns: List[int]
+        """
+        return self._get_property("sids")
+
+    @sids.setter
+    def sids(self, value):
+        """sids setter
+
+        One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
+
+        value: List[int]
+        """
+        self._set_property("sids", value)
+
+    @property
+    def flags(self):
+        # type: () -> Ospfv2LsaPrefixSidFlags
+        """flags getter
+
+        One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).Flags associated with the Prefix-SID.
+
+        Returns: Ospfv2LsaPrefixSidFlags
+        """
+        return self._get_property("flags", Ospfv2LsaPrefixSidFlags)
+
+    @property
+    def algorithm(self):
+        # type: () -> int
+        """algorithm getter
+
+        The Segment Routing algorithm the Prefix-SID is associated with.
+
+        Returns: int
+        """
+        return self._get_property("algorithm")
+
+    @algorithm.setter
+    def algorithm(self, value):
+        """algorithm setter
+
+        The Segment Routing algorithm the Prefix-SID is associated with.
+
+        value: int
+        """
+        self._set_property("algorithm", value)
+
+
+class Ospfv2LsaPrefixSidFlags(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "np_flag": {"type": bool},
+        "m_flag": {"type": bool},
+        "e_flag": {"type": bool},
+        "v_flag": {"type": bool},
+        "l_flag": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(
+        self,
+        parent=None,
+        np_flag=None,
+        m_flag=None,
+        e_flag=None,
+        v_flag=None,
+        l_flag=None,
+    ):
+        super(Ospfv2LsaPrefixSidFlags, self).__init__()
+        self._parent = parent
+        self._set_property("np_flag", np_flag)
+        self._set_property("m_flag", m_flag)
+        self._set_property("e_flag", e_flag)
+        self._set_property("v_flag", v_flag)
+        self._set_property("l_flag", l_flag)
+
+    def set(self, np_flag=None, m_flag=None, e_flag=None, v_flag=None, l_flag=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def np_flag(self):
+        # type: () -> bool
+        """np_flag getter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        Returns: bool
+        """
+        return self._get_property("np_flag")
+
+    @np_flag.setter
+    def np_flag(self, value):
+        """np_flag setter
+
+        NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+
+        value: bool
+        """
+        self._set_property("np_flag", value)
+
+    @property
+    def m_flag(self):
+        # type: () -> bool
+        """m_flag getter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        Returns: bool
+        """
+        return self._get_property("m_flag")
+
+    @m_flag.setter
+    def m_flag(self, value):
+        """m_flag setter
+
+        M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+
+        value: bool
+        """
+        self._set_property("m_flag", value)
+
+    @property
+    def e_flag(self):
+        # type: () -> bool
+        """e_flag getter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        Returns: bool
+        """
+        return self._get_property("e_flag")
+
+    @e_flag.setter
+    def e_flag(self, value):
+        """e_flag setter
+
+        E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+
+        value: bool
+        """
+        self._set_property("e_flag", value)
+
+    @property
+    def v_flag(self):
+        # type: () -> bool
+        """v_flag getter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        Returns: bool
+        """
+        return self._get_property("v_flag")
+
+    @v_flag.setter
+    def v_flag(self, value):
+        """v_flag setter
+
+        V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+
+        value: bool
+        """
+        self._set_property("v_flag", value)
+
+    @property
+    def l_flag(self):
+        # type: () -> bool
+        """l_flag getter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        Returns: bool
+        """
+        return self._get_property("l_flag")
+
+    @l_flag.setter
+    def l_flag(self, value):
+        """l_flag setter
+
+        L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+
+        value: bool
+        """
+        self._set_property("l_flag", value)
 
 
 class Ospfv2RouterLsaIter(OpenApiIter):
@@ -205758,27 +206523,27 @@ class Ospfv2RouterLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2RouterLsa):
             raise Exception("Item is not an instance of Ospfv2RouterLsa")
 
-    def routerlsa(self, label=None, srgb=None):
-        # type: (int,str) -> Ospfv2RouterLsaIter
+    def routerlsa(self):
+        # type: () -> Ospfv2RouterLsaIter
         """Factory method that creates an instance of the Ospfv2RouterLsa class
 
         Contents of the router LSA.
 
         Returns: Ospfv2RouterLsaIter
         """
-        item = Ospfv2RouterLsa(parent=self._parent, label=label, srgb=srgb)
+        item = Ospfv2RouterLsa(parent=self._parent)
         self._add(item)
         return self
 
-    def add(self, label=None, srgb=None):
-        # type: (int,str) -> Ospfv2RouterLsa
+    def add(self):
+        # type: () -> Ospfv2RouterLsa
         """Add method that creates and returns an instance of the Ospfv2RouterLsa class
 
         Contents of the router LSA.
 
         Returns: Ospfv2RouterLsa
         """
-        item = Ospfv2RouterLsa(parent=self._parent, label=label, srgb=srgb)
+        item = Ospfv2RouterLsa(parent=self._parent)
         self._add(item)
         return item
 
@@ -205946,10 +206711,7 @@ class Ospfv2NetworkSummaryLsa(OpenApiObject):
             "type": int,
             "format": "uint32",
         },
-        "label": {
-            "type": int,
-            "format": "uint32",
-        },
+        "prefix_sid": {"type": "Ospfv2LsaPrefixSid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -205958,14 +206720,13 @@ class Ospfv2NetworkSummaryLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(self, parent=None, network_mask=None, metric=None, label=None):
+    def __init__(self, parent=None, network_mask=None, metric=None):
         super(Ospfv2NetworkSummaryLsa, self).__init__()
         self._parent = parent
         self._set_property("network_mask", network_mask)
         self._set_property("metric", metric)
-        self._set_property("label", label)
 
-    def set(self, network_mask=None, metric=None, label=None):
+    def set(self, network_mask=None, metric=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -206024,25 +206785,15 @@ class Ospfv2NetworkSummaryLsa(OpenApiObject):
         self._set_property("metric", value)
 
     @property
-    def label(self):
-        # type: () -> int
-        """label getter
+    def prefix_sid(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        """prefix_sid getter
 
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the. OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix. (RFC 8665).
 
-        Returns: int
+        Returns: Ospfv2LsaPrefixSid
         """
-        return self._get_property("label")
-
-    @label.setter
-    def label(self, value):
-        """label setter
-
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-
-        value: int
-        """
-        self._set_property("label", value)
+        return self._get_property("prefix_sid", Ospfv2LsaPrefixSid)
 
 
 class Ospfv2NetworkSummaryLsaIter(OpenApiIter):
@@ -206075,8 +206826,8 @@ class Ospfv2NetworkSummaryLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2NetworkSummaryLsa):
             raise Exception("Item is not an instance of Ospfv2NetworkSummaryLsa")
 
-    def networksummarylsa(self, network_mask=None, metric=None, label=None):
-        # type: (str,int,int) -> Ospfv2NetworkSummaryLsaIter
+    def networksummarylsa(self, network_mask=None, metric=None):
+        # type: (str,int) -> Ospfv2NetworkSummaryLsaIter
         """Factory method that creates an instance of the Ospfv2NetworkSummaryLsa class
 
         Contents of the Network Summary LSA Type 3.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206084,13 +206835,13 @@ class Ospfv2NetworkSummaryLsaIter(OpenApiIter):
         Returns: Ospfv2NetworkSummaryLsaIter
         """
         item = Ospfv2NetworkSummaryLsa(
-            parent=self._parent, network_mask=network_mask, metric=metric, label=label
+            parent=self._parent, network_mask=network_mask, metric=metric
         )
         self._add(item)
         return self
 
-    def add(self, network_mask=None, metric=None, label=None):
-        # type: (str,int,int) -> Ospfv2NetworkSummaryLsa
+    def add(self, network_mask=None, metric=None):
+        # type: (str,int) -> Ospfv2NetworkSummaryLsa
         """Add method that creates and returns an instance of the Ospfv2NetworkSummaryLsa class
 
         Contents of the Network Summary LSA Type 3.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206098,7 +206849,7 @@ class Ospfv2NetworkSummaryLsaIter(OpenApiIter):
         Returns: Ospfv2NetworkSummaryLsa
         """
         item = Ospfv2NetworkSummaryLsa(
-            parent=self._parent, network_mask=network_mask, metric=metric, label=label
+            parent=self._parent, network_mask=network_mask, metric=metric
         )
         self._add(item)
         return item
@@ -206266,10 +207017,7 @@ class Ospfv2ExternalAsLsa(OpenApiObject):
             "type": int,
             "format": "uint32",
         },
-        "label": {
-            "type": int,
-            "format": "uint32",
-        },
+        "prefix_sid": {"type": "Ospfv2LsaPrefixSid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -206278,17 +207026,14 @@ class Ospfv2ExternalAsLsa(OpenApiObject):
 
     _STATUS = {}  # type: Dict[str, Union(type)]
 
-    def __init__(
-        self, parent=None, network_mask=None, metric=None, metric_type=None, label=None
-    ):
+    def __init__(self, parent=None, network_mask=None, metric=None, metric_type=None):
         super(Ospfv2ExternalAsLsa, self).__init__()
         self._parent = parent
         self._set_property("network_mask", network_mask)
         self._set_property("metric", metric)
         self._set_property("metric_type", metric_type)
-        self._set_property("label", label)
 
-    def set(self, network_mask=None, metric=None, metric_type=None, label=None):
+    def set(self, network_mask=None, metric=None, metric_type=None):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
                 self._set_property(property_name, property_value)
@@ -206368,25 +207113,15 @@ class Ospfv2ExternalAsLsa(OpenApiObject):
         self._set_property("metric_type", value)
 
     @property
-    def label(self):
-        # type: () -> int
-        """label getter
+    def prefix_sid(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        """prefix_sid getter
 
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the. OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix. (RFC 8665).
 
-        Returns: int
+        Returns: Ospfv2LsaPrefixSid
         """
-        return self._get_property("label")
-
-    @label.setter
-    def label(self, value):
-        """label setter
-
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-
-        value: int
-        """
-        self._set_property("label", value)
+        return self._get_property("prefix_sid", Ospfv2LsaPrefixSid)
 
 
 class Ospfv2ExternalAsLsaIter(OpenApiIter):
@@ -206419,10 +207154,8 @@ class Ospfv2ExternalAsLsaIter(OpenApiIter):
         if not isinstance(item, Ospfv2ExternalAsLsa):
             raise Exception("Item is not an instance of Ospfv2ExternalAsLsa")
 
-    def externalaslsa(
-        self, network_mask=None, metric=None, metric_type=None, label=None
-    ):
-        # type: (str,int,int,int) -> Ospfv2ExternalAsLsaIter
+    def externalaslsa(self, network_mask=None, metric=None, metric_type=None):
+        # type: (str,int,int) -> Ospfv2ExternalAsLsaIter
         """Factory method that creates an instance of the Ospfv2ExternalAsLsa class
 
         Contents of OSPFv2 AS-External-LSA Type 5.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206434,13 +207167,12 @@ class Ospfv2ExternalAsLsaIter(OpenApiIter):
             network_mask=network_mask,
             metric=metric,
             metric_type=metric_type,
-            label=label,
         )
         self._add(item)
         return self
 
-    def add(self, network_mask=None, metric=None, metric_type=None, label=None):
-        # type: (str,int,int,int) -> Ospfv2ExternalAsLsa
+    def add(self, network_mask=None, metric=None, metric_type=None):
+        # type: (str,int,int) -> Ospfv2ExternalAsLsa
         """Add method that creates and returns an instance of the Ospfv2ExternalAsLsa class
 
         Contents of OSPFv2 AS-External-LSA Type 5.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206452,7 +207184,6 @@ class Ospfv2ExternalAsLsaIter(OpenApiIter):
             network_mask=network_mask,
             metric=metric,
             metric_type=metric_type,
-            label=label,
         )
         self._add(item)
         return item
@@ -206479,10 +207210,7 @@ class Ospfv2NssaLsa(OpenApiObject):
             "type": str,
             "format": "ipv4",
         },
-        "label": {
-            "type": int,
-            "format": "uint32",
-        },
+        "prefix_sid": {"type": "Ospfv2LsaPrefixSid"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -206498,7 +207226,6 @@ class Ospfv2NssaLsa(OpenApiObject):
         metric=None,
         metric_type=None,
         forwarding_address=None,
-        label=None,
     ):
         super(Ospfv2NssaLsa, self).__init__()
         self._parent = parent
@@ -206506,15 +207233,9 @@ class Ospfv2NssaLsa(OpenApiObject):
         self._set_property("metric", metric)
         self._set_property("metric_type", metric_type)
         self._set_property("forwarding_address", forwarding_address)
-        self._set_property("label", label)
 
     def set(
-        self,
-        network_mask=None,
-        metric=None,
-        metric_type=None,
-        forwarding_address=None,
-        label=None,
+        self, network_mask=None, metric=None, metric_type=None, forwarding_address=None
     ):
         for property_name, property_value in locals().items():
             if property_name != "self" and property_value is not None:
@@ -206616,25 +207337,15 @@ class Ospfv2NssaLsa(OpenApiObject):
         self._set_property("forwarding_address", value)
 
     @property
-    def label(self):
-        # type: () -> int
-        """label getter
+    def prefix_sid(self):
+        # type: () -> Ospfv2LsaPrefixSid
+        """prefix_sid getter
 
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of. the Extended Prefix Opaque LSA (RFC 8665).The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the. OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix. (RFC 8665).
 
-        Returns: int
+        Returns: Ospfv2LsaPrefixSid
         """
-        return self._get_property("label")
-
-    @label.setter
-    def label(self, value):
-        """label setter
-
-        The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-
-        value: int
-        """
-        self._set_property("label", value)
+        return self._get_property("prefix_sid", Ospfv2LsaPrefixSid)
 
 
 class Ospfv2NssaLsaIter(OpenApiIter):
@@ -206668,14 +207379,9 @@ class Ospfv2NssaLsaIter(OpenApiIter):
             raise Exception("Item is not an instance of Ospfv2NssaLsa")
 
     def nssalsa(
-        self,
-        network_mask=None,
-        metric=None,
-        metric_type=None,
-        forwarding_address=None,
-        label=None,
+        self, network_mask=None, metric=None, metric_type=None, forwarding_address=None
     ):
-        # type: (str,int,int,str,int) -> Ospfv2NssaLsaIter
+        # type: (str,int,int,str) -> Ospfv2NssaLsaIter
         """Factory method that creates an instance of the Ospfv2NssaLsa class
 
         Contents of OSPFv2 NSSA LSA Type 7.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206688,20 +207394,14 @@ class Ospfv2NssaLsaIter(OpenApiIter):
             metric=metric,
             metric_type=metric_type,
             forwarding_address=forwarding_address,
-            label=label,
         )
         self._add(item)
         return self
 
     def add(
-        self,
-        network_mask=None,
-        metric=None,
-        metric_type=None,
-        forwarding_address=None,
-        label=None,
+        self, network_mask=None, metric=None, metric_type=None, forwarding_address=None
     ):
-        # type: (str,int,int,str,int) -> Ospfv2NssaLsa
+        # type: (str,int,int,str) -> Ospfv2NssaLsa
         """Add method that creates and returns an instance of the Ospfv2NssaLsa class
 
         Contents of OSPFv2 NSSA LSA Type 7.. The value of the IPv4 prefix that was received is present in header.lsa_id.
@@ -206714,7 +207414,6 @@ class Ospfv2NssaLsaIter(OpenApiIter):
             metric=metric,
             metric_type=metric_type,
             forwarding_address=forwarding_address,
-            label=label,
         )
         self._add(item)
         return item
@@ -206733,7 +207432,6 @@ class Ospfv2OpaqueLsa(OpenApiObject):
                 "domain",
             ],
         },
-        "tlvs": {"type": "Ospfv2OpaqueLsaTlvIter"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -206772,7 +207470,7 @@ class Ospfv2OpaqueLsa(OpenApiObject):
         # type: () -> Union[Literal["area"], Literal["domain"], Literal["local"]]
         """type getter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The scope of the Opaque LSA.
 
         Returns: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
@@ -206782,388 +207480,11 @@ class Ospfv2OpaqueLsa(OpenApiObject):
     def type(self, value):
         """type setter
 
-        The type of Opaque TE LSAs. The LSA type.
+        The scope of the Opaque LSA.
 
         value: Union[Literal["area"], Literal["domain"], Literal["local"]]
         """
         self._set_property("type", value)
-
-    @property
-    def tlvs(self):
-        # type: () -> Ospfv2OpaqueLsaTlvIter
-        """tlvs getter
-
-        The list of TLVs learned in this Opaque LSA. The Segment Routing information is carried here, e.g. the Extended Prefix TLV (with the Prefix-SID sub-TLV), the Extended Link TLV (with the Adjacency-SID LAN Adjacency-SID sub-TLVs), and the Router Information (RI) SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB) and SRMS Preference TLVs.
-
-        Returns: Ospfv2OpaqueLsaTlvIter
-        """
-        return self._get_property(
-            "tlvs", Ospfv2OpaqueLsaTlvIter, self._parent, self._choice
-        )
-
-
-class Ospfv2OpaqueLsaTlv(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "type": {
-            "type": str,
-            "enum": [
-                "unknown",
-                "router_address",
-                "link",
-                "extended_prefix",
-                "extended_prefix_range",
-                "ri_sr_algorithm",
-                "ri_global_label_range",
-                "ri_local_label_range",
-                "ri_srms_preference",
-                "extended_link",
-                "ri_flex_algo_definition",
-            ],
-        },
-        "length": {
-            "type": int,
-            "format": "uint32",
-        },
-        "value": {"type": str},
-        "sub_tlvs": {"type": "Ospfv2OpaqueLsaSubTlvIter"},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    UNKNOWN = "unknown"  # type: str
-    ROUTER_ADDRESS = "router_address"  # type: str
-    LINK = "link"  # type: str
-    EXTENDED_PREFIX = "extended_prefix"  # type: str
-    EXTENDED_PREFIX_RANGE = "extended_prefix_range"  # type: str
-    RI_SR_ALGORITHM = "ri_sr_algorithm"  # type: str
-    RI_GLOBAL_LABEL_RANGE = "ri_global_label_range"  # type: str
-    RI_LOCAL_LABEL_RANGE = "ri_local_label_range"  # type: str
-    RI_SRMS_PREFERENCE = "ri_srms_preference"  # type: str
-    EXTENDED_LINK = "extended_link"  # type: str
-    RI_FLEX_ALGO_DEFINITION = "ri_flex_algo_definition"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, type=None, length=None, value=None):
-        super(Ospfv2OpaqueLsaTlv, self).__init__()
-        self._parent = parent
-        self._set_property("type", type)
-        self._set_property("length", length)
-        self._set_property("value", value)
-
-    def set(self, type=None, length=None, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def type(self):
-        # type: () -> Union[Literal["extended_link"], Literal["extended_prefix"], Literal["extended_prefix_range"], Literal["link"], Literal["ri_flex_algo_definition"], Literal["ri_global_label_range"], Literal["ri_local_label_range"], Literal["ri_sr_algorithm"], Literal["ri_srms_preference"], Literal["router_address"], Literal["unknown"]]
-        """type getter
-
-        The Opaque LSA TLV type. The Segment Routing related types are the Extended Prefix TLV,. the Extended Prefix Range TLV, the Router Information (RI) SR-Algorithm TLV, the RI. Global (SRGB) and Local (SRLB) Label Range TLVs, the RI SRMS Preference TLV and the. Extended Link TLV.
-
-        Returns: Union[Literal["extended_link"], Literal["extended_prefix"], Literal["extended_prefix_range"], Literal["link"], Literal["ri_flex_algo_definition"], Literal["ri_global_label_range"], Literal["ri_local_label_range"], Literal["ri_sr_algorithm"], Literal["ri_srms_preference"], Literal["router_address"], Literal["unknown"]]
-        """
-        return self._get_property("type")
-
-    @type.setter
-    def type(self, value):
-        """type setter
-
-        The Opaque LSA TLV type. The Segment Routing related types are the Extended Prefix TLV,. the Extended Prefix Range TLV, the Router Information (RI) SR-Algorithm TLV, the RI. Global (SRGB) and Local (SRLB) Label Range TLVs, the RI SRMS Preference TLV and the. Extended Link TLV.
-
-        value: Union[Literal["extended_link"], Literal["extended_prefix"], Literal["extended_prefix_range"], Literal["link"], Literal["ri_flex_algo_definition"], Literal["ri_global_label_range"], Literal["ri_local_label_range"], Literal["ri_sr_algorithm"], Literal["ri_srms_preference"], Literal["router_address"], Literal["unknown"]]
-        """
-        self._set_property("type", value)
-
-    @property
-    def length(self):
-        # type: () -> int
-        """length getter
-
-        The length of the TLV value.
-
-        Returns: int
-        """
-        return self._get_property("length")
-
-    @length.setter
-    def length(self, value):
-        """length setter
-
-        The length of the TLV value.
-
-        value: int
-        """
-        self._set_property("length", value)
-
-    @property
-    def value(self):
-        # type: () -> str
-        """value getter
-
-        The raw value of the TLV.
-
-        Returns: str
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The raw value of the TLV.
-
-        value: str
-        """
-        self._set_property("value", value)
-
-    @property
-    def sub_tlvs(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlvIter
-        """sub_tlvs getter
-
-        The list of sub-TLVs learned within this TLV, e.g. the Prefix-SID, SID/Label, Adjacency-SID and LAN Adjacency-SID sub-TLVs.
-
-        Returns: Ospfv2OpaqueLsaSubTlvIter
-        """
-        return self._get_property(
-            "sub_tlvs", Ospfv2OpaqueLsaSubTlvIter, self._parent, self._choice
-        )
-
-
-class Ospfv2OpaqueLsaSubTlv(OpenApiObject):
-    __slots__ = "_parent"
-
-    _TYPES = {
-        "type": {
-            "type": str,
-            "enum": [
-                "unknown",
-                "prefix_sid",
-                "sid_label",
-                "adj_sid_label",
-                "lan_adj_sid_label",
-                "source_router_id",
-            ],
-        },
-        "length": {
-            "type": int,
-            "format": "uint32",
-        },
-        "value": {"type": str},
-    }  # type: Dict[str, str]
-
-    _REQUIRED = ()  # type: tuple(str)
-
-    _DEFAULTS = {}  # type: Dict[str, Union(type)]
-
-    UNKNOWN = "unknown"  # type: str
-    PREFIX_SID = "prefix_sid"  # type: str
-    SID_LABEL = "sid_label"  # type: str
-    ADJ_SID_LABEL = "adj_sid_label"  # type: str
-    LAN_ADJ_SID_LABEL = "lan_adj_sid_label"  # type: str
-    SOURCE_ROUTER_ID = "source_router_id"  # type: str
-
-    _STATUS = {}  # type: Dict[str, Union(type)]
-
-    def __init__(self, parent=None, type=None, length=None, value=None):
-        super(Ospfv2OpaqueLsaSubTlv, self).__init__()
-        self._parent = parent
-        self._set_property("type", type)
-        self._set_property("length", length)
-        self._set_property("value", value)
-
-    def set(self, type=None, length=None, value=None):
-        for property_name, property_value in locals().items():
-            if property_name != "self" and property_value is not None:
-                self._set_property(property_name, property_value)
-
-    @property
-    def type(self):
-        # type: () -> Union[Literal["adj_sid_label"], Literal["lan_adj_sid_label"], Literal["prefix_sid"], Literal["sid_label"], Literal["source_router_id"], Literal["unknown"]]
-        """type getter
-
-        The Opaque LSA sub-TLV type. The Segment Routing related sub-TLV types are the. Prefix-SID, the SID/Label, the Adjacency-SID (Adj SID or Label), the LAN Adjacency-SID. (LAN Adj SID or Label) and the Source Router ID.
-
-        Returns: Union[Literal["adj_sid_label"], Literal["lan_adj_sid_label"], Literal["prefix_sid"], Literal["sid_label"], Literal["source_router_id"], Literal["unknown"]]
-        """
-        return self._get_property("type")
-
-    @type.setter
-    def type(self, value):
-        """type setter
-
-        The Opaque LSA sub-TLV type. The Segment Routing related sub-TLV types are the. Prefix-SID, the SID/Label, the Adjacency-SID (Adj SID or Label), the LAN Adjacency-SID. (LAN Adj SID or Label) and the Source Router ID.
-
-        value: Union[Literal["adj_sid_label"], Literal["lan_adj_sid_label"], Literal["prefix_sid"], Literal["sid_label"], Literal["source_router_id"], Literal["unknown"]]
-        """
-        self._set_property("type", value)
-
-    @property
-    def length(self):
-        # type: () -> int
-        """length getter
-
-        The length of the sub-TLV value.
-
-        Returns: int
-        """
-        return self._get_property("length")
-
-    @length.setter
-    def length(self, value):
-        """length setter
-
-        The length of the sub-TLV value.
-
-        value: int
-        """
-        self._set_property("length", value)
-
-    @property
-    def value(self):
-        # type: () -> str
-        """value getter
-
-        The raw value of the sub-TLV.
-
-        Returns: str
-        """
-        return self._get_property("value")
-
-    @value.setter
-    def value(self, value):
-        """value setter
-
-        The raw value of the sub-TLV.
-
-        value: str
-        """
-        self._set_property("value", value)
-
-
-class Ospfv2OpaqueLsaSubTlvIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2OpaqueLsaSubTlvIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2OpaqueLsaSubTlv]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlvIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlv
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2OpaqueLsaSubTlv
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2OpaqueLsaSubTlv):
-            raise Exception("Item is not an instance of Ospfv2OpaqueLsaSubTlv")
-
-    def opaquelsasubtlv(self, type=None, length=None, value=None):
-        # type: (Union[Literal["adj_sid_label"], Literal["lan_adj_sid_label"], Literal["prefix_sid"], Literal["sid_label"], Literal["source_router_id"], Literal["unknown"]],int,str) -> Ospfv2OpaqueLsaSubTlvIter
-        """Factory method that creates an instance of the Ospfv2OpaqueLsaSubTlv class
-
-        A single sub-TLV learned within an OSPFv2 Opaque LSA TLV, reported as type, length and raw value.
-
-        Returns: Ospfv2OpaqueLsaSubTlvIter
-        """
-        item = Ospfv2OpaqueLsaSubTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return self
-
-    def add(self, type=None, length=None, value=None):
-        # type: (Union[Literal["adj_sid_label"], Literal["lan_adj_sid_label"], Literal["prefix_sid"], Literal["sid_label"], Literal["source_router_id"], Literal["unknown"]],int,str) -> Ospfv2OpaqueLsaSubTlv
-        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaSubTlv class
-
-        A single sub-TLV learned within an OSPFv2 Opaque LSA TLV, reported as type, length and raw value.
-
-        Returns: Ospfv2OpaqueLsaSubTlv
-        """
-        item = Ospfv2OpaqueLsaSubTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return item
-
-
-class Ospfv2OpaqueLsaTlvIter(OpenApiIter):
-    __slots__ = ("_parent", "_choice")
-
-    _GETITEM_RETURNS_CHOICE_OBJECT = False
-
-    def __init__(self, parent=None, choice=None):
-        super(Ospfv2OpaqueLsaTlvIter, self).__init__()
-        self._parent = parent
-        self._choice = choice
-
-    def __getitem__(self, key):
-        # type: (str) -> Union[Ospfv2OpaqueLsaTlv]
-        return self._getitem(key)
-
-    def __iter__(self):
-        # type: () -> Ospfv2OpaqueLsaTlvIter
-        return self._iter()
-
-    def __next__(self):
-        # type: () -> Ospfv2OpaqueLsaTlv
-        return self._next()
-
-    def next(self):
-        # type: () -> Ospfv2OpaqueLsaTlv
-        return self._next()
-
-    def _instanceOf(self, item):
-        if not isinstance(item, Ospfv2OpaqueLsaTlv):
-            raise Exception("Item is not an instance of Ospfv2OpaqueLsaTlv")
-
-    def opaquelsatlv(self, type=None, length=None, value=None):
-        # type: (Union[Literal["extended_link"], Literal["extended_prefix"], Literal["extended_prefix_range"], Literal["link"], Literal["ri_flex_algo_definition"], Literal["ri_global_label_range"], Literal["ri_local_label_range"], Literal["ri_sr_algorithm"], Literal["ri_srms_preference"], Literal["router_address"], Literal["unknown"]],int,str) -> Ospfv2OpaqueLsaTlvIter
-        """Factory method that creates an instance of the Ospfv2OpaqueLsaTlv class
-
-        A single TLV learned within an OSPFv2 Opaque LSA, reported as type, length and raw value.
-
-        Returns: Ospfv2OpaqueLsaTlvIter
-        """
-        item = Ospfv2OpaqueLsaTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return self
-
-    def add(self, type=None, length=None, value=None):
-        # type: (Union[Literal["extended_link"], Literal["extended_prefix"], Literal["extended_prefix_range"], Literal["link"], Literal["ri_flex_algo_definition"], Literal["ri_global_label_range"], Literal["ri_local_label_range"], Literal["ri_sr_algorithm"], Literal["ri_srms_preference"], Literal["router_address"], Literal["unknown"]],int,str) -> Ospfv2OpaqueLsaTlv
-        """Add method that creates and returns an instance of the Ospfv2OpaqueLsaTlv class
-
-        A single TLV learned within an OSPFv2 Opaque LSA, reported as type, length and raw value.
-
-        Returns: Ospfv2OpaqueLsaTlv
-        """
-        item = Ospfv2OpaqueLsaTlv(
-            parent=self._parent, type=type, length=length, value=value
-        )
-        self._add(item)
-        return item
 
 
 class Ospfv2OpaqueLsaIter(OpenApiIter):
@@ -207200,7 +207521,7 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsaIter
         """Factory method that creates an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11.
 
         Returns: Ospfv2OpaqueLsaIter
         """
@@ -207212,7 +207533,7 @@ class Ospfv2OpaqueLsaIter(OpenApiIter):
         # type: (Union[Literal["area"], Literal["domain"], Literal["local"]]) -> Ospfv2OpaqueLsa
         """Add method that creates and returns an instance of the Ospfv2OpaqueLsa class
 
-        Contents of OSPFv2 Opaque LSA Type 7.
+        Contents of OSPFv2 Opaque LSA Type 9/10/11.
 
         Returns: Ospfv2OpaqueLsa
         """

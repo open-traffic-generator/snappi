@@ -13,10 +13,11 @@ import (
 // ***** Ospfv2ExternalAsLsa *****
 type ospfv2ExternalAsLsa struct {
 	validation
-	obj          *otg.Ospfv2ExternalAsLsa
-	marshaller   marshalOspfv2ExternalAsLsa
-	unMarshaller unMarshalOspfv2ExternalAsLsa
-	headerHolder Ospfv2LsaHeader
+	obj             *otg.Ospfv2ExternalAsLsa
+	marshaller      marshalOspfv2ExternalAsLsa
+	unMarshaller    unMarshalOspfv2ExternalAsLsa
+	headerHolder    Ospfv2LsaHeader
+	prefixSidHolder Ospfv2LsaPrefixSid
 }
 
 func NewOspfv2ExternalAsLsa() Ospfv2ExternalAsLsa {
@@ -245,6 +246,7 @@ func (obj *ospfv2ExternalAsLsa) Clone() (Ospfv2ExternalAsLsa, error) {
 
 func (obj *ospfv2ExternalAsLsa) setNil() {
 	obj.headerHolder = nil
+	obj.prefixSidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -299,12 +301,16 @@ type Ospfv2ExternalAsLsa interface {
 	SetMetricType(value uint32) Ospfv2ExternalAsLsa
 	// HasMetricType checks if MetricType has been set in Ospfv2ExternalAsLsa
 	HasMetricType() bool
-	// Label returns uint32, set in Ospfv2ExternalAsLsa.
-	Label() uint32
-	// SetLabel assigns uint32 provided by user to Ospfv2ExternalAsLsa
-	SetLabel(value uint32) Ospfv2ExternalAsLsa
-	// HasLabel checks if Label has been set in Ospfv2ExternalAsLsa
-	HasLabel() bool
+	// PrefixSid returns Ospfv2LsaPrefixSid, set in Ospfv2ExternalAsLsa.
+	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
+	// the Extended Prefix Opaque LSA (RFC 8665).
+	PrefixSid() Ospfv2LsaPrefixSid
+	// SetPrefixSid assigns Ospfv2LsaPrefixSid provided by user to Ospfv2ExternalAsLsa.
+	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
+	// the Extended Prefix Opaque LSA (RFC 8665).
+	SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2ExternalAsLsa
+	// HasPrefixSid checks if PrefixSid has been set in Ospfv2ExternalAsLsa
+	HasPrefixSid() bool
 	setNil()
 }
 
@@ -402,25 +408,37 @@ func (obj *ospfv2ExternalAsLsa) SetMetricType(value uint32) Ospfv2ExternalAsLsa 
 	return obj
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// Label returns a uint32
-func (obj *ospfv2ExternalAsLsa) Label() uint32 {
-
-	return *obj.obj.Label
-
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// PrefixSid returns a Ospfv2LsaPrefixSid
+func (obj *ospfv2ExternalAsLsa) PrefixSid() Ospfv2LsaPrefixSid {
+	if obj.obj.PrefixSid == nil {
+		obj.obj.PrefixSid = NewOspfv2LsaPrefixSid().msg()
+	}
+	if obj.prefixSidHolder == nil {
+		obj.prefixSidHolder = &ospfv2LsaPrefixSid{obj: obj.obj.PrefixSid}
+	}
+	return obj.prefixSidHolder
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// Label returns a uint32
-func (obj *ospfv2ExternalAsLsa) HasLabel() bool {
-	return obj.obj.Label != nil
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// PrefixSid returns a Ospfv2LsaPrefixSid
+func (obj *ospfv2ExternalAsLsa) HasPrefixSid() bool {
+	return obj.obj.PrefixSid != nil
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// SetLabel sets the uint32 value in the Ospfv2ExternalAsLsa object
-func (obj *ospfv2ExternalAsLsa) SetLabel(value uint32) Ospfv2ExternalAsLsa {
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// SetPrefixSid sets the Ospfv2LsaPrefixSid value in the Ospfv2ExternalAsLsa object
+func (obj *ospfv2ExternalAsLsa) SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2ExternalAsLsa {
 
-	obj.obj.Label = &value
+	obj.prefixSidHolder = nil
+	obj.obj.PrefixSid = value.msg()
+
 	return obj
 }
 
@@ -441,6 +459,11 @@ func (obj *ospfv2ExternalAsLsa) validateObj(vObj *validation, set_default bool) 
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2ExternalAsLsa.NetworkMask"))
 		}
 
+	}
+
+	if obj.obj.PrefixSid != nil {
+
+		obj.PrefixSid().validateObj(vObj, set_default)
 	}
 
 }

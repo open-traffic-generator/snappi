@@ -13,9 +13,10 @@ import (
 // ***** Ospfv2Link *****
 type ospfv2Link struct {
 	validation
-	obj          *otg.Ospfv2Link
-	marshaller   marshalOspfv2Link
-	unMarshaller unMarshalOspfv2Link
+	obj                *otg.Ospfv2Link
+	marshaller         marshalOspfv2Link
+	unMarshaller       unMarshalOspfv2Link
+	adjacencySidHolder Ospfv2LsaAdjacencySid
 }
 
 func NewOspfv2Link() Ospfv2Link {
@@ -29,7 +30,7 @@ func (obj *ospfv2Link) msg() *otg.Ospfv2Link {
 }
 
 func (obj *ospfv2Link) setMsg(msg *otg.Ospfv2Link) Ospfv2Link {
-
+	obj.setNil()
 	proto.Merge(obj.obj, msg)
 	return obj
 }
@@ -112,7 +113,7 @@ func (m *unMarshalospfv2Link) FromPbText(value string) error {
 	if retObj != nil {
 		return retObj
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -158,7 +159,7 @@ func (m *unMarshalospfv2Link) FromYaml(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	vErr := m.obj.validateToAndFrom()
 	if vErr != nil {
 		return vErr
@@ -197,7 +198,7 @@ func (m *unMarshalospfv2Link) FromJson(value string) error {
 		return fmt.Errorf("unmarshal error %s", strings.Replace(
 			uError.Error(), "\u00a0", " ", -1)[7:])
 	}
-
+	m.obj.setNil()
 	err := m.obj.validateToAndFrom()
 	if err != nil {
 		return err
@@ -240,6 +241,13 @@ func (obj *ospfv2Link) Clone() (Ospfv2Link, error) {
 		return nil, pbErr
 	}
 	return newObj, nil
+}
+
+func (obj *ospfv2Link) setNil() {
+	obj.adjacencySidHolder = nil
+	obj.validationErrors = nil
+	obj.warnings = nil
+	obj.constraints = make(map[string]map[string]Constraints)
 }
 
 // Ospfv2Link is generic attributes used to identify links within OSPFv2.
@@ -288,12 +296,17 @@ type Ospfv2Link interface {
 	SetMetric(value uint32) Ospfv2Link
 	// HasMetric checks if Metric has been set in Ospfv2Link
 	HasMetric() bool
-	// AdjacencyLabel returns uint32, set in Ospfv2Link.
-	AdjacencyLabel() uint32
-	// SetAdjacencyLabel assigns uint32 provided by user to Ospfv2Link
-	SetAdjacencyLabel(value uint32) Ospfv2Link
-	// HasAdjacencyLabel checks if AdjacencyLabel has been set in Ospfv2Link
-	HasAdjacencyLabel() bool
+	// AdjacencySid returns Ospfv2LsaAdjacencySid, set in Ospfv2Link.
+	// Ospfv2LsaAdjacencySid is the learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
+	// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
+	AdjacencySid() Ospfv2LsaAdjacencySid
+	// SetAdjacencySid assigns Ospfv2LsaAdjacencySid provided by user to Ospfv2Link.
+	// Ospfv2LsaAdjacencySid is the learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
+	// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
+	SetAdjacencySid(value Ospfv2LsaAdjacencySid) Ospfv2Link
+	// HasAdjacencySid checks if AdjacencySid has been set in Ospfv2Link
+	HasAdjacencySid() bool
+	setNil()
 }
 
 type Ospfv2LinkTypeEnum string
@@ -433,25 +446,37 @@ func (obj *ospfv2Link) SetMetric(value uint32) Ospfv2Link {
 	return obj
 }
 
-// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
-// AdjacencyLabel returns a uint32
-func (obj *ospfv2Link) AdjacencyLabel() uint32 {
-
-	return *obj.obj.AdjacencyLabel
-
+// The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
+// of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
+// (RFC 8665).
+// AdjacencySid returns a Ospfv2LsaAdjacencySid
+func (obj *ospfv2Link) AdjacencySid() Ospfv2LsaAdjacencySid {
+	if obj.obj.AdjacencySid == nil {
+		obj.obj.AdjacencySid = NewOspfv2LsaAdjacencySid().msg()
+	}
+	if obj.adjacencySidHolder == nil {
+		obj.adjacencySidHolder = &ospfv2LsaAdjacencySid{obj: obj.obj.AdjacencySid}
+	}
+	return obj.adjacencySidHolder
 }
 
-// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
-// AdjacencyLabel returns a uint32
-func (obj *ospfv2Link) HasAdjacencyLabel() bool {
-	return obj.obj.AdjacencyLabel != nil
+// The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
+// of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
+// (RFC 8665).
+// AdjacencySid returns a Ospfv2LsaAdjacencySid
+func (obj *ospfv2Link) HasAdjacencySid() bool {
+	return obj.obj.AdjacencySid != nil
 }
 
-// The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
-// SetAdjacencyLabel sets the uint32 value in the Ospfv2Link object
-func (obj *ospfv2Link) SetAdjacencyLabel(value uint32) Ospfv2Link {
+// The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
+// of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
+// (RFC 8665).
+// SetAdjacencySid sets the Ospfv2LsaAdjacencySid value in the Ospfv2Link object
+func (obj *ospfv2Link) SetAdjacencySid(value Ospfv2LsaAdjacencySid) Ospfv2Link {
 
-	obj.obj.AdjacencyLabel = &value
+	obj.adjacencySidHolder = nil
+	obj.obj.AdjacencySid = value.msg()
+
 	return obj
 }
 
@@ -476,6 +501,11 @@ func (obj *ospfv2Link) validateObj(vObj *validation, set_default bool) {
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2Link.Data"))
 		}
 
+	}
+
+	if obj.obj.AdjacencySid != nil {
+
+		obj.AdjacencySid().validateObj(vObj, set_default)
 	}
 
 }

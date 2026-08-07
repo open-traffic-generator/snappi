@@ -9004,7 +9004,16 @@ message Ospfv2Interface {
   // required = true
   optional string name = 1;
 
-  // The globally unique name of the IPv4 interface connected to the DUT.
+  // The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying
+  // Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection
+  // of type port_name / lag_name, i.e. connected to a port and the DUT) or a simulated
+  // interface (Ethernet connection of type simulated_link). When the underlying Ethernet
+  // uses a simulated_link, this OSPFv2 interface belongs to a simulated router inside
+  // a simulated topology behind the emulated router, connected either by a primary link
+  // (internal to the simulated topology) or a secondary link (to a device behind a different
+  // simulated topology). This is how OSPFv2 simulated topologies are built - a simulated
+  // router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections.
+  // 
   // 
   // x-constraint:
   // - /components/schemas/Device.Ipv4/properties/name
@@ -9333,7 +9342,13 @@ message Ospfv2InterfaceAdjacencySid {
   optional uint32 weight = 7;
 }
 
-// Emulated OSPFv2 IPv4 routes.
+// A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.
+// The router may be an emulated router (connected to the DUT via a port) or a simulated
+// router inside a simulated topology (its Ethernet uses a simulated_link connection).
+// The
+// route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,
+// external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment
+// Routing Prefix-SID(s) for these routes.
 message Ospfv2V4RouteRange {
 
   // Globally unique name of an object. It also serves as the primary key for arrays of
@@ -9667,11 +9682,6 @@ message Ospfv2SRRouterNodeSid {
   // connected or attached in another connected area SHOULD set this flag.
   // default = False
   optional bool a_flag = 9;
-
-  // An optional list of additional Node Prefix-SIDs advertised for the same loopback
-  // prefix but with different Segment Routing algorithms (one Prefix-SID sub-TLV per
-  // algorithm).
-  repeated Ospfv2SRPrefixSid additional_prefix_sids = 10;
 }
 
 // A container of properties for an OSPFv3 router.
@@ -21729,14 +21739,16 @@ message Ospfv2RouterLsa {
   // Links that are described within the LSA.
   repeated Ospfv2Link links = 2;
 
-  // The Segment Routing Node/Prefix-SID label or index learned for this router. This
-  // value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque
-  // LSA (RFC 8665) advertised for the router's own prefix.
-  optional uint32 label = 3;
+  // The Segment Routing capability learned for this router, decoded from the Router
+  // Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
+  // SR Local Block (SRLB) TLV (RFC 8665).
+  Ospfv2LsaSrCapability sr_capability = 3;
 
-  // The learned Segment Routing Global Block (SRGB) range(s) advertised by this router
-  // in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
-  optional string srgb = 4;
+  // The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV
+  // of
+  // the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC
+  // 8665).
+  Ospfv2LsaPrefixSid prefix_sid = 4;
 }
 
 // Contents of the Network LSA.
@@ -21765,10 +21777,10 @@ message Ospfv2NetworkSummaryLsa {
   // The cost of the summary route TOS level 0 and all unspecified levels.
   optional uint32 metric = 3;
 
-  // The Segment Routing Prefix-SID label or index learned for this prefix. This value
-  // is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA
-  // (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-  optional uint32 label = 4;
+  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+  // (RFC 8665).
+  Ospfv2LsaPrefixSid prefix_sid = 4;
 }
 
 // Contents of OSPFv2 Autonomous System Boundary Router (ASBR) summary LSA - Type 4.
@@ -21800,10 +21812,10 @@ message Ospfv2ExternalAsLsa {
   // The type of metric associated with the route range.
   optional uint32 metric_type = 4;
 
-  // The Segment Routing Prefix-SID label or index learned for this prefix. This value
-  // is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA
-  // (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-  optional uint32 label = 5;
+  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+  // (RFC 8665).
+  Ospfv2LsaPrefixSid prefix_sid = 5;
 }
 
 // Contents of OSPFv2 NSSA LSA - Type 7.
@@ -21825,13 +21837,13 @@ message Ospfv2NssaLsa {
   // IPv4 Forwarding address.
   optional string forwarding_address = 5;
 
-  // The Segment Routing Prefix-SID label or index learned for this prefix. This value
-  // is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA
-  // (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-  optional uint32 label = 6;
+  // The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+  // OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+  // (RFC 8665).
+  Ospfv2LsaPrefixSid prefix_sid = 6;
 }
 
-// Contents of OSPFv2 Opaque LSA - Type 7.
+// Contents of OSPFv2 Opaque LSA - Type 9/10/11.
 message Ospfv2OpaqueLsa {
 
   // Contents of the LSA header.
@@ -21845,15 +21857,8 @@ message Ospfv2OpaqueLsa {
       domain = 3;
     }
   }
-  // The type of Opaque TE LSAs. The LSA type.
+  // The scope of the Opaque LSA.
   optional Type.Enum type = 2;
-
-  // The list of TLVs learned in this Opaque LSA. The Segment Routing information is carried
-  // here, e.g. the Extended Prefix TLV (with the Prefix-SID sub-TLV), the Extended Link
-  // TLV (with the Adjacency-SID / LAN Adjacency-SID sub-TLVs), and the Router Information
-  // (RI) SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB) and SRMS Preference
-  // TLVs.
-  repeated Ospfv2OpaqueLsaTlv tlvs = 4;
 }
 
 // Attributes in LSA Header.
@@ -21915,76 +21920,130 @@ message Ospfv2Link {
   // the local system's IP address.
   optional uint32 metric = 4;
 
-  // The Segment Routing Adjacency SID label learned for this link. This value is correlated
-  // from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose
-  // Extended Link TLV references this link.
-  optional uint32 adjacency_label = 5;
+  // The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
+  // of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
+  // (RFC 8665).
+  Ospfv2LsaAdjacencySid adjacency_sid = 5;
 }
 
-// A single TLV learned within an OSPFv2 Opaque LSA, reported as a type, length and
-// raw value.
-message Ospfv2OpaqueLsaTlv {
+// The Segment Routing capability learned from the Router Information (RI) Opaque LSA:
+// the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.
+// Reference: https://datatracker.ietf.org/doc/html/rfc8665.
+message Ospfv2LsaSrCapability {
+
+  // The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 = SPF, 1 = Strict
+  // SPF).
+  repeated uint32 algorithms = 1;
+
+  // The learned Segment Routing Global Block (SRGB) ranges from the SID/Label Range TLV.
+  repeated Ospfv2LsaSrgb srgb_ranges = 2;
+
+  // The learned SR Local Block (SRLB) ranges from the SR Local Block TLV.
+  repeated Ospfv2LsaSrlb srlb_ranges = 3;
+}
+
+// A learned Segment Routing Global Block (SRGB) range.
+message Ospfv2LsaSrgb {
+
+  // The first value (base SID/label) of the SRGB range.
+  optional uint32 starting_sid = 1;
+
+  // The number of SIDs in this SRGB range.
+  optional uint32 range = 2;
+}
+
+// A learned SR Local Block (SRLB) range.
+message Ospfv2LsaSrlb {
+
+  // The first value (base SID/label) of the SRLB range.
+  optional uint32 starting_sid = 1;
+
+  // The number of SIDs in this SRLB range.
+  optional uint32 range = 2;
+}
+
+// The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV
+// of
+// the Extended Prefix Opaque LSA (RFC 8665).
+message Ospfv2LsaPrefixSid {
+
+  // One or more SID/Label values or indices associated with the IGP Prefix segment attached
+  // to the prefix.
+  repeated uint32 sids = 1;
+
+  // Flags associated with the Prefix-SID.
+  Ospfv2LsaPrefixSidFlags flags = 2;
+
+  // The Segment Routing algorithm the Prefix-SID is associated with.
+  optional uint32 algorithm = 3;
+}
+
+// One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).
+message Ospfv2LsaPrefixSidFlags {
+
+  // NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before
+  // delivering the packet to the advertising node.
+  optional bool np_flag = 1;
+
+  // M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+  optional bool m_flag = 2;
+
+  // E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID
+  // with the Explicit-NULL label before forwarding.
+  optional bool e_flag = 3;
+
+  // V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear,
+  // an index.
+  optional bool v_flag = 4;
+
+  // L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+  optional bool l_flag = 5;
+}
+
+// The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN
+// Adj-SID
+// sub-TLV of the Extended Link Opaque LSA (RFC 8665).
+message Ospfv2LsaAdjacencySid {
 
   message Type {
     enum Enum {
       unspecified = 0;
-      unknown = 1;
-      router_address = 2;
-      link = 3;
-      extended_prefix = 4;
-      extended_prefix_range = 5;
-      ri_sr_algorithm = 6;
-      ri_global_label_range = 7;
-      ri_local_label_range = 8;
-      ri_srms_preference = 9;
-      extended_link = 10;
-      ri_flex_algo_definition = 11;
+      adj_sid = 1;
+      lan_adj_sid = 2;
     }
   }
-  // The Opaque LSA TLV type. The Segment Routing related types are the Extended Prefix
-  // TLV,
-  // the Extended Prefix Range TLV, the Router Information (RI) SR-Algorithm TLV, the
-  // RI
-  // Global (SRGB) and Local (SRLB) Label Range TLVs, the RI SRMS Preference TLV and the
-  // Extended Link TLV.
+  // Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID
+  // (Type 3).
   optional Type.Enum type = 1;
 
-  // The length of the TLV value.
-  optional uint32 length = 2;
+  // One or more SID/Label values or indices associated with the adjacency.
+  repeated uint32 sids = 2;
 
-  // The raw value of the TLV.
-  optional string value = 3;
+  // Flags associated with the Adjacency-SID.
+  Ospfv2LsaAdjSidFlags flags = 3;
 
-  // The list of sub-TLVs learned within this TLV, e.g. the Prefix-SID, SID/Label, Adjacency-SID
-  // and LAN Adjacency-SID sub-TLVs.
-  repeated Ospfv2OpaqueLsaSubTlv sub_tlvs = 4;
+  // The weight of the Adjacency-SID for the purpose of load balancing.
+  optional uint32 weight = 4;
 }
 
-// A single sub-TLV learned within an OSPFv2 Opaque LSA TLV, reported as a type, length
-// and raw value.
-message Ospfv2OpaqueLsaSubTlv {
+// One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+message Ospfv2LsaAdjSidFlags {
 
-  message Type {
-    enum Enum {
-      unspecified = 0;
-      unknown = 1;
-      prefix_sid = 2;
-      sid_label = 3;
-      adj_sid_label = 4;
-      lan_adj_sid_label = 5;
-      source_router_id = 6;
-    }
-  }
-  // The Opaque LSA sub-TLV type. The Segment Routing related sub-TLV types are the
-  // Prefix-SID, the SID/Label, the Adjacency-SID (Adj SID or Label), the LAN Adjacency-SID
-  // (LAN Adj SID or Label) and the Source Router ID.
-  optional Type.Enum type = 1;
+  // B-Flag (Backup): the Adjacency-SID is eligible for protection.
+  optional bool b_flag = 1;
 
-  // The length of the sub-TLV value.
-  optional uint32 length = 2;
+  // G-Flag (Group): the Adjacency-SID refers to a group of adjacencies.
+  optional bool g_flag = 2;
 
-  // The raw value of the sub-TLV.
-  optional string value = 3;
+  // P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+  optional bool p_flag = 3;
+
+  // V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear,
+  // an index.
+  optional bool v_flag = 4;
+
+  // L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+  optional bool l_flag = 5;
 }
 
 // The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned

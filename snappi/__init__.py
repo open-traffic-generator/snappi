@@ -1832,7 +1832,16 @@ from .snappi import Ospfv2LsaState
 from .snappi import Ospfv2RouterLsa
 from .snappi import Ospfv2LsaHeader
 from .snappi import Ospfv2Link
+from .snappi import Ospfv2LsaAdjacencySid
+from .snappi import Ospfv2LsaAdjSidFlags
 from .snappi import Ospfv2LinkIter
+from .snappi import Ospfv2LsaSrCapability
+from .snappi import Ospfv2LsaSrgb
+from .snappi import Ospfv2LsaSrgbIter
+from .snappi import Ospfv2LsaSrlb
+from .snappi import Ospfv2LsaSrlbIter
+from .snappi import Ospfv2LsaPrefixSid
+from .snappi import Ospfv2LsaPrefixSidFlags
 from .snappi import Ospfv2RouterLsaIter
 from .snappi import Ospfv2NetworkLsa
 from .snappi import Ospfv2NetworkLsaIter
@@ -1845,10 +1854,6 @@ from .snappi import Ospfv2ExternalAsLsaIter
 from .snappi import Ospfv2NssaLsa
 from .snappi import Ospfv2NssaLsaIter
 from .snappi import Ospfv2OpaqueLsa
-from .snappi import Ospfv2OpaqueLsaTlv
-from .snappi import Ospfv2OpaqueLsaSubTlv
-from .snappi import Ospfv2OpaqueLsaSubTlvIter
-from .snappi import Ospfv2OpaqueLsaTlvIter
 from .snappi import Ospfv2OpaqueLsaIter
 from .snappi import Ospfv2LsaStateIter
 from .snappi import Ospfv3LsaState

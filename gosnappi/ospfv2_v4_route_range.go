@@ -254,7 +254,12 @@ func (obj *ospfv2V4RouteRange) setNil() {
 	obj.constraints = make(map[string]map[string]Constraints)
 }
 
-// Ospfv2V4RouteRange is emulated OSPFv2 IPv4 routes.
+// Ospfv2V4RouteRange is a group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.
+// The router may be an emulated router (connected to the DUT via a port) or a simulated
+// router inside a simulated topology (its Ethernet uses a simulated_link connection). The
+// route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,
+// external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment
+// Routing Prefix-SID(s) for these routes.
 type Ospfv2V4RouteRange interface {
 	Validation
 	// msg marshals Ospfv2V4RouteRange to protobuf object *otg.Ospfv2V4RouteRange
