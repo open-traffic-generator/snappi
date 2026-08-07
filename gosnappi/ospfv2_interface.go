@@ -367,7 +367,7 @@ func (obj *ospfv2Interface) SetName(value string) Ospfv2Interface {
 	return obj
 }
 
-// The globally unique name of the IPv4 interface connected to the DUT.
+// The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name / lag_name, i.e. connected to a port and the DUT) or a simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses a simulated_link, this OSPFv2 interface belongs to a simulated router inside a simulated topology behind the emulated router, connected either by a primary link (internal to the simulated topology) or a secondary link (to a device behind a different simulated topology). This is how OSPFv2 simulated topologies are built - a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name
@@ -379,7 +379,7 @@ func (obj *ospfv2Interface) Ipv4Name() string {
 
 }
 
-// The globally unique name of the IPv4 interface connected to the DUT.
+// The globally unique name of the IPv4 interface on which OSPFv2 is running. The underlying Ethernet of this IPv4 interface may be an emulated interface (Ethernet connection of type port_name / lag_name, i.e. connected to a port and the DUT) or a simulated interface (Ethernet connection of type simulated_link). When the underlying Ethernet uses a simulated_link, this OSPFv2 interface belongs to a simulated router inside a simulated topology behind the emulated router, connected either by a primary link (internal to the simulated topology) or a secondary link (to a device behind a different simulated topology). This is how OSPFv2 simulated topologies are built - a simulated router is an ordinary Device running ospfv2 whose Ethernets use simulated_link connections.
 //
 // x-constraint:
 // - /components/schemas/Device.Ipv4/properties/name

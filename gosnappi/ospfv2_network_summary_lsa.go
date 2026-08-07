@@ -13,10 +13,11 @@ import (
 // ***** Ospfv2NetworkSummaryLsa *****
 type ospfv2NetworkSummaryLsa struct {
 	validation
-	obj          *otg.Ospfv2NetworkSummaryLsa
-	marshaller   marshalOspfv2NetworkSummaryLsa
-	unMarshaller unMarshalOspfv2NetworkSummaryLsa
-	headerHolder Ospfv2LsaHeader
+	obj             *otg.Ospfv2NetworkSummaryLsa
+	marshaller      marshalOspfv2NetworkSummaryLsa
+	unMarshaller    unMarshalOspfv2NetworkSummaryLsa
+	headerHolder    Ospfv2LsaHeader
+	prefixSidHolder Ospfv2LsaPrefixSid
 }
 
 func NewOspfv2NetworkSummaryLsa() Ospfv2NetworkSummaryLsa {
@@ -245,6 +246,7 @@ func (obj *ospfv2NetworkSummaryLsa) Clone() (Ospfv2NetworkSummaryLsa, error) {
 
 func (obj *ospfv2NetworkSummaryLsa) setNil() {
 	obj.headerHolder = nil
+	obj.prefixSidHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -293,12 +295,16 @@ type Ospfv2NetworkSummaryLsa interface {
 	SetMetric(value uint32) Ospfv2NetworkSummaryLsa
 	// HasMetric checks if Metric has been set in Ospfv2NetworkSummaryLsa
 	HasMetric() bool
-	// Label returns uint32, set in Ospfv2NetworkSummaryLsa.
-	Label() uint32
-	// SetLabel assigns uint32 provided by user to Ospfv2NetworkSummaryLsa
-	SetLabel(value uint32) Ospfv2NetworkSummaryLsa
-	// HasLabel checks if Label has been set in Ospfv2NetworkSummaryLsa
-	HasLabel() bool
+	// PrefixSid returns Ospfv2LsaPrefixSid, set in Ospfv2NetworkSummaryLsa.
+	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
+	// the Extended Prefix Opaque LSA (RFC 8665).
+	PrefixSid() Ospfv2LsaPrefixSid
+	// SetPrefixSid assigns Ospfv2LsaPrefixSid provided by user to Ospfv2NetworkSummaryLsa.
+	// Ospfv2LsaPrefixSid is the learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
+	// the Extended Prefix Opaque LSA (RFC 8665).
+	SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2NetworkSummaryLsa
+	// HasPrefixSid checks if PrefixSid has been set in Ospfv2NetworkSummaryLsa
+	HasPrefixSid() bool
 	setNil()
 }
 
@@ -374,25 +380,37 @@ func (obj *ospfv2NetworkSummaryLsa) SetMetric(value uint32) Ospfv2NetworkSummary
 	return obj
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// Label returns a uint32
-func (obj *ospfv2NetworkSummaryLsa) Label() uint32 {
-
-	return *obj.obj.Label
-
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// PrefixSid returns a Ospfv2LsaPrefixSid
+func (obj *ospfv2NetworkSummaryLsa) PrefixSid() Ospfv2LsaPrefixSid {
+	if obj.obj.PrefixSid == nil {
+		obj.obj.PrefixSid = NewOspfv2LsaPrefixSid().msg()
+	}
+	if obj.prefixSidHolder == nil {
+		obj.prefixSidHolder = &ospfv2LsaPrefixSid{obj: obj.obj.PrefixSid}
+	}
+	return obj.prefixSidHolder
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// Label returns a uint32
-func (obj *ospfv2NetworkSummaryLsa) HasLabel() bool {
-	return obj.obj.Label != nil
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// PrefixSid returns a Ospfv2LsaPrefixSid
+func (obj *ospfv2NetworkSummaryLsa) HasPrefixSid() bool {
+	return obj.obj.PrefixSid != nil
 }
 
-// The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-// SetLabel sets the uint32 value in the Ospfv2NetworkSummaryLsa object
-func (obj *ospfv2NetworkSummaryLsa) SetLabel(value uint32) Ospfv2NetworkSummaryLsa {
+// The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+// OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+// (RFC 8665).
+// SetPrefixSid sets the Ospfv2LsaPrefixSid value in the Ospfv2NetworkSummaryLsa object
+func (obj *ospfv2NetworkSummaryLsa) SetPrefixSid(value Ospfv2LsaPrefixSid) Ospfv2NetworkSummaryLsa {
 
-	obj.obj.Label = &value
+	obj.prefixSidHolder = nil
+	obj.obj.PrefixSid = value.msg()
+
 	return obj
 }
 
@@ -413,6 +431,11 @@ func (obj *ospfv2NetworkSummaryLsa) validateObj(vObj *validation, set_default bo
 			vObj.validationErrors = append(vObj.validationErrors, fmt.Sprintf("%s %s", err.Error(), "on Ospfv2NetworkSummaryLsa.NetworkMask"))
 		}
 
+	}
+
+	if obj.obj.PrefixSid != nil {
+
+		obj.PrefixSid().validateObj(vObj, set_default)
 	}
 
 }

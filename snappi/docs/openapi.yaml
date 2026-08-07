@@ -12141,8 +12141,18 @@ components:
           type: string
           x-unique: global
         ipv4_name:
-          description: "The globally unique name of the IPv4 interface connected to\
-            \ the DUT.            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
+          description: "The globally unique name of the IPv4 interface on which OSPFv2\
+            \ is running. The underlying Ethernet of this IPv4 interface may be an\
+            \ emulated interface (Ethernet connection of type port_name / lag_name,\
+            \ i.e. connected to a port and the DUT) or a simulated interface (Ethernet\
+            \ connection of type simulated_link). When the underlying Ethernet uses\
+            \ a simulated_link, this OSPFv2 interface belongs to a simulated router\
+            \ inside a simulated topology behind the emulated router, connected either\
+            \ by a primary link (internal to the simulated topology) or a secondary\
+            \ link (to a device behind a different simulated topology). This is how\
+            \ OSPFv2 simulated topologies are built - a simulated router is an ordinary\
+            \ Device running ospfv2 whose Ethernets use simulated_link connections.\
+            \            \n\nx-constraint:\n- /components/schemas/Device.Ipv4/properties/name\n"
           type: string
           x-constraint:
           - /components/schemas/Device.Ipv4/properties/name
@@ -12578,7 +12588,12 @@ components:
           x-field-uid: 7
     Ospfv2.V4RouteRange:
       description: |-
-        Emulated OSPFv2 IPv4 routes.
+        A group of OSPFv2 IPv4 routes advertised by this OSPFv2 router.
+        The router may be an emulated router (connected to the DUT via a port) or a simulated
+        router inside a simulated topology (its Ethernet uses a simulated_link connection). The
+        route_origin choice selects the OSPFv2 LSA/route type (intra_area, inter_area,
+        external_type_1, external_type_2, nssa_external), and prefix_sids attaches the Segment
+        Routing Prefix-SID(s) for these routes.
       type: object
       properties:
         name:
@@ -13045,15 +13060,6 @@ components:
           type: boolean
           default: false
           x-field-uid: 9
-        additional_prefix_sids:
-          description: |-
-            An optional list of additional Node Prefix-SIDs advertised for the same loopback
-            prefix but with different Segment Routing algorithms (one Prefix-SID sub-TLV per
-            algorithm).
-          type: array
-          items:
-            $ref: '#/components/schemas/Ospfv2SR.PrefixSid'
-          x-field-uid: 10
     Device.Ospfv3Router:
       description: |-
         A container of properties for an OSPFv3 router.
@@ -29853,16 +29859,18 @@ components:
           items:
             $ref: '#/components/schemas/Ospfv2.Link'
           x-field-uid: 2
-        label:
+        sr_capability:
           description: |-
-            The Segment Routing Node/Prefix-SID label or index learned for this router. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665) advertised for the router's own prefix.
-          type: integer
-          format: uint32
+            The Segment Routing capability learned for this router, decoded from the Router
+            Information (RI) Opaque LSA: the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and
+            SR Local Block (SRLB) TLV (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.SrCapability'
           x-field-uid: 3
-        srgb:
+        prefix_sid:
           description: |-
-            The learned Segment Routing Global Block (SRGB) range(s) advertised by this router in the SID/Label Range TLV of the Router Information Opaque LSA (RFC 8665).
-          type: string
+            The Node/Prefix-SID learned for this router, decoded from the Prefix-SID sub-TLV of
+            the OSPFv2 Extended Prefix Opaque LSA advertised for the router's own prefix (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
           x-field-uid: 4
     Ospfv2.NetworkLsa:
       description: |-
@@ -29911,11 +29919,12 @@ components:
           type: integer
           format: uint32
           x-field-uid: 3
-        label:
+        prefix_sid:
           description: |-
-            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-          type: integer
-          format: uint32
+            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+            (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
           x-field-uid: 4
     Ospfv2.SummaryAsLsa:
       description: |-
@@ -29968,11 +29977,12 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
-        label:
+        prefix_sid:
           description: |-
-            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-          type: integer
-          format: uint32
+            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+            (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
           x-field-uid: 5
     Ospfv2.NssaLsa:
       description: |-
@@ -30009,15 +30019,16 @@ components:
           type: string
           format: ipv4
           x-field-uid: 5
-        label:
+        prefix_sid:
           description: |-
-            The Segment Routing Prefix-SID label or index learned for this prefix. This value is correlated from the Prefix-SID sub-TLV of the OSPFv2 Extended Prefix Opaque LSA (RFC 8665), whose Extended Prefix TLV references this prefix by route type.
-          type: integer
-          format: uint32
+            The Prefix-SID learned for this prefix, decoded from the Prefix-SID sub-TLV of the
+            OSPFv2 Extended Prefix Opaque LSA whose Extended Prefix TLV references this prefix
+            (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSid'
           x-field-uid: 6
     Ospfv2.OpaqueLsa:
       description: |-
-        Contents of OSPFv2 Opaque LSA - Type 7.
+        Contents of OSPFv2 Opaque LSA - Type 9/10/11.
       type: object
       properties:
         header:
@@ -30027,7 +30038,7 @@ components:
           x-field-uid: 1
         type:
           description: |-
-            The type of Opaque TE LSAs. The LSA type.
+            The scope of the Opaque LSA.
           type: string
           x-field-uid: 2
           x-enum:
@@ -30041,13 +30052,6 @@ components:
           - local
           - area
           - domain
-        tlvs:
-          description: |-
-            The list of TLVs learned in this Opaque LSA. The Segment Routing information is carried here, e.g. the Extended Prefix TLV (with the Prefix-SID sub-TLV), the Extended Link TLV (with the Adjacency-SID / LAN Adjacency-SID sub-TLVs), and the Router Information (RI) SR-Algorithm, SID/Label Range (SRGB), SR Local Block (SRLB) and SRMS Preference TLVs.
-          type: array
-          items:
-            $ref: '#/components/schemas/Ospfv2.OpaqueLsaTlv'
-          x-field-uid: 4
     Ospfv2.LsaHeader:
       description: |-
         Attributes in LSA Header.
@@ -30136,121 +30140,201 @@ components:
           type: integer
           format: uint32
           x-field-uid: 4
-        adjacency_label:
+        adjacency_sid:
           description: |-
-            The Segment Routing Adjacency SID label learned for this link. This value is correlated from the Adj-SID sub-TLV of the OSPFv2 Extended Link Opaque LSA (RFC 8665), whose Extended Link TLV references this link.
-          type: integer
-          format: uint32
+            The Adjacency-SID learned for this link, decoded from the Adj-SID / LAN Adj-SID sub-TLV
+            of the OSPFv2 Extended Link Opaque LSA whose Extended Link TLV references this link
+            (RFC 8665).
+          $ref: '#/components/schemas/Ospfv2Lsa.AdjacencySid'
           x-field-uid: 5
-    Ospfv2.OpaqueLsaTlv:
+    Ospfv2Lsa.SrCapability:
       description: |-
-        A single TLV learned within an OSPFv2 Opaque LSA, reported as a type, length and raw value.
+        The Segment Routing capability learned from the Router Information (RI) Opaque LSA:
+        the SR-Algorithm TLV, SID/Label Range (SRGB) TLV and SR Local Block (SRLB) TLV.
+        Reference: https://datatracker.ietf.org/doc/html/rfc8665.
       type: object
       properties:
-        type:
+        algorithms:
           description: |-
-            The Opaque LSA TLV type. The Segment Routing related types are the Extended Prefix TLV,
-            the Extended Prefix Range TLV, the Router Information (RI) SR-Algorithm TLV, the RI
-            Global (SRGB) and Local (SRLB) Label Range TLVs, the RI SRMS Preference TLV and the
-            Extended Link TLV.
-          type: string
-          x-field-uid: 1
-          x-enum:
-            unknown:
-              x-field-uid: 1
-            router_address:
-              x-field-uid: 2
-            link:
-              x-field-uid: 3
-            extended_prefix:
-              x-field-uid: 4
-            extended_prefix_range:
-              x-field-uid: 5
-            ri_sr_algorithm:
-              x-field-uid: 6
-            ri_global_label_range:
-              x-field-uid: 7
-            ri_local_label_range:
-              x-field-uid: 8
-            ri_srms_preference:
-              x-field-uid: 9
-            extended_link:
-              x-field-uid: 10
-            ri_flex_algo_definition:
-              x-field-uid: 11
-          enum:
-          - unknown
-          - router_address
-          - link
-          - extended_prefix
-          - extended_prefix_range
-          - ri_sr_algorithm
-          - ri_global_label_range
-          - ri_local_label_range
-          - ri_srms_preference
-          - extended_link
-          - ri_flex_algo_definition
-        length:
-          description: |-
-            The length of the TLV value.
-          type: integer
-          format: uint32
-          x-field-uid: 2
-        value:
-          description: |-
-            The raw value of the TLV.
-          type: string
-          x-field-uid: 3
-        sub_tlvs:
-          description: |-
-            The list of sub-TLVs learned within this TLV, e.g. the Prefix-SID, SID/Label, Adjacency-SID and LAN Adjacency-SID sub-TLVs.
+            The Segment Routing algorithms advertised in the SR-Algorithm TLV (0 = SPF, 1 = Strict SPF).
           type: array
           items:
-            $ref: '#/components/schemas/Ospfv2.OpaqueLsaSubTlv'
-          x-field-uid: 4
-    Ospfv2.OpaqueLsaSubTlv:
+            type: integer
+            format: uint32
+          x-field-uid: 1
+        srgb_ranges:
+          description: |-
+            The learned Segment Routing Global Block (SRGB) ranges from the SID/Label Range TLV.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Lsa.Srgb'
+          x-field-uid: 2
+        srlb_ranges:
+          description: |-
+            The learned SR Local Block (SRLB) ranges from the SR Local Block TLV.
+          type: array
+          items:
+            $ref: '#/components/schemas/Ospfv2Lsa.Srlb'
+          x-field-uid: 3
+    Ospfv2Lsa.Srgb:
       description: |-
-        A single sub-TLV learned within an OSPFv2 Opaque LSA TLV, reported as a type, length and raw value.
+        A learned Segment Routing Global Block (SRGB) range.
+      type: object
+      properties:
+        starting_sid:
+          description: |-
+            The first value (base SID/label) of the SRGB range.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        range:
+          description: |-
+            The number of SIDs in this SRGB range.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+    Ospfv2Lsa.Srlb:
+      description: |-
+        A learned SR Local Block (SRLB) range.
+      type: object
+      properties:
+        starting_sid:
+          description: |-
+            The first value (base SID/label) of the SRLB range.
+          type: integer
+          format: uint32
+          x-field-uid: 1
+        range:
+          description: |-
+            The number of SIDs in this SRLB range.
+          type: integer
+          format: uint32
+          x-field-uid: 2
+    Ospfv2Lsa.PrefixSid:
+      description: |-
+        The learned OSPFv2 Prefix-SID and its attributes, decoded from the Prefix-SID sub-TLV of
+        the Extended Prefix Opaque LSA (RFC 8665).
+      type: object
+      properties:
+        sids:
+          description: |-
+            One or more SID/Label values or indices associated with the IGP Prefix segment attached to the prefix.
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 1
+        flags:
+          description: |-
+            Flags associated with the Prefix-SID.
+          $ref: '#/components/schemas/Ospfv2Lsa.PrefixSidFlags'
+          x-field-uid: 2
+        algorithm:
+          description: |-
+            The Segment Routing algorithm the Prefix-SID is associated with.
+          type: integer
+          format: uint32
+          minimum: 0
+          maximum: 255
+          x-field-uid: 3
+    Ospfv2Lsa.PrefixSidFlags:
+      description: |-
+        One-octet flags of the OSPFv2 Prefix-SID sub-TLV (RFC 8665).
+      type: object
+      properties:
+        np_flag:
+          description: |-
+            NP-Flag (No-PHP): if set, the penultimate hop MUST NOT pop the Prefix-SID before delivering the packet to the advertising node.
+          type: boolean
+          x-field-uid: 1
+        m_flag:
+          description: |-
+            M-Flag (Mapping Server): if set, the SID was advertised by an SR Mapping Server.
+          type: boolean
+          x-field-uid: 2
+        e_flag:
+          description: |-
+            E-Flag (Explicit-Null): if set, the upstream neighbor MUST replace the Prefix-SID with the Explicit-NULL label before forwarding.
+          type: boolean
+          x-field-uid: 3
+        v_flag:
+          description: |-
+            V-Flag (Value): if set, the Prefix-SID carries an absolute value (label); if clear, an index.
+          type: boolean
+          x-field-uid: 4
+        l_flag:
+          description: |-
+            L-Flag (Local): if set, the value/index carried by the Prefix-SID has local significance.
+          type: boolean
+          x-field-uid: 5
+    Ospfv2Lsa.AdjacencySid:
+      description: |-
+        The learned OSPFv2 Adjacency-SID and its attributes, decoded from the Adj-SID / LAN Adj-SID
+        sub-TLV of the Extended Link Opaque LSA (RFC 8665).
       type: object
       properties:
         type:
           description: |-
-            The Opaque LSA sub-TLV type. The Segment Routing related sub-TLV types are the
-            Prefix-SID, the SID/Label, the Adjacency-SID (Adj SID or Label), the LAN Adjacency-SID
-            (LAN Adj SID or Label) and the Source Router ID.
+            Adjacency-SID type: Adjacency-SID (Extended Link sub-TLV Type 2) or LAN Adjacency-SID (Type 3).
           type: string
           x-field-uid: 1
           x-enum:
-            unknown:
+            adj_sid:
               x-field-uid: 1
-            prefix_sid:
+            lan_adj_sid:
               x-field-uid: 2
-            sid_label:
-              x-field-uid: 3
-            adj_sid_label:
-              x-field-uid: 4
-            lan_adj_sid_label:
-              x-field-uid: 5
-            source_router_id:
-              x-field-uid: 6
           enum:
-          - unknown
-          - prefix_sid
-          - sid_label
-          - adj_sid_label
-          - lan_adj_sid_label
-          - source_router_id
-        length:
+          - adj_sid
+          - lan_adj_sid
+        sids:
           description: |-
-            The length of the sub-TLV value.
+            One or more SID/Label values or indices associated with the adjacency.
+          type: array
+          items:
+            type: integer
+            format: uint32
+          x-field-uid: 2
+        flags:
+          description: |-
+            Flags associated with the Adjacency-SID.
+          $ref: '#/components/schemas/Ospfv2Lsa.AdjSidFlags'
+          x-field-uid: 3
+        weight:
+          description: |-
+            The weight of the Adjacency-SID for the purpose of load balancing.
           type: integer
           format: uint32
-          x-field-uid: 2
-        value:
+          x-field-uid: 4
+    Ospfv2Lsa.AdjSidFlags:
+      description: |-
+        One-octet flags of the OSPFv2 Adjacency-SID sub-TLV (RFC 8665).
+      type: object
+      properties:
+        b_flag:
           description: |-
-            The raw value of the sub-TLV.
-          type: string
+            B-Flag (Backup): the Adjacency-SID is eligible for protection.
+          type: boolean
+          x-field-uid: 1
+        g_flag:
+          description: |-
+            G-Flag (Group): the Adjacency-SID refers to a group of adjacencies.
+          type: boolean
+          x-field-uid: 2
+        p_flag:
+          description: |-
+            P-Flag (Persistent): the Adjacency-SID is persistently allocated.
+          type: boolean
           x-field-uid: 3
+        v_flag:
+          description: |-
+            V-Flag (Value): if set, the Adj-SID carries an absolute value (label); if clear, an index.
+          type: boolean
+          x-field-uid: 4
+        l_flag:
+          description: |-
+            L-Flag (Local): if set, the value/index carried by the Adj-SID has local significance.
+          type: boolean
+          x-field-uid: 5
     Ospfv3Lsas.State.Request:
       description: |-
         The request to retrieve OSPFv3 Link State Advertisements (LSA) information learned by the routers.
