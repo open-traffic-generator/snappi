@@ -13,12 +13,13 @@ import (
 // ***** FlowMetric *****
 type flowMetric struct {
 	validation
-	obj                 *otg.FlowMetric
-	marshaller          marshalFlowMetric
-	unMarshaller        unMarshalFlowMetric
-	timestampsHolder    MetricTimestamp
-	latencyHolder       MetricLatency
-	taggedMetricsHolder FlowMetricFlowTaggedMetricIter
+	obj                      *otg.FlowMetric
+	marshaller               marshalFlowMetric
+	unMarshaller             unMarshalFlowMetric
+	timestampsHolder         MetricTimestamp
+	latencyHolder            MetricLatency
+	taggedMetricsHolder      FlowMetricFlowTaggedMetricIter
+	packetLossDurationHolder FlowPacketLossDuration
 }
 
 func NewFlowMetric() FlowMetric {
@@ -249,6 +250,7 @@ func (obj *flowMetric) setNil() {
 	obj.timestampsHolder = nil
 	obj.latencyHolder = nil
 	obj.taggedMetricsHolder = nil
+	obj.packetLossDurationHolder = nil
 	obj.validationErrors = nil
 	obj.warnings = nil
 	obj.constraints = make(map[string]map[string]Constraints)
@@ -433,6 +435,16 @@ type FlowMetric interface {
 	SetRxRateMbps(value float32) FlowMetric
 	// HasRxRateMbps checks if RxRateMbps has been set in FlowMetric
 	HasRxRateMbps() bool
+	// PacketLossDuration returns FlowPacketLossDuration, set in FlowMetric.
+	// FlowPacketLossDuration is the container for packet loss duration metrics. The container will be empty if
+	// options.flow_options.packet_loss_duration has not been enabled during set_config.
+	PacketLossDuration() FlowPacketLossDuration
+	// SetPacketLossDuration assigns FlowPacketLossDuration provided by user to FlowMetric.
+	// FlowPacketLossDuration is the container for packet loss duration metrics. The container will be empty if
+	// options.flow_options.packet_loss_duration has not been enabled during set_config.
+	SetPacketLossDuration(value FlowPacketLossDuration) FlowMetric
+	// HasPacketLossDuration checks if PacketLossDuration has been set in FlowMetric
+	HasPacketLossDuration() bool
 	setNil()
 }
 
@@ -1057,6 +1069,34 @@ func (obj *flowMetric) SetRxRateMbps(value float32) FlowMetric {
 	return obj
 }
 
+// description is TBD
+// PacketLossDuration returns a FlowPacketLossDuration
+func (obj *flowMetric) PacketLossDuration() FlowPacketLossDuration {
+	if obj.obj.PacketLossDuration == nil {
+		obj.obj.PacketLossDuration = NewFlowPacketLossDuration().msg()
+	}
+	if obj.packetLossDurationHolder == nil {
+		obj.packetLossDurationHolder = &flowPacketLossDuration{obj: obj.obj.PacketLossDuration}
+	}
+	return obj.packetLossDurationHolder
+}
+
+// description is TBD
+// PacketLossDuration returns a FlowPacketLossDuration
+func (obj *flowMetric) HasPacketLossDuration() bool {
+	return obj.obj.PacketLossDuration != nil
+}
+
+// description is TBD
+// SetPacketLossDuration sets the FlowPacketLossDuration value in the FlowMetric object
+func (obj *flowMetric) SetPacketLossDuration(value FlowPacketLossDuration) FlowMetric {
+
+	obj.packetLossDurationHolder = nil
+	obj.obj.PacketLossDuration = value.msg()
+
+	return obj
+}
+
 func (obj *flowMetric) validateObj(vObj *validation, set_default bool) {
 	if set_default {
 		obj.setDefault()
@@ -1084,6 +1124,11 @@ func (obj *flowMetric) validateObj(vObj *validation, set_default bool) {
 			item.validateObj(vObj, set_default)
 		}
 
+	}
+
+	if obj.obj.PacketLossDuration != nil {
+
+		obj.PacketLossDuration().validateObj(vObj, set_default)
 	}
 
 }

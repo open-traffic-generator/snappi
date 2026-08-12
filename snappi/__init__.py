@@ -1481,6 +1481,7 @@ from .snappi import MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipl
 from .snappi import MacsecValidateFrames
 from .snappi import PortProtocolIter
 from .snappi import PerPortOptionsIter
+from .snappi import FlowOptions
 from .snappi import Lldp
 from .snappi import LldpConnection
 from .snappi import LldpChassisId
@@ -1631,6 +1632,7 @@ from .snappi import FlowTaggedMetric
 from .snappi import FlowMetricTag
 from .snappi import FlowMetricTagValue
 from .snappi import FlowMetricTagIter
+from .snappi import FlowPacketLossDuration
 from .snappi import FlowTaggedMetricIter
 from .snappi import FlowMetricIter
 from .snappi import Bgpv4Metric

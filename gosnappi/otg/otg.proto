@@ -1,4 +1,4 @@
-/* Open Traffic Generator API 1.60.0
+/* Open Traffic Generator API 1.61.0
  * Open Traffic Generator API defines a model-driven, vendor-neutral and standard
  * interface for emulating layer 2-7 network devices and generating test traffic.
  * 
@@ -75,6 +75,9 @@ message ConfigOptions {
 
   // Description missing in models
   repeated PerPortOptions per_port_options = 3;
+
+  // Description missing in models
+  FlowOptions flow_options = 4;
 }
 
 // An abstract test port.
@@ -10871,6 +10874,19 @@ message Flow {
   FlowPayload payload = 8;
 }
 
+// Common flow options that apply to all configured Flow objects.
+message FlowOptions {
+
+  // Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds).
+  // This metric represents the duration for which expected flow packets were not received,
+  // reported either per Rx port or aggregated across all Rx ports, depending on whether
+  // the flow metric is being fetched at per Rx port level or at an aggregate level. When
+  // set to true, this duration is reported in packet_loss field of the flow statistics.
+  // Applied across all flows.
+  // default = False
+  optional bool packet_loss_duration = 1;
+}
+
 // A container for different types of transmit and receive
 // endpoint containers.
 message FlowTxRx {
@@ -17806,6 +17822,9 @@ message FlowMetric {
 
   // The receive rate in Megabits per second.
   optional float rx_rate_mbps = 25;
+
+  // Description missing in models
+  FlowPacketLossDuration packet_loss_duration = 26;
 }
 
 // Metrics for each set of values applicable for configured
@@ -17872,6 +17891,9 @@ message FlowTaggedMetric {
 
   // The receive rate in Megabits per second.
   optional float rx_rate_mbps = 20;
+
+  // Description missing in models
+  FlowPacketLossDuration packet_loss_duration = 21;
 }
 
 // Description missing in models
@@ -17903,6 +17925,15 @@ message FlowMetricTagValue {
 
   // Value represented in string format
   optional string str = 3;
+}
+
+// The container for packet loss duration metrics. The container will be empty if
+// options.flow_options.packet_loss_duration has not been enabled during set_config.
+message FlowPacketLossDuration {
+
+  // Estimated packet loss duration in milliseconds, calculated based on the number
+  // of lost packets and Rx Rate.
+  optional float value = 1;
 }
 
 // The container for timestamp metrics.

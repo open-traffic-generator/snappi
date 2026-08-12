@@ -1,4 +1,4 @@
-# Open Traffic Generator API 1.60.0
+# Open Traffic Generator API 1.61.0
 # License: MIT
 
 import importlib
@@ -161257,6 +161257,7 @@ class ConfigOptions(OpenApiObject):
         "port_options": {"type": "PortOptions"},
         "protocol_options": {"type": "ProtocolOptions"},
         "per_port_options": {"type": "PerPortOptionsIter"},
+        "flow_options": {"type": "FlowOptions"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -161303,6 +161304,17 @@ class ConfigOptions(OpenApiObject):
         return self._get_property(
             "per_port_options", PerPortOptionsIter, self._parent, self._choice
         )
+
+    @property
+    def flow_options(self):
+        # type: () -> FlowOptions
+        """flow_options getter
+
+        Common flow options that apply to all configured Flow objects.Common flow options that apply to all configured Flow objects.Common flow options that apply to all configured Flow objects.
+
+        Returns: FlowOptions
+        """
+        return self._get_property("flow_options", FlowOptions)
 
 
 class PortOptions(OpenApiObject):
@@ -163431,6 +163443,53 @@ class PerPortOptionsIter(OpenApiIter):
         item = PerPortOptions(parent=self._parent, port_name=port_name)
         self._add(item)
         return item
+
+
+class FlowOptions(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "packet_loss_duration": {"type": bool},
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {
+        "packet_loss_duration": False,
+    }  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, packet_loss_duration=False):
+        super(FlowOptions, self).__init__()
+        self._parent = parent
+        self._set_property("packet_loss_duration", packet_loss_duration)
+
+    def set(self, packet_loss_duration=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def packet_loss_duration(self):
+        # type: () -> bool
+        """packet_loss_duration getter
+
+        Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds). This metric represents the duration for which expected flow packets were not received, reported either per Rx port or aggregated across all Rx ports, depending on whether the flow metric is being fetched at per Rx port level or at an aggregate level. When set to true, this duration is reported in packet_loss field of the flow statistics. Applied across all flows.
+
+        Returns: bool
+        """
+        return self._get_property("packet_loss_duration")
+
+    @packet_loss_duration.setter
+    def packet_loss_duration(self, value):
+        """packet_loss_duration setter
+
+        Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds). This metric represents the duration for which expected flow packets were not received, reported either per Rx port or aggregated across all Rx ports, depending on whether the flow metric is being fetched at per Rx port level or at an aggregate level. When set to true, this duration is reported in packet_loss field of the flow statistics. Applied across all flows.
+
+        value: bool
+        """
+        self._set_property("packet_loss_duration", value)
 
 
 class Lldp(OpenApiObject):
@@ -176386,6 +176445,7 @@ class FlowMetric(OpenApiObject):
         "rx_rate_kbps": {"type": float},
         "tx_rate_mbps": {"type": float},
         "rx_rate_mbps": {"type": float},
+        "packet_loss_duration": {"type": "FlowPacketLossDuration"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -176951,6 +177011,17 @@ class FlowMetric(OpenApiObject):
         """
         self._set_property("rx_rate_mbps", value)
 
+    @property
+    def packet_loss_duration(self):
+        # type: () -> FlowPacketLossDuration
+        """packet_loss_duration getter
+
+        The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.
+
+        Returns: FlowPacketLossDuration
+        """
+        return self._get_property("packet_loss_duration", FlowPacketLossDuration)
+
 
 class MetricTimestamp(OpenApiObject):
     __slots__ = "_parent"
@@ -177162,6 +177233,7 @@ class FlowTaggedMetric(OpenApiObject):
         "rx_rate_kbps": {"type": float},
         "tx_rate_mbps": {"type": float},
         "rx_rate_mbps": {"type": float},
+        "packet_loss_duration": {"type": "FlowPacketLossDuration"},
     }  # type: Dict[str, str]
 
     _REQUIRED = ()  # type: tuple(str)
@@ -177625,6 +177697,17 @@ class FlowTaggedMetric(OpenApiObject):
         """
         self._set_property("rx_rate_mbps", value)
 
+    @property
+    def packet_loss_duration(self):
+        # type: () -> FlowPacketLossDuration
+        """packet_loss_duration getter
+
+        The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.The container for packet loss duration metrics. The container will be empty if. options.flow_options.packet_loss_duration has not been enabled during set_config.
+
+        Returns: FlowPacketLossDuration
+        """
+        return self._get_property("packet_loss_duration", FlowPacketLossDuration)
+
 
 class FlowMetricTag(OpenApiObject):
     __slots__ = "_parent"
@@ -177848,6 +177931,54 @@ class FlowMetricTagIter(OpenApiIter):
         item = FlowMetricTag(parent=self._parent, name=name)
         self._add(item)
         return item
+
+
+class FlowPacketLossDuration(OpenApiObject):
+    __slots__ = "_parent"
+
+    _TYPES = {
+        "value": {
+            "type": float,
+            "format": "float",
+        },
+    }  # type: Dict[str, str]
+
+    _REQUIRED = ()  # type: tuple(str)
+
+    _DEFAULTS = {}  # type: Dict[str, Union(type)]
+
+    _STATUS = {}  # type: Dict[str, Union(type)]
+
+    def __init__(self, parent=None, value=None):
+        super(FlowPacketLossDuration, self).__init__()
+        self._parent = parent
+        self._set_property("value", value)
+
+    def set(self, value=None):
+        for property_name, property_value in locals().items():
+            if property_name != "self" and property_value is not None:
+                self._set_property(property_name, property_value)
+
+    @property
+    def value(self):
+        # type: () -> float
+        """value getter
+
+        Estimated packet loss duration in milliseconds, calculated based on the number. of lost packets and Rx Rate.
+
+        Returns: float
+        """
+        return self._get_property("value")
+
+    @value.setter
+    def value(self, value):
+        """value setter
+
+        Estimated packet loss duration in milliseconds, calculated based on the number. of lost packets and Rx Rate.
+
+        value: float
+        """
+        self._set_property("value", value)
 
 
 class FlowTaggedMetricIter(OpenApiIter):
@@ -212631,8 +212762,8 @@ class Api(object):
 
     def __init__(self, **kwargs):
         self._version_meta = self.version()
-        self._version_meta.api_spec_version = "1.60.0"
-        self._version_meta.sdk_version = "1.60.0"
+        self._version_meta.api_spec_version = "1.61.0"
+        self._version_meta.sdk_version = "1.61.0"
         self._version_check = kwargs.get("version_check")
         if self._version_check is None:
             self._version_check = False

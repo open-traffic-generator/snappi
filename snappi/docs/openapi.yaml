@@ -7,7 +7,7 @@ info:
     \ issue](https://github.com/open-traffic-generator/models/issues) in the models\
     \ repository\n- [fork the models repository](https://github.com/open-traffic-generator/models)\
     \ and submit a PR"
-  version: 1.60.0
+  version: 1.61.0
   contact:
     url: https://github.com/open-traffic-generator/models
   license:
@@ -373,6 +373,9 @@ components:
           items:
             $ref: '#/components/schemas/PerPort.Options'
           x-field-uid: 3
+        flow_options:
+          $ref: '#/components/schemas/Flow.Options'
+          x-field-uid: 4
     Port:
       description: |-
         An abstract test port.
@@ -14450,6 +14453,17 @@ components:
             The pattern of the bytes in the transmitted frames for the flow after the protocol headers.
           $ref: '#/components/schemas/Flow.Payload'
           x-field-uid: 8
+    Flow.Options:
+      description: |-
+        Common flow options that apply to all configured Flow objects.
+      type: object
+      properties:
+        packet_loss_duration:
+          description: |-
+            Enable flow statistics to compute and return the Packet Loss Duration (in milliseconds). This metric represents the duration for which expected flow packets were not received, reported either per Rx port or aggregated across all Rx ports, depending on whether the flow metric is being fetched at per Rx port level or at an aggregate level. When set to true, this duration is reported in packet_loss field of the flow statistics. Applied across all flows.
+          type: boolean
+          default: false
+          x-field-uid: 1
     Flow.TxRx:
       description: "A container for different types of transmit and receive \nendpoint\
         \ containers."
@@ -23021,6 +23035,9 @@ components:
             The receive rate in Megabits per second.
           type: number
           x-field-uid: 25
+        packet_loss_duration:
+          $ref: '#/components/schemas/Flow.PacketLossDuration'
+          x-field-uid: 26
     Flow.TaggedMetric:
       description: |-
         Metrics for each set of values applicable for configured
@@ -23130,6 +23147,9 @@ components:
             The receive rate in Megabits per second.
           type: number
           x-field-uid: 20
+        packet_loss_duration:
+          $ref: '#/components/schemas/Flow.PacketLossDuration'
+          x-field-uid: 21
     Flow.MetricTag:
       type: object
       properties:
@@ -23171,6 +23191,19 @@ components:
             Value represented in string format
           type: string
           x-field-uid: 3
+    Flow.PacketLossDuration:
+      description: |-
+        The container for packet loss duration metrics. The container will be empty if
+        options.flow_options.packet_loss_duration has not been enabled during set_config.
+      type: object
+      properties:
+        value:
+          description: |-
+            Estimated packet loss duration in milliseconds, calculated based on the number
+            of lost packets and Rx Rate.
+          type: number
+          format: float
+          x-field-uid: 1
     Metric.Timestamp:
       description: |-
         The container for timestamp metrics.
