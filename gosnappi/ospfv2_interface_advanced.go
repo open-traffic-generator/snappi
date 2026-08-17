@@ -352,7 +352,11 @@ func (obj *ospfv2InterfaceAdvanced) SetDeadInterval(value uint32) Ospfv2Interfac
 	return obj
 }
 
-// Routing metric associated with the interface..
+// Routing metric (interface output cost) associated with the interface.
+// It is advertised as the 16-bit TOS 0 metric of the corresponding link in the
+// Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has a valid
+// range of 1 to 65535 (RFC 2328 Section C.3). This applies equally to emulated
+// and simulated OSPFv2 interfaces.
 // RoutingMetric returns a uint32
 func (obj *ospfv2InterfaceAdvanced) RoutingMetric() uint32 {
 
@@ -360,13 +364,21 @@ func (obj *ospfv2InterfaceAdvanced) RoutingMetric() uint32 {
 
 }
 
-// Routing metric associated with the interface..
+// Routing metric (interface output cost) associated with the interface.
+// It is advertised as the 16-bit TOS 0 metric of the corresponding link in the
+// Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has a valid
+// range of 1 to 65535 (RFC 2328 Section C.3). This applies equally to emulated
+// and simulated OSPFv2 interfaces.
 // RoutingMetric returns a uint32
 func (obj *ospfv2InterfaceAdvanced) HasRoutingMetric() bool {
 	return obj.obj.RoutingMetric != nil
 }
 
-// Routing metric associated with the interface..
+// Routing metric (interface output cost) associated with the interface.
+// It is advertised as the 16-bit TOS 0 metric of the corresponding link in the
+// Router-LSA (RFC 2328 Appendix A.4.2); the interface output cost has a valid
+// range of 1 to 65535 (RFC 2328 Section C.3). This applies equally to emulated
+// and simulated OSPFv2 interfaces.
 // SetRoutingMetric sets the uint32 value in the Ospfv2InterfaceAdvanced object
 func (obj *ospfv2InterfaceAdvanced) SetRoutingMetric(value uint32) Ospfv2InterfaceAdvanced {
 
