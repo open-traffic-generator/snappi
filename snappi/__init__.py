@@ -129,6 +129,11 @@ from .snappi import IsisInterfaceAdvanced
 from .snappi import IsisInterfaceLinkProtection
 from .snappi import IsisInterfaceAdjacencySid
 from .snappi import IsisInterfaceAdjacencySidIter
+from .snappi import IsisSRv6AdjSidContainer
+from .snappi import IsisSRv6AdjSid
+from .snappi import IsisSRv6AdjSidIter
+from .snappi import IsisSRv6Msd
+from .snappi import IsisSRv6MsdValue
 from .snappi import IsisInterfaceIter
 from .snappi import IsisBasic
 from .snappi import IsisAdvanced
@@ -152,6 +157,14 @@ from .snappi import IsisSRSrgb
 from .snappi import IsisSRSrgbIter
 from .snappi import IsisSRSrlb
 from .snappi import IsisSRSrlbIter
+from .snappi import IsisSRv6NodeCapability
+from .snappi import IsisSRv6Locator
+from .snappi import IsisSRv6EndSid
+from .snappi import IsisSRv6EndSidIter
+from .snappi import IsisSRv6SidStructure
+from .snappi import IsisSRv6AdvertiseLocatorAsPrefix
+from .snappi import IsisSRv6PrefixAttributes
+from .snappi import IsisSRv6LocatorIter
 from .snappi import IsisGracefulRestart
 from .snappi import DeviceBgpRouter
 from .snappi import BgpV4Interface
@@ -1478,6 +1491,7 @@ from .snappi import MacsecHardwareAccelerationInlineCryptoTypeOfCaGroupCaMultipl
 from .snappi import MacsecValidateFrames
 from .snappi import PortProtocolIter
 from .snappi import PerPortOptionsIter
+from .snappi import FlowOptions
 from .snappi import Lldp
 from .snappi import LldpConnection
 from .snappi import LldpChassisId
@@ -1628,6 +1642,7 @@ from .snappi import FlowTaggedMetric
 from .snappi import FlowMetricTag
 from .snappi import FlowMetricTagValue
 from .snappi import FlowMetricTagIter
+from .snappi import FlowPacketLossDuration
 from .snappi import FlowTaggedMetricIter
 from .snappi import FlowMetricIter
 from .snappi import Bgpv4Metric
